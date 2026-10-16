@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BasketVibe → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.0
+// @version      0.1.1
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers basketvibe.com.
 // @match        https://www.basketvibe.com/*
 // @match        https://basketvibe.com/*
@@ -18,7 +18,7 @@
   'use strict';
 
   const GAME = 'basketvibe';
-  const CLIENT = 'basketvibe.user.js@0.1.0';
+  const CLIENT = 'basketvibe.user.js@0.1.1';
   const MAX_CAPTURES = 300;
   const MAX_BODY_CHARS = 3_000_000;
   const SECRET_KEYS = /^(access_token|refresh_token|provider_token|provider_refresh_token|id_token|password|api_?key|secret)$/i;
@@ -66,9 +66,12 @@
     if (p === '/club/academy') return withTab('academy');
     if (p.startsWith('/transfers')) return withTab('transfers');
     if (/^\/match\/[^/]+$/.test(p)) return withTab('match');
-    if (/^\/players?\/[^/]+/.test(p)) return withTab('player');   // à confirmer
-    if (/standing|table|league/.test(p)) return withTab('standings'); // à confirmer
-    if (/schedule|fixtures|calendar/.test(p)) return withTab('schedule'); // à confirmer
+    if (/^\/player\/[^/]+$/.test(p)) return withTab('player');
+    if (p === '/league/table') return withTab('standings');      // ?tab=clubs, schedule, teams, players, injuries, transfers
+    if (p === '/league/schedule') return withTab('schedule');
+    if (p.startsWith('/league')) return withTab('league');
+    if (p === '/competition/cups') return withTab('cups');
+    if (p === '/world') return withTab('world');
     return 'unknown';
   }
 
@@ -150,6 +153,10 @@
       headers: [...t.querySelectorAll('thead th, thead td')].map((c) => c.innerText.trim()),
       rows: [...t.querySelectorAll('tbody tr')].map((r) => [...r.cells].map((c) => c.innerText.trim())),
     }));
+    // Masquer le bouton du script pour qu'il n'apparaisse pas dans le texte capturé.
+    if (ui) ui.box.style.display = 'none';
+    const text = root.innerText;
+    if (ui) ui.box.style.display = '';
     return {
       game: GAME,
       page_type: pageType(location.href),
@@ -157,7 +164,7 @@
       source: 'dom',
       source_url: null,
       captured_at: new Date().toISOString(),
-      payload: { title: document.title, text: root.innerText, tables },
+      payload: { title: document.title, text, tables },
       client: CLIENT,
     };
   }
