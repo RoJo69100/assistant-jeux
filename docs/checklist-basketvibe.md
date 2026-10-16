@@ -11,13 +11,13 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 ## B. Collecte (script Tampermonkey BasketVibe)
 - [x] Effectif → bronze (vérifié le 2026-10-16 : 15 joueurs via /api/v1/teams/…/overview)
 - [x] Fiche joueur, avec l'historique d'entraînement → bronze (vérifié le 2026-10-16 : season-profile, training-history, training, recent-runs)
-- [ ] Match : score, box score, play-by-play, tactique jouée → bronze
-- [ ] Tactique et depth chart actuels → bronze
+- [x] Match : score, box score, play-by-play, tactique jouée → bronze (vérifié le 2026-10-16 : 2 matchs, period-box 1-4, play-by-play, match-tactics-used)
+- [x] Tactique et depth chart actuels → bronze (vérifié le 2026-10-16 : /teams/…/tactics + onglet depth)
 - [ ] Marché des transferts et fiche d'un joueur listé → bronze
-- [ ] Finances → bronze
-- [ ] Personnel → bronze
-- [ ] Académie (rapport du scout) → bronze
-- [ ] Classement et calendrier → bronze
+- [x] Finances → bronze (vérifié le 2026-10-16 : finance + sponsor)
+- [x] Personnel → bronze (vérifié le 2026-10-16)
+- [x] Académie (rapport du scout) → bronze (vérifié le 2026-10-16 : 3 candidats, rapport du 2026-10-15)
+- [x] Classement et calendrier → bronze (vérifié le 2026-10-16 : standings 12 équipes, fixtures 132 matchs)
 - [ ] Discord BasketVibe → bronze (export quotidien)
 
 ## C. Modèle de données
