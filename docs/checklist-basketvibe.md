@@ -30,7 +30,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Gold : résultat financier hebdo et projection de fin de saison (vérifié le 2026-10-16 : gold.bv_finance_weekly_result + gold.bv_finance_projection)
 
 ## D. Skills
-- [ ] Règles, moteur, entraînement, économie, marché écrits depuis le manuel officiel
+- [x] Règles, moteur, entraînement, économie, marché écrits depuis le manuel officiel (vérifié le 2026-10-16 : 7 skills basketvibe-*, manuel lu en entier, chaque fait sourcé [M§x])
 - [ ] Communauté : historique Discord lu une fois, conseils classés et datés
 - [ ] 10 questions de règles testées par l'utilisateur : 10 réponses justes
 
