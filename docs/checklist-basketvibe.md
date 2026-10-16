@@ -13,7 +13,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Fiche joueur, avec l'historique d'entraînement → bronze (vérifié le 2026-10-16 : season-profile, training-history, training, recent-runs)
 - [x] Match : score, box score, play-by-play, tactique jouée → bronze (vérifié le 2026-10-16 : 2 matchs, period-box 1-4, play-by-play, match-tactics-used)
 - [x] Tactique et depth chart actuels → bronze (vérifié le 2026-10-16 : /teams/…/tactics + onglet depth)
-- [ ] Marché des transferts et fiche d'un joueur listé → bronze
+- [x] Marché des transferts et fiche d'un joueur listé → bronze (vérifié le 2026-10-16 : transfer-auctions, historiques, records, fiche joueur en vente avec transfer-auction)
 - [x] Finances → bronze (vérifié le 2026-10-16 : finance + sponsor)
 - [x] Personnel → bronze (vérifié le 2026-10-16)
 - [x] Académie (rapport du scout) → bronze (vérifié le 2026-10-16 : 3 candidats, rapport du 2026-10-15)
