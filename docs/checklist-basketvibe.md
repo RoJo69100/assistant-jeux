@@ -5,8 +5,8 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 ## A. Fondations
 - [ ] Dépôt GitHub privé créé, cloné sur les 2 PC, `CLAUDE.md` en place
 - [ ] Projet Supabase créé, clés dans `.env` non versionné
-- [ ] Serveur MCP Supabase branché dans Claude Code
-- [ ] Tables bronze créées (JSON brut + jeu + type de page + date)
+- [x] Serveur MCP Supabase branché dans Claude Code (vérifié le 2026-10-16)
+- [x] Tables bronze créées (JSON brut + jeu + type de page + date) (vérifié le 2026-10-16)
 
 ## B. Collecte (script Tampermonkey BasketVibe)
 - [ ] Effectif → bronze
