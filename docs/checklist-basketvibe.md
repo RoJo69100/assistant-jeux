@@ -10,7 +10,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 
 ## B. Collecte (script Tampermonkey BasketVibe)
 - [x] Effectif → bronze (vérifié le 2026-10-16 : 15 joueurs via /api/v1/teams/…/overview)
-- [ ] Fiche joueur, avec l'historique d'entraînement → bronze
+- [x] Fiche joueur, avec l'historique d'entraînement → bronze (vérifié le 2026-10-16 : season-profile, training-history, training, recent-runs)
 - [ ] Match : score, box score, play-by-play, tactique jouée → bronze
 - [ ] Tactique et depth chart actuels → bronze
 - [ ] Marché des transferts et fiche d'un joueur listé → bronze
