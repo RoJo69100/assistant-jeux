@@ -31,7 +31,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 
 ## D. Skills
 - [x] Règles, moteur, entraînement, économie, marché écrits depuis le manuel officiel (vérifié le 2026-10-16 : 7 skills basketvibe-*, manuel lu en entier, chaque fait sourcé [M§x])
-- [ ] Communauté : historique Discord lu une fois, conseils classés et datés
+- [x] Communauté : historique Discord lu une fois, conseils classés et datés (vérifié le 2026-10-16 : 2 321 messages utiles lus, skill basketvibe-communaute)
 - [ ] 10 questions de règles testées par l'utilisateur : 10 réponses justes
 
 ## E. Agents
