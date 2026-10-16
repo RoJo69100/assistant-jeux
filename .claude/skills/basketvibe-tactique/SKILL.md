@@ -1,0 +1,107 @@
+---
+name: basketvibe-tactique
+description: Règles BasketVibe de la tactique et du moteur de match — cinq par quart-temps, emplacements PG–C, depth chart, consignes par joueur (passe/tir, focus offensif, focus de tir, agressivité défensive), focus défensif par adversaire, presets, verrouillage, quelles compétences pèsent sur chaque action. À charger pour construire ou ajuster une tactique, analyser un match ou expliquer un résultat.
+---
+
+# BasketVibe — tactique et moteur de match
+
+Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2026-10-16). Le manuel donne des directions, pas tous les coefficients cachés [M§9.8]. Ne pas inventer de chiffres.
+
+## Composition [M§6.2]
+- 5 joueurs **par quart-temps** (Q1–Q4) plus la prolongation (OT), chacun sur un emplacement fixe PG, SG, SF, PF, C. Un joueur peut jouer un quart-temps et pas le suivant.
+- Le moteur ignore le libellé de poste : seuls comptent l'**emplacement**, la **taille par rapport à l'emplacement** et le physique (table d'efficacité dans basketvibe-joueurs [M§6.2.1]).
+- L'emplacement règle aussi la portée au rebond et les duels défensifs [M§6.2].
+- Le manuel cite deux remplacements forcés pendant un quart-temps : 6 fautes ou blessure. Sinon, le cinq change au début de chaque quart-temps selon la grille [M§6.2].
+- [Obs] Nos play-by-play contiennent aussi des événements `substitution_foul_trouble` (2 dans le match du 14/10) : le moteur sort parfois un joueur chargé de fautes. Le manuel n'en parle pas ; règle non documentée.
+- Rappel : à partir de 36 minutes dans le match, −20 % sur tout (basketvibe-joueurs [M§5.7]). Les rotations par quart-temps sont le levier pour l'éviter.
+
+## Depth chart [M§6.2.2]
+- Pour chaque poste, liste ordonnée de 5 remplaçants maximum ; un joueur peut figurer sur plusieurs listes. Valable pour tout le club, indépendant des presets.
+- Utilisé avant le coup d'envoi (blessé, doublon, place vide) et pendant le match (6 fautes, blessure).
+- Si la liste du poste est épuisée : le joueur valide dont le poste est le plus proche sur l'échelle PG→C. Plusieurs postes à remplir : ordre C → PF → SF → SG → PG.
+- Sans depth chart sauvegardé : uniquement l'échelle PG→C.
+- Banc court : un remplaçant déjà très utilisé jouera quand même (~40 min possibles) ; le jeu ne plafonne pas les minutes.
+
+## Consignes par joueur (pour tout le match) [M§6.3]
+1. **Passe ou tir** : 5 crans, de passeur à scoreur. Oriente qui tire ; ce n'est pas un bonus de compétence.
+2. **Focus offensif** : 5 crans, de Low à Primary en passant par Normal. Part relative de l'attaque qui passe par lui (dernière passe, tir, pertes de balle). Exemple : deux scoreurs, l'un Primary et l'autre Normal → le Primary tente ~1/3 de tirs en plus.
+3. **Focus de tir** : 5 crans, de 2 pts à 3 pts. Au maximum ~2 tirs à 3 pour 1 tir à 2 ; toute l'équipe au maximum plafonne à ~50 % de tirs à 3.
+4. **Agressivité défensive** : 0 soft · 2 équilibrée (défaut) · 4 agressive.
+
+| | Soft (0) | Équilibrée (2) | Agressive (4) |
+|---|---|---|---|
+| Défense en duel direct | ~−14 | 0 | ~+14 |
+| Défense moyenne des 5 | ~−4,4 | 0 | ~+4,4 |
+| Tirs adverses provoquant une faute | ~12 % | ~16,5 % | ~21 % |
+| Fatigue après match | ×0,75 | ×1,00 | ×1,65 |
+| Risque de blessure | ×0,85 | ×1,00 | ×2,00 |
+
+- Les fautes dépendent de l'agressivité **moyenne des 5 sur le terrain** ; la fatigue, de l'agressivité de chaque joueur.
+- Ordre de grandeur, à niveaux égaux (~70) : adversaire à ~53 % aux tirs en soft contre ~48 % en agressif. Soit ~4–5 points encaissés de plus en soft qu'en équilibré, et ~3–4 de moins en agressif.
+- Le moteur respecte les consignes : il ne redirige pas le ballon vers le joueur en forme [M§6.3].
+
+## Focus défensif par adversaire (par match) [M§6.6]
+- Se règle sur la page du match (Tactics à côté de Preview), joueur adverse par joueur adverse. Verrouillé 15 min avant le coup d'envoi.
+- **Sans plan sauvegardé, tous les adversaires sont marqués pareil.**
+
+| Niveau | Lock | Intense | Normal | Light | Give up |
+|---|---|---|---|---|---|
+| Poids de marquage | 2,00 | 1,55 | 1,00 | 0,62 | 0,22 |
+
+- Plus de focus : le joueur tire moins et, quand il tire, est mieux défendu. Ses coéquipiers récupèrent des tirs.
+- **Hit** : Lock ou Intense sur le vrai scoreur (celui sur qui passe l'attaque) → l'adversaire perd nettement. **Even** : sur un cinq équilibré → le score bouge peu. **Miss** : Lock sur un meneur passeur → les autres ont des tirs plus faciles, l'adversaire peut marquer plus.
+- Effet typique sur le % de réussite du scoreur visé : Intense contre Normal −2 à −4 pts ; Lock contre Intense −2 à −4 pts ; de Give up à Lock +12 à +16 pts d'écart.
+- Conseils du manuel : verrouiller le scoreur, pas le meneur qui distribue ; compenser par Light ou Give up sur les joueurs peu utilisés ; toujours sauvegarder avant le verrouillage.
+
+## Presets et verrouillage [M§6.4, §6.5, §1.1]
+- Jusqu'à 5 presets nommés ; un actif pour la ligue, un pour les amicaux, un pour les coupes.
+- Plan d'un match précis : preset, cinq et consignes propres à ce match + focus défensif. Le depth chart reste celui du club.
+- Verrouillage 15 min avant le coup d'envoi (ligue 19:45). Le plan sauvegardé en dernier est utilisé.
+- Tactique incomplète impossible : 5 joueurs différents par segment, consignes pour chaque joueur. Sans tactique sauvegardée : composition par défaut avec consignes neutres.
+- Depuis le rapport d'un match terminé : « Save as preset » enregistre les cinq et les consignes (pas le focus défensif).
+
+## Avantage du terrain [M§6.1]
+Petit bonus de compétence à domicile et meilleure chance de gagner l'entre-deux du premier quart-temps.
+
+## Quelles compétences pour quelle action [M§7.1]
+| Action | Compétences utilisées |
+|---|---|
+| Lancers francs | Deux points (2/3), Trois points (1/3) |
+| Tirs à 2 mi-distance | Deux points, qualité de la passe |
+| Tirs à 3 | Trois points, qualité de la passe |
+| Tirs à 2 au cercle | Deux points, Athlétisme (+ taille, poids), qualité de la passe |
+| Défense intérieure | Défense, Athlétisme (+ taille, poids) |
+| Défense extérieure | Défense, Athlétisme |
+| Rebonds | Rebond, Athlétisme (+ taille, emplacement) |
+| Interceptions | Défense, Athlétisme |
+| Contres | Défense, Athlétisme (+ taille) |
+| Éviter les pertes en dribble | Dribble, Athlétisme |
+| Éviter les pertes sur passe | Passe, Athlétisme |
+| Passes décisives | Passe, Dribble |
+| Qui attaque la raquette | Dribble, Deux points |
+
+L'endurance n'intervient dans aucune action [M§7.1].
+
+Profils de joueur (compétences principales → secondaires) [M§7.1] :
+| Profil | Principales | Secondaires |
+|---|---|---|
+| Shooteur en attente du ballon (spot-up) | Trois points, Défense | Deux points |
+| Scoreur arrière / ailier | Trois points, Dribble | Deux points, Passe |
+| Meneur passeur | Passe, Dribble | Deux points, Trois points |
+| Pénétrateur | Dribble, Deux points | Athlétisme |
+| Scoreur mi-distance | Deux points | — |
+| Intérieur finisseur | Deux points, Rebond | Défense, Athlétisme |
+| Rebondeur / dur au mal | Rebond, Défense | Deux points, Athlétisme |
+| Défenseur extérieur | Défense | Athlétisme, Dribble |
+| 3-and-D | Trois points, Défense | Athlétisme, Deux points |
+| Intérieur shooteur | Trois points, Deux points | Rebond, Défense |
+
+Par emplacement (attaque principale / défense principale) [M§7.1] : PG Dribble+Passe / Défense · SG Trois points+Deux points / Défense · SF Deux points+Trois points / Défense · PF Deux points / Défense+Rebond · C Deux points+Rebond / Défense+Rebond. L'athlétisme est secondaire partout.
+
+## Déroulé d'une possession [M§7.3]
+Chaque possession se termine par un tir, une perte de balle ou des lancers francs. Après un rebond offensif, le rebondeur a la priorité pour la seconde chance, en général au cercle et sans passe.
+
+## Lecture de nos données
+- `silver.bv_match_tactics` : tactique réellement jouée (cinq par quart-temps, consignes, focus défensif).
+- `gold.bv_match_trends` : tendances sur les 5 et 10 derniers matchs, de mon côté et du côté adverse.
+- Le PS adverse n'est visible que pour les joueurs en vente ; sinon les compétences adverses sont en tranches [M§2.2, §4].
