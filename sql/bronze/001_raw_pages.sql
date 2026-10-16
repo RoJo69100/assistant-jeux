@@ -15,7 +15,7 @@ create table if not exists bronze.raw_pages (
   payload_sha256 text        not null,
   client         text,                                 -- version du script
   inserted_at    timestamptz not null default now(),
-  unique (game, page_type, source, source_url, payload_sha256)
+  unique nulls not distinct (game, page_type, source, source_url, payload_sha256)  -- source_url null pour 'dom'
 );
 
 create index if not exists raw_pages_game_type_time on bronze.raw_pages (game, page_type, captured_at desc);
