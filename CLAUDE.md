@@ -30,7 +30,7 @@ docs/                  checklist et décisions
 
 ## Règles
 - Secrets dans `.env` (jamais commité). `samples/`, `data/` et `.env` sont dans `.gitignore`.
-- Python 3.12, dépendances dans `requirements.txt`.
+- Python 3.13, dépendances dans `requirements.txt`.
 - Une modification = un commit avec un message clair.
 - Coût : ne jamais relire tout l'historique brut ; travailler sur les vues gold et le delta du jour.
 
