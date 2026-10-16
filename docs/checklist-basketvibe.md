@@ -24,10 +24,10 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Silver : joueurs + photo hebdomadaire (lundi matin) de leurs skills, forme, fatigue (vérifié le 2026-10-16 : silver.bv_player_weekly, 15 joueurs, skills précis ; 2e semaine à confirmer le 2026-10-19)
 - [x] Silver : matchs, stats par joueur, événements du play-by-play (vérifié le 2026-10-16 : 2 matchs, somme des quart-temps = score final = fin du play-by-play)
 - [x] Silver : marché, finances, personnel, académie, classement (vérifié le 2026-10-16 : bilan de saison recalculé = solde du jeu, 102 matchs joués = 17 journées × 6)
-- [ ] Gold : bilan par poste (PS, âge, salaire, profondeur)
-- [ ] Gold : tendances de match (rebonds, tirs, pertes de balle, fautes) sur les 5 et 10 derniers matchs
-- [ ] Gold : progression hebdo de chaque skill par joueur
-- [ ] Gold : résultat financier hebdo et projection de fin de saison
+- [x] Gold : bilan par poste (PS, âge, salaire, profondeur) (vérifié le 2026-10-16 : gold.bv_position_summary, 15 joueurs, somme des salaires = silver)
+- [x] Gold : tendances de match (rebonds, tirs, pertes de balle, fautes) sur les 5 et 10 derniers matchs (vérifié le 2026-10-16 : gold.bv_match_trends, moi vs adversaires ; 2 matchs en base, se remplit avec les exports)
+- [x] Gold : progression hebdo de chaque skill par joueur (vérifié le 2026-10-16 : gold.bv_skill_progress_weekly, 6 entraînements)
+- [x] Gold : résultat financier hebdo et projection de fin de saison (vérifié le 2026-10-16 : gold.bv_finance_weekly_result + gold.bv_finance_projection)
 
 ## D. Skills
 - [ ] Règles, moteur, entraînement, économie, marché écrits depuis le manuel officiel
