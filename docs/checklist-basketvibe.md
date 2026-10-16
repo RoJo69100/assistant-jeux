@@ -18,7 +18,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Personnel → bronze (vérifié le 2026-10-16)
 - [x] Académie (rapport du scout) → bronze (vérifié le 2026-10-16 : 3 candidats, rapport du 2026-10-15)
 - [x] Classement et calendrier → bronze (vérifié le 2026-10-16 : standings 12 équipes, fixtures 132 matchs)
-- [ ] Discord BasketVibe → bronze (export quotidien)
+- [x] Discord BasketVibe → bronze (export hebdomadaire) (vérifié le 2026-10-16 : 2 624 messages, 13 salons ; 2e export à tester semaine du 2026-10-23)
 
 ## C. Modèle de données
 - [ ] Silver : joueurs + photo quotidienne de leurs skills, forme, fatigue
