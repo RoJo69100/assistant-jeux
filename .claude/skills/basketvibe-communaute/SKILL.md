@@ -1,0 +1,87 @@
+---
+name: basketvibe-communaute
+description: Ce que dit le Discord BasketVibe (lu en entier le 2026-10-16, 2 624 messages du 31/05 au 09/10/2026) — précisions du développeur, versions du moteur, conseils et observations de la communauté, prix du marché constatés, contradictions avec le manuel. Chaque point est daté et sourcé. À charger en complément des skills de règles, pour les conseils pratiques, ou quand le manuel est muet.
+---
+
+# BasketVibe — communauté et développeur (Discord)
+
+## Comment lire cette skill
+- **[Dev aaaa-mm-jj, salon]** = vachacz, développeur unique du jeu : quasi officiel, mais ça peut changer.
+- **[Com aaaa-mm-jj, auteur, salon]** = un joueur : opinion ou expérience, **pas une règle**.
+- **Le manuel l'emporte** en cas de contradiction ; les écarts sont signalés ⚠️.
+- **Reset du monde le 2026-09-06** (saison 1 depuis le 07/09). Ce qui date d'**avant** porte sur la bêta : souvent périmé, marqué 🕰️.
+- Source brute : `bronze.discord_messages` (export du 2026-10-16).
+
+## 1. Moteur de match : versions et calibrage
+- **Saison 1 : le moteur v3 tourne en ligue depuis la journée 12 ; il est gelé jusqu'à la fin de la saison. Le v4 n'est actif qu'en amical et passera en ligue en saison 2.** Conséquence : un résultat d'amical **ne prédit pas** la ligue [Dev 2026-09-30 / 2026-10-04, release-notes + engine].
+- Les poids du PS sont **indicatifs**. Le moteur joue possession par possession avec les compétences, pas avec ces pourcentages [Dev 2026-09-17, engine].
+- Pénalité au-delà de 36 min : 8 % → 10 % → 12,5 % → **20 %** (le 2026-09-13). Le manuel indique 20 % [Dev, release-notes]. La communauté trouve que les équipes à « 5 × 48 min » gagnent encore trop souvent [Com 2026-09-12, grobarbrate/faraone85, engine].
+- Le dev simule un match 1 000 fois pour mesurer la chance (exemple : 68 % de chances de gagner, et défaite quand même). **Un match isolé ne prouve rien** [Dev 2026-06-27 / 2026-08-24, general].
+- Tirs à 3 : plafonnés à **50 % des tirs** pour un joueur réglé « tout à 3 pts » [Dev 2026-08-24]. Le plafond par joueur a été relevé le 2026-09-16 (détails non publiés) [Dev, release-notes].
+- Dernier passeur choisi selon le poste et le rôle ; sa passe améliore le tir assisté [Dev 2026-08-24], ce que confirme le manuel §5.1.4.
+- Fin de match serrée : fautes volontaires de l'équipe menée (v3) [Dev 2026-09-09].
+- Le libellé de poste n'a aucun effet, seule la taille sur l'emplacement compte ; entre 200 et 205 cm en PG, la baisse est linéaire [Dev 2026-09-10, help].
+
+## 2. Tactique
+- **Agressivité défensive** = « arme à double tranchant » : un match plus fort, payé en fatigue. On peut jouer soft pour se permettre un match agressif ensuite [Dev 2026-09-19, engine].
+  - Retours de joueurs : l'agressif « ne paie pas pour l'instant », ils restent en équilibré en ligue et en coupe, au minimum en amical [Com 2026-09-22, tankre1792 / grillanza, italia].
+- **Focus défensif** : erreurs rapportées par les joueurs. « Give up » sur un pivot → il en a marqué 48 [Com 2026-09-09, tankre1792, italia]. Délaisser un joueur qui n'avait jamais joué → puni [Com 2026-09-13, grillanza, italia]. Trop concentrer le focus est contre-productif [Com 2026-09-22, uthred9751]. C'est le cas « Miss » du manuel §6.6.
+- Tactique de match = preset + focus. Si on modifie un preset, il faut **le re-sélectionner sur chaque match déjà planifié**, sinon l'ancienne version est utilisée [Com 2026-09-05, grobarbrate/vortexraijin, help].
+- Les joueurs observent qu'une tactique soignée fait gagner. Exemple : défaite contre le dernier sans tactique, alors que le moteur donnait 68 % de victoire [Com+Dev 2026-08-24, general].
+
+## 3. Joueurs, entraînement, potentiel
+- **Les compétences sont stockées avec des décimales** [Dev 2026-08-02]. Les juniors de l'académie et les effectifs de départ commencent **sans décimales** [Dev 2026-09-13, help].
+- **Expérience** : elle monte de façon linéaire, mais son effet ne l'est pas. **Les 10 premiers points comptent plus que ceux de 80 à 90** [Dev 2026-08-02, general].
+- **S'entraîner ne demande pas de jouer** : tout le monde s'entraîne chaque semaine, quelles que soient ses minutes [Dev 2026-09-21, help ; manuel §8].
+- Pas de plafond caché par compétence : on peut monter jusqu'à 99, de plus en plus lentement [Dev 2026-09-08, help].
+- Potentiel identique quel que soit le pays [Dev 2026-09-08]. Joueurs libres : potentiel tiré **au hasard entre 3 et 9** [Dev 2026-09-07, help].
+- Un junior « 3 étoiles » de 16 ans gagne **18 à 24 points de compétence par saison** selon son potentiel [Dev 2026-09-24, help] ; cohérent avec le manuel §8.3.
+- Lire le potentiel dans les progrès (méthode des joueurs) :
+  - « 3 étoiles » = potentiel 8–10 [Com 2026-09-06, help ; manuel §4.2].
+  - Un +2 sur la compétence principale en une semaine (16–18 ans) indique au moins un potentiel moyen, pas forcément 10 [Com 2026-08-16, dcarra / random_player_123].
+  - +2 principale et +1 secondaire dès la première semaine → potentiel 10 très probable [Com 2026-09-24, pilipinas].
+  - Il faut **4–5 entraînements** pour une estimation fiable [Com 2026-09-01, dcarra, italia].
+  - Les décimales cachées faussent ces lectures. Nos valeurs précises (`*_exact`) donnent une mesure bien meilleure.
+- Endurance sous 40 jugée « inutile » [Com 2026-08-13, grobarbrate, reset] : opinion. Selon le manuel, l'endurance ne joue que sur la fatigue et les blessures.
+- Garder tout le monde **sous 15 de fatigue** → une seule blessure sur une saison [Com 2026-08-23, random_player_123, general] : expérience individuelle, cohérente avec le manuel §9.3.
+- Pivots : monter le rebond jusqu'à 80 avec la défense, car le ralentissement devient fort au-delà [Com 2026-10-06, .doman/kotryk, polska]. Contre-avis : l'athlétisme aide à la fois le rebond, la défense et l'attaque [Com 2026-10-08, marekb9231].
+- Un grand pivot athlétique et bon rebondeur marque beaucoup même avec peu de tir à 2 [Com 2026-09-14, carlomtlopes, portugal].
+- 🕰️ « Stage de présaison » : petit bonus d'entraînement des jeunes au changement de saison [Dev 2026-07-21]. Date d'avant la refonte de l'entraînement (2026-08-10), **non confirmé aujourd'hui**.
+
+## 4. Académie
+- Le rapport est tiré **après** la mise à jour du jeudi. Exemple : si la jauge passe de 99 à 100 %, le rapport bénéficie déjà du bonus des 100 % [Dev 2026-09-28, polska] ; conforme au manuel §4.2.
+- Stratégie répandue : **ne pas signer en fin de saison**. Monter à 100 % et faire le premier recrutement au début de la saison suivante, car tout le monde vieillit en même temps au changement de saison [Com 2026-10-08, giovannidziadzia / .doman, academy ; Com 2026-07-12, br0kh3n].
+- Ne signer qu'un 3 étoiles après test, sauf compétences exceptionnelles. Un 17 ans 3 étoiles reste derrière un 16 ans 3 étoiles [Com 2026-09-12/13, carlomtlopes, portugal].
+- Le test à 25 000 « vaut le coup » (≈ 1,5 amical de recette) [Com 2026-09-10, .doman, academy].
+- ⚠️ « 71 000 investis font progresser la jauge autant que 100 000 » [Com 2026-09-13, nhegas12, portugal] : **non vérifié**, contraire aux tableaux du manuel §4.2. À tester avec `silver.bv_academy_weekly`.
+
+## 5. Économie et personnel
+- **Amicaux = revenu important** : ~17 000–20 000 par amical pour chaque club [Com 2026-09-05, lolek5232, help ; Obs : 20 150 le 2026-10-16]. Le dev le confirme : « jouer des amicaux reste financièrement important » [Dev 2026-08-21, economy]. Sans blessure, avec 1/10 de fatigue et d'expérience : idéal pour faire jouer les jeunes.
+- Match de ligue à domicile : **250 000 à 400 000** selon la popularité [Dev 2026-09-05, help].
+- Personnel = **un compromis, pas « tout prendre et oublier »** [Dev 2026-08-28, general].
+  - Médecins : **on peut les embaucher après une blessure**, ils agissent à partir du jour d'embauche [Dev 2026-09-14, help]. Facturation = maximum de la semaine, donc ~10 000 par médecin et par semaine d'usage (manuel §4.3.6).
+  - Kinés : comptés **au coup d'envoi**, à embaucher **avant** les matchs.
+  - Conseil répandu : médecins et kinés seulement en cas de blessures ; le marketing utile si on perd souvent à domicile [Com 2026-09-12, carlomtlopes / chanceler, portugal].
+- Solde négatif : interdiction d'enchérir ; restrictions possibles sur le personnel et l'académie [Dev 2026-09-12, help ; manuel §10.3].
+- Pas de limite de taille d'effectif, à part le coût des salaires [Dev 2026-09-12, help].
+- Sponsor : 6 contrats au choix **à partir de la saison 2**, version « tout ou rien » retirée, écarts réduits [Dev 2026-10-02, economy].
+- ⚠️ Prime de titre : « 200 000 » [Dev 2026-09-27, help] → le manuel actuel dit **400 000** (§10.1.4). Le manuel fait foi.
+- Salaires non linéaires et revenus selon le niveau de la ligue : **envisagés pour plus tard** [Dev 2026-08-27, economy]. Le dev « peut gonfler l'économie si elle est trop serrée » [Dev 2026-08-28].
+- Alternance domicile/extérieur non garantie : début de saison inégal en recettes, mais 11 domicile / 11 extérieur sur la saison [Com 2026-09-11, italia].
+
+## 6. Marché des transferts
+- Prix constatés en saison 1 [Com, italia 2026-09-11 / pilipinas 2026-09-24 / lietuva 2026-09-22] :
+  - 16 ans PS 40 ≈ **300 000** ; PS 42 ≈ **500 000**. Prix doublés en 2 semaines début septembre.
+  - Jeunes à fort potentiel : **1 à 2 M+**.
+  - « Même les mauvais jeunes partent à des prix délirants » (lietuva 22/09).
+  - Bêta : stars à 1,5–2,5 M.
+- Conseil : acheter des jeunes vite, avant que les prix montent encore [Com 2026-10-08, .doman, academy].
+- Joueurs libres post-reset : TSP entre 360 et 420 [Dev 2026-08-14], potentiel 3–9 [Dev 2026-09-07]. Départ à 10 000 (manuel §11.4).
+- Taxe de 5 % (anti-revente rapide), délai avant revente ramené à **7 jours** [Dev 2026-07-29 / 2026-09-14] ; conforme au manuel §11.1.
+
+## 7. Coupes
+- ⚠️ Coupe de septembre 2026 : « **25 % de fatigue et d'expérience** » [Com 2026-09-12, dcarra, italia]. Par défaut, le manuel dit 0 (§3.3) : **chaque édition annonce ses propres règles** (Inbox → BasketVibe). Vérifier avant chaque coupe.
+- Bug signalé (2026-09-18) : en coupe, le preset amical était pris par défaut ; depuis, il existe un preset coupe [Dev 2026-09-19].
+
+## 8. À venir (non joué, ne pas en tenir compte pour les règles)
+Moteur v4 en ligue en saison 2 ; zone de défense et « fréquence de pénétration » à l'étude ; équipes nationales et coupe mondiale ; contrats de sponsor ; salaires non linéaires [Dev, engine/economy/general].
