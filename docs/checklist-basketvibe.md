@@ -22,7 +22,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 
 ## C. Modèle de données
 - [x] Silver : joueurs + photo hebdomadaire (lundi matin) de leurs skills, forme, fatigue (vérifié le 2026-10-16 : silver.bv_player_weekly, 15 joueurs, skills précis ; 2e semaine à confirmer le 2026-10-19)
-- [ ] Silver : matchs, stats par joueur, événements du play-by-play
+- [x] Silver : matchs, stats par joueur, événements du play-by-play (vérifié le 2026-10-16 : 2 matchs, somme des quart-temps = score final = fin du play-by-play)
 - [ ] Silver : marché, finances, personnel, académie, classement
 - [ ] Gold : bilan par poste (PS, âge, salaire, profondeur)
 - [ ] Gold : tendances de match (rebonds, tirs, pertes de balle, fautes) sur les 5 et 10 derniers matchs
