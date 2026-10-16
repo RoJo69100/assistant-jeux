@@ -9,7 +9,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Tables bronze créées (JSON brut + jeu + type de page + date) (vérifié le 2026-10-16)
 
 ## B. Collecte (script Tampermonkey BasketVibe)
-- [ ] Effectif → bronze
+- [x] Effectif → bronze (vérifié le 2026-10-16 : 15 joueurs via /api/v1/teams/…/overview)
 - [ ] Fiche joueur, avec l'historique d'entraînement → bronze
 - [ ] Match : score, box score, play-by-play, tactique jouée → bronze
 - [ ] Tactique et depth chart actuels → bronze
