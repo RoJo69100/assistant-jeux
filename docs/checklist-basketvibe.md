@@ -44,8 +44,8 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Tactique : tactique initiale complète, prête à saisir dans le jeu (validé par l'utilisateur le 2026-10-18 : presets « Ligue S1 » et « Amical » saisis dans le jeu)
 - [x] Tactique : ajustement selon l'adversaire du prochain match (validé par l'utilisateur le 2026-10-18 : focus défensif J19 BARIUM saisi)
 - [ ] Tactique : évolution de la tactique à partir du journal des enseignements
-- [ ] Entraînement : verdict hebdo garder ou changer, à partir des résultats d'entraînement
-- [ ] Potentiel : estimation du potentiel de chaque joueur depuis sa progression, avec un niveau de confiance
+- [x] Entraînement : verdict hebdo garder ou changer, à partir des résultats d'entraînement (validé par l'utilisateur le 2026-10-18 : brief du 2026-10-18, gains précis par entraînement)
+- [x] Potentiel : estimation du potentiel de chaque joueur depuis sa progression, avec un niveau de confiance (validé par l'utilisateur le 2026-10-18 : gold.bv_potential_estimate, 6 potentiels sûrs, 8 à 2 valeurs)
 - [ ] Académie : avis sur les 3 prospects (tester, signer ou ignorer) et sur l'investissement hebdo
 - [ ] Transferts : pour un joueur donné, intérêt pour l'effectif, prix correct ou non, enchère maximum
 - [ ] Transferts : liste des joueurs à vendre (âge, salaire, déclin) et moment de la vente
