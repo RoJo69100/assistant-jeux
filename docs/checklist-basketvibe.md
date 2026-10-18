@@ -38,8 +38,8 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Effectif : bilan par poste, meilleurs et moins bons joueurs (validé par l'utilisateur le 2026-10-18 : brief du 2026-10-16)
 - [x] Effectif : 3 actions concrètes pour améliorer l'équipe (validé par l'utilisateur le 2026-10-18, action 1 complétée avec Nolan Baron)
 - [x] Effectif : projection sur 1 à 3 saisons (âges, déclin, relève) (validé par l'utilisateur le 2026-10-18)
-- [ ] Match : explication de chaque victoire et défaite, chiffres à l'appui
-- [ ] Match : journal des enseignements, mis à jour après chaque match
+- [x] Match : explication de chaque victoire et défaite, chiffres à l'appui (validé par l'utilisateur le 2026-10-18 : brief du 2026-10-18, 26 matchs)
+- [x] Match : journal des enseignements, mis à jour après chaque match (validé par l'utilisateur le 2026-10-18 : learnings.md, L-001 à L-007, delta par « dernier match analysé »)
 - [ ] Match : contrôle des conseils passés (appliqué ou non, effet constaté)
 - [ ] Tactique : tactique initiale complète, prête à saisir dans le jeu
 - [ ] Tactique : ajustement selon l'adversaire du prochain match
