@@ -21,7 +21,7 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Discord BasketVibe → bronze (export hebdomadaire) (vérifié le 2026-10-16 : 2 624 messages, 13 salons ; 2e export à tester semaine du 2026-10-23)
 
 ## C. Modèle de données
-- [x] Silver : joueurs + photo hebdomadaire (lundi matin) de leurs skills, forme, fatigue (vérifié le 2026-10-16 : silver.bv_player_weekly, 15 joueurs, skills précis ; 2e semaine à confirmer le 2026-10-19)
+- [x] Silver : joueurs + photo hebdomadaire (lundi matin) de leurs skills, forme, fatigue (vérifié le 2026-10-16 : silver.bv_player_weekly, 15 joueurs, skills précis ; 2e semaine confirmée le 2026-10-18 : semaines du 11/10 et du 18/10, calées sur l'entraînement du dimanche)
 - [x] Silver : matchs, stats par joueur, événements du play-by-play (vérifié le 2026-10-16 : 2 matchs, somme des quart-temps = score final = fin du play-by-play)
 - [x] Silver : marché, finances, personnel, académie, classement (vérifié le 2026-10-16 : bilan de saison recalculé = solde du jeu, 102 matchs joués = 17 journées × 6)
 - [x] Gold : bilan par poste (PS, âge, salaire, profondeur) (vérifié le 2026-10-16 : gold.bv_position_summary, 15 joueurs, somme des salaires = silver)
