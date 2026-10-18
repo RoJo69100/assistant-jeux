@@ -75,4 +75,5 @@ Un joueur de champ utilise Physique, Attaque et Défense ; un gardien Physique e
 
 ## [Obs] Nos données
 - Le 2026-10-18 : effectif de 12 joueurs (Chomelix Cow), composition 7/7, formations attaque 5-1 / défense 6-0 (page Équipe → Tactique). API : `/api/teams/mine/players`, `/api/teams/mine/tactics/default`.
+- [Obs 2026-10-18, utilisateur] Dans l'écran Tactique, un joueur placé hors de son poste apparaît **en orange** (pénalité de hors-poste visible). L'API donne une note par rôle (`roleOveralls`) non affichée à l'écran ; à son poste naturel elle est égale à la note générale. **Non vérifié** : si `roleOveralls` inclut déjà la pénalité de hors-poste.
 - La liste affiche une note (OVR) de 7 à 13 et des salaires de 75 à 145 € : niveau « Grassroots » en début de jeu.
