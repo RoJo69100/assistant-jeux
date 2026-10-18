@@ -24,4 +24,4 @@ Liste donnée par l'utilisateur le 2026-10-18 : 29 adresses (BuzzerBeater appara
 2. **Team Soccer** (football) : vérifier le kit sur la plus grosse famille.
 
 ## Critères pour la suite
-Critères : temps passé et ambition sur le jeu, richesse du manuel, données exposées (API JSON ou seulement HTML), taille de la famille (un jeu de football rend le kit utile à 13 jeux).
+Critères : temps passé et ambition sur le jeu, richesse du manuel, données exposées (API JSON ou seulement HTML), taille de la famille (un jeu de football rend le kit utile à 12 jeux).
