@@ -2,18 +2,56 @@
 
 Tenu par l'agent Match (`.claude/agents/match.md`). Mis à jour après chaque export de match.
 
-**Dernier match analysé : aucun** (premier passage à faire sur toute la saison).
+**Dernier match analysé : 2026-10-18 — Arios Pagkos (amical) ; dernier match de ligue : 2026-10-17 — Sierra Nevada (J18)** (passage du 2026-10-18, brief `briefs/2026-10-18-match.md`).
 
 ## Enseignements
 <!-- L-nnn · date · enseignement · matchs de ligue à l'appui · statut (à surveiller / confirmé / infirmé) · source -->
+| ID | Date | Enseignement | Matchs ligue | Statut | Source |
+|---|---|---|---|---|---|
+| L-001 | 2026-10-18 | Victoires et défaites se séparent par le tir (eFG 50,9 contre 42,1), la défense du tir (eFG adverse 43,4 contre 54,2), l'OREB (28,4 contre 19,5) et les pertes adverses (20,4 contre 13,9). Le FT rate ne fait pas la différence. | 18 (7V/11D) | confirmé | `gold.bv_match_factors_by_result` |
+| L-002 | 2026-10-18 | Moins de tirs à 3 (part : 44,8 % sur J1–J14, 32,3 % sur J15–J18) va avec une meilleure eFG (43,2 → 53,7). Notre réussite à 3 reste faible (25–29 %). Cause non isolable : 4 changements simultanés. | 4 | à surveiller | `gold.bv_match_report` |
+| L-003 | 2026-10-18 | Rotation à 2 unités de 24 min (fin des 5×48) depuis J15 : 3V-1D. Contre les mêmes adversaires qu'à l'aller (J4–J7), cumul +82 contre +34. | 4 | à surveiller | `gold.bv_match_player_lines`, `gold.bv_match_report` ; [M§5.7] |
+| L-004 | 2026-10-18 | `defense_tier` 0 depuis J15 (sauf Fournier) : eFG adverse 51,1 → 46,0 (le manuel annonce l'inverse) ; FT rate adverse 31,1 → 19,1 (conforme au manuel). Facteurs confondus. Sens « 0 = soft » à confirmer dans le jeu. | 4 | à surveiller | `gold.bv_match_player_lines`, `gold.bv_match_report` ; [M§6.3] |
+| L-005 | 2026-10-18 | Matchs serrés (écart ≤ 5) : 0 sur 3. En J11 et J16, la fin se joue sur une perte de balle. | 3 | à surveiller (cause non établie) | `gold.bv_match_report`, `silver.bv_match_events` |
+| L-006 | 2026-10-18 | Le give_up sur le vrai scoreur adverse (J15 Georgiou, J18 Hola) lui donne 36 à 62 % des tirs et 36 à 39 pts. Miss au sens du manuel. Aucun Hit sur la saison. | 2 | à surveiller | `gold.bv_match_opp_focus` ; [M§6.6], [Com 2026-09-09] |
+| L-007 | 2026-10-18 | Sous le régime 5×48 (J1–J14), Q4 à −4,9 contre −3,2 sur les autres quarts : pas de signal net de la pénalité au-delà de 36 min dans le score. | 14 | à surveiller | `gold.bv_match_report` ; [M§5.7] |
 
 ## Conseils
 <!-- C-nnn · date · conseil · critère vérifiable (SQL) · statut (ouvert / appliqué / partiel / non appliqué) · effet constaté -->
 | ID | Date | Conseil | Critère vérifiable | Statut | Effet constaté |
 |---|---|---|---|---|---|
-| C-001 | 2026-10-16 | Plafonner les minutes à ~34 (Baron, Bernard, Boyer, Fontaine, Fournier, Bonnet, Durand) — agent Effectif, action 1 | `gold.bv_match_player_lines` : aucun `over_36` en ligue | ouvert | — |
-| C-002 | 2026-10-16 | Entraînement : Gimenez secondaire → trois points ; Bernard secondaire → athlétisme — agent Effectif, action 2 | `silver.bv_player_weekly` : `training_secondary` | ouvert | — |
-| C-003 | 2026-10-16 | Mettre Nael Fontaine en vente — agent Effectif, action 3 | Fontaine absent de l'effectif ou en vente | ouvert | — |
+| C-001 | 2026-10-16 | Plafonner les minutes à ~34 (Baron, Bernard, Boyer, Fontaine, Fournier, Bonnet, Durand) — agent Effectif, action 1 | `gold.bv_match_player_lines` : aucun `over_36` en ligue | partiel (2026-10-18) : les 7 joueurs cités sont à 24 min ou moins en J18, mais Legrand est à 48 min (`over_36`) | trop tôt (1 match ; la rotation à 24 min date de J15, avant le conseil) |
+| C-002 | 2026-10-16 | Entraînement : Gimenez secondaire → trois points ; Bernard secondaire → athlétisme — agent Effectif, action 2 | `silver.bv_player_weekly` : `training_secondary` | non appliqué au 16/10 (`silver.bv_player_daily` : Gimenez = defense, Bernard = three_point) ; non vérifiable au 18/10 (champs vides) : export de la page Entraînement à faire | — |
+| C-003 | 2026-10-16 | Mettre Nael Fontaine en vente — agent Effectif, action 3 | Fontaine absent de l'effectif ou en vente | appliqué (2026-10-18) : `silver.bv_players.on_transfer_list` = true | sans objet (pas un facteur de match) |
+| C-004 | 2026-10-18 | Focus Intense sur le vrai scoreur adverse ; light et give_up seulement sur les joueurs peu utilisés [M§6.6] — agent Match | `gold.bv_match_opp_focus` (ligue) : le joueur au plus fort `shot_share` a `our_focus` in ('intense','lock') ; aucun `give_up` sur un adverse à 30 min ou plus | ouvert | — |
+| C-005 | 2026-10-18 | Revenir à `defense_tier` = 2 en ligue, après avoir confirmé dans le jeu que 0 = soft [M§6.3] — agent Match | `gold.bv_match_player_lines` : `defense_tier` = 2 pour tous les joueurs de ligue avec `min` > 0 ; effet sur `opp_efg_pct` (base J15–J18 : 46,0) | ouvert | — |
+| C-006 | 2026-10-18 | Remettre Lefebvre dans une unité dès que sa forme atteint 5 ou plus ; Legrand dans une seule unité [M§5.5, §5.7] — agent Match | Ligue : Lefebvre `min` > 0 quand `gold.bv_player_outlook.form` ≥ 5 ; Legrand `over_36` = false | ouvert | — |
 
 ## Journal des matchs
 <!-- date · compétition · adversaire · score · résultat · cause principale (1 ligne) -->
+- 2026-09-07 · ligue J1 · KK Uola (dom) · 74-114 · D · eFG 36,7–56,5 (15,8 % à 3 pts) ; Q2 −19
+- 2026-09-09 · ligue J2 · Mind Readers (ext) · 93-115 · D · OREB 18,4–36,7 ; Q4 −15
+- 2026-09-12 · ligue J3 · Águias do Guadiana (dom) · 71-101 · D · eFG 27,6–54,6 (24,5 % à 2 pts) ; Q2 −20
+- 2026-09-14 · ligue J4 · Thrylos (ext) · 97-89 · V · 3 pts adverse à 19,5 % ; Q1 +11
+- 2026-09-16 · ligue J5 · Póvoa Riptide (dom) · 74-103 · D · TOV 21,8–11,0 ; Q1 −14
+- 2026-09-19 · ligue J6 · San Pancrazio (ext) · 112-78 · V · eFG adverse 32,3, OREB 33,3–19,6
+- 2026-09-21 · ligue J7 · Sierra Nevada (ext) · 103-82 · V · TOV adverse 21,9, 57,1 % à 2 pts
+- 2026-09-23 · ligue J8 · BARIUM (dom) · 91-95 · D · eFG 38,3 et TOV 18,7 ; mené tout le Q4
+- 2026-09-26 · ligue J9 · Žirmūnai (ext) · 96-129 · D · eFG adverse 57,3, OREB adverse 37,0
+- 2026-09-28 · ligue J10 · Astur Hoops (dom) · 114-105 · V · eFG 58,0, OREB 35,0
+- 2026-09-30 · ligue J11 · Wolves Empire (ext) · 108-111 · D · Cecchetti 38 pts à 71 % ; perte de balle dans la dernière minute
+- 2026-10-03 · ligue J12 · KK Uola (ext) · 76-135 · D · eFG adverse 68,0 ; écart de niveau
+- 2026-10-05 · ligue J13 · Mind Readers (dom) · 88-111 · D · eFG 33,0, OREB adverse 36,5
+- 2026-10-07 · ligue J14 · Águias do Guadiana (ext) · 89-119 · D · eFG adverse 57,1 ; Q2 −23
+- 2026-10-10 · amical · Isotopi&aAllies · 131-79 · V · eFG 61,0–38,3
+- 2026-10-10 · ligue J15 · Thrylos (dom) · 115-71 · V · eFG 59,1, TOV adverse 30,1 ; 1er match en rotation de 24 min, `defense_tier` 0
+- 2026-10-11 · amical · Tenerife · 105-100 · V · FT rate 49,4–13,1, OREB 32,7
+- 2026-10-12 · amical · Lila Sólymok · 109-120 · D · eFG 50,5–55,8 ; Q3 −11
+- 2026-10-12 · ligue J16 · Póvoa Riptide (ext) · 107-110 · D · TOV 24,2 ; égalité à 0:30 puis perte de balle
+- 2026-10-13 · amical · Halifax Wolves · 92-103 · D · box score adverse absent (export à refaire) ; 20 % à 3 pts
+- 2026-10-14 · ligue J17 · San Pancrazio (dom) · 100-85 · V · eFG 50,6–41,0, FT rate 39,7–9,6 ; Q4 +15
+- 2026-10-15 · amical · veldeman · 106-98 · V · Q1 −15 puis Q3/Q4 +24
+- 2026-10-16 · amical · Ironwood Holdings · 112-128 · D · eFG adverse 60,1 ; Q1 −18
+- 2026-10-17 · amical · Gremeska Achilles · 107-97 · V · eFG 55,4–45,5 ; Q4 +16
+- 2026-10-17 · ligue J18 · Sierra Nevada (dom) · 109-83 · V · TOV 6,0–25,0 ; Hola (give_up) 36 pts ; Lefebvre 0 min
+- 2026-10-18 · amical · Arios Pagkos · 138-95 · V · eFG 67,4 ; Lefebvre 40 d'éval
