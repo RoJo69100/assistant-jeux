@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SixZero League → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.2
+// @version      0.1.3
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers sixzeroleague.com.
 // @match        https://sixzeroleague.com/*
 // @match        https://www.sixzeroleague.com/*
@@ -18,11 +18,11 @@
   'use strict';
 
   const GAME = 'sixzeroleague';
-  const CLIENT = 'sixzeroleague.user.js@0.1.2';
+  const CLIENT = 'sixzeroleague.user.js@0.1.3';
   const MAX_HTML_CHARS = 1_500_000;
   const MAX_CAPTURES = 300;
   const MAX_BODY_CHARS = 3_000_000;
-  const SECRET_KEYS = /^(access_?token|refresh_?token|provider_?token|provider_?refresh_?token|id_?token|token|jwt|password|api_?key|secret|client_?secret)$/i;
+  const SECRET_KEYS = /^(access_?token|refresh_?token|provider_?token|provider_?refresh_?token|id_?token|token|jwt|password|api_?key|secret|client_?secret|e-?mail|owner_?username)$/i;  // + e-mails des autres managers (ownerUsername)
   const SKIP_URL = /\/auth\/v1\/|\/auth\/(refresh|token|login|logout|signin|signup)\b|\/_next\/|\/__nextjs|analytics|sentry|posthog|vercel-insights|google/i;
 
   const page = unsafeWindow;
