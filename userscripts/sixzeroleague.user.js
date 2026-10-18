@@ -23,7 +23,7 @@
   const MAX_CAPTURES = 300;
   const MAX_BODY_CHARS = 3_000_000;
   const SECRET_KEYS = /^(access_?token|refresh_?token|provider_?token|provider_?refresh_?token|id_?token|token|jwt|password|api_?key|secret|client_?secret)$/i;
-  const SKIP_URL = /\/auth\/|\/_next\/|\/__nextjs|analytics|sentry|posthog|vercel-insights|google/i;
+  const SKIP_URL = /\/auth\/v1\/|\/auth\/(refresh|token|login|logout|signin|signup)\b|\/_next\/|\/__nextjs|analytics|sentry|posthog|vercel-insights|google/i;
 
   const page = unsafeWindow;
   const captures = [];   // en attente d'envoi
