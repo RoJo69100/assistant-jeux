@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BasketVibe → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.2
+// @version      0.1.3
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers basketvibe.com.
 // @match        https://www.basketvibe.com/*
 // @match        https://basketvibe.com/*
@@ -21,8 +21,8 @@
   const CLIENT = 'basketvibe.user.js@0.1.1';
   const MAX_CAPTURES = 300;
   const MAX_BODY_CHARS = 3_000_000;
-  const SECRET_KEYS = /^(access_token|refresh_token|provider_token|provider_refresh_token|id_token|password|api_?key|secret)$/i;
-  const SKIP_URL = /\/auth\/v1\/|\/_next\/|\/__nextjs|analytics|sentry|posthog|vercel-insights|google/i;
+  const SECRET_KEYS = /^(access_?token|refresh_?token|provider_?token|provider_?refresh_?token|id_?token|token|jwt|password|api_?key|secret|client_?secret)$/i;
+  const SKIP_URL = /\/auth\/|\/_next\/|\/__nextjs|analytics|sentry|posthog|vercel-insights|google/i;
 
   const page = unsafeWindow;
   const captures = [];   // en attente d'envoi
