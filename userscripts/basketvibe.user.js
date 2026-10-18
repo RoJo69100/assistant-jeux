@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BasketVibe → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.1
+// @version      0.1.2
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers basketvibe.com.
 // @match        https://www.basketvibe.com/*
 // @match        https://basketvibe.com/*
@@ -66,6 +66,10 @@
     if (p === '/club/academy') return withTab('academy');
     if (p.startsWith('/transfers')) return withTab('transfers');
     if (/^\/match\/[^/]+$/.test(p)) return withTab('match');
+    if (/^\/friendly\/[^/]+$/.test(p)) return withTab('friendly');
+    if (p === '/club') return withTab('club');
+    if (p === '/news') return 'news';
+    if (p === '/notifications') return 'notifications';
     if (/^\/player\/[^/]+$/.test(p)) return withTab('player');
     if (p === '/league/table') return withTab('standings');      // ?tab=clubs, schedule, teams, players, injuries, transfers
     if (p === '/league/schedule') return withTab('schedule');
