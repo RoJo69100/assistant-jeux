@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         SixZero League → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.1
+// @version      0.1.2
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers sixzeroleague.com.
 // @match        https://sixzeroleague.com/*
 // @match        https://www.sixzeroleague.com/*
@@ -18,7 +18,7 @@
   'use strict';
 
   const GAME = 'sixzeroleague';
-  const CLIENT = 'sixzeroleague.user.js@0.1.1';
+  const CLIENT = 'sixzeroleague.user.js@0.1.2';
   const MAX_HTML_CHARS = 1_500_000;
   const MAX_CAPTURES = 300;
   const MAX_BODY_CHARS = 3_000_000;
@@ -161,6 +161,28 @@
       client: CLIENT,
     };
   }
+
+  // ---------- Wiki / aide : instantané automatique de chaque rubrique affichée ----------
+  // Les rubriques changent sans changer d'adresse : on garde une copie à chaque changement de contenu
+  // (lecture de la page déjà affichée, aucune requête vers le site). Envoi au prochain clic sur le bouton.
+  const AUTO_DOM = /wiki|help|rules|faq|guide/i;
+  let lastText = '';
+  let autoTimer = 0;
+  function autoSnapshot() {
+    if (!AUTO_DOM.test(location.pathname)) return;
+    const root = document.querySelector('main') || document.body;
+    if (!root) return;
+    const text = root.innerText;
+    if (text.length < 300 || text === lastText) return;
+    lastText = text;
+    captures.push(domSnapshot());
+    if (captures.length > MAX_CAPTURES) captures.shift();
+    refresh();
+  }
+  new MutationObserver(() => {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(autoSnapshot, 1200);
+  }).observe(document, { childList: true, subtree: true, characterData: true });
 
   // ---------- Envoi vers Supabase ----------
   function post(items) {
