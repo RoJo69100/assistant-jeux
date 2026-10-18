@@ -7,21 +7,21 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 - [x] Script Tampermonkey `userscripts/sixzeroleague.user.js` installé et configuré (vérifié le 2026-10-18 : version 0.1.2, captures API JSON + copie de page, wiki complet reçu)
 
 ## B. Collecte
-- [ ] Effectif et fiche joueur (20 compétences, âge, taille, main, éthique, salaire) → bronze
-- [ ] Tactique : composition par défaut, remplaçants par rôle, formations → bronze
-- [ ] Entraînement : intensité, focus par joueur, rapport, formation de rôle → bronze
+- [x] Effectif et fiche joueur (20 compétences, âge, taille, main, éthique, salaire) → bronze (vérifié le 2026-10-18 : 12 joueurs, compétences, progression fractionnaire, note par rôle)
+- [x] Tactique : composition par défaut, remplaçants par rôle, formations → bronze (vérifié le 2026-10-18 : 7 titulaires, 2 remplaçants, 5-1 / 6-0)
+- [x] Entraînement : intensité, focus par joueur, rapport, formation de rôle → bronze (vérifié le 2026-10-18 : intensité Normal, 12 focus, rapport de 9 progrès, 1 emplacement de rôle)
 - [ ] Match : score, rapport, statistiques, incidents (après le 1er match de la saison) → bronze
-- [ ] Compétitions : classement, calendrier, coupe → bronze
-- [ ] Marché des transferts et joueur en vente → bronze
-- [ ] Finances, rapport hebdomadaire, offres de sponsor → bronze
-- [ ] Infrastructures (4 installations, niveaux, coûts, remboursement) → bronze
-- [ ] Académie U18 (2 prospects, compétences dévoilées) → bronze
+- [x] Compétitions : classement, calendrier, coupe → bronze (vérifié le 2026-10-18 : ligue Vanadium, 5e division, 10 clubs, 90 matchs dont 18 pour nous ; coupe capturée)
+- [x] Marché des transferts et joueur en vente → bronze (vérifié le 2026-10-18 : 23 annonces avec compétences)
+- [x] Finances, rapport hebdomadaire, offres de sponsor → bronze (vérifié le 2026-10-18 : solde, prévision, dernier rapport, 3 offres, sponsor actuel)
+- [x] Infrastructures (4 installations, niveaux, coûts, remboursement) → bronze (vérifié le 2026-10-18 : 4 installations, 20 niveaux chacune avec effet, entretien et coût)
+- [x] Académie U18 (2 prospects, compétences dévoilées) → bronze (vérifié le 2026-10-18 : pas de prospect disponible, prochain choix dans 5 journées)
 - [x] Wiki du jeu (15 rubriques) → bronze (vérifié le 2026-10-18)
 
 ## C. Modèle de données
 - [ ] Silver : joueurs + relevé par cycle d'entraînement (compétences, blessures)
 - [ ] Silver : matchs, stats par joueur, incidents
-- [ ] Silver : classement, calendrier, marché, finances, infrastructures, académie
+- [x] Silver : classement, calendrier, marché, finances, infrastructures, académie (vérifié le 2026-10-18 : sql/silver/010_sz_base.sql)
 - [ ] Gold : bilan par rôle (note, compétences clés du rôle, âge, salaire, profondeur)
 - [ ] Gold : progression par cycle d'entraînement (points gagnés par joueur et compétence)
 - [ ] Gold : résultat financier par cycle et projection de fin de saison
