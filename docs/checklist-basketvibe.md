@@ -47,8 +47,8 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Entraînement : verdict hebdo garder ou changer, à partir des résultats d'entraînement (validé par l'utilisateur le 2026-10-18 : brief du 2026-10-18, gains précis par entraînement)
 - [x] Potentiel : estimation du potentiel de chaque joueur depuis sa progression, avec un niveau de confiance (validé par l'utilisateur le 2026-10-18 : gold.bv_potential_estimate, 6 potentiels sûrs, 8 à 2 valeurs)
 - [ ] Académie : avis sur les 3 prospects (tester, signer ou ignorer) et sur l'investissement hebdo
-- [ ] Transferts : pour un joueur donné, intérêt pour l'effectif, prix correct ou non, enchère maximum
-- [ ] Transferts : liste des joueurs à vendre (âge, salaire, déclin) et moment de la vente
+- [x] Transferts : pour un joueur donné, intérêt pour l'effectif, prix correct ou non, enchère maximum (validé par l'utilisateur le 2026-10-18 : brief du 2026-10-18, enchères Al-Anazi, Dang, Daniels, Albano posées)
+- [x] Transferts : liste des joueurs à vendre (âge, salaire, déclin) et moment de la vente (validé par l'utilisateur le 2026-10-18 : Fontaine maintenant, Henry et Klein après le 26/10)
 - [ ] Finances : alerte si on perd de l'argent, avec la cause
 - [ ] Finances : masse salariale soutenable ou non par rapport aux revenus
 - [ ] Finances : capacité d'investissement (académie, personnel)
