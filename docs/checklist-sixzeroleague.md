@@ -25,7 +25,7 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 - [ ] Gold : bilan par rôle (note, compétences clés du rôle, âge, salaire, profondeur)
 - [ ] Gold : progression par cycle d'entraînement (points gagnés par joueur et compétence)
 - [ ] Gold : résultat financier par cycle et projection de fin de saison
-- [ ] Gold : rentabilité des infrastructures (semaines de remboursement)
+- [x] Gold : rentabilité des infrastructures (semaines de remboursement) (vérifié le 2026-10-18 : gold.sz_infrastructure_payback, Arena et Fan Shop, 4 niveaux au-dessus de l'actuel)
 
 ## D. Skills
 - [x] Règles écrites depuis le wiki officiel (4 skills `sixzeroleague-*`, chaque fait sourcé [W:Rubrique]) (validé par l'utilisateur le 2026-10-18 : « je te fais confiance pour les règles »)
