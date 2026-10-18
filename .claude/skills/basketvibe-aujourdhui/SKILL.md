@@ -1,6 +1,6 @@
 ---
 name: basketvibe-aujourdhui
-description: « Qu'est-ce que je fais aujourd'hui sur BasketVibe ? » — liste courte et horodatée des actions du jour (et de demain matin si on est le soir) : presets et focus à régler avant les verrouillages, enchères qui se terminent, entraînement à sauvegarder, exports à faire, amicaux à programmer. À charger dès que l'utilisateur demande quoi faire aujourd'hui, ce soir, demain matin, ou « mes tâches BasketVibe ».
+description: « Qu'est-ce que je fais aujourd'hui sur BasketVibe ? » et brief du matin — liste courte et horodatée des actions du jour (et de demain matin si on est le soir) : presets et focus à régler avant les verrouillages, enchères qui se terminent, entraînement à sauvegarder, exports à faire, amicaux à programmer. À charger dès que l'utilisateur demande quoi faire aujourd'hui, ce soir, demain matin, ou « mes tâches BasketVibe », ou le brief quotidien (alertes : blessés, fatigue, forme, finances, exports en retard).
 ---
 
 # BasketVibe — que faire aujourd'hui
@@ -17,6 +17,17 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
    - personnel ou finances : actions datées du dernier `*-finances.md`.
 3. Vérifie la fraîcheur : si un brief a plus de 3 jours pour un sujet du jour (ex. tactique avant un match de ligue), dis-le et propose de relancer l'agent concerné.
 4. Signale les exports attendus que je n'ai pas reçus (ex. page du dernier match joué absente de `silver.bv_matches`).
+
+5. Lis `select * from gold.bv_daily_alerts order by priority` : blessés, fatigue hors zone verte, forme ≤ 2, finances, joueurs disponibles, exports en retard, dernier match exporté, match joué non exporté.
+
+## Brief du matin (case F7)
+Si la demande est faite **le matin** (avant 12:00) ou si l'utilisateur demande « le brief » : écris aussi `outputs/basketvibe/briefs/AAAA-MM-JJ-quotidien.md`, qui regroupe en une page :
+1. **Aujourd'hui** : la liste horodatée (format ci-dessous).
+2. **Alertes** : `gold.bv_daily_alerts`, une ligne chacune, avec l'action à faire (ex. fatigue > 20 → le sortir d'un quart-temps, voir l'agent Tactique).
+3. **Hier** : derniers matchs exportés (`gold.bv_match_report`, 24 h) en une ligne chacun.
+4. **Conseils ouverts** qui arrivent à échéance aujourd'hui ou demain (section Conseils de `outputs/basketvibe/learnings.md`).
+5. **Agents à relancer** : ceux dont l'export d'entrée est arrivé depuis leur dernier brief (match, entraînement, finances, académie, transferts, veille).
+Pas plus d'une page ; pas de nouvelle recommandation, seulement ce que les briefs ont validé.
 
 ## Format de réponse
 - **Au plus 8 lignes**, triées par heure : `HH:MM — action — détail (source)`.
