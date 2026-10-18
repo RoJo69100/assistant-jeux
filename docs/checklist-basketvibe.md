@@ -55,10 +55,10 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Personnel : recruter, garder ou virer, poste par poste, avec le coût et le gain attendu (validé et appliqué par l'utilisateur le 2026-10-18 : 2 marketing renvoyés, 3 kinés embauchés)
 
 ## F. Wiki et apprentissage continu
-- [ ] Wiki : routine quotidienne et hebdomadaire
-- [ ] Wiki : comment progresser (priorités par saison)
-- [ ] Wiki : âges clés (meilleur âge, quand vendre, déclin, retraite)
-- [ ] Wiki : profil idéal par poste et meilleurs joueurs observés par poste
-- [ ] Wiki : quels entraînements selon le poste et l'âge
+- [x] Wiki : routine quotidienne et hebdomadaire (validé par l'utilisateur le 2026-10-18 : wiki/routine.md)
+- [x] Wiki : comment progresser (priorités par saison) (validé par l'utilisateur le 2026-10-18 : wiki/progresser.md)
+- [x] Wiki : âges clés (meilleur âge, quand vendre, déclin, retraite) (validé par l'utilisateur le 2026-10-18 : wiki/ages.md)
+- [x] Wiki : profil idéal par poste et meilleurs joueurs observés par poste (validé par l'utilisateur le 2026-10-18 : wiki/profils-postes.md)
+- [x] Wiki : quels entraînements selon le poste et l'âge (validé par l'utilisateur le 2026-10-18 : wiki/entrainements.md)
 - [ ] Veille : propositions de mise à jour des skills après chaque export Discord ou devlog
 - [ ] Brief quotidien : un résumé chaque matin regroupant les points ci-dessus
