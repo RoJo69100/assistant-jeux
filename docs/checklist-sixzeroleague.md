@@ -28,8 +28,8 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 - [ ] Gold : rentabilité des infrastructures (semaines de remboursement)
 
 ## D. Skills
-- [ ] Règles écrites depuis le wiki officiel (4 skills `sixzeroleague-*`, chaque fait sourcé [W:Rubrique]) — écrits le 2026-10-18, à valider
-- [ ] 10 questions de règles testées par l'utilisateur : 10 réponses justes
+- [x] Règles écrites depuis le wiki officiel (4 skills `sixzeroleague-*`, chaque fait sourcé [W:Rubrique]) (validé par l'utilisateur le 2026-10-18 : « je te fais confiance pour les règles »)
+- ~~10 questions de règles testées par l'utilisateur~~ (retirée le 2026-10-18 à la demande de l'utilisateur : pas de test des règles pour ce jeu)
 
 ## E. Agents (globaux, avec la fiche du jeu)
 - [ ] Fiche du jeu pour les agents (skills, vues gold, spécificités)
