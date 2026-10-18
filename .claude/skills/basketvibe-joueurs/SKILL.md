@@ -69,7 +69,7 @@ Taille adulte par poste : PG 180–200, SG 186–203, SF 192–209, PF 196–212
   Sous 100 : moins de ballons, pas d'avantage de taille au contest, conversion plus difficile [M§6.2.1].
 - Poids : hors de la plage saine pour sa taille, le joueur est pénalisé. Trop lourd : défense extérieure, protection du ballon et interceptions. Trop léger : contact, défense au poste et rebond [M§5.2].
 - Jeunes : ils grandissent jusqu'à 22 ans (+0 à +4 cm par saison, vers une taille cible cachée), +0,9 kg par cm [M§5.2].
-- Changement de libellé de poste possible à partir de 22 ans, purement cosmétique [M§4].
+- Changement de libellé de poste possible à partir de 22 ans, purement cosmétique [M§4]. Depuis le 14/10, il se fait sur la fiche du joueur, dans la plage permise par sa taille [News 2026-10-14].
 
 ## Forme (1–10) [M§5.5]
 - Mise à jour chaque dimanche : en général ±1 ou stable, avec un retour vers le milieu. Remise à 6 en début de saison. Les psychologues font légèrement pencher vers la hausse.
@@ -95,6 +95,7 @@ Taille adulte par poste : PG 180–200, SG 186–203, SF 192–209, PF 196–212
 | Défense | 0 % | −2 % | −6 % | −13 % | −26 % |
 
   Variation linéaire entre ces points. Zones : vert 0–20, jaune 20–40, orange 40–60, rouge 60–100 [M§5.6.1].
+- ⚠️ **Moteur v4 (amicaux depuis le 17/10, ligue en saison 2)** : une seule échelle, plus dure, pour l'attaque et la défense : 20 → −4 % ; 40 → −15 % ; 60 → −30 % ; 80 → −50 % [News 2026-10-17]. Détail dans basketvibe-communaute. *Avis (pas une règle)* : en saison 2, viser une fatigue au coup d'envoi en zone verte (≤ 20) pour les titulaires.
 - Multiplicateur d'agressivité défensive : soft ×0,75 · ×0,875 · équilibré ×1,00 · ×1,325 · agressif ×1,65 [M§6.3].
 - Fatigue stabilisée avant un match du samedi (même usage chaque semaine), extrait [M§5.6.4] :
   - défense équilibrée, endurance 50 : 24 min → 12 ; 36 min → 21 ; 48 min → 30 ;

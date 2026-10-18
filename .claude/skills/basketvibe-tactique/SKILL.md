@@ -14,6 +14,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Le manuel cite deux remplacements forcés pendant un quart-temps : 6 fautes ou blessure. Sinon, le cinq change au début de chaque quart-temps selon la grille [M§6.2].
 - [Obs] Nos play-by-play contiennent aussi des événements `substitution_foul_trouble` (2 dans le match du 14/10) : le moteur sort parfois un joueur chargé de fautes. Le manuel n'en parle pas ; règle non documentée.
 - Rappel : à partir de 36 minutes dans le match, −20 % sur tout (basketvibe-joueurs [M§5.7]). Les rotations par quart-temps sont le levier pour l'éviter.
+- ⚠️ **Moteur v4 (ligue en saison 2)** : fatigue plus punitive (jusqu'à −50 % à 80) et duels 1 contre 1 plus marqués, ce qui donne plus d'impact à la tactique ; les fautes suivent l'agressivité défensive [News 2026-10-11 / 16 / 17]. Détail dans basketvibe-communaute. Une tactique de saison 2 doit gérer la fatigue d'un match à l'autre, pas seulement les 36 min.
 
 ## Depth chart [M§6.2.2]
 - Pour chaque poste, liste ordonnée de 5 remplaçants maximum ; un joueur peut figurer sur plusieurs listes. Valable pour tout le club, indépendant des presets.

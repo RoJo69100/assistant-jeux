@@ -1,6 +1,6 @@
 ---
 name: basketvibe-communaute
-description: Ce que dit le Discord BasketVibe (lu en entier le 2026-10-16, 2 624 messages du 31/05 au 09/10/2026) — précisions du développeur, versions du moteur, conseils et observations de la communauté, prix du marché constatés, contradictions avec le manuel. Chaque point est daté et sourcé. À charger en complément des skills de règles, pour les conseils pratiques, ou quand le manuel est muet.
+description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 624 messages du 31/05 au 09/10/2026) et les News de l'admin (lues jusqu'au 2026-10-18 : moteur v4 pour la saison 2, fatigue plus punitive, duels plus marqués) — précisions du développeur, versions du moteur, conseils et observations de la communauté, prix du marché constatés, contradictions avec le manuel. Chaque point est daté et sourcé. À charger en complément des skills de règles, pour les conseils pratiques, ou quand le manuel est muet.
 ---
 
 # BasketVibe — communauté et développeur (Discord)
@@ -8,12 +8,28 @@ description: Ce que dit le Discord BasketVibe (lu en entier le 2026-10-16, 2 624
 ## Comment lire cette skill
 - **[Dev aaaa-mm-jj, salon]** = vachacz, développeur unique du jeu : quasi officiel, mais ça peut changer.
 - **[Com aaaa-mm-jj, auteur, salon]** = un joueur : opinion ou expérience, **pas une règle**.
+- **[News aaaa-mm-jj]** = annonce officielle de l'admin sur la page News du jeu (`silver.bv_news`, lue le 2026-10-18) : vaut une règle pour la version de moteur qu'elle cite.
 - **Le manuel l'emporte** en cas de contradiction ; les écarts sont signalés ⚠️.
 - **Reset du monde le 2026-09-06** (saison 1 depuis le 07/09). Ce qui date d'**avant** porte sur la bêta : souvent périmé, marqué 🕰️.
 - Source brute : `bronze.discord_messages` (export du 2026-10-16).
 
 ## 1. Moteur de match : versions et calibrage
 - **Saison 1 : le moteur v3 tourne en ligue depuis la journée 12 ; il est gelé jusqu'à la fin de la saison. Le v4 n'est actif qu'en amical et passera en ligue en saison 2.** Conséquence : un résultat d'amical **ne prédit pas** la ligue [Dev 2026-09-30 / 2026-10-04, release-notes + engine].
+
+### Moteur v4 : changements annoncés (amicaux seulement en saison 1, **ligue en saison 2**)
+À prendre en compte pour préparer la saison 2. Les amicaux depuis le 11/10 tournent déjà avec ces réglages.
+- **Fatigue plus punitive, une seule échelle pour l'attaque et la défense** : fatigue 0 → 0 % ; 20 → −4 % ; 40 → −15 % ; 60 → −30 % ; 80 → −50 % [News 2026-10-17].
+  - ⚠️ C'est plus dur que le tableau du manuel (v3 : attaque −3 / −10 / −20 / −40 % à 20 / 40 / 60 / 100 ; défense plus faible encore) [M§5.6].
+  - Simulations miroir de l'admin (équipe fraîche contre la même fatiguée à 20 / 40 / 60 / 80) : **+1,7 / +7,4 / +11,5 / +15,3 points** pour l'équipe fraîche.
+  - But annoncé : décourager le « 5 × 48 min » (les bots sur ce réglage gagnaient trop) [News 2026-10-17].
+- **Duels 1 contre 1 plus marqués** : le v3 resserrait les gros écarts de compétences ; en v4, un défenseur à ~80 pèse plus contre un attaquant à ~40, et inversement. « La tactique a plus de place et plus d'impact. » Les équipes bots (≈ 10 points de compétences sous les humains) perdent 1,5 à 4,5 points par match de plus [News 2026-10-16].
+- **Fautes** : leur répartition suit maintenant l'agressivité défensive (manquait en v3). Avec un **Lock**, le défenseur direct provoque moins de fautes, puisqu'une partie des tirs du joueur visé part chez ses coéquipiers [News 2026-10-11].
+
+### Autres annonces (toutes versions)
+- **Changement de poste d'un senior** sur sa fiche, dans la plage permise par sa taille [News 2026-10-14]. Complète le manuel (libellé modifiable dès 22 ans [M§4]).
+- **Primes de fin de saison** confirmées : 1er 400k, 2e 300k, 3e 200k, 4e 100k, 5e–8e 50k, 9e–12e rien [News 2026-10-14]. Concorde avec le manuel §10.1.4.
+- Les tests de potentiel sur le marché n'apparaissent plus comme des achats dans Finances [News 2026-10-14].
+- Trophées pour les 3 premiers de chaque ligue et pour le finaliste de la coupe ; partage de l'historique d'entraînement dans le chat ; le play-by-play affiche le remplacement d'un joueur indisponible par le depth chart [News 2026-10-11].
 - Les poids du PS sont **indicatifs**. Le moteur joue possession par possession avec les compétences, pas avec ces pourcentages [Dev 2026-09-17, engine].
 - Pénalité au-delà de 36 min : 8 % → 10 % → 12,5 % → **20 %** (le 2026-09-13). Le manuel indique 20 % [Dev, release-notes]. La communauté trouve que les équipes à « 5 × 48 min » gagnent encore trop souvent [Com 2026-09-12, grobarbrate/faraone85, engine].
 - Le dev simule un match 1 000 fois pour mesurer la chance (exemple : 68 % de chances de gagner, et défaite quand même). **Un match isolé ne prouve rien** [Dev 2026-06-27 / 2026-08-24, general].
