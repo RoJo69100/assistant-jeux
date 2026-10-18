@@ -41,8 +41,8 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Match : explication de chaque victoire et défaite, chiffres à l'appui (validé par l'utilisateur le 2026-10-18 : brief du 2026-10-18, 26 matchs)
 - [x] Match : journal des enseignements, mis à jour après chaque match (validé par l'utilisateur le 2026-10-18 : learnings.md, L-001 à L-007, delta par « dernier match analysé »)
 - [ ] Match : contrôle des conseils passés (appliqué ou non, effet constaté)
-- [ ] Tactique : tactique initiale complète, prête à saisir dans le jeu
-- [ ] Tactique : ajustement selon l'adversaire du prochain match
+- [x] Tactique : tactique initiale complète, prête à saisir dans le jeu (validé par l'utilisateur le 2026-10-18 : presets « Ligue S1 » et « Amical » saisis dans le jeu)
+- [x] Tactique : ajustement selon l'adversaire du prochain match (validé par l'utilisateur le 2026-10-18 : focus défensif J19 BARIUM saisi)
 - [ ] Tactique : évolution de la tactique à partir du journal des enseignements
 - [ ] Entraînement : verdict hebdo garder ou changer, à partir des résultats d'entraînement
 - [ ] Potentiel : estimation du potentiel de chaque joueur depuis sa progression, avec un niveau de confiance
