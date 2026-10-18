@@ -26,12 +26,12 @@ from t group by 1, 2;
 -- Ventes conclues dont on connaît les compétences (vues en vente avant) : la meilleure référence de prix.
 create or replace view gold.bv_market_price_known with (security_invoker = true) as
 with t as (select distinct on (auction_id) * from silver.bv_transfers where fee > 0 and entry_type = 'transfer' order by auction_id),
-a as (select distinct on (player_id) * from silver.bv_transfer_auctions order by player_id, seen_at desc)
+a as (select distinct on (auction_id) * from silver.bv_transfer_auctions order by auction_id, seen_at desc)  -- même enchère que la vente
 select t.settled_at::date as sold_on, t.name, t.position, t.age, a.ps,
        round((a.two_point + a.three_point + a.defense + a.passing + a.ball_handling + a.rebounding + a.stamina + a.athleticism) / 8.0, 1) as avg_skill,
        a.height_cm, a.starting_price, t.fee, a.seller_is_free_agent as was_free_agent,
        round(t.fee / nullif(a.ps, 0)) as fee_per_ps
-from t join a using (player_id);
+from t join a on a.auction_id::text = t.auction_id::text;
 
 -- Joueurs en vente (dernier export du marché) jugés pour mon effectif.
 create or replace view gold.bv_market_candidates with (security_invoker = true) as
