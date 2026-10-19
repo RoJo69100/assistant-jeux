@@ -33,6 +33,7 @@ docs/                  checklist et décisions
 - Python 3.13, dépendances dans `requirements.txt`.
 - Une modification = un commit avec un message clair.
 - Coût : ne jamais relire tout l'historique brut ; travailler sur les vues gold et le delta du jour.
+- Tokens : une tâche par session. Proposer `/clear` dès que l'utilisateur change de sujet (autre jeu, autre domaine) ou qu'une tâche est commitée ; proposer `/compact` quand la session devient longue (nombreux échanges, grosses sorties). Requêtes SQL avec colonnes choisies et `LIMIT`.
 
 ## Sources BasketVibe
 - Manuel officiel : https://www.basketvibe.com/guide
