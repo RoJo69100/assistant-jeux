@@ -16,25 +16,25 @@ Adaptée de la checklist SixZero League le 2026-10-19 (3e jeu du kit multi-jeux)
 - [x] Finances et stade → bronze (vérifié le 2026-10-19 : `team_finances`, `stadiums`, pages Finances et Stade)
 - [x] Académie et Haute Performance → bronze (vérifié le 2026-10-19 : `youth_academy_players` avec `revealed_skills`, `high_performance_scouts`)
 - [x] Guide du jeu et forum → bronze (vérifié le 2026-10-19 : guide de 50 558 caractères ; 881 messages avec contenu)
-- [ ] Compléments : réponses de la FAQ du guide (repliées, non captées) et 13 annonces dont seul le titre est en base (liste dans le skill `teamsoccer-communaute`)
+- [ ] Compléments : réponses de la FAQ du guide (repliées, non captées) et 13 annonces dont seul le titre est en base (liste dans le skill `teamsoccer-communaute`) (annonces captées le 2026-10-19 : 20 annonces avec contenu, du 2026-08-18 au 2026-10-18, `silver.ts_news` ; reste la FAQ)
 - [ ] Page Statistiques du club : les 5 cercles de constance du manager (MC)
 
 ## C. Modèle de données
-- [ ] Silver : joueurs + relevé hebdomadaire après l'entraînement du vendredi (compétences, Forme, valeur, salaire), par club
-- [ ] Silver : matchs, compositions et consignes, notes par joueur, secteurs
-- [ ] Silver : classement, calendrier, coupes, marché, finances, stade, académie
-- [ ] Gold : bilan par poste naturel (sous-rôle, OVR, Forme, âge, valeur, salaire, profondeur du banc)
-- [ ] Gold : progression par séance d'entraînement (gain par joueur et compétence selon âge et intensité, variation de Forme)
-- [ ] Gold : résultat financier par semaine et projection de fin de saison (salaires, entretien, billetterie, primes), alerte solde négatif
-- [ ] Gold : rentabilité du stade (matchs pour rembourser chaque type de place selon division et rang)
-- [ ] Gold : académie (jeunes, compétences révélées, révélations du jour à faire)
+- [x] Silver : joueurs + relevé hebdomadaire après l'entraînement du vendredi (compétences, Forme, valeur, salaire), par club (vérifié le 2026-10-19 : `silver.ts_player_snapshots` un relevé par joueur et par jour, `ts_players` 23 + 22 joueurs, `sql/silver/012`)
+- [ ] Silver : matchs, compositions et consignes, notes par joueur, secteurs (fait le 2026-10-19 : `ts_matches`, `ts_match_lineups`, `ts_lineups` ; manquent notes et secteurs, liés à B4)
+- [x] Silver : classement, calendrier, coupes, marché, finances, stade, académie (vérifié le 2026-10-19 : `ts_standings` recalculé, `ts_matches` par compétition, `ts_transfer_listings` 72 annonces, `ts_finances`, `ts_stadiums`, `ts_youth_players` 2 × 16, `ts_hpc`)
+- [x] Gold : bilan par poste naturel (sous-rôle, OVR, Forme, âge, valeur, salaire, profondeur du banc) (vérifié le 2026-10-19 : `gold.ts_squad_report` par zone ; sous-rôle indicatif via `second_skill`)
+- [ ] Gold : progression par séance d'entraînement (gain par joueur et compétence selon âge et intensité, variation de Forme) (vue `gold.ts_player_progress` créée le 2026-10-19 ; à vérifier au 2e relevé, après le vendredi)
+- [x] Gold : résultat financier par semaine et projection de fin de saison (salaires, entretien, billetterie, primes), alerte solde négatif (vérifié le 2026-10-19 : `gold.ts_finance_status` ; salaires et entretien recalculés = lignes du jeu, écart 0 ; primes non comptées)
+- [x] Gold : rentabilité du stade (matchs pour rembourser chaque type de place selon division et rang) (vérifié le 2026-10-19 : `gold.ts_stadium_payback`)
+- [x] Gold : académie (jeunes, compétences révélées, révélations du jour à faire) (vérifié le 2026-10-19 : `gold.ts_academy`, plus `gold.ts_hpc_status` et `gold.ts_upcoming`)
 
 ## D. Skills
-- [ ] Règles écrites depuis le guide et le forum (6 skills `teamsoccer-*` : joueurs, match, entrainement, club, saison, communaute ; chaque fait sourcé [G], [F], [P] ou [Obs]) (écrits le 2026-10-19 ; à valider par l'utilisateur)
+- [x] Règles écrites depuis le guide et le forum (6 skills `teamsoccer-*` : joueurs, match, entrainement, club, saison, communaute ; chaque fait sourcé [G], [F], [P] ou [Obs]) (validés par l'utilisateur le 2026-10-19)
 - [ ] Points incertains tranchés par nos données : formule de l'OVR par sous-rôle, valeur et salaire, Forme au changement de saison, ampleur du style d'équipe
 
 ## E. Agents (globaux, avec la fiche du jeu)
-- [ ] Fiche du jeu pour les agents (`docs/fiches/teamsoccer/` : commun + 8 domaines, skills et vues citées présents)
+- [x] Fiche du jeu pour les agents (`docs/fiches/teamsoccer/` : commun + 8 domaines, skills et vues citées présents) (vérifié le 2026-10-19 : 9 fiches, toutes les vues citées existent en base)
 - [ ] Effectif : bilan par poste, meilleurs et moins bons joueurs, 3 actions, pour chaque club
 - [ ] Tactique : formation, style, consignes, banc et remplacements prêts à saisir, selon la Forme et l'adversaire
 - [ ] Match : explication de chaque match, chiffres à l'appui, journal des enseignements

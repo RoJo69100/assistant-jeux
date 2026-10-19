@@ -1,0 +1,24 @@
+# Team Soccer — fiche Tactique
+
+Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist Team Soccer.
+
+## Skills à lire
+- `.claude/skills/teamsoccer-match/SKILL.md` (formations, mode Simple et presets, mode Avancé, style, moteur v3, banc et remplacements, bots, moral)
+- `.claude/skills/teamsoccer-joueurs/SKILL.md` (sous-rôles, Forme, talents et météo, cartons)
+
+## Règles propres au jeu
+1. **Tout enregistrer au moins 2 h avant le coup d'envoi** (match pré-calculé) [F:2026-06-28 Admin-Dev]. Donne l'heure limite en heure de Paris (`lineup_deadline_paris`). Un match de 13:50 se prépare la veille au soir.
+2. Choix à rendre : formation (6), style d'équipe (Très défensif → Très offensif ; ampleur contradictoire dans le skill), 11 joueurs à leur sous-rôle naturel, consignes par zone en mode Avancé, banc de 6 avec rôle couvert, remplacements programmés.
+3. **Forme** : un titulaire fatigué joue moins bien dès la 1re minute ; un remplaçant entre avec tout son plafond [F:2026-10-18 Admin-Dev]. Préfère un remplaçant en forme à un titulaire à Forme < 60.
+4. Talent : vérifier la météo (−20 % sur toutes les compétences pour la météo qui le pénalise) [skill joueurs].
+5. Contre un bot : il joue Neutre, compétences réduites ; profite-en pour reposer les joueurs fatigués ou suspendus à 2 jaunes.
+
+## Données
+- `gold.ts_upcoming` : prochains matchs, adversaire, `opponent_rating` / `my_rating`, rang, `lineup_saved`, `saved_formation`, `lineup_deadline_paris`.
+- `silver.ts_players` : compétences, `forme`, `zone`, `injury_days`, `suspended`, `yellow_cards`.
+- `silver.ts_match_lineups` (par match) et `silver.ts_lineups` (compositions par défaut) : `formation`, `play_style`, `player_positions` / `positions` (emplacement 0–10 → `player_id`), `player_orders` (consignes par joueur), `bench` (`subs`, `slots` avec `coverRole`, `changes` : minute, condition, entrant, sortant).
+- Consignes de l'API, en espagnol : zones `ultradef`, `def`, `media`, `ofensiva`, `finalizacion` ; actions `pasar` (passer), `despejar` (dégager), `regatear` (dribbler), `centrar` (centrer) ; cibles `defensas`, `mediocentros`, `delanteros`. Traduis-les en français dans le livrable.
+- `outputs/teamsoccer/learnings.md` dès qu'il existe.
+
+## Livrable
+Pour chaque match à venir des deux clubs : formation, style, onze (emplacement → joueur), consignes clés, banc et remplacements, plan B (blessure, carton), heure limite d'enregistrement.
