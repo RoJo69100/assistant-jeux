@@ -44,4 +44,4 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 
 ## F. Routine
 - [ ] Wiki de synthèse : routine, priorités, âges clés, profil par rôle
-- [ ] « Que faire aujourd'hui » et brief du matin pour SixZero League
+- [ ] « Que faire aujourd'hui » et brief du matin pour SixZero League (fait le 2026-10-19 : skill `sixzeroleague-aujourdhui`, `gold.sz_agenda`, `gold.sz_daily_alerts` ; à valider par l'utilisateur)
