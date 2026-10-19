@@ -12,7 +12,7 @@ Coche une case uniquement quand son critère est vérifié, et note la date.
 - **Discord** : export géré par l'utilisateur ; fichiers déposés dans `data/discord/<jeu>/`, puis importés en bronze par `pipelines/import_discord.py`.
 - **Données** : Supabase (Postgres), schémas `bronze` (JSON brut daté, jamais modifié), `silver` (vues/tables par jeu), `gold` (vues d'analyse et d'alertes). Les calculs se font en SQL, pas dans le LLM.
 - **Connaissance** : skills par jeu dans `.claude/skills/<jeu>-<domaine>/SKILL.md`. Chaque fait est sourcé (manuel, devlog, Discord + date). Toute modification de skill proposée par l'agent veille doit être validée par l'utilisateur.
-- **Agents** : par domaine dans `.claude/agents/` (effectif, match, tactique, entrainement, academie, transferts, finances-personnel, veille). Ils lisent Supabase via MCP et chargent le skill du jeu concerné.
+- **Agents** : globaux, par domaine, dans `.claude/agents/` (effectif, match, tactique, entrainement, academie, transferts, finances-personnel, veille). Toujours leur donner le jeu dans la demande. Ils lisent la fiche du jeu `docs/fiches/<jeu>/` (`commun.md` + `<agent>.md` : skills, vues, règles et livrable propres au jeu), puis Supabase via MCP.
 - **Sorties** : `outputs/<jeu>/` — wiki, journal des enseignements (`learnings.md`), briefs datés.
 
 ## Arborescence
@@ -26,6 +26,7 @@ samples/<jeu>/         pages HTML enregistrées (ignoré par Git)
 data/discord/<jeu>/    exports Discord (ignoré par Git)
 outputs/<jeu>/         wiki, learnings, briefs
 docs/                  checklist et décisions
+docs/fiches/<jeu>/     fiche du jeu pour les agents
 ```
 
 ## Règles

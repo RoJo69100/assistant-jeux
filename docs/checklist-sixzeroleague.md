@@ -32,7 +32,7 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 - ~~10 questions de règles testées par l'utilisateur~~ (retirée le 2026-10-18 à la demande de l'utilisateur : pas de test des règles pour ce jeu)
 
 ## E. Agents (globaux, avec la fiche du jeu)
-- [ ] Fiche du jeu pour les agents (skills, vues gold, spécificités)
+- [x] Fiche du jeu pour les agents (skills, vues gold, spécificités) (vérifié le 2026-10-19 : docs/fiches/sixzeroleague/, commun + 8 domaines, 15 vues citées présentes en base, skills cités présents)
 - [ ] Effectif : bilan par rôle, meilleurs et moins bons joueurs, 3 actions
 - [ ] Tactique : composition par défaut et remplaçants par rôle, prêts à saisir
 - [ ] Match : explication de chaque match, chiffres à l'appui, journal des enseignements
