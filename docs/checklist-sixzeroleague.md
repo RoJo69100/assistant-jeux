@@ -10,7 +10,7 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 - [x] Effectif et fiche joueur (20 compétences, âge, taille, main, éthique, salaire) → bronze (vérifié le 2026-10-18 : 12 joueurs, compétences, progression fractionnaire, note par rôle)
 - [x] Tactique : composition par défaut, remplaçants par rôle, formations → bronze (vérifié le 2026-10-18 : 7 titulaires, 2 remplaçants, 5-1 / 6-0)
 - [x] Entraînement : intensité, focus par joueur, rapport, formation de rôle → bronze (vérifié le 2026-10-18 : intensité Normal, 12 focus, rapport de 9 progrès, 1 emplacement de rôle)
-- [ ] Match : score, rapport, statistiques, incidents (après le 1er match de la saison) → bronze
+- [x] Match : score, rapport, statistiques, incidents (après le 1er match de la saison) → bronze (vérifié le 2026-10-19 : `/matches/<id>/stats`, journée 1, 27-26 contre voleibol aljarafe)
 - [x] Compétitions : classement, calendrier, coupe → bronze (vérifié le 2026-10-18 : ligue Vanadium, 5e division, 10 clubs, 90 matchs dont 18 pour nous ; coupe capturée)
 - [x] Marché des transferts et joueur en vente → bronze (vérifié le 2026-10-18 : 23 annonces avec compétences)
 - [x] Finances, rapport hebdomadaire, offres de sponsor → bronze (vérifié le 2026-10-18 : solde, prévision, dernier rapport, 3 offres, sponsor actuel)
@@ -20,7 +20,7 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 
 ## C. Modèle de données
 - [ ] Silver : joueurs + relevé par cycle d'entraînement (compétences, blessures)
-- [ ] Silver : matchs, stats par joueur, incidents
+- [x] Silver : matchs, stats par joueur, incidents (vérifié le 2026-10-19 : `sz_matches`, `sz_match_players`, `sz_match_incidents`, `sql/silver/011_sz_matches.sql`)
 - [x] Silver : classement, calendrier, marché, finances, infrastructures, académie (vérifié le 2026-10-18 : sql/silver/010_sz_base.sql)
 - [ ] Gold : bilan par rôle (note, compétences clés du rôle, âge, salaire, profondeur)
 - [ ] Gold : progression par cycle d'entraînement (points gagnés par joueur et compétence)
