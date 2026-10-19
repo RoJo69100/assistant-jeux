@@ -19,12 +19,12 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 - [x] Wiki du jeu (15 rubriques) → bronze (vérifié le 2026-10-18)
 
 ## C. Modèle de données
-- [ ] Silver : joueurs + relevé par cycle d'entraînement (compétences, blessures)
+- [x] Silver : joueurs + relevé par cycle d'entraînement (compétences, blessures) (vérifié le 2026-10-19 : `sz_player_cycles`, `sz_training_changes` par `applied_at`, `sql/gold/014_sz_cycles.sql`)
 - [x] Silver : matchs, stats par joueur, incidents (vérifié le 2026-10-19 : `sz_matches`, `sz_match_players`, `sz_match_incidents`, `sql/silver/011_sz_matches.sql`)
 - [x] Silver : classement, calendrier, marché, finances, infrastructures, académie (vérifié le 2026-10-18 : sql/silver/010_sz_base.sql)
-- [ ] Gold : bilan par rôle (note, compétences clés du rôle, âge, salaire, profondeur)
-- [ ] Gold : progression par cycle d'entraînement (points gagnés par joueur et compétence)
-- [ ] Gold : résultat financier par cycle et projection de fin de saison
+- [x] Gold : bilan par rôle (note, compétences clés du rôle, âge, salaire, profondeur) (vérifié le 2026-10-19 : `gold.sz_role_report`, 12 lignes, RB et LW sans remplaçant naturel)
+- [x] Gold : progression par cycle d'entraînement (points gagnés par joueur et compétence) (vérifié le 2026-10-19 : `gold.sz_training_progress`, cycle 9, 9 joueurs)
+- [x] Gold : résultat financier par cycle et projection de fin de saison (vérifié le 2026-10-19 : `gold.sz_finance_cycles`, `gold.sz_finance_projection`)
 - [x] Gold : rentabilité des infrastructures (semaines de remboursement) (vérifié le 2026-10-18 : gold.sz_infrastructure_payback, Arena et Fan Shop, 4 niveaux au-dessus de l'actuel)
 
 ## D. Skills

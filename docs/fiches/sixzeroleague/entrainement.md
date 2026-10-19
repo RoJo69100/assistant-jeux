@@ -18,7 +18,8 @@ Lue par l'agent `entrainement` après `commun.md`. Case E5 de la checklist SixZe
 - `silver.sz_training_changes` : par cycle (`week_number`, `applied_at`), chaque point franchi (`skill`, `value_before`, `value_after`, `overall_before`, `overall_after`).
 - `silver.sz_players.training_progress` : progression fractionnaire vers le prochain point ; `work_ethic`, `age`.
 - `silver.sz_role_training` : emplacements de formation de rôle, occupant, journées faites / 36, coût par cycle (`weekly_fee`).
-- Vue gold « progression par cycle » **manquante** (checklist C) : calcule les points par joueur et par cycle en SQL sur `silver.sz_training_changes`.
+- `gold.sz_training_progress` : par cycle (`applied_at`, `week_number`) et par joueur, `points`, `key_points` (compétences clés de son rôle), `overall_gain`, `detail`. `silver.sz_training_changes.match_share` : part liée au temps de jeu.
+- `silver.sz_player_cycles` : relevé complet des joueurs rattaché au dernier cycle réglé (`after_cycle`).
 
 ## Livrable
 1. **Fiche de saisie** : intensité d'équipe, puis joueur → focus (groupe ou compétence), garder ou changer.

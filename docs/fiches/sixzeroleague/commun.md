@@ -28,7 +28,7 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/six
 - Silver (`sql/silver/010_sz_base.sql`) : `sz_api`, `sz_my_team`, `sz_player_snapshots`, `sz_players`, `sz_tactics`, `sz_training_plan`, `sz_training_changes`, `sz_role_training`, `sz_finances`, `sz_infrastructure_levels`, `sz_standings`, `sz_fixtures`, `sz_transfer_listings`, `sz_u18`.
 - Gold (`sql/gold/013_sz_gold.sql`) : `sz_infrastructure_payback`, `sz_lineup_natural`, `sz_slot_options`.
 - Silver des matchs (`sql/silver/011_sz_matches.sql`, 2026-10-19) : `sz_matches`, `sz_match_players`, `sz_match_incidents`.
-- **Manquent** (checklist `docs/checklist-sixzeroleague.md`, partie C) : relevé par cycle ; gold bilan par rôle, progression par cycle, finances par cycle. En attendant, calcule en SQL sur silver (colonnes choisies, `LIMIT`) et dis que la vue gold manque.
+- Cycles (`sql/gold/014_sz_cycles.sql`, 2026-10-19) : `silver.sz_player_cycles` (relevé des joueurs rattaché au dernier cycle réglé), `gold.sz_role_report` (bilan par rôle), `gold.sz_training_progress` (points par cycle et par joueur), `gold.sz_finance_cycles` (résultat de chaque cycle) et `gold.sz_finance_projection` (fin de saison). `weekNumber` repart à 1 chaque saison : un cycle s'identifie par `applied_at`.
 - Aucune capture après le 2026-10-18 au moment de la rédaction : vérifie toujours la date du dernier relevé (`day`, `as_of`) et demande l'export si elle est périmée.
 
 ## Sorties

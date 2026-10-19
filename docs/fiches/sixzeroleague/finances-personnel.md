@@ -17,7 +17,8 @@ Lue par l'agent `finances-personnel` après `commun.md`. Cases E7 (finances, spo
 - `silver.sz_finances` : par jour, `balance`, sponsor actuel (`sponsor_weekly`, `sponsor_win_bonus`, `sponsor_can_choose`, `sponsor_offers`), prévision du cycle (`fc_revenue`, `fc_expenses`, `fc_wages`, `fc_net`, `fc_home_fixtures`), dernier rapport (`last_week`, `last_net`, `last_report`).
 - `silver.sz_infrastructure_levels` : chaque niveau des 4 installations (effet, entretien, coût depuis le niveau actuel, déblocage).
 - `gold.sz_infrastructure_payback` : Arena et Fan Shop, 4 niveaux au-dessus de l'actuel, gain net par cycle (min / max) et cycles de remboursement (`payback_cycles_best`, `payback_cycles_worst`).
-- Vue gold « résultat par cycle et projection de fin de saison » **manquante** (checklist C) : calcule-la en SQL sur `silver.sz_finances`.
+- `gold.sz_finance_cycles` : résultat de chaque cycle réglé (recettes par poste, primes, entretien, dépenses d'infrastructure, transferts).
+- `gold.sz_finance_projection` : solde de fin de saison sans prime de victoire (`end_balance_no_wins`) et avec les victoires au rythme actuel (`end_balance_with_wins`), `wages_pct_revenue`, `sponsor_can_choose`.
 
 ## Livrable
 1. **Alerte** : le club perd-il de l'argent sur le dernier cycle et sur la prévision ? Cause chiffrée.
