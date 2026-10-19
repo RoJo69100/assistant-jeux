@@ -35,6 +35,8 @@ docs/fiches/<jeu>/     fiche du jeu pour les agents
 - Une modification = un commit avec un message clair.
 - Coût : ne jamais relire tout l'historique brut ; travailler sur les vues gold et le delta du jour.
 - Tokens : une tâche par session. Proposer `/clear` dès que l'utilisateur change de sujet (autre jeu, autre domaine) ou qu'une tâche est commitée ; proposer `/compact` quand la session devient longue (nombreux échanges, grosses sorties). Requêtes SQL avec colonnes choisies et `LIMIT`.
+- Modèle : la session tourne sur Sonnet et les agents aussi (`model: sonnet`). Si l'utilisateur demande une tâche de conception (nouveau jeu, nouvelles vues SQL silver/gold, refonte d'agents ou de fiches), lui rappeler en une ligne de passer sur Opus (`/model opus`) avant de commencer, puis de revenir sur Sonnet (`/model sonnet`) après le commit.
+- Écrire les fichiers avec l'outil Write, jamais par de longs heredocs dans le terminal (échecs constatés le 2026-10-19, tout était à réécrire).
 
 ## Sources BasketVibe
 - Manuel officiel : https://www.basketvibe.com/guide
