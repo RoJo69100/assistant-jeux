@@ -15,7 +15,11 @@ Lue par l'agent `match` après `commun.md`. Case E4 de la checklist Team Soccer.
 - `silver.ts_matches` : `match_id`, `match_date_paris`, `competition` (ligue, coupe, barrage, amical, autre), `venue`, scores, `my_team_id`.
 - `silver.ts_match_lineups` : ce que nous avions enregistré pour ce match (formation, style, consignes, banc).
 - `silver.ts_standings` : classement recalculé depuis les matchs joués.
-- **Pas encore capté** : notes des joueurs, secteurs, événements, affluence (checklist B4). Si le match n'a que son score, demande l'export de la page du match (rapport final) avec le script actif, et limite l'analyse au score, à la composition et à la Forme d'avant-match.
+- `gold.ts_match_report` : une ligne par match exporté (page « match-viewer ») — buteurs et minutes, formation et style, actions et tirs des deux équipes, cadrés, efficacité, penaltys, ballons perdus (interception, mauvais contrôle, sortie), cartons, blessures, notes moyennes, secteurs (moyenne, gardien, zone la plus faible), affluence.
+- `gold.ts_match_plays` : une ligne par action (minute, nombre de phases, issue, dernier acteur) ; `silver.ts_match_events` pour le détail (acteur et passeur de chaque phase).
+- `gold.ts_player_match_ratings` : par joueur, notes, buts, implication, ballons perdus sur les matchs exportés.
+- ⚠️ **Notes et secteurs dépendent de la composition, pas du déroulé** (constat du 2026-10-19 : notes identiques à composition égale, 7,3 avec ou sans triplé). Ils mesurent la force de chaque emplacement, comme les barres de secteurs ; la performance du jour se lit dans les événements (tirs, buts, ballons perdus).
+- Si un match n'a pas de ligne dans `gold.ts_match_report`, demande l'export de sa page « match-viewer » (script actif) et limite l'analyse au score, à la composition et à la Forme d'avant-match.
 
 ## Livrable
 Explication du match chiffres à l'appui, puis mise à jour de `outputs/teamsoccer/learnings.md` (créer le fichier au premier match, sur le modèle BasketVibe) : enseignements `L-nnn`, conseils `C-nnn` et contrôle des conseils passés.
