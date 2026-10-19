@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Team Soccer → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.0
+// @version      0.1.1
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers teamsoccer.org.
 // @match        https://teamsoccer.org/*
 // @match        https://www.teamsoccer.org/*
@@ -20,7 +20,7 @@
   'use strict';
 
   const GAME = 'teamsoccer';
-  const CLIENT = 'teamsoccer.user.js@0.1.0';
+  const CLIENT = 'teamsoccer.user.js@0.1.1';
   const MAX_HTML_CHARS = 1_500_000;
   const MAX_CAPTURES = 300;
   const MAX_BODY_CHARS = 3_000_000;
@@ -137,7 +137,7 @@
   };
 
   // ---------- Instantané DOM (filet de sécurité, lu depuis la page déjà affichée) ----------
-  function domSnapshot() {
+  function domSnapshot(withHtml = true) {
     const root = document.querySelector('main') || document.body;
     const tables = [...root.querySelectorAll('table')].map((t) => {
       const head = t.querySelector('thead tr') || t.querySelector('tr');
@@ -149,7 +149,7 @@
     // Masquer le bouton du script pour qu'il n'apparaisse pas dans le texte capturé.
     if (ui) ui.box.style.display = 'none';
     const text = root.innerText;
-    const html = root.outerHTML.length <= MAX_HTML_CHARS ? root.outerHTML : null;
+    const html = withHtml && root.outerHTML.length <= MAX_HTML_CHARS ? root.outerHTML : null;
     if (ui) ui.box.style.display = '';
     return {
       game: GAME,
@@ -175,7 +175,7 @@
     const text = root.innerText;
     if (text.length < 300 || text === lastText) return;
     lastText = text;
-    captures.push(domSnapshot());
+    captures.push(domSnapshot(false));  // texte seul : des dizaines de sujets avec leur HTML dépassaient la taille d'envoi
     if (captures.length > MAX_CAPTURES) captures.shift();
     refresh();
   }
@@ -214,13 +214,23 @@
     busy = true;
     const batch = captures.splice(0, captures.length);
     batch.push(domSnapshot());
+    // Paquets d'au plus 50 captures et ~1,5 Mo, pour rester sous la taille d'envoi acceptée par Supabase.
+    const chunks = [];
+    let cur = [], size = 0;
+    for (const b of batch) {
+      const s = JSON.stringify(b).length;
+      if (cur.length && (cur.length >= 50 || size + s > 1_500_000)) { chunks.push(cur); cur = []; size = 0; }
+      cur.push(b); size += s;
+    }
+    if (cur.length) chunks.push(cur);
+    let inserted = 0, sent = 0;
     try {
-      let inserted = 0;
-      for (let i = 0; i < batch.length; i += 50) inserted += await post(batch.slice(i, i + 50));
+      for (const c of chunks) { inserted += await post(c); sent += c.length; }
       toast(`Exporté : ${batch.length} captures (${inserted} nouvelles)`);
     } catch (e) {
-      captures.unshift(...batch.filter((b) => b.source === 'api'));
-      toast(`Échec : ${e.message}`, true);
+      // Garder ce qui n'est pas parti (sauf l'instantané du clic, refait au prochain export).
+      captures.unshift(...batch.slice(sent, -1));
+      toast(`Échec après ${sent}/${batch.length} : ${e.message}`, true);
     } finally {
       busy = false;
       refresh();
