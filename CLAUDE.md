@@ -36,6 +36,14 @@ docs/fiches/<jeu>/     fiche du jeu pour les agents
 - Coût : ne jamais relire tout l'historique brut ; travailler sur les vues gold et le delta du jour.
 - Tokens : une tâche par session. Proposer `/clear` dès que l'utilisateur change de sujet (autre jeu, autre domaine) ou qu'une tâche est commitée ; proposer `/compact` quand la session devient longue (nombreux échanges, grosses sorties). Requêtes SQL avec colonnes choisies et `LIMIT`.
 - Modèle : la session tourne sur Sonnet et les agents aussi (`model: sonnet`). Si l'utilisateur demande une tâche de conception (nouveau jeu, nouvelles vues SQL silver/gold, refonte d'agents ou de fiches), lui rappeler en une ligne de passer sur Opus (`/model opus`) avant de commencer, puis de revenir sur Sonnet (`/model sonnet`) après le commit.
+- Horaire : l'utilisateur n'agit que le soir après 19h. « Que faire aujourd'hui » = un plan du soir (exports en retard puis agents), jamais une liste horodatée sur la journée. Un amical du matin se rattrape par son export du soir.
+- Ordre de réponse après un export : 1) vérifier l'arrivée en base (une requête, `bronze.raw_pages` ou `silver`), 2) donner un compte rendu de une à trois lignes pour chaque export reçu (résultat, chiffre marquant), 3) proposer l'agent à lancer. Ne pas poser de question si une requête peut y répondre.
+- Réglage effort/modèle : je ne peux pas changer `/effort` ni `/model` moi-même, seul l'utilisateur le peut. Je dis donc en une ligne, au moment où ça change, ce qu'il faut régler.
+  - **low + Sonnet** : vérifier des exports, lire l'agenda, requêtes simples, commits.
+  - **medium + Sonnet** : agents Match, Tactique, Transferts, Entraînement, Finances, Académie, Veille ; analyse d'un match.
+  - **low + Haiku** : seulement tâches mécaniques sans jugement (compter les exports reçus, reformater). Pas de SQL d'analyse ni de règle de jeu avec Haiku.
+  - **Opus** : conception (voir règle Modèle).
+  Revenir à low + Sonnet après la tâche.
 - Écrire les fichiers avec l'outil Write, jamais par de longs heredocs dans le terminal (échecs constatés le 2026-10-19, tout était à réécrire).
 
 ## Sources BasketVibe
