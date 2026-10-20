@@ -8,7 +8,7 @@ Adaptée de la checklist SixZero League le 2026-10-19 (3e jeu du kit multi-jeux)
 
 ## B. Collecte (pour les deux clubs)
 - [x] Effectif et fiche joueur (10 compétences, OVR, poste, Forme, talent, valeur, salaire, blessure, suspension) → bronze (vérifié le 2026-10-19 : `players` avec `fitness`, `form`, `value`, `wage`)
-- [x] Entraînement : compétence et intensité par joueur, progression, niveau d'entraîneur → bronze (vérifié le 2026-10-19 : `player_training_assignments`, page Entraînement)
+- [x] Entraînement : compétence et intensité par joueur, progression, niveau d'entraîneur → bronze (vérifié le 2026-10-19 : `player_training_assignments`, page Entraînement) (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
 - [x] Matchs : calendrier, composition, consignes, résultat → bronze (vérifié le 2026-10-19 : `matches`, `lineups`, `match_lineups`, 41 captures de pages de match)
 - [x] Rapport de match détaillé : notes 0–10, secteurs, événements, affluence (vérifié le 2026-10-19 : page `match-viewer`, `match_replays` 100 à 127 événements par match + HTML notes et secteurs, 5 matchs de ligue)
 - [x] Compétitions : classement, coupes, statistiques → bronze (vérifié le 2026-10-19 : `series`, `cup_participants`, `cup_tournaments`, `player_league_stats_per_match`)
@@ -35,16 +35,16 @@ Adaptée de la checklist SixZero League le 2026-10-19 (3e jeu du kit multi-jeux)
 
 ## E. Agents (globaux, avec la fiche du jeu)
 - [x] Fiche du jeu pour les agents (`docs/fiches/teamsoccer/` : commun + 8 domaines, skills et vues citées présents) (vérifié le 2026-10-19 : 9 fiches, toutes les vues citées existent en base)
-- [ ] Effectif : bilan par poste, meilleurs et moins bons joueurs, 3 actions, pour chaque club
-- [ ] Tactique : formation, style, consignes, banc et remplacements prêts à saisir, selon la Forme et l'adversaire
+- [x] Effectif : bilan par poste, meilleurs et moins bons joueurs, 3 actions, pour chaque club (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Tactique : formation, style, consignes, banc et remplacements prêts à saisir, selon la Forme et l'adversaire (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
 - [x] Match : explication de chaque match, chiffres à l'appui, journal des enseignements (vérifié le 2026-10-19 : 5 matchs de ligue expliqués, `outputs/teamsoccer/learnings.md` L-001 à L-010, C-001 à C-008)
-- [ ] Entraînement : compétence et intensité par joueur, verdict chaque vendredi, gestion de la Forme
-- [ ] Transferts : intérêt, prix, enchère ; joueurs à vendre (banque ou enchère), en tenant compte de la limite d'un achat par semaine
-- [ ] Finances : alerte, masse salariale, retour à un solde positif, niveau d'entraîneur
-- [ ] Stade : quelles places acheter et quand (remboursement)
-- [ ] Académie : quelles compétences révéler chaque jour, quel jeune monter, vendre ou libérer
+- [x] Entraînement : compétence et intensité par joueur, verdict chaque vendredi, gestion de la Forme
+- [x] Transferts : intérêt, prix, enchère ; joueurs à vendre (banque ou enchère), en tenant compte de la limite d'un achat par semaine (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Finances : alerte, masse salariale, retour à un solde positif, niveau d'entraîneur (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Stade : quelles places acheter et quand (remboursement) (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Académie : quelles compétences révéler chaque jour, quel jeune monter, vendre ou libérer (briefs du 2026-10-19/20 dans `outputs/teamsoccer/briefs/` ; validé par l'utilisateur le 2026-10-20, retours à venir)
 - [x] Veille : nouvelles annonces et messages des admins depuis le dernier passage, propositions de mise à jour des skills (vérifié le 2026-10-19 : 20 annonces, 13 messages, FAQ → 12 propositions dont 3 contradictions, `outputs/teamsoccer/veille/2026-10-19.md`)
 
 ## F. Routine
-- [ ] Wiki de synthèse : routine de la semaine, priorités, âges clés, profil par poste (écrit le 2026-10-20 : `outputs/teamsoccer/wiki/` README, routine, priorites, ages, profils-postes ; à valider par l'utilisateur)
+- [x] Wiki de synthèse : routine de la semaine, priorités, âges clés, profil par poste (écrit le 2026-10-20 : `outputs/teamsoccer/wiki/` README, routine, priorites, ages, profils-postes ; validé par l'utilisateur le 2026-10-20)
 - [ ] « Que faire ce soir » pour Team Soccer (skill `teamsoccer-aujourdhui`, agenda et alertes du jour : composition à enregistrer 2 h avant, révélations d'académie, amical de la semaine, contrôle de l'entretien le lundi) (skill et vues `gold.ts_agenda`, `gold.ts_daily_alerts` créés le 2026-10-20, `sql/gold/018` ; à tester un soir par l'utilisateur)
