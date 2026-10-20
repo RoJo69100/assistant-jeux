@@ -29,6 +29,8 @@ description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 
 - **Changement de poste d'un senior** sur sa fiche, dans la plage permise par sa taille [News 2026-10-14]. Complète le manuel (libellé modifiable dès 22 ans [M§4]).
 - **Primes de fin de saison** confirmées : 1er 400k, 2e 300k, 3e 200k, 4e 100k, 5e–8e 50k, 9e–12e rien [News 2026-10-14]. Concorde avec le manuel §10.1.4.
 - Les tests de potentiel sur le marché n'apparaissent plus comme des achats dans Finances [News 2026-10-14].
+- Logos : option « Remove solid background » (Settings) pour un fond transparent ; logos prédéfinis désormais transparents [News 2026-10-20].
+- Mises à jour du 2026-10-19/20 (potentiel révélé, blessures et focus Rim/Perimeter en amical, Best fives, amicaux hors succès) : détail dans basketvibe-joueurs, -tactique, -saison et -academie.
 - Trophées pour les 3 premiers de chaque ligue et pour le finaliste de la coupe ; partage de l'historique d'entraînement dans le chat ; le play-by-play affiche le remplacement d'un joueur indisponible par le depth chart [News 2026-10-11].
 - Les poids du PS sont **indicatifs**. Le moteur joue possession par possession avec les compétences, pas avec ces pourcentages [Dev 2026-09-17, engine].
 - Pénalité au-delà de 36 min : 8 % → 10 % → 12,5 % → **20 %** (le 2026-09-13). Le manuel indique 20 % [Dev, release-notes]. La communauté trouve que les équipes à « 5 × 48 min » gagnent encore trop souvent [Com 2026-09-12, grobarbrate/faraone85, engine].

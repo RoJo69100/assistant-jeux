@@ -28,6 +28,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide, lu en e
 - Échelle régionale : 1 ligue tier 1, 4 en tier 2, 16 en tier 3 [M§2.1].
 - Fin de saison : 4 promus (vainqueur de chacune des 4 ligues filles), 4 relégués (places 9 à 12), répartis par tirage au sort entre les ligues filles [M§2.1].
 - Primes de classement en fin de saison : voir basketvibe-economie [M§10.1.4].
+- Vue League : onglet « Best fives » avec un meilleur cinq U21 ; la vue principale n'affiche que le meilleur cinq de la journée [News 2026-10-20].
 - Inactivité 45 jours → compte fermé au changement de saison [M§2.1].
 - Nouvelle saison : forme remise à 6, fatigue à 0, popularité à 70 %, salaires recalculés, +1 an d'âge, retraite à la fin de la saison des 38 ans [M§5.5, §5.6, §10.1.1, §10.2, §4].
 
@@ -41,7 +42,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide, lu en e
 - Règles par défaut : pas de prime de match, pas de billetterie, pas de blessure, **ni fatigue ni expérience** — sauf si l'édition l'annonce autrement (Inbox → BasketVibe) [M§3.3].
 
 ## Amicaux
-- Hors classement. Expérience et fatigue ≈ **1/10** d'un match de ligue pour les mêmes minutes. **Aucune blessure.** Même recette billetterie pour les deux clubs (≈ 6 % d'un match de ligue à domicile), popularité inchangée [M§1.2, §10.1.1].
+- Hors classement. Expérience et fatigue ≈ **1/10** d'un match de ligue pour les mêmes minutes. Aucune blessure selon le manuel [M§1.2] ; ⚠️ le moteur v4 en met en amical [News 2026-10-19] (voir basketvibe-joueurs). Plus de succès (achievements) des joueurs en amical [News 2026-10-20]. Même recette billetterie pour les deux clubs (≈ 6 % d'un match de ligue à domicile), popularité inchangée [M§1.2, §10.1.1].
 - Maximum 10 amicaux programmés. Annulation possible jusqu'à 48 h avant [M§1.2].
 - Usage typique selon le manuel : tester des compositions et des tactiques sans risque [M§1.2].
 

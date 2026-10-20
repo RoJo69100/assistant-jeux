@@ -49,6 +49,10 @@ Seules les 8 compétences comptent (ni forme, ni fatigue, ni taille, ni potentie
 - PS visible chez les autres clubs seulement quand le joueur est en vente [M§2.2]. Les compétences adverses apparaissent en tranches (0–20, 21–40, 41–60, 61–80, 81–99) [M§4].
 - [Obs] Nos données d'entraînement (`silver.bv_player_daily.*_exact`) donnent les valeurs précises. La valeur affichée = partie entière, vérifié sur 15 joueurs le 2026-10-16.
 
+## Potentiel révélé [News 2026-10-20]
+- Le potentiel d'un de ses propres joueurs peut être révélé depuis son profil et reste ensuite visible pour nous. Il ne compte toujours pas dans PS/TS [M§2.2].
+- À vérifier : le coût et d'éventuelles limites (la News ne les donne pas) ; si l'export Tampermonkey capte la valeur révélée. `gold.bv_potential_estimate` et `bv_sell_candidates.potential_est` sont des estimations : une valeur révélée les remplace.
+
 ## Taille et poids [M§5.2, §6.2.1]
 Taille adulte par poste : PG 180–200, SG 186–203, SF 192–209, PF 196–212, C 205–222 cm.
 - Le **libellé de poste ne compte pas** en match. Ce qui compte : l'emplacement sur le terrain (PG–C) dans le cinq du quart-temps, et l'adéquation de la taille à cet emplacement [M§6.2].
@@ -113,7 +117,8 @@ Taille adulte par poste : PG 180–200, SG 186–203, SF 192–209, PF 196–212
 Valeur de la carte → forme → fatigue → expérience → minutes lourdes → tactique (agressivité, focus, choix de tirs) → taille et poids au duel → avantage du terrain. Chaque couche multiplie puis arrondit (minimum 1).
 
 ## Blessures [M§9.3, §4.3]
-- **Ligue uniquement** : jamais en amical, pas en coupe par défaut.
+- **Ligue uniquement** selon le manuel, pas en coupe par défaut [M§9.3]. ⚠️ Mais depuis le moteur v4, les amicaux ont des blessures : la News règle leurs probabilités [News 2026-10-19]. Un amical v4 n'est donc plus sans risque ; le manuel n'est pas encore à jour (on garde le manuel, on signale).
+- [v4, amicaux] Défense soft : risque ×0,60 (avant ×0,85) ; medium soft ×0,80 (avant ×0,95). Au-delà de 36 min, +40 % de risque au dernier quart-temps (contre la stratégie 5×48). 48 min en soft reste à peu près au même niveau ; 5×48 en équilibré ou agressif donne beaucoup plus de blessures [News 2026-10-19]. La table ci-dessous reste celle du manuel (ligue v3).
 - Risque pendant le match, augmenté par : minutes jouées, fatigue avant le match, endurance basse, agressivité défensive (soft ×0,85, équilibrée ×1,00, ×1,50, agressive ×2,00). Réduit par les kinés (−12,5 % chacun).
 - Référence (endurance 70, fatigue 0, sans kiné), risque de blessure sur le match :
 

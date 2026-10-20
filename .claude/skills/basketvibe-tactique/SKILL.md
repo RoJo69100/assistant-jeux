@@ -14,7 +14,8 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Le manuel cite deux remplacements forcés pendant un quart-temps : 6 fautes ou blessure. Sinon, le cinq change au début de chaque quart-temps selon la grille [M§6.2].
 - [Obs] Nos play-by-play contiennent aussi des événements `substitution_foul_trouble` (2 dans le match du 14/10) : le moteur sort parfois un joueur chargé de fautes. Le manuel n'en parle pas ; règle non documentée.
 - Rappel : à partir de 36 minutes dans le match, −20 % sur tout (basketvibe-joueurs [M§5.7]). Les rotations par quart-temps sont le levier pour l'éviter.
-- ⚠️ **Moteur v4 (ligue en saison 2)** : fatigue plus punitive (jusqu'à −50 % à 80) et duels 1 contre 1 plus marqués, ce qui donne plus d'impact à la tactique ; les fautes suivent l'agressivité défensive [News 2026-10-11 / 16 / 17]. Détail dans basketvibe-communaute. Une tactique de saison 2 doit gérer la fatigue d'un match à l'autre, pas seulement les 36 min.
+- ⚠️ **Moteur v4 (ligue en saison 2)** : fatigue plus punitive (jusqu'à −50 % à 80) et duels 1 contre 1 plus marqués, ce qui donne plus d'impact à la tactique ; les fautes suivent l'agressivité défensive [News 2026-10-11 / 16 / 17]. Détail dans basketvibe-communaute. Une tactique de saison 2 doit gérer la fatigue d'un match à l'autre, pas seulement les 36 min. Le v4 sera activé dans tous les types de match juste après la saison 1, sans autre changement prévu au moteur [News 2026-10-19].
+- [v4, amicaux] Risque de blessure : soft ×0,60, medium soft ×0,80 ; +40 % au-delà de 36 min au dernier quart-temps (détail dans basketvibe-joueurs) [News 2026-10-19].
 
 ## Depth chart [M§6.2.2]
 - Pour chaque poste, liste ordonnée de 5 remplaçants maximum ; un joueur peut figurer sur plusieurs listes. Valable pour tout le club, indépendant des presets.
@@ -53,6 +54,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - **Hit** : Lock ou Intense sur le vrai scoreur (celui sur qui passe l'attaque) → l'adversaire perd nettement. **Even** : sur un cinq équilibré → le score bouge peu. **Miss** : Lock sur un meneur passeur → les autres ont des tirs plus faciles, l'adversaire peut marquer plus.
 - Effet typique sur le % de réussite du scoreur visé : Intense contre Normal −2 à −4 pts ; Lock contre Intense −2 à −4 pts ; de Give up à Lock +12 à +16 pts d'écart.
 - Conseils du manuel : verrouiller le scoreur, pas le meneur qui distribue ; compenser par Light ou Give up sur les joueurs peu utilisés ; toujours sauvegarder avant le verrouillage.
+- [v4, amicaux pour l'instant] Nouvelle zone de focus défensif par joueur adverse : **Rim** (son 2P% −3 % environ, son 3P% jusqu'à +5 %), **Perimeter** (son 3P% −3 % environ, son 2P% jusqu'à +5 %), **Neutral** (comme avant). Le compromis est volontairement inégal [News 2026-10-19]. À vérifier : `silver.bv_match_tactics` capte-t-il ce champ ?
 
 ## Presets et verrouillage [M§6.4, §6.5, §1.1]
 - Jusqu'à 5 presets nommés ; un actif pour la ligue, un pour les amicaux, un pour les coupes.
