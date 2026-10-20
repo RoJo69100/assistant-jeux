@@ -47,4 +47,4 @@ Adaptée de la checklist SixZero League le 2026-10-19 (3e jeu du kit multi-jeux)
 
 ## F. Routine
 - [ ] Wiki de synthèse : routine de la semaine, priorités, âges clés, profil par poste
-- [ ] « Que faire ce soir » pour Team Soccer (skill `teamsoccer-aujourdhui`, agenda et alertes du jour : composition à enregistrer 2 h avant, révélations d'académie, amical de la semaine, contrôle de l'entretien le lundi)
+- [ ] « Que faire ce soir » pour Team Soccer (skill `teamsoccer-aujourdhui`, agenda et alertes du jour : composition à enregistrer 2 h avant, révélations d'académie, amical de la semaine, contrôle de l'entretien le lundi) (skill et vues `gold.ts_agenda`, `gold.ts_daily_alerts` créés le 2026-10-20, `sql/gold/018` ; à tester un soir par l'utilisateur)
