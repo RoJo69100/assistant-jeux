@@ -1,5 +1,84 @@
 # Six Zero League — Entraînement, 2026-10-20 (Chomelix Cow)
 
+# MISE À JOUR du soir (cycle semaine 2 réglé le 2026-10-20 à 22:15 Paris) — prime sur la suite
+
+## À faire (avant 21:00 Paris, mercredi 2026-10-21 ; le prochain cycle se règle après J6 de 21:00)
+Un seul changement : donner un focus à Sundberg. Les 12 autres restent comme au plan du 2026-10-20 (`silver.sz_training_plan`, intensité Normal).
+
+| Joueur | Rôle | Focus actuel | Saisie | Décision |
+|---|---|---|---|---|
+| Intensité d'équipe | | Normal | Normal | garder |
+| Nils Sundberg | LW (29 ans) | All skills (aucune ligne au plan) | **Attaque → Tir** | **changer** |
+| Emmanuel Bourgeois | GK | Gardien → Placement | idem | garder |
+| Sébastien Blanc | GK (apprend RW) | Attaque → Contrôle du ballon | idem | garder |
+| Aurélien Simon | CB | Attaque → Passe | idem | garder |
+| Frédéric Denis | CB | Attaque → Passe | idem | garder |
+| Alain Bertin | LB | Attaque → Passe | idem | garder |
+| Guillaume Leroy | LB | Attaque → Tir | idem | garder |
+| Nicolas Roger | RB | Attaque → Passe | idem | garder |
+| Jordan Lefebvre | LW | Attaque → Tir | idem | garder |
+| Gabriel Bertin | RW | Physique → Vitesse | idem | garder |
+| Gilbert Lemaire | RW | Attaque → Tir | idem | garder |
+| Alexandre Benoit | P (blessé) | Attaque → Tir | idem | garder (rien à gagner à changer) |
+| Benoît Chevalier | P | Physique → Force | idem | garder |
+
+Formation de rôle : ne rien toucher (Blanc → RW, 7 / 36 journées, 150 € par cycle, `silver.sz_role_training` 2026-10-20).
+
+## Verdict du cycle semaine 2 (applied_at 2026-10-20 20:15 UTC)
+Faits : 9 joueurs listés, 10 points franchis ; gains de note : Simon 9→10, Denis 7→8 (`gold.sz_training_progress`). Cycle précédent (2026-10-19) : 12 points, 2 gains de note.
+
+Les gains fractionnaires viennent de `silver.sz_player_cycles.training_progress` (relevés 2026-10-18 et 2026-10-20 20:52 UTC, soit 2 cycles) moins le gain du cycle 1 déjà mesuré dans la version du matin ci-dessous. Repère « attendu » = rendement du cycle 1 pour le même focus (le skill ne chiffre rien [W:Training]).
+
+| Joueur (éthique) | Focus | Gain cycle 2 mesuré (points) | Attendu | Verdict |
+|---|---|---|---|---|
+| Roger (78) | Passe | 1,77 (Passe 5→7) | 1,76 | garder |
+| G. Bertin (61) | Vitesse | 1,45 (8→9) | 1,44 | garder |
+| Blanc (48) | Contrôle du ballon | 1,28 (6→7) | 1,27 | garder |
+| Leroy (29) | Tir | 1,07 (5→7) | 1,08 | garder |
+| A. Bertin (32) | Passe | 1,06 (9→10) | 1,07 | garder |
+| Bourgeois (26) | Placement | 0,83 (4→5) | 0,83 | garder |
+| Chevalier (5) | Force | 0,77, aucun point (reste 0,85 sur Force) | 0,76 | garder : point attendu au prochain cycle, pas un retard |
+| Denis (3) | Passe | 0,69 (3→4, note +1) | 0,69 | garder |
+| **Simon (22)** | Passe (nouveau) | **1,19 (Passe 1→2, note +1)** | 0,23 sur sa meilleure compétence en groupe Défense, 0 point | **le changement a marché** : garder |
+| **Lemaire (19)** | Tir (nouveau) | **1,14 (Tir 9→10)** | 1,05 sur Jeu sans ballon | garder (rendement égal, cible désormais clé) |
+| **Lefebvre (2)** | Tir (nouveau) | **0,68 (Tir 15, reste 0,70)** ; aucune ligne au rapport | 0,68 sur Jeu sans ballon | garder : rendement identique, point attendu au prochain cycle |
+| Benoit (40) | Tir | **0,00** (progrès Tir inchangé à 4,51) ; aucune ligne | 1,42 au cycle 1 | blessé : voir ci-dessous |
+
+Le changement de focus a joué dès le cycle réglé le soir même (22:15 Paris), pas « au cycle suivant » : Simon, Lemaire et Lefebvre avaient été modifiés avant 21:00 le 2026-10-20 et leurs gains portent sur la nouvelle compétence [Obs SQL 2026-10-20]. Les rendements restent proportionnels à l'éthique et à l'âge, comme le dit le skill.
+
+### Ce que l'absence de ligne au rapport permet de conclure (sans deviner)
+Une absence signifie seulement « aucun point entier franchi » [skill entraînement, rapport]. Il faut regarder le progrès fractionnaire :
+- **Lefebvre** : Tir 15 + 0,70 (contre 0,03 au relevé du 2026-10-18). Il a donc bien progressé de 0,68 sur Tir ; son prochain point tombera au cycle de demain soir si le rendement tient (0,70 + 0,68 > 1). Pas de retard. Éthique 2 : le plus lent de l'équipe, par construction.
+- **Chevalier** : Force 8 + 0,85. Même logique : point attendu au prochain cycle (confiance moyenne, rendement 0,77 par cycle).
+- **Benoit** : blessure à 32:53 du match de 21:00 (J4, 13-10), `silver.sz_match_incidents`. Son progrès Tir est resté à 4,508 entre le relevé post-cycle 1 et celui post-cycle 2 : 0,00 de gain, alors qu'il gagnait 1,42 au cycle précédent. Observation sur un seul joueur et un seul cycle : un joueur blessé semble ne pas s'entraîner (hypothèse, le skill ne le dit pas ; confiance faible). La durée de l'absence (1 à 6 matchs [W:Injuries]) n'est pas dans nos données : ce qu'il faut vérifier dans l'écran. Tant qu'il est blessé son focus ne sert à rien mais ne coûte rien ; ne pas le changer.
+- **Sundberg** : voir ci-dessous.
+
+### Nils Sundberg (LW, 29 ans, 185 cm, droitier, note 10, salaire 95 €, éthique 28)
+Correction de la demande : il est bien dans `silver.sz_players` (relevé 2026-10-20 20:52 UTC, `as_of` 2026-10-20), mais absent de `silver.sz_training_plan` (12 lignes, sans lui). Le texte brut `bronze.raw_pages` app_team (id 8535, 2026-10-20 20:57 UTC) confirme : focus « All skills », donc aucun focus (effort réparti sur les 20 compétences [W:Training]). Profil conforme à C-007 (Vitesse, Détente, Endurance à 19, salaire 95).
+- Compétences clés d'ailier [W:Attributes] : Vitesse 19, Agilité 5, Tir 7, Contrôle du ballon 15 (`silver.sz_players`).
+- Gain mesuré : aucune ligne au rapport de la semaine 2 ; son progrès est réparti à ~0,22 sur 11 compétences (Tir 0,215), 0,05 sur les compétences de gardien. Cela correspond à un effort dispersé sur un cycle ; je n'en tire pas plus (on ne sait pas s'il a été présent à ce cycle ni son historique chez l'ancien club).
+- **Changer : Attaque → Tir.** « Le focus bat la dispersion » [W:Training]. Tir (7) est la finition principale et la plus basse des clés avec Agilité (5). Je préfère Tir à Agilité parce qu'il a 29 ans : il aura 30 ans à la fin de saison et perdra alors des compétences **physiques** à chaque changement de saison [W:Training, Players] ; Agilité en fait partie, pas Tir. À 29 ans le gain hebdomadaire est déjà réduit (dès 28 ans) : attendre ~0,8 à 1,0 par cycle, estimation faible (éthique 28 proche de Leroy 29 : 1,07 à 24 ans). Confiance faible : le skill ne donne pas de rendement chiffré. Lefebvre étant aussi sur Tir, Sundberg est la doublure du poste : sa note (10) est inférieure à celle de Lefebvre (13).
+
+### Intensité : garder Normal (confiance moyenne)
+Un blessé (Benoit) laisse Chevalier seul pivot sain ; RB et LW sont couverts un cran mieux avec Sundberg, mais High augmente blessures et durées [W:Training, Injuries], surtout arrières et pivots. Aucun chiffre de gain de High dans le skill : rien ne justifie le risque.
+
+### Formation de rôle
+Blanc → RW : 7 / 36 journées (6 au relevé du 2026-10-20 du matin ; attendu 8 : la progression est de 1 par cycle et non 2, à vérifier), 150 € par cycle. Rien à décider. Pas de second emplacement avant Training Facilities 10.
+
+## Conseils d'entraînement (suivi, voir `outputs/sixzeroleague/learnings.md`)
+- C-009 (Simon), C-010 (Lefebvre), C-011 (Lemaire) : appliqués ; effets mesurés ci-dessus.
+- Nouveau : C-013 (Sundberg → Tir). Nouveau : C-014 (Benoit : vérifier la durée de blessure à l'écran).
+
+## Données manquantes
+- Durée d'absence de Benoit (écran Équipe) et date de retour.
+- Prochain export Équipe → Training après le match de 21:00 du 2026-10-21 (J6) pour le cycle suivant.
+
+À refaire si : Sundberg change de rôle ou de focus, Benoit revient plus tôt que prévu, ou un blessé de plus apparaît.
+
+---
+
+# VERSION DU MATIN (cycle semaine 1, périmée pour la saisie ; gardée pour l'étude de formation de rôle)
+
 ## À faire (saisie avant 21:00 Paris, mardi 2026-10-20)
 Page Équipe → Training. Le cycle se règle après le match J4 de 21:00 (Nenaa) [W:Training ; Dev chat] ; un changement de focus joue au cycle suivant [W:Training].
 
