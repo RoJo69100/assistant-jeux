@@ -61,4 +61,4 @@ Le travail est terminé quand tout est coché. Parties D à F : chaque case est 
 - [x] Wiki : profil idéal par poste et meilleurs joueurs observés par poste (validé par l'utilisateur le 2026-10-18 : wiki/profils-postes.md)
 - [x] Wiki : quels entraînements selon le poste et l'âge (validé par l'utilisateur le 2026-10-18 : wiki/entrainements.md)
 - [ ] Veille : propositions de mise à jour des skills après chaque export Discord ou devlog
-- [ ] Brief quotidien : un résumé chaque matin regroupant les points ci-dessus
+- [x] Plan du soir : un résumé chaque soir regroupant les points ci-dessus (skill `basketvibe-aujourdhui`, `gold.bv_agenda` ; remplace le brief du matin, décidé par l'utilisateur le 2026-10-20 car il n'agit que le soir)

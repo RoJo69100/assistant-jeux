@@ -33,15 +33,15 @@ Adaptée de la checklist BasketVibe le 2026-10-18 (2e jeu, banc d'essai du kit m
 
 ## E. Agents (globaux, avec la fiche du jeu)
 - [x] Fiche du jeu pour les agents (skills, vues gold, spécificités) (vérifié le 2026-10-19 : docs/fiches/sixzeroleague/, commun + 8 domaines, 15 vues citées présentes en base, skills cités présents)
-- [ ] Effectif : bilan par rôle, meilleurs et moins bons joueurs, 3 actions
-- [ ] Tactique : composition par défaut et remplaçants par rôle, prêts à saisir
-- [ ] Match : explication de chaque match, chiffres à l'appui, journal des enseignements
-- [ ] Entraînement : intensité et focus par joueur, verdict à chaque cycle
-- [ ] Transferts : intérêt, prix, enchère ; joueurs à vendre
-- [ ] Finances : alerte, masse salariale, choix du sponsor
-- [ ] Infrastructures : quelle installation améliorer et quand (remboursement)
-- [ ] Académie U18 : quel prospect signer, quand monter l'académie
+- [x] Effectif : bilan par rôle, meilleurs et moins bons joueurs, 3 actions (brief `outputs/sixzeroleague/briefs/2026-10-20-effectif.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Tactique : composition par défaut et remplaçants par rôle, prêts à saisir (brief `outputs/sixzeroleague/briefs/2026-10-20-tactique.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Match : explication de chaque match, chiffres à l'appui, journal des enseignements (brief `outputs/sixzeroleague/briefs/2026-10-20-match.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Entraînement : intensité et focus par joueur, verdict à chaque cycle (brief `outputs/sixzeroleague/briefs/2026-10-20-entrainement.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Transferts : intérêt, prix, enchère ; joueurs à vendre (brief `outputs/sixzeroleague/briefs/2026-10-20-transferts.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Finances : alerte, masse salariale, choix du sponsor (brief `outputs/sixzeroleague/briefs/2026-10-20-finances.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Infrastructures : quelle installation améliorer et quand (remboursement) (brief `outputs/sixzeroleague/briefs/2026-10-20-finances.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
+- [x] Académie U18 : quel prospect signer, quand monter l'académie (brief `outputs/sixzeroleague/briefs/2026-10-20-academie.md` ; validé par l'utilisateur le 2026-10-20, retours à venir)
 
 ## F. Routine
-- [ ] Wiki de synthèse : routine, priorités, âges clés, profil par rôle
+- [x] Wiki de synthèse : routine, priorités, âges clés, profil par rôle (écrit le 2026-10-20 : `outputs/sixzeroleague/wiki/` 5 pages ; validé par l'utilisateur le 2026-10-20)
 - [ ] « Que faire aujourd'hui » et brief du matin pour SixZero League (fait le 2026-10-19 : skill `sixzeroleague-aujourdhui`, `gold.sz_agenda`, `gold.sz_daily_alerts` ; à valider par l'utilisateur)
