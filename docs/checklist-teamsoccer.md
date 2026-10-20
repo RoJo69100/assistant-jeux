@@ -46,5 +46,5 @@ Adaptée de la checklist SixZero League le 2026-10-19 (3e jeu du kit multi-jeux)
 - [x] Veille : nouvelles annonces et messages des admins depuis le dernier passage, propositions de mise à jour des skills (vérifié le 2026-10-19 : 20 annonces, 13 messages, FAQ → 12 propositions dont 3 contradictions, `outputs/teamsoccer/veille/2026-10-19.md`)
 
 ## F. Routine
-- [ ] Wiki de synthèse : routine de la semaine, priorités, âges clés, profil par poste
+- [ ] Wiki de synthèse : routine de la semaine, priorités, âges clés, profil par poste (écrit le 2026-10-20 : `outputs/teamsoccer/wiki/` README, routine, priorites, ages, profils-postes ; à valider par l'utilisateur)
 - [ ] « Que faire ce soir » pour Team Soccer (skill `teamsoccer-aujourdhui`, agenda et alertes du jour : composition à enregistrer 2 h avant, révélations d'académie, amical de la semaine, contrôle de l'entretien le lundi) (skill et vues `gold.ts_agenda`, `gold.ts_daily_alerts` créés le 2026-10-20, `sql/gold/018` ; à tester un soir par l'utilisateur)
