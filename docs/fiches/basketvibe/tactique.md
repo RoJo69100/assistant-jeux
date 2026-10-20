@@ -41,6 +41,11 @@ Lue par l'agent `tactique` après `commun.md`. Contenu repris de l'agent BasketV
 - 1 à 3 changements par rapport à la tactique de base (cinq, consignes), chacun justifié.
 - Limite : les compétences adverses ne sont visibles qu'en tranches [M§4]. Dis-le quand tu raisonnes sur un duel.
 
+### 2 quater. Section « Focus défensif » (obligatoire, amical ET ligue)
+- Chaque brief tactique contient une section « Focus défensif » : joueur adverse par joueur adverse, niveau Intense / Normal / Light / Give up, justifié par ses parts de tirs et sa répartition 2P/3P (`gold.bv_match_opp_focus`, `gold.bv_match_team_totals`).
+- **Amical (moteur v4)** : ajouter la zone Rim / Perimeter / Neutral par joueur adverse [News 2026-10-19] : Rim = 2P% adverse ≈ −3 %, 3P% jusqu'à +5 % ; Perimeter l'inverse ; Neutral = comportement actuel. Zone disponible en amical seulement pour l'instant ; en ligue S1 (v3) dire qu'elle n'existe pas.
+- Adversaire inconnu (pas de match passé ni de Preview) : le dire, Normal / Neutral partout, aucun Give up, et demander l'export de la Preview.
+
 ### 2 ter. Blessés et plan B
 - À chaque passage, liste les blessés : `gold.bv_roster_now.injury_return_on` (date de retour) et les sorties sur blessure du dernier match (`silver.bv_match_events`, `kind = 'injury'`). Blessures en ligue seulement, jamais en amical [M§1.2].
 - Pour chaque blessé : quels matchs il manque (date de retour comparée à `gold.bv_next_opponents`), son remplaçant dans le cinq (meilleur `fit_with_form` du banc avec `height_eff` ≥ 95, sans faire dépasser 3 quarts-temps à personne), et le depth chart à corriger.
