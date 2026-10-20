@@ -44,6 +44,8 @@ docs/fiches/<jeu>/     fiche du jeu pour les agents
   - **low + Haiku** : seulement tâches mécaniques sans jugement (compter les exports reçus, reformater). Pas de SQL d'analyse ni de règle de jeu avec Haiku.
   - **Opus** : conception (voir règle Modèle).
   Revenir à low + Sonnet après la tâche.
+- Préparation au plus tôt : quand l'utilisateur demande une composition, une tactique ou une enchère, la préparer tout de suite, sans attendre le jour du match, tant que les données utiles sont déjà exportées. La refaire seulement si un export posterieur change quelque chose (blessure, forme, fatigue, adversaire). Le brief dit « à refaire si : … ».
+- Plusieurs jeux dans une session : autorisé pour un état des lieux « ce soir » (exports + alertes des 3 jeux). Pour le travail d'analyse, un agent à la fois, un jeu à la fois (règle Tokens).
 - Écrire les fichiers avec l'outil Write, jamais par de longs heredocs dans le terminal (échecs constatés le 2026-10-19, tout était à réécrire).
 
 ## Sources BasketVibe
