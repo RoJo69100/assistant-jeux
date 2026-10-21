@@ -55,6 +55,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Effet typique sur le % de réussite du scoreur visé : Intense contre Normal −2 à −4 pts ; Lock contre Intense −2 à −4 pts ; de Give up à Lock +12 à +16 pts d'écart.
 - Conseils du manuel : verrouiller le scoreur, pas le meneur qui distribue ; compenser par Light ou Give up sur les joueurs peu utilisés ; toujours sauvegarder avant le verrouillage.
 - [v4, amicaux pour l'instant] Nouvelle zone de focus défensif par joueur adverse : **Rim** (son 2P% −3 % environ, son 3P% jusqu'à +5 %), **Perimeter** (son 3P% −3 % environ, son 2P% jusqu'à +5 %), **Neutral** (comme avant). Le compromis est volontairement inégal [News 2026-10-19]. À vérifier : `silver.bv_match_tactics` capte-t-il ce champ ?
+- [Export] Dans le plan sauvegardé exporté (page du match), un focus défensif **Lock** est écrit `off` ; confirmé à l'écran pour deux joueurs de Žirmūnai (J20) [Utilisateur 2026-10-21, learnings L-018]. Les autres niveaux sont écrits par leur nom.
 
 ## Presets et verrouillage [M§6.4, §6.5, §1.1]
 - Jusqu'à 5 presets nommés ; un actif pour la ligue, un pour les amicaux, un pour les coupes.
