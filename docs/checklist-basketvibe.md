@@ -3,7 +3,7 @@
 Le travail est terminé quand tout est coché. Parties D à F : chaque case est un test validé par l'utilisateur.
 
 ## A. Fondations
-- [ ] Dépôt GitHub privé créé, cloné sur les 2 PC, `CLAUDE.md` en place
+- [x] Dépôt GitHub privé créé, cloné sur les 2 PC, `CLAUDE.md` en place (vérifié le 2026-10-22 : dépôt introuvable sans authentification, clone du PC 2 à jour avec origin/main, export BasketVibe reçu en bronze depuis le PC 2)
 - [x] Projet Supabase créé, clés dans `.env` non versionné (vérifié le 2026-10-16)
 - [x] Serveur MCP Supabase branché dans Claude Code (vérifié le 2026-10-16)
 - [x] Tables bronze créées (JSON brut + jeu + type de page + date) (vérifié le 2026-10-16)
