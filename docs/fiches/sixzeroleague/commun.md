@@ -32,6 +32,9 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/six
 - Calendrier et agenda (`sql/gold/015_sz_agenda.sql`, 2026-10-19) : `silver.sz_schedule` (heure officielle de chaque journée de ligue et tour de coupe, mon adversaire), `gold.sz_agenda` (plan du soir), `gold.sz_daily_alerts`. Skill `sixzeroleague-aujourdhui`.
 - Aucune capture après le 2026-10-18 au moment de la rédaction : vérifie toujours la date du dernier relevé (`day`, `as_of`) et demande l'export si elle est périmée.
 
+## Ordre des agents et briefs du jour (règle du 2026-10-22)
+Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas encore passé. Ordre : Veille (si nouvelle source) → Match → Effectif → Finances-personnel → Académie (U18) → Entraînement → Tactique → Transferts (dernier). Chaque agent lit d'abord les briefs du jour (`outputs/sixzeroleague/briefs/AAAA-MM-JJ-<domaine>.md`) des agents placés avant lui ; seuls les agents sans dépendance entre eux tournent en parallèle. Avant d'écrire « donnée non relevée », cherche dans ces briefs ; sinon, dis quel export manque en tête du résumé. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé (relance à faire).
+
 ## Sorties
 - Briefs : `outputs/sixzeroleague/briefs/AAAA-MM-JJ-<domaine>.md`.
 - Journal : `outputs/sixzeroleague/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`) ; à créer au premier match analysé, sur le modèle de `outputs/basketvibe/learnings.md`.
