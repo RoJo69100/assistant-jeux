@@ -28,8 +28,55 @@ SECTION = re.compile(r"^\{([A-Za-z][A-Za-z ]*)\}$")
 FOOTER = re.compile(r"^Exported \d+ message\(s\)$")
 
 
+CANAL = re.compile(r"^=== CANAL : (.+?) ===$")
+CANAL_MESSAGE = re.compile(r"^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\] (.+?) : (.*)$")
+
+
+def parse_canal(path: Path, game: str, tz: ZoneInfo) -> list[dict]:
+    """Format de userscripts/export_discord.py : `=== CANAL : #salon ===`, puis `[AAAA-MM-JJ HH:MM] auteur : texte`."""
+    items, channel, msg = [], None, None
+
+    def close():
+        nonlocal msg
+        if msg is None:
+            return
+        content = "\n".join(msg["lines"]).strip()
+        posted = datetime.strptime(msg["posted"], "%Y-%m-%d %H:%M").replace(tzinfo=tz)
+        items.append({
+            "game": game,
+            "guild": game,
+            "channel": channel,
+            "author": msg["author"],
+            "posted_local": posted.strftime("%d/%m/%Y %H:%M"),
+            "posted_at": posted.isoformat(),
+            "source_file": path.name,
+            "payload": {"content": content, "sections": {}, "raw": content},
+        })
+        msg = None
+
+    for line in path.read_text(encoding="utf-8-sig").splitlines():
+        if RULE.match(line):
+            continue
+        c = CANAL.match(line)
+        if c:
+            close()
+            channel = c.group(1).strip()
+            continue
+        m = CANAL_MESSAGE.match(line)
+        if m and channel:
+            close()
+            msg = {"posted": m.group(1), "author": m.group(2).strip(), "lines": [m.group(3)]}
+        elif msg is not None:
+            msg["lines"].append(line)
+    close()
+    return items
+
+
 def parse(path: Path, game: str, tz: ZoneInfo) -> list[dict]:
-    lines = path.read_text(encoding="utf-8-sig").splitlines()
+    text = path.read_text(encoding="utf-8-sig")
+    if re.search(r"^=== CANAL : ", text, re.M):
+        return parse_canal(path, game, tz)
+    lines = text.splitlines()
     items, guild, channel, msg = [], None, None, None
     in_header = False
 
@@ -106,12 +153,15 @@ def main():
     ap.add_argument("game")
     ap.add_argument("--tz", default="Europe/Paris", help="fuseau horaire du PC qui a fait l'export")
     ap.add_argument("--dry-run", action="store_true", help="analyser sans envoyer")
+    ap.add_argument("--only", help="ne traiter que ce fichier du dossier (nom exact)")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # console Windows en cp1252
 
     load_dotenv(ROOT / ".env")
     folder = ROOT / "data" / "discord" / args.game
     files = sorted(folder.glob("*.txt"))
+    if args.only:
+        files = [f for f in files if f.name == args.only]
     if not files:
         sys.exit(f"Aucun fichier .txt dans {folder}")
 

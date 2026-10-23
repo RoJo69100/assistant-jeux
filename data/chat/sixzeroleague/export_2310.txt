@@ -1,0 +1,245 @@
+Scottern:Ahhh, okey. Makes sense that it is alphabetical then
+
+Draugar:Gazelle, but when i don't pick a new sponsor for next season (i stay with the same) i'm missing on the signing bonus right?
+
+Gazelle:Yes, that’s the down side
+
+Stoik:Ah, ok, good to know !
+
+Stoik::)
+
+ethixz:league 10 champs! we did it!
+
+Stoik:Congrats ! League 8 here ! :D
+
+Gazelle:Hi guys! New season is on, matches start tomorrow!
+
+Gazelle:Cup matches are played at 4:00 PM (Europe/Lisbon). I am aware that this might be too many matches during the day and I'm sorry for that, later on these matches will be spread throughout the week.
+
+Gazelle:Current transfer listings end on the next kickoff.
+
+Gazelle:There's also an issue with the cup tab information, I'll be fixing that.
+
+beardrik:One quick question: when does a training week start and finish? Is it like a real week or after 2 games played or what is the timeframe?
+
+Gazelle:there are training results only after the second league round, if the season is on
+
+Gazelle:so right now, on off-season a 'real' week doesn't happen
+
+beardrik:Okay then this means that 2 games aka 2nd league round counts as one week for training during live season, correct?
+
+Gazelle:that's right
+
+Draugar:so the season last 9 days? 18 games in a league / 2 games per day = 9 days. So every 9 days our players get +1 year koder?
+
+Gazelle:Yes
+
+Stoik:Could we have the comeback of national flag in front of the teams ? :)
+
+Gazelle:Right now it might extend to 11 days, if there are a lot of registered teams for the cup
+
+Gazelle:What do you mean Stoik?
+
+Stoik:before we could see the national flag in front of each team of our league (near the "AI" for AI teams)
+
+Gazelle:oh, you can't see it? could you refresh?
+
+Gazelle:you should be able to still see it
+
+Gazelle:or you mean in the cup?
+
+Stoik:both,, on all the "competitions" leagues, before we had 1/ our place on the league 2/ our blaze 3/ the name othe team and 3/ the nationality of the team designed by the national flag.
+
+Stoik:the flag hve disapeared on version 0.5.8 or somrthing like that
+
+Stoik:(all the flags)
+
+Gazelle:you should be able to see them on the league competition at least, for the standings table. what browser are you using? are you on your phone?
+
+Stoik:on my computer and mozilla
+
+Gazelle:yeah I see what's the issue in your case
+
+Gazelle:thanks
+
+Stoik:Your welcome :)
+
+97777ali:So matches are now:
+
+97777ali:League: 12pm, 8pm (Lisbon time)
+
+97777ali:Cup: 5pm (Lisbon time)
+
+97777ali:Training completes and transfer closes after evening matches (8pm)?
+
+Gazelle:Yes!
+
+Carlinhos:No 3rd place bonus?
+
+Gazelle:You must've received the bonus, but it's not showing on the finances tab currently
+
+Carlinhos:Ok, thanks
+
+Stoik:I saw you give different levels to bots depending on their division, what a smart idiea ! :D
+
+Gazelle:Yes. And the top division bots are not even half of the power that a human team can become, it's just a slow-down mechanism for the initial state of the game
+
+Stoik:Sounds great to me !
+
+beardrik:Can these Infos for when training ia ending and when are game starting please be updated in the wiki as well?
+
+Ottendahl:Does it take the same time to train from a skill from 4-5 than it takes to train from 24-25?
+
+Gazelle:yes it does
+
+Scottern:First match of the new league. Good luck everyone :)
+
+Erin:if i won my league last season, why am i still in 5th division?
+
+Urban Fox:Hey Erin, maybe you've missed it, I've stated that promotions only next season a couple of times.
+
+Urban Fox:This is Gazelle btw
+
+Erin:ok ty
+
+Yan:What sport is this?
+
+Gazelle:This is handball!
+
+Draugar:Extra time in the cup game finished with golden goal rule - that’s not exactly how handball works. If we have an extra time we should have 2x 5’ game. I watched it live and in 61 minute when my player scored the game just ended.
+
+Gazelle:yes Draugar and I'm sorry for that, that was my mistake
+
+Draugar:no worries, just letting you know - either you want to change it or we should put an information about it in WIKI
+
+Gazelle:no, I included the sudden death mechanic by accident, that wouldn't make sense
+
+Draugar:yea, 2x 5’ and then Penalty Shootout will be more realistic
+
+Gazelle:penalty shootout implemented, but there's almost no way to reach it due to the sudden death
+
+Scottern:Haha, love the "Nice" button for the Cup Win, Gazelle :D
+
+Scottern:I need more "Nice" buttons in my life
+
+Gazelle:😅
+
+Fundador23:In the future will be national teams?
+
+Stoik:yes, go to discord in the chat section ;)
+
+Gazelle:yes, in the near future I hope
+
+Scottern:My players just can't score. Currently 13-3 after 22 minutes. Losing big in the last 2 games
+
+Scottern:Last season I would have 25+ goals in most games. Now, it's awful
+
+Gazelle:leagues were shuffled and now your league might be more competitive
+
+Scottern:I think so yea :/
+
+Scottern:I just have to get through this league
+
+Lebowski:Man, my 7 meters taker sucks. Would be cool to be able to choose who takes 7m.
+
+Gazelle:it chooses the best in your 7 automatically
+
+Scottern:My opponent has scored on 8/9  7m
+
+Scottern:This is horrible
+
+Lebowski:God, I can imagine the others, hahaha
+
+Draugar:It’s all good guys, at this point players are weak so results are random sometimes
+
+Draugar:Focus on building good foundation for your team, and in 2-3 season you’ll be winning everything
+
+Scottern:Lost 33-21. Room for improvement :D
+
+M prata:do players have to train second role so we can use the defense tab on tactics?
+
+Draugar:M prata - I think changing tactics both in attack and defence will be possible with one of future updates, at the moment second role can allow your player to play on different side of the field without having skill penalty
+
+M prata:i am making changes on the defense tab, should i stop?
+
+Gazelle:it depends. the out of position penalty on defense is only 10%
+
+M prata:i am not sure but, i think im taking 2 min exclusions away from the ball.
+
+Gazelle:that's getting fixed, yeah
+
+M prata:never thought i'd like handball
+
+Gazelle:that's the idea. attract people who are not familiar with it as well
+
+M prata:good job, i am learning the rules
+
+Bergkamp:Seeing good handball match M prata, you don´t see better. 
+As a former player, soo great to play as so many possibilities
+
+Bergkamp:I saw the game live for first time. Looks good. I even start thinking that after not so long time we could use Barca and other versions ;)
+
+Gazelle:what do you mean, like a single player?
+
+Bergkamp:Not sure what you mean. I played the game in years if you are asking about that part.
+If you are asking about what I mean with seeing it live, I saw for the first time game here on this site live yesterday. And like it and my brain started to think :)
+The only think which was bad was that the results come directly on the table.
+
+beardrik:I think one feature that would be nice would be to see the opposite teams states. Like when you see the league and click on a team, then you could be able to see the overall stats of the opposite teams players. This way you can adjust your own team. The currently only way is to either watch your own game live and see that play performs good or see the result after the game that is only showing the overall stats.
+
+beardrik:Without seeing the game you can only guys what players where strong during your last game or which where week. For example maybe a RB is very good at blocking but bad at shooting. Then you would check the other team and maybe even if the overall that's are weaker you can put him against a good shooter, because he might be a better blocker then other members of your team.
+
+Gazelle:Hi beardrik. I don't intend to show that kind of info without some kind of trade off, all I'm thinking about is showing the formation that was used on the match statistics and that's it
+
+Gazelle:At most in the future you might be able to scout players, but at the cost of money
+
+Erin:is this the second season since this game was created?
+
+Gazelle:it's the third
+
+Bergkamp:Agree beardrik, it would be great. SPecially when you can limited formation (I understand very well that this all take time), this stats would be even more important as at the moment you can do very little in the games.
+
+Bergkamp:But I am grateful for the points system was change to correct. It was trouble man.
+And again, I know things take time, I understand that very well so there are no pressure!
+Just thank for this talented game
+
+
+
+Global
+
+France
+Stoik:C'est cool @martin de se retrouver dans la même poule ! :)
+
+Stoik:Et pareil pour @Asterix ! :)
+
+martin:Bonjour Stoîk, je viens seulement de vfoir ton message.
+
+martin:?????????????????????
+
+martin:je viens de voir ton message
+
+martin:Ce jeu est difficile. Je n'arrive pas à constituer une bonne équipe.
+
+martin:Le chat change les mots quand on les envoie
+
+Stoik:salut martin, j'ai beaucoup investi dans l'académie de jeunes et ça fonctionne très bien même si on a pas beaucoup de tirages. Au niveau de youth academy 10 je viens de tirer un pivot qui a une moyenne de 26 au niveau de ses caractéristiques. ;)
+
+martin:J'ai investi dans la formation, mais la progression est lente avec l'attaque et la défense à faire progresser
+
+Stoik:par contre je n'ai pas mis un sou dans l'entraînement pour l'instant. On part de trop bas avec les joueurs de départ ^^
+
+Stoik:j'investirai dedans que quand j'aurai une académie au maximum. Je ne sais pas si ça sera efficace mais autant profité de cette version alpha pour voir où cette stratégie mène ^^
+
+Stoik:profiter*
+
+martin:j'ai l'arène à 9. Et toi ?
+
+Stoik:Pour résumer : arène 7, entraînement 1, Académie 10, Fan shop 10 :)
+
+martin:arène 9 formation 6 académie 2 fan shop 1
+
+RoJo:Hello hello.
+
+RoJo:Propre le 26 de partout.
+
+RoJo:J'aurais pas penser que l academie marche si bien. Moi j ai plus investi dans l entrainement et les joueurd montent rapidement mais je penses que tucas pris un bon avantage quand meme
