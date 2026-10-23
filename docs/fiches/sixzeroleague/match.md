@@ -11,6 +11,7 @@ Lue par l'agent `match` après `commun.md`. Case E4 de la checklist SixZero Leag
 1. Résultats encore très aléatoires et « affinités » entre équipes [Dev chat] : un enseignement n'est « confirmé » qu'à partir de **3 matchs de ligue** dans le même sens.
 2. Ligue et coupe se distinguent : coupe sur terrain neutre, sans avantage du terrain [W:Competitions].
 3. Matchs joués avant la mise à jour des statistiques : seul le score existe [Dev chat].
+4. Le rouge « avec rapport de l'arbitre » peut coûter 2 journées (devlog 0.5.7) contre 1 match pour le wiki ⚠️ : note la durée réelle observée. Exclusions loin du ballon : bug connu en correction [Dev chat, 2026-10-20] ; ne tire pas d'enseignement sur la discipline d'un seul match.
 
 ## Données
 - `silver.sz_fixtures` (`is_mine`, `status`, scores, adversaire, bot) et `silver.sz_standings` (`form`, points, buts).

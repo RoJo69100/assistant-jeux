@@ -10,6 +10,7 @@ Lue par l'agent `academie` après `commun.md`. Case E9 de la checklist SixZero L
 ## Règles propres au jeu (skill entraînement § Académie U18)
 1. 2 prospects fixes jusqu'à ce qu'on en signe un ; nouveau choix toutes les 8 journées de ligue ; signature à 18 ans, compétences tirées au niveau actuel de l'académie.
 2. Compétences dévoilées avant signature selon le niveau de l'académie ; monter le niveau pendant une offre en dévoile plus sur les 2 mêmes prospects.
+2bis. Plage des compétences selon le niveau : 1-20 (niv. 1), 2-22 (niv. 2), 9-36 (niv. 9) [Com chat, 2026-10-20]. Formule min = niveau, max = 18 + 2 × niveau : **vérifiée le 2026-10-23 sur `silver.sz_infrastructure_levels` pour les niveaux 1 à 20** (niv. 20 = 20-58) ; confiance bonne. Le prospect étranger (2 % au niv. 5 à 9, 4 % au niv. 10, 6 % au 15, 8 % au 20 d'après les mêmes données) ne sert qu'aux futures sélections nationales [Dev chat, 2026-10-20].
 3. Effectif de 30 au maximum. L'académie sert surtout à remplacer les retraités.
 4. Ni test payant, ni jauge, ni investissement hebdomadaire : ne reprends pas la méthode BasketVibe.
 
