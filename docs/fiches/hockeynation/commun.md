@@ -41,3 +41,11 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 - Correction du 2026-10-23 (agent Académie, sources [G:U21 Team], [G:Farm Team], [G:Teams]) : il n'y a pas de négociation en U21. Le GM signe un ELC PRO (après la fenêtre I) ou un contrat Farm (à 21 ans seulement, effet à 22 ans) ; un U21 non signé part à 22 ans. La négociation existe pour les FRM de 25 ans et plus. Les draftés et les 2 U17 non draftables arrivent en U21 à 18 ans ; un U17 draftable est pris par un autre club.
 - Le calendrier « négociations ouvertes le jour 1, validées jours 4-5 » (dit par l'utilisateur) est introuvable dans le guide : non vérifié.
 - « Contre-emploi » (gold.hn_player_fit) = aucun des 2 talents forts du joueur n'est une compétence clé de son poste (hypothèse de `gold.hn_position_keys`, non confirmée par le jeu).
+
+## Précisions de l'utilisateur du 2026-10-23 (soir)
+- Négociation FRM : la demande de contrat (ex. Vollmer, 1,56 M$ sur 5 ans) n'est qu'une étape pour décider de garder ou non un joueur FRM. Pour renvoyer un FRM, le seul moyen est de négocier avec lui puis de ne pas le prolonger : il part. Un FRM en négociation dont le GM ne répond pas ne part pas (il reste, comme les autres FRM).
+- Finances : aucune évolution dans le temps ; seul compte le cap space à respecter avec les salaires PRO.
+- Stan Aalst (head coach PRO) prend sa retraite en début de saison S27.
+- Vocabulaire : ne pas dire « vendre » pour un échange ; dire « échanger ». Échanger Hateboer et Jaworski dégrade la ligne : toujours vérifier la ligne avant/après.
+- Scouts : à recruter ensemble en début de saison, selon la classe de draft.
+- Toujours raisonner en 4 C / 4 LW / 4 RW / 2 LD / 2 RD / 2 G.
