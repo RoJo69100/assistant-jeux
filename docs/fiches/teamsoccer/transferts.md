@@ -30,3 +30,9 @@ Lue par l'agent `transferts` après `commun.md`. Case E6 de la checklist Team So
 
 ## Enchère et solde (confirmé par l'utilisateur, 2026-10-23)
 Le jeu **refuse** une enchère supérieure au solde disponible à cet instant. Pour une enchère de 1 700 000 $ avec 1 200 599 $ de solde, il faut vendre d'abord (ex. Étienne Roux 903 450 $) puis enchérir.
+
+## Prix et valeur (mesuré le 2026-10-23, [Obs])
+- Annonces de la banque : prix de départ ≈ 0,99 × la valeur de la fiche (0,88 à 1,17). Chaque offre ajoute ≈ 8,2 % (Hassan : valeur 1 281 071 → 1 499 553 $ après 2 offres). Enchère maximale = prévoir 3 offres de marge (×1,28).
+- Vente à la banque = valeur de la fiche, sans commission, immédiate. Enchère de manager = 72 h, 10 % de commission : n'est meilleure que si l'acheteur dépasse la valeur de plus de 11 %.
+- Valeur « fondée sur les compétences, l'OVR et le poste », changement au plus tous les 7 jours ; salaire ≈ 1 % de la valeur par semaine. Un jeune qui monte de +3 par semaine voit sa valeur monter.
+- **Donnée à constituer** : l'historique hebdomadaire de la valeur de chaque joueur (une seule date en base aujourd'hui). Chaque export Effectif du vendredi suffit : comparer `value` d'un vendredi au suivant pour savoir si garder un jeune rapporte plus que son salaire.
