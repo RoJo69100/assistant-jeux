@@ -13,10 +13,12 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/bas
 ## Rythme
 - Semaine du jeu = semaine réelle : matchs de ligue lun / mer / sam, entraînement et forme le dimanche (sauvegarder avant 04:00, Paris), rapport de l'académie le jeudi 09:00, salaires le dimanche (skill basketvibe-saison [M§1.3]).
 - Un amical **chaque jour** (08:00, à domicile ou à l'extérieur) : chaque amical a son export, vérifie qu'il est arrivé.
+- **Fin de saison 1 (dates 2026)** : dernière journée de ligue lundi 26/10 ; changement de saison dans la nuit, ligues neuves mardi 27/10 ; une semaine sans ligue ; première journée de la saison 2 lundi 02/11 (déduit) [Dev 2026-10-18/22]. Dimanche 25/10 = dernier entraînement avant le +1 an ; jeudi 29/10 = premier rapport d'académie de la saison 2. Le moteur passe en v4 en ligue dès la saison 2 [News 2026-10-19]. Détail dans basketvibe-saison.
+- **Moteur** : ligue en v3 jusqu'au 26/10 inclus, v4 ensuite ; ne pas mélanger les deux dans les tendances.
 
 ## Pièges communs
 - Ligue et amicaux ne se comparent pas (fatigue et expérience à ≈ 1/10 en amical, pas de blessure) [M§1.2].
-- Moteur : ligue en v3 en saison 1, amicaux en v4, ligue en v4 en saison 2 [Dev 2026-09-30, News 2026-10-11/16/17].
+- Moteur : ligue v3 jusqu'au 26/10 inclus ; v4 ensuite, sans autre changement prévu [Dev 2026-09-30, News 2026-10-19].
 - Consignes : l'écran affiche 1–5 = nos données 0–4 (+1) (confirmé par l'utilisateur le 2026-10-18). Donne toujours les valeurs de l'écran.
 
 ## Ordre des agents et briefs du jour (règle du 2026-10-22)

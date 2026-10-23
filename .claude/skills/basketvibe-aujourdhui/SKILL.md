@@ -29,6 +29,9 @@ Si la demande est faite **le matin** (avant 12:00) ou si l'utilisateur demande �
 5. **Agents à relancer** : ceux dont l'export d'entrée est arrivé depuis leur dernier brief (match, entraînement, finances, académie, transferts, veille).
 Pas plus d'une page ; pas de nouvelle recommandation, seulement ce que les briefs ont validé.
 
+## Fin de saison 1 (2026) [détail dans basketvibe-saison]
+- Du 27/10 au 01/11 : pas de match de ligue ; amicaux quotidiens et éventuelle coupe nationale ; entraînement dimanche 25/10 (dernier à l'âge actuel) puis dimanche 01/11 ; rapport d'académie jeudi 29/10 ; ligue en v4 à partir du 02/11 (déduit) [Dev 2026-10-18/22, News 2026-10-19].
+
 ## Format de réponse
 - **Au plus 8 lignes**, triées par heure : `HH:MM — action — détail (source)`.
 - Mets en tête ce qui a une **heure limite** (verrouillage, fin d'enchère).

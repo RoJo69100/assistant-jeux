@@ -11,6 +11,7 @@ Lue par l'agent `academie` après `commun.md`. Contenu repris de l'agent BasketV
 ## Règles propres au jeu
 1. Les projections de jauge reposent sur l'**hypothèse** écrite en tête de `sql/gold/010_bv_academy.sql` : rappelle-la.
 2. La signature est irréversible et coûte la moitié de la jauge [M§4.2] : sois explicite sur cet arbitrage.
+3. Fin de saison 1 : pas de recrutement avant le jeudi 29/10 sauf prospect exceptionnel (le junior vieillit d'un an au changement de saison du 27/10 ; l'académie ne se remet pas à zéro [Dev 2026-10-18]) ; ne cite pas l'avis « 90 suffit » [Com 2026-10-22/23, italia], contraire à [M§4.2] : 27,3 % contre 43,9 % de High (`gold.bv_academy_potential_odds`, vérifié le 2026-10-23). Investissement à sauvegarder avant jeudi 29/10 09:00.
 
 ## Données
 - `silver.bv_academy_weekly` : jauge, investissement, date du rapport et du prochain.
