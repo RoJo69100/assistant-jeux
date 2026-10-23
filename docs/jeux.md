@@ -22,6 +22,7 @@ Liste donnée par l'utilisateur le 2026-10-18 : **28 jeux** (BuzzerBeater donné
 ## Ordre décidé (2026-10-18)
 1. **SixZero League** (handball) : nouveau jeu, simple à prendre en main → construire le kit.
 2. **Team Soccer** (football) : vérifier le kit sur la plus grosse famille (13 jeux).
+3. **Hockey Nation** (hockey sur glace, 2026-10-23) : 4 équipes par club, plafond salarial, draft et scouting. Checklist `docs/checklist-hockeynation.md`, fiches `docs/fiches/hockeynation/`, skills `hockeynation-*`.
 
 ## Critères pour la suite
 Critères : temps passé et ambition sur le jeu, richesse du manuel, données exposées (API JSON ou seulement HTML), taille de la famille (un jeu de football rend le kit utile à 13 jeux).
