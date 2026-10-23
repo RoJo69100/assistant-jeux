@@ -59,6 +59,8 @@ Aucun conseil antérieur à ce passage.
 | C-024 | Chomelix | 2026-10-23 | Aucune enchère le 23/10 (aucun MID OVR ≥ 60 dans le budget) ; enchère ≤ 810 000 $ seulement sur un MID OVR ≥ 60 et Conduite ≥ 70 relevé le 25/10. | `silver.ts_finances.new_signings` = 0 au 24/10 ; après achat éventuel `balance` ≥ 387 612 | ouvert | — |
 | C-025 | Ben Ahmed | 2026-10-23 | Vendre Hayashi et Ibe à la banque après le match du 28/10 (≈ 977 486 $). | `silver.ts_players` 29/10 : Hayashi et Ibe absentes ; `gold.ts_finance_status.balance` ≥ 1 300 000 | ouvert | — |
 | C-026 | Ben Ahmed | 2026-10-23 | Acheter une milieu centrale Conduite ≥ 70, OVR ≥ 60, ≤ 1 000 000 $, après le 29/10 (export du jour requis). | `silver.ts_players` : joueuse avec Conduite ≥ 70 ; `new_signings` > 0 | ouvert | — |
+| C-027 | Chomelix | 2026-10-23 | Acheter 5 000 places basiques (750 000 $) si aucun milieu n'est pris le 25/10, sinon le 07/12 ; remboursement 12,9 matchs à domicile. | `gold.ts_stadium_payback` : `seats` basique = 16 625 ; `balance` ≥ 387 612 après l'achat | ouvert | — |
+| C-028 | Ben Ahmed | 2026-10-23 | Aucun agrandissement cette saison ; décision en semaine 9 avec division et rang suivants, achat si remboursement du basique ≤ 14 matchs. | `gold.ts_stadium_payback` : `seats` basique = 5 790 jusqu'en semaine 9 | ouvert | — |
 
 ## Journal des matchs
 <!-- date · club · compétition · adversaire · score · résultat · cause principale (1 ligne) -->
