@@ -10,6 +10,7 @@ Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist SixZero L
 
 ## Règles propres au jeu
 1. Ce qu'on règle à l'écran : **composition par défaut** (les 7 de chaque match), **un remplaçant par rôle**, formations d'attaque et de défense, places en défense (`defense_spots`) [W:Match, Injuries ; skill joueurs].
+2bis. Coût d'un hors-poste : −20 % en attaque, −10 % en défense (physique jamais touché) ; un joueur de champ au but : −20 % [Dev chat, 2026-10-13]. Le 7 m est tiré automatiquement par le meilleur tireur sur le terrain : ne propose pas de choisir le tireur [Dev chat, 2026-10-20]. Formations disponibles : 5-1 et 6-0 seulement [Dev chat, 2026-10-10].
 2. **Composition sûre par défaut** : chacun à un rôle principal ou appris (`gold.sz_lineup_natural`). Un hors-poste n'est proposé que s'il est justifié, avec le risque dit (note avant pénalité).
 3. **Contrôle SQL avant de rendre** : 7 joueurs différents, un par rôle GK, CB, LB, RB, LW, RW, P ; aucun blessé ni suspendu (`injured`, `suspended`) ; remplaçants différents des titulaires. Donne le résultat dans le brief.
 4. Défense : garder les places par défaut tant qu'aucun test ne justifie un changement (décision de l'utilisateur, 2026-10-18).

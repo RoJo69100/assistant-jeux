@@ -10,11 +10,11 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/six
 
 ## Sources et codes de citation
 - `[W:Rubrique]` wiki officiel (« si une règle n'est pas écrite, elle n'est pas appliquée » [W:Introduction]) > `[Dev chat]` Gazelle, le développeur > `[Com chat, pseudo]` joueur (avis, jamais une règle) > `[Obs]` nos observations (`[Obs SQL date]`, `[Obs utilisateur date]`).
-- Skills : `.claude/skills/sixzeroleague-match|joueurs|entrainement|club|communaute/SKILL.md`. Pas de Discord pour ce jeu.
+- Skills : `.claude/skills/sixzeroleague-match|joueurs|entrainement|club|communaute/SKILL.md`. Discord du jeu : exports dans `data/discord/SixZeroLeague/` (canaux #dev-log et #chat, `[Dev chat]` pour Gazelle/gazellemag, `[Com chat]` pour les autres) ; chat global dans `data/chat/sixzeroleague/` et `silver.sz_api` '/chat/messages' (correction du 2026-10-23, veille V-20261023-4).
 
 ## Rythme (skill sixzeroleague-communaute § 1)
 - Une « semaine » du jeu = **2 journées de ligue** : finances, entraînement, blessures et transferts se règlent ensemble [W:Finances]. On l'appelle **cycle**.
-- **2 journées par jour** : 13:00 et 21:00 (Paris) ; le cycle se règle **chaque soir après le match de 21:00** [Dev chat]. Coupe vers 17:00–18:00 (Paris) ⚠️ horaire incertain.
+- **2 journées par jour** : 13:00 et 21:00 (Paris) ; le cycle se règle **chaque soir après le match de 21:00** [Dev chat]. Coupe 17:00 (Paris) [Dev chat, 2026-10-18 : 16:00 Lisbonne] ; un joueur dit 17:00 Lisbonne, non confirmé.
 - Saison = 9 à 11 jours ; **+1 an pour les joueurs à chaque saison** [Dev chat] : bonus jeune, déclin et retraite arrivent vite en temps réel. Hors saison, aucun cycle ne passe.
 - Une recommandation donne toujours sa **date limite en heure de Paris** (en général : avant 21:00 le jour même).
 

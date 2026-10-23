@@ -13,7 +13,7 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 
 ## 1. Rythme réel du jeu (essentiel pour la planification)
 - **Matchs de ligue à 12:00 et 20:00 (heure de Lisbonne)**, soit 13:00 et 21:00 à Paris : **2 journées par jour** [Com chat, 97777ali, confirmé « Yes! » par Dev chat].
-- **Coupe** : 16:00 heure de Lisbonne selon le Dev [Dev chat], 17:00 selon un joueur que le Dev confirme ensuite ⚠️ (17:00 ou 18:00 à Paris) ; ces matchs seront plus tard répartis dans la semaine [Dev chat].
+- **Coupe** : 16:00 heure de Lisbonne selon le développeur = **17:00 à Paris** [Dev chat, chat jeu 2026-10-18 15:33]. Un joueur écrit 17:00 Lisbonne [Com chat, 97777ali 2026-10-18 17:55] : non confirmé par le développeur. Les matchs de coupe seront répartis dans la semaine plus tard [Dev chat]. (Ancienne version : 17:00 ou 18:00 incertain ⚠️, remplacée le 2026-10-23.)
 - Une « semaine » du jeu = 2 journées de ligue [W:Finances], donc **en pratique un jour** : **l'entraînement se règle et le marché se clôt chaque soir après le match de 20:00 (Lisbonne)** [Dev chat]. Hors saison, aucune « semaine » ne passe.
 - **Saison = 18 journées / 2 par jour = 9 jours**, jusqu'à 11 jours s'il y a beaucoup d'équipes en coupe [Dev chat]. **Les joueurs prennent donc 1 an tous les 9 à 11 jours** [Dev chat, à la question de Draugar].
   - Conséquence : le bonus jeune (jusqu'à 20 ans [W:Training]), le déclin (dès 30 ans) et la retraite (dès 33 ans) arrivent **très vite en temps réel**.
@@ -30,6 +30,7 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 - Divisions introduites par une mise à jour : **tout le monde commence en 5e division**, montées et descentes à partir de la saison suivante [Dev chat].
 - Le niveau des bots dépend de la division ; même en 1re division, ils n'ont **pas la moitié de la force** qu'une équipe humaine peut atteindre : c'est un frein pour le début du jeu [Dev chat].
 - Résultats qui paraissent aléatoires (ex. défaite 16–24 puis victoire 28–20 contre le même leader) : selon le Dev, toutes les équipes sont encore faibles, la tactique a peu de profondeur, et **certaines compétences contrent ce qu'une équipe sait faire**, d'où des « affinités » entre équipes [Dev chat, à Draugar].
+- Les ligues sont tirées au hasard, pas par niveau ; elles ont été remélangées en début de saison, d'où des ligues parfois plus fortes [Dev chat, 2026-10-07 et 2026-10-20]. Promotions et relégations seulement à la saison suivante : un champion promu, trois relégués (sauf 5e) [Dev chat, 2026-10-19]. Troisième saison du jeu [Dev chat, 2026-10-22].
 
 ## 4. Sponsor et argent
 - Changer de sponsor ne fait pas perdre la prime de 3e place [Dev chat, à Carlinhos].
@@ -41,3 +42,13 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 - Pour moins de cartons et d'exclusions : travailler le **Marquage** d'abord, puis **Anticipation** et **Duels** [Com chat, Antarez] ; cohérent avec le wiki (Marquage et Duels = moins de fautes [W:Attributes]).
 - Jeu passif : les équipes faibles tirent rarement pendant l'avertissement et perdent le ballon à la 7e passe ; selon le Dev, un tir pendant cette phase a pourtant actuellement **un taux de réussite plus élevé** ; point à revoir de son côté [Dev chat].
 - Matchs joués avant la mise à jour des statistiques : seul le score est disponible [Dev chat].
+- Le 7 m est tiré par le meilleur de l'équipe, sans choix possible [Dev chat, 2026-10-20]. Fautes de 2 min loin du ballon : bug en correction ; nombre d'exclusions en révision ; jeu passif : pression pour tirer ajoutée, mais les équipes faibles tirent encore peu [Dev chat, 2026-10-20 et 2026-10-21]. Seules les formations 5-1 / 6-0 existent ; un joueur ne peut pas être limité à l'attaque ou à la défense [Dev chat, 2026-10-10]. Stats adverses non visibles ; la formation adverse viendra dans les stats de match [Dev chat, 2026-10-22].
+
+## 6. Économie, académie, alpha
+- Coût des niveaux d'infrastructure caché volontairement ; Arena max > 9 999 par match à domicile, plus en division haute [Dev chat, Discord #chat 2026-10-19]. Bonus du Training Facilities +0,04 par niveau, linéaire (« si je ne me trompe pas ») [Dev chat, 2026-10-19].
+- Fan Shop : 1,6 × (leader) à 0,7 × (dernier) selon le classement [Dev chat, devlog 0.5.7 2026-10-04].
+- Conseil du développeur (avis) : revenus d'abord ; avec des Training Facilities hautes, garder les joueurs à forte éthique de travail puis les vendre [Dev chat, 2026-10-11].
+- Joueur libéré : 10 % de chances d'être relisté en joueur libre [Dev chat, 2026-09-23].
+- Les joueurs de l'alpha ne seront pas conservés à la sortie officielle ; tout le monde repart en dernière division [Dev chat, 2026-09-23].
+- Prospect étranger : utile surtout pour les futures sélections nationales [Dev chat, 2026-10-20].
+- Avis (pas des règles) : académie niveau 7 à 8 donne des joueurs vers 20 de note ; joueur d'académie ~5 à 5,5 mois de vie [Com chat, 2026-10-19 et 2026-10-20].
