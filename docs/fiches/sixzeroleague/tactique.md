@@ -29,3 +29,7 @@ Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist SixZero L
 ## Sortie propre au jeu
 - En tête du brief : la fiche de saisie et la date limite (coup d'envoi suivant : 13:00 ou 21:00, Paris).
 - Si `silver.sz_tactics.day` ou `silver.sz_players.as_of` est périmé, demande l'export de la page Équipe → Tactics.
+
+## Contraintes d'écran vérifiées (2026-10-23, [Obs utilisateur])
+- Un joueur ne peut pas être remplaçant à deux postes : jamais de doublon dans la fiche de saisie ; si les valides manquent, le remplaçant du poste reste vide.
+- Durées à l'écran : rouge direct = 1 match de suspension ; blessure d'A. Bertin = 2 matchs. Une suspension d'1 match fait manquer le match suivant seulement.
