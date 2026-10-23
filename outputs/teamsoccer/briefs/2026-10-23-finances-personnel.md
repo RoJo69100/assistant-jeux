@@ -1,3 +1,5 @@
+> **Décision du 2026-10-23 (arbitrage de la session, remplace « n'enchérir sur aucune annonce » pour Chomelix et « ne pas enchérir sur Hassan »)** : Chomelix **enchérit sur Omar Hassan** (milieu 20 ans, OVR 77,2, Conduite 100, Passe 90, Centres 96 ; 1 499 553 $, fin 25/10 16:01 Paris) avec une enchère maximale de **1 700 000 $**, financée en **vendant Étienne Roux** (attaquant 19 ans, OVR 63, 4e attaquant derrière Moreau 70,6, Bonnet 67,6 et M. David 65,4 ; 903 450 $ à la banque). Une recrue démarre à Forme 85 (fiche Transferts, règle 3) : la Forme 30 actuelle ne compte pas. Les 750 000 $ de places basiques passent après, le 26/10, seulement avec le solde restant. Solde 1 200 599 $ + 903 450 $ = 2 104 049 $, réserve ≈ 387 612 $ ⇒ capacité ≈ 1 716 437 $.
+
 # Team Soccer — brief Finances et Stade du 2026-10-23
 
 Agent Finances-personnel (medium + Sonnet). Fiches lues : `commun.md`, `finances-personnel.md` ; skills `teamsoccer-club` (seul chargé : prix de l'entraîneur et primes non utilisés ici). Briefs amont lus : `2026-10-23-match.md` (corrigé), `2026-10-23-effectif.md`.
@@ -68,6 +70,90 @@ Vues : `gold.ts_finance_status` (F), `gold.ts_stadium_payback` (P), `silver.ts_f
 - Réserve = 2 semaines de salaires + entretien = 243 122 $.
 - **Aujourd'hui : 144 754 $** (387 876 − 243 122), donc **aucun achat avant la vente**.
 - Après la vente de Hayashi et Ibe (≈ 977 000 $, prix de fiche sans commission, bank : valeur 488 743 $ × 2 d'après Effectif ; salaires −9 800/semaine → dépenses fixes 111 761, réserve 223 522) : solde ≈ 1 364 876 $, **capacité ≈ 1 141 354 $**.
+
+## Stade (détail, ajouté le 2026-10-23)
+Sources : P (`gold.ts_stadium_payback`), SS (`silver.ts_stadiums`, relevé 2026-10-19), SF (`silver.ts_finances`), F (`gold.ts_finance_status`), MR (`gold.ts_match_report`, colonnes `spectators` et `fill_pct`), règles [skill club] (prix, recette par place, entretien 6 %, table d'affluence) et [skill saison] (9 semaines, 7 matchs de ligue à domicile par saison). Calculs d'avis : entretien étalé sur 9 semaines pour 7 matchs à domicile (facteur 9/7 ; P, lui, retire 6 % par match, d'où ses chiffres un peu plus courts).
+
+### Chomelix Cows (18) — Div I, 3e, 85 %, capacité 36 675 sur 80 000
+**(1) Rentable : oui.**
+| Mesure | Valeur |
+|---|---|
+| Billetterie par match à domicile (F) | 409 700 $ (482 000 × 85 %) ; 20/10 contre Vertigo CLUB : 409 700 encaissés (SF), identique |
+| Entretien (F) | 28 920 $/semaine = 6 % × 482 000 ; 260 280 $ par saison de 9 semaines |
+| Billetterie de ligue d'une saison | 7 × 409 700 = 2 867 900 $ ; entretien = 9,1 % de ce montant |
+| Net par saison (ligue seule) | 2 607 620 $ ; par match à domicile 372 517 $ |
+| Coût d'achat du stade (SF `total_stadium_building`) | 4 872 500 $ ; valeur des places au prix d'achat 5 403 750 ; 531 250 $ de places non facturées (déduction : même écart chez Ben Ahmed, donc dotation de départ) |
+| Remboursement de l'ensemble | 13,1 matchs à domicile, soit 1,9 saison (ligue seule, sans coupes ni amicaux) |
+
+**(2) Rempli : au taux de la table, 85 %, sans exception.** Le même pourcentage s'applique à chaque type [skill club]. Dernier match à domicile (MR 20/10) : 31 174 spectateurs sur 36 675 = 85 %. Avant : 13/10, 27 473 spectateurs à 90 % (2e), pour une capacité alors de 30 526 : +6 149 places achetées depuis.
+| Type | Places | Occupées | Vides | Recette par match | Recette perdue (vides) |
+|---|---|---|---|---|---|
+| Debout | 20 250 | 17 212 | 3 038 | 129 094 | 22 781 |
+| Basique | 11 625 | 9 881 | 1 744 | 148 219 | 26 156 |
+| Couverte | 4 300 | 3 655 | 645 | 100 513 | 17 738 |
+| VIP | 500 | 425 | 75 | 31 875 | 5 625 |
+| Total | 36 675 | 31 174 | 5 501 | 409 700 | 72 300 |
+Les places vides ne viennent pas d'un manque de public mais du rang : 1er ou 2e rang en Div I = 100 % ou 90 %.
+
+**(3) Agrandir : OUI, des places basiques.**
+| Type | Prix d'achat | Remboursement P | Remboursement avec entretien (avis) | Place restante |
+|---|---|---|---|---|
+| Basique | 150 $ | 12,5 matchs | **12,9** | 8 375 |
+| Debout | 80 $ | 13,4 | 13,8 | 29 750 |
+| Couverte | 300 $ | 13,7 | 14,1 | 5 200 |
+| VIP | 1 500 $ | 25,0 | — | 0 (maximum atteint) |
+- **Quantité : 5 000 places basiques = 750 000 $.** Gain : 5 000 × 15 $ × 85 % = 63 750 $ par match à domicile, moins 4 500 $/semaine d'entretien (5 000 × 15 × 6 %) ; net 57 964 $ par match ; remboursées en 12,9 matchs à domicile (1,85 saison). Après l'achat : capacité 41 675, billetterie pleine 557 000.
+- **Quand : le premier lundi où le solde dépasse la réserve (387 612 $) + 750 000 = 1 137 612 $ après l'achat de milieu.** Solde actuel 1 200 599 : possible dès lundi 26/10 si aucun milieu n'est acheté le 25/10 (C-024) ; sinon le **lundi 07/12** (F : fin de saison projetée 1 892 457, moins milieu ≤ 810 000, plus Hugo Martin 200 003 = 1 282 460). Aucun achat de place avant que le choix du milieu soit tranché.
+- Risque chiffré : si Chomelix tombe au 6e rang, le taux passe à 70 % (table) et le remboursement du basique à 150 ÷ (15 × (0,70 − 0,0771)) = 16,1 matchs.
+
+**(4) Prix des billets : pas de levier.** Les prix (debout 7,50, basique 15, couverte 27,50, VIP 75 $ par place occupée) sont ceux du jeu pour tous les clubs [skill club, G:Stades et spectateurs, en vigueur depuis le 2026-09-18]. Le taux d'affluence de la table ne contient aucun terme de prix ; SS ne contient aucune colonne de prix. Il me manque : un réglage de prix de billet sur la page Stade. Voici comment on l'obtient ensemble : tu ouvres la page Stade de Chomelix, tu me dis si un champ de prix est modifiable (capture ou export Stade) ; je l'enregistre dans `docs/fiches/teamsoccer/finances-personnel.md`. Sans ce champ, 0 $ de gain possible par les prix.
+
+### Ben Ahmed Donkey (15858) — Div III, 1re, 80 %, capacité 25 540 sur 80 000
+**(1) Rentable : oui, un peu moins.**
+| Mesure | Valeur |
+|---|---|
+| Billetterie par match à domicile (F) | 266 980 $ (333 725 × 80 %) ; le 22/10 contre BOT, SF `match_income` = 275 355 (écart de 8 375 $ non expliqué) |
+| Entretien (F) | 20 024 $/semaine = 6 % × 333 725 ; 180 216 $ par saison |
+| Billetterie de ligue d'une saison | 7 × 266 980 = 1 868 860 $ ; entretien = 9,6 % |
+| Net par saison (ligue seule) | 1 688 644 $ ; par match à domicile 241 235 $ |
+| Coût d'achat (SF) | 3 342 250 $ (places au prix d'achat 3 873 500 ; 531 250 $ non facturés) |
+| Remboursement de l'ensemble | 13,9 matchs à domicile, soit 2,0 saisons |
+
+**(2) Rempli : à 80 %, sans exception.** MR : 22/10 contre BOT, 20 432 spectateurs sur 25 540 = 80 % ; 15/10 et 12/10 : 15 192 chacun à 80 %, capacité alors de 18 990 (+6 550 places depuis le 15/10).
+| Type | Places | Occupées | Vides | Recette par match | Recette perdue (vides) |
+|---|---|---|---|---|---|
+| Debout | 16 000 | 12 800 | 3 200 | 96 000 | 24 000 |
+| Basique | 5 790 | 4 632 | 1 158 | 69 480 | 17 370 |
+| Couverte | 3 250 | 2 600 | 650 | 71 500 | 17 875 |
+| VIP | 500 | 400 | 100 | 30 000 | 7 500 |
+| Total | 25 540 | 20 432 | 5 108 | 266 980 | 66 745 |
+
+**(3) Agrandir : NON cette saison.**
+| Type | Prix d'achat | Remboursement P | Avec entretien (avis) | Place restante |
+|---|---|---|---|---|
+| Basique | 150 $ | 13,3 matchs | **13,8** | 14 210 |
+| Debout | 80 $ | 14,2 | 14,8 | 34 000 |
+| Couverte | 300 $ | 14,5 | 15,1 | 6 250 |
+| VIP | 1 500 $ | 26,6 | — | 0 |
+- Raison chiffrée : la capacité d'investissement est 144 754 $ aujourd'hui puis 1 141 354 $ après la vente du 28/10, dont ≤ 1 000 000 $ vont à la milieu (décision 6). Il reste 141 000 $, soit 940 places basiques : trop peu pour peser.
+- **Quand : décision en semaine 9, une fois la division et le rang de la saison suivante connus**, parce que le remboursement du basique dépend d'eux : Div II 1er (90 %) 12,2 matchs ; Div III 1er (80 %) 13,8 ; Div II 4e (70 %) ou Div III 2e (70 %) 16,1 ; Div III 3e (65 %) 17,5. Seuil : acheter si le remboursement est de 14 matchs ou moins, par 5 000 basiques (750 000 $ ; +60 000 $ par match à 80 %, moins 4 500 $/semaine d'entretien).
+
+**(4) Prix des billets : pas de levier.** Mêmes tarifs que Chomelix, fixés par le jeu. Il me manque : un réglage de prix sur la page Stade. Voici comment on l'obtient ensemble : même démarche que Chomelix, ouvrir la page Stade de Ben Ahmed et dire si un prix est modifiable.
+
+### Données absentes (ligne par ligne)
+- Il me manque l'historique d'affluence avant le 12/10 (MR commence ce jour-là, 3 matchs à domicile chez Ben Ahmed, 2 chez Chomelix) ; voici comment on l'obtient ensemble : export des pages de match à domicile passées (une page par match, onglet « Résumé »), à déposer comme d'habitude.
+- Il me manque la répartition par type de place des spectateurs d'un match réel (MR ne donne que le total) ; voici comment on l'obtient ensemble : la table d'affluence applique le même taux à chaque type, ce que je vérifie ici par le total (31 174 = 85 % × 36 675 ; 20 432 = 80 % × 25 540) ; un export de la page de match montrant les spectateurs par type confirmerait.
+- Il me manque le réglage éventuel des prix (voir (4)).
+- Enregistrement proposé et fait dans `docs/fiches/teamsoccer/finances-personnel.md` (section « Méthode d'analyse du stade »).
+
+### Actions Stade (rouge d'abord)
+| Pastille | Club | Action | Quand |
+|---|---|---|---|
+| 🔴 | Chomelix | Acheter 5 000 places basiques (750 000 $) si aucun milieu n'est pris le 25/10 ; sinon le 07/12 | Lundi 26/10 ou lundi 07/12 |
+| 🟠 | Les deux | Ouvrir la page Stade et dire si un prix de billet est modifiable | Cette semaine |
+| 🟠 | Ben Ahmed | Calculer le remboursement du basique avec la division et le rang de la saison suivante, acheter si 14 matchs ou moins | Semaine 9 |
+| 🟢 | Les deux | Contrôler `maintenance_gap` = 0 après la clôture | Lundi 26/10 |
+| 🟢 | Les deux | Déposer les pages de match à domicile passées pour l'historique d'affluence | Quand tu veux |
 
 ## 3. Ordre de priorité des dépenses (décisions fermes)
 | N° | Club | Décision | Quand | Montant | Pourquoi |

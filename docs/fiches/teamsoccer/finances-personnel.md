@@ -26,6 +26,19 @@ Lue par l'agent `finances-personnel` après `commun.md`. Cases E7 (finances) et 
 2. Masse salariale soutenable ou non ; capacité d'investissement (entraîneur, places).
 3. Stade : quelles places acheter, combien, quand (remboursement en matchs à domicile).
 
+## Méthode d'analyse du stade (à suivre à chaque passage)
+Le brief contient une section « Stade » par club avec quatre réponses chiffrées : (1) rentabilité, (2) remplissage, (3) agrandissement, (4) prix.
+1. **Rentabilité** : billetterie par match à domicile (`gold.ts_finance_status.gate_per_home_match`) ; entretien annuel = `stadium_maintenance` × 9 semaines ; net par match = billetterie − entretien × 9/7 ; coût d'achat = `silver.ts_finances.total_stadium_building` ; remboursement = coût ÷ net par match. Les places non facturées (531 250 $, déduction identique chez les deux clubs) expliquent l'écart avec la valeur au prix d'achat.
+2. **Remplissage** : `gold.ts_match_report` (`venue` = 'domicile', `spectators`, `fill_pct`) ; le taux est celui de la table division × rang et vaut pour chaque type de place ; places vides par type = places × (1 − taux). Capacité d'un match passé = spectateurs ÷ taux.
+3. **Agrandissement** : remboursement d'une place avec entretien = prix ÷ (recette × (taux − 0,06 × 9/7)) ; comparer les types (le basique est le meilleur chez les deux clubs) ; acheter si ≤ 14 matchs ; taille de l'achat limitée par la capacité (solde − réserve de 2 semaines). Recalculer le taux avec la division et le rang de la saison suivante avant d'acheter en fin de saison.
+4. **Prix** : fixés par le jeu (skill club) ; ne pas en conclure qu'ils sont modifiables.
+
+## Données à exporter pour le stade
+- Pages de match à domicile passées (historique d'affluence avant le 12/10 ; spectateurs par type de place s'ils sont affichés).
+- **Ouvert** : un prix de billet est-il modifiable sur la page Stade ? L'utilisateur le vérifie et le dit ; à enregistrer ici.
+- `silver.ts_stadiums` : dernier relevé au 2026-10-19 ; nouvel export Stade après chaque achat de places.
+- Écart non expliqué : Ben Ahmed, 22/10, `match_income` 275 355 contre 266 980 attendus (8 375 $).
+
 ## Constat au 2026-10-19 [Obs SQL]
 - Chomelix Cows −185 283 $, Ben Ahmed Donkey −112 482 $ ; entretien conforme (écart 0) ; projection fin de saison positive pour les deux (+878 706 $ et +413 078 $) si l'affluence suit.
 - Aucune place n'est remboursée en une saison (12 à 27 matchs à domicile pour 5 ou 6 restants) : l'agrandissement est un investissement sur plusieurs saisons.

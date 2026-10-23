@@ -35,3 +35,13 @@ Base : [skill teamsoccer-match § Avancé] 5 zones (Ultra défensive, Défensive
 | Attaquant | passer | passer | passer | dribbler puis tirer | tirer (×1,15) |
 
 Règle de choix : pour chaque joueur et chaque zone, l'action = la compétence la plus haute parmi celles qui servent l'action (Passe → passer, Conduite → dribbler, Centres → centrer, Finition → tirer), sauf dans la zone Ultra défensive (dégager). Les défenseurs et milieux qui « dribblent puis tirent » privent les attaquants de ballons [F:2026-09-15 PIPO68].
+
+## Emplacements (confirmé par l'utilisateur, 2026-10-23)
+- Défense à 4 : emplacements 1 et 4 = latéraux, 2 et 3 = centraux. Milieu à 3 : 1 latéral, 1 central, 1 latéral. Les centraux ne centrent pas (ils passent) ; seuls les latéraux et les ailiers centrent.
+- Gardien : une seule consigne (dégager). Aucune consigne en zone de Finition pour les défenseurs ni le gardien.
+
+## Données absentes enregistrées (2026-10-23)
+- **Départage à 60** : plusieurs joueuses de Ben Ahmed ont Passe = Conduite = Centres = Finition = 60. Il me manque une règle de choix ; voici comment on l'obtient ensemble : saisir « passer » (action par défaut du poste), puis comparer les pertes de balle après le match (`gold.ts_match_plays`) et tester « dribbler » si elles sont trop nombreuses.
+- **Remplaçant et consignes** : il me manque si un entrant reprend les consignes du sortant ; voici comment on l'obtient ensemble : après le premier remplacement réel, lire l'onglet Avancé de la page du match et le noter ici.
+- **Numéros d'emplacement des formations à 5 défenseurs (1-5-4-1)** : déduits, non vus ; voici comment on l'obtient ensemble : choisir la formation à l'écran et relever le numéro de chaque case.
+- **Convention des tableaux nommés** : Défensive = passer pour tous ; Médiane et Offensive = meilleure compétence d'action ; Finition seulement milieux, ailiers, attaquants ; centraux ni centrer ni dribbler. Les consignes de Chomelix pour Adrien Roux, Lucas David et Robert suivent la logique de poste, pas strictement la meilleure compétence : décision de l'utilisateur en attente.
