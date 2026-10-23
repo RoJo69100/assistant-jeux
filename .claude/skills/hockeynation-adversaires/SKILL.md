@@ -26,5 +26,16 @@ Demande de l'utilisateur (contexte `data/contexte/HN_contexte.txt`, 2026-10-23) 
 ## Livrable
 Tableau `point fort | preuve | notre réponse` (3 lignes au plus), puis un réglage concret pour nos lignes A/B/C ou notre plan de jeu.
 
+## Compétences clés (sources lues le 2026-10-23)
+| Poste | Ce que disent les sources | Source |
+|---|---|---|
+| Attaquants | SHO et PAS = buts ; SKA et PWR = possession de la rondelle ; CHK et DEF = défense ; DSC = pénalités ; FOF : un bon joueur de mises au jeu par ligne suffit, pas forcément le centre | Discord talonflame1, 2026-04-04 ; définitions [G:Players] |
+| Défenseurs | DEF « crucial pour empêcher les occasions », CHK, SKA ; END de la paire D1 à 8+ | [G:Players] ; talonflame1 |
+| Gardiens | REF, POS, PAD, BLO, GLO comptent tous ; STK est le moins utilisé (« tout sauf Stick », a_ferk 2026-04-04) ; END = nombre de matchs avant fatigue, titulaire à 7+ ; un gardien à END faible tombe vers 60 % de condition en 3e période | talonflame1, a_ferk, [G:Players] |
+Écarts avec `gold.hn_position_keys` : PWR manque aux attaquants, FOF est compté à tort comme clé du centre. À corriger au recalage après le premier patch (conception, Opus). Le poids exact de chaque compétence dans la note (note par position) n'est dans aucune source lue ; un outil communautaire (nedu92, #game-tools, 2026-01-18) l'utilise sans le publier.
+
 ## Données
-Les pages d'autres équipes arrivent dans `bronze.raw_pages` comme les nôtres ; à ce jour (2026-10-23) aucune vue silver ne les sépare des nôtres : à construire au premier export d'adversaire.
+- Effectifs PRO des 4 clubs étudiés (Leszno Bulls, Seoul Pilots, Miami Maidiacs, Jessup Baldos), exportés le 2026-10-23 : `silver.hn_league_players`, `gold.hn_league_player_fit`, `gold.hn_depth_chart` (lignes probables, les lignes réelles d'un autre club ne sont pas visibles).
+- Staffs complets (4 coachs par club) : `silver.hn_club_staff`, `gold.hn_coach_specials`, `gold.hn_club_compare`.
+- Matchs joués contre eux : `silver.hn_game_detail` (boxscore, players, coaches).
+- Marché, trade chat : `silver.hn_market_players`, `silver.hn_trade_chat`.

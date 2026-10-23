@@ -32,7 +32,7 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 
 ## D. Skills
 - [x] 6 skills `hockeynation-*` écrits depuis le guide, chaque fait sourcé [G:Rubrique] (2026-10-23)
-- [ ] Hypothèse des compétences clés par poste confirmée (Discord ou observation)
+- [x] Hypothèse des compétences clés par poste confirmée (2026-10-23 : Discord talonflame1/a_ferk 2026-04-04 + guide ; écarts à corriger au recalage : PWR manque aux attaquants, FOF n'est pas clé du centre, END gardien 7+ ; voir skill `hockeynation-adversaires`)
 - [x] Validés par l'utilisateur (2026-10-23, « je valide TOUT »)
 
 ## E. Agents (fiche `docs/fiches/hockeynation/`, 2026-10-23)
@@ -41,9 +41,9 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 - [x] Académie : draft, U21 (ELC, Farm, départ), Import Draft (validé le 2026-10-23)
 - [x] Entraînement : compétence et coach par joueur PRO/FRM, ordre de choix (validé le 2026-10-23)
 - [x] Tactique : lignes, unités spéciales, Extra Attacker, ordre des coachs (validé le 2026-10-23 ; lignes B et C PRO à exporter)
-- [ ] Transferts : verdict d'échange, joueurs à vendre, agents libres (attend l'export du marché)
+- [x] Transferts : abandonné par l'utilisateur le 2026-10-23 (« ça ne sert à rien », pas d'export du marché) ; les cibles d'échange viennent de l'agent Tactique
 - [x] Match : explication et journal des enseignements (33 matchs, validé le 2026-10-23)
-- [ ] Étude des adversaires
+- [x] Étude des adversaires (brief `2026-10-23-adversaires.md`, 4 clubs de l'autre ligue ; schedules et Team Ratings à exporter pour aller plus loin)
 
 ## F. Routine
 - [ ] « Que faire aujourd'hui » Hockey Nation (agenda par jour de saison)
