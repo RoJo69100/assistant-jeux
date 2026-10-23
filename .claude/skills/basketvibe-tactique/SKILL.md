@@ -53,6 +53,17 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - **Hit** : Lock ou Intense sur le vrai scoreur (celui sur qui passe l'attaque) → l'adversaire perd nettement. **Even** : sur un cinq équilibré → le score bouge peu. **Miss** : Lock sur un meneur passeur → les autres ont des tirs plus faciles, l'adversaire peut marquer plus.
 - Effet typique sur le % de réussite du scoreur visé : Intense contre Normal −2 à −4 pts ; Lock contre Intense −2 à −4 pts ; de Give up à Lock +12 à +16 pts d'écart.
 - Conseils du manuel : verrouiller le scoreur, pas le meneur qui distribue ; compenser par Light ou Give up sur les joueurs peu utilisés ; toujours sauvegarder avant le verrouillage.
+- **Échelle à l'écran : 1 à 5** = Give up, Light, Normal, Intense, Lock (3 = Normal, valeur sans plan sauvegardé). Saisir le chiffre. [M§6.6.1 ; échelle confirmée par l'utilisateur le 2026-10-23]
+- **Nombre de joueurs en Intense/Lock** : le manuel ne fixe aucun plafond. Il conseille « un ou deux » joueurs forts en Lock/Intense, compensés par Light/Give up sur le banc [M§6.6.5]. Les poids sont moyennés sur l'effectif adverse et décalent des tirs vers les coéquipiers [M§6.6.3]. Effet de plusieurs 4/5 en même temps sur les autres joueurs : non documenté, voir tests L-012 / C-040 du journal.
+- Écart d'effet typique sur le joueur visé : un cran plus facile sur le scoreur clé ≈ +2 à +7 points de FG% ; Intense contre Normal et Lock contre Intense ≈ 2 à 4 points chacun [M§6.6.4].
+- **En amical, un grand écart de compétence au même poste ajoute à l'effet du focus** ; en ligue et en coupe l'effet de compétence reste plus petit [M§6.6.3].
+
+### Defensive area (amicaux seulement) [M§6.6.2]
+- Second curseur par joueur adverse, à côté du focus : **Perimeter – Middle – Rim**. Middle = aucun décalage (défaut). Ni la ligue ni les coupes ne l'utilisent.
+- Elle change le **% de réussite**, pas le nombre de tirs. Perimeter : tirs à 3 pts plus difficiles, tirs à 2 pts plus faciles. Rim : l'inverse.
+- Ampleur : à l'extrême, tirs défendus ≈ −3 points, tirs ouverts ≈ +5 points ; un cran hors du milieu = la moitié.
+- Le devlog du 2026-10-19 (« v4 engine wraps up: injury tuning and defensive focus areas ») la rattache au moteur v4 ; le détail est tronqué sur la page. Pas de plan sauvegardé : tous les adversaires sont marqués pareil.
+- Utilité : à tester en amical pour la saison 2 ; non applicable en ligue (saison 1).
 
 ## Presets et verrouillage [M§6.4, §6.5, §1.1]
 - Jusqu'à 5 presets nommés ; un actif pour la ligue, un pour les amicaux, un pour les coupes.
