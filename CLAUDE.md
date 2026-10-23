@@ -45,6 +45,7 @@ docs/fiches/<jeu>/     fiche du jeu pour les agents
   - **low + Haiku** : seulement tâches mécaniques sans jugement (compter les exports reçus, reformater). Pas de SQL d'analyse ni de règle de jeu avec Haiku.
   - **Opus** : conception (voir règle Modèle).
   Revenir à low + Sonnet après la tâche.
+- Présentation : plans, comparaisons, états d'exports et résultats en **tableau court** (colonnes choisies), suivi de une à trois lignes de commentaire. Pas de tableau pour une réponse d'une phrase. Focus défensif toujours en chiffres 1 (Give up) à 5 (Lock) ; Defensive area (Perimeter/Middle/Rim, amicaux seulement) dans les fiches d'amical.
 - Écrire les fichiers avec l'outil Write, jamais par de longs heredocs dans le terminal (échecs constatés le 2026-10-19, tout était à réécrire).
 
 ## Sources BasketVibe
