@@ -17,8 +17,8 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 - [x] Échanges et marché (vérifié le 2026-10-23)
 - [x] Draft : classes des 3 ligues de nos choix, choix, scouts, budget (vérifié le 2026-10-23 : 300 joueurs, 5 choix)
 - [x] Guide complet (vérifié le 2026-10-23 : 21 rubriques)
-- [ ] Lignes FRM, U21, U17 ; fiche détaillée d'un coach ; fiche contrat d'un joueur ; /version-history
-- [ ] Exports d'un adversaire (effectif, coachs, matchs)
+- [x] Lignes FRM, U21, U17 (non réglables par le GM : calculées par `gold.hn_depth_chart`), fiches coach (31 fiches `/coach/:id`, dont Pavel Vašák), contrats (partie Contract de la fiche joueur) (vérifié le 2026-10-23) ; reste /version-history
+- [x] Exports d'adversaires : Leszno Bulls, Seoul Pilots, Miami Maidiacs, Jessup Baldos (effectif + staff) (vérifié le 2026-10-23)
 
 ## C. Modèle de données
 - [x] Silver : 22 vues `hn_*` (vérifié le 2026-10-23 : `sql/silver/015_hn_base.sql`)
@@ -26,9 +26,9 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 - [x] Gold : tableau de draft `hn_draft_board` (vérifié le 2026-10-23 : 3 ligues, 53 repérés dans la nôtre)
 - [x] Gold : plafond par saison `hn_cap_outlook` (vérifié le 2026-10-23 : S27 engagés 55,2 M$ + rachat 0,67 M$, cap space 1,63 M$)
 - [x] Gold : coachs `hn_coach_board`, calendrier `hn_calendar`, alertes `hn_daily_alerts` (vérifié le 2026-10-23)
-- [ ] Gold : valeur d'un échange (avant/après : âge, talents, cap space)
-- [ ] Gold : progression par joueur entre deux relevés
-- [ ] Silver/gold : équipes adverses
+- [x] Gold : valeur d'un échange `hn_trade_value` (vérifié le 2026-10-23 : 169 joueurs ; Pålsson cédé = cap space S27 1,63 → 4,91 M$)
+- [ ] Gold : progression par joueur entre deux relevés (`hn_player_progress` créée le 2026-10-23, vide tant qu'il n'y a qu'un jour de relevés)
+- [x] Silver/gold : équipes adverses `hn_league_players`, `hn_club_compare`, `hn_coach_specials`, `hn_special_skills` (vérifié le 2026-10-23 : 5 clubs comparés)
 
 ## D. Skills
 - [x] 6 skills `hockeynation-*` écrits depuis le guide, chaque fait sourcé [G:Rubrique] (2026-10-23)
