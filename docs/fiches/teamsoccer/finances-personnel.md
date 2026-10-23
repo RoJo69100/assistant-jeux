@@ -42,3 +42,6 @@ Le brief contient une section « Stade » par club avec quatre réponses chiffr�
 ## Constat au 2026-10-19 [Obs SQL]
 - Chomelix Cows −185 283 $, Ben Ahmed Donkey −112 482 $ ; entretien conforme (écart 0) ; projection fin de saison positive pour les deux (+878 706 $ et +413 078 $) si l'affluence suit.
 - Aucune place n'est remboursée en une saison (12 à 27 matchs à domicile pour 5 ou 6 restants) : l'agrandissement est un investissement sur plusieurs saisons.
+
+## Prix des billets (confirmé par l'utilisateur, 2026-10-23)
+Le prix des billets est **fixe** : aucun champ modifiable sur la page Stade. Aucun levier prix ; ne plus le demander.
