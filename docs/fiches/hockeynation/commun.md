@@ -48,4 +48,11 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 - Stan Aalst (head coach PRO) prend sa retraite en début de saison S27.
 - Vocabulaire : ne pas dire « vendre » pour un échange ; dire « échanger ». Échanger Hateboer et Jaworski dégrade la ligne : toujours vérifier la ligne avant/après.
 - Scouts : à recruter ensemble en début de saison, selon la classe de draft.
-- Toujours raisonner en 4 C / 4 LW / 4 RW / 2 LD / 2 RD / 2 G.
+- Toujours raisonner en **20 joueurs par équipe : 4 C / 4 LW / 4 RW / 3 LD / 3 RD / 2 G** (3 paires de défenseurs ; correction du 2026-10-23, remplace « 2 LD / 2 RD »). Lignes complètes pour PRO, FRM, U21, U17.
+
+## Consignes tactique (2026-10-23, après la v1)
+- **Aucun nouveau joueur dans une lineup** : on n'en reçoit que par agent libre ou échange (difficile, non garanti). Une lineup se bâtit sur nos joueurs actuels moins ceux qui partent (contrat fini non prolongé, échange voulu, draft). Les cibles d'échange vont dans un tableau séparé, jamais dans la lineup. Ne pas parler de Baier ; Mráz et Jenko ne servent que de cible d'échange.
+- Montées en PRO : candidats du **FRM et de l'U21** (U21 : pas de négociation, ELC actif la saison suivante).
+- Équipes spéciales à saisir : PP1, PP2, PK1, PK2, PK 3 hommes 1 et 2, 4 contre 4 L1 et L2 (un joueur une fois par type).
+- Coach pick order : liste ordonnée pour chaque équipe (PRO, FRM, U21, U17).
+- Endurance : seuils Discord (talonflame1, 2026-04-04) L1 7+, L2 6+, D1 8+, D2 6+, G1 7+, tolérés à −1 ; le temps de glace est fixé par la ligne, l'END fait baisser la condition.
