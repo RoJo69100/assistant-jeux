@@ -34,3 +34,10 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 - Le GM ne règle les lignes que de la PRO. Pour les autres équipes (FRM, U21, U17 et adversaires), la composition idéale est **4 LW / 4 RW / 4 C / 2 LD / 2 RD / 2 G** : elle dit quel joueur joue. Lezno Bulls (meilleure équipe du jeu, très loin devant) sert d'équipe de référence.
 - Il n'y a pas de fiche contrat : le contrat d'un joueur est dans la partie Contract de sa fiche.
 - Un coach se juge sur ses compétences spéciales (ex. Pavel Vasak, marché : Commander, Master Agitator) : lire le bonus exact avant un recrutement ou un échange.
+
+## Négociations de fin de saison (consigne du 2026-10-23)
+- Seuls les contrats de l'équipe PRO comptent pour le plafond ; un contrat FRM n'a aucun impact.
+- Un joueur FRM en négociation (page contract-talks-farm-players : ex. Vollmer, 1 560 000 $ sur 5 ans) **part de l'équipe si le GM ne fait rien** ; les autres joueurs FRM n'ont pas besoin de négociation pour rester.
+- Les U21 en négociation montent en FRM ou en PRO selon le choix du GM ; les U17 montent en U21. À vérifier dans le guide (U21 Team / Farm Team).
+- Les négociations ouvrent le jour 1 de la saison et sont validées vers le jour 4 ou 5 (déclaré par l'utilisateur, non vérifié).
+- « Contre-emploi » (gold.hn_player_fit) = aucun des 2 talents forts du joueur n'est une compétence clé de son poste (hypothèse de `gold.hn_position_keys`, non confirmée par le jeu).
