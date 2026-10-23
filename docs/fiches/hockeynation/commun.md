@@ -29,3 +29,8 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 ## Sorties
 - Briefs : `outputs/hockeynation/briefs/AAAA-MM-JJ-<domaine>.md`. Journal : `outputs/hockeynation/learnings.md` (C-nnn, L-nnn), créé au premier match analysé. Veille : `outputs/hockeynation/veille/`.
 - Couleurs : 🟥 URGENT, 🟧 IMPORTANT, 🟩 SUIVI devant chaque action ; verdict nommé, joueur par joueur.
+
+## Lignes des équipes que le GM ne gère pas (consigne du 2026-10-23)
+- Le GM ne règle les lignes que de la PRO. Pour les autres équipes (FRM, U21, U17 et adversaires), la composition idéale est **4 LW / 4 RW / 4 C / 2 LD / 2 RD / 2 G** : elle dit quel joueur joue. Lezno Bulls (meilleure équipe du jeu, très loin devant) sert d'équipe de référence.
+- Il n'y a pas de fiche contrat : le contrat d'un joueur est dans la partie Contract de sa fiche.
+- Un coach se juge sur ses compétences spéciales (ex. Pavel Vasak, marché : Commander, Master Agitator) : lire le bonus exact avant un recrutement ou un échange.
