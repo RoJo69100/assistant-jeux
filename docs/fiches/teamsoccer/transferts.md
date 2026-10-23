@@ -27,3 +27,6 @@ Lue par l'agent `transferts` après `commun.md`. Case E6 de la checklist Team So
 
 ## Constat au 2026-10-19 [Obs SQL]
 - Les deux soldes sont négatifs : aucun achat possible avant le retour au positif.
+
+## Enchère et solde (confirmé par l'utilisateur, 2026-10-23)
+Le jeu **refuse** une enchère supérieure au solde disponible à cet instant. Pour une enchère de 1 700 000 $ avec 1 200 599 $ de solde, il faut vendre d'abord (ex. Étienne Roux 903 450 $) puis enchérir.

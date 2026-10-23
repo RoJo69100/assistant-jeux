@@ -51,7 +51,7 @@ docs/fiches/<jeu>/     fiche du jeu pour les agents
   - **Opus** : conception (voir règle Modèle).
   Revenir à low + Sonnet après la tâche.
 - Présentation : plans, comparaisons, états d'exports et résultats en **tableau court** (colonnes choisies), suivi de une à trois lignes de commentaire. Pas de tableau pour une réponse d'une phrase. Focus défensif toujours en chiffres 1 (Give up) à 5 (Lock) ; Defensive area (Perimeter/Middle/Rim, amicaux seulement) dans les fiches d'amical.
-- Couleurs dans les réponses (code défini le 2026-10-23, à enrichir) : 🔴 **très important** (à faire absolument, échéance proche ou perte réelle) · 🟠 **important** mais pas nécessaire · 🟢 moins important (confort, suivi). Chaque ligne d'action de mes tableaux commence par sa pastille ; rouge d'abord. Objectif de l'utilisateur : voir vite ce qu'il doit faire.
+- Couleurs dans les réponses (code défini le 2026-10-23, à enrichir) : 🟥 **URGENT** (à faire absolument, échéance proche ou perte réelle) · 🟧 **IMPORTANT** (utile mais pas nécessaire) · 🟩 **SUIVI** (confort, à surveiller). Chaque ligne d'action de mes tableaux commence par la pastille carrée **et son mot** (ex. « 🟥 URGENT ») ; rouge d'abord. Révision du 2026-10-23 : carrés + mot, les ronds n'étaient pas assez lisibles. Objectif de l'utilisateur : voir vite ce qu'il doit faire.
 - Team Soccer : deux clubs (Chomelix Cows, Ben Ahmed Donkey). Toute réponse, tout agent, tout tableau traite **les deux clubs** (un bloc chacun), jamais un seul.
 - Écrire les fichiers avec l'outil Write, jamais par de longs heredocs dans le terminal (échecs constatés le 2026-10-19, tout était à réécrire).
 
