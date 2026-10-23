@@ -22,3 +22,16 @@ Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist Team Socc
 
 ## Livrable
 Pour chaque match à venir des deux clubs : formation, style, onze (emplacement → joueur), consignes clés, banc et remplacements, plan B (blessure, carton), heure limite d'enregistrement.
+
+## Règles de consignes par poste et par zone (2026-10-23)
+Base : [skill teamsoccer-match § Avancé] 5 zones (Ultra défensive, Défensive, Médiane, Offensive, Finition) ; actions dégager, passer, dribbler, centrer, tirer ; consigne cohérente avec la meilleure compétence ×1,10, incohérente ×0,90 ; bonus de poste dans la zone naturelle (DC défensive ×1,15 Défense ; milieu au milieu ×1,10 ; attaquant en Finition ×1,15 Finition et Tête ; ailier qui centre ×1,20 Centres ; milieu qui tire ×1,05 Finition). Les tableaux ci-dessous sont **déduits** de ces multiplicateurs, pas des règles du jeu : à confirmer au fil des matchs.
+
+| Poste | Ultra déf. | Défensive | Médiane | Offensive | Finition |
+|---|---|---|---|---|---|
+| Défenseur central | dégager | passer (milieu) | passer | passer | passer (jamais dribbler : ×0,90) |
+| Latéral | dégager | passer | dribbler si Conduite ≥ 70, sinon passer | centrer si Centres ≥ 70, sinon passer | centrer |
+| Milieu | passer | passer | passer ou dribbler selon la meilleure des deux (Passe/Conduite) | passer vers l'attaquant | tirer si Finition ≥ 60 (×1,05), sinon passer |
+| Ailier | passer | passer | dribbler | centrer (×1,20) ou dribbler | tirer |
+| Attaquant | passer | passer | passer | dribbler puis tirer | tirer (×1,15) |
+
+Règle de choix : pour chaque joueur et chaque zone, l'action = la compétence la plus haute parmi celles qui servent l'action (Passe → passer, Conduite → dribbler, Centres → centrer, Finition → tirer), sauf dans la zone Ultra défensive (dégager). Les défenseurs et milieux qui « dribblent puis tirent » privent les attaquants de ballons [F:2026-09-15 PIPO68].
