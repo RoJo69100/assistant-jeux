@@ -33,16 +33,16 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 ## D. Skills
 - [x] 6 skills `hockeynation-*` écrits depuis le guide, chaque fait sourcé [G:Rubrique] (2026-10-23)
 - [ ] Hypothèse des compétences clés par poste confirmée (Discord ou observation)
-- [ ] Validés par l'utilisateur
+- [x] Validés par l'utilisateur (2026-10-23, « je valide TOUT »)
 
 ## E. Agents (fiche `docs/fiches/hockeynation/`, 2026-10-23)
-- [ ] Effectif : bilan par poste et par équipe, doubles postes, vieillissement
-- [ ] Finances-personnel : plafond, prolongations, coachs, scouts
-- [ ] Académie : draft, U21 (ELC, Farm, départ), Import Draft
-- [ ] Entraînement : compétence et coach par joueur PRO/FRM, ordre de choix
-- [ ] Tactique : lignes A/B/C, mises au jeu, gardiens
-- [ ] Transferts : verdict d'échange, joueurs à vendre, agents libres
-- [ ] Match : explication et journal des enseignements
+- [x] Effectif : bilan par poste et par équipe, doubles postes, vieillissement (briefs validés par l'utilisateur le 2026-10-23)
+- [x] Finances-personnel : plafond, prolongations, coachs, scouts (validé le 2026-10-23)
+- [x] Académie : draft, U21 (ELC, Farm, départ), Import Draft (validé le 2026-10-23)
+- [x] Entraînement : compétence et coach par joueur PRO/FRM, ordre de choix (validé le 2026-10-23)
+- [x] Tactique : lignes, unités spéciales, Extra Attacker, ordre des coachs (validé le 2026-10-23 ; lignes B et C PRO à exporter)
+- [ ] Transferts : verdict d'échange, joueurs à vendre, agents libres (attend l'export du marché)
+- [x] Match : explication et journal des enseignements (33 matchs, validé le 2026-10-23)
 - [ ] Étude des adversaires
 
 ## F. Routine
