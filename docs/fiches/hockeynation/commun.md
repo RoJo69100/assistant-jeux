@@ -38,6 +38,6 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 ## Négociations de fin de saison (consigne du 2026-10-23)
 - Seuls les contrats de l'équipe PRO comptent pour le plafond ; un contrat FRM n'a aucun impact.
 - Un joueur FRM en négociation (page contract-talks-farm-players : ex. Vollmer, 1 560 000 $ sur 5 ans) **part de l'équipe si le GM ne fait rien** ; les autres joueurs FRM n'ont pas besoin de négociation pour rester.
-- Les U21 en négociation montent en FRM ou en PRO selon le choix du GM ; les U17 montent en U21. À vérifier dans le guide (U21 Team / Farm Team).
-- Les négociations ouvrent le jour 1 de la saison et sont validées vers le jour 4 ou 5 (déclaré par l'utilisateur, non vérifié).
+- Correction du 2026-10-23 (agent Académie, sources [G:U21 Team], [G:Farm Team], [G:Teams]) : il n'y a pas de négociation en U21. Le GM signe un ELC PRO (après la fenêtre I) ou un contrat Farm (à 21 ans seulement, effet à 22 ans) ; un U21 non signé part à 22 ans. La négociation existe pour les FRM de 25 ans et plus. Les draftés et les 2 U17 non draftables arrivent en U21 à 18 ans ; un U17 draftable est pris par un autre club.
+- Le calendrier « négociations ouvertes le jour 1, validées jours 4-5 » (dit par l'utilisateur) est introuvable dans le guide : non vérifié.
 - « Contre-emploi » (gold.hn_player_fit) = aucun des 2 talents forts du joueur n'est une compétence clé de son poste (hypothèse de `gold.hn_position_keys`, non confirmée par le jeu).
