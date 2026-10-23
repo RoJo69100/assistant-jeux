@@ -26,3 +26,6 @@ Rotation : un joueur utilisé progresse plus vite (minutes d'entraînement) ; si
 
 ## Sortie propre au jeu
 - Si `as_of` est antérieur au dernier cycle réglé (la veille au soir), demande l'export de la page Équipe → Players.
+
+## Surplus par rôle (règle du 2026-10-23)
+Avant de proposer de vendre un joueur « en trop » à un poste (ex. 3 RW), lire ses `role_overalls` sur **tous** les rôles (`silver.sz_players`) : un joueur dont la note ailleurs, après la pénalité de hors-poste (−20 % attaque, −10 % défense, −20 % champ au but, [Dev chat 2026-10-13/20]), égale ou dépasse le remplaçant naturel d'un rôle mince (aujourd'hui LB et CB) est une couverture, pas un surplus. Ne le vendre que si aucun rôle mince ne dépend de lui. Cas du 2026-10-23 : Lemaire (RW 8, salaire 90) vaut LB 10 et CB 10 avant pénalité, contre 8 pour Leroy et Denis : à garder.
