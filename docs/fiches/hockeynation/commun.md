@@ -50,6 +50,10 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 - Scouts : à recruter ensemble en début de saison, selon la classe de draft.
 - Toujours raisonner en **20 joueurs par équipe : 4 C / 4 LW / 4 RW / 3 LD / 3 RD / 2 G** (3 paires de défenseurs ; correction du 2026-10-23, remplace « 2 LD / 2 RD »). Lignes complètes pour PRO, FRM, U21, U17.
 
+## Fenêtres (2026-10-23)
+- Les échanges et les montées FRM→PRO sont fermés jusqu'au **jour 1 de S27** : ne jamais mettre en « aujourd'hui » une action qui dépend d'une fenêtre fermée ou d'un état S27 (lineup avec Nokelainen, Hateboer, Jaworski ; échanges Pålsson, Munk, Carpentier, Hongisto). Le plan B d'entraînement attend l'embauche des coachs.
+- Les 4 clubs étudiés (Leszno, Seoul, Miami, Jessup) sont dans l'autre ligue : référence et cibles d'échange, pas adversaires directs (`silver.hn_standings`).
+
 ## Consignes tactique (2026-10-23, après la v1)
 - **Aucun nouveau joueur dans une lineup** : on n'en reçoit que par agent libre ou échange (difficile, non garanti). Une lineup se bâtit sur nos joueurs actuels moins ceux qui partent (contrat fini non prolongé, échange voulu, draft). Les cibles d'échange vont dans un tableau séparé, jamais dans la lineup. Ne pas parler de Baier ; Mráz et Jenko ne servent que de cible d'échange.
 - Montées en PRO : candidats du **FRM et de l'U21** (U21 : pas de négociation, ELC actif la saison suivante).
