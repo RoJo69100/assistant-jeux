@@ -18,6 +18,7 @@ Lue par l'agent `tactique` après `commun.md`. Contenu repris de l'agent BasketV
    - **forme** : utilise `fit_with_form` de `gold.bv_slot_fit`. La forme change chaque dimanche [M§5.5] : vérifie la date du relevé (`gold.bv_roster_now.day`) et signale si elle est antérieure au dernier dimanche. Conseil du manuel : tireurs à 7 ou plus, joueurs à 5–6 pour les quarts-temps défensifs, reposer ceux à 4 ou moins [M§5.5].
    Donne le résultat du contrôle dans le brief.
 2. **Moteur** : en saison 1, la ligue tourne en v3, gelé ; les amicaux sont en v4 ; la **ligue passe en v4 en saison 2** [Dev 2026-09-30, News 2026-10-11/16/17]. Pour chaque recommandation, dis si elle vaut pour v3, v4 ou les deux.
+   **Mise à jour 2026-10-23** : la ligue passe en v4 après la dernière journée de la saison 1 (lundi 26/10) ; à partir du 27/10 elle est en v4 (premier match le 02/11, déduit). Applique les risques de blessure v4 (Soft 0,60, Medium soft 0,80, +40 % au-delà de 36 min au Q4) [News 2026-10-19] ; propose 1 test de Defensive area par amical avant le 02/11, un seul changement à la fois, et note que la ligue n'utilise pas ce réglage [M§6.6.2].
 
 ## Données
 - `gold.bv_slot_fit` : chaque joueur sur chacun des 5 emplacements. `slot_ps` (compétences × poids du poste [M§2.2], indicatif [Dev 2026-09-17]), `height_eff` (taille sur l'emplacement [M§6.2.1]), `fit`, `fit_with_form` (forme [M§5.5]), `rank_in_slot`, fatigue actuelle.

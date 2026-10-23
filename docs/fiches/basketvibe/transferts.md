@@ -14,7 +14,10 @@ Lue par l'agent `transferts` après `commun.md`. Contenu repris de l'agent Baske
    - `gold.bv_market_price_ref` : médiane et quartiles par âge et poste sur 21 jours, compétences inconnues, donc très dispersés ;
    - prix constatés sur Discord [Com].
    Dis toujours combien de ventes comparables tu as. Avec moins de 5, la confiance est faible.
+   Contrôle du 2026-10-23 : `bv_market_price_known` ne couvre que 89 ventes du 16 au 22/10 (maximum 2 894 063) ; les records de 3,5 M ou plus cités sur Discord ne sont pas vérifiés.
 2. **Argent** : la somme des enchères maximales en cours ne peut pas dépasser le solde [M§10.3]. Lis `gold.bv_finance_projection` (solde, projection de fin de saison) avant de conseiller un achat. Compte le **salaire hebdomadaire** de la recrue (`est_weekly_salary`, barème [M§10.2]), pas seulement le prix.
+
+3. Avant de conseiller une vente en fin de saison, signale que le dev étudie une taxe dégressive sur les reventes rapides (idée d'un joueur, non décidée) [Dev 2026-10-22, economy] et qu'une semaine d'achat est bloquée pour la revente [M§11.1] ; compte 5 % de taxe. Test de potentiel : payé une fois par club et par joueur, résultat conservé sur le profil [M§11, lu 2026-10-23].
 
 ## Données
 - `gold.bv_market_candidates` : joueurs en vente au dernier export du marché. PS, moyenne des compétences, meilleur emplacement (`best_slot`, `best_fit`, taille comprise), `would_rank_in_slot` (son rang parmi mes joueurs à cet emplacement), `enters_top8` (fait-il monter le TS [M§2.2]), salaire estimé, statut d'âge, prix actuel, nombre d'enchères, fin de l'enchère (heure de Paris), médiane des ventes comparables, et les 8 compétences.

@@ -24,7 +24,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - **Phase finale à l'aveugle** : si l'enchère est encore ouverte 15 minutes après l'heure de fin initiale, le prix affiché se fige pendant 5 minutes. Chaque club soumet une offre finale secrète. Le meneur ne peut pas descendre sous son maximum.
 - **Prix final** : le plus petit des deux montants entre le maximum du gagnant et ce qu'il faut pour battre le deuxième maximum.
 - La somme de tes maximums en cours ne peut pas dépasser ton solde ; un maximum en tête bloque l'argent jusqu'à la fin de l'enchère [M§10.3].
-- **Tests (25 000)**, une fois par club et par mise en vente : potentiel révélé en catégorie Low, Decent ou High pendant l'enchère.
+- **Tests (25 000)** : payés **une fois par club et par joueur** tant que l'enchère est ouverte ; une remise en vente ne refacture pas ; le résultat (Low / Decent / High, jamais le nombre exact) **reste sur le profil**, même après la vente ou un changement de club [M§11, lu 2026-10-23 via résumé, pas mot pour mot]. Il faut un solde positif qui couvre les frais. Un test sur un joueur de son propre club n'est plus nécessaire : le potentiel s'affiche (voir basketvibe-communaute) [News 2026-10-20]. ⚠️ Remplace « une fois par club et par mise en vente » (lecture du 2026-10-16).
 - Après achat, la fiche du joueur montre aussi ses progressions passées dans d'autres clubs humains [M§4].
 
 ## Joueurs libres [M§11.4]
@@ -37,6 +37,11 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Valeur sportive : le PS dépend du poste (poids dans basketvibe-joueurs), mais en match seuls comptent l'emplacement et la taille [M§2.2, §6.2].
 - Âge : 0 progression à partir de 30 ans, déclin à partir de 31, retraite à la fin de la saison des 38 ans [M§8.5].
 - TS = moyenne des 8 meilleurs PS : une recrue ne fait monter le TS que si elle entre dans ce top 8 [M§2.2].
+
+## À surveiller / avis (hors règles du manuel)
+- **Taxe dégressive à l'étude** : idée **proposée par un joueur** (« feature request »), que le dev dit devoir trancher : 1re semaine bloquée, puis 20 % la 2e semaine, 15 % la 3e… jusqu'à 5 % ; non décidée, ne pas en tenir compte avant une News [Dev 2026-10-22, economy ; message relu en base le 2026-10-23]. Pas de limite du nombre de transferts [Dev, aucune annonce]. Le dev pourrait aussi relever le prix du test de potentiel si l'argent circule trop [Dev 2026-10-19, general, d'après la veille ; non recoupé mot pour mot].
+- Un joueur « 2 étoiles » de potentiel 7 progresse presque comme un 8 (×1,50 contre ×1,60 [M§8.3], −6 %) mais se vend nettement moins cher : cible d'achat à valeur [Com 2026-10-14, dcarra, italia ; calcul sur M§8.3] (avis). Le scouting sur le marché rend les 3 étoiles très chers et les 2 étoiles moins chers [Com 2026-10-16, sakota0, portugal] (avis).
+- Prix constatés dans nos données (`gold.bv_market_price_known`, 89 ventes du 2026-10-16 au 2026-10-22, lu le 2026-10-23) : maximum **2 894 063** (SF 17 ans, PS 49,7, départ 2 500 000, le 21/10) ; 3 ventes ≥ 2 M, toutes de 16–17 ans ; 18 ventes ≥ 1 M. Les records de 3,5 M cités par la communauté (voir basketvibe-communaute §6) **ne sont pas dans cette vue** (fenêtre trop courte).
 
 ## Lecture de nos données
 - `silver.bv_transfer_auctions` : joueurs vus sur le marché (compétences, PS, prix de départ et actuel, nombre d'enchères).
