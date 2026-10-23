@@ -32,9 +32,9 @@ CANAL = re.compile(r"^=== CANAL : (.+?) ===$")
 CANAL_MESSAGE = re.compile(r"^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\] (.+?) : (.*)$")
 
 
-def parse_canal(path: Path, game: str, tz: ZoneInfo) -> list[dict]:
+def parse_canal(path: Path, game: str, tz: ZoneInfo, channel: str | None = None) -> list[dict]:
     """Format de userscripts/export_discord.py : `=== CANAL : #salon ===`, puis `[AAAA-MM-JJ HH:MM] auteur : texte`."""
-    items, channel, msg = [], None, None
+    items, msg = [], None
 
     def close():
         nonlocal msg
@@ -72,10 +72,12 @@ def parse_canal(path: Path, game: str, tz: ZoneInfo) -> list[dict]:
     return items
 
 
-def parse(path: Path, game: str, tz: ZoneInfo) -> list[dict]:
+def parse(path: Path, game: str, tz: ZoneInfo, carry: str | None = None) -> list[dict]:
     text = path.read_text(encoding="utf-8-sig")
-    if re.search(r"^=== CANAL : ", text, re.M):
-        return parse_canal(path, game, tz)
+    # fichier sans en-tête de salon (suite d'un export coupé à 2,5 Mo) : salon du fichier précédent
+    first = next((l for l in text.splitlines() if l.strip()), "")
+    if re.search(r"^=== CANAL : ", text, re.M) or (carry and CANAL_MESSAGE.match(first)):
+        return parse_canal(path, game, tz, carry)
     lines = text.splitlines()
     items, guild, channel, msg = [], None, None, None
     in_header = False
@@ -166,8 +168,11 @@ def main():
         sys.exit(f"Aucun fichier .txt dans {folder}")
 
     tz = ZoneInfo(args.tz)
+    carry = None
     for f in files:
-        items = parse(f, args.game, tz)
+        items = parse(f, args.game, tz, carry)
+        if items:
+            carry = items[-1]["channel"]
         channels = {i["channel"] for i in items}
         if args.dry_run:
             print(f"{f.name} : {len(items)} messages, {len(channels)} salons (non envoyé)")
