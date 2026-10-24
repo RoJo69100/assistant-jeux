@@ -2,7 +2,15 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
-## 2026-10-24
+## 2026-10-24 (bilan de fin de journée, à lire en premier)
+18. Conseil d'une catégorie échoué deux fois = nouveau levier nommé, jamais « ne rien changer » (RÉCIDIVE ; agent Match). Compter les échecs dans `learnings.md` avant d'écrire.
+17. Série de 3 défaites ou plus : le brief propose un changement chiffré de composition ou de tactique.
+16. Une vue de résultat se teste sur un match non joué (`bv_matches.my_result` donne `L` si le score est NULL, bug B1).
+15. Expliquer un script ou une vue = l'ouvrir et citer la ligne (RÉCIDIVE de la règle 6, à monter dans `CLAUDE.md` avec la règle 17 de début de session).
+14. Les `C-nnn` se prennent après le plus grand ID du fichier (BV a deux C-046).
+13. Trou de données (Team Soccer `ts_match_lineups`) : une seule demande, avec le geste exact, puis les conseils dépendants sont marqués « non vérifiable ».
+
+## 2026-10-24 (matin)
 1. Résultat d'un match = `my_result` / `is_mine`, jamais le score brut.
 2. Tout solde se recoupe avec la dernière ligne de dépenses ; sinon « non recoupé ».
 3. Un rang se lit avec sa date et son club ; le rang de l'adversaire n'est pas le nôtre.
