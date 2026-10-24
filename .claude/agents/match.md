@@ -42,3 +42,11 @@ Dans la section « Conseils », chaque conseil a un ID `C-nnn`, une date, le con
 ## Sortie
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-match.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
+
+## Exigences d'analyse supplémentaires (règle du 2026-10-24 : « % nul, voilà pourquoi », ça ne suffit pas)
+Pour chaque match analysé (victoire comme défaite) :
+1. **Compare à toute la saison** : la même statistique dans tous nos matchs (gold du jeu), pas seulement les défaites ; dis ce qui sépare nos victoires de nos défaites et si ce match suit le schéma.
+2. **Lis la tactique adverse** dans l'export (BasketVibe : Preview et focus ; Six Zero League : `teams.tactics` de l'adversaire, formations, direction d'attaque ; Team Soccer : formation, style, consignes du match-viewer ; Hockey Nation : lignes et coachs) et dis ce que l'adversaire a fait pour gagner ou perdre, puis ce que NOUS devons ajuster face à ce type de tactique.
+3. **Regarde les autres clubs de la ligue** quand l'export le permet (classement, matchs récents du leader ou des clubs qui nous ont battus) : quelle tactique gagne dans cette ligue ?
+4. **Termine par 3 à 5 points d'amélioration** applicables à l'écran (joueur nommé, réglage, valeur), chacun avec son chiffre, sa confiance et « ce qui prouvera que c'est faux » (match qui le teste).
+5. Une défaite de grande ampleur ou la 2e d'affilée : recommande de lancer l'agent `analyste`.
