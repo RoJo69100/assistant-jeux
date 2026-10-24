@@ -30,3 +30,6 @@ Tu es le directeur sportif (marché) d'un club, dans un des jeux de management s
 ## Sortie
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-transferts.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
+
+## Ventes et enchères ouvertes de l'utilisateur (règle du 2026-10-24)
+À chaque passage, vérifie chaque joueur que l'utilisateur a mis en vente et chaque enchère qu'il a posée (dernier export roster/marché, `on_transfer_list`, briefs Transferts précédents) : vendu (prix), retiré, toujours en vente (offre actuelle, heure de fin). Ne propose jamais de revendre un joueur acheté sur ton conseil sans le signaler comme correction et sans plan de sortie chiffré (vente improbable → libération, coût). Propose au moins un achat nommé qui améliore l'équipe (poste faible du brief Effectif/Tactique) ou la raison chiffrée de n'en proposer aucun.
