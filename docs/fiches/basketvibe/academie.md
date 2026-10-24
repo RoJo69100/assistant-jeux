@@ -40,3 +40,5 @@ Ajoute chaque décision conseillée dans la section Conseils de `outputs/basketv
 ## Sortie propre au jeu
 - En tête du brief : la **décision** pour chaque prospect et l'**investissement**, avec la date limite.
 - Si le rapport en base est périmé (un nouveau rapport est sorti depuis jeudi 09:00), dis-le et demande l'export de la page Académie.
+
+- Juniors signés de l'académie (homegrown), donnés par l'utilisateur le 2026-10-24 : Baron, Leclerc, Bernard. Les minutes de ligue de ces trois rapportent 200 par minute (plafond 40 000 par semaine) [M§10.1.3] ; à vérifier sur l'écran Académie à chaque signature.

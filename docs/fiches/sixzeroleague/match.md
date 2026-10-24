@@ -19,6 +19,8 @@ Lue par l'agent `match` après `commun.md`. Case E4 de la checklist SixZero Leag
 - Un match absent de `sz_matches` mais terminé dans `sz_fixtures` = export à demander. Les blessures n'apparaissent pas dans les incidents : les lire dans `sz_players.injured`.
 - `/seasons/current/teams/<id>/player-stats` existe en bronze (`silver.sz_api`, champ `endpoint`) : stats de saison par joueur, à lire si besoin.
 
+- **Données absentes de l'export `/matches/<id>/stats`** (clés `teams`, `players`, `incidents`, vérifiées 2026-10-24) : zone de chaque tir hors 7 m (9 m, 6 m, ailes), minutes jouées, pertes de balle par joueur. Pour les réunir : regarder un match en direct (bouton Live) et dire si l'écran donne la zone ou le type de tir. Sans cela, ne pas déduire de zone. `teams.tactics` (aggression, attackDirection, formations) n'est rempli que depuis J12.
+
 ## Livrable
 1. Explication de chaque nouveau match (3 à 6 lignes).
 2. Journal `outputs/sixzeroleague/learnings.md` (le créer au premier match : en-tête « Dernier match analysé », Journal des matchs, Enseignements, Conseils).
