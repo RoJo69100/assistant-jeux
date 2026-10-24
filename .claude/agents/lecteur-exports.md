@@ -24,3 +24,11 @@ Ce soir-là, des agents ont déclaré des joueurs « non repérés » alors que 
 3. « Classement erroné du script » : chaque `page_type` qui contient autre chose que son nom, avec le critère de correction (une ligne chacun).
 4. « Reste à exporter » : seulement ce qui manque vraiment, avec l'écran exact à ouvrir.
 Écris le tout dans `outputs/<jeu>/briefs/AAAA-MM-JJ-exports.md` (ajoute une section par passage, heure en tête). Les agents suivants lisent ce fichier avant de dire qu'une donnée manque.
+
+## Détection des nouveautés (règle du 2026-10-24, obligatoire)
+Ce soir-là, les options de tactique de Six Zero League (attaque 4-2, défense 3-2-1 et 3-3, directions d'attaque left/right/centre/left-center/right-center/left-right) étaient dans le brut de `app_team` depuis le début ; aucune vue silver ni aucun agent ne les lisait, et l'utilisateur a dû les signaler lui-même.
+À chaque passage, pour chaque `page_type` récent :
+1. Liste les éléments « de choix » du brut : `<select>` / `<option>`, valeurs d'énumération, clés JSON, statuts, colonnes de tableau.
+2. Compare à ce que la fiche du jeu (`docs/fiches/<jeu>/commun.md`) et les skills déclarent. Tout élément absent des fiches est une **nouveauté**.
+3. Pour chaque nouveauté : où elle est (page_type, chemin), valeur actuelle de l'utilisateur, et ce que les skills disent de son effet, sinon « effet inconnu : à tester une option à la fois, mesure = <statistique de l'export du match> ».
+4. Ajoute les nouveautés à la fiche du jeu (section « Options observées ») avant de rendre ton résumé, pour que les agents suivants les voient.

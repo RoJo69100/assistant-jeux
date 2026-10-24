@@ -39,3 +39,9 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 - Briefs : `outputs/sixzeroleague/briefs/AAAA-MM-JJ-<domaine>.md`.
 - Journal : `outputs/sixzeroleague/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`) ; à créer au premier match analysé, sur le modèle de `outputs/basketvibe/learnings.md`.
 - Veille : `outputs/sixzeroleague/veille/`.
+
+## Options de tactique observées à l'écran (déclaré par l'utilisateur, 2026-10-24)
+- Formation d'attaque : 5-1 ou 4-2 (nouveau).
+- Formation de défense : 6-0, 5-1, 3-2-1 ou 3-3 (nouveau).
+- Direction d'attaque : mixed, left, right, centre, left + centre, right + centre, left-right.
+- Remplace « 5-1 / 6-0 seules disponibles » [Dev chat, 2026-10-10], périmé. Aucune source n'indique l'effet de ces options : à tester une seule à la fois et à relever dans l'export du match (`teams.tactics`, rempli seulement pour J12 : aggression normal, attackDirection mixed). Chercher l'effet dans le chat du jeu / le devlog (agent Veille) avant de conseiller.
