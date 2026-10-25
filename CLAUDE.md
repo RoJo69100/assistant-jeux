@@ -23,14 +23,15 @@ userscripts/           scripts Tampermonkey
 sql/bronze|silver|gold migrations et vues SQL
 pipelines/             Python (import Discord, utilitaires)
 samples/<jeu>/         pages HTML enregistrées (ignoré par Git)
-data/discord/<jeu>/    exports Discord (ignoré par Git)
+data/discord/<jeu>/    exports Discord (versionnés dans Git, dépôt privé)
 outputs/<jeu>/         wiki, learnings, briefs
 docs/                  checklist et décisions
 docs/fiches/<jeu>/     fiche du jeu pour les agents
 ```
 
 ## Règles
-- Secrets dans `.env` (jamais commité). `samples/`, `data/` et `.env` sont dans `.gitignore`.
+- Secrets dans `.env` (jamais commité). `samples/` et `.env` sont dans `.gitignore` ; `data/discord/` est versionné (dépôt privé).
+- **Deux ordinateurs (2026-10-25)** : l'utilisateur travaille sur deux machines et ne veut rien faire à la main entre les deux. Le dépôt contient tout, y compris ma mémoire dans `docs/memoire-claude/` (copie de `~/.claude/projects/<projet>/memory/`). Début de session : si la mémoire locale est absente ou plus ancienne que `docs/memoire-claude/`, je la recopie depuis le dépôt dans le dossier `memory` local et je lis `MEMORY.md`. Chaque fois que j'écris ou modifie une mémoire, je recopie aussi le fichier dans `docs/memoire-claude/`, je commite et je pousse (`main`). Un hook de démarrage fait `git pull` (`.claude/settings.json`). Reste à faire à la main une seule fois par machine : `.env` et le MCP Supabase.
 - Python 3.13, dépendances dans `requirements.txt`.
 - Une modification = un commit avec un message clair.
 - Coût : ne jamais relire tout l'historique brut ; travailler sur les vues gold et le delta du jour.
