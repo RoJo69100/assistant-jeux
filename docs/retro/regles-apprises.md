@@ -2,7 +2,11 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
-## 2026-10-24 (bilan de fin de journée, à lire en premier)
+## 2026-10-25 (à lire en premier)
+20. « Que faire » = seulement ce qui est faisable maintenant. Jamais d'export de match ni d'action « après le match » dans « Reste à faire » : je les annonce quand le match est joué (RÉCIDIVE de « pas de temporalité »).
+19. Six Zero League : une seule tactique par défaut pour tous les matchs ; on ne choisit pas de compo par match. `gold.sz_agenda` répète « tactique pour J14 / J15 » : ne pas la reprendre telle quelle, la tactique du jour couvre les matchs suivants.
+
+## 2026-10-24 (bilan de fin de journée)
 18. Conseil d'une catégorie échoué deux fois = nouveau levier nommé, jamais « ne rien changer » (RÉCIDIVE ; agent Match). Compter les échecs dans `learnings.md` avant d'écrire.
 17. Série de 3 défaites ou plus : le brief propose un changement chiffré de composition ou de tactique.
 16. Une vue de résultat se teste sur un match non joué (`bv_matches.my_result` donne `L` si le score est NULL, bug B1).
