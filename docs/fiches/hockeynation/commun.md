@@ -67,7 +67,9 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contr
 
 ## Fenêtres (2026-10-23)
 - Les échanges et les montées FRM→PRO sont fermés jusqu'au **jour 1 de S27** : ne jamais mettre en « aujourd'hui » une action qui dépend d'une fenêtre fermée ou d'un état S27 (lineup avec Nokelainen, Hateboer, Jaworski ; échanges Pålsson, Munk, Carpentier, Hongisto). Le plan B d'entraînement attend l'embauche des coachs.
-- Les 4 clubs étudiés (Leszno, Seoul, Miami, Jessup) sont dans l'autre ligue : référence et cibles d'échange, pas adversaires directs (`silver.hn_standings`).
+- Les 4 clubs étudiés (Leszno, Seoul, Miami, Jessup) sont dans l'autre ligue : **équipes de comparaison seulement** [U, 2026-10-25] ; ne jamais leur proposer d'échange. Les partenaires d'échange viennent du Trade Center (export à jour).
+- **Jugement d'un joueur** [U, 2026-10-25] : jamais la note seule, ni « meilleur de l'équipe ». Dire s'il est fort et s'il peut le devenir, d'après ses compétences spéciales, l'importance de ses compétences dans la ligne (rôle, unités PP/PK, endurance) et la cohésion avec ses coéquipiers de ligne. Aucune règle de cohésion n'est documentée (guide, Discord) : travailler par compléments de talents (passeur + tireur) et par spéciales collectives (Team Player, Telepathy…), en hypothèse testable.
+- **Montées d'U21** [U, 2026-10-25] : un U21 peut être monté en FRM ou en PRO à tout âge ; il monte automatiquement à 21 ans.
 
 ## Consignes tactique (2026-10-23, après la v1)
 - **Aucun nouveau joueur dans une lineup** : on n'en reçoit que par agent libre ou échange (difficile, non garanti). Une lineup se bâtit sur nos joueurs actuels moins ceux qui partent (contrat fini non prolongé, échange voulu, draft). Les cibles d'échange vont dans un tableau séparé, jamais dans la lineup. Ne pas parler de Baier ; Mráz et Jenko ne servent que de cible d'échange.
