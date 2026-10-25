@@ -16,6 +16,7 @@ Lue par l'agent `match` après `commun.md`. Case E4 de la checklist SixZero Leag
 ## Données
 - `silver.sz_fixtures` (`is_mine`, `status`, scores, adversaire, bot) et `silver.sz_standings` (`form`, points, buts).
 - Matchs (`sql/silver/011_sz_matches.sql`, 2026-10-19) : `silver.sz_matches` (une ligne par match vu de mon équipe : score, tirs, % de réussite, arrêts, pertes, exclusions, 7 m, possession), `silver.sz_match_players` (stats par joueur, `is_mine`), `silver.sz_match_incidents` (buts, exclusions, cartons, mi-temps, dans l'ordre, `clock_s`). Source : endpoint `/matches/<id>/stats`, capturé en ouvrant la page du match (icône à droite du match dans League).
+- Depuis le 2026-10-25 (`sql/silver/020`) : `sz_matches.competition` ('league' / 'cup') — chiffres de ligue = `competition = 'league'` ; `match_day` = date Paris du résultat (`/teams/mine/events`), NULL si l'événement n'est pas en base (J5, J6) ; `played_at` = horodatage du résultat.
 - Un match absent de `sz_matches` mais terminé dans `sz_fixtures` = export à demander. Les blessures n'apparaissent pas dans les incidents : les lire dans `sz_players.injured`.
 - `/seasons/current/teams/<id>/player-stats` existe en bronze (`silver.sz_api`, champ `endpoint`) : stats de saison par joueur, à lire si besoin.
 
