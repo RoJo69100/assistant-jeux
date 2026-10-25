@@ -39,6 +39,17 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 - Avant d'écrire « donnée non relevée » ou « brief absent », cherche dans les briefs du jour des agents en amont. Si elle n'y est pas, dis lequel et quel export manque, en tête du résumé.
 - Si un agent en aval change une conclusion d'un agent en amont (ex. Transferts libère un joueur présent au depth chart de la Tactique), il l'écrit en tête de son résumé pour que l'agent en amont soit relancé.
 
+## Options observées (lecteur-exports, 2026-10-25)
+| Élément | Où | Valeur actuelle | Effet |
+|---|---|---|---|
+| `estimated_chance` {home_pct, away_pct} | `match` / `friendly`, aperçu (`body.estimated_chance`) | J22 contre Wolves Empire : 53 % domicile / 47 % extérieur | Effet inconnu : à comparer au résultat de chaque match, mesure = écart entre `home_pct` et `my_result` |
+| `league_hardiness` | `club` / `notifications`, `body.league_hardiness` (avec `standings`) | 54,4 | Effet inconnu : à relever chaque semaine, mesure = évolution et lien avec la force des adversaires |
+| Focus défensif `off` | `body.defensive_focus[].focus`, ligue du 26/10 (un adversaire) | valeurs vues : give_up, light, normal, intense, off ; `area_step` 3 partout | `off` non décrit dans les fiches : à tester sur un seul adversaire, mesure = points marqués par lui |
+| Onglets Progress et Recent changes | Training (DOM) | non exportés | Recent changes alimente `silver.bv_training_changes` (arrêté au 18/10) |
+| `hide_match_results_until_replay` | `club`, `body.preferences` | false | Préférence d'affichage, sans effet de jeu connu |
+| Coupe FR (match 28/10 18:00 contre MACCABI) | `club`, `body.cup_fixtures` et `active_enrollments` | tactique non enregistrée | Non lue par silver (`bv_fixtures`, `bv_matches` sans cette date) |
+| Notification `training_resolved` | `notifications` | 13 améliorés, top Bernard rebond +2 | Contrôle rapide du résultat de l'entraînement |
+
 ## Sorties
 - Briefs : `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md`.
 - Journal : `outputs/basketvibe/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`).
