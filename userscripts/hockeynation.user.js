@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hockey Nation → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.0
+// @version      0.2.0
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages. Aucune requête supplémentaire vers hockey-nation.com.
 // @match        https://hockey-nation.com/*
 // @match        https://www.hockey-nation.com/*
@@ -18,9 +18,9 @@
   'use strict';
 
   const GAME = 'hockeynation';
-  const CLIENT = 'hockeynation.user.js@0.1.0';
+  const CLIENT = 'hockeynation.user.js@0.2.0';
   const MAX_HTML_CHARS = 1_500_000;
-  const MAX_CAPTURES = 300;
+  const AUTO_FLUSH = 150;   // envoi automatique dès 150 réponses en attente (avant : les plus anciennes au-delà de 300 étaient jetées)
   const MAX_BODY_CHARS = 3_000_000;
   const SECRET_KEYS = /^(access_?token|refresh_?token|provider_?token|provider_?refresh_?token|id_?token|token|jwt|password|api_?key|secret|client_?secret|e-?mail|owner_?username)$/i;  // + e-mails des autres managers (ownerUsername)
   const SKIP_URL = /\/auth\/v1\/|\/auth\/(refresh|token|login|logout|signin|signup)\b|\/_next\/|\/__nextjs|analytics|sentry|posthog|vercel-insights|google/i;
@@ -96,9 +96,36 @@
         payload: { method, status, body: scrub(body) },
         client: CLIENT,
       });
-      if (captures.length > MAX_CAPTURES) captures.shift();
+      trackPage(abs);
+      // Plus de perte silencieuse : au-delà du seuil, envoi automatique au lieu de jeter les plus anciennes.
+      if (captures.length >= AUTO_FLUSH) exportNow(false);
       refresh();
     } catch (_) { /* pas du JSON : ignoré */ }
+  }
+
+  // ---------- Recherches paginées (Coach Center, agents libres, Trade Center) ----------
+  // Une page cliquée trop vite peut être annulée par le site avant d'arriver : on note les pages reçues
+  // par recherche (route + tri) et on signale les trous, pour que l'utilisateur y revienne.
+  const PAGED = /\/api\/(coach-center|free-agent-center|trade-center)\/search\b/;
+  const LABEL = { 'coach-center': 'Coach Center', 'free-agent-center': 'Agents libres', 'trade-center': 'Trade Center' };
+  const paged = {};  // clé → { label, pages: Set }
+  function trackPage(abs) {
+    const m = abs.match(PAGED);
+    if (!m) return;
+    const u = new URL(abs);
+    const n = Number(u.searchParams.get('page') || 1);
+    u.searchParams.delete('page');
+    const key = u.pathname + '?' + u.searchParams.toString();
+    const p = paged[key] || (paged[key] = { label: `${LABEL[m[1]]} (${u.searchParams.get('sort') || 'défaut'})`, pages: new Set() });
+    p.pages.add(n);
+  }
+  function pagedStatus() {
+    return Object.values(paged).map((p) => {
+      const max = Math.max(...p.pages);
+      const missing = [];
+      for (let i = 1; i <= max; i++) if (!p.pages.has(i)) missing.push(i);
+      return { text: `${p.label} : ${p.pages.size} pages${missing.length ? `, manquent ${missing.join(', ')}` : ', complet'}`, missing };
+    });
   }
 
   const isJson = (ct) => /json/i.test(ct || '');
@@ -176,7 +203,6 @@
     if (text.length < 300 || text === lastText) return;
     lastText = text;
     captures.push(domSnapshot());
-    if (captures.length > MAX_CAPTURES) captures.shift();
     refresh();
   }
   new MutationObserver(() => {
@@ -204,7 +230,7 @@
   }
 
   let busy = false;
-  async function exportNow() {
+  async function exportNow(withDom = true) {
     if (busy) return;
     const c = cfg();
     if (!c.url || !c.key || !c.token) {
@@ -213,11 +239,13 @@
     }
     busy = true;
     const batch = captures.splice(0, captures.length);
-    batch.push(domSnapshot());
+    if (withDom) batch.push(domSnapshot());
     try {
       let inserted = 0;
       for (let i = 0; i < batch.length; i += 50) inserted += await post(batch.slice(i, i + 50));
-      toast(`Exporté : ${batch.length} captures (${inserted} nouvelles)`);
+      const st = pagedStatus();
+      const holes = st.filter((s) => s.missing.length);
+      toast(`Exporté : ${batch.length} captures (${inserted} nouvelles)` + (st.length ? ' — ' + st.map((s) => s.text).join(' ; ') : ''), holes.length > 0);
     } catch (e) {
       captures.unshift(...batch.filter((b) => b.source === 'api'));
       toast(`Échec : ${e.message}`, true);
@@ -230,8 +258,11 @@
   // ---------- Interface ----------
   function refresh() {
     if (!ui) return;
-    ui.btn.textContent = `⇪ 60 ${captures.length}`;
-    ui.btn.title = `${pageType(location.href)} — ${captures.length} réponse(s) en attente`;
+    const st = pagedStatus();
+    const holes = st.some((s) => s.missing.length);
+    ui.btn.textContent = `⇪ 60 ${captures.length}${holes ? ' ⚠' : ''}`;
+    ui.btn.style.background = holes ? '#b42318' : '#e8590c';
+    ui.btn.title = `${pageType(location.href)} — ${captures.length} réponse(s) en attente` + (st.length ? '\n' + st.map((s) => s.text).join('\n') : '');
   }
 
   function toast(msg, err) {
@@ -250,7 +281,7 @@
     msg.style.cssText = 'display:none;color:#fff;padding:6px 10px;border-radius:6px;max-width:320px';
     const btn = document.createElement('button');
     btn.style.cssText = 'cursor:pointer;border:0;border-radius:6px;padding:8px 12px;background:#e8590c;color:#fff;font-weight:600;box-shadow:0 2px 6px #0006';
-    btn.addEventListener('click', exportNow);
+    btn.addEventListener('click', () => exportNow());
     box.append(msg, btn);
     document.body.appendChild(box);
     ui = { box, msg, btn, t: 0 };
