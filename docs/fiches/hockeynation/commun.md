@@ -23,6 +23,21 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/hoc
 - Gold (`sql/gold/019_hn_gold.sql`) : `hn_position_keys`, `hn_player_fit`, `hn_draft_board`, `hn_cap_outlook`, `hn_coach_board`, `hn_calendar`, `hn_daily_alerts`.
 - Manques connus (`outputs/hockeynation/exports-a-faire.md`) : lignes FRM/U21/U17 (automatiques), fiches détaillées des coachs, fiche contrat d'un joueur, adversaires. Toujours vérifier `day` / `as_of`.
 
+## Options observées (lecteur d'exports, 2026-10-25)
+| Nouveauté | Où | Valeur actuelle | Effet |
+|---|---|---|---|
+| Saison 27 phase `regular` | `season-current`, `season-phase` | 27 / regular (depuis ~09:22 UTC) | Fenêtres de la fiche (« fermées jusqu'au jour 1 S27 ») à réviser : agents libres open jusqu'au 2026-11-28 20:00 UTC |
+| Fenêtre échanges | `trade-center/trade-window` | timestamp 2026-11-28 20:00 UTC | sens à confirmer (fin de fenêtre ?) |
+| Statut de prolongation | `player/<id>/contract-extension-talks`, `new-extension-offer` | Bélanger : 3 ans, 1 870 000, mood happy, `waiting_for_gm` / `waiting_for_agent` | effet inconnu : à tester une option à la fois, mesure = réponse de l'agent après contre-offre |
+| Humeur du joueur | même endpoint | `happy` | effet inconnu |
+| Scouting : assignations | `scouting-assignments` | 2 missions (duration 1 et 2 jours) | effet inconnu : mesure = scouted_times de la classe |
+| Candidatures scouts / coachs | `office/scout-applications`, `coach-applications` | canHire true | recrutement possible |
+| Position limits / pick preferences | `draft-center/draft-position-limits`, `draft-pick-preferences` | 5 picks, ordre inconnu, tirage 2026-12-26 20:00 | effet inconnu |
+| Puck / raffle | `puck-overview`, `raffle-event-result` | solde 1 204 pucks, tirage 2026-10-25 20:00 UTC | hors gestion de club |
+| Staff PRO | `hn_club_staff` | head coach Byström (41, sans spécial) | Aalst parti, à évaluer par Finances/Entraînement |
+| Silver : pièges (corrigés le 2026-10-25, `sql/silver/021`, `sql/gold/021`) | `hn_players` = dernier roster de chaque équipe seulement (absents dans `hn_players_gone`) ; `hn_draft_class.season` et `gold.hn_draft_board.season` (filtrer la saison de la draft) ; `gold.hn_cap_outlook` commence à la saison en cours | — | — |
+| Nouvelles vues (2026-10-25) | `silver.hn_extension_offers`, `hn_scouting_assignments`, `hn_scout_applications`, `hn_coach_applications`, `hn_league_team_ratings` | — | Coach Center : le script 0.2.0 signale les pages manquantes (bouton rouge ⚠) |
+
 ## Ordre des agents et briefs du jour
 Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contrats, plafond, coachs, scouts) → Académie (draft, U17, U21) → Entraînement → Tactique → Transferts (dernier). Chaque agent lit les briefs du jour (`outputs/hockeynation/briefs/AAAA-MM-JJ-<domaine>.md`) des agents placés avant lui et le registre `outputs/hockeynation/fait-AAAA-MM-JJ.md`. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé.
 
