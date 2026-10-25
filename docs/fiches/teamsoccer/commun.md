@@ -39,3 +39,9 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 - Briefs : `outputs/teamsoccer/briefs/AAAA-MM-JJ-<domaine>.md` (une section par club).
 - Journal : `outputs/teamsoccer/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`) ; à créer au premier match analysé, sur le modèle de `outputs/basketvibe/learnings.md`.
 - Veille : `outputs/teamsoccer/veille/`.
+
+## Options observées (lecteur-exports, 2026-10-25)
+- Champs bruts non lus par silver, effet inconnu (à tester, mesure = résultat des révélations / matchs) : `login_streak` (19 le 2026-10-25), `daily_reveal_count` / `fully_revealed_count` (académie 376 : 15 jeunes entièrement révélés), `eliminated_in_round` (coupe), `reward` / `page_key` (récompense « foros »).
+- POST de révélation d'académie (`skill_name`, `skill_value`, `daily_reveal_count`) : en bronze (`dashboard_youth-scout`), non lus par silver ; max 3 jeunes distincts par club et par jour, reset 01:00 UTC.
+- Aucun `<select>` / `<option>` dans les HTML du marché et de l'académie.
+- Une composition de match n'arrive en base que par l'export de la page composition / match ; `dashboard_squad` n'en contient pas.
