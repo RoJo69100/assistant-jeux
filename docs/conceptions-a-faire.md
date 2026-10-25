@@ -7,7 +7,7 @@ Chantiers de conception en attente (à lancer sur Opus, retour sur Sonnet après
 | Priorité | Chantier | État |
 |---|---|---|
 | 🟥 URGENT | B1 : `silver.bv_matches.my_result` = L sur match sans score + règle 15 (test sur match non joué) | Fait le 2026-10-25 (`sql/silver/018`), test = 0 ligne, ligue 9V-12D |
-| 🟧 IMPORTANT | B2 : `silver.sz_matches` ligne orpheline (13 lignes / 12 journées), `match_day` = jour de capture | À faire, ouvrir le brut d'abord |
+| 🟧 IMPORTANT | B2 : `silver.sz_matches` ligne orpheline (13 lignes / 12 journées), `match_day` = jour de capture | Fait le 2026-10-25 (`sql/silver/020`) : la ligne est le match de coupe contre Pailans de Garavota (20/10, 24-25), colonne `competition` ajoutée, `match_day` = date du résultat ; ligue 7V-5D |
 | 🟧 IMPORTANT | B5 : `silver.hn_games` mélange les 4 équipes → colonnes `team_level` et `my_result` | Fait le 2026-10-25 (`sql/silver/019`), test règle 15 = 0, PRO 21V-9D + 0-3 playoffs |
 | 🟧 IMPORTANT | Agent Match : compter les échecs d'un même conseil avant de rédiger ; 3 défaites = changement chiffré (règles 13-14) | À faire (`.claude/agents/match.md`) |
 | 🟧 IMPORTANT | B3 : `silver.ts_match_lineups` vide depuis le 21/10, page composition captée ? | Test sur la composition d'Ajax (26/10) |
