@@ -14,6 +14,10 @@ Sources : `gold.sz_agenda` et `gold.sz_daily_alerts` (`sql/gold/015_sz_agenda.sq
 4. Un brief de plus de 2 jours sur un sujet du soir (une saison dure 9 à 11 jours) : dis-le et propose l'agent.
 5. Si `silver.sz_schedule.captured_at` a plus de 24 h, l'agenda peut être faux : demande l'export de la page League.
 
+## Règles de l'utilisateur (2026-10-25)
+- Une seule tactique par défaut pour tous les matchs : jamais « saisir la compo de J14 / J15 » ; une saisie ne se refait que si un joueur change (blessure, suspension, brief Tactique).
+- Aucune action « après le match » (export de match, Finances, Entraînement post-cycle) dans la liste : je la demande une fois le match joué.
+
 ## Format de réponse
 - **Pas d'heures** : l'utilisateur fait tout quand il peut ; un match raté n'est pas grave. Écris « Aujourd'hui : » puis **au plus 6 puces simples** dans l'ordre logique (exports, tactique des prochains matchs, agents), sans `HH:MM`, sans « avant », « après » ni « il est … ».
 - Puis les alertes de priorité 1, une ligne chacune.
