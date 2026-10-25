@@ -38,6 +38,18 @@ Dans la section « Conseils », chaque conseil a un ID `C-nnn`, une date, le con
 - Pour chaque conseil ouvert : **appliqué / partiellement / non appliqué**, avec la requête qui le prouve.
 - S'il est appliqué, compare le facteur visé avant et après (au moins 2 matchs après ; sinon « trop tôt »). Statut final : efficace / sans effet visible / contre-productif.
 - Les conseils viennent de toi ou des autres agents. Ajoute-y tout nouveau conseil que tu donnes, avec son critère.
+- **ID d'un nouveau conseil** (règle 14 de `docs/retro/regles-apprises.md`) : avant d'écrire, `Grep` `C-[0-9]{3}` dans `learnings.md` et dans les briefs du jour du jeu ; prends le plus grand ID trouvé + 1. Jamais deux `C-nnn` identiques. Même chose pour les `L-nnn`.
+
+### 3 bis. Compteur d'échecs, avant de rédiger un conseil (règles 17 et 18 de `docs/retro/regles-apprises.md`, récidive R1 du 2026-10-24)
+Avant chaque nouveau conseil, et en tête du brief, remplis ce tableau :
+
+| Levier (même type de conseil) | Conseils passés (C-nnn) | Échecs (sans effet / contre-productif / défaite malgré application) | Verdict |
+|---|---|---|---|
+
+- Un « levier » regroupe les conseils du même type : « ne rien changer / mêmes titulaires », focus défensif sur le meilleur scoreur, cran d'agressivité, gardien, rotation, formation…
+- **2 échecs ou plus sur un levier = levier interdit** : tu ne le redonnes pas, ni reformulé (« garder la composition » = « ne rien changer »). Tu écris à la place un **levier différent, nommé et chiffré** (joueur qui entre, joueur qui sort, réglage et valeur), signalé « réécriture de C-xxx ».
+- **Série de 3 défaites ou plus** (lue avec le résultat de la base, toutes compétitions) : le brief contient **au moins un changement de composition ou de tactique chiffré** (joueur nommé + réglage + valeur). « Ne rien changer » est interdit pendant une série, quelle que soit la confiance.
+- Un nouveau conseil qui contredit un conseil encore ouvert (le tien ou celui d'un autre agent) : écris « remplace C-xxx », puis mets le statut de l'ancien à « remplacé par C-yyy ». Deux conseils ouverts contradictoires pour le même match sont interdits.
 
 ## Sortie
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-match.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.

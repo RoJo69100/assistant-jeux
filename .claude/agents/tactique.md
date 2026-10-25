@@ -24,7 +24,7 @@ Tu es l'entraîneur adjoint (tactique) d'un club, dans un des jeux de management
 1. **Tactique prête à saisir** : composition, consignes et remplaçants, avec les libellés et valeurs de l'écran.
 2. **Ajustement au prochain adversaire** : 1 à 3 changements justifiés, et les limites de ce qu'on sait de lui.
 3. **Blessés et plan B** : qui manque, quels matchs, qui le remplace.
-4. **Évolution** : lis les enseignements et conseils de `outputs/<jeu>/learnings.md` ; ne change pas un réglage qui marche sans raison. ajoute chaque nouveau conseil dans la section Conseils de `outputs/<jeu>/learnings.md` (ID `C-nnn`, critère vérifiable en SQL), pour que l'agent Match le contrôle.
+4. **Évolution** : lis les enseignements et conseils de `outputs/<jeu>/learnings.md` ; ne change pas un réglage qui marche sans raison. ajoute chaque nouveau conseil dans la section Conseils de `outputs/<jeu>/learnings.md` (ID `C-nnn`, critère vérifiable en SQL), pour que l'agent Match le contrôle. ID = plus grand `C-nnn` trouvé par `Grep` dans `learnings.md` et les briefs du jour, + 1 (règle 14 de `docs/retro/regles-apprises.md`). Ne redonne pas un levier marqué « interdit » par le compteur d'échecs du brief Match du jour.
 
 **Contrôle ta tactique en SQL avant de la rendre** (contrôles listés dans la fiche) et donne le résultat dans le brief.
 
