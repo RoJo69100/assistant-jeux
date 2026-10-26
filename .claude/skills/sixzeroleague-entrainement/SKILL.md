@@ -13,6 +13,7 @@ Sources : **[W:Rubrique]** = wiki officiel, lu le 2026-10-18 (voir sixzeroleague
 - **Focus par joueur** : un groupe entier (Physique, Attaque, Défense ou Gardien) ou une seule compétence de ce groupe. Sans focus, l'effort est réparti sur les 20 compétences. Changement possible à tout moment, effet à la semaine suivante.
 - **« Le focus bat la dispersion »** : une compétence ciblée gagne son point bien plus vite que le même effort réparti sur 20.
 - Progression lente et continue : le progrès s'accumule d'une semaine à l'autre jusqu'à un point entier, puis la compétence gagne +1. Plafond 100.
+- **Temps de jeu** : les minutes jouées à chaque match (ligue et coupe) sont enregistrées et alimentent la semaine d'entraînement ; les joueurs réellement utilisés progressent plus vite [Dev chat, devlog 0.5.7 2026-10-04 et 0.6.0 2026-10-16]. Le rendement ne diminue pas avec le niveau : passer de 4 à 5 prend autant de temps que de 24 à 25 [Dev chat, chat jeu 2026-10-19 08:17].
 - **Éthique de travail** (1–100) : trait fixe, sans effet en match ; décide seulement du rendement de l'entraînement.
 - Rapport d'entraînement : liste des joueurs qui ont franchi un point et lesquelles de leurs compétences. Personne listé = personne n'a franchi de point, le progrès reste acquis.
 
@@ -40,6 +41,7 @@ Sources : **[W:Rubrique]** = wiki officiel, lu le 2026-10-18 (voir sixzeroleague
 | Prospects | 2, fixes jusqu'à ce qu'on en signe un |
 | Signature | Un joueur complet rejoint l'effectif tout de suite, à **18 ans**, avec son nom et son poste ; taille, main forte et 20 compétences sont tirées **au niveau actuel de l'académie** |
 | Compétences au niveau 1 | 1–20 |
+| Plage des compétences selon le niveau | Observé : niveau 1 = 1 à 20, niveau 2 = 2 à 22, niveau 9 = 9 à 36 [Com chat, krzykaczpl_ 2026-10-20 ; pierrottingchrist_29708 2026-10-20]. Formule min = niveau, max = 18 + 2 × niveau : **vérifiée le 2026-10-23 sur `silver.sz_infrastructure_levels` (YouthAcademy, `effect_label`) pour les 20 niveaux** (niveau 20 = 20 à 58), donc plus une simple hypothèse. Dévoilement 2/4/6/8 compétences aux niveaux 3/8/13/18 et étrangers 2 % (niv. 5), 4 % (10), 6 % (15), 8 % (20) : mêmes données. La plage est lisible dans la description de l'infrastructure [Dev chat 2026-10-20]. |
 | Compétences dévoilées avant signature | 2 / 4 / 6 / 8 aux niveaux 3 / 8 / 13 / 18 de l'académie (au hasard par prospect) ; monter le niveau en cours d'offre dévoile plus sur les 2 mêmes prospects |
 | Prospects étrangers | Petite chance à partir du niveau 5, qui grandit lentement |
 | Effectif | 30 au maximum : au plafond, on ne peut pas signer |

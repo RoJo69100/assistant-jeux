@@ -40,6 +40,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 
 - Les fautes dépendent de l'agressivité **moyenne des 5 sur le terrain** ; la fatigue, de l'agressivité de chaque joueur.
 - Ordre de grandeur, à niveaux égaux (~70) : adversaire à ~53 % aux tirs en soft contre ~48 % en agressif. Soit ~4–5 points encaissés de plus en soft qu'en équilibré, et ~3–4 de moins en agressif.
+- ⚠️ **Moteur v4 (ligue à partir de la saison 2) : risque de blessure retouché** [News 2026-10-19]. Par rapport à une défense neutre : **Soft ×0,60** (v3 : ×0,85), **Medium soft ×0,80** (v3 : ×0,95). Les valeurs Neutre, Medium aggressive et Aggressive ne sont pas annoncées (le tableau v3 ci-dessus reste la seule référence). **Au-delà de 36 min, +40 % de risque de blessure au dernier quart** pour ce joueur. Effet annoncé : 48 min en Soft ≈ inchangé (0,60 × 1,40 = 0,84) ; 5×48 en défense normale ou agressive = « far more injuries ». Dernier message du dev : plus de changement prévu pour le v4. Interprétation (confiance moyenne) : la News étiquette ces deux points « v4, friendlies only », or les amicaux n'ont pas de blessure [M§1.2] ; ils visent donc la ligue v4. Texte de la News relu en base (`gold.bv_veille_feed`, 2026-10-19) le 2026-10-23.
 - Le moteur respecte les consignes : il ne redirige pas le ballon vers le joueur en forme [M§6.3].
 
 ## Focus défensif par adversaire (par match) [M§6.6]
@@ -56,6 +57,18 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Conseils du manuel : verrouiller le scoreur, pas le meneur qui distribue ; compenser par Light ou Give up sur les joueurs peu utilisés ; toujours sauvegarder avant le verrouillage.
 - [v4, amicaux pour l'instant] Nouvelle zone de focus défensif par joueur adverse : **Rim** (son 2P% −3 % environ, son 3P% jusqu'à +5 %), **Perimeter** (son 3P% −3 % environ, son 2P% jusqu'à +5 %), **Neutral** (comme avant). Le compromis est volontairement inégal [News 2026-10-19]. À vérifier : `silver.bv_match_tactics` capte-t-il ce champ ?
 - [Export] Dans le plan sauvegardé exporté (page du match), un focus défensif **Lock** est écrit `off` ; confirmé à l'écran pour deux joueurs de Žirmūnai (J20) [Utilisateur 2026-10-21, learnings L-018]. Les autres niveaux sont écrits par leur nom.
+- **Échelle à l'écran : 1 à 5** = Give up, Light, Normal, Intense, Lock (3 = Normal, valeur sans plan sauvegardé). Saisir le chiffre. [M§6.6.1 ; échelle confirmée par l'utilisateur le 2026-10-23]
+- **Nombre de joueurs en Intense/Lock** : le manuel ne fixe aucun plafond. Il conseille « un ou deux » joueurs forts en Lock/Intense, compensés par Light/Give up sur le banc [M§6.6.5]. Les poids sont moyennés sur l'effectif adverse et décalent des tirs vers les coéquipiers [M§6.6.3]. Effet de plusieurs 4/5 en même temps sur les autres joueurs : non documenté, voir tests L-012 / C-040 du journal.
+- Écart d'effet typique sur le joueur visé : un cran plus facile sur le scoreur clé ≈ +2 à +7 points de FG% ; Intense contre Normal et Lock contre Intense ≈ 2 à 4 points chacun [M§6.6.4].
+- **En amical, un grand écart de compétence au même poste ajoute à l'effet du focus** ; en ligue et en coupe l'effet de compétence reste plus petit [M§6.6.3].
+
+### Defensive area (amicaux seulement) [M§6.6.2]
+- Second curseur par joueur adverse, à côté du focus : **Perimeter – Middle – Rim**. Middle = aucun décalage (défaut). Ni la ligue ni les coupes ne l'utilisent.
+- Elle change le **% de réussite**, pas le nombre de tirs. Perimeter : tirs à 3 pts plus difficiles, tirs à 2 pts plus faciles. Rim : l'inverse.
+- Ampleur : à l'extrême, tirs défendus ≈ −3 points, tirs ouverts ≈ +5 points ; un cran hors du milieu = la moitié.
+- Annonce complète [News 2026-10-19, « v4 engine wraps up: injury tuning and defensive focus areas »] : réglage par joueur adverse dans la tactique du match (**amicaux seulement pour l'instant**). **Rim** : −3 % environ de 2P% adverse, mais jusqu'à +5 % de 3P%. **Perimeter** : −3 % environ de 3P%, mais jusqu'à +5 % de 2P%. **Neutral** : comme avant. Le déséquilibre est voulu : « décaler le focus à l'aveugle comporte un vrai risque, par exemple un grand qui tire à 3 ». [M§6.6.2] : la ligue et les coupes ne l'utilisent pas ; « for now » laisse penser à une extension future (à surveiller). Pas de plan sauvegardé : tous les adversaires sont marqués pareil.
+- Avis de joueurs (non vérifiés) : « les intérieurs tirent environ 10 fois plus à 2 qu'à 3, on peut régler Rim à l'aveugle sur eux » [Com 2026-10-20, marekb9231, polska] ; avec seulement des fourchettes de compétences adverses, le choix reste « une loterie » [Com 2026-10-20, gulon84, polska].
+- Utilité : à tester en amical pour la saison 2 ; non applicable en ligue (saison 1).
 
 ## Presets et verrouillage [M§6.4, §6.5, §1.1]
 - Jusqu'à 5 presets nommés ; un actif pour la ligue, un pour les amicaux, un pour les coupes.

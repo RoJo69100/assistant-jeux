@@ -19,7 +19,7 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/tea
 - Ligue : Chomelix Cows le **mardi et le samedi 13:50** (Paris), Ben Ahmed Donkey le **lundi et le jeudi 19:30** (`gold.ts_upcoming`). Coupes en semaine.
 - **Vendredi** : entraînement (et Forme). **Lundi 00:05** (heure du site) : finances de la semaine. **Chaque jour** : 3 révélations d'académie par club.
 - **Composition à enregistrer au moins 2 h avant le coup d'envoi** (match pré-calculé) [skill teamsoccer-match] : `gold.ts_upcoming.lineup_deadline_paris`.
-- L'utilisateur n'agit que le soir : un match de 13:50 se prépare **la veille au soir**.
+- Un match de 13:50 se prépare **la veille** (composition enregistrée 2 h avant au plus tard).
 
 ## Pièges communs
 - L'API renvoie des réponses partielles ; les vues silver fusionnent la dernière valeur de chaque colonne. Vérifie toujours `as_of` / `day` et demande l'export s'il est périmé.
@@ -32,7 +32,16 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/tea
 - Gold (`sql/gold/016_ts_gold.sql`) : `ts_season_calendar`, `ts_squad_report`, `ts_player_progress`, `ts_finance_status`, `ts_stadium_payback`, `ts_academy`, `ts_hpc_status`, `ts_upcoming`.
 - Pas encore captés : notes des joueurs et rapport détaillé des matchs (checklist B4), cercles de constance du manager (B6). Un seul relevé des joueurs (2026-10-19) : `ts_player_progress` sera vide jusqu'au prochain export après le vendredi.
 
+## Ordre des agents et briefs du jour (règle du 2026-10-22)
+Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas encore passé. Ordre : Veille (si nouvelle source) → Match → Effectif → Finances-personnel → Académie → Entraînement → Tactique → Transferts (dernier). Chaque agent lit d'abord les briefs du jour (`outputs/teamsoccer/briefs/AAAA-MM-JJ-<domaine>.md`) des agents placés avant lui ; seuls les agents sans dépendance entre eux tournent en parallèle. Avant d'écrire « donnée non relevée », cherche dans ces briefs ; sinon, dis quel export manque en tête du résumé. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé (relance à faire).
+
 ## Sorties
 - Briefs : `outputs/teamsoccer/briefs/AAAA-MM-JJ-<domaine>.md` (une section par club).
 - Journal : `outputs/teamsoccer/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`) ; à créer au premier match analysé, sur le modèle de `outputs/basketvibe/learnings.md`.
 - Veille : `outputs/teamsoccer/veille/`.
+
+## Options observées (lecteur-exports, 2026-10-25)
+- Champs bruts non lus par silver, effet inconnu (à tester, mesure = résultat des révélations / matchs) : `login_streak` (19 le 2026-10-25), `daily_reveal_count` / `fully_revealed_count` (académie 376 : 15 jeunes entièrement révélés), `eliminated_in_round` (coupe), `reward` / `page_key` (récompense « foros »).
+- POST de révélation d'académie (`skill_name`, `skill_value`, `daily_reveal_count`) : en bronze (`dashboard_youth-scout`), non lus par silver ; max 3 jeunes distincts par club et par jour, reset 01:00 UTC.
+- Aucun `<select>` / `<option>` dans les HTML du marché et de l'académie.
+- Une composition de match n'arrive en base que par l'export de la page composition / match ; `dashboard_squad` n'en contient pas.

@@ -1,6 +1,6 @@
 ---
 name: basketvibe-communaute
-description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 624 messages du 31/05 au 09/10/2026) et les News de l'admin (lues jusqu'au 2026-10-18 : moteur v4 pour la saison 2, fatigue plus punitive, duels plus marqués) — précisions du développeur, versions du moteur, conseils et observations de la communauté, prix du marché constatés, contradictions avec le manuel. Chaque point est daté et sourcé. À charger en complément des skills de règles, pour les conseils pratiques, ou quand le manuel est muet.
+description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 624 messages du 31/05 au 09/10/2026 ; delta du 09/10 au 23/10 lu le 2026-10-23, en base) et les News de l'admin (lues jusqu'au 2026-10-22 : moteur v4 en ligue après la saison 1, fatigue plus punitive, duels plus marqués, blessures v4, potentiel de ses joueurs visible) — précisions du développeur, versions du moteur, conseils et observations de la communauté, prix du marché constatés, contradictions avec le manuel. Chaque point est daté et sourcé. À charger en complément des skills de règles, pour les conseils pratiques, ou quand le manuel est muet.
 ---
 
 # BasketVibe — communauté et développeur (Discord)
@@ -14,7 +14,7 @@ description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 
 - Source brute : `bronze.discord_messages` (export du 2026-10-16).
 
 ## 1. Moteur de match : versions et calibrage
-- **Saison 1 : le moteur v3 tourne en ligue depuis la journée 12 ; il est gelé jusqu'à la fin de la saison. Le v4 n'est actif qu'en amical et passera en ligue en saison 2.** Conséquence : un résultat d'amical **ne prédit pas** la ligue [Dev 2026-09-30 / 2026-10-04, release-notes + engine].
+- **Moteur** : la ligue reste en **v3 jusqu'à la dernière journée de la saison 1 (lundi 26/10)** ; le **v4 est activé dans tous les types de matchs juste après la saison 1**, et le dev ne prévoit **plus aucun changement du v4** [News 2026-10-19 ; Dev 2026-09-30]. Un amical (v4) ne prédit donc plus la ligue v3 aujourd'hui, mais prédit la ligue de la saison 2. Ne pas mélanger les tendances v3 et v4 : couper `gold.bv_match_trends` à la date du changement. (Le v3 tourne en ligue depuis la journée 12 [Dev 2026-09-30 / 2026-10-04, release-notes + engine].)
 
 ### Moteur v4 : changements annoncés (amicaux seulement en saison 1, **ligue en saison 2**)
 À prendre en compte pour préparer la saison 2. Les amicaux depuis le 11/10 tournent déjà avec ces réglages.
@@ -39,6 +39,17 @@ description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 
 - Dernier passeur choisi selon le poste et le rôle ; sa passe améliore le tir assisté [Dev 2026-08-24], ce que confirme le manuel §5.1.4.
 - Fin de match serrée : fautes volontaires de l'équipe menée (v3) [Dev 2026-09-09].
 - Le libellé de poste n'a aucun effet, seule la taille sur l'emplacement compte ; entre 200 et 205 cm en PG, la baisse est linéaire [Dev 2026-09-10, help].
+- Complément (V-20261023-10) : le libellé de poste n'a **aucun effet sur le match** (seules comptent la taille et la corpulence par rapport à l'emplacement) [Com 2026-10-21, elemke. (GM), general, relu en base ; Dev 2026-09-10, help]. Il sert (1) à l'éligibilité aux récompenses de poste (top 5 de journée et de saison) [Com 2026-10-21, marekb9231, general ; non recoupé en base] ; (2) au **PS affiché**, qui dépend des poids du poste [M§2.2] : un joueur est passé de PS 51 à 52 en passant de PG à SG [Com 2026-10-15, foo_13, ex-yugo] — **observation isolée, confiance faible**. Seniors seulement (juniors : pas encore) [Dev 2026-10-10 et 2026-10-17, general].
+
+### Autres éléments (faible priorité, V-20261023-14)
+- Autres annonces [News 2026-10-20, relue en base] : onglet League « Best fives » (dont un meilleur cinq U21) ; les amicaux ne comptent plus pour les succès de joueur ; logos : option « Remove solid background » et logos prédéfinis transparents. [News 2026-10-22, relue en base] : onglet Schedule « Matches » (l'ancien « Combined ») par défaut ; stats de tir dans l'ordre FT%, 2P%, 3P% ; ORB/DRB ajoutés ; premier jet d'un outil d'analyse d'équipe, qui fera partie d'un futur pack Supporter en 2027 ; correctif : sauvegarde des tactiques sur mobile (lineup OT manquant).
+- Le dev peut rejouer un match 1 000 fois : une défaite avec 96 % de chances de victoire est un cas rare, « sous observation » [Dev 2026-10-11, engine]. Idée de « rejouer N fois pour voir le taux de victoire » (réservée aux matchs de ligue) envisagée, sans date [Dev 2026-10-11, engine].
+- Équipes inactives : leur tactique par défaut (cinq fixes sur 48 min) bat encore des équipes de jeunes en v3 ; plusieurs joueurs l'ont constaté [Com 2026-10-13/21, carlomtlopes/dollarius/arodrigues84, portugal et italia] (avis) ; le v4 devrait corriger (fatigue, +40 % de blessures au-delà de 36 min, hypothèse).
+- Avis : en défense normale, un joueur à 48 min avec une fatigue < 30 ne se remarque presque pas (v3) [Com 2026-10-09, heldermoreno, portugal] ; ⚠️ contredit par les chiffres du v4 [News 2026-10-17] : pour la saison 2, ne plus s'y fier.
+- Grandir : les joueurs disent +4 cm par saison jusqu'à 21 ans (max 15 cm de 16 à 21 ans) [Com 2026-10-13/17, chanceler/grobarbrate/montabelas] ; ⚠️ le skill academie et le manuel disent « jusqu'à 22 ans » [M§5.2] : le manuel fait foi.
+- Outil tiers cité par le dev (depth chart) : https://www.onlinesportmanagers.com/tools/basket-vibe-depth-chart-tool/ [Dev 2026-10-13, general] ; extensions de navigateur de joueurs : sources non vérifiées.
+- Récupération de fatigue : confirmée par le manuel (0,5 + 10 % de la fatigue du moment ; l'endurance ne joue pas sur la récupération) [M§5.6 ; Com 2026-10-23, grillanza, italia].
+- Médecins : 1 médecin = 7–8 jours pour 10 jours de blessure ; 2 médecins = 5 jours [Com 2026-10-21, isr_shay/elemke., general, relu en base] : cohérent avec −25 % chacun [M§4.3]. Question ouverte : un joueur dont la date de retour tombe le dimanche d'entraînement s'entraîne-t-il ? « On croit que oui, pas sûr » [Com 2026-10-21, uthred9751, italia] — à tester avec `gold.bv_training_gains_exact`.
 
 ## 2. Tactique
 - **Agressivité défensive** = « arme à double tranchant » : un match plus fort, payé en fatigue. On peut jouer soft pour se permettre un match agressif ensuite [Dev 2026-09-19, engine].
@@ -60,6 +71,9 @@ description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 
   - +2 principale et +1 secondaire dès la première semaine → potentiel 10 très probable [Com 2026-09-24, pilipinas].
   - Il faut **4–5 entraînements** pour une estimation fiable [Com 2026-09-01, dcarra, italia].
   - Les décimales cachées faussent ces lectures. Nos valeurs précises (`*_exact`) donnent une mesure bien meilleure.
+- **Potentiel de nos propres joueurs visible depuis le 2026-10-20** : il s'affiche dans la fiche et y reste [News 2026-10-20 : « Reveal your own player's potential in his profile, and it stays visible to you »]. Les fiches des nouveaux juniors d'académie restent visibles (nouveaux seulement) [News 2026-10-20] ; les anciens tests d'académie ne sont pas récupérés [Dev 2026-10-18, general].
+  - ⚠️ **Contradiction** : le manuel §11 (lu 2026-10-23, résumé) parle encore de « Unknown » avant test ; la News du 2026-10-20 dit l'inverse. La News est plus récente ; le manuel peut être en retard.
+  - **Constat dans nos données (2026-10-23)** : la page joueur de Chomelix Cow (joueur de notre effectif), capturée le 2026-10-22 13:33 UTC, affiche « Potential ★★☆ — Decent potential », soit une **tranche** (pas un nombre) ; aucun test de 25 000 pour ce joueur dans les transactions exportées. Un test a été payé pour un autre joueur (Dang, 2026-10-19), avant la News. Le champ de la fiche `potential_reveal_available: true` existe aussi dans le JSON d'une page joueur. Format confirmé pour **un seul joueur** : à confirmer sur d'autres fiches. `gold.bv_potential_estimate` n'a pas de `potential_est` au 2026-10-23 (15 lignes, 0 gain mesuré pour la semaine du 2026-10-18) : la comparaison est impossible pour l'instant.
 - Endurance sous 40 jugée « inutile » [Com 2026-08-13, grobarbrate, reset] : opinion. Selon le manuel, l'endurance ne joue que sur la fatigue et les blessures.
 - Garder tout le monde **sous 15 de fatigue** → une seule blessure sur une saison [Com 2026-08-23, random_player_123, general] : expérience individuelle, cohérente avec le manuel §9.3.
 - Pivots : monter le rebond jusqu'à 80 avec la défense, car le ralentissement devient fort au-delà [Com 2026-10-06, .doman/kotryk, polska]. Contre-avis : l'athlétisme aide à la fois le rebond, la défense et l'attaque [Com 2026-10-08, marekb9231].
@@ -71,6 +85,10 @@ description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 
 - Stratégie répandue : **ne pas signer en fin de saison**. Monter à 100 % et faire le premier recrutement au début de la saison suivante, car tout le monde vieillit en même temps au changement de saison [Com 2026-10-08, giovannidziadzia / .doman, academy ; Com 2026-07-12, br0kh3n].
 - Ne signer qu'un 3 étoiles après test, sauf compétences exceptionnelles. Un 17 ans 3 étoiles reste derrière un 16 ans 3 étoiles [Com 2026-09-12/13, carlomtlopes, portugal].
 - Le test à 25 000 « vaut le coup » (≈ 1,5 amical de recette) [Com 2026-09-10, .doman, academy].
+- ⚠️ « Attendre 100 % ne sert à rien par rapport à 90 % » [Com 2026-10-22/23, grillanza/dixi2499, italia ; avis non retrouvé mot pour mot en base] : **contredit le manuel** [M§4.2] : probabilité d'un potentiel 8–10 = 27,3 % à 90 %, 43,9 % à 100 % (P10 : 3,5 % → 10,7 % [M§4.2]). Chiffres 27,3 et 43,9 vérifiés dans `gold.bv_academy_potential_odds` le 2026-10-23. Le manuel fait foi.
+- Fin de saison 1 : ne pas signer avant le changement de saison (27/10) ; le prochain rapport est celui du jeudi 29/10 [Com 2026-10-22/23, italia ; Dev 2026-10-18 : l'académie ne se remet pas à zéro]. Consensus d'avis (le junior de 16 ans a 17 ans au changement de saison ; signer fait perdre la moitié de la jauge) ; certains ont tiré quand même (17 ans PS 51 tiré à l'académie 100 %, « 50/50 ») [Com 2026-10-22, dcarra/grillanza/allymcinally, academy et italia].
+- Observation isolée : avec test, le PS réel est tombé en haut de la fourchette estimée (51 pour une estimation 47,6, min 42,6, max 52,6) : un cas, pas une règle [Com 2026-10-22, isr_shay, academy].
+- Les valeurs de départ maximales confirment le tableau du skill academie : au-dessus de 90 %, 55 maximum par compétence à 16 ans, 57 à 17 ans [Com 2026-10-12, grillanza, italia ; M§4.2]. La page Académie du jeu indique la jauge projetée [Com 2026-10-23, grillanza, italia].
 - ⚠️ « 71 000 investis font progresser la jauge autant que 100 000 » [Com 2026-09-13, nhegas12, portugal] : **non vérifié**, contraire aux tableaux du manuel §4.2. À tester avec `silver.bv_academy_weekly`.
 
 ## 5. Économie et personnel
@@ -93,6 +111,9 @@ description: Ce que disent le Discord BasketVibe (lu en entier le 2026-10-16, 2 
   - Jeunes à fort potentiel : **1 à 2 M+**.
   - « Même les mauvais jeunes partent à des prix délirants » (lietuva 22/09).
   - Bêta : stars à 1,5–2,5 M.
+- Fin de saison 1 (avis, non vérifiés sauf mention) : PF PS 63 vendu 2,3 M le 22/09 puis 4,0 M ; 16 ans PG > 3 M (20/10) ; une enchère à 3,5 M citée comme la plus chère [Com 2026-10-17, carlomtlopes, portugal] ; 3,5 M n'ont pas suffi pour un 16 ans (Mercier, 20/10, grillanza, italia) ; prix « presque doublés en 2–3 semaines » ; 60–80 % des transactions observées seraient des reventes avec plus-value [Com 2026-10-14/20/22, dcarra/uthred9751/grillanza/dollarius, italia ; sakota0, portugal]. **Contrôle en base (2026-10-23)** : `gold.bv_market_price_known` (89 ventes du 16 au 22/10) a pour maximum 2 894 063 (SF 17 ans PS 49,7, le 21/10) ; les 3,5 M et 4,0 M ne s'y trouvent pas (hors fenêtre ou enchère non terminée). Références du dev (12/10) : 18 ans PS 45 = 100 000 ; 19 ans PS 49 = 380 000 ; 16 ans PS 44 = 660 000 [Dev 2026-10-12, general ; non recoupé en base].
+- Une partie de la communauté attend les prix plus bas pendant la pause entre saisons, d'autres pensent qu'ils vont monter : avis opposés, aucune donnée [Com 2026-10-21/22, italia].
+- Taxe dégressive sur les reventes rapides : idée d'un joueur, à l'étude, non décidée (voir basketvibe-transferts) [Dev 2026-10-22, economy].
 - Conseil : acheter des jeunes vite, avant que les prix montent encore [Com 2026-10-08, .doman, academy].
 - Joueurs libres post-reset : TSP entre 360 et 420 [Dev 2026-08-14], potentiel 3–9 [Dev 2026-09-07]. Départ à 10 000 (manuel §11.4).
 - Taxe de 5 % (anti-revente rapide), délai avant revente ramené à **7 jours** [Dev 2026-07-29 / 2026-09-14] ; conforme au manuel §11.1.

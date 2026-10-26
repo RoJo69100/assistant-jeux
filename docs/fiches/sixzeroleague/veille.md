@@ -1,13 +1,13 @@
 # Six Zero League — fiche Veille
 
-Lue par l'agent `veille` après `commun.md`. Pas de Discord pour ce jeu : la veille lit le **chat global** du jeu et les mises à jour du wiki.
+Lue par l'agent `veille` après `commun.md`. Sources : chat global (base + `data/chat/sixzeroleague/`), Discord (`data/discord/SixZeroLeague/`, y compris le devlog des mises à jour 0.5.7 à 0.6.0), wiki.
 
 ## Skills à lire
 - tous les `.claude/skills/sixzeroleague-*/SKILL.md` concernés par les messages lus
 
 ## Règles propres au jeu
 1. Hiérarchie : wiki `[W:Rubrique]` > développeur `[Dev chat]` (Gazelle) > joueurs `[Com chat, pseudo]`.
-2. Delta : `outputs/sixzeroleague/veille/etat.md` (date « lu jusqu'au » ; le créer au premier passage). Le chat collé le 2026-10-18 est déjà intégré au skill communauté.
+2. Delta : `etat.md` donne une date par source (chat jeu, Discord #chat, Discord #dev-log, wiki). Les exports de `data/chat/sixzeroleague/` et `data/discord/SixZeroLeague/` qui ne sont pas listés dans `etat.md` sont à lire en entier ; la base reprend le chat du jeu (100 derniers messages par canal), donc vérifier les doublons par `createdAt`. Le chat collé le 2026-10-18 est déjà intégré au skill communauté.
 3. Coût : lis tous les messages du développeur ; pour les joueurs, seulement ceux qui touchent une règle, un horaire ou un chiffre.
 
 ## Données

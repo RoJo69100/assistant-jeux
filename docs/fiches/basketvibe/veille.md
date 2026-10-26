@@ -9,6 +9,8 @@ Lue par l'agent `veille` après `commun.md`. Contenu repris de l'agent BasketVib
 1. **Hiérarchie des sources** (skill basketvibe-communaute) : manuel `[M§x]` > News de l'admin `[News date]` et développeur `[Dev date, salon]` > communauté `[Com date, auteur, salon]`.
 2. Coût : filtre en SQL (`is_dev`, salon, mots-clés : engine, v4, fatigue, training, potential, academy, transfer, salary, sponsor, bug, fix…) avant de lire le texte complet. Lis tous les messages du développeur et toutes les News ; pour la communauté, seulement ceux qui touchent une règle ou un chiffre.
 3. Delta : `outputs/basketvibe/veille/etat.md` (date « lu jusqu'au » par source), puis seulement les posts plus récents dans `gold.bv_veille_feed`.
+4. **Codes de citation** : ajouter `[GM date, auteur, salon]` pour les Game Masters (par ex. `elemke.`), entre la News/développeur et la communauté : réponses de modération et d'usage, pas des règles de moteur.
+5. **Export Discord** : le dossier réel est `data/discord/BasketVibe/` (identifiant de jeu : `basketvibe`). `discord_BasketVibe_export.txt` = historique déjà lu jusqu'au 2026-10-09 ; `discord_BasketVibe_partN.txt` = delta. Lire seulement le delta après `etat.md`. Rappeler d'importer le delta en base (`pipelines/import_discord.py`) pour que `gold.bv_veille_feed` suive.
 
 ## Données
 - `gold.bv_veille_feed` : `source` (news | discord), `posted_at`, `author`, `is_dev`, `channel`, `content`, `ref`.

@@ -1,0 +1,296 @@
+==========================================
+=== CANAL : #📘・dev-log ===
+==========================================
+[2026-09-14 15:47] gazellemag : We're currently in the middle of the first closed alpha test, and at this stage, the game is pretty much playable and some feedback has already been taken and handled.  After this we will go for another alpha testing, this time involving everyone from this discord server who are willing to participate. Currently the game will not be played the same way as when it's going to be released, meaning the time progression will be much faster for testing purposes. I'll be making preparations for this new round of alpha testing meanwhile, while the first round hasn't finished yet.  So far, as a manager of a handball team, you can do the following:  - **Overview View** - Manager can check the team overview - **Team View** - Manager can check team roster and player profiles, set tactics, set training plan & training report, U18 picks, transfer history, sell/release a player. - **Competitions View** - For now, a single competition: league. Manager can check league standings, list of fixtures and list of the team matches. Live match view when a live round is being played - ** Infrastructure View** - A manager can upgrade his team/club infrastructure for bonuses. - **Transfers View** - A manager can check players being sold in the transfer market and buy players by bidding. - **Finances View** - A manager can check the team's balance and weekly financial report. It's also possible to choose a sponsor for a season - **Global Chat** - **User Settings** - ability to change team name, team colors, team logo, account password
+[2026-10-04 17:06] gazellemag : **Six Zero League 0.5.7 and 0.5.8 update** **Part 1 of 2 | On the court**  The biggest update we have shipped, and most of it lands on the pitch.  **Matches** Fouls can now cost a defender: a yellow is a warning, a 2 minute exclusion sends him to the side and leaves his team one short, and a red card ends his night. A red card with a referee's report also bans him for two league rounds. Hard challenges can put a player down: play stops, the medics come on, and your substitute for his role takes his place. When the bench runs dry a side plays short, and it shows at both ends of the court. Goalkeepers now wear their own kit, and the ball no longer jumps across the court.  **Players and careers** Minutes on court are recorded every match and feed the training week, so the players you actually use improve faster. Role training lets you teach a player a second and third position, and a learned role stays with him if you sell him. Age catches up in the off season: players age a year when the season ends, and from 33 they can announce retirement and play one final season. Every club also carries a rating now, from Grassroots to Legendary.  **Tactics** You can now set your own 6-0 defence: switch the Tactics tab to Defence and drag your six outfielders between the spots you want them in. Naming a substitute for each role happens on the same screen. Injured and suspended players are clearly marked wherever you see them.
+[2026-10-04 17:06] gazellemag : **Part 2 of 2 | Around the club**  **Money** The season ends with prize money for the top three: 15,000, 8,000 and 4,000. Arena and Fan Shop have been rebalanced so levelling them is worth the outlay, and Fan Shop income now follows your league position, from 1.6x for the leaders down to 0.7x for last. The Finances page shows prize income and anything you spent since the last report.  **Competitions and transfers** Standings, fixtures and your own matches share one page, and you can open any live match in a panel beside them. A league that has finished can be restarted as a new season and can take new clubs right up to the restart. The transfer market has been rebuilt with live updates and player profiles.  **Clubs** Your badge can have a shape. An absent manager's club is run by the bot after 30 days away, so an abandoned club keeps fielding a team instead of shrinking into forfeits.  **Guide and interface** A new in game Wiki explains the things that matter: the seven roles, attributes, training, injuries and retirement. Player profiles now show your club crest and the shirt number on a jersey, and the header no longer scrolls away on a phone. Live matches also use about half the data they did before.
+[2026-10-09 16:17] gazellemag : **Six Zero League 0.5.9 update:**  - Overall UI/UX consolidation - The Overview is redesigned: next match, last result and next report side by side, with this week's events and the league table below. - Player profiles have Attributes and Statistics tabs, with this season's and all-time career statistics. - Player statistics are private to their club unless the player is listed on the transfer market. - The full-time report has player-of-the-match cards with role badges, a cleaner scorer list, and fits without scrolling. - Match cards show the win, draw or loss result, with the score centered. - Technical fouls now match what the player was doing: travelling is the most common, charging needs a defender in front, and double dribbles are rare. - After a passive-play warning, an attack has six passes to get a shot away. - The injury rate is back to its intended level. - League matches interrupted by a server restart go back to pending instead of getting stuck. - Every column of the Team view can be sorted.  - Infrastructure cards are simpler and show what the next level unlocks and how long an upgrade takes to pay back. - On phones, the menu opens under its button as a simple list. - The wiki now covers technical fouls, passive play, the live viewer, player statistics, role training and infrastructure. - **Club:**    - A new Club page brings together Finances, Infrastructure and your club's Identity (name, colours and crest), and sits second in the menu.    - Infrastructure cards show what the next level brings, what it unlocks and how long an upgrade takes to pay back.    - Crests have 100 icons and 50 shapes to choose from. - A commentary bar in the clubs' colours narrates each attack, with goals flashing in the scorer's kit. - The live viewer has Incidents and Stats tabs below the court. - League points are now 2 for a win, 1 for a draw and 0 for a loss, and ties are decided by goal difference, then head-to-head, then goals scored.
+[2026-10-16 15:03] gazellemag : **Six Zero League 0.6.0 update - League divisions & Cup competition**  **Divisions** - Clubs now play across five divisions. Every new club starts in the 5th. - Each league champion goes up a division; the bottom three go down. - Higher divisions earn more from tickets, sponsors, facilities and prizes.  **Cup** - A new knockout cup runs alongside the league every season, for every manager-run club. - Ties are single matches at a neutral venue. The best-placed clubs skip the early rounds. - A level tie goes to extra time, then a 7 metre shootout played out on court. - Every cup tie pays a share of the gate and counts toward your players' match development. - The winner takes the cup prize and the Alpha Cup Winner trophy.  **Competitions** League and Cup tabs, with your matches from both in playing order. The Cup tab has the full bracket. Live ties show their scores and can be watched. The league picker groups leagues under their division.  **Injuries and suspensions** - Injuries last 1 to 6 matches, most of them short. - High intensity training now carries more risk and longer injuries, so a deeper squad pays off. - An injury or ban that outlasts the season carries over into the next one.  **Match engine** - Extra time and shootouts have their own commentary lines. Extra-time goals show as 61' to 70'. - The 7 metre shootout is played at a realistic pace. Takers walk up and stand set on the line before they shoot, and the keepers wait beside the goal. - 6 and 9 metre shots are now proper jump shots. The shooter runs straight into his jump from the line, releases in the air and lands inside. - Line violations are only called when the shooter takes off from the line. - After a line violation, the ball travels to the keeper instead of jumping into his hands. - Teams on a passive play warning now push for a shot instead of passing the limit away, so passive play is called far less often. - Fixed a rare bug where a keeper could keep the ball until half-time.
+==========================================
+=== CANAL : #💬・chat ===
+==========================================
+[2026-06-02 18:01] winniethedude : Am I the first member? lol
+[2026-06-02 18:28] gazellemag : yes 🙂
+[2026-06-02 19:12] juanmix21 : hi everybody!!!
+[2026-06-11 00:12] krzykaczpl_ : what's up guys? how's the progress on making the game?
+[2026-06-11 17:12] gazellemag : Hi there. This is pretty much in the beginning but I'd say I got quite a lot 🙂
+[2026-06-11 17:13] gazellemag : There's more information in the six-zero-league channel in case you didn't read it
+[2026-06-19 20:17] ferfranc : Hello, I'm Ferfranc from Spain
+[2026-06-22 13:55] gazellemag : Hi Ferfranc
+[2026-06-22 14:07] ferfranc : 👍
+[2026-06-24 17:23] omarh2377_13353 : Hi
+[2026-06-24 18:39] gazellemag : Hi! Thanks for joining.
+[2026-06-24 18:51] gazellemag : We've gathered quite a few here 🙂
+[2026-06-24 19:49] trkotrko : Hi
+[2026-06-24 20:05] pikachuvermelho : hi
+[2026-06-24 20:05] pikachuvermelho : really like this game, waiting for it 🙂
+[2026-06-30 10:28] hal94_27945 : hello https://open.spotify.com/track/5lpWlfViQ2ypDoHuxIbMIH?si=7abe5860f22748b9
+[2026-06-30 10:30] gazellemag : hey! what's up?
+[2026-07-06 07:18] juanmix21 : Hey, greetings from Colombia 🇨🇴
+[2026-07-06 08:28] gazellemag : Welcome!
+[2026-07-08 10:44] hal94_27945 : https://open.spotify.com/artist/1avQvYo9ABjSTqgTXVkW4F?si=60O8QO6rTUK90QbW2kU_Mg
+[2026-07-10 17:27] juanmix21 : ???
+[2026-07-29 16:50] yellowbeegaming : Hi!
+[2026-07-29 16:54] gazellemag : Hi! Welcome.
+[2026-07-29 21:11] jsb252 : Hello all 😌
+[2026-07-30 23:24] yellowbeegaming : So wait is the website out? I’m confused
+[2026-07-31 00:37] gazellemag : Only the landing page is available. The purpose is to showcase the 2D simulation and build a community while development continues
+[2026-07-31 00:58] yellowbeegaming : Ohh okay
+[2026-07-31 01:00] gazellemag : please share with anybody interested 🙂
+[2026-08-01 11:10] suiri09 : When will the game be available? It looks good.
+[2026-08-01 12:09] gazellemag : I'm not completely sure. But the pace has been really good.
+[2026-08-01 12:09] gazellemag : But alpha/beta testing will be a thing and everybody can try out earlier versions
+[2026-08-02 03:28] yellowbeegaming : Is it gnna be free?
+[2026-08-02 03:28] yellowbeegaming : or will there be a kick starter?
+[2026-08-02 10:14] gazellemag : it's free to play
+[2026-08-31 12:06] _dvt_ : Hey there, you have an interesting project! I have a few questions: - Will you open source the project? - Are you open for contributors?  I also have a friend developing a basketball management game on his spare time.
+[2026-08-31 12:11] _dvt_ : I'm also a developer myself
+[2026-08-31 14:10] gazellemag : Hi Danilo. At this stage it's a no to both questions
+[2026-09-04 22:19] winniethedude : This game looks really cool, looking forward to giving it a try once it is open!
+[2026-09-05 11:33] gazellemag : Hey dude, thanks for the kind words!
+[2026-09-09 19:33] kingofthekings5 : What’s this about then
+[2026-09-10 07:55] gazellemag : Hi. Check the six-zero-league discord channel for more info
+[2026-09-10 15:16] kingofthekings5 : That’s what I’m in
+[2026-09-11 08:10] gazellemag : I meant this
+[2026-09-14 15:50] gazellemag : Hey guys. I'm thinking about making an open alpha test pretty soon, hopefully involving everyone here. If you would be interested in participating, please react to this message!   Check my new post on <#1549040122270584973> fore more info regarding the current state of the game.  Also feel free to ask any questions here.  @everyone
+[2026-09-19 18:35] suiri09 : Will you invite me? Send me a private invitation.
+[2026-09-19 19:48] gazellemag : It will be open for everybody!
+[2026-09-20 09:38] suiri09 : When?
+[2026-09-20 14:28] gazellemag : We’re almost finished with a closed alpha test. Afterwards I’ll make registrations open for everybody. Expect this at the middle of the next week, but I’ll announce it here anyway
+[2026-09-20 14:30] gazellemag : Then we will wait a few more days so more people can join. And then a fresh season will start
+[2026-09-23 10:53] jorgeac25 : <@337192772006182912> hey! What about creating some free agents in the market just to kick off trades? With only 10 players, no one wants to sell...
+[2026-09-23 10:54] jorgeac25 : Tactics dont work for now right?
+[2026-09-23 11:01] jorgeac25 : <@337192772006182912> as for infrastrutures, where can i find the upgrade costs and upkeep costs of higher levels?
+[2026-09-23 11:02] gazellemag : You are right, selling players might not be worth initially since every team is basically super bad. But that doesn't mean that a player that is being transfer listed isn't a good fit for your team at this point. More managers are also coming in, so the transfer market will be much active. Also, worth noting that a player that was fired by a team has a 10% change of ending up on the transfers list as a free agent
+[2026-09-23 11:03] gazellemag : Tactics work yes, there's just a little bit of friction when using a mobile device. On the tactics editor you can drag & drop players into the positions, in case you are not familiar with this kind of system
+[2026-09-23 11:03] gazellemag : You can check for upgrade costs by increasing levels on each infrastructure, but I agree that it could be useful to have that information beforehand
+[2026-09-23 11:04] jorgeac25 : Attack and defense seems to be blocked at 5-1 and 6-0 respectively
+[2026-09-23 11:05] gazellemag : yes the simulation only supports these two tactics for now 🙁 more coming soon as well
+[2026-09-23 11:05] jorgeac25 : Exactly. We should now before to make an informed decision..
+[2026-09-23 11:05] jorgeac25 : But this is an alpha, great job until now!
+[2026-09-23 11:06] gazellemag : it will keep getting better, I promise
+[2026-09-23 11:06] jorgeac25 : Probably we will flood you with feedback and improvement solutions, but that s exactly the purpose of an alfa test
+[2026-09-23 11:07] gazellemag : yes, please bring it on 😂
+[2026-09-23 11:08] jorgeac25 : To keep track of all you can do Something like BV that closed beta some days ago
+[2026-09-23 11:08] jorgeac25 : Which is a page with all suggestions where managers can vote if they agree or not
+[2026-09-23 11:09] jorgeac25 : And you can classify if it is simple, médium or complex to implement and accept/reject
+[2026-09-23 11:10] jorgeac25 : BV=basketvibe
+[2026-09-23 11:11] gazellemag : yes, I've been looking into having such tracker in place. But still haven't decided. But for now everyone can do it here:<#1549747527195299971>
+[2026-09-23 11:11] jorgeac25 : Nice
+[2026-09-23 11:23] jorgeac25 : <@337192772006182912> in the market, there is no information about the end of the bidding
+[2026-09-23 11:29] gazellemag : Yes, there isn't one because the game currently doesn't work based on real time. Please check my latest announcement, I have a bit of an explanation there. Summarizing: every bidding ends after a week has passed (which means a pair of rounds have been played).
+[2026-09-23 11:29] gazellemag : But I can still provide such information in the transfers list, something like 'bidding ends in 1 round, bidding ends in 2 rounds, etc'
+[2026-09-23 11:33] jorgeac25 : No need, this is just for testing. But finished version should have a deadline with real time and eventually extend for some minutes in case of late bids
+[2026-09-23 11:34] gazellemag : that's the intention for the finished version! Everything will be based on real time
+[2026-09-23 12:20] suiri09 : <@337192772006182912> Create a ranking based on the combined skill sets of all players on a team. It would serve to measure their level.
+[2026-09-23 12:24] suiri09 : And will the alpha-phase players carry over to the final game with their trained skills? Because I’m planning to start a homegrown club and want to get attached to them.
+[2026-09-23 12:30] gazellemag : you can check for the overall of the player in the player profile or roster table. this is calculated not only based on attributes, but height and prefered hand vs play side
+[2026-09-23 12:31] gazellemag : It won't carry on to the released game due to fairness I'm afraid. But it will carry on during alpha and beta test versions.
+[2026-09-23 12:42] jorgeac25 : Agree with you on this! Alfa and beta is for testing, when the game starts everyone should be on the same page starting with similar conditions
+[2026-09-23 12:43] jorgeac25 : I noted there is a team with 14 players, how is that possible?
+[2026-09-23 12:43] jorgeac25 : Starting 10 + 1 youth pull
+[2026-09-23 12:44] suiri09 : There is no player with a left hand.
+[2026-09-23 12:44] suiri09 : What team?
+[2026-09-23 12:46] jorgeac25 : AURA farmers
+[2026-09-23 12:46] gazellemag : We've already ran a closed alpha version and some of the teams have already played the game. We've only played a single season, so the influence of it is very minimal or even none. Hope you don't mind.
+[2026-09-23 12:46] gazellemag : left hands are pretty rare
+[2026-09-23 12:47] jorgeac25 : Its ok 😁
+[2026-09-23 12:48] suiri09 : What's your team? <@337192772006182912>
+[2026-09-23 12:48] jorgeac25 : 28 and growing!
+[2026-09-23 12:49] suiri09 : Jorge what is your team?
+[2026-09-23 12:49] jorgeac25 : Abc in game and real life 😁
+[2026-09-23 12:50] gazellemag : I am the Skeleton Kings! 😅
+[2026-09-23 12:51] suiri09 : I hope I get to play against you in the league and crush you. Is there an achievement for beating the creator by a landslide?
+[2026-09-23 12:53] gazellemag : I'm already getting threatened! Ahah
+[2026-09-23 12:53] gazellemag : But that's an interesting idea
+[2026-09-23 12:59] suiri09 : Is there cup? <@337192772006182912>
+[2026-09-23 13:00] jorgeac25 : <@1431293966959247602> only 3 from spain! You need to bring your friends here 🙂
+[2026-09-23 13:01] suiri09 : I have a friend who likes sports management games, and I'm going to tell him to join the game. Right now, he's working
+[2026-09-23 13:03] suiri09 : I hope the Spanish community does great things in this game.
+[2026-09-23 13:04] suiri09 : But there are many portugueses
+[2026-09-23 13:04] jorgeac25 : 16 🇵🇹  3 🇪🇸  2 🇵🇱 🇷🇴 1 🇨🇿🇩🇪 🇮🇹 🇬🇷 🇫🇷
+[2026-09-23 13:06] jorgeac25 : I think gazelle is portuguese. But it seems to be spreading through europe. Need to reach the nordics, a lot of handball fans over there
+[2026-09-23 13:08] suiri09 : <@1446045286513508363> You're thinking about winning the league, look, they give out a special trophy, and if I get matched against you in the league I'll crush you.
+[2026-09-23 13:15] jorgeac25 : No problem in alfa and beta 😁 but things will get serious in go live
+[2026-09-23 13:16] jorgeac25 : <@337192772006182912> if you are thinking in a global pyramid structure, alfa testers should fill div 1 and 2 right? 😉
+[2026-09-23 13:18] gazellemag : no, only a single competition type currently, which is the league
+[2026-09-23 13:18] gazellemag : yes I am portuguese, hence the affluence of portuguese players 😅
+[2026-09-23 13:20] gazellemag : yes but like I explained in my recent announcement, I don't have a division system implemented yet. So effectively all leagues will be 'scattered'
+[2026-09-23 13:20] gazellemag : On the released game, everyone will start on the last division.
+[2026-09-23 13:20] jorgeac25 : Seems fair. Race to the top then
+[2026-09-23 13:21] jorgeac25 : 1st champions will be bots
+[2026-09-23 13:21] jorgeac25 : That s the downside
+[2026-09-23 13:21] gazellemag : yes, playing on upper divisions will naturally have more advantages, like more ticket revenue for example
+[2026-09-23 13:21] gazellemag : I'll make sure they don't win trophies, perhaps 😅
+[2026-09-23 13:24] suiri09 : Gazelle, do you already have the design for the special trophy for the first Alpha League champion? I'd like to see a prototype, even just a sneak peek.
+[2026-09-23 13:26] gazellemag : Not at all! Would you like to work on a design? ahaha
+[2026-09-23 13:28] suiri09 : Gold of course hahaha and a design similar to the World Cup but instead of a planet a handball
+[2026-09-23 13:28] suiri09 : Hahaha
+[2026-09-23 14:19] jsb252 : Portugal is so stacked 😆
+[2026-09-23 14:19] jsb252 : Repping Scotland here
+[2026-09-23 14:19] jorgeac25 : Welcome!!
+[2026-09-23 14:20] jorgeac25 : That s a first one 😉
+[2026-09-23 14:28] suiri09 : Welcome
+[2026-09-23 15:07] gazellemag : big up to Scotland's finest!
+[2026-09-23 18:40] suiri09 : My friend is in the game
+[2026-09-24 09:21] suiri09 : When does the competition start? <@337192772006182912>
+[2026-09-24 10:29] gazellemag : I'm not sure but I'm expecting to start this next sunday or monday. something like that
+[2026-09-25 10:38] jorgeac25 : <@337192772006182912> regarding infrastrutures, will you include information about upgrade and upkeep costs beforehand? If not in infrastruture tab, at least in the manual
+[2026-09-25 10:42] jorgeac25 : This infrastruture system normally does not work well in the long run, several online games have experience that in the past. It creates a snowball efect under which better infrastrutures generate more money, faster training and better youth players, which combined generate even more money to invest. In the long run, new clubs will have to replicate years of accumulated investment while competing against old teams that are already earning and developing players faster.
+[2026-09-25 10:43] jorgeac25 : <@337192772006182912> what s your view on this?
+[2026-09-25 10:47] jorgeac25 : I would be more favorable to weekly staff investment system where clubs could choose how much to spend weekly on training, youth or staff. This would avoid a permanent accumulated benefit that works like a barrier for new joiners
+[2026-09-25 11:52] gazellemag : yes, I sure will
+[2026-09-25 11:56] gazellemag : When it comes to economy, several things are still missing. the snowball effect you are talking about I believe can be mitigated through a lot of ways still (for example having a huge arena doesn't guarantee good ticket revenue vs maintenance cost if your team has been relegated, forcing you to downgrade your arena). But one thing is for sure: older teams must be on the advantage when compared to new teams, players who keep playing need to be rewarded in the long run. For a slow paced game I think that's super important. In the end if you think about it, this is basically what happens in real life
+[2026-09-25 11:57] gazellemag : there will be staff included in the game too, that's for sure! but all of this needs to be balanced with the current systems, and that takes time
+[2026-09-25 13:28] jorgeac25 : Understood. There could be ways to keep infrastrutures and reduce snowball efect. Also consider diminishing ROI (level 1 - > 100%, level 5 - > 120%, level 10 - > 130%, level 15 - > 135%, level 20 - > 138%).  older teams would keep an advantage but avoid a brutal gap between old teams and new joiners
+[2026-09-25 13:43] jorgeac25 : Update on the numbers, we are now 59! And reached América and northern europe 🔥  18 🇵🇹 10 🇪🇸 5 🇵🇱🇩🇪 3 🇮🇹 2 🇷🇴🇨🇿 🇸🇪 🇫🇷 🏴󠁧󠁢󠁳󠁣󠁴󠁿 1 🇦🇷 🇭🇷 🇭🇺 🇨🇦 🇬🇷 🇩🇰 🇧🇦 🇱🇻
+[2026-09-25 14:03] jorgeac25 : Canada and Argentina are America 🙂 not USA, but America for sure
+[2026-09-25 14:45] suiri09 : I lost 23-18 against Real Dulzac. The streets never forget.
+[2026-09-25 14:45] suiri09 : https://klipy.com/gifs/cr7-23
+[2026-09-27 18:46] suiri09 : When do the leagues and matches open?  <@337192772006182912>
+[2026-09-27 21:54] gazellemag : Hi. I've just arrived. They start tomorrow, I'll make an announcement soon
+[2026-09-28 16:02] suiri09 : I'm last in the league in the first game
+[2026-09-28 16:03] suiri09 : My friend is the best first in this round by goal difference +9
+[2026-09-28 20:25] sv3.n : I have a player with the same last name as me. He got injured in the first game. 💩
+[2026-09-30 16:15] gazellemag : @everyone
+[2026-09-30 19:55] sv3.n : watching the live game is cool would be nice to see why they lost the ball
+[2026-09-30 20:10] sv3.n : are pivots able to score?
+[2026-09-30 20:12] gazellemag : yes but they pass back way too much I believe
+[2026-09-30 20:13] sv3.n : yesss. or they get fouled.
+[2026-10-02 06:05] _lemonsquash : Hey I just saw about this game in Reddit. Real curious about who developed it? Was it a team or something? Or vibe coded?  It looks really interesting
+[2026-10-02 09:54] gazellemag : Hi LemonSquash. I'm the developer 🙂
+[2026-10-03 08:31] suiri09 : The website is down.
+[2026-10-03 10:50] gazellemag : Hi! Currently working on the fix. Matches will be delayed for a bit.
+[2026-10-03 13:00] gefrituurdebanaan : I love this game so much, it’s incredible 😭🙏🏼
+[2026-10-04 11:34] gefrituurdebanaan : Will there be a mobile game for Apple? Is it staying a web game? 🥹
+[2026-10-04 11:42] gazellemag : only web for now, but you can install the website as a native app through your browser in mobile!
+[2026-10-04 11:44] gefrituurdebanaan : I figured that!! It’s all good!
+[2026-10-04 11:44] gefrituurdebanaan : I love this game so so muchhh
+[2026-10-04 11:45] gazellemag : glad to hear! the experience on mobile might not be as good as the desktop though
+[2026-10-04 11:45] gazellemag : huge update coming really soon 😉
+[2026-10-04 11:47] gefrituurdebanaan : YAYY
+[2026-10-04 11:48] gazellemag : if you like it, then please bring your friends!
+[2026-10-04 11:49] gefrituurdebanaan : Yesss I’ma tell my friends maybe they’d like the game toooo
+[2026-10-04 11:49] gefrituurdebanaan : I showed the game to my other friends too and they said it looked quite fun :0
+[2026-10-05 07:34] beci_99976 : The game is still on hold. When will it start up again?
+[2026-10-05 07:53] gefrituurdebanaan : You need to go to the new website
+[2026-10-05 07:53] gefrituurdebanaan : Sixzeroleague.com
+[2026-10-05 16:52] abrantezz56 : Olá
+[2026-10-05 16:54] w1ldboy : Olá senhor treinador
+[2026-10-05 16:55] spacetrolha : Boas noites
+[2026-10-05 17:00] w1ldboy : tens de colocar em prática a tua sabedoria como treinador
+[2026-10-06 14:00] gazellemag : Hey guys! Don't forget to vote here daily if you are enjoying the game: https://votekicker.com/projects/six-zero-league-2 No need to create account!
+[2026-10-06 16:31] sv3.n : anyone from league 2 here?
+[2026-10-06 19:19] gefrituurdebanaan : I’m league 10!
+[2026-10-07 17:22] suiri09 : And Trophies?
+[2026-10-07 20:12] aliraza_57542 : Same here 🙋🏽‍♂️ First time, so don't know what I'm doing 😂🫣
+[2026-10-07 20:14] gefrituurdebanaan : I’m now league 16 ahah
+[2026-10-07 20:15] gefrituurdebanaan : Are there any Dutchies in the game?
+[2026-10-07 20:16] aliraza_57542 : What time are the matches? Wanna see the live match functions
+[2026-10-07 20:20] gefrituurdebanaan : Andddddd are the leagues randomized or is it based on overal of the players you have :D
+[2026-10-07 20:26] gazellemag : 12:00 PM and 8:00 PM every day
+[2026-10-07 20:26] gazellemag : they are just randomized currently
+[2026-10-07 20:27] aliraza_57542 : Thanx! Suggestion: put it in the Wiki 😉
+[2026-10-07 20:28] gefrituurdebanaan : Amazingggggg
+[2026-10-07 20:48] gazellemag : I'll be bringing some good indicators next patch!
+[2026-10-09 08:04] gazellemag : hey guys, we've just reach 200 registered accounts!! 💪
+[2026-10-09 08:51] jayauston1455 : Awsome 😎
+[2026-10-09 10:22] suiri09 : Congratulations! This game is amazing! 🤾‍♀️
+[2026-10-09 18:50] squidwardfrommegamind : Hey guys! I just joined, the Kirakira Bananas are about to run the world.
+[2026-10-09 20:02] gefrituurdebanaan : YAYY!
+[2026-10-09 20:49] squidwardfrommegamind : My 18-year-old cb just casually dropped 12 goals on 12 shots what a demon
+[2026-10-10 02:58] krzykaczpl_ : <@337192772006182912> damn, the game looks better every time I log in! Keep up with good work, seriously it has a lot of potential!
+[2026-10-10 02:59] jayauston1455 : Is there any way to change formations or are those still in the works lol no rush was just curious as to how to change if possible already?
+[2026-10-10 03:06] krzykaczpl_ : I think at the moment you’re not able to change formation. Only 5-1 attack and 6-0 defense
+[2026-10-10 03:09] jayauston1455 : Ah, ok thx.
+[2026-10-10 09:47] gazellemag : That’s right! I’ll be working on new formations really soon tho
+[2026-10-10 12:47] teamspeak.bessser.als.discorb : As it seems, its currently not possible to use a player only in offense or defence. They have to play both or nothing. Is this rigth?
+[2026-10-10 13:54] gazellemag : yes. but those kinds of subs are to be included in the future too
+[2026-10-10 18:34] jayauston1455 : Idk how, but somehow my ragtag team managed to at least temporarily for now claim the #1 spot in their league 😂
+[2026-10-10 19:29] antarez9313 : hey all 👋
+[2026-10-10 20:13] squidwardfrommegamind : Need my next academy demons in a couple days
+[2026-10-11 17:38] squidwardfrommegamind : Is there anything I should be doing in the game rn? I'm just following my team but is there anything I should be doing to make more money or make my team better?
+[2026-10-11 18:31] pikachuvermelho : select training for each, selling players, select sponsor, level buildings, then it is rather passive game, you come each day, check results, adjust trainings, check markets
+[2026-10-11 18:31] gazellemag : Hey Squidward!  Right now you got two types of infrastructure that generate revenue, being that the arena is the main infrastructure for revenue compared to the fan shop. You can also sell players, but ideally you need to maintain the competitiveness of your team at the same time, so sell players you don’t need, at least at this stage of the game. But if your training facilities are high enough, it might be worth to maintain players with high work ethic that you probably don’t need, but then you can sell them at a good price later. It also obviously helps that you win games (sponsor and fan shop).  On later versions it will be easier to make money, there will be divisions and the arena tickets will scale their price if you’re playing on higher divisions. Transfer market will be more active and the bids last longer. Maybe a new type of revenue infrastructure later on, you get the idea.  Just think about how clubs in real life make money.
+[2026-10-11 18:33] squidwardfrommegamind : Yeah that makes sense
+[2026-10-11 18:34] squidwardfrommegamind : Just have no money rn because I spent my whole balance on my academy instantly lmao
+[2026-10-11 18:41] gazellemag : One tip, at least that’s how I play these games: invest on revenue infrastructure first to build the foundation for the other upgrades
+[2026-10-11 20:15] squidwardfrommegamind : You say that now until I get my 22 overall winger in a day and he's the best player in the game
+[2026-10-11 23:40] jayauston1455 : Thats what I did 🙈 lol
+[2026-10-12 06:54] gefrituurdebanaan : https://klipy.com/gifs/hello-9X0
+[2026-10-12 14:27] sv3.n : <@595433083012907014> i already have a 22 ovr winger 😄 and im not even close to the top rn
+[2026-10-12 15:40] squidwardfrommegamind : Dang that's tragic for me
+[2026-10-12 18:15] gefrituurdebanaan : Wowww
+[2026-10-12 18:15] gefrituurdebanaan : Then my team is one big tragedy
+[2026-10-12 18:15] gefrituurdebanaan : My best one is 13 😭
+[2026-10-12 20:16] squidwardfrommegamind : 23 overall pivot has been acquired
+[2026-10-12 20:16] squidwardfrommegamind : Hate on my academy upgrades now
+[2026-10-13 11:21] sv3.n : <@337192772006182912> i have a cute bug.  the game is live right now but in the top right corner it shows 60' 23-18 which was the final result of round 9
+[2026-10-13 11:23] gazellemag : hmm ok. could you refresh and see if it appears again?
+[2026-10-13 11:24] sv3.n : yes still the same
+[2026-10-13 11:25] sv3.n : i tried a diffrent browser. its still the same
+[2026-10-13 11:36] gazellemag : okay, thanks for letting me know!
+[2026-10-13 11:39] sv3.n : what do i do if my rw is a right hand? can i paly him on the LW or is there any loss?
+[2026-10-13 11:41] gazellemag : there is a 20% penalty for out of position players when attacking, 10% when defending. excluding physical attributes, those are never decreased due to out of position.
+[2026-10-13 11:41] gazellemag : You can now make players learn new roles
+[2026-10-13 11:43] sv3.n : ahhh nice!!!  love the new features, huge improvement to season 1.
+[2026-10-13 12:34] squidwardfrommegamind : Great first game with my new P
+[2026-10-13 12:35] squidwardfrommegamind : 5 point road win, scored 28
+[2026-10-13 15:59] sv3.n : what happens if you put an outfield player in goal? is it the same -10% as defending out of position or way worse?
+[2026-10-13 16:00] sv3.n : my gk is 💩 😂
+[2026-10-13 16:28] gazellemag : in that case is 20%
+[2026-10-16 21:27] squidwardfrommegamind : Wooooo academy day for me, 19 overall 18-year-old winger acquired
+[2026-10-16 21:27] squidwardfrommegamind : He is unfortunately a lazy bum, but he'll do for now
+[2026-10-19 11:15] krzykaczpl_ : do we have somewhere an information about the costs of improving each level of the infrastructure options? so like how much do we need to pay for each level up?
+[2026-10-19 14:10] gazellemag : Hey Draugar. I have purposely hidden this information from users. I think the game should have some kind of 'discovery' layer so it's more exciting when upgrading. What do you think?
+[2026-10-19 15:09] krzykaczpl_ : Yeah, I’m cool with that. I don’t think it’s a bad idea since knowing or not knowing the costs in advance doesn’t really give you any advantage or disadvantage. I was just asking in case I missed something
+[2026-10-19 15:10] krzykaczpl_ : but if you could just give me a yes or no answer - does the max level of arena give you more than $ 9,999 per home game?
+[2026-10-19 15:12] gazellemag : yes and even more if you are in the upper divisions
+[2026-10-19 16:20] krzykaczpl_ : Cool! Thanks so much, also - are the bonuses for training center linear? So they always go up by 0.04 per level?
+[2026-10-19 16:24] gazellemag : if I'm not mistaken, yes!
+[2026-10-19 18:20] squidwardfrommegamind : What is the league structure like? Like how many teams promote and such
+[2026-10-19 19:50] gazellemag : one team gets promoted from each, three get demoted (except for the 5th division of course)
+[2026-10-19 19:55] squidwardfrommegamind : Oh wow okay we're running a tight ship
+[2026-10-19 19:56] squidwardfrommegamind : See this is why academy investment is good infrastructual decision making, because I have hella good players, which means I make more money by promoting
+[2026-10-19 19:56] krzykaczpl_ : so what overalls you got from academy?
+[2026-10-19 19:58] krzykaczpl_ : the life of academy player is about 5-5.5 months, it’ll be good combo if you get a decent academy player either max out training center this way you can maximize his overall before he has to retire or gets penalty skills for being old
+[2026-10-19 22:53] squidwardfrommegamind : I have gotten a 19 and a 23 with my upgraded academy
+[2026-10-20 02:05] krzykaczpl_ : damn, these are really good picks! do you mind sharing, what's your level of academy?
+[2026-10-20 06:18] squidwardfrommegamind : 7, I dumped my whole opening budget into it immediately for this purpose
+[2026-10-20 09:02] pierrottingchrist_29708 : with level 7-8 academy players seems to be around level 20
+[2026-10-20 09:05] pierrottingchrist_29708 : i purchased the level 9 for my next pick this evening 😊
+[2026-10-20 09:15] gazellemag : you can see the range of attributes that you can pull on the infrastructure description!
+[2026-10-20 11:09] krzykaczpl_ : oh really? well at level 1 it says pick between 1-20, then 2-22 so I didn’t know it grows up so fast, thanks for sharing that guys!
+[2026-10-20 14:14] pierrottingchrist_29708 : no, with level 20 I was talking abou their overall rating on the Players page, at Youth Academy level 9 it says : U18 prospect skills 9 to 36, scout 4 skills, 2% foreign 🙂
+[2026-10-20 14:21] pierrottingchrist_29708 : and what about the "2% foreign", @Gazelle ? I mean, what is the advantage to pick a foreign player ? I don' get it.
+[2026-10-20 14:49] gazellemag : This will make more sense once national teams are in place, nations that are requiring better players may call-up your player, resulting in him having more matches. Thus improving more
+[2026-10-20 14:49] gazellemag : Might be a good asset in your team. Anyway this was just my own idea 😅
+[2026-10-20 14:51] gazellemag : national teams with few clubs might benefit too.
+[2026-10-20 15:10] krzykaczpl_ : <@337192772006182912> once we have a lot of teams and national teams maybe it will be a good idea to utilize foreign players in your team in this way: - in order to run in the selection for the national team head coach/manager you have to have at least 3 players from the country you’re applying for, in your team (doesn’t have to be starting 7) - or in order to run in the selection for the national team head coach/manager you need to have at least 1 player playing in the national team of that country (this might cause a little bit conflict of interest at the beginning where there’s no national team)
+[2026-10-20 15:20] gazellemag : I was actually more inclined to let managers be coach for their own country only
+[2026-10-20 15:35] krzykaczpl_ : oh yeah! my suggestion could only apply to the countries without an active manager but I guess if there’s no active manager = there will be also no players from that country
+[2026-10-20 15:47] sv3.n : ohhh dammn. national teams sounds crazy! can you give us a roadmap? im totally hyped
+[2026-10-20 15:47] gazellemag : yes. I was thinking a minimum of 10 players to be able to register a national team
+[2026-10-20 15:50] krzykaczpl_ : cool! Are you also thinking about friendly games that could bring maybe 50% of revenue and be played only every 48h?
+[2026-10-20 15:55] gazellemag : ok here's a quick one, just out of my mind 😂  - minimum of 10 players to be able to register. minimum of 10 players in the call-ups in order to participate in the nations cup (another competition) - every off-season managers of given country may apply for coach. others may vote. you can't vote on yourself - at the start of the new season or at the end of the off season, the coach for the national team is set and he is able to control the team - for call-ups, the coach may see a full list of all the players in the system for that country, ordered by overall (all profiles can be accessed too). - registered countries play on a special nations cup competition during the duration of the season (group stage + elimination stage I guess). - 1st, 2nd and 3rd may distribute the nation cup prize to all the teams of that country, proportionate to the number of teams, as a gift from the 'country's handball federation'
+[2026-10-20 15:55] gazellemag : yes, something like that 🙂
+[2026-10-20 19:16] squidwardfrommegamind : I will be managing the Solomon Islands NT, it'll basically just be the Kirakira roster anyway
+[2026-10-21 15:31] sv3.n : Passive play seems a bit weird to me. My players don't shoot and lose the ball every time due to making too many passes. The same thing happens in the last seconds of a game. An "I have to shoot now" option in the engine would be nice.  Counterattacks are another issue. Why does my goalkeeper have a distribution stat if my team can't execute counterattacks and just waits until the defense is in formation?
+[2026-10-21 15:58] squidwardfrommegamind : Clock management thing is true, had a team pass around the ball for like a minute down 1 and never shoot
+[2026-10-21 15:58] squidwardfrommegamind : Like in the last minute of the game
+[2026-10-21 16:02] suiri09 : 19-19 in cup
+[2026-10-21 16:26] gazellemag : Hey! I've already implemented some pressure on players for shooting when under passive warning. The reason why they still don't shoot often is probably due to still having weak players relative to the potential skill the players might have
+[2026-10-21 16:26] gazellemag : Also, I am aware of the overtime issue! Sorry for the inconvenience 🙏
+[2026-10-21 16:27] sv3.n : no problem, this is an alpha and im really impressed. just wanted to let u know 👏
+[2026-10-21 16:28] sv3.n : and i couldn´t comment in <#1549747527195299971>
+[2026-10-21 16:32] squidwardfrommegamind : Kirakira sold so bad in the cup, we were up by 3, proceeded to have our best player get hurt and get a bunch of 2-min penalties and lose by 1
+[2026-10-21 16:33] sv3.n : will kirakira come back and win the league?
+[2026-10-21 16:41] gazellemag : you can't comment further on the thread?
+[2026-10-21 16:42] sv3.n : yes, i have no rights to do that
+[2026-10-21 19:31] sweeney4437 : Hellooo. Happy to join the discord 🙂
+[2026-10-21 19:33] sweeney4437 : I might need to change my club name to "Not liked by refs" 😄
+[2026-10-21 19:33] sweeney4437 : In 5 minutes I just got 5 2-min's
+[2026-10-21 20:23] gazellemag : Welcome Scottern! This might happen, but maybe it should be very rare. I'll be reviewing 2M exclusions once more
+[2026-10-21 22:39] squidwardfrommegamind : Looking good enough so far, tied for first with a big differential lead, but looking like a two team race, but still super early
+[2026-10-22 15:39] gazellemag : 🎉 🥳
+[2026-10-22 15:39] gazellemag : I missed the 300
