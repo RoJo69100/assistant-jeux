@@ -11,3 +11,4 @@
 - [Pas d'heures exactes](no-exact-times.md) — « ce soir, fais ça » sans horaires ; une seule recommandation nette
 - [Budget tokens](token-budget.md) — une tâche par session, /clear entre sujets, /compact au-delà de ~150k
 - [Défaites = agir fort](feedback-defaites-agir-fort.md) — série de défaites : décision forte ce soir, appliquer ce que dit le développeur, relire les briefs au « reprenons »
+- [Veille intégrale autres jeux](project-veille-integrale-autres-jeux.md) — à refaire jeu par jeu (connaissance.md) comme Six Zero League le 2026-10-26
