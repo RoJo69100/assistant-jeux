@@ -45,3 +45,14 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 - Formation de défense : 6-0, 5-1, 3-2-1 ou 3-3 (nouveau).
 - Direction d'attaque : mixed, left, right, centre, left + centre, right + centre, left-right.
 - Remplace « 5-1 / 6-0 seules disponibles » [Dev chat, 2026-10-10], périmé. Aucune source n'indique l'effet de ces options : à tester une seule à la fois et à relever dans l'export du match (`teams.tactics`, rempli seulement pour J12 : aggression normal, attackDirection mixed). Chercher l'effet dans le chat du jeu / le devlog (agent Veille) avant de conseiller.
+
+## Repères infrastructures des autres clubs (chat du jeu en base, 2026-10-26)
+Source : `silver.sz_api` `/chat/messages`. Avant d'écrire « pas de donnée » sur un autre club, chercher là et dans `data/discord/SixZeroLeague/`, `data/chat/sixzeroleague/`.
+| Club (joueur) | Date | Arena | Training Facilities | Youth Academy | Fan Shop |
+|---|---|---|---|---|---|
+| Stoik | 2026-10-21 | 7 | 1 | **10** | **10** |
+| martin | 2026-10-22 | 9 | 6 | 2 | 1 |
+| pierrottingchrist_29708 (Discord) | 2026-10-20 | ? | ? | 9 | ? |
+| Nous | 2026-10-26 | 7 | 6 | 5 | 9 |
+- Stoik : Youth Academy 10 = prospects aux compétences 10 à 38, moyenne d'un tirage ≈ 24 de note ; il a tiré un pivot à 26 (2026-10-21 et 2026-10-23). Il conseille le Fan Shop quand on est bien classé (2026-10-23). Notre Fournier (17) sort d'une académie niveau 5.
+- Retard mesuré : Youth Academy 5 contre 9–10 chez deux clubs ; Arena et Fan Shop au niveau des autres. Training Facilities 6 : au niveau de martin, très au-dessus de Stoik.
