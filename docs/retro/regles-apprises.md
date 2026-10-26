@@ -3,6 +3,7 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-10-26 (soir)
+26. Avant tout lancement d'agent : demander `/effort medium` si je ne sais pas que la session y est (RÉCIDIVE de la règle CLAUDE.md « Agents d'analyse » ; vérificateur et lecteur lancés sans l'avoir demandé).
 24. Au « reprenons » : relire les briefs du jour et le registre `fait-…` avant l'agenda ; jamais répondre depuis `gold.*_agenda` seul.
 23. Plan ou liste de plus de 5 lignes = `verificateur` avant de répondre (récidive de la règle CLAUDE.md « Vérificateur » : 3 réponses sans lui, 4 erreurs).
 22. Avant d'écrire « pas de donnée » ou « absent » : chercher dans tous les exports, y compris `data/chat/`, et dans le dernier export bronze (pas seulement silver).

@@ -48,3 +48,8 @@ Ajoute chaque conseil dans la section Conseils de `outputs/basketvibe/learnings.
 - Fichier : `outputs/basketvibe/briefs/AAAA-MM-JJ-finances.md`.
 - En tête du brief : **l'alerte** (ou « pas d'alerte ») et les **actions** (personnel à embaucher ou renvoyer, avec la date ; plafond d'enchères).
 - Si l'export Finances date de plus d'une semaine, demande-le.
+
+## Données manquantes enregistrées (2026-10-26)
+- Jauge d'académie, personnel, solde et masse salariale des 11 autres clubs : absents des exports (`standings[]` : rang, force, `manager_*`). À réunir : demander dans le Discord (academy/general), consigner dans `outputs/basketvibe/veille/connaissance.md` (thème finances/académie, daté).
+- Facturation du personnel : maximum atteint dans la semaine entre deux prélèvements du dimanche 02:30 (observé le 25/10 : 85 000 pour 2 marketing virés le 18/10 après 02:30 + 4 kinés). Virer avant 02:30 pour économiser la semaine suivante.
+- `gold.bv_finance_projection` double-compte le match à domicile du jour tant que `bv_fixtures` garde le match « scheduled » : recalculer à la main (solde actuel + prime) en attendant.
