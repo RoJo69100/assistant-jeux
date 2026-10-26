@@ -3,5 +3,14 @@
     "type": "command",
     "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/statusline.ps1",
     "padding": 0
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "git pull --no-edit" }
+        ]
+      }
+    ]
   }
 }
