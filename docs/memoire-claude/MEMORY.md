@@ -1,19 +1,13 @@
-- [Ordre des agents](feedback-ordre-agents.md) — ordre à ma charge, relancer si retour incomplet
-- [Pas de temporalité](feedback-pas-de-temporalite.md) — pas de « ce soir » ni d'heures, actions du jour
-- [Agents medium + Sonnet](feedback-agents-medium-sonnet.md) — toujours medium/Sonnet, refuser sinon, annoncer la liste ordonnée
-- [Décider et progresser](feedback-decider-et-progresser.md) — trancher sans « peut-être », s'améliorer d'après les résultats
-- [Appliquer la veille](feedback-appliquer-veille-sans-valider.md) — modifier les skills sans attendre de validation
-- [Ne pas redemander](feedback-ne-pas-redemander.md) — vérifier le déjà-fait (skill deja-fait), noter ce que l'utilisateur déclare
-- [Confirmer en tableau](feedback-confirmer-exports-en-tableau.md) — « j'ai fait X » → tableau fait/vérifié/reste, puis lancer les agents
-- [Aucun flou](feedback-aucun-flou-noms-et-donnees.md) — verdicts nommés, jamais de « si » ; donnée manquante = on la réunit ensemble
-- [Couleurs et deux clubs](feedback-couleurs-et-deux-clubs.md) — 🔴🟠🟢 devant chaque action ; Team Soccer = toujours les 2 clubs
-- [Vérifier avant de dire](feedback-verifier-avant-de-dire.md) — agent vérificateur, briefs > alertes gold, plus de rappels de forme répétés
-- [HN talents par poste](feedback-hn-talents-par-poste.md) — Hockey Nation : juger chaque joueur sur talents fort/faible vs poste
-- [HN 4 équipes, format validé](feedback-hn-4-equipes-format.md) — 4 équipes à 20 avec valeurs et VIDE, PRO avec toutes unités + Extra Attacker
-- [Résultats en tableau](feedback-resultats-en-tableau.md) — plans, comparaisons et résultats présentés en tableau court
-- [Synthèse précise par jeu](feedback-synthese-precise-par-jeu.md) — tableaux par jeu catégorisés, saisie poste par poste, défaites analysées en détail, leviers de transfert
-- [Coût en tokens, un jeu à la fois](feedback-couts-tokens-un-jeu-a-la-fois.md) — agents seulement sur export plus récent, plan du jour en SQL, briefs plafonnés
-- [Fiche de saisie BV complète](feedback-bv-fiche-saisie-complete.md) — ligue/amical séparés, 17 joueurs en valeurs d'écran, focus adverse nommé, jamais « inchangé »
-- [HN équipes/coachs/scouts](feedback-hn-format-equipes-coachs-scouts.md) — tableaux par poste (VIDE/CONTRE-EMPLOI/TOP/À TRADER), coachs sur match skills + jeunes, scouts nommés, utiliser règles et Discord
-- [HN potentiel des joueurs](project-hn-potentiel-joueurs.md) — min/max selon talents faible/fort, verdict + futur PRO/FRM/VIRER, à appliquer avant tout échange
-- [Pas de Preview pour les amicaux](feedback-bv-amical-sans-preview.md) — tactique par quart-temps, tests focus/area
+- [Clone 2nd PC](second-pc-clone.md) — checklist A1 en attente du clone sur le 2e PC, reporté à jeudi 2026-10-22
+- [Test 2e export Discord](discord-second-export-test.md) — export hebdo ; tester un 2e import semaine du 2026-10-23
+- [Calendrier d'actions](idea-daily-actions-calendar.md) — fait pour BasketVibe : gold.bv_agenda + skill basketvibe-aujourdhui ; à étendre aux autres jeux
+- [Routine hebdo BasketVibe](basketvibe-weekly-routine.md) — dimanche après 04:00 : Entraînement + Finances + Personnel ; matchs après chaque match ; jeudi optionnel
+- [Avancement BasketVibe](basketvibe-progress.md) — 2026-10-18 nuit : 44/49 ; restent A1, E6, E9, F6 (veille, à tester), F7 (brief, à tester un matin)
+- [Amicaux quotidiens](basketvibe-daily-friendlies.md) — un amical par jour, à préparer à chaque fois (jeunes, tests v4, fatigue)
+- [Kit multi-jeux](multi-game-kit.md) — 28 jeux (docs/jeux.md) ; ordre : SixZero League (handball) puis Team Soccer ; agents globaux + docs/fiches/<jeu>/ faits le 2026-10-19
+- [SixZero League](sixzeroleague-progress.md) — 2e jeu (handball) : wiki lu, 4 skills à valider, checklist docs/checklist-sixzeroleague.md
+- [Team Soccer](teamsoccer-progress.md) — 3e jeu : skills validés, silver/gold + 9 fiches faits le 2026-10-19 ; ensuite veille des 20 annonces, tests des agents
+- [Actions le soir seulement](evening-only-actions.md) — il n'agit qu'après 19h ; plan du soir uniquement, pas de liste horodatée sur la journée
+- [Pas d'heures exactes](no-exact-times.md) — « ce soir, fais ça » sans horaires ; une seule recommandation nette
+- [Budget tokens](token-budget.md) — une tâche par session, /clear entre sujets, /compact au-delà de ~150k
+- [Défaites = agir fort](feedback-defaites-agir-fort.md) — série de défaites : décision forte ce soir, appliquer ce que dit le développeur, relire les briefs au « reprenons »
