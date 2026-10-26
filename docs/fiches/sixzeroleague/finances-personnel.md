@@ -12,6 +12,7 @@ Lue par l'agent `finances-personnel` après `commun.md`. Cases E7 (finances, spo
 2. Salaires revus seulement entre les saisons : les progrès de l'entraînement alourdissent la masse salariale de la saison suivante [W:Finances].
 3. Sponsor : règles du skill club § Sponsor ; prime de signature perdue si on re-signe le même [Dev chat].
 4. Infrastructures : seules l'Arena et le Fan Shop rapportent ; coûts et entretien suivent la division [W:Infrastructure]. Training Facilities et Youth Academy se jugent sur la progression et la relève, pas en remboursement.
+5. Fan Shop : 1,6 × (leader) à 0,7 × (dernier) selon le classement [Dev chat, devlog 0.5.7] : la projection doit dépendre de la place en ligue. Les coûts de niveau sont cachés volontairement ; ne les déduis que de `silver.sz_infrastructure_levels`. Training Facilities +0,04 par niveau : incertain [Dev chat, 2026-10-19].
 
 ## Données
 - `silver.sz_finances` : par jour, `balance`, sponsor actuel (`sponsor_weekly`, `sponsor_win_bonus`, `sponsor_can_choose`, `sponsor_offers`), prévision du cycle (`fc_revenue`, `fc_expenses`, `fc_wages`, `fc_net`, `fc_home_fixtures`), dernier rapport (`last_week`, `last_net`, `last_report`).

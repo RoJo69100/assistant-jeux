@@ -5,7 +5,6 @@
 
 # Données locales (jamais versionnées)
 samples/
-data/
 
 # Python
 .venv/

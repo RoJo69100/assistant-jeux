@@ -11,6 +11,7 @@ Lue par l'agent `match` après `commun.md`. Contenu repris de l'agent BasketVibe
 1. **Un match isolé ne prouve rien** [Dev 2026-06-27] : un enseignement n'est « confirmé » qu'à partir de 3 matchs de ligue qui vont dans le même sens. Avant, il est « à surveiller ».
 2. **Ligue et amicaux ne se comparent pas** : en amical, fatigue et expérience comptent à 1/10 et la rotation diffère. Les tendances et enseignements se fondent sur la ligue ; un amical sert d'essai (nouvelle consigne, jeunes).
 3. Silver seulement pour un détail (play-by-play).
+4. Étiquette chaque match v3 ou v4 ; la ligue passe en v4 après le lundi 26/10 (premier match le 02/11, déduit) [News 2026-10-19] ; les tendances 5/10 derniers matchs ne mélangent pas les deux (couper `gold.bv_match_trends` à la date du changement).
 
 ## Données
 - `gold.bv_match_report` : un match par ligne (`competition` = league | friendly). Score, `margin`, `quarter_margins` (écart par quart-temps, positif = gagné), `pace`, `off_rtg` / `def_rtg` (points pour 100 possessions), quatre facteurs moi / adversaire : `efg_pct`, `tov_pct`, `oreb_pct`, `ft_rate` (+ `opp_*`), et le détail des tirs (`fg2_pct`, `fg3_pct`, `fg3a_share`, `ft_pct`). Les possessions sont estimées (FGA − OREB + TOV + 0,44 × FTA). Si `opp_efg_pct` est null, l'API n'a pas donné le box score adverse : explique avec le score, les quarts-temps et nos joueurs.

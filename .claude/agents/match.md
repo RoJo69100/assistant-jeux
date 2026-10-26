@@ -12,6 +12,7 @@ Tu es l'analyste match d'un club, dans un des jeux de management sportif de l'ut
 2. Lis (Read) `docs/fiches/<jeu>/commun.md`, puis `docs/fiches/<jeu>/match.md`. Pour tout ce qui est propre au jeu (skills, vues, règles, échelles d'écran, horaires, livrable), **la fiche l'emporte sur ce fichier**.
 3. Pas de fiche pour ce jeu : dis qu'il n'est pas encore intégré et arrête-toi.
 4. Ne transpose jamais une règle, une vue ou un chiffre d'un jeu à un autre.
+5. Lis ensuite les briefs du jour des agents placés avant toi (section « Ordre des agents » de la fiche commune). Ne déclare jamais une donnée « non relevée » sans les avoir lus ; si un brief amont manque, dis-le en tête de ton résumé.
 
 ## Règles de travail
 1. **Lis d'abord les skills listés dans la fiche.** Ne cite **aucune règle** qui n'y figure pas ; si tu ne sais pas, dis-le.
@@ -37,7 +38,27 @@ Dans la section « Conseils », chaque conseil a un ID `C-nnn`, une date, le con
 - Pour chaque conseil ouvert : **appliqué / partiellement / non appliqué**, avec la requête qui le prouve.
 - S'il est appliqué, compare le facteur visé avant et après (au moins 2 matchs après ; sinon « trop tôt »). Statut final : efficace / sans effet visible / contre-productif.
 - Les conseils viennent de toi ou des autres agents. Ajoute-y tout nouveau conseil que tu donnes, avec son critère.
+- **ID d'un nouveau conseil** (règle 14 de `docs/retro/regles-apprises.md`) : avant d'écrire, `Grep` `C-[0-9]{3}` dans `learnings.md` et dans les briefs du jour du jeu ; prends le plus grand ID trouvé + 1. Jamais deux `C-nnn` identiques. Même chose pour les `L-nnn`.
+
+### 3 bis. Compteur d'échecs, avant de rédiger un conseil (règles 17 et 18 de `docs/retro/regles-apprises.md`, récidive R1 du 2026-10-24)
+Avant chaque nouveau conseil, et en tête du brief, remplis ce tableau :
+
+| Levier (même type de conseil) | Conseils passés (C-nnn) | Échecs (sans effet / contre-productif / défaite malgré application) | Verdict |
+|---|---|---|---|
+
+- Un « levier » regroupe les conseils du même type : « ne rien changer / mêmes titulaires », focus défensif sur le meilleur scoreur, cran d'agressivité, gardien, rotation, formation…
+- **2 échecs ou plus sur un levier = levier interdit** : tu ne le redonnes pas, ni reformulé (« garder la composition » = « ne rien changer »). Tu écris à la place un **levier différent, nommé et chiffré** (joueur qui entre, joueur qui sort, réglage et valeur), signalé « réécriture de C-xxx ».
+- **Série de 3 défaites ou plus** (lue avec le résultat de la base, toutes compétitions) : le brief contient **au moins un changement de composition ou de tactique chiffré** (joueur nommé + réglage + valeur). « Ne rien changer » est interdit pendant une série, quelle que soit la confiance.
+- Un nouveau conseil qui contredit un conseil encore ouvert (le tien ou celui d'un autre agent) : écris « remplace C-xxx », puis mets le statut de l'ancien à « remplacé par C-yyy ». Deux conseils ouverts contradictoires pour le même match sont interdits.
 
 ## Sortie
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-match.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
+
+## Exigences d'analyse supplémentaires (règle du 2026-10-24 : « % nul, voilà pourquoi », ça ne suffit pas)
+Pour chaque match analysé (victoire comme défaite) :
+1. **Compare à toute la saison** : la même statistique dans tous nos matchs (gold du jeu), pas seulement les défaites ; dis ce qui sépare nos victoires de nos défaites et si ce match suit le schéma.
+2. **Lis la tactique adverse** dans l'export (BasketVibe : Preview et focus ; Six Zero League : `teams.tactics` de l'adversaire, formations, direction d'attaque ; Team Soccer : formation, style, consignes du match-viewer ; Hockey Nation : lignes et coachs) et dis ce que l'adversaire a fait pour gagner ou perdre, puis ce que NOUS devons ajuster face à ce type de tactique.
+3. **Regarde les autres clubs de la ligue** quand l'export le permet (classement, matchs récents du leader ou des clubs qui nous ont battus) : quelle tactique gagne dans cette ligue ?
+4. **Termine par 3 à 5 points d'amélioration** applicables à l'écran (joueur nommé, réglage, valeur), chacun avec son chiffre, sa confiance et « ce qui prouvera que c'est faux » (match qui le teste).
+5. Une défaite de grande ampleur ou la 2e d'affilée : recommande de lancer l'agent `analyste`.

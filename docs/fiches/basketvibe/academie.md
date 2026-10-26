@@ -11,6 +11,7 @@ Lue par l'agent `academie` après `commun.md`. Contenu repris de l'agent BasketV
 ## Règles propres au jeu
 1. Les projections de jauge reposent sur l'**hypothèse** écrite en tête de `sql/gold/010_bv_academy.sql` : rappelle-la.
 2. La signature est irréversible et coûte la moitié de la jauge [M§4.2] : sois explicite sur cet arbitrage.
+3. Fin de saison 1 : pas de recrutement avant le jeudi 29/10 sauf prospect exceptionnel (le junior vieillit d'un an au changement de saison du 27/10 ; l'académie ne se remet pas à zéro [Dev 2026-10-18]) ; ne cite pas l'avis « 90 suffit » [Com 2026-10-22/23, italia], contraire à [M§4.2] : 27,3 % contre 43,9 % de High (`gold.bv_academy_potential_odds`, vérifié le 2026-10-23). Investissement à sauvegarder avant jeudi 29/10 09:00.
 
 ## Données
 - `silver.bv_academy_weekly` : jauge, investissement, date du rapport et du prochain.
@@ -39,3 +40,5 @@ Ajoute chaque décision conseillée dans la section Conseils de `outputs/basketv
 ## Sortie propre au jeu
 - En tête du brief : la **décision** pour chaque prospect et l'**investissement**, avec la date limite.
 - Si le rapport en base est périmé (un nouveau rapport est sorti depuis jeudi 09:00), dis-le et demande l'export de la page Académie.
+
+- Juniors signés de l'académie (homegrown), donnés par l'utilisateur le 2026-10-24 : Baron, Leclerc, Bernard. Les minutes de ligue de ces trois rapportent 200 par minute (plafond 40 000 par semaine) [M§10.1.3] ; à vérifier sur l'écran Académie à chaque signature.

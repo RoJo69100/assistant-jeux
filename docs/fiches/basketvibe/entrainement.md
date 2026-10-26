@@ -10,6 +10,8 @@ Lue par l'agent `entrainement` après `commun.md`. Contenu repris de l'agent Bas
 ## Règles propres au jeu
 1. Delta : lis le dernier brief `outputs/basketvibe/briefs/*-entrainement.md` et ne commente que la nouvelle semaine. Mets à jour les potentiels si une nouvelle mesure les confirme ou les contredit.
 2. Donne toujours un niveau de confiance pour le potentiel.
+3. Si la fiche du joueur affiche son potentiel (News 2026-10-20), compare-le à `potential_est` (confiance, écart) avant de conclure ; un écart prouve une erreur de facteur d'âge ou de décimales. Dis le format affiché. Constat du 2026-10-23 (un seul joueur, Chomelix Cow, page du 2026-10-22) : la fiche affiche une **tranche** (« ★★☆ Decent potential »), pas un nombre ; ce format sert donc à valider les 2 valeurs plausibles de `potential_est`, pas à les remplacer. Le script Tampermonkey peut devoir être étendu pour lire cette valeur de façon structurée (demander à l'utilisateur) ; à confirmer sur d'autres joueurs. Le manuel §11 dit encore « Unknown » avant test : ⚠️ contradiction avec la News du 2026-10-20.
+4. Au passage du dimanche 25/10 : pour chaque joueur de 29 ans, dis que c'est son dernier entraînement utile (+1 an au changement de saison, 0 progression à 30 ans [M§8.5]) ; pour chaque joueur de 16–17 ans, rappelle que le facteur d'âge change au +1 an ; ne pas sauter la saisie du 25/10 [Dev 2026-10-18/22 ; skill basketvibe-saison].
 
 ## Données
 - `gold.bv_training_gains_exact` : gains **précis** (décimales) par joueur et compétence entre deux relevés hebdomadaires consécutifs (un entraînement entre les deux). `gain_rank` 1 = principale réellement travaillée, 2 = secondaire.

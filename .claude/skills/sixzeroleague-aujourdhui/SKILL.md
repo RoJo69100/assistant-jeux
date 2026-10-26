@@ -9,13 +9,17 @@ Sources : `gold.sz_agenda` et `gold.sz_daily_alerts` (`sql/gold/015_sz_agenda.sq
 
 ## Méthode (coût minimal : pas d'agent, deux requêtes)
 1. `select day_label, at_time, category, action from gold.sz_agenda` puis `select priority, category, alert from gold.sz_daily_alerts order by priority` via `mcp__supabase__execute_sql`.
-2. L'utilisateur n'agit que **le soir après 19:00** : l'agenda le respecte déjà (un match de 13:00 ou 17:00 se prépare la veille au soir, son export se fait le soir). Ne donne jamais de liste sur la journée.
+2. L'utilisateur agit **maintenant**, quand il demande : donne les actions du jour, sans « ce soir » ni liste horodatée (un match de 13:00 ou 17:00 se prépare la veille). « Après un match » seulement quand l'action en dépend vraiment.
 3. Pour chaque action, ajoute le détail concret du dernier brief concerné, sans relancer d'agent : composition (`*-tactique.md`), enchères (`*-transferts.md`), fiche d'entraînement (`*-entrainement.md`), sponsor et infrastructures (`*-finances.md`), conseils ouverts `C-nnn` (`outputs/sixzeroleague/learnings.md`).
 4. Un brief de plus de 2 jours sur un sujet du soir (une saison dure 9 à 11 jours) : dis-le et propose l'agent.
 5. Si `silver.sz_schedule.captured_at` a plus de 24 h, l'agenda peut être faux : demande l'export de la page League.
 
+## Règles de l'utilisateur (2026-10-25)
+- Une seule tactique par défaut pour tous les matchs : jamais « saisir la compo de J14 / J15 » ; une saisie ne se refait que si un joueur change (blessure, suspension, brief Tactique).
+- Aucune action « après le match » (export de match, Finances, Entraînement post-cycle) dans la liste : je la demande une fois le match joué.
+
 ## Format de réponse
-- **Pas d'heures** : l'utilisateur fait tout le soir, quand il peut ; un match raté n'est pas grave. Écris « Ce soir : » puis **au plus 6 puces simples** dans l'ordre logique (exports, tactique des prochains matchs, agents), sans `HH:MM`, sans « avant », « après » ni « il est … ».
+- **Pas d'heures** : l'utilisateur fait tout quand il peut ; un match raté n'est pas grave. Écris « Aujourd'hui : » puis **au plus 6 puces simples** dans l'ordre logique (exports, tactique des prochains matchs, agents), sans `HH:MM`, sans « avant », « après » ni « il est … ».
 - Puis les alertes de priorité 1, une ligne chacune.
-- Termine par « Exports de ce soir : … ».
+- Termine par « Exports du jour : … ».
 - Pas de règle de jeu sans source ; pas de recommandation nouvelle : seulement ce que les briefs ont validé. Si une décision manque, propose l'agent.

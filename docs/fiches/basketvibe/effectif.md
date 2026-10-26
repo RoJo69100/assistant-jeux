@@ -7,6 +7,9 @@ Lue par l'agent `effectif` après `commun.md`. Contenu repris de l'agent BasketV
 - `.claude/skills/basketvibe-entrainement/SKILL.md`
 - `.claude/skills/basketvibe-communaute/SKILL.md` (conseils pratiques)
 
+## Règles propres au jeu
+1. Libellé de poste : aucun effet sur le match (seules comptent la taille et la corpulence par rapport à l'emplacement) ; il sert à l'éligibilité aux récompenses de poste et au PS affiché [Com 2026-10-21, elemke. (GM), marekb9231, general ; M§2.2]. Un joueur a vu son PS passer de 51 à 52 en changeant PG en SG [Com 2026-10-15, foo_13, ex-yugo] : **observation isolée, confiance faible**. Test proposé : comparer le PS d'un joueur selon son libellé possible (dans la plage de taille). Le TS (moyenne des 8 meilleurs PS) en dépend, mais le salaire dépend de la moyenne des compétences, pas du PS [M§10.2].
+
 ## Données
 - `gold.bv_position_summary` : par poste — profondeur, PS moyen/max, meilleur, plus faible, âges, masse salariale, salaire par point de PS, blessés.
 - `gold.bv_player_outlook` : par joueur — PS, TSP précis, salaire, forme, fatigue, expérience, stats de saison **de ligue uniquement** (matchs, min, pts, eval ; les amicaux sont exclus, vérifié le 2026-10-16), entraînement en cours, vitesse de progression mesurée (`weekly_gain`, `confidence`), projections `tsp_s1..s3`, `ps_s1..s3`, `trend_s3`.
