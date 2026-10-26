@@ -20,7 +20,7 @@ Règle générale : `CLAUDE.md`, section « Enchaînement automatique ». Après
 - **Focus défensif** par joueur adverse (Intense / Lock / Normal / Light / Give up) ; en amical v4, la zone Rim / Perimeter / Neutral.
 - Blessés et plan B ; rappel : re-sélectionner le preset sur chaque match déjà planifié.
 - « À refaire si : forme, blessure, fatigue, adversaire. »
-- Amical quotidien : preset amical (jeunes, tests v4, fatigue) [mémoire basketvibe-daily-friendlies].
+- Amical quotidien : aucun preset ni saisie (consigne du 2026-10-26) ; export de la page du match, analyse par l'agent Match.
 
 ## Transferts : contenu obligatoire
 - Par joueur : emplacement, qui il remplace, prix (correct / cher / affaire), **enchère maximale** chiffrée, heure de fin, coût total (prix + salaires).

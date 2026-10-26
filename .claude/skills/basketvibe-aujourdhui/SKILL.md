@@ -11,7 +11,7 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
 1. Heure actuelle (Paris). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `mcp__supabase__execute_sql`. Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
 2. Pour chaque action, ajoute **le détail concret** pris dans le dernier brief concerné (sans relancer d'agent) :
    - ligue : cinqs, consignes et focus défensif → dernier `*-tactique.md` (fiche de saisie, mise à jour éventuelle en bas du brief) ;
-   - amical : preset amical et test du jour → même brief (plan des amicaux) ;
+   - amical : aucune action de saisie (pas de preset d'amical, consigne du 2026-10-26) ; seulement l'export de la page du match après coup ;
    - enchères qui se terminent aujourd'hui ou cette nuit : tableau ACTIONS du dernier `*-transferts.md` (montant maximum, heure limite). `gold.bv_agenda` ne connaît que **mes ventes**, pas mes enchères d'achat : lis-les dans le brief ;
    - entraînement (samedi soir) : fiche de saisie du dernier `*-entrainement.md` ;
    - personnel ou finances : actions datées du dernier `*-finances.md`.
