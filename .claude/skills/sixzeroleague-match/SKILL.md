@@ -51,3 +51,8 @@ Sources : **[W:Rubrique]** = wiki officiel du jeu, lu en entier le 2026-10-18 (c
 ## [Obs] Nos données
 - Le 2026-10-18 au soir : « Round 1 dans 15 h 45 », saison remise à zéro le jour même (dit l'utilisateur). Aucun match encore joué.
 - API JSON : `/api/seasons/current`, `/api/seasons/current/my-competition`, `/api/leagues/<id>`, `/api/cups/current` (pages Overview et Competitions).
+
+## [Veille 2026-10-26] Mises à jour (V-20261026-1, -3, -5)
+- Les formations ne sont plus limitées à 5-1 / 6-0 : la version 0.6.1 « Tactical Depth » est en ligne ; l effet des nouvelles options (4-2, 3-2-1, 3-3, directions d attaque) n est documenté nulle part, à tester une seule à la fois [Dev chat, Gazelle, 2026-10-23 07:37 et 2026-10-24 13:37 UTC ; V-20261026-1].
+- Un ailier ne peut pas défendre à l extérieur sans la pénalité de hors-poste ; règle annoncée comme transitoire, Gazelle cherche une solution [Dev chat, 2026-10-25 15:56 UTC ; V-20261026-3].
+- Hypothèse (avis de joueurs, non confirmé) : pas de remplacements ordonnés en cours de match pour l instant [Com chat, 2026-10-25 21:21 UTC ; V-20261026-5].

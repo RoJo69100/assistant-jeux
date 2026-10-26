@@ -52,3 +52,8 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 - Les joueurs de l'alpha ne seront pas conservés à la sortie officielle ; tout le monde repart en dernière division [Dev chat, 2026-09-23].
 - Prospect étranger : utile surtout pour les futures sélections nationales [Dev chat, 2026-10-20].
 - Avis (pas des règles) : académie niveau 7 à 8 donne des joueurs vers 20 de note ; joueur d'académie ~5 à 5,5 mois de vie [Com chat, 2026-10-19 et 2026-10-20].
+
+## [Veille 2026-10-26] Mises à jour (V-20261026-6, -7)
+- Indices voulus par le jeu sur les adversaires : tactiques visibles dans les statistiques de match, scouting, niveau du club, rediffusions, MVP [Dev chat, Gazelle, 2026-10-23 10:00 UTC ; V-20261026-7].
+- Anecdote : un joueur a eu 3 exclusions dans les 6 dernières minutes d un match de coupe [Com chat, 2026-10-25 17:32 UTC ; V-20261026-6].
+- À surveiller (sans date) : pas d enchère plus grand pour les gros prix, page de statistiques de ligue. L export Discord #dev-log s arrête au 2026-10-22 : la 0.6.1 y manque.
