@@ -1,0 +1,48 @@
+# Gabarit de config d'un jeu — copier en <jeu>.yaml et remplir.
+# Les attentes générales sont dans docs/attentes/attentes.md : ne rien y recopier ici.
+# Règle : une valeur non vérifiée porte « # à vérifier » ; elle est vérifiée avant d'être utilisée.
+
+jeu:
+  id:                # identifiant court, utilisé dans les tables et les dossiers (ex. basketvibe)
+  nom:
+  sport:             # famille de docs/jeux.md
+  prefixe_sql:       # ex. bv_ ; vues gold attendues : <prefixe>agenda, <prefixe>daily_alerts
+  clubs: []          # un bloc par club dans chaque rendu si plusieurs
+  fuseau: Europe/Paris
+
+sources:             # lues à 100 % par la veille (domaine Connaissance)
+  manuel:
+  devlog:
+  discord:           # data/discord/<jeu>/
+  forum:
+  chat:
+
+rythme:              # ce qui revient chaque semaine ; sert au « aujourd'hui / demain »
+  - { quand: , quoi: , verrouillage: }
+
+competitions:        # une entrée par compétition ; c'est ici qu'on dit ce qui demande une saisie
+  ligue:  { saisie: oui, preset: , but: gagner }
+  coupe:  { saisie: , preset: , but: }
+  amical: { saisie: non, preset: non, but: tester }
+
+ecrans:              # ordre EXACT des colonnes et des lignes à l'écran (attente R-4)
+  composition:
+    lignes: []       # ex. ordre des joueurs tel qu'exporté
+    colonnes: []
+
+exports:             # quoi exporter, quand, et ce que ça déclenche
+  - { page: , quand: , declenche: [] }
+
+domaines:            # présent: non = jamais mentionné dans les rendus
+  equipe:          { present: oui }
+  tactique:        { present: oui }
+  entrainement:    { present: oui, reglages: }
+  jeunes:          { present: , specificites: }
+  transferts:      { present: , taxe: , delai_revente: , base_historique: }
+  finances:        { present: oui, sponsor: }
+  personnel:       { present: }
+  infrastructures: { present: }
+
+ordre_agents: [match, effectif, finances, academie, entrainement, tactique, transferts]
+
+specificites: []     # règles propres au jeu qui changent une décision, chacune avec sa source

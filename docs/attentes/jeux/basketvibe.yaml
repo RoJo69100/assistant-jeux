@@ -1,0 +1,68 @@
+# BasketVibe — config (exemple de remplissage du gabarit _modele.yaml)
+# Attentes générales : docs/attentes/attentes.md.
+
+jeu:
+  id: basketvibe
+  nom: BasketVibe
+  sport: basket
+  prefixe_sql: bv_          # gold.bv_agenda, gold.bv_daily_alerts, gold.bv_match_report
+  clubs: [Chomelix Cow]
+  fuseau: Europe/Paris
+
+sources:
+  manuel: https://www.basketvibe.com/guide
+  devlog: https://www.basketvibe.com/devlog
+  discord: data/discord/basketvibe/
+  forum: null
+  chat: null
+  connaissance: outputs/basketvibe/veille/connaissance.md   # à créer (veille intégrale)
+
+rythme:
+  - { quand: chaque jour,          quoi: amical à domicile 08:00, verrouillage: "07:45" }
+  - { quand: jours de ligue,      quoi: match de ligue, verrouillage: "19:45" }   # jours exacts lus dans gold.bv_agenda
+  - { quand: dimanche 04:00,      quoi: entraînement, salaires, personnel facturé }
+  - { quand: jeudi 09:00,         quoi: rapport d'académie }
+  - { quand: fin de saison,       quoi: +1 an pour tous les joueurs }
+
+competitions:
+  ligue:  { saisie: oui, preset: League Tactic, but: gagner }
+  coupe:  { saisie: oui, preset: League Tactic, but: gagner }          # même preset que la ligue (export du 26/10)
+  amical: { saisie: non, preset: non, but: tester, note: "pas de preset ni de saisie à proposer (utilisateur, 2026-10-26) ; on analyse l'export après coup" }
+
+ecrans:
+  composition:
+    lignes: [Q1, Q2, Q3, Q4, OT]
+    colonnes: [PG, SG, SF, PF, C]
+  consignes_joueur:                       # ordre de l'écran, valeurs 1 à 5
+    colonnes: [joueur, poste, quart-temps, role (passe→score), offensive focus (low→primary), shooting focus (2 pts→3 pts), agressivité défensive]
+  focus_defensif:
+    colonnes: [joueur adverse, focus 1 Give up → 5 Lock]
+  defensive_area:
+    colonnes: [joueur adverse, zone Perimeter / Middle / Rim]   # amicaux seulement
+
+exports:
+  - { page: match,             quand: après chaque match,    declenche: [match] }
+  - { page: roster,            quand: après chaque match,    declenche: [effectif] }
+  - { page: preview,           quand: avant un match de ligue, declenche: [tactique] }
+  - { page: training,          quand: dimanche après 04:00,  declenche: [entrainement] }
+  - { page: finance,           quand: dimanche après 04:00,  declenche: [finances] }
+  - { page: personnel,         quand: dimanche après 04:00,  declenche: [finances] }
+  - { page: academy,           quand: jeudi après 09:00,     declenche: [academie] }
+  - { page: transfers,         quand: si plus de 24 h,       declenche: [transferts] }
+  - { page: transfers_global-history, quand: avec le marché, declenche: [transferts] }
+
+domaines:
+  equipe:          { present: oui, notes: "forme 1–10, fatigue (zones), expérience ; formé au club = bonus homegrown" }
+  tactique:        { present: oui }
+  entrainement:    { present: oui, reglages: "principal + secondaire par joueur, une fois par semaine" }
+  jeunes:          { present: oui, specificites: "jauge 0–100 %, investissement hebdo (max 100 000), test de potentiel 25 000" }
+  transferts:      { present: oui, taxe: "5 %", delai_revente: "1 semaine", minimum_effectif: 8, base_historique: transfers_global-history }
+  finances:        { present: oui, sponsor: "un contrat par saison" }
+  personnel:       { present: oui, postes: [médecins, kinés, psychologues, marketing], facturation: "maximum atteint dans la semaine" }
+  infrastructures: { present: non }
+
+ordre_agents: [match, effectif, finances, academie, entrainement, tactique, transferts]
+
+specificites:
+  - "Résultat d'un match : toujours my_result / is_mine, jamais le score brut."
+  - "Moteur v4 en amical depuis le 11/10 : les amicaux servent de banc d'essai."
