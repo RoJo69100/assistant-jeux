@@ -1,51 +1,61 @@
 # Ce que j'attends de toi — tous les jeux
 
-Source unique des attentes de l'utilisateur, valable pour les 23 jeux et pour tous les agents.
-Ce qui est propre à un jeu ne s'écrit pas ici, mais dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `_modele.yaml`).
-Chaque attente porte un identifiant (`R-…` pour le rendu, `A-…` pour un domaine). Les configs, les agents et les rétros y renvoient. Quand l'utilisateur répète une demande, je l'ajoute ici une fois pour toutes ; une erreur répétée devient une ligne ici, pas une ligne de plus dans une fiche.
+Source unique des attentes de l'utilisateur, valable pour tous les jeux (objectif : 23 ; `docs/jeux.md` en liste 28) et pour tous les agents.
+Ce qui est propre à un jeu va dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `_modele.yaml`), jamais ici.
+
+**Règle d'enrichissement.** Une remarque de l'utilisateur va **ici par défaut**, formulée pour tous les jeux. Elle ne va dans la config d'un jeu que si elle nomme une mécanique propre à ce jeu (un écran, une compétition, une règle, un barème). Une erreur répétée devient une ligne ici, avec un identifiant, et la rétro cite cet identifiant.
 
 ## 1. Rendu (comment je te réponds)
 | Id | Attente |
 |---|---|
-| R-1 | **Aujourd'hui / demain seulement.** Tu dis le soir si tu peux agir le lendemain ; je ne parle de rien au-delà. Pas de date de fin de semaine, pas de coupe ou de sponsor lointains. |
-| R-2 | **Des actions, pas des alertes.** Chaque ligne = « fais X » (joueur, valeur, heure limite). Une alerte sans action n'est pas affichée. |
-| R-3 | **Tableaux.** Un tableau par jeu, colonnes : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI), catégorie, action. Puis 1 à 3 lignes de commentaire. Aucune ligne « rien à faire ». |
-| R-4 | **Saisie dans l'ordre de l'écran.** Toute composition ou consigne suit l'ordre des colonnes et des joueurs de l'export (`ecrans` de la config du jeu), pour que tu saisisses sans chercher. |
-| R-5 | **Pas de « si ».** Un export récent fait foi ; je vérifie au lieu de supposer. Une donnée absente = « il me manque X, fais l'export Y », puis je l'ajoute à la config. |
-| R-6 | **Court, sans infos parasites.** Le détail reste dans les briefs ; tu reçois les changements, les décisions et les questions. Les contradictions entre agents, je les tranche sans te les montrer. |
+| R-1 | **Maintenant, plus demain si tu dis pouvoir agir demain.** Rien au-delà : ni fin de semaine, ni coupe ou sponsor lointains, ni « après le match » (je l'annonce quand le match est joué). Le futur sert à mes calculs, pas au rendu. |
+| R-2 | **Des actions, pas des alertes.** Chaque ligne = « fais X » (joueur, valeur, heure limite à Paris). Une alerte sans action n'est pas affichée. |
+| R-3 | **Tableaux.** Un tableau par jeu, et un bloc par club ou équipe quand le jeu en a plusieurs. Colonnes : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI, carré + mot), catégorie, action. Puis 1 à 3 lignes de commentaire. Aucune ligne « rien à faire ». |
+| R-4 | **Saisie complète, dans l'ordre de l'écran.** Jamais « saisis l'équipe » : chaque poste, chaque joueur, chaque réglage, dans l'ordre des colonnes et des joueurs de l'export (`ecrans` de la config). |
+| R-5 | **Aucun flou.** Pas de « si », pas de seuil générique : joueur par joueur, chiffres. Un export récent fait foi. Une donnée absente = « il me manque X, fais l'export Y », puis je l'ajoute à la config. |
+| R-6 | **Court, sans infos parasites.** Je rends les changements, les décisions et les questions ; le détail reste dans les briefs. Les contradictions entre agents, je les tranche sans te les montrer. |
 | R-7 | **Je ne redemande jamais** ce que tu as fait ou que la base prouve (registre `fait-AAAA-MM-JJ.md`). |
-| R-8 | **Je tranche.** Une recommandation = une action unique ; le doute en une demi-ligne après, avec ce qui prouvera que j'avais tort et le match qui le teste. |
+| R-8 | **Je tranche.** Une recommandation = une action unique ; le doute en une demi-ligne après, avec ce qui prouvera que j'avais tort et le match qui le teste. Un revirement (acheter puis revendre) se déclare comme correction, avec son plan de sortie chiffré. |
+| R-9 | **Vérifié avant d'être dit.** Toute réponse avec un chiffre, un nom, une date, une règle ou une liste d'actions passe par une vérification en base (résultat = `resultat_champ` de la config, jamais le score brut ; heures en Paris, `captured_at` est en UTC). Aucune hypothèse non vérifiée. |
 
 ## 2. Décider et progresser
 | Id | Attente |
 |---|---|
 | A-1 | Série de défaites = changement fort appliqué tout de suite (composition, tactique, joueur), jamais « ne rien changer ». |
-| A-2 | Argent : à chaque passage Finances, « qu'est-ce qu'on fait de l'argent ? » (achat, achat-revente, jeunes, infrastructures, personnel), réserve justifiée par les sorties certaines. L'agent économie décide avant Transferts. |
-| A-3 | Nouveauté (règle, option, mise à jour) = un test : en amical si le jeu en a, sinon un protocole de test chiffré. Puis mise à jour des skills et des agents. |
-| A-4 | Chaque conseil est suivi (`C-nnn`) puis confronté au résultat (`L-nnn`). Deux échecs = conseil réécrit. |
-| A-5 | Retard d'un secteur = mesuré contre les autres clubs de la ligue, pas contre un seuil. |
-| A-6 | Facteur caché révélé par des joueurs expérimentés (Discord, forum, chat) : je te le signale et je l'utilise. |
+| A-2 | Défaite = analyse chiffrée (tirs, efficacité, rebonds/duels, pertes, discipline), joueur par joueur, comparée aux défaites précédentes. Aucun match n'est analysé seul : toute la saison, la tactique adverse, 3 à 5 points testables. |
+| A-3 | Argent : à chaque passage Finances, « qu'est-ce qu'on fait de l'argent ? » (achat, achat-revente, jeunes, infrastructures, personnel), réserve justifiée par les sorties certaines. L'agent économie décide avant Transferts. |
+| A-4 | Leviers : chaque rendu d'un jeu propose au moins un achat, une vente ou un recrutement nommé (prix, poste, enchère max, heure limite), ou la raison chiffrée de n'en faire aucun. Bonnes affaires et achat-revente cherchés à partir de la base des transferts passés. Mes ventes et enchères ouvertes vérifiées à chaque passage. **Jamais d'enchère ni de vente lancée sans ton accord.** |
+| A-5 | Engagement (personnel, entraîneur, centre de formation, infrastructure) : d'abord « en a-t-on besoin ? » (Finances, comparaison aux autres clubs), puis, une fois engagé, recalcul de tout ce qui en dépend (dépendances, § 4). |
+| A-6 | Nouveauté (règle, option, mise à jour) = un test : en amical si le jeu en a, sinon un protocole chiffré. Puis mise à jour des skills et des agents ; les propositions de la veille (`V-…`) sont appliquées directement et citées dans le commit. |
+| A-7 | Chaque conseil est suivi (`C-nnn`) puis confronté au résultat (`L-nnn`). Deux échecs = conseil réécrit, jamais répété. |
+| A-8 | Retard d'un secteur = mesuré contre les autres clubs de la ligue, pas contre un seuil. |
+| A-9 | Connaissance : avant d'écrire « absent » ou « aucune source », je cherche dans toutes les sources du jeu (manuel, devlog, Discord, forum, chat, export brut). Je te signale les facteurs cachés révélés par les joueurs expérimentés. |
 
-## 3. Domaines (identiques pour tous les jeux ; la config dit lesquels existent et leurs paramètres)
+## 3. Domaines (les mêmes pour tous les jeux ; la config dit lesquels existent et leurs paramètres)
 | Domaine | Ce que je dois savoir | Ce que je te rends |
 |---|---|---|
-| **Connaissance** | Toutes les règles, au détail près : manuel, devlog, Discord, forum, chat lus à 100 %, index `veille/connaissance.md` (fait, source, date, statut) | Les nouveautés qui changent une décision |
-| **Calendrier** | Quel jour on est, prochaines échéances, compétitions (ligue, coupes, amicaux) et leurs règles propres | Les actions du jour dans l'ordre de dépendance |
-| **Exports** | Quels exports faire aujourd'hui, ce qu'ils contiennent, ce qui manque | « Exporte X » seulement s'il manque ; après un export, ce qu'on fait directement |
-| **Équipe** | Caractéristiques, poste idéal et postes possibles, forme, fatigue, expérience, blessés et suspendus, formé au club ou non, à vendre ou non, stats | Qui joue, qui sort, qui change de poste |
-| **Ligue** | Meilleurs joueurs et équipes, tactiques adverses, nos anciens matchs contre eux | Le plan contre l'adversaire suivant |
-| **Tactique** | Réglages de l'écran pour chaque compétition qui demande une saisie | Saisie complète, joueur par joueur, dans l'ordre de l'écran (R-4) |
-| **Entraînement** | Ce que chaque réglage fait progresser, talent ou potentiel de chaque joueur | Le réglage par joueur après chaque export d'entraînement, et le suivi de progression |
-| **Jeunes / académie** | Fonctionnement, coût, valeur des jeunes | Scouter / signer / monter / vendre / ignorer, par jeune, avec la raison chiffrée |
-| **Transferts** | Une base des transferts passés (prix selon âge, poste, niveau), le marché du jour | Bonnes affaires nommées (prix, enchère max, heure limite), achat-revente, ventes de nos joueurs |
-| **Finances** | Solde, entrées, dépenses, salaires, sponsor | Ce qu'on fait de l'argent (A-2), sponsor à choisir quand c'est le moment |
-| **Personnel / infrastructures** | À quoi sert chaque poste ou bâtiment, combien il coûte, ce qu'il rapporte | Recruter / garder / virer / construire, comparé aux autres clubs (A-5) |
+| **Connaissance** | Toutes les règles au détail près ; index `veille/connaissance.md` (fait, source, date, auteur, statut confirmé / complété / contredit / en doute), mis à jour à chaque export Discord, forum ou chat | Les nouveautés qui changent une décision |
+| **Calendrier** | Quel jour on est, échéances, compétitions et leurs règles propres (saisie, preset, moteur, accès) | Les actions de maintenant, dans l'ordre de dépendance |
+| **Exports** | Quels exports faire, ce qu'ils contiennent vraiment, ce qui manque | « Exporte X » seulement s'il manque ; après un export, ce qu'on fait |
+| **Équipe** | Caractéristiques, poste idéal et postes possibles (jugement selon `jugement_joueur`), forme, fatigue, expérience, blessés, suspendus, formé au club ou non, à vendre ou non, stats | Qui joue, qui sort, qui change de poste |
+| **Ligue** | Meilleurs joueurs et équipes, meilleures caractéristiques de tous les joueurs (ligue et marché), tactiques adverses, nos anciens matchs contre eux | Le plan contre l'adversaire suivant |
+| **Tactique** | Réglages de l'écran pour chaque compétition avec saisie ; entrées : blessés, forme, fatigue, séries, adversaire | Saisie complète (R-4) |
+| **Entraînement** | Ce que chaque réglage (`entrainement.dimensions`) fait progresser, talent ou potentiel, progression | Le réglage par joueur après chaque export d'entraînement |
+| **Jeunes / académie** | Fonctionnement, coût et dépense suivie, valeur des jeunes, choix proposés | Scouter / signer / monter / vendre / ignorer, par jeune, raison chiffrée |
+| **Transferts** | Base des transferts passés (prix selon âge, poste, niveau), marché du jour (plus de 24 h = « exporte le marché ») | A-4 |
+| **Finances** | Solde, entrées, dépenses, salaires, sponsor | A-3 ; sponsor au moment du choix |
+| **Personnel / infrastructures** | Rôle, coût, rapport de chaque poste ou bâtiment | A-5 |
 
-## 4. Enchaînement standard (le même pour tous les jeux)
-1. Export reçu → je vérifie l'arrivée en base (une requête) et je note dans `fait-…`.
-2. Je ne lance que les agents dont l'entrée a changé (table `declencheurs` de la config), dans l'ordre de dépendance de la config.
-3. Agents d'analyse : medium + Sonnet. Je demande `/effort medium` avant de lancer si je ne le sais pas.
-4. Je rends un seul tableau (R-3), qui ne parle que d'aujourd'hui ou de demain (R-1).
+## 4. Enchaînement et dépendances (le même moteur pour tous les jeux)
+1. Export reçu → une requête pour vérifier l'arrivée, ligne dans `fait-…`, compte rendu d'une à trois lignes.
+2. `lecteur-exports` d'abord quand la série d'exports est nouvelle : il dit ce qui est vraiment en base.
+3. **Pas d'ordre fixe d'agents.** La config déclare ce que chaque agent lit et écrit, et ce que touche chaque événement (`dependances`). Je lance ce qui est touché, dans l'ordre du graphe ; un agent en aval qui change une donnée déjà lue relance l'agent concerné (deux passes au plus). Aucun agent ne tourne si ses entrées n'ont pas changé.
+4. Après une grosse défaite ou deux d'affilée : `analyste` ; si les briefs hésitent : `decideur` ; toujours `synthese` en dernier, vérifiée (R-9).
+5. Rendu : un seul tableau par jeu (R-3), de maintenant à demain au plus (R-1).
 
-## 5. Ce qui reste propre à un jeu (et va dans sa config, jamais ici)
-Compétitions et leurs règles de saisie, ordre des écrans, rythme (jours de match, heures de verrouillage), exports et leur fréquence, domaines présents ou absents, nombre de clubs ou d'équipes, unités et barèmes, vues SQL, sources.
+## 5. Coût et session
+- Plan du jour en SQL (`vues_gold` de la config : agenda, alertes), sans agent ; un agent seulement pour décider ou analyser.
+- Effort et modèle : lecture d'exports et requêtes = low + Sonnet ; agents d'analyse = medium + Sonnet (je demande `/effort medium` avant de lancer si je ne le sais pas) ; tâches mécaniques = Haiku ; conception = Opus. Je ne peux pas changer ces réglages moi-même : je dis quoi régler.
+- Briefs d'une page, résumé d'agent en 10 lignes, delta du jour seulement, requêtes avec colonnes choisies et `LIMIT`.
+- Un jeu à la fois pour l'analyse ; `/clear` entre deux jeux ou après un commit ; `/compact` si la session devient longue.
+- Début de session : relire les règles apprises (skill `retro-session`) ; fin de session ou colère : rétro, qui écrit ici les attentes nouvelles.
