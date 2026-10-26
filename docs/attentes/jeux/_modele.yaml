@@ -1,48 +1,109 @@
 # Gabarit de config d'un jeu — copier en <jeu>.yaml et remplir.
 # Les attentes générales sont dans docs/attentes/attentes.md : ne rien y recopier ici.
-# Règle : une valeur non vérifiée porte « # à vérifier » ; elle est vérifiée avant d'être utilisée.
+# Règle : une valeur non vérifiée porte « # à vérifier » ; elle est vérifiée avant d'être utilisée (R-9).
 
 jeu:
-  id:                # identifiant court, utilisé dans les tables et les dossiers (ex. basketvibe)
+  id:                  # identifiant court (dossiers, tables) ex. basketvibe
   nom:
-  sport:             # famille de docs/jeux.md
-  prefixe_sql:       # ex. bv_ ; vues gold attendues : <prefixe>agenda, <prefixe>daily_alerts
-  clubs: []          # un bloc par club dans chaque rendu si plusieurs
-  fuseau: Europe/Paris
+  sport:               # famille de docs/jeux.md
+  prefixe_sql:         # ex. bv_
+  fuseau_affichage: Europe/Paris
 
-sources:             # lues à 100 % par la veille (domaine Connaissance)
+equipes:               # un bloc par équipe dans chaque rendu (R-3)
+  - { id: , nom: , niveau: , controle: [composition, entrainement, transferts], limite_effectif: }
+
+ligue: { taille: , division: , montee_descente: }
+
+unites_echelles:
+  devise:
+  competences: { nombre: , echelle: }           # ex. 8 compétences sur 100
+  forme: ""                                     # ex. 1–10
+  conversion_base_ecran: ""                     # ex. base 0–4 = écran 1–5 (+1)
+
+jugement_joueur: []    # ordre des critères, ex. [talents_vs_poste, note, stats]
+
+sources:               # lues à 100 % par la veille (A-9)
   manuel:
   devlog:
-  discord:           # data/discord/<jeu>/
+  discord:             # data/discord/<jeu>/
   forum:
   chat:
+  connaissance:        # outputs/<jeu>/veille/connaissance.md
 
-rythme:              # ce qui revient chaque semaine ; sert au « aujourd'hui / demain »
-  - { quand: , quoi: , verrouillage: }
+exports_texte:         # chat, forum, Discord : comment ils arrivent
+  - { type: , canal: , frequence: , destination: , declenche: [veille] }
 
-competitions:        # une entrée par compétition ; c'est ici qu'on dit ce qui demande une saisie
-  ligue:  { saisie: oui, preset: , but: gagner }
-  coupe:  { saisie: , preset: , but: }
-  amical: { saisie: non, preset: non, but: tester }
+rythme:                # ce qui revient ; sert à « maintenant / demain » (R-1)
+  - { quand: , quoi: , verrouillage: , fuseau_heure: }   # fuseau_heure : Paris, hôte, ligue ou UTC
 
-ecrans:              # ordre EXACT des colonnes et des lignes à l'écran (attente R-4)
+competitions:          # une entrée par compétition
+  ligue:  { saisie: oui, preset: , moteur: , verrouillage: , acces: , but: gagner }
+  coupe:  { saisie: , preset: , calendrier: , acces: , but: }
+  amical: { saisie: , preset: , but: tester }
+
+ecrans:                # ordre EXACT de l'écran (R-4) ; un bloc par écran de saisie
   composition:
-    lignes: []       # ex. ordre des joueurs tel qu'exporté
+    lignes: []
     colonnes: []
+    ordre_joueurs: ""  # ex. par poste puis alphabétique
+  consignes_joueur:
+    colonnes: []
+    valeurs_permises: {}          # colonne -> liste ou échelle
+  # autres écrans possibles : formation, consignes_matrice (colonnes × actions), remplacements_programmes, focus_defensif
 
-exports:             # quoi exporter, quand, et ce que ça déclenche
-  - { page: , quand: , declenche: [] }
+options_a_tester: []   # options vues dans le jeu ou citées par des joueurs, effet inconnu (A-6)
 
-domaines:            # présent: non = jamais mentionné dans les rendus
+exports:               # page, quand, ce que ça déclenche (noms = événements de dependances)
+  - { page: , quand: , evenement: , page_typee_reelle: }
+
+domaines:              # present: non = jamais mentionné dans les rendus
   equipe:          { present: oui }
   tactique:        { present: oui }
-  entrainement:    { present: oui, reglages: }
-  jeunes:          { present: , specificites: }
-  transferts:      { present: , taxe: , delai_revente: , base_historique: }
+  entrainement:    { present: oui, dimensions: [], frequence: }
+  jeunes:          { present: , depense_suivie: oui, revelations_par_jour: , choix_par_tirage: , chemins: [] }
+  transferts:      { present: , taxe: , delai_revente: , minimum_effectif: , base_historique: }
   finances:        { present: oui, sponsor: }
-  personnel:       { present: }
-  infrastructures: { present: }
+  personnel:       { present: , postes: [], facturation: , leviers: [] }
+  infrastructures: { present: , batiments: [] }
+indicateurs: []        # badges, couleurs, notes de l'écran : { libelle, sens, comment_ameliorer }
 
-ordre_agents: [match, effectif, finances, academie, entrainement, tactique, transferts]
+seuils: {}             # alertes chiffrées propres au jeu (forme, solde, cartons…)
 
-specificites: []     # règles propres au jeu qui changent une décision, chacune avec sa source
+vues_gold:
+  agenda:
+  alertes:
+  rapport_match:
+  base_transferts:
+  resultat_champ:      # ex. my_result / is_mine (R-9)
+
+# Dépendances : remplace tout ordre fixe d'agents (attentes § 4).
+dependances:
+  agents:              # ce que chaque agent lit et écrit (noms = fichiers .claude/agents/)
+    match:              { lit: [export_match], ecrit: [resultats] }
+    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances-personnel: { lit: [finances, personnel, besoins_postes], ecrit: [capacite_invest] }
+    academie:           { lit: [rapport_academie, capacite_invest], ecrit: [jeunes_retenus] }
+    entrainement:       { lit: [export_entrainement, roster, niveau_entraineur], ecrit: [reglages_entrainement] }
+    tactique:           { lit: [dispo_joueurs, resultats, reglages_entrainement], ecrit: [composition] }
+    transferts:         { lit: [marche, capacite_invest, besoins_postes, composition], ecrit: [achats_ventes] }
+  evenements:
+    export_match:        { touche: [export_match] }
+    export_roster:       { touche: [roster] }
+    export_finances:     { touche: [finances, personnel] }
+    export_entrainement: { touche: [export_entrainement] }
+    export_academie:     { touche: [rapport_academie] }
+    export_marche:       { touche: [marche] }
+    engagement:          # personnel, entraîneur, centre de formation, infrastructure (A-5)
+      d_abord: finances-personnel        # en a-t-on besoin ?
+      si_engage: { touche: [personnel, capacite_invest, niveau_entraineur] }
+    achat_ou_vente:      { d_abord: finances-personnel, si_fait: { touche: [roster] } }
+    fin_de_saison:       { touche: [roster, finances, rapport_academie] }
+    regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
+  cascade:
+    - "Lancer d_abord, puis chaque agent dont `lit` croise ce qui est touché ou écrit, dans l'ordre du graphe."
+    - "Un agent qui change une donnée déjà lue relance l'agent qui l'a lue (deux passes au plus)."
+    - "Aucun agent si ses entrées n'ont pas changé."
+
+specificites: []       # { regle, source, date, statut } : règles propres au jeu qui changent une décision
+confidentialite: []    # champs jamais affichés
+rendu_obligatoire: []  # ex. Hockey Nation : montrer l'équipe résultante à 20 joueurs

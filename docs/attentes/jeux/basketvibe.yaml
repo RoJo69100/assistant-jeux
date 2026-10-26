@@ -1,13 +1,24 @@
-# BasketVibe — config (exemple de remplissage du gabarit _modele.yaml)
-# Attentes générales : docs/attentes/attentes.md.
+# BasketVibe — config (gabarit : _modele.yaml ; attentes : ../attentes.md)
 
 jeu:
   id: basketvibe
   nom: BasketVibe
   sport: basket
-  prefixe_sql: bv_          # gold.bv_agenda, gold.bv_daily_alerts, gold.bv_match_report
-  clubs: [Chomelix Cow]
-  fuseau: Europe/Paris
+  prefixe_sql: bv_
+  fuseau_affichage: Europe/Paris
+
+equipes:
+  - { id: chomelix, nom: Chomelix Cow, niveau: senior, controle: [composition, entrainement, transferts, academie, personnel] }
+
+ligue: { taille: 12, division: , montee_descente: "voir skill basketvibe-saison" }
+
+unites_echelles:
+  devise: monnaie du jeu
+  competences: { nombre: 8, echelle: "0–100" }
+  forme: "1–10"
+  conversion_base_ecran: "consignes : base 0–4 = écran 1–5 (+1)"
+
+jugement_joueur: [fit au poste, forme, fatigue, stats]
 
 sources:
   manuel: https://www.basketvibe.com/guide
@@ -17,52 +28,73 @@ sources:
   chat: null
   connaissance: outputs/basketvibe/veille/connaissance.md   # à créer (veille intégrale)
 
+exports_texte:
+  - { type: discord, canal: export manuel, frequence: hebdomadaire, destination: data/discord/basketvibe/, declenche: [veille] }
+
 rythme:
-  - { quand: chaque jour,          quoi: amical à domicile 08:00, verrouillage: "07:45" }
-  - { quand: jours de ligue,      quoi: match de ligue, verrouillage: "19:45" }   # jours exacts lus dans gold.bv_agenda
-  - { quand: dimanche 04:00,      quoi: entraînement, salaires, personnel facturé }
-  - { quand: jeudi 09:00,         quoi: rapport d'académie }
-  - { quand: fin de saison,       quoi: +1 an pour tous les joueurs }
+  - { quand: lundi mercredi samedi, quoi: match de ligue 20:00, verrouillage: "19:45", fuseau_heure: ligue }   # à vérifier : fuseau de la ligue = Paris ?
+  - { quand: chaque jour, quoi: amical 08:00 (domicile ou extérieur), verrouillage: "07:45", fuseau_heure: hôte }
+  - { quand: dimanche 04:00, quoi: entraînement, salaires, personnel facturé, fuseau_heure: Paris }
+  - { quand: jeudi 09:00, quoi: rapport d'académie, fuseau_heure: Paris }
+  - { quand: fin de saison, quoi: "+1 an pour tous les joueurs" }
 
 competitions:
-  ligue:  { saisie: oui, preset: League Tactic, but: gagner }
-  coupe:  { saisie: oui, preset: League Tactic, but: gagner }          # même preset que la ligue (export du 26/10)
-  amical: { saisie: non, preset: non, but: tester, note: "pas de preset ni de saisie à proposer (utilisateur, 2026-10-26) ; on analyse l'export après coup" }
+  ligue:  { saisie: oui, preset: League Tactic, moteur: "v3 jusqu'au 26/10, v4 dès la saison 2", but: gagner }
+  coupe:  { saisie: oui, preset: League Tactic, but: gagner }   # à vérifier : vu sur un seul export (26/10)
+  amical: { saisie: non, preset: non, moteur: v4, but: tester }  # utilisateur 2026-10-26 : ni preset ni saisie ; analyse de l'export après coup
 
 ecrans:
   composition:
     lignes: [Q1, Q2, Q3, Q4, OT]
     colonnes: [PG, SG, SF, PF, C]
-  consignes_joueur:                       # ordre de l'écran, valeurs 1 à 5
-    colonnes: [joueur, poste, quart-temps, role (passe→score), offensive focus (low→primary), shooting focus (2 pts→3 pts), agressivité défensive]
+    ordre_joueurs: "par poste PG-SG-SF-PF-C, puis alphabétique"
+    depth_chart: "2 ou 3 remplaçants par emplacement"
+  consignes_joueur:
+    colonnes: [joueur, role, offensive focus, shooting focus, defense]   # à vérifier sur l'écran : 3 ordres différents dans les notes
+    valeurs_permises:
+      role: "1 Passeur → 5 Scoreur"
+      offensive focus: "1 Low → 5 Primary"
+      shooting focus: "1 = 2 pts → 5 = 3 pts"
+      defense: "1 soft → 5 agressif"
   focus_defensif:
-    colonnes: [joueur adverse, focus 1 Give up → 5 Lock]
+    colonnes: [joueur adverse, focus]
+    valeurs_permises: { focus: "1 Give up, 2 Light, 3 Normal, 4 Intense, 5 Lock (export : off)" }
   defensive_area:
-    colonnes: [joueur adverse, zone Perimeter / Middle / Rim]   # amicaux seulement
+    colonnes: [joueur adverse, zone]
+    valeurs_permises: { zone: [Rim, Perimeter, Neutral] }   # amicaux v4 ; « Middle » vu une fois, à vérifier à l'écran
+
+options_a_tester:
+  - "role_tier, shot_tier, offensive_focus_tier : effet en match, un seul à la fois, en amical"
 
 exports:
-  - { page: match,             quand: après chaque match,    declenche: [match] }
-  - { page: roster,            quand: après chaque match,    declenche: [effectif] }
-  - { page: preview,           quand: avant un match de ligue, declenche: [tactique] }
-  - { page: training,          quand: dimanche après 04:00,  declenche: [entrainement] }
-  - { page: finance,           quand: dimanche après 04:00,  declenche: [finances] }
-  - { page: personnel,         quand: dimanche après 04:00,  declenche: [finances] }
-  - { page: academy,           quand: jeudi après 09:00,     declenche: [academie] }
-  - { page: transfers,         quand: si plus de 24 h,       declenche: [transferts] }
-  - { page: transfers_global-history, quand: avec le marché, declenche: [transferts] }
+  - { page: match,             quand: après chaque match,        evenement: export_match }
+  - { page: roster,            quand: après chaque match,        evenement: export_roster }
+  - { page: preview,           quand: avant un match de ligue,   evenement: export_roster }
+  - { page: training,          quand: dimanche après 04:00,      evenement: export_entrainement }
+  - { page: finance,           quand: dimanche après 04:00,      evenement: export_finances }
+  - { page: personnel,         quand: dimanche après 04:00,      evenement: export_finances }
+  - { page: academy,           quand: jeudi après 09:00,         evenement: export_academie, page_typee_reelle: "parfois la page finances (26/10)" }
+  - { page: transfers,         quand: si plus de 24 h,           evenement: export_marche }
+  - { page: transfers_global-history, quand: avec le marché,     evenement: export_marche }
 
 domaines:
-  equipe:          { present: oui, notes: "forme 1–10, fatigue (zones), expérience ; formé au club = bonus homegrown" }
+  equipe:          { present: oui }
   tactique:        { present: oui }
-  entrainement:    { present: oui, reglages: "principal + secondaire par joueur, une fois par semaine" }
-  jeunes:          { present: oui, specificites: "jauge 0–100 %, investissement hebdo (max 100 000), test de potentiel 25 000" }
-  transferts:      { present: oui, taxe: "5 %", delai_revente: "1 semaine", minimum_effectif: 8, base_historique: transfers_global-history }
+  entrainement:    { present: oui, dimensions: [principale, secondaire], frequence: hebdomadaire }
+  jeunes:          { present: oui, depense_suivie: oui, specificites: "jauge 0–100 %, investissement hebdo jusqu'à 100 000, test de potentiel 25 000, recrutement −50 % de jauge" }
+  transferts:      { present: oui, taxe: "5 %", delai_revente: "1 semaine", minimum_effectif: 8, base_historique: transfers_global-history }   # 8 = règle du jeu ; 9 = notre marge de sécurité
   finances:        { present: oui, sponsor: "un contrat par saison" }
-  personnel:       { present: oui, postes: [médecins, kinés, psychologues, marketing], facturation: "maximum atteint dans la semaine" }
+  personnel:       { present: oui, postes: [médecins, kinés, psychologues, marketing], facturation: "maximum atteint dans la semaine (dev 2026-09-14 ; 85 000 contre 60 000 le 25/10, à confirmer le 01/11)" }
   infrastructures: { present: non }
 
-ordre_agents: [match, effectif, finances, academie, entrainement, tactique, transferts]
+vues_gold:
+  agenda: gold.bv_agenda
+  alertes: gold.bv_daily_alerts
+  rapport_match: gold.bv_match_report
+  base_transferts: null          # à créer
+  resultat_champ: my_result
 
 specificites:
-  - "Résultat d'un match : toujours my_result / is_mine, jamais le score brut."
-  - "Moteur v4 en amical depuis le 11/10 : les amicaux servent de banc d'essai."
+  - { regle: "Ligue et amicaux non comparables : fatigue et expérience d'un amical ≈ 1/10", source: "manuel M§1.2", statut: confirmé }
+  - { regle: "Ne pas mélanger v3 et v4 dans les tendances", source: "news 2026-10-19", statut: confirmé }
+  - { regle: "Re-sélectionner le preset sur chaque match de ligue déjà planifié", source: "fiche tactique", statut: confirmé }
