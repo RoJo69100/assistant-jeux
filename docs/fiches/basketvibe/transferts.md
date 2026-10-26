@@ -10,7 +10,8 @@ Lue par l'agent `transferts` après `commun.md`. Contenu repris de l'agent Baske
 
 ## Règles propres au jeu
 1. **Prix de référence, du plus fiable au moins fiable** :
-   - `gold.bv_market_price_known` : ventes conclues dont on connaît le PS (peu nombreuses) ;
+   - `gold.bv_price_ref_ps` : quartiles des ventes conclues par tranche de PS (5 points) et d'âge (≤21, 22-25, 26-29, 30+), compétences connues (158 ventes au 2026-10-26). Le prix saute à PS 50 et baisse avec l'âge : compare toujours dans la même tranche ;
+   - `gold.bv_market_price_known` : ventes conclues dont on connaît le PS, une ligne par vente ;
    - `gold.bv_market_price_ref` : médiane et quartiles par âge et poste sur 21 jours, compétences inconnues, donc très dispersés ;
    - prix constatés sur Discord [Com].
    Dis toujours combien de ventes comparables tu as. Avec moins de 5, la confiance est faible.
@@ -18,6 +19,8 @@ Lue par l'agent `transferts` après `commun.md`. Contenu repris de l'agent Baske
 2. **Argent** : la somme des enchères maximales en cours ne peut pas dépasser le solde [M§10.3]. Lis `gold.bv_finance_projection` (solde, projection de fin de saison) avant de conseiller un achat. Compte le **salaire hebdomadaire** de la recrue (`est_weekly_salary`, barème [M§10.2]), pas seulement le prix.
 
 3. Avant de conseiller une vente en fin de saison, signale que le dev étudie une taxe dégressive sur les reventes rapides (idée d'un joueur, non décidée) [Dev 2026-10-22, economy] et qu'une semaine d'achat est bloquée pour la revente [M§11.1] ; compte 5 % de taxe. Test de potentiel : payé une fois par club et par joueur, résultat conservé sur le profil [M§11, lu 2026-10-23].
+
+4. **Bonnes affaires et achat-revente** (demande du 2026-10-26) : chaque brief ouvre sur `gold.bv_market_bargains` (`ref_reliable`, tri par `resale_margin_p25`). `bid_ceiling_resale` = enchère maximale pour revendre au p25 de la tranche sans perte, taxe de 5 % déduite ; le prix actuel monte encore, `discount_pct` n'est qu'un signal. `gold.bv_resale_stats` dit ce que rapporte la revente sur le marché réel (38 reventes au 2026-10-26, 26 gagnantes, marge nette médiane 39 250, 13 jours de détention). `gold.bv_transfer_history` : historique complet (`bought_by_me`, `sold_by_me`, `is_resale`, `resale_net_margin`).
 
 ## Données
 - `gold.bv_market_candidates` : joueurs en vente au dernier export du marché. PS, moyenne des compétences, meilleur emplacement (`best_slot`, `best_fit`, taille comprise), `would_rank_in_slot` (son rang parmi mes joueurs à cet emplacement), `enters_top8` (fait-il monter le TS [M§2.2]), salaire estimé, statut d'âge, prix actuel, nombre d'enchères, fin de l'enchère (heure de Paris), médiane des ventes comparables, et les 8 compétences.
