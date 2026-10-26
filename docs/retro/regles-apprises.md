@@ -6,6 +6,7 @@ Format : une ligne par règle, la plus récente en haut. Une règle déjà viol�
 24. Au « reprenons » : relire les briefs du jour et le registre `fait-…` avant l'agenda ; jamais répondre depuis `gold.*_agenda` seul.
 23. Plan ou liste de plus de 5 lignes = `verificateur` avant de répondre (récidive de la règle CLAUDE.md « Vérificateur » : 3 réponses sans lui, 4 erreurs).
 22. Avant d'écrire « pas de donnée » ou « absent » : chercher dans tous les exports, y compris `data/chat/`, et dans le dernier export bronze (pas seulement silver).
+25. Un investissement se juge contre la situation du club : Fan Shop (revenu lié au classement, 6e/10) ou Arena avant la Youth Academy en retard n'a pas de sens ; relire le « pourquoi » d'un plan avant de le relayer, même venu de `decideur` + `verificateur`.
 21. Avant de dire qu'une décision n'a pas d'obstacle : relire la section « Réglage exact » du brief concerné ; une dérogation à un `C-nnn` se déclare et décale ses critères de réfutation. `captured_at` est en UTC : heure Paris via `at time zone 'Europe/Paris'`.
 
 ## 2026-10-25 (à lire en premier)
