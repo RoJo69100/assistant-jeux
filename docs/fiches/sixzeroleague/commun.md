@@ -44,7 +44,7 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 - Formation d'attaque : 5-1 ou 4-2 (nouveau).
 - Formation de défense : 6-0, 5-1, 3-2-1 ou 3-3 (nouveau).
 - Direction d'attaque : mixed, left, right, centre, left + centre, right + centre, left-right.
-- Remplace « 5-1 / 6-0 seules disponibles » [Dev chat, 2026-10-10], périmé. Aucune source n'indique l'effet de ces options : à tester une seule à la fois et à relever dans l'export du match (`teams.tactics`, rempli seulement pour J12 : aggression normal, attackDirection mixed). Chercher l'effet dans le chat du jeu / le devlog (agent Veille) avant de conseiller.
+- Remplace « 5-1 / 6-0 seules disponibles » [Dev chat, 2026-10-10], périmé. Effets connus (qualitatifs) : voir `outputs/sixzeroleague/veille/connaissance.md` § 1 (contres 1.3, 4-2 sans CB 1.6, hors-poste défensif 1.8). Direction d'attaque : effet **non chiffré** (écran : « left/right + centre » = CB et P attaquent le plus). À relever dans l'export du match (`teams.tactics`, rempli seulement pour J12 : aggression normal, attackDirection mixed). [V-20261026-23, corrige « aucune source n'indique l'effet »]
 
 ## Repères infrastructures des autres clubs (chat du jeu en base, 2026-10-26)
 Source : `silver.sz_api` `/chat/messages`. Avant d'écrire « pas de donnée » sur un autre club, chercher là et dans `data/discord/SixZeroLeague/`, `data/chat/sixzeroleague/`.

@@ -5,12 +5,12 @@ Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist SixZero L
 ## Skills à lire
 - `.claude/skills/sixzeroleague-match/SKILL.md` (match, exclusions, cartons, jeu passif, avantage du terrain)
 - `.claude/skills/sixzeroleague-joueurs/SKILL.md` (compétences clés par rôle, hors-poste, remplaçants, blessures)
-- `.claude/skills/sixzeroleague-communaute/SKILL.md` (§ 5 : discipline, pas encore de réglage d'agressivité)
+- `.claude/skills/sixzeroleague-communaute/SKILL.md` (§ 5 : discipline, agressivité Light/Normal/Hard depuis la 0.6.1)
 - puis `outputs/sixzeroleague/learnings.md` s'il existe
 
 ## Règles propres au jeu
 1. Ce qu'on règle à l'écran : **composition par défaut** (les 7 de chaque match), **un remplaçant par rôle**, formations d'attaque et de défense, places en défense (`defense_spots`) [W:Match, Injuries ; skill joueurs].
-2bis. Coût d'un hors-poste : −20 % en attaque, −10 % en défense (physique jamais touché) ; un joueur de champ au but : −20 % [Dev chat, 2026-10-13]. Le 7 m est tiré automatiquement par le meilleur tireur sur le terrain : ne propose pas de choisir le tireur [Dev chat, 2026-10-20]. Formations disponibles : 5-1 et 6-0 seulement [Dev chat, 2026-10-10].
+2bis. Coût d'un hors-poste : −20 % en attaque, −10 % en défense (physique jamais touché) ; un joueur de champ au but : −20 % [Dev chat, 2026-10-13]. Le 7 m est tiré automatiquement par le meilleur tireur sur le terrain : ne propose pas de choisir le tireur [Dev chat, 2026-10-20]. Formations : attaque 5-1 ou 4-2, défense 6-0, 5-1, 3-2-1 ou 3-3 (0.6.1) [Dev chat, 2026-10-24, D:L9 ; remplace « 5-1 et 6-0 seulement », Dev chat 2026-10-10, périmé]. **Avant tout conseil de formation ou de direction, lire le rapport tactique de l'écran et la carte « prochain match »** (tactique jouée par l'adversaire la dernière fois) ; si le texte du rapport n'est pas en base, écrire « il me manque le rapport tactique, on le réunit ainsi : Équipe → Tactique → rapport pour chaque choix, capture ou copie » et le noter ici. Le 4-2 n'a pas de CB (inférence : incompatible avec Fournier au CB). [D:L9, L325 ; V-20261026-22]
 2. **Composition sûre par défaut** : chacun à un rôle principal ou appris (`gold.sz_lineup_natural`). Un hors-poste n'est proposé que s'il est justifié, avec le risque dit (note avant pénalité).
 3. **Contrôle SQL avant de rendre** : 7 joueurs différents, un par rôle GK, CB, LB, RB, LW, RW, P ; aucun blessé ni suspendu (`injured`, `suspended`) ; remplaçants différents des titulaires. Donne le résultat dans le brief.
 4. Défense : garder les places par défaut tant qu'aucun test ne justifie un changement (décision de l'utilisateur, 2026-10-18).

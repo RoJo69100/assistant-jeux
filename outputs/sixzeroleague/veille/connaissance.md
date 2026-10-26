@@ -1,0 +1,237 @@
+# Six Zero League — connaissance (index par thème, lecture intégrale du 2026-10-26)
+
+Lecture **intégrale** (pas le delta) de : Discord `data/discord/SixZeroLeague/discord_SixZeroLeague_part1.txt` (336 lignes, dernier message 2026-10-25 10:35, **contient maintenant la 0.6.1 « Tactical Depth »**, que `etat.md` croyait absente), `data/chat/sixzeroleague/export_2310.txt` (244 lignes, sans date), chat du jeu en base (`silver.sz_api` `/chat/messages`, dédoublonné par `id` : **214 messages Global** du 2026-10-15 10:43 au 2026-10-26 13:06 UTC et **27 France** du 2026-10-08 au 2026-10-25), wiki (`bronze.raw_pages` `app_wiki`, capture du 2026-10-18, client 0.1.2, **antérieur aux 0.6.0 et 0.6.1** : sert seulement à recouper). Les skills `sixzeroleague-*` et les rapports `2026-10-23.md` / `2026-10-26.md` ont été lus pour ne pas refaire.
+
+## Comment lire
+- **Sources** : `D:Lnn` = ligne nn du fichier Discord ; `X:Lnn` = ligne nn de `export_2310.txt` ; `C:xxxxxx aaaa-mm-jj hh:mm` = message du chat du jeu (6 premiers caractères de l'`id`, heure UTC de `createdAt`) ; `W:` = wiki ; `SQL` = nos vues. Les heures du fichier Discord sont traitées comme UTC (l'annonce 0.6.1 est à 13:26 dans le devlog et 13:37 UTC dans le chat).
+- **Auteurs** : **Gazelle = développeur** (`gazellemag` sur Discord, `Gazelle` dans le jeu, `isAdmin` vrai). **Alias confirmé : « Urban Fox » = Gazelle** (« This is Gazelle btw », C:82fda3 2026-10-19 21:16 ; X:L99-101) : ses messages valent `[Dev chat]`. `Draugar` (jeu) = `krzykaczpl_` (Discord) ; `Scottern` = `sweeney4437` (Gazelle les appelle ainsi, D:L291 et D:L246) ; `RoJo` = nous (France, C:b4d3dc). Hiérarchie : wiki > Gazelle > joueurs (avis, jamais une règle).
+- **Statuts** : CONFIRMÉ (dit par Gazelle/wiki ou recoupé par nos données) · COMPLÉTÉ (ajoute à un skill) · CONTREDIT ⚠️ (contre un skill, le wiki ou nos données) · EN DOUTE (un seul avis de joueur, hypothèse, ancien et peut-être périmé par une version). Rien n'est effacé : un fait douteux reste listé avec sa raison.
+- **Corrections de nos propres écrits trouvées en relisant** : (1) « Urban Fox » n'est pas un joueur : V-20261026-5 est mal attribué (voir 1.12) ; (2) `etat.md` disait « Aucune appliquée » alors que V-20261026-1 à 8 sont dans les skills (commit 31e42fd) ; (3) le brief Académie du 2026-10-26 additionne des coûts déjà cumulés (voir 3.7).
+
+---
+
+## 1. Tactique et formations / directions
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 1.1 | 0.6.1 « Tactical Depth » : attaque **5-1 ou 4-2** ; défense **6-0, 5-1, 3-2-1 ou 3-3** ; **direction d'attaque** ; **agressivité Light / Normal / Hard** ; **ordres de match** (jusqu'à 3 changements tactiques à une minute et un score choisis) ; **rapport tactique** (avantages et inconvénients de chaque choix, vérifiés contre nos propres joueurs) ; **scouting** : les tactiques des deux équipes figurent dans les stats et le rapport de match, la carte « prochain match » montre ce que l'adversaire a joué la dernière fois | D:L9 ; annonce C:664f7d | 2026-10-24 13:26 (devlog), 13:37 (chat) | Gazelle | CONFIRMÉ. Remplace « seules 5-1 / 6-0 existent » (D:L68-69, L205-209). V-20261026-1 (« non documenté ») est **périmée** : le devlog est lu |
+| 1.2 | Les formations sont « équilibrées entre elles », le 4-2 est « une vraie alternative » au 5-1 ; les défenseurs marquent mieux les pivots (y compris contre deux pivots) ; les attaquants gardent une meilleure distance face aux défenses qui pressent | D:L9 | 2026-10-24 | Gazelle | CONFIRMÉ |
+| 1.3 | **Contres** : les tactiques se contrent « de peu ». Le **5-1 d'attaque est le meilleur contre une défense 6-0** (moins de pressing que les autres défenses). Le **4-2 « fonctionne très bien » contre le 3-3**, moins bien contre 3-2-1, 5-1 puis 6-0 (dans cet ordre), mais reste « un contre » du 3-2-1 et du 5-1 | D:L325 | 2026-10-24 18:14 | Gazelle | CONFIRMÉ (qualitatif, aucun chiffre) |
+| 1.4 | « Pour l'état actuel des tactiques, **il vaut mieux jouer selon les forces de son équipe que contrer la tactique adverse**, même si le contre compte ; entre deux équipes égales, il peut faire la différence » | D:L326 | 2026-10-24 18:16 | Gazelle | CONFIRMÉ |
+| 1.5 | Par défaut les joueurs sont en 5-1 attaque / 6-0 défense ; **les bots peuvent changer de tactique selon leurs forces** | D:L325 | 2026-10-24 | Gazelle | CONFIRMÉ |
+| 1.6 | **4-2 d'attaque = LB, RB, P, P (+ ailiers) : pas de CB** ; les deux pivots comptent à égalité dans la simulation ; le texte de l'écran sur « CB et P attaquent le plus » est faux pour le 4-2 ; en 4-2, direction « gauche+centre » / « droite+centre » = LB (ou RB) + les pivots, et **« mixed » donne la même chose** | D:L324, L325, L327, L328 | 2026-10-24 17:41-18:33 | Gazelle (questions de Draugar) | CONFIRMÉ |
+| 1.7 | Direction « Left+Centre / Right+Centre » : l'écran dit que **CB et P attaquent le plus** ; aucun chiffre d'effet ni de gain de la direction n'est donné | D:L324 (texte de l'écran cité par un joueur) | 2026-10-24 | joueur citant l'écran | EN DOUTE sur l'effet (non quantifié par Gazelle) |
+| 1.8 | **Hors-poste en défense = selon la place défensive, pas la place d'attaque**. Le slot LB défend par défaut une demi-place (« half spot »), le pivot défend au centre : un P placé LB en attaque perd **12,5 % sur ses compétences de défense** ; mis sur une place centrale de l'onglet Défense, **aucune pénalité** | D:L325 | 2026-10-24 18:14 | Gazelle | CONFIRMÉ pour le mécanisme. **⚠️ 12,5 % contredit « 10 % en défense »** (D:L235, C:2ceba0, C:db5dc3) : non tranché ; hypothèse non prouvée : la pénalité dépend de la distance entre places (demi-place → centre), et 10 % serait le cas simple |
+| 1.9 | **Places centrales en défense : pour CB et P** ; la seule différence : le CB peut jouer à l'extérieur. En 4-2 (sans CB) les deux P peuvent donc tenir les places centrales sans pénalité | D:L329-331 | 2026-10-24 18:45-18:55 | Gazelle | CONFIRMÉ |
+| 1.10 | « Un CB extérieur en défense apparaît hors poste » : corrigé le jour même ; le pivot n'est pas un défenseur extérieur « en général » ; avec RB/LB sur cette place, quelqu'un est toujours hors poste | D:L304-309, L310 | 2026-10-24 13:44-14:37 | Gazelle / joueur `_tozao_` | CONFIRMÉ (corrigé) |
+| 1.11 | Un **ailier ne peut pas défendre à l'extérieur sans pénalité** (équilibre : sinon 4 rôles pour les défenseurs extérieurs, LB/RB/CB/LW/RW plus forts que P et GK) ; solution promise, sans date. Avis Bergkamp : normal en vrai handball (vitesse) | C:0808a3, 3b60aa, b65493 (Gazelle) ; C:a9dab8 (Bergkamp) | 2026-10-25 15:18-15:58 | Gazelle / joueur | CONFIRMÉ (transitoire). Déjà V-20261026-3 |
+| 1.12 | **Remplacements sur ordre** : « no subs on orders? » → « not yet » (C:4f8014 / C:98bde4). **Le « not yet » vient d'Urban Fox = Gazelle**, pas d'un joueur. Les ordres de match de la 0.6.1 existent mais pour des **changements tactiques** (D:L9), pas des remplacements nommés | C:4f8014, C:98bde4 | 2026-10-25 21:21-21:25 | **Gazelle (alias)** | **CONTREDIT ⚠️ notre V-20261026-5** (marquée « avis de joueur ») : c'est une réponse du développeur |
+| 1.13 | **Agressivité** : annoncée « dans la mise à jour tactique » (réponse à une question sur les jaunes et les 2 min) puis livrée en 0.6.1 (Light, Normal, Hard). **Effet non documenté.** Notre skill communauté § 5 dit encore « pas encore de réglage » | C:911baf (2026-10-16 12:18) ; D:L9 | 2026-10-16, 2026-10-24 | Gazelle | COMPLÉTÉ ; l'effet sur fautes/exclusions est une inférence, EN DOUTE |
+| 1.14 | Un joueur limité à l'attaque ou à la défense (ou rôle séparé) : « pour le futur » (toujours pas en 0.6.1) | D:L208-209, L310-311 | 2026-10-10 ; 2026-10-24 14:40 | Gazelle | CONFIRMÉ |
+| 1.15 | Le joueur de défense 6-0 se place à la main depuis la 0.5.7 (on glisse les six joueurs de champ) ; un remplaçant nommé par rôle sur le même écran ; blessés/suspendus marqués | D:L5 | 2026-10-04 | Gazelle | CONFIRMÉ |
+| 1.16 | Question « une modification de tactique en cours de match n'affecte pas le match en cours, non ? » : **sans réponse** dans l'export | D:L332 | 2026-10-24 19:05 | joueur Draugar | EN DOUTE (aucune réponse ; les ordres de match servent à ça) |
+| 1.17 | « La main de lancer compte-t-elle pour PL et PR ? » → « doesn't matter ». Codes PL/PR absents de nos skills | C:1370e3, C:b85162 | 2026-10-24 14:00 | Gazelle | EN DOUTE (sens de PL/PR inconnu) ; ne pas intégrer |
+| 1.18 | Question de Draugar : « un P joué LB en attaque n'a-t-il qu'une pénalité d'attaque de 20 % ? » → la pénalité de défense dépend de sa place défensive (1.8). Le −20 % d'attaque s'applique donc **à l'attaque hors poste** et reste valable | D:L324-325 | 2026-10-24 | Gazelle | COMPLÉTÉ |
+
+## 2. Match et moteur
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 2.1 | **Hors-poste : −20 % sur les compétences d'attaque en attaquant, −10 % sur celles de défense en défendant, jamais sur le physique** ; ce n'était plus 15 % « depuis un moment » ; « bien plus visible quand les équipes sont fortes » ; permuter LB et CB en défense : les deux perdent 10 % | D:L235 ; C:9a4ecd, 88473c, db5dc3, 2ceba0, 4a17c9 | 2026-10-13 11:41 ; 2026-10-24 12:43-13:03 | Gazelle | CONFIRMÉ (3 occurrences). Sauf 12,5 % ⚠️ (1.8) |
+| 2.2 | Joueur de champ au but : −20 % | D:L242 | 2026-10-13 16:28 | Gazelle | CONFIRMÉ |
+| 2.3 | Le 7 m est tiré par le meilleur des 7 sur le terrain, automatiquement | C:2b605c ; X:L145 | 2026-10-20 20:10 | Gazelle | CONFIRMÉ |
+| 2.4 | **Jeu passif** : 0.5.9 « six passes pour tirer après l'avertissement » ; 0.6.0 : les équipes sous avertissement « poussent pour un tir » ; **0.6.1 : 4 passes, la passe qui prend un coup franc ne compte pas**. Avant : les équipes faibles faisaient la 7e passe et perdaient la balle ; tirer pendant l'avertissement avait un taux de réussite plus élevé | D:L7, L8, L9 ; C:3f5e6a, e1110e, af29ab | 2026-10-09 ; 10-16 ; 10-24 | Gazelle / Antarez | CONFIRMÉ |
+| 2.5 | **Exclusions 2 min** : bug « loin du ballon » en correction (10-20), nombre « en révision » (10-21), **0.6.1 : moins d'exclusions, plus en rafale, et seulement à un défenseur en contact avec l'attaquant** ; idem fautes et 7 m | C:1010da ; D:L294 ; D:L9 | 2026-10-20 → 10-24 | Gazelle | CONFIRMÉ. **Rupture de série** : les exclusions d'avant et d'après le 2026-10-24 13:37 UTC ne sont pas comparables (4.2) |
+| 2.6 | **Blessures** : taux « revenu au niveau voulu » (0.5.9) ; durée 1 à 6 matchs, entraînement High plus risqué (0.6.0) ; **0.6.1 : chance de blessure à l'entraînement divisée par deux, trois intensités rééquilibrées** ; blessure qui dépasse la saison reportée | D:L7, L8, L9 | 2026-10-09 ; 10-16 ; 10-24 | Gazelle | CONFIRMÉ. Plaintes de joueurs (CB blessé 6 matchs D:L302 ; Marco C:d65fb5) = avis |
+| 2.7 | Rouge « avec rapport de l'arbitre » = **2 journées de suspension** (0.5.7). Notre skill match garde le wiki (rouge direct = 1 match) et l'écran 2026-10-23 a affiché 1 match | D:L5 | 2026-10-04 | Gazelle | CONTREDIT ⚠️ (devlog 2 journées / wiki et écran 1 match) ; non tranché |
+| 2.8 | Carton jaune = avertissement ; 2 min = sort, équipe à un de moins ; rouge = fin de soirée ; choc dur = jeu arrêté, remplaçant du même rôle ; banc vide = équipe à moins | D:L5 | 2026-10-04 | Gazelle | CONFIRMÉ (recoupe le wiki) |
+| 2.9 | Résultats « très aléatoires » : toutes les équipes sont faibles, peu de profondeur tactique, **« affinités » : certaines compétences contrent ce qu'une équipe sait faire** | C:a3c41b, ac8f6c | 2026-10-16 12:09-12:10 | Gazelle | EN DOUTE : partiellement périmé par la 0.6.1 (équilibrage des formations, tactiques qui se contrent) |
+| 2.10 | Runs « 10-3 puis 8-2 » du rival quand on mène largement, au même moment dans deux matchs (fin de 1re mi-temps + 10-12 premières minutes de la 2e) : « peut arriver, comme au vrai handball, pas tout le temps » | D:L333, L335, L336 | 2026-10-24 20:01 → 10-25 10:35 | joueur Draugar / Gazelle | EN DOUTE : observation d'un joueur, réponse du développeur sans mécanisme ; aucune règle de fatigue |
+| 2.11 | Les compétences **Vitesse** rendent les joueurs « plus rapides visuellement » dans la simulation « et c'est tout ce que j'ai » ; (le wiki dit que la Vitesse sert à devancer son marqueur) | D:L313-315 | 2026-10-24 15:16 | Gazelle | EN DOUTE (formulation ambiguë ; le wiki prime) |
+| 2.12 | Le 7 m adverse réussi 8/9 : anecdote ; 33-21 et 13-3 après 22 min : anecdotes de joueurs | C:40d7ab (Scottern) ; C:7ea18e | 2026-10-20 | joueur | EN DOUTE (anecdote) |
+| 2.13 | Prolongation de coupe : **0.6.1 « toujours jouée en entier (plus de but en or) », tirs au but seulement si encore à égalité** ; avant : but en or par erreur (61e minute). Le wiki dit 2 × 5 min (jamais confirmé en jeu) | D:L9 ; C:e030f6, 938534, bbf0c1, 31e94d ; X:L109-119 | 2026-10-20, 10-24 | Gazelle | CONFIRMÉ. **Corrige V-20261023-7** (« but en or » est un bug réparé) |
+| 2.14 | Rien dans les sources sur la **fatigue / endurance en 2e mi-temps** : aucun message, aucune ligne de devlog | recherche sur « stamina », « endurance », « tired », « fatigue » dans les 4 sources | 2026-10-26 | — | **Absence confirmée** après lecture intégrale (le wiki décrit l'Endurance en qualitatif) |
+| 2.15 | Les matchs joués avant la mise à jour des stats ne montrent que le score | C:4fa37a | 2026-10-16 | Gazelle | CONFIRMÉ |
+| 2.16 | Le live : 2 onglets Incidents / Stats, barre de commentaires, conso de données divisée par deux ; tirs 6 et 9 m en sauts, fautes de ligne seulement si décollage de la ligne | D:L5, L7, L8 | 2026-10-04 → 10-16 | Gazelle | CONFIRMÉ |
+
+## 3. Infrastructures et niveaux des autres clubs
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 3.1 | Coût des niveaux **caché volontairement** (« couche de découverte ») ; Arena au maximum rapporte plus de 9 999 par match à domicile, plus encore en division haute | D:L246-249 | 2026-10-19 | Gazelle | CONFIRMÉ par nos données : `silver.sz_infrastructure_levels` Arena niv. 20 = **+10 050 €** par match à domicile (5e division, multiplicateur ×1) |
+| 3.2 | « Bonus du Training Facilities **+0,04 par niveau**, linéaire si je ne me trompe pas » | D:L250-251 | 2026-10-19 16:24 | Gazelle (incertain) | **CONTREDIT ⚠️ par nos données** : `effect_label` = rendement ×1,30 au niv. 6, ×1,36 au 7, ×1,42 au 8, ×1,54 au 10, ×2,14 au 20 : **+0,06 par niveau**, linéaire. Le skill communauté § 6 écrit encore 0,04 |
+| 3.3 | **Stoik** (France, ligue 8 puis poule avec martin) : Arena 7, Training Facilities 1, **Youth Academy 10, Fan Shop 10**, aucun sou dans l'entraînement « on part de trop bas » ; il investira dedans « quand l'académie sera au maximum » | C:a9c76a ; C:a8e0fa, 2ab496 | 2026-10-21 16:26 et 21:21 | joueur | CONFIRMÉ comme observation (pas une règle) |
+| 3.4 | **martin** (France) : Arena 9, Training (« formation ») 6, Youth Academy 2, Fan Shop 1 ; « le jeu est difficile, je n'arrive pas à constituer une bonne équipe » ; progression lente | C:e7407b ; C:9b9697 ; C:ee5cb4, f703e1 | 2026-10-21 → 10-22 | joueur | CONFIRMÉ (observation) |
+| 3.5 | **pierrottingchrist_29708** : Youth Academy 7-8 → joueurs vers 20 de note ; **a acheté le niveau 9** pour son prochain choix (« U18 prospect skills 9 to 36, scout 4 skills, 2 % foreign ») | D:L261-262, L265 | 2026-10-20 09:02 et 14:14 | joueur | CONFIRMÉ (observation) |
+| 3.6 | **squidwardfrommegamind** (Kirakira Bananas) : Youth Academy 7 (tout le budget de départ y est passé) ; tirages **19 et 23** de note ; ailier 22 de note (10-11), pivot 23 (10-12), ailier 19 de note à 18 ans (10-16), tirages 19 et 23 ; stratégie « académie d'abord » ; sv3.n a aussi un ailier 22 de note sans être en tête | D:L217, L219, L227, L243, L258-260 ; D:L222 | 2026-10-11 → 10-20 | joueurs | CONFIRMÉ (observation) |
+| 3.7 | **Nos niveaux** : Arena 7, Training Facilities 6, Youth Academy **5**, Fan Shop 9 (`silver.sz_infrastructure_levels`, 2026-10-26). **Coût de montée Youth Academy : la colonne `upgrade_cost_from_current` est CUMULÉE** (même colonne pour les Training Facilities : niv. 7 = 6 200, niv. 8 = 13 700, soit +7 500 pour le 8e) : depuis le niv. 5, **niv. 6 = 5 200 ; 7 = 11 400 ; 8 = 18 900 ; 9 = 27 900 ; 10 = 38 600** (entretien par cycle 130 → 175, 230, 295, 370, **455**) | SQL `silver.sz_infrastructure_levels` | 2026-10-26 | — | **CONTREDIT ⚠️ le brief Académie du 2026-10-26** (« 5 200 + 11 400 + 18 900 » = 35 600 pour le niv. 8 : c'est 18 900, additionner compte les paliers deux fois). Lecture « cumulée » déduite du nom de colonne et de la série Training Facilities ; à confirmer par l'écran Infrastructure |
+| 3.8 | **Plages d'une Youth Academy** (min = niveau, max = 18 + 2 × niveau, exact aux 20 niveaux, vérifié le 2026-10-23) : niv. 5 = 5-28 (milieu 16,5), 7 = 7-32 (19,5), 8 = 8-34 (21), 9 = 9-36 (22,5), 10 = 10-38 (**24**), 11 = 11-40 ; dévoilement 2 compétences jusqu'au niv. 7, **4 au niv. 8**, 6 au 13, 8 au 18 ; étrangers 2 % (niv. 5 à 9), 4 % (10) | SQL `effect_label` ; D:L265 | 2026-10-26 | — | CONFIRMÉ |
+| 3.9 | **Les témoignages concordent avec un tirage uniforme dans la plage** : Stoik « au niveau 10, entre 10 et 38, un tirage moyen donne 24 » = milieu exact (C:0e6ced) ; niv. 7 : milieu 19,5 ↔ « 19 et 23 » (Squidward), « vers 20 » (pierrot) ; notre Fournier (niv. 5) 17 de note ↔ milieu 16,5. Son pivot « moyenne 26 » est un tirage chanceux (+2) | C:0e6ced, 6aa782 ; D:L258, L261 | 2026-10-19 → 10-23 | joueurs + SQL | COMPLÉTÉ (le modèle « milieu de la plage » tient sur 4 observations ; hypothèse, pas règle) |
+| 3.10 | **Écart de niveau Youth Academy** : nous 5 (milieu 16,5) contre Stoik 10 (24) et pierrottingchrist_29708 9 (22,5) : **+7,5 et +6 points par compétence en moyenne par prospect**. Coût pour nous : niv. 9 = 27 900 € et entretien 370 par cycle (contre 130 aujourd'hui), niv. 10 = 38 600 € et 455 par cycle ; solde 1 843 € le 2026-10-26 (brief Finances) | SQL + C/D ci-dessus | 2026-10-26 | — | CONFIRMÉ (calcul) ; l'effet sur le résultat n'est pas prouvé |
+| 3.11 | Fan Shop : revenu selon la place, de **1,6 × (leader) à 0,7 × (dernier)** (0.5.7) ; notre niv. 9 : +938 à +2 144 €/semaine selon la place, niv. 10 : +1 120 à +2 560 (coût 5 400, entretien 230) ; Stoik conseille de lancer le Fan Shop quand on est bien classé | D:L6 ; SQL ; C:8ab505 (2026-10-23 08:40) | 2026-10 | Gazelle / joueur | CONFIRMÉ |
+| 3.12 | Conseil de Gazelle (avis) : « investis d'abord dans les infrastructures de **revenus** (Arena, Fan Shop) pour fonder les autres » ; l'Arena est l'infrastructure de revenu principale | D:L215, L218 | 2026-10-11 | Gazelle | EN DOUTE comme règle (avis personnel) ; **s'oppose à Stoik/Squidward** (académie d'abord) et à notre choix actuel |
+| 3.13 | Avis de joueur : investir dans l'entraînement est « la moins bonne idée au début », l'arène « très bien sur le long terme » ; des bons joueurs à vendre apparaissent pour ceux qui ont économisé ; dans 2-3 saisons Stoik vendra des joueurs de ses premiers tirages | C:0f6618, 6c6c5f | 2026-10-24 10:53-10:57 | Stoik | EN DOUTE (avis ; **le propriétaire a fait l'inverse** : « j'ai plus investi dans l'entraînement », C:99fe12) |
+| 3.14 | Snowball des infrastructures : avertissement d'un joueur ; Gazelle : les vieux clubs doivent avoir l'avantage ; une arène géante ne garantit rien si l'équipe est reléguée | D:L140-144 | 2026-09-25 | joueur / Gazelle | EN DOUTE (principe de conception, rien de chiffré) |
+| 3.15 | Plus la division est haute, plus les billets, sponsors, installations et primes rapportent ; installations aussi plus chères | D:L8, L124 ; W:Infrastructure | 2026-09-23, 10-16 | Gazelle | CONFIRMÉ (multiplicateurs déjà au skill match) |
+| 3.16 | Niveau du club : étiquette de Grassroots à Legendary (0.5.7) ; « club tier » est un des indices sur les autres équipes | D:L5 ; C:d392b5 | 2026-10-04, 10-23 | Gazelle | CONFIRMÉ |
+| 3.17 | Wiki : l'Arena et le Fan Shop sont les deux installations qui rapportent ; coût qui croît plus vite que le revenu : « les premiers niveaux se paient en quelques mois, les derniers en années » | W:Infrastructure | 2026-10-18 | wiki | CONFIRMÉ |
+
+## 4. Académie U18
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 4.1 | Nouveau choix toutes les **8 journées** de ligue, 2 prospects, âge 18, signature immédiate, tirage des 20 compétences à la signature dans la plage du niveau ; l'horloge ne tourne qu'en saison | W:Team U18 | 2026-10-18 | wiki | CONFIRMÉ |
+| 4.2 | Le prospect étranger sert aux **sélections nationales à venir** (appelé = plus de matchs = progresse plus) ; « c'était mon idée » | D:L267-269 | 2026-10-20 14:49 | Gazelle | CONFIRMÉ (futur) |
+| 4.3 | Durée de vie d'un joueur d'académie ≈ 5 à 5,5 mois ; combinaison académie + Training Facilities pour maximiser avant la retraite | D:L257 | 2026-10-19 | joueur krzykaczpl_ | EN DOUTE (cohérent : 15 saisons × 9-11 jours = 4,4 à 5,4 mois) |
+| 4.4 | Prospect de Stoik niveau 10 : pivot « moyenne 26 », vu comme chanceux ; 24 est la moyenne attendue ; « 26 de partout » (le propriétaire, C:9e6be8) | C:6aa782, 0e6ced, 9e6be8 | 2026-10-21 → 10-23 | joueur | CONFIRMÉ (observation) |
+| 4.5 | Offre U18 du 2026-10-26 : Fournier (CB, 17) et Durand (GK) ; Fournier recruté (briefs Académie, Tactique) ; la plage 5-28 du niveau 5 contient 17 (milieu 16,5) | SQL / briefs | 2026-10-26 | — | CONFIRMÉ |
+| 4.6 | Le dévoilement ne grandit qu'aux niveaux 3, 8, 13, 18 (2, 4, 6, 8) : la signature reste « à l'aveugle » en dessous | W:Team U18 ; SQL | 2026-10-18 | wiki | CONFIRMÉ |
+
+## 5. Entraînement et rôles
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 5.1 | Cycle d'entraînement = **2 journées de ligue** ; pas de « vraie » semaine hors saison ; entraînement et clôture du marché **après le match de 20:00 Lisbonne** | C:ee8874, 9eb702, 436ef9, cc2484 ; X:L25-31, L73-75 | 2026-10-18 | Gazelle | CONFIRMÉ |
+| 5.2 | **Pas de rendement décroissant** : 4 → 5 prend autant que 24 → 25 | C:8eb934 ; X:L91-93 | 2026-10-19 08:17 | Gazelle | CONFIRMÉ |
+| 5.3 | Les **minutes jouées alimentent la semaine d'entraînement** (ligue et coupe) | D:L5, L8 | 2026-10-04, 10-16 | Gazelle | CONFIRMÉ |
+| 5.4 | **Un blessé ne reçoit pas de points d'entraînement** | C:b219f2 | 2026-10-26 13:06 | Gazelle | CONFIRMÉ (déjà V-4 appliquée) |
+| 5.5 | Formation de rôle : onglet Entraînement, Training Facilities ≥ 5 ; **2 saisons au total**, **3 rôles max**, les anciens rôles restent ; on peut aligner hors rôle avec pénalité ; **un rôle appris reste avec le joueur s'il est vendu** | C:4299e7, c4b79f, aaf497, 53bf8d ; D:L5 | 2026-10-04 → 10-15 | Gazelle | CONFIRMÉ (la partie « reste s'il est vendu » est absente de nos skills) |
+| 5.6 | Le **rôle de départ est définitif** ; certains joueurs ont un meilleur gardien en CB | C:6b5af3, e506dc, fc0f78 | 2026-10-17 | Fundador23 | EN DOUTE (plainte de joueur ; confirmé par Gazelle sur le principe, 5.5) |
+| 5.7 | Avis de joueur : un 2e rôle permet de jouer de l'autre côté du terrain sans pénalité de compétence | C:55563e | 2026-10-20 22:35 | Draugar | EN DOUTE (avis ; consistant avec Gazelle) |
+| 5.8 | Rendement du Training Facilities : ×1,30 (niv. 6) → ×2,14 (niv. 20), **+0,06 par niveau** ; emplacements de formation de rôle : 1 aux niv. 6 à 8, 2 au niv. 10, 4 au niv. 20 | SQL `effect_label` | 2026-10-26 | — | CONFIRMÉ (contredit 0,04, voir 3.2) |
+| 5.9 | Vieillissement : bonus jeune jusqu'à 20 ans (nul à 25), baisse dès 28, déclin physique dès 30 ; les joueurs prennent **1 an à chaque fin de saison** (9 à 11 jours) ; la fiche du marché montre les points physiques perdus avec l'âge la saison dernière (0.6.1) | W:Training ; C:9c5b31, bcd333 ; D:L9 | 2026-10 | wiki / Gazelle | CONFIRMÉ |
+| 5.10 | Retraite : envisagée dès 33 ans, une dernière saison après l'annonce ; badge R orange | W:Retirement ; D:L5 | 2026-10 | wiki | CONFIRMÉ |
+| 5.11 | Entraînement : la vitesse d'une compétence dépend de l'éthique de travail ; avec Training Facilities hautes, garder les joueurs à forte éthique même inutiles puis les vendre (avis) | W ; D:L215 | 2026-10-11 | Gazelle | EN DOUTE (avis) |
+
+## 6. Finances, sponsor, transferts
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 6.1 | Primes de fin de saison pour le **top 3 : 15 000 / 8 000 / 4 000** ; la prime est versée même si l'onglet Finances ne l'affiche pas (bug d'affichage) ; changer de sponsor ne fait pas perdre la prime de 3e place | D:L6 ; C:e571cd, 6b6182 | 2026-10-04, 10-17, 10-18 | Gazelle | CONFIRMÉ. Le propriétaire a touché les 15 000 la saison dernière (C:995eff, Stoik) |
+| 6.2 | Re-signer le même sponsor = ne pas en choisir un autre ; on perd la **prime de signature** | C:89c85c, 741da1 ; X:L3-5 | 2026-10-17 | Gazelle | CONFIRMÉ |
+| 6.3 | Les offres de sponsor sont repricées pour la division de la saison suivante ; changement une fois par saison, entre les saisons | W:Sponsors | 2026-10-18 | wiki | CONFIRMÉ |
+| 6.4 | **Pas d'enchère personnalisée** probable ; on pourrait augmenter le pas quand le prix est élevé (ex. 2 000 € à partir de 20 000 €) ; le pas fixe empêche les virements entre comptes | C:7111b2, e6042b, 83715e | 2026-10-24 09:51-10:57 | Gazelle / joueur | EN DOUTE (idée sans date) |
+| 6.5 | Suivi anti-triche interne (multi-comptes, e-mails proches, prix absurdes, transferts répétés entre deux équipes) ; club sans manager 30 jours = bot | C:38e6f7, d2c81d ; D:L6 | 2026-10-24 | Gazelle | CONFIRMÉ (sans effet sur nous) |
+| 6.6 | Enchère = une semaine du jeu (2 journées) ; réglée au coup d'envoi suivant ; temps réel prévu pour la version finale ; marché reconstruit en 0.5.7 avec mises à jour en direct | D:L82-85 ; C:8bde53 | 2026-09-23, 10-18 | Gazelle | CONFIRMÉ |
+| 6.7 | Joueur libéré : 10 % de chances de réapparaître en joueur libre ; les stats d'un joueur ne sont publiques que s'il est en vente | D:L65 ; D:L7 | 2026-09-23, 10-09 | Gazelle | CONFIRMÉ |
+| 6.8 | Il faut **maintenir la compétitivité** en vendant : « vends les joueurs dont tu n'as pas besoin » ; les revenus augmentent avec les divisions ; marché plus actif et enchères plus longues « plus tard » | D:L215 | 2026-10-11 | Gazelle | EN DOUTE (annonce sans date) |
+| 6.9 | Finances 0.6.1 : l'estimation de billetterie indique les matchs à domicile joués et restants | D:L9 | 2026-10-24 | Gazelle | CONFIRMÉ |
+| 6.10 | Wiki marché : prix de départ minimum 1 000 €, frais de mise en vente 500 € (non remboursés), frais de libération 500 €, pas d'enchère 1 000 €, effectif 7 à 30 | W:Transfers | 2026-10-18 | wiki | CONFIRMÉ (déjà au skill club) |
+| 6.11 | Statistiques de ligue (buteurs, gardiens) : idée acceptée, sans date ; indicateur de niveau d'équipe annoncé « au prochain patch » le 2026-10-07 : peut-être livré sous forme de niveau de club (0.5.7, non confirmé) | C:1c9a7a, 6c59f5 ; D:L196 | 2026-10-07, 10-23 | Gazelle | EN DOUTE (la livraison de l'« indicateur » est ambiguë) |
+
+## 7. Blessures et discipline
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 7.1 | Blessures : 1 à 6 matchs, surtout 1 ou 2 ; entraînement High = environ 3 matchs, parfois 6 (wiki, avant la 0.6.1 qui divise le risque par deux) | W:Injuries ; D:L8, L9 | 2026-10 | wiki / Gazelle | CONFIRMÉ ; chiffres du wiki partiellement périmés |
+| 7.2 | Forfait 15-0 si moins de 7 joueurs aptes (0-0 si les deux) ; coupe : walkover | W:Injuries | 2026-10-18 | wiki | CONFIRMÉ |
+| 7.3 | Pour moins de jaunes/2 min : travailler **Marquage** d'abord, puis Anticipation et Duels | C:a9e74e | 2026-10-16 12:22 | Antarez | EN DOUTE (avis ; cohérent avec W:Attributes) |
+| 7.4 | Trois exclusions dans les 6 dernières minutes d'une demi-finale de coupe, jusqu'à 3 joueurs de champ ; « 5 exclusions en 5 minutes » ; Kirakira menait de 3 en coupe, un blessé + des 2 min = défaite d'un but | C:f2053d ; D:L287, L292-293 | 2026-10-21, 10-25 | joueurs | EN DOUTE (anecdotes ; en grande partie **avant** la correction 0.6.1 des exclusions) |
+| 7.5 | Un joueur avec les deux seuls LB et RB blessés a quand même gagné avec des joueurs hors poste : « la pénalité n'est pas si grosse » (en équipes faibles) | C:28312a | 2026-10-24 12:40 | Draugar | EN DOUTE (avis) ; Gazelle : bien plus visible chez les équipes fortes (2.1) |
+
+## 8. Calendrier, divisions, coupes
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 8.1 | Ligue **12:00 et 20:00 Lisbonne** (13:00 et 21:00 Paris), 2 journées par jour ; saison de 18 journées = **9 jours**, jusqu'à **11** avec beaucoup d'équipes en coupe ; +1 an pour les joueurs à chaque saison | D:L192 ; C:9c5b31, bcd333 ; X:L33-39, L67-75 | 2026-10-07, 10-18 | Gazelle | CONFIRMÉ |
+| 8.2 | **Coupe 16:00 Lisbonne** selon Gazelle (X:L17) ; un joueur dit 17:00 | C:2e4254 ; C:32636b | 2026-10-18 | Gazelle / 97777ali | CONFIRMÉ (16:00 Lisbonne = 17:00 Paris) |
+| 8.3 | Divisions (0.6.0) : 5 divisions, on commence en 5e, **un champion promu par ligue, les trois derniers relégués** (sauf 5e) ; promotions seulement la saison suivante ; ligues tirées au hasard, remélangées | D:L8 ; D:L253 ; C:fde887, 5c5f79 | 2026-10-16 → 10-19 | Gazelle | CONFIRMÉ |
+| 8.4 | Coupe : élimination directe, match unique en terrain neutre, les mieux classés sautent les premiers tours ; chaque tour paie une part de la recette et compte pour le développement ; **seul le premier prend le prix** (trophée Alpha Cup Winner) | D:L8 ; D:L318-319 | 2026-10-16, 10-24 | Gazelle | CONFIRMÉ |
+| 8.5 | Saison courante : « troisième saison » depuis la création ; matchs de ligue de la saison 3 depuis le 2026-10-19 ; fin de saison de ligue prévue le **2026-10-27 au soir** (J18) puis promotion/relégation, +1 an | C:d032ae ; C:6ba424 ; SQL | 2026-10-19 → 10-27 | Gazelle / SQL | CONFIRMÉ (calcul des dates : mon calcul sur 2 journées par jour) |
+| 8.6 | Hors saison, aucune « semaine » ne passe (ni entraînement ni finances) | C:9eb702 | 2026-10-18 | Gazelle | CONFIRMÉ |
+| 8.7 | Points : 2 victoire, 1 nul, 0 défaite ; départage : différence de buts, confrontation directe, buts marqués | D:L7 | 2026-10-09 | Gazelle | CONFIRMÉ (déjà au skill match) |
+| 8.8 | Sélections nationales (futur) : 10 joueurs minimum pour enregistrer, coupe des nations, entraîneur élu en intersaison ; amicaux : idée de joueur (50 % de recette, tous les 48 h) | D:L270-276 | 2026-10-20 | Gazelle / joueur | EN DOUTE (esquisse, aucune date) |
+| 8.9 | Les joueurs de l'alpha **ne seront pas conservés** à la sortie officielle ; tout le monde repart en dernière division | D:L89, L120 | 2026-09-23 | Gazelle | CONFIRMÉ (stratégique) |
+
+## 9. Bugs et correctifs
+| # | Fait | Source | Date | Statut |
+|---|---|---|---|---|
+| 9.1 | Compteur live « 60' 23-18 » bloqué sur le résultat de la J9 | D:L229-233 | 2026-10-13 | EN DOUTE (corrigé ? aucune confirmation) |
+| 9.2 | Menu des ligues trié « 1, 10, 11… » : se corrige au prochain démarrage de saison | C:2c7a4c, 431e44 | 2026-10-17 | CONFIRMÉ (cosmétique) |
+| 9.3 | Drapeaux absents (Firefox) ; onglet Coupe avec info erronée | X:L21, L37-63 | 2026-10-18 | EN DOUTE (corrigé ?) |
+| 9.4 | Prime de classement non affichée dans Finances | C:e571cd | 2026-10-18 | EN DOUTE (pas de correction annoncée) |
+| 9.5 | But en or en prolongation (erreur) → corrigé en 0.6.1 | voir 2.13 | 2026-10-24 | CONFIRMÉ |
+| 9.6 | Exclusions loin du ballon → corrigé en 0.6.1 (« seulement un défenseur en contact ») | voir 2.5 | 2026-10-24 | CONFIRMÉ |
+| 9.7 | Place CB extérieure comptée hors poste → corrigé le 2026-10-24 | D:L304 | 2026-10-24 13:44 | CONFIRMÉ |
+| 9.8 | Écran Tactique : texte « CB et P » faux pour le 4-2 (la simulation est correcte) | D:L325 | 2026-10-24 | CONFIRMÉ |
+| 9.9 | Chat du jeu qui « change les mots » à l'envoi (filtre) | C:70b047 | 2026-10-21 | EN DOUTE (un seul témoin) |
+| 9.10 | Panne du site (2026-10-03), nouveau domaine **sixzeroleague.com** (2026-10-05) ; redémarrage serveur : matchs interrompus repassent en attente | D:L163-164, L177-178, L7 | 2026-10-03/05 | CONFIRMÉ |
+| 9.11 | « Problème de prolongation » reconnu le 2026-10-21 | D:L284 | 2026-10-21 | CONFIRMÉ (corrigé en 0.6.1) |
+
+## 10. Versions et devlog
+| Version | Date (devlog) | Contenu clé | Source |
+|---|---|---|---|
+| Première alpha fermée | 2026-09-14 15:47 | vues Aperçu, Équipe, Compétitions (une ligue), Infrastructure, Transferts, Finances, chat | D:L4 |
+| 0.5.7 + 0.5.8 | 2026-10-04 17:06 | exclusions/rouges, blessures en match, minutes qui nourrissent l'entraînement, formation de rôle, vieillissement, étiquette de club, primes top 3, Fan Shop selon le classement, marché reconstruit, wiki en jeu, bot après 30 jours | D:L5-6 |
+| 0.5.9 | 2026-10-09 16:17 | stats privées, onglet Club, coûts de montée affichés avec amortissement, points 2/1/0 et départages, jeu passif à 6 passes | D:L7 |
+| 0.6.0 | devlog 2026-10-16 15:03 ; **en ligne le 2026-10-17 09:56** (chat C:f1e44f) | 5 divisions, coupe, blessures 1 à 6, prolongation/tirs au but, tirs sautés | D:L8 ; C:f1e44f |
+| **0.6.1 Tactical Depth** | devlog 2026-10-24 13:26 ; en ligne 13:37 UTC | formations, directions, agressivité, ordres, rapport tactique, scouting, jeu passif à 4 passes, moins d'exclusions et de blessures, pivots mieux marqués | D:L9 ; C:664f7d |
+Note : la date du devlog précède de 18 h la mise en ligne de la 0.6.0 (EN DOUTE sur les dates de devlog = jour de rédaction). Communauté : 59 inscrits le 2026-09-25 (D:L147), 200 comptes le 2026-10-09 (D:L197), 300 le 2026-10-22 (D:L296-297).
+
+---
+
+## Autres clubs (noms, niveaux, tactiques, résultats cités)
+| Club / joueur | Date | Information | Source | Statut |
+|---|---|---|---|---|
+| **Stoik** (France, ligue 8 le 2026-10-17, même poule que martin) | 2026-10-21 | Arena 7 · Training 1 · **Youth Academy 10** · **Fan Shop 10** ; tirage pivot « moyenne 26 » à l'académie 10 | C:a9c76a, 6aa782 | observation |
+| **martin** | 2026-10-21/22 | Arena 9 · Training 6 · Youth Academy 2 · Fan Shop 1 ; peine à constituer une équipe | C:e7407b, 9b9697 | observation |
+| **pierrottingchrist_29708** | 2026-10-20 | Youth Academy 7-8 (joueurs vers 20), **niveau 9 acheté** pour son choix du soir | D:L261-265 | observation |
+| **squidwardfrommegamind** (Kirakira Bananas, Salomon) | 2026-10-09 → 10-21 | Youth Academy 7 ; ailier 22 de note, pivot 23, ailier 19 ; CB de 18 ans 12 buts sur 12 tirs (10-09) ; victoire à l'extérieur de 5 buts (28 marqués, 10-13) ; 1er ex æquo avec grosse différence de buts (10-21) ; en coupe mené de 3 puis perdu d'un but après blessure et 2 min (10-21) | D:L200-202, L219-243, L255, L287, L295 | observation |
+| **sv3.n** | 2026-10-12/23 | ailier 22 de note, « pas près du haut » ; éliminé en coupe à cause des blessures (10-23) | D:L222, L300 | observation |
+| **jayauston1455** | 2026-10-10 | équipe « bricolée » 1re de sa ligue provisoirement | D:L210 | observation |
+| **gefrituurdebanaan** | 2026-10-06/12 | ligues 10 puis 16 (tirage aléatoire) ; meilleur joueur 13 de note | D:L185-188, L226 | observation |
+| **ethixz** | 2026-10-17 20:46 | champion de la ligue 10 | C:35c243 | résultat cité |
+| **Draugar** (`krzykaczpl_`) | 2026-10-16 | défaite 16-24 puis victoire 28-20 contre le même leader à 2 jours d'écart | C:b891a5 | résultat cité |
+| **Scottern** (`sweeney4437`) | 2026-10-20 → 10-24 | 13-3 après 22 min, défaite 33-21 ; adversaire 8/9 aux 7 m ; top 16 de coupe (10-23), sorti au tour 6 contre une équipe « nettement meilleure » (10-24) | C:217ba8, 7ea18e, 40d7ab ; D:L301, L321 | résultat cité |
+| **Erin** | 2026-10-25 | demi-finale de coupe presque perdue après 3 exclusions en 6 min | C:f2053d | résultat cité |
+| **suiri09** | 2026-09-25/28 | défaite 23-18 contre « Real Dulzac » ; dernier de la ligue au 1er match ; un ami 1er (+9) | D:L149, L153-154 | résultat cité |
+| **AURA farmers** | 2026-09-23 | équipe de 14 joueurs (10 de départ + 1 jeune…) ; `jorgeac25` : « 28 and growing » | D:L91-95, L100 | observation |
+| **Skeleton Kings** | 2026-09-23 | équipe du développeur | D:L103 | observation |
+| **Leões do Bombarral** (nos briefs) | 2026-10-22 | 1er de notre ligue, tactique identique à la nôtre (5-1 / 6-0 / mixed) ; battu 23-22 en J7 ; **humain** ; bilan 12V-0N-3D le 2026-10-26 | SQL / brief Match | SQL |
+| **Bots** | 2026-10-18 | niveau selon la division, jamais la moitié de la puissance d'une équipe humaine forte ; peuvent adapter leur tactique à leurs forces | C:1cd589 ; D:L325 | CONFIRMÉ |
+| **Tactiques des adversaires** | 2026-10-24 | visibles désormais dans les stats de match et la carte « prochain match » (0.6.1) | D:L9 | CONFIRMÉ. **Aucune équipe citée n'a dévoilé sa formation dans les chats** ; seul recoupement : Leões (SQL) |
+Remarque : aucune source ne donne les **effectifs** ni les notes de joueurs d'un club adverse hors les chiffres ci-dessus (Gazelle refuse de les montrer : C:d392b5, ba3fd2). Indices voulus : scouting à petit prix, niveau de club, tactiques dans les stats, rediffusions, MVP, attributs du pays pour un sélectionneur.
+
+---
+
+## Ce qui change nos décisions maintenant
+Faits de la lecture intégrale appliqués à la situation du 2026-10-26 (J16 ce soir, J17 et J18 demain ; **6 matchs sans victoire** J10-J15 : L, L, L, N, L, L, `silver.sz_matches`).
+
+1. **Fournier (CB 17) est un tirage moyen d'une académie niveau 5.**
+   - Plage 5-28, milieu 16,5 ; 17 = dans la moyenne (3.8, 3.9), donc **le niveau 5 ne produit pas de miracle**, mais il remplace des CB à 10 et 8 : +7 sur le poste le plus mince.
+   - Gazelle : les places centrales de la défense sont pour CB et P ; le CB peut en plus jouer à l'extérieur (1.9). Fournier au CB défend au centre sans pénalité. Seuls CB et P y sont sans pénalité.
+   - Piège : en **4-2 d'attaque il n'y a pas de CB** (1.6) : Fournier n'aurait pas de place d'attaque naturelle. Donc 4-2 est incompatible avec notre atout principal (inférence ; vérifier à l'écran).
+2. **Directions « right » / « left+centre » / « right+centre » : aucune source ne chiffre l'effet.** Seul fait : « left/right + centre » → CB et P attaquent le plus (1.7). Notre analyste (brief 2026-10-26) a mesuré le côté gauche à 37 % contre 47 % à droite et 56 % au centre (pivot 73 %) : **cela soutient « centre » ou « right+centre » plutôt que « mixed »**, mais c'est un échantillon de 6 matchs. La preuve manque : le **rapport tactique** de la 0.6.1 donne « avantages et inconvénients de chaque choix vérifiés contre nos joueurs » (1.1). **Il me manque ce texte** : on le réunit ainsi : Équipe → Tactique → ouvrir le rapport tactique pour chaque direction (right, right+centre, left+centre, centre), copier le texte ou capturer l'écran, et l'exporter avec le script (page Tactique). Je l'enregistre dans la fiche Tactique pour qu'il ne manque plus.
+3. **Formations 4-2 / 3-2-1 / 3-3 :**
+   - Attaque : **garder le 5-1 contre une défense 6-0** (1.3) ; la plupart des adversaires humains sont probablement encore en 5-1/6-0 (Leões le sont) ; le 4-2 n'est un contre sérieux que du 3-3.
+   - Défense : **aucune source ne dit quelle défense contre le 5-1**. Les défenses 3-2-1 / 3-3 « pressent » plus (1.3). Un ailier y serait hors poste (1.11).
+   - Gazelle : « joue selon les forces de ton équipe » (1.4) : ne pas changer de formation pour contrer, sauf si le rapport tactique le recommande pour nos joueurs.
+   - Tester **une option à la fois**, après lecture du rapport et de la carte « prochain match » (tactique jouée par J17 Miloslav Stružinsky et J18 Pretok). Les ordres de match (3 changements à minute/score choisis) sont un levier non testé contre les secondes mi-temps perdues (L-004).
+4. **Youth Academy 5 contre 9–10 chez Stoik et pierrottingchrist_29708 :**
+   - Mesure : milieu de tirage 16,5 contre 24 et 22,5 (+7,5 et +6 points par compétence) ; Stoik n'a rien dans l'entraînement (niveau 1), nous 6.
+   - Prix réel depuis le niv. 5 : niv. 9 = 27 900 € (entretien 370 par cycle), niv. 10 = 38 600 € (455), **pas** 35 600 pour le niv. 8 (c'est 18 900, 3.7). Notre solde : 1 843 € (brief Finances) → rattrapage impossible cette saison ; la question est l'ordre des investissements de la saison suivante, pas ce soir. Le passage au niv. 8 (18 900 €) passe de 2 à 4 compétences dévoilées.
+   - Opposition de conseils : Gazelle = revenus d'abord (3.12) ; Stoik/Squidward = académie d'abord, entraînement en dernier (3.3, 3.13). **Le propriétaire a fait l'inverse de Stoik** (Training 6, Académie 5). Les trois avis sont des avis ; aucune règle.
+5. **Six matchs sans victoire : la 0.6.1 coupe la série en deux.** Le 2026-10-24 13:37 UTC (entre J11 à 12:12 et J12 à 20:13) le moteur change : jeu passif 6 → 4 passes, **moins d'exclusions**, **pivots mieux marqués**, attaquants plus loin des défenses qui pressent, formations équilibrées (2.4, 2.5, 1.2). `silver.sz_matches` (ligue) :
+   | Période | Matchs | Buts pour / contre | Efficacité nous / adversaire | Exclusions nous / adversaire |
+   |---|---|---|---|---|
+   | avant 0.6.1 (matchs datés ; 2 matchs sans date exclus) | 9 | 22,1 / 22,9 | 51,6 % / 52,0 % | 3,9 / 4,8 |
+   | après 0.6.1 (J12-J15) | 4 | **20,0 / 26,0** | 49,4 % / **56,2 %** | 4,5 / 5,0 |
+   - Par poste après la 0.6.1 (tirs, `silver.sz_match_players`) : **pivot 72,2 % (13/18), inchangé** (avant 71,4 %) : « mieux marqué » ne se voit pas sur notre pivot ; **LW 31,6 % (6/19) contre 48,8 %** ; RB 45,7 % contre 59,0 % ; CB 55,3 % contre 40,7 %.
+   - Lecture prudente : 4 matchs ; **l'efficacité adverse monte (56 % contre 52 %), nos exclusions ne baissent pas** (le « moins d'exclusions » ne se voit pas chez nous). Toute conclusion sur la tactique doit comparer **J12 et après**, pas la saison entière (rupture de série) — et la série J10-J11 est, elle, d'avant la 0.6.1. **EN DOUTE**, confiance faible.
+6. **Hors-poste : le calcul des briefs est juste mais incomplet.** Une pénalité de défense suit la **place défensive**, pas le rôle d'attaque (1.8) ; le 12,5 % cité par Gazelle est un écart non résolu avec 10 % ⚠️. Pour un test avec Fournier, éviter toute combinaison où un joueur défend une place latérale hors de son rôle.
+7. **Aucune règle sur la fatigue** après lecture intégrale (2.14) : C-023 (endurance en Stamina) reste une hypothèse ; la réponse de Gazelle sur les runs de 2e mi-temps (2.10) ne donne pas de mécanisme.
+
+---
+
+## Registre des contradictions et doutes (rien n'est effacé)
+| Point | Dit A | Dit B | État |
+|---|---|---|---|
+| Pénalité de défense hors poste | 10 % (Gazelle 10-13, 10-24) | 12,5 % pour un P en LB à l'attaque (D:L325) | ⚠️ non tranché ; tester avec un cas simple |
+| Training Facilities par niveau | +0,04 (Gazelle 10-19, « si je ne me trompe pas ») | +0,06 (nos données, `effect_label`) | ⚠️ nos données priment |
+| Suspension du rouge avec rapport | 2 journées (devlog 0.5.7) | 1 match (wiki, écran 10-23) | ⚠️ non tranché |
+| Remplacements sur ordre | « joueur » (V-5) | Urban Fox = Gazelle, « not yet » | ⚠️ V-5 à corriger |
+| Coûts d'académie | additionnés (brief Académie) | cumulés par colonne | ⚠️ à vérifier à l'écran Infrastructure |
+| Prolongation de coupe | but en or (V-20261023-7) | corrigé en 0.6.1 | V-7 périmée |
+| Formations | 5-1 / 6-0 seules (V-20261023-12, fiche tactique 2bis) | 0.6.1 : 5-1/4-2 ; 6-0/5-1/3-2-1/3-3 | fiche périmée |
+| Agressivité | « pas encore » (skill communauté § 5) | Light/Normal/Hard (0.6.1) | skill périmé |
+| Ordre de revenus | revenus d'abord (Gazelle) | académie d'abord (Stoik, Squidward) | avis opposés |
+
+## Delta (à compléter à chaque export)
+| Export | Date de passage | Dernier message lu | Nouveautés |
+|---|---|---|---|
+| Discord #dev-log + #chat | 2026-10-26 | #dev-log 0.6.1 du 2026-10-24 13:26 ; #chat 2026-10-25 10:35 | première lecture intégrale, 0.6.1 enfin lue |
+| Chat du jeu (base) | 2026-10-26 | Global 2026-10-26 13:06 UTC ; France 2026-10-25 12:30 | lecture intégrale des 241 messages |
+| `export_2310.txt` | 2026-10-26 | fin (244 lignes) | doublon de la base jusqu'au 2026-10-22 |
+| Wiki | capture 2026-10-18 | — | antérieur à 0.6.0/0.6.1 ; à refaire |
