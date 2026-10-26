@@ -50,3 +50,7 @@ Après une signature, l'horloge repart : la paire suivante arrive 8 journées pl
 ## [Obs] Nos données
 - API : `/api/teams/mine/training` (plan), `/api/teams/mine/training/report` (rapport), `/api/teams/mine/role-training`, `/api/teams/mine/u18`.
 - Aucun cycle d'entraînement encore joué le 2026-10-18 (saison remise à zéro).
+
+## [Veille 2026-10-26] Mise à jour (V-20261026-4, -8)
+- Un joueur blessé ne reçoit pas de points d entraînement [Dev chat, Gazelle, 2026-10-26 13:06 UTC ; V-20261026-4].
+- Hypothèse (avis de joueur) : académie niveau 10 = compétences de 10 à 38, tirage moyen ~24, cohérent avec min = niveau et max = 18 + 2 x niveau [Com chat, Stoik, chat France 2026-10-23 08:45 ; V-20261026-8].
