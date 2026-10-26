@@ -7,6 +7,7 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 
 ## Comment lire cette skill
 - **[Dev chat]** = Gazelle, qui déploie les mises à jour et lance les saisons : vaut une règle, mais le jeu est en alpha et change vite.
+- Alias confirmé : **« Urban Fox » = Gazelle** (« This is Gazelle btw », C:82fda3, 2026-10-19 21:16) : ses messages sont des [Dev chat]. `Draugar` (jeu) = `krzykaczpl_` (Discord) ; `Scottern` = `sweeney4437`. [V-20261026-13]
 - **[Com chat, pseudo]** = un joueur : opinion ou observation, **pas une règle**.
 - **Le wiki l'emporte** en cas de contradiction ([W:Rubrique], skills sixzeroleague-*) ; les écarts sont signalés ⚠️.
 - Source : export du chat global collé par l'utilisateur le 2026-10-18 (messages non datés, de la fin de la saison précédente au 18/10). Le chat est aussi capturé par le script (`/api/chat/messages?channel=global`).
@@ -38,14 +39,14 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 - ⚠️ Bug connu : la prime de classement a été versée mais ne s'affichait pas dans l'onglet Finances [Dev chat].
 
 ## 5. Match, discipline, tactique
-- Pas encore de réglage d'agressivité d'équipe : prévu dans une future mise à jour tactique [Dev chat].
+- Agressivité d'équipe **disponible depuis la 0.6.1** (Light, Normal, Hard) ; son effet n'est pas documenté ; elle était annoncée comme réponse aux jaunes et aux 2 min [Dev chat, C:911baf 2026-10-16 12:18 ; D:L9 ; V-20261026-14, remplace la puce « pas encore de réglage »]
 - Pour moins de cartons et d'exclusions : travailler le **Marquage** d'abord, puis **Anticipation** et **Duels** [Com chat, Antarez] ; cohérent avec le wiki (Marquage et Duels = moins de fautes [W:Attributes]).
 - Jeu passif : les équipes faibles tirent rarement pendant l'avertissement et perdent le ballon à la 7e passe ; selon le Dev, un tir pendant cette phase a pourtant actuellement **un taux de réussite plus élevé** ; point à revoir de son côté [Dev chat].
 - Matchs joués avant la mise à jour des statistiques : seul le score est disponible [Dev chat].
 - Le 7 m est tiré par le meilleur de l'équipe, sans choix possible [Dev chat, 2026-10-20]. Fautes de 2 min loin du ballon : bug en correction ; nombre d'exclusions en révision ; jeu passif : pression pour tirer ajoutée, mais les équipes faibles tirent encore peu [Dev chat, 2026-10-20 et 2026-10-21]. Seules les formations 5-1 / 6-0 existent ; un joueur ne peut pas être limité à l'attaque ou à la défense [Dev chat, 2026-10-10]. Stats adverses non visibles ; la formation adverse viendra dans les stats de match [Dev chat, 2026-10-22].
 
 ## 6. Économie, académie, alpha
-- Coût des niveaux d'infrastructure caché volontairement ; Arena max > 9 999 par match à domicile, plus en division haute [Dev chat, Discord #chat 2026-10-19]. Bonus du Training Facilities +0,04 par niveau, linéaire (« si je ne me trompe pas ») [Dev chat, 2026-10-19].
+- Coût des niveaux d'infrastructure caché volontairement ; Arena max > 9 999 par match à domicile, plus en division haute [Dev chat, Discord #chat 2026-10-19]. Bonus du Training Facilities +0,04 par niveau, linéaire (« si je ne me trompe pas ») ⚠️ contredit par nos données (+0,06 par niveau : ×1,30 au niveau 6 à ×2,14 au niveau 20, voir skill club) [Obs SQL 2026-10-26 ; V-20261026-17] [Dev chat, 2026-10-19].
 - Fan Shop : 1,6 × (leader) à 0,7 × (dernier) selon le classement [Dev chat, devlog 0.5.7 2026-10-04].
 - Conseil du développeur (avis) : revenus d'abord ; avec des Training Facilities hautes, garder les joueurs à forte éthique de travail puis les vendre [Dev chat, 2026-10-11].
 - Joueur libéré : 10 % de chances d'être relisté en joueur libre [Dev chat, 2026-09-23].
@@ -57,3 +58,5 @@ description: Ce que disent le chat du jeu Six Zero League et son développeur (G
 - Indices voulus par le jeu sur les adversaires : tactiques visibles dans les statistiques de match, scouting, niveau du club, rediffusions, MVP [Dev chat, Gazelle, 2026-10-23 10:00 UTC ; V-20261026-7].
 - Anecdote : un joueur a eu 3 exclusions dans les 6 dernières minutes d un match de coupe [Com chat, 2026-10-25 17:32 UTC ; V-20261026-6].
 - À surveiller (sans date) : pas d enchère plus grand pour les gros prix, page de statistiques de ligue. L export Discord #dev-log s arrête au 2026-10-22 : la 0.6.1 y manque.
+- Jeu passif et exclusions modifiés en 0.6.1 (4 passes, moins d'exclusions, blessure d'entraînement divisée par deux) : voir skill match ; rupture de série au 2026-10-24 13:37 UTC [Dev chat, D:L9 ; V-20261026-15].
+- Stratégies d'infrastructure observées : Stoik (2026-10-21) Arena 7, Training 1, Youth Academy 10, Fan Shop 10 ; martin (2026-10-22) Arena 9, Training 6, Academy 2, Fan Shop 1 ; pierrottingchrist_29708 (2026-10-20) Academy 9 ; Squidward : Academy 7 d'emblée (tirages 19 et 23). Avis opposés : Gazelle « revenus d'abord (Arena, Fan Shop) » (D:L215, L218) contre Stoik/Squidward « académie d'abord, entraînement en dernier » (C:0f6618, D:L255) — **avis, pas des règles**. [Dev chat / Com chat ; V-20261026-20]

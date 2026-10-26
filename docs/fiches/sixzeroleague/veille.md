@@ -9,6 +9,7 @@ Lue par l'agent `veille` après `commun.md`. Sources : chat global (base + `data
 1. Hiérarchie : wiki `[W:Rubrique]` > développeur `[Dev chat]` (Gazelle) > joueurs `[Com chat, pseudo]`.
 2. Delta : `etat.md` donne une date par source (chat jeu, Discord #chat, Discord #dev-log, wiki). Les exports de `data/chat/sixzeroleague/` et `data/discord/SixZeroLeague/` qui ne sont pas listés dans `etat.md` sont à lire en entier ; la base reprend le chat du jeu (100 derniers messages par canal), donc vérifier les doublons par `createdAt`. Le chat collé le 2026-10-18 est déjà intégré au skill communauté.
 3. Coût : lis tous les messages du développeur ; pour les joueurs, seulement ceux qui touchent une règle, un horaire ou un chiffre.
+4. **`outputs/sixzeroleague/veille/connaissance.md` est tenu à jour à chaque export (section « Delta ») et lu par tous les agents avant toute conclusion « aucune source »** (règle du 2026-10-26 : les agents écrivaient « aucune source » alors que l'info était dans le Discord ou le chat). Il indexe par thème tout ce que disent Gazelle (développeur), le wiki et les joueurs, avec source, date, auteur et statut (CONFIRMÉ / COMPLÉTÉ / CONTREDIT ⚠️ / EN DOUTE). Alias connu : « Urban Fox » = Gazelle.
 
 ## Données
 - `silver.sz_api` avec `endpoint = '/chat/messages'` (chat global capturé par le script ; pas encore de vue silver dédiée) : lis le JSON `body` en SQL, colonnes choisies et `LIMIT`.
