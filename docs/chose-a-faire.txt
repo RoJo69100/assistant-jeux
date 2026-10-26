@@ -1,0 +1,177 @@
+Basket Vibe : 
+
+Global :
+Faire un premier tour avec l'agent Veille pour comprendre les regles, pour avoir toutes les infos discord, toutes les infos du forum et toutesz les infos du chat, pour avoir une mine d'or de données 
+Avoir le calendrier et savoir quel jour on est et du coup se reperer
+Comprendre la différence des compétitions Coupe/Amical/Ligue et faire en sorte d'avoir des parametres chacun, ligue coupe avoir preset compo, amical pas de preset mais on peut tester beaucoup de choses
+Analyser les stats de la ligue pour voir les meilleurs joueurs dans les equipes
+
+Jeunes/Academies : 
+Comprendre comment l'académie fonctionne
+Savoir si on scout le joueur
+Savoir si le joueur apres scout est intégrable dans le club
+Savoir combien on dépense dans l'académie
+
+Finances : 
+Connaitre notre solde actuel
+Connaitre nos dépenses
+Connaitre nos salaires
+Connaitre notre entrée d'argents
+Savoir quels actions on peut mener, acheter joueur ? acheter personnel ? rien faire ? 
+Quoi faire dans le futur.
+Comprendre les sponsors et choisir le meilleur sponsor possible
+
+Equipe : 
+Connaitre toutes les caracteristiques des joueurs
+Savoir si le joueur est de l('academie oiu non
+Comprendre l'effet de forme
+Comprendr el'effet d'experience
+Comprendre l'effet de fatigue 
+Savoir si le joueur est bon a son psote, si non a quel poste ? (savoir si on peut faire jouer a un autre poste)
+Savoir si ce joueur est a vendre
+Connaitre les statistiques des joueurs 
+Connaitre les joueurs blesses ou suspendues
+
+Transferts :
+Se créer une base de données, ce type de joueur vale ce prix
+Etudier le marché savoir si on peut acheter/revendre nos joueurs
+Savoir s'il faut vendre nos joueurs 
+
+Entrainements :
+Definir les caracteristiques premiere et deuxieme a entrainer apres un export
+Suivre le progres des joueurs 
+Comprendre le progres et definir quel est le talent du joueur
+
+Tactique : 
+Quels tactiques mettre en place
+Avoir une composition avec un tableau des joueurs avec leur poste, leur quart temps auxquelles ils jouent,l'offensive focus de 1 a 5 (Low (Pri), Role 1 a 5 (Pass - Score), shooting focus 1 a 5 (2pt - 3 pts), defense 1 a 5 soft agressivite
+Mettre en place le defensive focus 1-5 (give up-Lock), defensive area 1-5 (perimeter-run)
+Choisir la meilleur stratégie pour cette adversaire selon nos anciens matchs contre eux
+Choisir la meilleur stratégie possible selon tous les matchs qu'on a joué, selon les blesses, selon el manque de forme, selon le manque de reussit ces derneirs temps 
+
+Personnel : 
+Savoir a quoi sert chaque personnel 
+Savoir si on a besoin de ce personnel ou non 
+
+SixZeroLeague: 
+
+Global :
+Faire un premier tour avec l'agent Veille pour comprendre les regles, pour avoir toutes les infos discord, toutes les infos du forum et toutesz les infos du chat, pour avoir une mine d'or de données 
+Avoir le calendrier et savoir quel jour on est et du coup se reperer
+Comprendre la différence des compétitions Coupe/Ligue et faire en sorte d'avoir des parametres chacun
+Analyser les stats de la ligue pour voir les meilleurs joueurs dans les equipes
+Avoir quelque chose pour export du chat
+
+Jeunes/Academies : 
+Comprendre comment l'académie fonctionne
+Savoir quel joueurs on selectionne entre les 2 selon les statistiques et selon le besoin de l'equipe et selon la possibilite de revente si pas necessaire a l'equipe
+
+Finances : 
+Connaitre notre solde actuel
+Connaitre nos dépenses
+Connaitre nos salaires
+Connaitre notre entrée d'argents
+Savoir quels actions on peut mener, acheter joueur ? ameliorer infrastructure ? rien faire ? 
+Quoi faire dans le futur.
+Comprendre les sponsors et choisir le meilleur sponsor possible
+
+Equipe : 
+Connaitre toutes les caracteristiques des joueurs 
+Savoir si le joueur est bon a son psote, si non a quel poste ? (savoir si on peut faire jouer a un autre poste)
+Savoir si ce joueur est a vendre
+Connaitre les statistiques des joueurs 
+Connaitre les joueurs blesses ou suspendues
+
+Transferts :
+Se créer une base de données, ce type de joueur vale ce prix
+Etudier le marché savoir si on peut acheter/revendre nos joueurs
+Savoir s'il faut vendre nos joueurs 
+
+Entrainements :
+Definir la caracteristique a entrainer
+Suivre le progres des joueurs 
+Comprendre le progres
+
+Tactique : 
+Quels tactiques mettre en place
+Avoir une composition avec un tableau des joueurs avec leur poste, l'attack formation, la defense formation, l'attack direction, l'agresssion avec les remplacements et quand faire les rempalcements si necessaire
+Voir si on peut mettre des ordres (pas encore dans les skills de maintenat)
+Choisir la meilleur stratégie pour cette adversaire selon nos anciens matchs contre eux
+Choisir la meilleur stratégie possible selon tous les matchs qu'on a joué, selon les blesses, selon el manque de forme, selon le manque de reussit ces derneirs temps 
+
+Personnel : 
+
+Team Soccer: 
+
+Global :
+Faire un premier tour avec l'agent Veille pour comprendre les regles, pour avoir toutes les infos discord, toutes les infos du forum et toutesz les infos du chat, pour avoir une mine d'or de données 
+Avoir le calendrier et savoir quel jour on est et du coup se reperer
+Comprendre la différence des compétitions Coupe/Amical/Ligue/Coupe europeene (Csonsolation, masters, championnes, coupe des champions, coupe continental) et faire en sorte d'avoir des parametres chacun
+Analyser les stats de la ligue pour voir les meilleurs joueurs dans les equipes
+Avoir quelque chose pour l'export du forum 
+Comprendre ce qu'est les badges rouge,bleu , orange, vert etc ...; et comprendre comment es'ameliorer
+
+Jeunes/Academies : 
+Comprendre comment l'académie fonctionne (chaque jour 3 jeunes visibles)
+Savoir si on fait monter un jeune ou non apres avoir scouter toutes ses caracteristiques
+Savoir si on le monte et on le vend ?
+
+Finances : 
+Connaitre notre solde actuel
+Connaitre nos dépenses
+Connaitre nos salaires
+Connaitre notre entrée d'argents
+Savoir quels actions on peut mener, acheter joueur ? ameliorer infrastructure ? rien faire ? 
+Quoi faire dans le futur.
+Comprendre les sponsors et choisir le meilleur sponsor possible
+
+Equipe : 
+Connaitre toutes les caracteristiques des joueurs
+Savoir si le joueur est de l'academie oiu non
+Comprendre l'effet de forme
+Savoir si le joueur est bon a son psote, si non a quel poste ? (savoir si on peut faire jouer a un autre poste)
+Savoir si ce joueur est a vendre
+Connaitre les statistiques des joueurs 
+Connaitre les joueurs blesses ou suspendues
+
+Transferts :
+Se créer une base de données, ce type de joueur vale ce prix
+Etudier le marché savoir si on peut acheter/revendre nos joueurs
+Savoir s'il faut vendre nos joueurs 
+
+Entrainements :
+Definir la caracteristique a entrainer et l'intensite a mettre en place pour chaque joeuur
+Suivre le progres des joueurs 
+Comprendre le progres 
+
+Tactique : 
+Quels tactiques mettre en place
+Avoir une composition avec un tableau des joueurs avec leur poste,avec les remplacements et quand faire les rempalcements si necessaire
+Definir l'ordre tactique, chaque joueur a 5 colonnes, UDEF/DEF:MED/OFE/FIN et dans chaque colonne on peut mettre DEGAGER/PASSER/DRIBBL/CENTRER/TIRER
+Definir la consigne de jeux 
+Choisir la meilleur stratégie pour cette adversaire selon nos anciens matchs contre eux
+Choisir la meilleur stratégie possible selon tous les matchs qu'on a joué, selon les blesses, selon el manque de forme, selon le manque de reussit ces derneirs temps 
+
+Personnel : 
+Savoir a quoi sert chaque personnel 
+Savoir si on a besoin d'augmenter le niveau de 'lentaineur dans la partie entrainement 
+
+Tous jeux : 
+Pour toute composition, si je te fais un extract, l'ordre doit etre les memes, je veux facilite ma saisie, si c'est meme ordre j'ai juste a faire facilement sinon je dois chercher le joueur 
+Connaitre les meilleurs caracteristiques de tous les joueurs
+Des actions clairs, ej te dis si je suis dispo ou non du coup on parle que de aujourd"hui
+Pas de si, des verifications tout le temps
+Des reponses simples et de la mise en forme
+Des tableaux pour etre plus efficace
+Chaque chose verifier, tu dois apprendre de tes erreur
+tu ne dois pas faire d'hypothese sans verifier
+Tu dois prendre des decisions, on a beaucoup d'argents, que faire ? reflechir sur les axes a ameliorer
+Prendre des décisions, un grand nombre de défaites, on doit prendre une actions
+Une nouveauté ? tu dois tester, si possible en amical sinon tu proposes comment tester
+Tu dois comprendre chaque jeu et chaque subitilité, chaque regle doit etre parfaite, la mine d'or doit etre etudier a 100 %
+Savori quel export faire chaque jour et apres chaque export savoir quoi faire directement pour ce jeu specifique
+Mettre en place un ordre logique dansla suite des actions, comprendre quels actions depend de quel action 
+Mettre a jour les agents/skills lorsqu'une nouveauté est mis en place et pouvoir adapter nos decisions suite a ce changement
+Comprendre le retour des joueurs experimentes Discord pour nos prises de decisions insecure si possible
+Me dire si je ne connais pas certaines choses, un facteur  cachée qui est devoilée dans des discussions
+Si tu ne trouves pas quelque chose dans un export, el dire, je refais l'export et tu t'ameliores
