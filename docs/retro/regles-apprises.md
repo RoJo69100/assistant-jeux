@@ -2,6 +2,12 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-26 (soir)
+24. Au « reprenons » : relire les briefs du jour et le registre `fait-…` avant l'agenda ; jamais répondre depuis `gold.*_agenda` seul.
+23. Plan ou liste de plus de 5 lignes = `verificateur` avant de répondre (récidive de la règle CLAUDE.md « Vérificateur » : 3 réponses sans lui, 4 erreurs).
+22. Avant d'écrire « pas de donnée » ou « absent » : chercher dans tous les exports, y compris `data/chat/`, et dans le dernier export bronze (pas seulement silver).
+21. Avant de dire qu'une décision n'a pas d'obstacle : relire la section « Réglage exact » du brief concerné ; une dérogation à un `C-nnn` se déclare et décale ses critères de réfutation. `captured_at` est en UTC : heure Paris via `at time zone 'Europe/Paris'`.
+
 ## 2026-10-25 (à lire en premier)
 20. « Que faire » = seulement ce qui est faisable maintenant. Jamais d'export de match ni d'action « après le match » dans « Reste à faire » : je les annonce quand le match est joué (RÉCIDIVE de « pas de temporalité »).
 19. Six Zero League : une seule tactique par défaut pour tous les matchs ; on ne choisit pas de compo par match. `gold.sz_agenda` répète « tactique pour J14 / J15 » : ne pas la reprendre telle quelle, la tactique du jour couvre les matchs suivants.
