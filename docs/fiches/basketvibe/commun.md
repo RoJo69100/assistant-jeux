@@ -50,6 +50,19 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 | Coupe FR (match 28/10 18:00 contre MACCABI) | `club`, `body.cup_fixtures` et `active_enrollments` | tactique non enregistrée | Non lue par silver (`bv_fixtures`, `bv_matches` sans cette date) |
 | Notification `training_resolved` | `notifications` | 13 améliorés, top Bernard rebond +2 | Contrôle rapide du résultat de l'entraînement |
 
+Ajouts du lecteur-exports 2026-10-26 (export de 20:08 UTC) :
+
+| Élément | Où | Valeur actuelle | Effet |
+|---|---|---|---|
+| Préréglages `active_friendly_preset_id` / `active_league_preset_id` / `active_cup_preset_id` | `match`/`friendly`, page tactique (`body.presets`, 2 presets : « League Tactic » 43d784f8, « Friendly » 924952fc) | amical = « Friendly » ; ligue = « League Tactic » ; **coupe = « League Tactic »** (même id que la ligue) | La coupe du 28/10 reprend donc le preset de ligue ; effet sur le résultat inconnu : mesure = score et `my_result` du match de coupe |
+| `player_directives` : `role_tier`, `shot_tier`, `offensive_focus_tier` (0–4) en plus de `defense_tier` | presets, par joueur | ex. Friendly : Bonnet role 4 / shot 4 / focus 4 ; Leclerc role 3 / shot 4 ; League Tactic : Bonnet idem, `defense_tier` 2 partout (Friendly : 0 sauf Dang et Albano à 2) | Seul `defense_tier` est documenté (fatigue) ; effet des trois autres inconnu : à tester une option à la fois, mesure = tirs tentés (`fga`) et points du joueur dans l'export du match |
+| `possessions_per_quarter_n` | `match`/`friendly`, détail | 50 (Wolves et Debrecen) | Effet inconnu : à relever, mesure = tirs + pertes + lancers par équipe |
+| `injuries` (match) | détail du match | J22 : Casadei (Wolves) blessé ; amical : aucun | Lecture : blessure adverse avant match, mesure = minutes de l'adversaire |
+| `club_strength` | `notifications`, `standings[]` | Chomelix Cow 53,6 ; plage de la ligue 52,2 à 58,4 (KK Uola) | Effet inconnu : à comparer au rang final (nous 8e avec 53,6) |
+| `manager_last_seen_at`, `manager_is_online`, `is_banned`, `entry_direction` | `notifications`, `standings[]` | BARIUM vu pour la dernière fois le 26/08, Thrylos le 17/08 | Clubs abandonnés repérables ; effet de jeu inconnu |
+| `popularity`, `weekly_medical_staff_cost`, `weekly_medical_staff_peak_cost`, `transfer_lock` | page typée `academy` (en réalité finances) | 0,67 ; 60 000 ; 60 000 ; false | Le journal montre 85 000 de personnel médical le 25/10 contre 60 000 affichés : écart à expliquer |
+| `skills_visibility`, `is_academy_junior`, `primary_display` / `secondary_display` | `training`, `body.players[]` | « full » ; false | Affichage entier des compétences (skill_display) vs `stats` décimales |
+
 ## Sorties
 - Briefs : `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md`.
 - Journal : `outputs/basketvibe/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`).
