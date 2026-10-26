@@ -1,0 +1,160 @@
+# Team Soccer — config (gabarit : _modele.yaml ; attentes : ../attentes.md)
+# Écrite le 2026-10-26 depuis docs/fiches/teamsoccer/, les skills teamsoccer-* et bronze.raw_pages.
+
+jeu:
+  id: teamsoccer
+  nom: Team Soccer
+  sport: football
+  prefixe_sql: ts_
+  fuseau_affichage: Europe/Paris
+
+equipes:              # deux économies séparées : un bloc par club dans CHAQUE rendu (R-3)
+  - { id: 18,    nom: Chomelix Cows,    niveau: "Division I, série 119",   controle: [composition, tactique, entrainement, transferts, academie, stade, entraineur] }
+  - { id: 15858, nom: Ben Ahmed Donkey, niveau: "Women's TS League, Division III, série 1956", controle: [composition, tactique, entrainement, transferts, academie, stade, entraineur] }
+
+ligue: { taille: 8, division: "voir equipes", montee_descente: "barrages en semaine 8 (skill teamsoccer-saison)" }
+
+unites_echelles:
+  devise: "$"
+  competences: { nombre: 10, echelle: "0–100" }
+  forme: "0–100 ; action × (0,70 + 0,30 × Forme/100)"
+  conversion_base_ecran: "API en espagnol : zones ultradef/def/media/ofensiva/finalizacion ; actions pasar/despejar/regatear/centrar ; à traduire"
+
+jugement_joueur: [sous-rôle naturel (tableau du skill joueurs), OVR pondéré du poste, Forme, talent et météo, stats]
+
+sources:
+  manuel: "guide officiel teamsoccer.org — [G:Rubrique]"
+  devlog: "annonces de l'admin (silver.ts_news)"
+  discord: null
+  forum: "silver.ts_forum_posts (page dashboard_forums) — Admin-Dev = développeur"
+  chat: null
+  connaissance: outputs/teamsoccer/veille/connaissance.md   # à faire : veille intégrale (mémoire project-veille-integrale-autres-jeux)
+
+exports_texte:
+  - { type: forum, canal: "pages dashboard_forums exportées par le script", frequence: "à chaque visite du forum", destination: bronze.raw_pages, declenche: [veille] }
+  # « avoir quelque chose pour l'export du forum » (utilisateur) : un export par sujet aujourd'hui ; un export groupé reste à faire
+
+rythme:
+  - { quand: mardi samedi,  quoi: "ligue Chomelix Cows 13:50", verrouillage: "2 h avant (11:50)", fuseau_heure: Paris }
+  - { quand: lundi jeudi,   quoi: "ligue Ben Ahmed Donkey 19:30", verrouillage: "2 h avant (17:30)", fuseau_heure: Paris }
+  - { quand: en semaine,    quoi: coupes, verrouillage: "2 h avant (gold.ts_upcoming.lineup_deadline_paris)", fuseau_heure: Paris }
+  - { quand: vendredi,      quoi: "entraînement et Forme", fuseau_heure: hôte }
+  - { quand: lundi 00:05,   quoi: "finances de la semaine", fuseau_heure: hôte }
+  - { quand: chaque jour,   quoi: "3 révélations d'académie par club (reset 01:00 UTC)", fuseau_heure: UTC }
+  - { quand: saison,        quoi: "9 semaines : ligue sem. 1–7 (14 journées), barrages sem. 8, repos et Gala sem. 9 ; saison 3 du 2026-10-12 au 2026-11-28" }
+
+competitions:
+  ligue:                { saisie: oui, preset: "mode Simple (4 presets) ou Avancé", moteur: v3, verrouillage: "2 h avant", but: gagner }
+  coupe_nationale:      { saisie: oui, verrouillage: "2 h avant", but: gagner, note: "bloque les amicaux tant qu'on y est" }
+  coupe_consolation:    { saisie: oui, verrouillage: "2 h avant", but: gagner }
+  coupe_masters:        { saisie: oui, verrouillage: "2 h avant", but: gagner }
+  coupe_des_champions:  { saisie: oui, verrouillage: "2 h avant", but: gagner }
+  coupe_continentale:   { saisie: oui, verrouillage: "2 h avant", but: gagner }   # page continental-cup en bronze ; règles à lire par la veille
+  amical:               { saisie: oui, preset: libre, frequence: "un par semaine", but: tester }
+
+ecrans:
+  composition:
+    lignes: [formation, style d'équipe]
+    valeurs_permises:
+      formation: "6 formations (skill teamsoccer-match)"
+      style d'équipe: [Très défensif, Défensif, Neutre, Offensif, Très offensif]
+    colonnes: [emplacement, joueur]
+    ordre_joueurs: "emplacements 0–10 : gardien, défense (1 et 4 latéraux, 2 et 3 centraux), milieu (latéral, central, latéral), attaque"   # 1-5-4-1 déduit, non vu
+  consignes_matrice:                # mode Avancé, une ligne par joueur
+    colonnes: [joueur, Ultra défensive, Défensive, Médiane, Offensive, Finition]
+    valeurs_permises: { action: [dégager, passer, dribbler, centrer, tirer], cible_passe: [défenseurs, milieux, attaquants] }
+    contraintes: "gardien : une consigne (dégager) ; aucune consigne en Finition pour défenseurs et gardien ; centraux ne centrent pas"
+  banc:
+    colonnes: [remplaçant, rôle couvert]
+    nombre: 6
+  remplacements_programmes:
+    colonnes: [minute, condition, entrant, sortant]
+  entrainement:
+    colonnes: [joueur, compétence, intensité]
+
+options_a_tester:
+  - "départage Passe = Conduite = Centres = Finition = 60 (Ben Ahmed) : passer, puis dribbler si trop de pertes (gold.ts_match_plays)"
+  - "un entrant reprend-il les consignes du sortant ? lire l'onglet Avancé après le premier remplacement"
+  - "login_streak, daily_reveal_count, reward/page_key : effet inconnu"
+  - "badges de couleur (rouge, bleu, orange, vert) : sens et façon de progresser à relever (demande utilisateur)"
+
+exports:
+  - { page: dashboard_match-viewer_id, quand: après chaque match,                 evenement: export_match }
+  - { page: dashboard_matches,         quand: après chaque match,                 evenement: export_match }
+  - { page: dashboard_squad,           quand: "après chaque match, et vendredi après l'entraînement", evenement: export_roster }
+  - { page: dashboard_team,            quand: avant la saisie (composition),       evenement: export_roster, page_typee_reelle: "la composition n'arrive que par la page composition/match ; dashboard_squad n'en contient pas" }
+  - { page: dashboard_training,        quand: vendredi,                            evenement: export_entrainement }
+  - { page: dashboard_finances,        quand: lundi,                               evenement: export_finances }
+  - { page: dashboard_stadium,         quand: avant un engagement sur le stade,    evenement: engagement }
+  - { page: dashboard_youth-scout,     quand: chaque jour après les 3 révélations, evenement: export_academie }
+  - { page: dashboard_transfers,       quand: si plus de 24 h,                     evenement: export_marche }
+  - { page: dashboard_league,          quand: après chaque journée,                evenement: export_ligue }
+  - { page: dashboard_high-performance, quand: "quand des TSCredits sont disponibles", evenement: engagement }
+  - { page: dashboard_forums,          quand: nouvelle annonce ou sujet,           evenement: regle_changee }
+
+domaines:
+  equipe:          { present: oui }
+  tactique:        { present: oui }
+  entrainement:    { present: oui, dimensions: [compétence par joueur, intensité par joueur], frequence: "hebdomadaire (vendredi)" }
+  jeunes:          { present: oui, depense_suivie: oui, revelations_par_jour: 3, effectif_academie: 16, chemins: [révéler, monter, monter puis vendre, ignorer] }
+  transferts:      { present: oui, taxe: "10 % de commission (enchère de manager, 72 h)", delai_revente: "7 semaines", minimum_effectif: 16, achats_par_semaine: 1, autres: "vente à la banque, enchères de la banque", base_historique: null }
+  finances:        { present: oui, sponsor: "à relever (skill teamsoccer-club)" }
+  personnel:       { present: oui, postes: [entraîneur (5 niveaux)], leviers: ["monter le niveau d'entraîneur ? (demande utilisateur)"] }
+  infrastructures: { present: oui, batiments: [stade (80 000 places, 4 types, entretien 6 %), Centre de Haute Performance (TSCredits)] }
+
+indicateurs:
+  - { libelle: "badges de couleur (rouge, bleu, orange, vert…)", sens: "à relever", comment_ameliorer: "à relever" }   # il me manque leur sens : capture de l'écran qui les montre + recherche forum par la veille
+  - { libelle: "cercles de constance du manager (moral)", sens: "skill teamsoccer-match", comment_ameliorer: "non capté (checklist B6)" }
+
+seuils:
+  forme_titulaire: "préférer un remplaçant en forme à un titulaire < 60"
+  cartons: "2 jaunes = suspension (skill joueurs)"
+  solde: "négatif = ni achat, ni stade, ni entraîneur"
+
+vues_gold:
+  agenda: gold.ts_agenda
+  alertes: gold.ts_daily_alerts
+  rapport_match: gold.ts_match_report
+  base_transferts: null          # à créer
+  resultat_champ: "gold.ts_match_report.result (V/N/D, notre point de vue)"
+  autres: [gold.ts_upcoming, gold.ts_squad_report, gold.ts_player_progress, gold.ts_finance_status, gold.ts_stadium_payback, gold.ts_academy, gold.ts_hpc_status, gold.ts_match_plays, gold.ts_player_match_ratings, gold.ts_season_calendar]
+
+dependances:
+  agents:
+    match:              { lit: [export_match], ecrit: [resultats] }
+    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances-personnel: { lit: [finances, stade, niveau_entraineur, besoins_postes], ecrit: [capacite_invest] }
+    academie:           { lit: [rapport_academie, capacite_invest, besoins_postes], ecrit: [jeunes_retenus] }
+    entrainement:       { lit: [export_entrainement, roster, niveau_entraineur], ecrit: [reglages_entrainement] }
+    tactique:           { lit: [dispo_joueurs, resultats, classement, reglages_entrainement], ecrit: [composition] }
+    transferts:         { lit: [marche, capacite_invest, besoins_postes, composition, jeunes_retenus], ecrit: [achats_ventes] }
+  evenements:
+    export_match:        { touche: [export_match] }
+    export_roster:       { touche: [roster] }
+    export_ligue:        { touche: [classement] }
+    export_finances:     { touche: [finances] }
+    export_entrainement: { touche: [export_entrainement] }
+    export_academie:     { touche: [rapport_academie] }
+    export_marche:       { touche: [marche] }
+    engagement:          { d_abord: finances-personnel, si_engage: { touche: [stade, niveau_entraineur, capacite_invest] } }
+    achat_ou_vente:      { d_abord: finances-personnel, si_fait: { touche: [roster] } }
+    fin_de_saison:       { touche: [roster, finances, rapport_academie, classement] }
+    regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
+  cascade:
+    - "Lancer d_abord, puis chaque agent dont `lit` croise ce qui est touché ou écrit, dans l'ordre du graphe."
+    - "Un agent qui change une donnée déjà lue relance l'agent qui l'a lue (deux passes au plus)."
+    - "Aucun agent si ses entrées n'ont pas changé."
+    - "Chaque agent traite les deux clubs, une section par club."
+
+specificites:
+  - { regle: "Match pré-calculé : tout enregistrer au moins 2 h avant le coup d'envoi", source: "F:2026-06-28 Admin-Dev", statut: confirmé }
+  - { regle: "La Forme ne bouge qu'à l'entraînement du vendredi ; un titulaire fatigué joue moins bien dès la 1re minute, un remplaçant entre avec tout son plafond", source: "F:2026-06-27 et 2026-10-18 Admin-Dev", statut: confirmé }
+  - { regle: "Météo : −20 % sur toutes les compétences pour le talent qu'elle pénalise", source: "skill teamsoccer-joueurs", statut: confirmé }
+  - { regle: "Bots : compétences × 0,90, jouent Neutre, perdent > 90 % : reposer les fatigués et les joueurs à 2 jaunes", source: "skill teamsoccer-match", statut: confirmé }
+  - { regle: "Consigne cohérente avec la meilleure compétence × 1,10, incohérente × 0,90 ; bonus de poste dans la zone naturelle", source: "skill teamsoccer-match § Avancé", statut: confirmé }
+  - { regle: "Tableau des consignes par poste de la fiche tactique = déduit des multiplicateurs, pas une règle du jeu", source: "fiche tactique 2026-10-23", statut: en doute }
+
+confidentialite: []
+rendu_obligatoire:
+  - "Un bloc Chomelix Cows et un bloc Ben Ahmed Donkey, toujours les deux"
+  - "Saisie : formation, style, onze par emplacement, matrice de consignes (5 zones) par joueur, banc de 6, remplacements programmés, heure limite Paris"

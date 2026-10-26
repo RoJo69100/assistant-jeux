@@ -1,0 +1,152 @@
+# Hockey Nation — config (gabarit : _modele.yaml ; attentes : ../attentes.md)
+# Écrite le 2026-10-26 depuis docs/fiches/hockeynation/, les skills hockeynation-*, data/contexte/HN_contexte.txt et bronze.raw_pages.
+
+jeu:
+  id: hockeynation
+  nom: Hockey Nation
+  sport: hockey sur glace
+  prefixe_sql: hn_
+  fuseau_affichage: Europe/Paris
+
+equipes:              # un bloc par équipe dans chaque rendu ; toujours 20 joueurs : 4 C / 4 LW / 4 RW / 3 LD / 3 RD / 2 G
+  - { id: PRO, nom: PRO, niveau: senior, controle: [lignes, equipes_speciales, entrainement, echanges, contrats, coachs, scouts, draft], limite_effectif: 20 }
+  - { id: FRM, nom: Farm, niveau: réserve, controle: [poste principal (Swap position), coach pick order, entrainement, negociation 25 ans et plus], limite_effectif: 20 }
+  - { id: U21, nom: U21, niveau: jeunes, controle: [poste principal, coach pick order, montee FRM ou PRO, ELC ou contrat Farm], limite_effectif: 20 }
+  - { id: U17, nom: U17, niveau: jeunes, controle: [poste principal, coach pick order], limite_effectif: 20 }
+
+ligue: { taille: 20, division: "2 conférences, 4 niveaux", montee_descente: "skill hockeynation-match-calendrier" }
+
+unites_echelles:
+  devise: "$"
+  competences: { nombre: "patineurs et gardiens, voir skill hockeynation-joueurs", echelle: "0–10 avec plafonds (maxings)" }
+  forme: "condition (baisse avec l'END)"
+  conversion_base_ecran: ""
+
+jugement_joueur: [talents fort/faible contre le poste (gold.hn_player_fit), compétences spéciales, importance dans la ligne (rôle, PP/PK, endurance), plafonds et potentiel, note, stats]   # jamais la note seule [U 2026-10-25]
+
+sources:
+  manuel: "guide officiel (30/09/2026) — [G:Rubrique]"
+  devlog: "Discord #events"
+  discord: "bronze.discord_messages (#general, #events, #trade, #france, #game-tools)"
+  forum: "pages forum_* en bronze"
+  chat: null
+  connaissance: outputs/hockeynation/veille/connaissance.md   # à faire : veille intégrale
+  contexte_utilisateur: data/contexte/HN_contexte.txt
+
+exports_texte:
+  - { type: discord, canal: "export manuel", frequence: hebdomadaire, destination: bronze.discord_messages, declenche: [veille] }
+
+rythme:
+  - { quand: saison, quoi: "63 jours, 30 matchs, playoffs au meilleur des 5 (gold.hn_calendar)" }
+  - { quand: jours 1–35, quoi: "embauche des coachs (meilleure offre)" }
+  - { quand: jours 8–42, quoi: "paies" }
+  - { quand: fenêtres, quoi: "échanges et montées FRM→PRO seulement fenêtre ouverte ; trade-window lu dans l'export (2026-11-28 20:00 UTC, sens à confirmer)", fuseau_heure: UTC }
+  - { quand: "1 h avant la draft", quoi: "pré-instructions de draft verrouillées (tirage 2026-12-26 20:00 UTC)", fuseau_heure: UTC }
+  - { quand: début de saison, quoi: "recruter les scouts ensemble, selon la classe de draft" }
+  - { quand: fin de saison, quoi: "négociations FRM, ELC/Farm des U21, retraites" }
+
+competitions:
+  ligue:    { saisie: "oui (PRO seulement ; FRM/U21/U17 automatiques)", but: gagner }
+  playoffs: { saisie: oui, format: "meilleur des 5", but: gagner }
+  amical:   { saisie: oui, but: tester }   # à vérifier : modalités dans le skill match-calendrier
+
+ecrans:
+  lignes_pro:
+    lignes: [A, B, C]
+    colonnes: [LW, C, RW, LD, RD]
+    gardiens: [titulaire, remplaçant]
+    regle: "joueur au poste où ses talents collent ; jamais hors de ses postes (−20 %)"
+  equipes_speciales:
+    lignes: [PP1, PP2, PK1, PK2, PK 3 hommes 1, PK 3 hommes 2, 4 contre 4 L1, 4 contre 4 L2]
+    contrainte: "un joueur une seule fois par type"
+  mises_au_jeu: { colonnes: [premier FOF, second FOF] }
+  coach_pick_order: { lignes: [PRO, FRM, U21, U17], colonnes: [rang, coach] }
+  postes_auto: { equipes: [FRM, U21, U17], levier: "Swap position (poste principal)" }
+  draft: { colonnes: [cible 1, cible 2, cible 3, repli, limites de position] }
+
+options_a_tester:
+  - "statut de prolongation (waiting_for_gm / waiting_for_agent) et humeur : une option à la fois, mesure = réponse de l'agent"
+  - "assignations de scouting (durée 1 et 2 jours) : mesure = scouted_times de la classe"
+  - "position limits / pick preferences de la draft"
+  - "cohésion de ligne : compléments de talents et spéciales collectives (Team Player, Telepathy), en hypothèse testable"
+
+exports:
+  - { page: game_id,                 quand: après chaque match PRO,              evenement: export_match }
+  - { page: club_roster_id,          quand: "après chaque match, pour chaque équipe (PRO, FRM, U21, U17)", evenement: export_roster }
+  - { page: club_lineups,            quand: avant la saisie des lignes,          evenement: export_roster }
+  - { page: club_training_id,        quand: après l'entraînement quotidien,      evenement: export_entrainement }
+  - { page: office_finances,         quand: avant tout échange ou prolongation,  evenement: export_finances }
+  - { page: coaching-staff,          quand: avant une embauche de coach,         evenement: engagement }
+  - { page: office_scouting,         quand: après chaque mission de scout,       evenement: export_academie }
+  - { page: office_draft-center,     quand: avant la draft,                      evenement: export_academie }
+  - { page: office_trade-center,     quand: si plus de 24 h et fenêtre ouverte,  evenement: export_marche }
+  - { page: office_free-agent-center, quand: fenêtre des agents libres,         evenement: export_marche }
+  - { page: club_overview_id,        quand: "avant un match important (adversaire)", evenement: export_adversaire }
+  - { page: league_standings,        quand: après chaque journée,                evenement: export_ligue }
+
+domaines:
+  equipe:          { present: oui }
+  tactique:        { present: oui }
+  entrainement:    { present: oui, dimensions: [coach d'entraînement, compétence travaillée], frequence: quotidienne, equipes_reglables: [PRO, FRM] }
+  jeunes:          { present: oui, depense_suivie: oui, chemins: [drafter, monter U21→FRM/PRO, ELC PRO, contrat Farm à 21 ans, laisser partir à 22 ans], specificites: "draft de 100 par ligue, 10 choix sur 2 saisons, scouts : 8 au plus, 300 000 $ par saison" }
+  transferts:      { present: oui, vocabulaire: "échanger, jamais vendre", taxe: null, minimum_effectif: 20, base_historique: "silver.hn_trades, gold.hn_trade_value", partenaires: "Trade Center seulement ; jamais les 4 clubs de comparaison (Leszno, Seoul, Miami, Jessup)" }
+  finances:        { present: oui, sponsor: null, regle: "seul compte le cap space PRO ; jamais négatif (−30 % en match, faillite)" }
+  personnel:       { present: oui, postes: [head coach (compte double), coachs de match, coachs d'entraînement, scouts], facturation: "salaires", leviers: [embauche, promotion sans retour, renvoi] }
+  infrastructures: { present: non }
+
+indicateurs:
+  - { libelle: "idéal / correct / contre-emploi", sens: "gold.hn_player_fit : talents vs compétences clés du poste (hypothèse gold.hn_position_keys)", comment_ameliorer: "changer de poste (Swap position) ou échanger" }
+
+seuils:
+  endurance: "L1 7+, L2 6+, D1 8+, D2 6+, G1 7+, tolérés à −1 (Discord talonflame1 2026-04-04)"
+  cap_space: "jamais négatif"
+
+vues_gold:
+  agenda: gold.hn_calendar
+  alertes: gold.hn_daily_alerts
+  rapport_match: "silver.hn_game_detail (pas de vue gold)"
+  base_transferts: gold.hn_trade_value
+  resultat_champ: "silver.hn_games.my_result (W/L, NULL si pas notre match ; filtrer le niveau d'équipe)"
+  autres: [gold.hn_player_fit, gold.hn_draft_board, gold.hn_cap_outlook, gold.hn_coach_board, gold.hn_depth_chart, gold.hn_special_skills, gold.hn_coach_specials, gold.hn_club_compare, gold.hn_league_player_fit, gold.hn_player_progress]
+
+dependances:
+  agents:
+    match:              { lit: [export_match, adversaire], ecrit: [resultats] }
+    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances-personnel: { lit: [finances, contrats, coachs, scouts, besoins_postes], ecrit: [capacite_invest, cap_space] }
+    academie:           { lit: [rapport_academie, cap_space, besoins_postes], ecrit: [jeunes_retenus, montees] }
+    entrainement:       { lit: [export_entrainement, roster, coachs], ecrit: [reglages_entrainement] }
+    tactique:           { lit: [dispo_joueurs, resultats, montees, adversaire], ecrit: [composition] }
+    transferts:         { lit: [marche, cap_space, besoins_postes, composition, jeunes_retenus], ecrit: [echanges] }
+  evenements:
+    export_match:        { touche: [export_match] }
+    export_roster:       { touche: [roster] }
+    export_adversaire:   { touche: [adversaire] }
+    export_ligue:        { touche: [resultats] }
+    export_finances:     { touche: [finances, contrats] }
+    export_entrainement: { touche: [export_entrainement] }
+    export_academie:     { touche: [rapport_academie] }
+    export_marche:       { touche: [marche] }
+    engagement:          { d_abord: finances-personnel, si_engage: { touche: [coachs, scouts, cap_space] } }   # coach, scout
+    echange_ou_signature: { d_abord: finances-personnel, si_fait: { touche: [roster, contrats, cap_space] } }
+    fin_de_saison:       { touche: [roster, contrats, rapport_academie, coachs] }
+    regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
+  cascade:
+    - "Lancer d_abord, puis chaque agent dont `lit` croise ce qui est touché ou écrit, dans l'ordre du graphe."
+    - "Un agent qui change une donnée déjà lue relance l'agent qui l'a lue (deux passes au plus)."
+    - "Aucun agent si ses entrées n'ont pas changé."
+
+specificites:
+  - { regle: "Seuls les contrats PRO comptent pour le plafond ; un contrat FRM n'a aucun impact", source: "U 2026-10-23", statut: confirmé }
+  - { regle: "Pas de négociation en U21 : ELC PRO ou contrat Farm (à 21 ans, effet à 22) ; un U21 non signé part à 22 ans", source: "G:U21 Team, G:Farm Team", statut: confirmé }
+  - { regle: "Renvoyer un FRM = négocier puis ne pas prolonger ; un FRM sans réponse du GM reste", source: "U 2026-10-23", statut: confirmé }
+  - { regle: "Un U21 monte en FRM ou PRO à tout âge ; automatiquement à 21 ans", source: "U 2026-10-25", statut: confirmé }
+  - { regle: "Aucun nouveau joueur dans une lineup : cibles d'échange dans un tableau séparé", source: "U 2026-10-23", statut: confirmé }
+  - { regle: "Contre-emploi = aucun des 2 talents forts n'est une compétence clé du poste", source: "gold.hn_position_keys", statut: en doute }
+  - { regle: "« Négociations ouvertes jour 1, validées jours 4–5 » introuvable dans le guide", source: "U", statut: en doute }
+
+confidentialite: []
+rendu_obligatoire:
+  - "Tout ajout de joueurs (draft, U17, échange) : montrer l'équipe résultante à 20 joueurs (talents vs poste, VIDE)"
+  - "Tout échange ou prolongation : effet sur gold.hn_cap_outlook, ligne avant/après"
+  - "Un bloc par équipe (PRO, FRM, U21, U17)"
