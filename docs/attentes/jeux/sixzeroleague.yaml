@@ -1,0 +1,143 @@
+# Six Zero League — config (gabarit : _modele.yaml ; attentes : ../attentes.md)
+# Écrite le 2026-10-26 depuis docs/fiches/sixzeroleague/, les skills sixzeroleague-* et bronze.raw_pages.
+
+jeu:
+  id: sixzeroleague
+  nom: Six Zero League
+  sport: handball
+  prefixe_sql: sz_
+  fuseau_affichage: Europe/Paris
+
+equipes:
+  - { id: chomelix, nom: Chomelix Cow, niveau: senior, controle: [composition, tactique, entrainement, transferts, academie, infrastructures] }
+
+ligue: { taille: 10, division: "Vanadium, 5e division", montee_descente: "voir skill sixzeroleague-match" }
+
+unites_echelles:
+  devise: euro (entiers)
+  competences: { nombre: 20, echelle: "1–100", groupes: [Physique, Attaque, Défense, Gardien] }
+  forme: "aucune (pas de forme dans ce jeu)"
+  conversion_base_ecran: ""
+  multiplicateur_division: "revenus, coûts, entretien × division ; salaires non"
+
+jugement_joueur: [rôle principal ou appris (hors-poste −20 % att. / −10 % déf.), compétences clés du rôle, âge (bonus ≤ 20, baisse ≥ 28), stats]
+
+sources:
+  manuel: "wiki du jeu (page app_wiki en bronze) — [W:Rubrique]"
+  devlog: "data/discord/SixZeroLeague/ #dev-log (Gazelle)"
+  discord: data/discord/SixZeroLeague/
+  forum: null
+  chat: "data/chat/sixzeroleague/ + silver.sz_api '/chat/messages'"
+  connaissance: outputs/sixzeroleague/veille/connaissance.md
+
+exports_texte:
+  - { type: discord, canal: "export manuel (#dev-log, #chat)", frequence: hebdomadaire, destination: data/discord/SixZeroLeague/, declenche: [veille] }
+  - { type: chat, canal: "chat du jeu, capté avec les exports (sz_api /chat/messages)", frequence: à chaque export, destination: silver.sz_api, declenche: [veille] }
+
+rythme:
+  - { quand: chaque jour, quoi: journée de ligue 13:00, verrouillage: "coup d'envoi", fuseau_heure: Paris }
+  - { quand: chaque jour, quoi: journée de ligue 21:00, verrouillage: "coup d'envoi", fuseau_heure: Paris }
+  - { quand: jours de coupe, quoi: coupe 17:00, fuseau_heure: Paris }          # Dev chat 2026-10-18 (16:00 Lisbonne) ; « 17:00 Lisbonne » non confirmé
+  - { quand: chaque soir après 21:00, quoi: "cycle réglé : finances, entraînement, blessures, transferts (2 journées = 1 cycle)", fuseau_heure: Paris }
+  - { quand: toutes les 8 journées, quoi: nouveau choix U18 (2 prospects) }
+  - { quand: fin de saison (9 à 11 jours), quoi: "+1 an pour tous les joueurs ; salaires fixés entre les saisons ; sponsor changeable une fois" }
+
+competitions:
+  ligue:  { saisie: oui, preset: non, moteur: "alpha, résultats très aléatoires [Dev chat]", verrouillage: coup d'envoi, but: gagner }
+  coupe:  { saisie: oui, preset: non, calendrier: "17:00 Paris", but: gagner }
+  amical: null   # aucun amical : une nouveauté se teste par protocole chiffré sur la ligue (A-6)
+
+ecrans:
+  tactique:                       # Équipe → Tactics
+    lignes: [formation d'attaque, formation de défense, direction d'attaque, agressivité]
+    valeurs_permises:
+      formation d'attaque: ["5-1", "4-2"]                       # 4-2 = pas de CB
+      formation de défense: ["6-0", "5-1", "3-2-1", "3-3"]
+      direction d'attaque: [mixed, left, right, centre, left + centre, right + centre, left-right]
+      agressivité: [Light, Normal, Hard]                         # 0.6.1
+  composition:
+    colonnes: [rôle, titulaire, remplaçant]
+    ordre_joueurs: "GK, CB, LB, RB, LW, RW, P"   # à vérifier : ordre exact des rôles à l'écran
+    contraintes: "7 joueurs différents ; un remplaçant par rôle, jamais deux fois le même ; poste vide si aucun valide"
+  defense_spots: { regle: "garder les places par défaut sauf test justifié (décision utilisateur 2026-10-18)" }
+  entrainement:
+    colonnes: [joueur, focus (groupe ou compétence), formation de rôle]
+    ligne_equipe: "intensité Light / Normal / High"
+  ordres: { present: inconnu }    # « voir si on peut mettre des ordres » (utilisateur) : à relever à l'écran
+
+options_a_tester:
+  - "formation d'attaque 4-2 (sans CB) contre 5-1"
+  - "formations de défense 3-2-1 et 3-3 contre 6-0"
+  - "direction d'attaque : effet non chiffré ; relever teams.tactics dans l'export du match"
+  - "agressivité Hard : exclusions et cartons contre buts encaissés"
+
+exports:
+  - { page: app_competitions,        quand: après chaque journée (13:00 et 21:00), evenement: export_match }
+  - { page: app_team,                quand: après chaque journée et avant la saisie, evenement: export_roster }
+  - { page: app_overview,            quand: chaque soir après le cycle,          evenement: export_entrainement }
+  - { page: app_club_finances,       quand: chaque soir après le cycle,          evenement: export_finances }
+  - { page: app_club_infrastructure, quand: après une montée de niveau,          evenement: engagement }
+  - { page: app_transfers,           quand: si plus de 24 h,                     evenement: export_marche }
+  - { page: app_visit_id,            quand: avant de jouer un club humain,       evenement: export_adversaire }
+  - { page: app_club,                quand: choix U18 (toutes les 8 journées),   evenement: export_academie }   # à vérifier : page exacte du choix U18
+
+domaines:
+  equipe:          { present: oui }
+  tactique:        { present: oui }
+  entrainement:    { present: oui, dimensions: [intensité d'équipe, focus par joueur, formation de rôle (2 saisons, 3 rôles max)], frequence: chaque cycle (chaque soir) }
+  jeunes:          { present: oui, depense_suivie: oui, choix_par_tirage: 2, chemins: [signer, ignorer, signer puis vendre], specificites: "niveau de la Youth Academy = niveau des prospects" }
+  transferts:      { present: oui, taxe: "frais selon paliers (skill sixzeroleague-club)", delai_revente: "à vérifier", minimum_effectif: "à vérifier", base_historique: null }
+  finances:        { present: oui, sponsor: "3 offres : fixe, prime de victoire, prime de signature ; changement une fois par saison ; re-signer = pas de prime" }
+  personnel:       { present: non }
+  infrastructures: { present: oui, batiments: [Arena, Training Facilities, Youth Academy, Fan Shop], niveaux: "1–20, entretien" }
+
+indicateurs:
+  - { libelle: "joueur en orange à l'écran", sens: "hors-poste", comment_ameliorer: "le remettre à un rôle principal ou appris" }
+
+seuils: {}
+
+vues_gold:
+  agenda: gold.sz_agenda
+  alertes: gold.sz_daily_alerts
+  rapport_match: "silver.sz_matches + silver.sz_match_players (pas de vue gold)"
+  base_transferts: null          # à créer
+  resultat_champ: "silver.sz_matches.result (W/L/D, déjà de notre point de vue)"
+  autres: [gold.sz_lineup_natural, gold.sz_slot_options, gold.sz_role_report, gold.sz_training_progress, gold.sz_finance_cycles, gold.sz_finance_projection, gold.sz_infrastructure_payback]
+
+dependances:
+  agents:
+    match:              { lit: [export_match], ecrit: [resultats] }
+    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances-personnel: { lit: [finances, infrastructures, besoins_postes], ecrit: [capacite_invest] }   # couvre les infrastructures (pas de personnel)
+    academie:           { lit: [rapport_academie, capacite_invest, besoins_postes], ecrit: [jeunes_retenus] }
+    entrainement:       { lit: [export_entrainement, roster, infrastructures], ecrit: [reglages_entrainement] }
+    tactique:           { lit: [dispo_joueurs, resultats, adversaire], ecrit: [composition] }
+    transferts:         { lit: [marche, capacite_invest, besoins_postes, composition, jeunes_retenus], ecrit: [achats_ventes] }
+  evenements:
+    export_match:        { touche: [export_match] }
+    export_roster:       { touche: [roster] }
+    export_adversaire:   { touche: [adversaire] }
+    export_finances:     { touche: [finances] }
+    export_entrainement: { touche: [export_entrainement] }
+    export_academie:     { touche: [rapport_academie] }
+    export_marche:       { touche: [marche] }
+    engagement:          { d_abord: finances-personnel, si_engage: { touche: [infrastructures, capacite_invest] } }   # montée d'infrastructure
+    achat_ou_vente:      { d_abord: finances-personnel, si_fait: { touche: [roster] } }
+    fin_de_saison:       { touche: [roster, finances, rapport_academie] }
+    regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
+  cascade:
+    - "Lancer d_abord, puis chaque agent dont `lit` croise ce qui est touché ou écrit, dans l'ordre du graphe."
+    - "Un agent qui change une donnée déjà lue relance l'agent qui l'a lue (deux passes au plus)."
+    - "Aucun agent si ses entrées n'ont pas changé."
+
+specificites:
+  - { regle: "Hors-poste : −20 % en attaque, −10 % en défense, physique intact ; joueur de champ au but −20 %", source: "Dev chat 2026-10-13", statut: confirmé }
+  - { regle: "role_overalls de l'API est calculé avant la pénalité de hors-poste", source: "Obs SQL 2026-10-18", statut: confirmé }
+  - { regle: "Le 7 m est tiré automatiquement par le meilleur tireur sur le terrain : ne pas proposer de tireur", source: "Dev chat 2026-10-20", statut: confirmé }
+  - { regle: "Rouge direct = 1 match de suspension (le match suivant seulement)", source: "Obs utilisateur 2026-10-23", statut: confirmé }
+  - { regle: "+1 an par saison de 9 à 11 jours : âge et déclin vont vite", source: "Dev chat", statut: confirmé }
+  - { regle: "Retard d'infrastructure mesuré contre Stoik, martin et autres (fiche commune)", source: "chat du jeu 2026-10-21/22", statut: confirmé }
+
+confidentialite: [ownerUsername]   # e-mail des autres managers
+rendu_obligatoire:
+  - "Fiche de saisie en tête : formations, direction, agressivité, puis rôle → titulaire → remplaçant, et l'heure limite (13:00 ou 21:00 Paris)"
