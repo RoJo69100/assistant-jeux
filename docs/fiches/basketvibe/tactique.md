@@ -60,7 +60,7 @@ L'utilisateur joue **un amical presque chaque jour** (08:00, à domicile). C'est
   1. **expérience des jeunes** (≤ 21 ans, elle monte plus vite [M§5.4]) : leur donner beaucoup de minutes ;
   2. **tester en v4** un réglage prévu pour la saison 2 (agressivité, focus, cinq), un seul changement à la fois pour pouvoir le lire ;
   3. **ne pas user les titulaires de la ligue** : un amical le matin d'un match de ligue (lun / mer / sam) ajoute sa fatigue avant le coup d'envoi du soir [M§5.6.2]. Calcule en SQL la fatigue ajoutée : minutes × 0,019 × multiplicateur d'agressivité × (1,5 − 0,008 × endurance), soit le dixième d'un match de ligue.
-- **Livrable** : un preset amical (cinqs, consignes) et, pour chaque amical programmé, ce qu'on teste et le critère de lecture. La liste des amicaux est dans `silver.bv_api` (`endpoint ~ '/friendlies$'`, dernière capture, `body->'friendlies'`, statut `scheduled`). Les jours sans amical, propose d'en programmer un (10 au maximum [M§1.2]).
+- **Livrable : AUCUN preset ni fiche de saisie d'amical (consigne de l'utilisateur, 2026-10-26 : « je n'ai pas besoin de preset pour les amicaux »).** Le preset « Friendly » déjà sauvegardé reste tel quel ; ne rien lui faire saisir ni sauvegarder. On analyse seulement le résultat d'un amical exporté (agent Match). Un test n'est proposé que s'il est demandé.
 
 ### 3. Évolution à partir du journal (case E9)
 - Pour chaque enseignement confirmé ou à surveiller qui touche la tactique, dis ce que tu gardes, changes ou testes.

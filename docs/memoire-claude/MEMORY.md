@@ -12,3 +12,5 @@
 - [Budget tokens](token-budget.md) — une tâche par session, /clear entre sujets, /compact au-delà de ~150k
 - [Défaites = agir fort](feedback-defaites-agir-fort.md) — série de défaites : décision forte ce soir, appliquer ce que dit le développeur, relire les briefs au « reprenons »
 - [Veille intégrale autres jeux](project-veille-integrale-autres-jeux.md) — à refaire jeu par jeu (connaissance.md) comme Six Zero League le 2026-10-26
+- [Rendu : demain seulement](feedback-rendu-demain-seulement.md) — pas de preset d'amical, consignes en tableau dans l'ordre de l'export, pas de « si », pas d'infos parasites
+- [Base transferts / bonnes affaires](project-base-transferts-bonnes-affaires.md) — achat-revente, base des transferts passés, usage de l'argent (tous jeux)
