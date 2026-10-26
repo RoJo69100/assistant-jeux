@@ -2,6 +2,12 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-26 (nuit) — les règles de rendu vivent désormais dans `docs/attentes/attentes.md` (R-1 à R-9, A-1 à A-9)
+30. Une consigne de l'utilisateur s'écrit là où les agents la lisent (`attentes.md` ou config du jeu), jamais seulement en mémoire (preset d'amical redemandé après avoir été noté).
+29. Une alerte sans action ne s'affiche pas ; horizon = maintenant + demain si annoncé (RÉCIDIVE de la règle 20 → R-1, R-2).
+28. L'agent économie décide de l'usage de l'argent avant Transferts ; une réserve se justifie par les sorties certaines (A-3).
+27. Une remarque sur un jeu va dans `attentes.md` par défaut ; dans la config du jeu seulement si elle nomme une mécanique propre au jeu.
+
 ## 2026-10-26 (soir)
 26. Avant tout lancement d'agent : demander `/effort medium` si je ne sais pas que la session y est (RÉCIDIVE de la règle CLAUDE.md « Agents d'analyse » ; vérificateur et lecteur lancés sans l'avoir demandé).
 24. Au « reprenons » : relire les briefs du jour et le registre `fait-…` avant l'agenda ; jamais répondre depuis `gold.*_agenda` seul.
