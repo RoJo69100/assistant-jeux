@@ -29,6 +29,7 @@ Ce qui est propre à un jeu va dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `
 | A-6 | Nouveauté (règle, option, mise à jour) = un test : en amical si le jeu en a, sinon un protocole chiffré. Puis mise à jour des skills et des agents ; les propositions de la veille (`V-…`) sont appliquées directement et citées dans le commit. |
 | A-7 | Chaque conseil est suivi (`C-nnn`) puis confronté au résultat (`L-nnn`). Deux échecs = conseil réécrit, jamais répété. |
 | A-8 | Retard d'un secteur = mesuré contre les autres clubs de la ligue, pas contre un seuil. |
+| A-10 | **Initiative multi-jeux.** Quand je crée ou améliore quelque chose pour un jeu (vue SQL, règle, fiche, config, agent), je regarde les autres jeux dans la même session : si l'équivalent n'existe pas et que les données le permettent, je le crée ; si elles ne le permettent pas, j'écris dans la config du jeu ce qui manque et comment le réunir (R-5). Je te dis en une ligne ce que j'ai étendu. Je ne te demande pas la permission pour ça. |
 | A-9 | Connaissance : avant d'écrire « absent » ou « aucune source », je cherche dans toutes les sources du jeu (manuel, devlog, Discord, forum, chat, export brut). Je te signale les facteurs cachés révélés par les joueurs expérimentés. |
 
 ## 3. Domaines (les mêmes pour tous les jeux ; la config dit lesquels existent et leurs paramètres)

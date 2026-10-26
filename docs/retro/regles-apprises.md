@@ -2,6 +2,9 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-26 (fin de nuit)
+31. Ce que je fais pour un jeu, je le vérifie pour les autres dans la même session et je l'étends sans demander (base des transferts faite pour BasketVibe seul alors que la mémoire disait « par jeu » ; « tu as tout, prends l'initiative »). Règle A-10 de `attentes.md`.
+
 ## 2026-10-26 (nuit) — les règles de rendu vivent désormais dans `docs/attentes/attentes.md` (R-1 à R-9, A-1 à A-9)
 30. Une consigne de l'utilisateur s'écrit là où les agents la lisent (`attentes.md` ou config du jeu), jamais seulement en mémoire (preset d'amical redemandé après avoir été noté).
 29. Une alerte sans action ne s'affiche pas ; horizon = maintenant + demain si annoncé (RÉCIDIVE de la règle 20 → R-1, R-2).
