@@ -16,3 +16,4 @@
 - [Base transferts / bonnes affaires](project-base-transferts-bonnes-affaires.md) — achat-revente, base des transferts passés, usage de l'argent (tous jeux)
 - [Format tactique parfait](feedback-format-tactique-parfait.md) — tableau joueur × Q + tableau adversaires (focus + zone), ordre de l'export, à chaque fois
 - [Initiative multi-jeux](feedback-initiative-multi-jeux.md) — faire pour un jeu = vérifier et compléter les autres sans demander (A-10) ; transferts SZL/TS à faire
+- [Effectif, V/D, vue gold systématique](feedback-effectif-questions-vue-gold-systematique.md) — me poser seul les questions effectif (améliorer/vendre/acheter), analyse V/D poussée, vue gold dès qu'un gain de temps existe
