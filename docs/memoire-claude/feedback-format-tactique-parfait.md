@@ -5,14 +5,15 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 51ef3928-8819-4dda-b574-79832ad90f33
-  modified: 2026-10-27T19:07:55.308Z
+  modified: 2026-10-27T19:13:40.590Z
 ---
 
 Format validé (27/10 soir, « absolument PARFAIT, tu dois faire ça à chaque fois ») : un tableau joueur × quart-temps (poste, Q1–Q4, Prol., minutes, Off. focus, Rôle, Tir, Agress.), puis un second tableau **par adversaire** avec focus défensif 1–5 ET defensive area, les deux dans le même tableau.
 
 **Why:** l'utilisateur veut saisir sans réfléchir ; le 27/10 j'avais oublié la zone défensive dans l'amical et listé les adversaires en vrac.
 **How to apply:**
-- Joueurs ET adversaires dans l'ordre exact de l'export / de l'écran du jeu (jamais alphabétique de ma part, jamais regroupés par valeur).
+- Joueurs ET adversaires dans l'ordre de l'écran : par poste PG, SG, SF, PF, C, puis alphabétique dans le poste (ex. adversaires PG : Brun, Girard, Leclerc, Rousseau). Pas l'ordre brut du JSON (alphabétique global), pas regroupés par valeur.
+- Dire « /compact maintenant » moi-même dès ~15 % de contexte (l'utilisateur paie chaque relecture du contexte).
 - Tableau défensif : colonnes Adversaire | Focus défensif (1–5) | Zone (Rim/Middle/Perimeter), pour coupe, ligue et amical.
 - Si l'ordre ou les noms adverses manquent en base : le dire en une ligne et donner l'export à faire, jamais « tu lis à l'écran ».
 - Pas de preset d'amical, pas de « si ». Voir [[feedback-rendu-demain-seulement]].
