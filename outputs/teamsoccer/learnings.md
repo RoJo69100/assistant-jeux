@@ -3,7 +3,8 @@
 Tenu par l'agent Match (`.claude/agents/match.md`). Mis à jour après chaque export de match. Un club = un jeu de lignes : toujours préciser lequel.
 
 **Dernier match analysé : Chomelix Cows 2026-10-20 — Vertigo CLUB (dom., ligue) ; Ben Ahmed Donkey 2026-10-19 — bot (ext., ligue)** (passage du 2026-10-20 : Chomelix seulement, 1 match ; Ben Ahmed non repassé).
-**Dernier match analysé : Chomelix Cows 2026-10-24 — Ballon Athletique hawaien (dom., ligue, 2-0) ; Ben Ahmed Donkey 2026-10-22 — bot (dom., ligue)** (passage du 2026-10-24 : 1 match ; passage du 2026-10-23 : 5 matchs, 2 humains ; passage précédent du 2026-10-19 : 5 matchs de ligue contre des bots).
+**Dernier match analysé : Chomelix Cows 2026-10-27 — BOT (ext., ligue, 1-0) ; Ben Ahmed Donkey 2026-10-26 — BOT (ext., ligue, 0-0)** (passage du 2026-10-27 : 3 matchs dont Ajax 0-4, admin).
+**Précédent : Chomelix Cows 2026-10-24 — Ballon Athletique hawaien (dom., ligue, 2-0) ; Ben Ahmed Donkey 2026-10-22 — bot (dom., ligue)** (passage du 2026-10-24 : 1 match ; passage du 2026-10-23 : 5 matchs, 2 humains ; passage précédent du 2026-10-19 : 5 matchs de ligue contre des bots).
 
 Seuil de confirmation : la fiche n'en fixe pas. Choix provisoire de l'agent : **confirmé = au moins 3 matchs de ligue contre des humains** ; contre des bots, un enseignement reste « à surveiller » au mieux (victoire peu probante) [fiche match règle 3, skill teamsoccer-match « Bots »].
 
@@ -36,6 +37,10 @@ Seuil de confirmation : la fiche n'en fixe pas. Choix provisoire de l'agent : **
 | L-019 | Chomelix | 2026-10-24 | XI et notes stables : mêmes 11 titulaires les 22 et 24/10 (milieu A. Roux, L. David, C. Robert à 8,7 puis 8,8 ; équipe 9,04 puis 9,06). Faiblesse « Aile droite −23 » (barre informative seulement). | 2 | à surveiller | `silver.ts_match_ratings`, `gold.ts_match_report` ; [skill match : barres sans effet] |
 | L-020 | Ben Ahmed | 2026-10-24 | Remplacements programmés à 60' (Hayashi/Fournier, Wilson/Schmidt, Suzuki/Müller) : Müller (Finition 88) sort pour une GK à Finition 60. Effet à lire sur les buts après 60'. | 1 (composition du 26/10) | à surveiller | `silver.ts_match_lineups` match 2080326 ; `silver.ts_players` |
 | L-021 | Les deux | 2026-10-24 | Rang : ne jamais lire le rang d'un club dans le brief sans date ; `silver.ts_standings` est un instantané actuel, le rang au jour du match se recalcule depuis `silver.ts_matches` (points puis différence de buts). Le « 7e » du brief était le rang de l'adversaire après match ; Cows 3es avant et après le 24/10, Ben Ahmed 1er avant et après le 22/10. Aucun C-nnn ne dépendait du rang (C-009 disait déjà 6e pour l'adversaire, exact avant match). | 1977453, 2080323 | confirmé | `silver.ts_matches`, `silver.ts_standings` |
+
+| L-022 | Chomelix | 2026-10-27 | Pertes de balle jusqu'à 88 % (15/17 le 27/10) avec un XI proche des matchs précédents : le tir/attaque chute (2 tirs contre 6,4 en moyenne des victoires). Renforce L-012/L-018 (variable, non pilotable par composition seule) ; pertes élevées = moins de tirs, donc un 1-0 étroit. | 5 (3 humains) | à surveiller | `gold.ts_match_report` (`my_lost`, `my_attacks`, `my_shots`) |
+| L-023 | Les deux | 2026-10-27 | Sans composition enregistrée, le jeu choisit : Ajax 0-4 (1re défaite Cows) et aucune ligne dans `ts_match_report`. Les matchs d'admin (`is_admin_match`) ne sont pas comparables aux autres. | 1 | à surveiller | `silver.ts_matches` (competition=inconnu), `gold.ts_match_report` |
+| L-024 | Ben Ahmed | 2026-10-27 | À l'extérieur : 13-14 attaques et 2-7 tirs contre 19-24 attaques à domicile ; 0-0 le 26/10 avec 2 tirs. | 3 (bots) | à surveiller | `gold.ts_match_report` (`venue`, `my_attacks`) ; [skill match : possession +4 à domicile] |
 
 ## Conseils
 <!-- C-nnn · date · conseil · critère vérifiable (SQL) · statut (ouvert / appliqué / partiel / non appliqué) · effet constaté -->
@@ -116,8 +121,18 @@ Aucun conseil antérieur à ce passage.
 | C-034 | Chomelix | 2026-10-24 | Ajax (Room Madness déclaré, 26/10 02:00) : 1-4-3-3, XI du 24/10, banc de 6 (T. David, P. Leroy, Enzo Roux, J. Leroy, A. Thomas, Étienne Roux), consignes nommées (brief tactique) ; Mathis David passe à « centrer » en Offensive. Copier le texte des règles du mode et exporter la page composition. | `gold.ts_upcoming.lineup_saved` = true pour 2080875 avant 2026-10-26 00:00 ; `silver.ts_match_lineups` 2080875 : `bench.subs` de 6 et `player_orders` de Mathis David (307) avec `centrar` | ouvert | — |
 | C-035 | Chomelix | 2026-10-25 | Vendre Étienne Roux (FWD, 903 450 $) à la banque, puis enchérir sur Omar Hassan (id 5343, MID 77,2) jusqu'à 2 124 000 $ maximum avant 16:01 Paris. Corrige C-013/C-024 (plafond 810 000 $). | `silver.ts_players` : Hassan présent au relevé du 30/10 et OVR ≥ 77 ; `silver.ts_finances.new_signings` > 0 ; `balance` ≥ 387 612 | ouvert | — |
 | C-036 | Ben Ahmed | 2026-10-25 | Aucun achat sur le marché du 25/10 (meilleure annonce Salma Uche OVR 54 < titulaires 62-64,6). | `silver.ts_finances.new_signings` = 0 au 27/10 | ouvert | — |
+| C-038 | Les deux | 2026-10-27 | Enregistrer la composition 2 h avant chaque match (Cows coupe BOT 28/10 avant 13:11 Paris, Ben Ahmed coupe 28/10 avant 13:35), puis exporter la page. Remplace C-010/C-034 (2 échecs). | `gold.ts_upcoming.lineup_saved` = true ; `gold.ts_match_report.formation` non nul pour 2082494 et 2082895 | ouvert | — |
+| C-039 | Chomelix | 2026-10-27 | Test milieu contre le BOT du 28/10 : Jules Leroy ou Enzo Roux à la place de Clément Robert (pertes 88 % le 27/10). | `gold.ts_match_report` 2082494 : `my_lost`/`my_attacks` < 65 % | ouvert | — |
+| C-040 | Chomelix | 2026-10-27 | Enchérir sur Miguel Flores (listing 5406, MID 61, 608 449 $, max 650 000 $), repli Maximo Salinas (5419, 445 645 $). Remplace C-013/C-035 (Hassan perdu). | `silver.ts_finances.new_signings` > 0 ; Flores dans `silver.ts_player_snapshots` team 18 | ouvert | — |
+| C-041 | Ben Ahmed | 2026-10-27 | Aucun remplacement programmé à 60' pour le BOT du 29/10 (confirme C-018). | `silver.ts_match_lineups` 2080331 : `bench.changes` vide ; buts après 60' | ouvert | — |
+
+Contrôle du 2026-10-27 : C-010 (Chomelix, formation NULL) non appliqué (1977456 NULL), échec 2 ; C-034 non appliqué (Ajax sans composition, défaite 0-4) ; C-011 (Kumar MC) appliqué le 26/10, effet non évaluable (0-0, notes MC non lues, trop tôt) ; C-035 non appliqué (Hassan absent de l'effectif) ; C-013 non appliqué (`new_signings` 0 à la semaine du 26/10) ; C-014 / C-011-maintenance appliqués (`maintenance_gap` = 0 le 26/10, Cows 28 920, Ben Ahmed 20 024) ; C-036 appliqué (`new_signings` Ben Ahmed = 0).
 
 ## Journal des matchs
+- 2026-10-26 · Chomelix · hors compétition (admin, ext) · Ajax Amsterdam · 0-4 · D · composition jamais enregistrée, aucune page match exportée : cause non mesurable
+- 2026-10-26 · Ben Ahmed · ligue (ext) · BOT · 0-0 · N · 13 attaques/4, 2 tirs/1 cadré ; 3 remplacements programmés (L-020), Kumar au MC (C-011)
+- 2026-10-27 · Chomelix · ligue (ext) · BOT · 1-0 · V · Bonnet 88' ; 17 attaques/4, 2 tirs/2 cadrés ; pertes 88 % (15/17), record saison
+
 <!-- date · club · compétition · adversaire · score · résultat · cause principale (1 ligne) -->
 - 2026-10-12 · Ben Ahmed · ligue (dom) · BOT · 4-1 · V · Yamamoto triplé (4', 50' pen., 58'), Müller 6' ; 8 tirs/6 cadrés, 15 pertes ; but encaissé à 88' (tête)
 - 2026-10-13 · Chomelix · ligue (dom) · BOT · 2-0 · V · domination (21 attaques/2) mais 0 but avant 86' ; 2 têtes (Bonnet, Ounahi) ; 6 tirs/4 cadrés, 12 pertes
@@ -131,3 +146,5 @@ Aucun conseil antérieur à ce passage.
 - 2026-10-22 · Chomelix · coupe (ext) · FC Luku Bratislava (humain) · 0-0, 3-2 t.a.b. · V · 7 tirs cadrés arrêtés par Rusnák, 2 poteaux adverses ; pertes 36 %
 - 2026-10-24 · Chomelix · ligue (dom) · Ballon Athletique hawaien (humain, 66,05 ; adversaire 6e avant, Cows 3es) · 2-0 · V · 20 attaques/2, 8 tirs/6 cadrés ; Bonnet tête 18' et 50' ; pertes 55 % sans conséquence
 - 2026-10-22 · Ben Ahmed · ligue (dom) · BOT (6e, Ben Ahmed 1er) · 1-0 · V · Yamamoto 19' ; 24 attaques/5 mais 6 tirs ; 18 pertes (75 %)
+| C-T1027-1 | Chomelix | 2026-10-27 | Acheter Florian Schäfer (GK 20 ans, OVR 69, annonce 5423), enchère max 1 072 000 $, posée le 29/10 au matin, après l achat des 8 375 places ; vendre Romain Thomas à la banque (838 166 $) après le 02/11 si Schäfer est gagné. [skill club : limite d achat, banque] | `silver.ts_players` team 18 : Schäfer présent ; buts encaissés par match après le 31/10 < ceux de Thomas | ouvert | — |
+| C-T1027-2 | Ben Ahmed | 2026-10-27 | Aucun achat avant le relevé finances du 28/10 (plafond 150 000 $) ; ligne Nanami Rousseau (5391) à revérifier au relevé du 28/10. | `silver.ts_finances` team 15858 `balance` au 28/10 ; `total_new_signings` = 0 | ouvert | — |
