@@ -17,4 +17,4 @@
 - [Format tactique parfait](feedback-format-tactique-parfait.md) — tableau joueur × Q + tableau adversaires (focus + zone), ordre de l'export, à chaque fois
 - [Initiative multi-jeux](feedback-initiative-multi-jeux.md) — faire pour un jeu = vérifier et compléter les autres sans demander (A-10) ; transferts SZL/TS à faire
 - [Effectif, V/D, vue gold systématique](feedback-effectif-questions-vue-gold-systematique.md) — me poser seul les questions effectif (améliorer/vendre/acheter), analyse V/D poussée, vue gold dès qu'un gain de temps existe
-- [Horizon aujourd'hui/demain](feedback-horizon-aujourdhui-demain.md) — aucune action au-delà de demain, tous jeux et agents (2026-10-27)
+- [Horizon aujourd'hui/demain](feedback-horizon-aujourdhui-demain.md) — l'utilisateur n'agit que le jour même : toute action = aujourd'hui, jamais demain (2026-10-27)
