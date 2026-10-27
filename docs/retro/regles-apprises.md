@@ -3,6 +3,9 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-10-27 (soir)
+37. Les agents sont liés : un désaccord entre deux briefs (Match vs Effectif sur les 48 minutes) se tranche par moi avec la source avant de rendre, et je n'inverse pas ma position sans fait nouveau. Si la tâche est un tableau de données déjà en base, je le fais moi-même en SQL (5 minutes) plutôt que d'enchaîner 7 agents (45 minutes, 27 % du budget).
+36. Réserve d'argent = sorties moins recettes certaines de la même période (pas deux semaines de charges à recettes nulles) ; l'argent qui dort n'est pas un conseil : chaque passage Finances nomme un usage chiffré (A-3).
+35. Tactique = tableau joueur × quart-temps avec toutes les colonnes (R-10) ; l'amical aussi (config du 2026-10-27). RÉCIDIVE de la règle 3 de rendu.
 34. Avant tout « que faire » pour un match : lire la ligne du type de match dans `docs/attentes/jeux/<jeu>.yaml` (BasketVibe amical = `saisie: non, preset: non`) et le plan de tests ouvert dans `learnings.md` (C-063 : area Perimeter/Rim/Middle par amical). Jamais reprendre `gold.bv_agenda` (« preset amical ») ni demander l'export Preview d'un amical (RÉCIDIVE des règles 8, 29, 30).
 33. Un utilisateur qui exporte beaucoup attend la chaîne complète (lecteur → Match → Effectif → Finances → Tactique → Transferts) sans que je m'arrête après le sponsor et la veille ; lancer la chaîne dès l'arrivée des exports.
 
