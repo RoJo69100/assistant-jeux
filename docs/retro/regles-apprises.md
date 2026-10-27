@@ -57,3 +57,4 @@ Format : une ligne par règle, la plus récente en haut. Une règle déjà viol�
 11. Un jeu par session, un agent seulement sur nouvel export, résumé de 10 lignes.
 12. Plan du jour : lire l'horloge de Paris avant ; aucune échéance passée.
 13. (2026-10-27, l'utilisateur : « pourquoi tu te poses pas ces questions ? ») Après chaque série de matchs, victoires et défaites se comparent (agent Match : ce qui sépare les V des D, chiffré sur la saison) ET l'effectif se questionne de moi-même : par poste, qui n'a jamais joué ou est doublé, salaire gagné à vendre, vente finançable ou non. Je ne le laisse plus en note de bas de brief.
+14. (2026-10-27, RÉCIDIVE de la règle 7 de CLAUDE.md) Score de mi-temps ou d'étape d'un match à l'extérieur lu domicile-extérieur (J17 SZL : « 19-16 pour nous » au lieu de 16-19). Tout score partiel se remet de notre point de vue (venue) avant d'être écrit ; à faire en vue gold, pas à la main.
