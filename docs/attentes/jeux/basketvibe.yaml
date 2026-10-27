@@ -91,6 +91,7 @@ vues_gold:
   agenda: gold.bv_agenda
   alertes: gold.bv_daily_alerts
   rapport_match: gold.bv_match_report
+  saisie_tactique: [gold.bv_saisie_joueurs, gold.bv_saisie_adversaires]   # R-10, ordre de l'écran, ligue/coupe/amical
   base_transferts: null          # à créer
   resultat_champ: my_result
 
