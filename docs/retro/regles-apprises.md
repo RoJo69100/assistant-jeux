@@ -3,6 +3,7 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-10-27 (soir)
+41. Rendu de saisie BasketVibe = `select * from gold.bv_saisie_joueurs` / `gold.bv_saisie_adversaires` (filtre `kind`, `match_day`, `order by ordre`), sans agent. Coût mesuré en fin de session par l'agent `optimisation` (`pipelines/mesure_session.py`) ; mesure du 27/10 : 85 min, contexte max 108 %, 9 agents = 8,2 M tokens relus, `basketvibe.yaml` relu par 8 agents.
 39. Budget par jeu : 23 jeux ne tiennent pas si un jeu coûte 27 % du contexte et 1 h. Cible : un rendu de saisie = 1 requête SQL + 1 tableau, sans agent ; agents seulement pour décider ; jamais plus de 3 agents par passage ; `/compact` dès 15 % ; estimation de durée annoncée = durée tenue (j'avais dit 15–20 min, réel 60 min : cause = 7 agents en série qui relisent les mêmes fichiers).
 40. Contexte : je dis moi-même « /compact maintenant » dès ~15 % de contexte ou après un gros rendu, avec la raison (chaque message relit tout le contexte et coûte plus cher). Oublié le 27/10 jusqu'à 27 % : RÉCIDIVE de CLAUDE.md « Tokens ».
 38. Tactique : joueurs et adversaires dans l'ordre de l'écran (par poste PG-SG-SF-PF-C, puis alphabétique ; l'ordre brut du JSON est alphabétique global, faux), et tableau défensif par adversaire avec focus ET zone (R-10 complété). Oublier la zone dans l'amical et ranger par poste = RÉCIDIVE de 35.
