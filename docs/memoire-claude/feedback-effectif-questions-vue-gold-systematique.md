@@ -13,6 +13,6 @@ Le 2026-10-27 (Six Zero League), l'utilisateur : « garde en tête la vente et p
 **Why:** il juge les agents trop longs et veut que je prenne l'initiative au lieu d'attendre qu'il demande ; les lectures répétées en SQL/agent coûtent du temps et des tokens.
 
 **How to apply:**
-- Tous jeux, à chaque passage : verdict effectif en une ligne par poste (améliorer / vendre / acheter, joueur nommé, finançable ou non) ; une vente identifiée reste ouverte jusqu'à exécution (ex. SZL : Denis CB 8, puis Lemaire RW 9, dès que 500 € de frais sont payables).
+- Tous jeux, à chaque passage : verdict effectif en une ligne par poste (améliorer / vendre / acheter, joueur nommé, finançable ou non) ; une vente identifiée reste ouverte jusqu'à exécution (ex. SZL au 2026-10-27, `gold.sz_effectif_bilan` : Gabriel Bertin RW 9, 0 match, puis Denis CB 8, 3e CB, dès que 500 € de frais sont payables ; Lemaire est doublure RW, à garder).
 - Analyse V/D : comparer victoires et défaites sur toute la saison, plus profond que le match isolé (voir [[feedback-decider-et-progresser]]).
 - Optimisation : dès qu'une requête ou un agent revient (tableau, bilan effectif, comparaison V/D), je crée la vue gold tout de suite (conception → rappeler `/model opus` puis revenir sur Sonnet), pas « plus tard ». Voir [[feedback-couts-tokens-un-jeu-a-la-fois]], [[feedback-initiative-multi-jeux]].
