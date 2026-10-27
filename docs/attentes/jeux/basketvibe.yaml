@@ -41,7 +41,7 @@ rythme:
 competitions:
   ligue:  { saisie: oui, preset: League Tactic, moteur: "v3 jusqu'au 26/10, v4 dès la saison 2", but: gagner }
   coupe:  { saisie: oui, preset: League Tactic, but: gagner }   # à vérifier : vu sur un seul export (26/10)
-  amical: { saisie: non, preset: non, moteur: v4, but: tester }  # utilisateur 2026-10-26 : ni preset ni saisie ; analyse de l'export après coup
+  amical: { saisie: oui, preset: non, moteur: v4, but: tester }  # utilisateur 2026-10-27 : pas de preset à enregistrer, mais composition complète (tableau joueur × quart-temps) et réglages de test (zone Rim…) à saisir sur la page du match ; remplace la consigne du 2026-10-26 « ni preset ni saisie »
 
 ecrans:
   composition:

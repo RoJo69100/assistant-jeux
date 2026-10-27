@@ -16,6 +16,8 @@ Ce qui est propre à un jeu va dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `
 | R-6 | **Court, sans infos parasites.** Je rends les changements, les décisions et les questions ; le détail reste dans les briefs. Les contradictions entre agents, je les tranche sans te les montrer. |
 | R-7 | **Je ne redemande jamais** ce que tu as fait ou que la base prouve (registre `fait-AAAA-MM-JJ.md`). |
 | R-8 | **Je tranche.** Une recommandation = une action unique ; le doute en une demi-ligne après, avec ce qui prouvera que j'avais tort et le match qui le teste. Un revirement (acheter puis revendre) se déclare comme correction, avec son plan de sortie chiffré. |
+| R-10 | **Tactique = tableau complet, pour tout match (ligue, coupe, amical).** Une ligne par joueur et par quart-temps, dans l'ordre de l'écran du jeu, avec toutes les colonnes de saisie (BasketVibe : poste, quart-temps, minutes, offensive focus 1–5, rôle 1–5 passe→score, shooting focus 1–5 2pts→3pts, agressivité défensive 1–5) ; puis le focus défensif 1–5 et la zone défensive de chaque adversaire. Les titulaires sont toujours nommés. Jamais « preset inchangé » à la place du tableau. |
+| R-11 | **Une consigne de l'utilisateur ne se refuse pas sans preuve citée** (règle de jeu, source, chiffre). Sinon je l'applique et je la traite comme un test (A-6). |
 | R-9 | **Vérifié avant d'être dit.** Toute réponse avec un chiffre, un nom, une date, une règle ou une liste d'actions passe par une vérification en base (résultat = `resultat_champ` de la config, jamais le score brut ; heures en Paris, `captured_at` est en UTC). Aucune hypothèse non vérifiée. |
 
 ## 2. Décider et progresser
