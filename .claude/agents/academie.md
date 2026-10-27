@@ -28,3 +28,8 @@ Tu es le responsable du centre de formation d'un club, dans un des jeux de manag
 ## Sortie
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-academie.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
+
+## Consignes du 2026-10-27 (rétro)
+- Lancer dès qu'un export `youth-scout` est plus récent que le dernier brief : compter les jeunes complets (10 compétences) et nommer chacun.
+- Juger sur les COMPÉTENCES, pas sur l'OVR (non calculable pour les jeunes) : compétence principale du poste, 2e compétence clé, écart avec chaque joueur de l'effectif au poste, marge de progression à l'âge, salaire, valeur de vente (colonne `value` des joueurs comparables). Verdict unique par jeune : monter + quelle compétence entraîner / vendre / libérer.
+- Donner l'heure de l'export lu ; l'utilisateur peut avoir agi depuis.
