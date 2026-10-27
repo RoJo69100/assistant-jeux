@@ -2,6 +2,10 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-27 (soir)
+34. Avant tout « que faire » pour un match : lire la ligne du type de match dans `docs/attentes/jeux/<jeu>.yaml` (BasketVibe amical = `saisie: non, preset: non`) et le plan de tests ouvert dans `learnings.md` (C-063 : area Perimeter/Rim/Middle par amical). Jamais reprendre `gold.bv_agenda` (« preset amical ») ni demander l'export Preview d'un amical (RÉCIDIVE des règles 8, 29, 30).
+33. Un utilisateur qui exporte beaucoup attend la chaîne complète (lecteur → Match → Effectif → Finances → Tactique → Transferts) sans que je m'arrête après le sponsor et la veille ; lancer la chaîne dès l'arrivée des exports.
+
 ## 2026-10-26 (fin de nuit)
 31. Ce que je fais pour un jeu, je le vérifie pour les autres dans la même session et je l'étends sans demander (base des transferts faite pour BasketVibe seul alors que la mémoire disait « par jeu » ; « tu as tout, prends l'initiative »). Règle A-10 de `attentes.md`.
 
