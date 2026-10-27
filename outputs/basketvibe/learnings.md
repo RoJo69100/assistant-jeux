@@ -192,3 +192,5 @@ Tenu par l'agent Match (`.claude/agents/match.md`). Mis à jour après chaque ex
 - 2026-10-26 · amical · Debrecen Ravens (dom) · 73-93 · D · eFG 35,6–47,0, 3 pts 4/30 (Lecomte 1/14), LF 11/20 ; Q3 −18 (Bernard 6 fautes à 2:55) ; écran 3, focus tout à 3, area Middle (`area_step` 3), preset modifié depuis le 25/10
 - 2026-10-26 · ligue J22 · Wolves Empire (dom) · 125-80 · V · OREB 46,3–23,3, pertes adverses 26,8 % ; Q3 +22 ; Lock Cecchetti 0 pt ; écran 1 ; Wolves 5 joueurs à 44–48 min ; v3
 - Area jouée par amical (à noter à la main, C-041, révisé le 25/10 : C-063) : 24/10 Middle · 25/10 Middle · 26/10 **Middle (Perimeter prévu, non appliqué)** · 27/10 Rim · 28/10 Middle (Lock + Intense)
+
+- 2026-10-27 : un classement hebdomadaire ne vaut pas bilan de saison tant que tous les matchs ne sont pas comptés (21 sur 22 pour la saison 1, bilan réel 10-12 déduit).
