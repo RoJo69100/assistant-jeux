@@ -14,4 +14,5 @@
 - [Veille intégrale autres jeux](project-veille-integrale-autres-jeux.md) — à refaire jeu par jeu (connaissance.md) comme Six Zero League le 2026-10-26
 - [Rendu : demain seulement](feedback-rendu-demain-seulement.md) — pas de preset d'amical, consignes en tableau dans l'ordre de l'export, pas de « si », pas d'infos parasites
 - [Base transferts / bonnes affaires](project-base-transferts-bonnes-affaires.md) — achat-revente, base des transferts passés, usage de l'argent (tous jeux)
+- [Format tactique parfait](feedback-format-tactique-parfait.md) — tableau joueur × Q + tableau adversaires (focus + zone), ordre de l'export, à chaque fois
 - [Initiative multi-jeux](feedback-initiative-multi-jeux.md) — faire pour un jeu = vérifier et compléter les autres sans demander (A-10) ; transferts SZL/TS à faire
