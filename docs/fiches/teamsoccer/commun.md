@@ -30,6 +30,7 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/tea
 ## État des données (2026-10-19)
 - Silver (`sql/silver/012_ts_base.sql`) : `ts_api`, `ts_me`, `ts_teams`, `ts_my_teams`, `ts_player_snapshots`, `ts_players`, `ts_training`, `ts_finances`, `ts_stadiums`, `ts_matches`, `ts_match_lineups`, `ts_lineups`, `ts_standings` (recalculé depuis les matchs), `ts_transfer_listings`, `ts_my_bids`, `ts_youth_academies`, `ts_youth_players`, `ts_hpc`, `ts_news`, `ts_forum_posts`.
 - Gold (`sql/gold/016_ts_gold.sql`) : `ts_season_calendar`, `ts_squad_report`, `ts_player_progress`, `ts_finance_status`, `ts_stadium_payback`, `ts_academy`, `ts_hpc_status`, `ts_upcoming`.
+- Gold de décision (`sql/gold/019_ts_decision_views.sql`, 2026-10-27) : `ts_capacite_invest`, `ts_stade_choix`, `ts_effectif_bilan`, `ts_marche_cibles`, `ts_academie_verdict`, `ts_vd_comparatif`, `ts_saisie_composition` ; table `silver.ts_depenses_decidees`. Marché masculin / féminin : `silver.ts_transfer_listings.market` (`sql/silver/014`). Résumé des agents : `resume.md`.
 - Pas encore captés : notes des joueurs et rapport détaillé des matchs (checklist B4), cercles de constance du manager (B6). Un seul relevé des joueurs (2026-10-19) : `ts_player_progress` sera vide jusqu'au prochain export après le vendredi.
 
 ## Ordre des agents et briefs du jour (règle du 2026-10-22)
