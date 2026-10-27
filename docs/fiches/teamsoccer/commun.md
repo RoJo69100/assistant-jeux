@@ -44,4 +44,5 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 - Champs bruts non lus par silver, effet inconnu (à tester, mesure = résultat des révélations / matchs) : `login_streak` (19 le 2026-10-25), `daily_reveal_count` / `fully_revealed_count` (académie 376 : 15 jeunes entièrement révélés), `eliminated_in_round` (coupe), `reward` / `page_key` (récompense « foros »).
 - POST de révélation d'académie (`skill_name`, `skill_value`, `daily_reveal_count`) : en bronze (`dashboard_youth-scout`), non lus par silver ; max 3 jeunes distincts par club et par jour, reset 01:00 UTC.
 - Aucun `<select>` / `<option>` dans les HTML du marché et de l'académie.
+- 2026-10-27 : champs bruts non lus, effet inconnu (mesure = résultat de match / Forme) : `is_admin_match` (Ajax–Cows 2080875 = true, `competition` inconnue dans silver), `is_promotion`, `time_changed`, `room_challenge_id`, `custom_tournament_id`, `team_morale` (75), `team_spirit` (Normal), `shirt_color`, `name_changed`, `hotlists`, `season_yellow_cards`, `injured_at`.
 - Une composition de match n'arrive en base que par l'export de la page composition / match ; `dashboard_squad` n'en contient pas.
