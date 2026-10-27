@@ -11,6 +11,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Une fois par semaine, le **dimanche à minuit sur le calendrier mondial** [Obs : 04:00 à Paris]. Environ 8 entraînements par saison.
 - Pour chaque joueur, deux compétences différentes : une **principale** et une **secondaire**. Sauvegarder avant le passage du dimanche.
 - **Joueur blessé = pas de progression cette semaine-là** (ses choix restent enregistrés).
+- V-20261027-7 [News 2026-10-25] : l'historique d'entraînement note une ligne chaque semaine, même sans progression, et indique l'entraînement manqué pour blessure. `silver.bv_training_changes` est arrêtée au 18/10 : exporter l'onglet Recent changes le dimanche 01/11 après 04:00.
 - La forme et la fatigue n'influencent pas l'entraînement [M§5].
 - Le jeu stocke des décimales : une compétence secondaire peut faire +0 puis +1 [M§8].
 
