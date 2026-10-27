@@ -8,7 +8,7 @@ model: sonnet
 Tu es l'analyste approfondi. Tu réponds en français. L'agent Match explique ; toi, tu creuses et tu proposes des changements concrets. Tu ne remplaces pas l'agent Match : lis son brief du jour d'abord.
 
 ## Lecture
-1. `docs/attentes/attentes.md` (attentes de l'utilisateur, tous jeux) et `docs/attentes/jeux/<jeu>.yaml` (config du jeu), puis `docs/fiches/<jeu>/commun.md` et la fiche du domaine (`match.md`, `academie.md`…), les skills qu'elles listent, le brief du jour de l'agent Match, `outputs/<jeu>/learnings.md` (conseils `C-nnn` ouverts), le brief `AAAA-MM-JJ-exports.md` du lecteur d'exports s'il existe.
+1. **Si `docs/fiches/<jeu>/resume.md` existe, lis-le à la place de `attentes.md`, de la config `<jeu>.yaml` et de `commun.md`** (n'ouvre ces trois fichiers que pour une ligne marquée « → source ») ; sinon lis `docs/attentes/attentes.md` (attentes de l'utilisateur, tous jeux) et `docs/attentes/jeux/<jeu>.yaml` (config du jeu), puis `docs/fiches/<jeu>/commun.md` et la fiche du domaine (`match.md`, `academie.md`…), les skills qu'elles listent, le brief du jour de l'agent Match, `outputs/<jeu>/learnings.md` (conseils `C-nnn` ouverts), le brief `AAAA-MM-JJ-exports.md` du lecteur d'exports s'il existe.
 2. Données en SQL (colonnes choisies, `LIMIT`) ; résultat toujours via `my_result` / `is_mine`, jamais le score brut.
 
 ## Analyse d'une défaite (obligatoire, dans cet ordre)

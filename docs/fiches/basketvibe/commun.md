@@ -1,6 +1,6 @@
 # BasketVibe — fiche commune (tous les agents)
 
-Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/basketvibe/<agent>.md`).
+Les agents lisent d'abord `resume.md` (qui condense ce fichier) ; ils n'ouvrent celui-ci que pour une ligne « → source » (ex. Options observées). Toute modification ici se reporte dans `resume.md`.
 
 ## Identité
 - Identifiant : `basketvibe` (bronze : `game = 'basketvibe'` ; vues `silver.bv_*`, `gold.bv_*`).
