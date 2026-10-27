@@ -1,0 +1,18 @@
+---
+name: feedback-format-tactique-parfait
+description: "Format de rendu tactique validé \"absolument parfait\" par l'utilisateur le 2026-10-27 — à reproduire à chaque fois, ordre de l'export, focus défensif + zone par adversaire en tableau"
+metadata:
+  node_type: memory
+  type: feedback
+  originSessionId: 51ef3928-8819-4dda-b574-79832ad90f33
+  modified: 2026-10-27T19:07:55.308Z
+---
+
+Format validé (27/10 soir, « absolument PARFAIT, tu dois faire ça à chaque fois ») : un tableau joueur × quart-temps (poste, Q1–Q4, Prol., minutes, Off. focus, Rôle, Tir, Agress.), puis un second tableau **par adversaire** avec focus défensif 1–5 ET defensive area, les deux dans le même tableau.
+
+**Why:** l'utilisateur veut saisir sans réfléchir ; le 27/10 j'avais oublié la zone défensive dans l'amical et listé les adversaires en vrac.
+**How to apply:**
+- Joueurs ET adversaires dans l'ordre exact de l'export / de l'écran du jeu (jamais alphabétique de ma part, jamais regroupés par valeur).
+- Tableau défensif : colonnes Adversaire | Focus défensif (1–5) | Zone (Rim/Middle/Perimeter), pour coupe, ligue et amical.
+- Si l'ordre ou les noms adverses manquent en base : le dire en une ligne et donner l'export à faire, jamais « tu lis à l'écran ».
+- Pas de preset d'amical, pas de « si ». Voir [[feedback-rendu-demain-seulement]].
