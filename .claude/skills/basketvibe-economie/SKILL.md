@@ -25,6 +25,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Six contrats au choix en début de saison : Stability, Balance, Win bonus, Top half, Podium, Championship. Sans choix avant la date limite (15 min avant la 1re journée) : Stability.
 - Un montant de base chaque dimanche (8 versements maximum par saison), plus selon le contrat des primes par victoire ou de classement. Rater l'objectif ne fait perdre que la prime de fin.
 - [Obs] Saison 1 : Ironvale « stability », 100 000 par semaine, 200 000 garantis restants le 2026-10-16.
+- [Obs] Saison 2 (export 2026-10-27) : six offres, garanti = 8 × taux hebdo ; Stability 800k ; Fluxora 80k + 15k/victoire (640k–970k) ; Asterion 50k + 30k/victoire (400k–1,06M) ; Lunaro « top half » 85k (680k–1M) ; Pulseharbor « podium » 75k (600k–1,12M) ; Harborlane « championship » 70k (560k–1,2M). Choix avant le 02/11/2026 19:45. Le palier exact des primes de classement (top 6 ? 1re place ?) n'est pas confirmé. La saison compte 22 matchs (12 clubs en aller-retour ; KK Uola 22-0 en saison 1). L'écran « Wins: 12 / 22 » est un scénario, pas une prévision.
 
 ### Bonus homegrown [M§10.1.3]
 200 par minute de ligue jouée par les juniors signés à l'académie, plafonné à 40 000 par semaine, versé le dimanche. Exemple du manuel : ~20 min par match sur une saison ≈ 88 000.
