@@ -30,6 +30,8 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - `weekNumber` repart à 1 chaque saison : un cycle s'identifie par `applied_at`.
 - Infrastructures déjà payées : lis `silver.sz_infrastructure_levels` et `silver.sz_finances.since_last_report` avant d'écrire « dépense inconnue ». Niveaux au 2026-10-27 : Arena 7, Training Facilities 6, **Youth Academy 6**, Fan Shop 9 ; solde 31 € (déclaré).
 - Retard mesuré contre les autres clubs (→ source `commun.md` § Repères infrastructures) : Youth Academy 6 contre 9–10 chez Stoik et pierrottingchrist.
+- **Remplacements (veille 2026-10-27)** : automatiques, **uniquement sur blessure ou rouge** (un remplaçant par rôle, une entrée par match) [W:Match, W:Injuries ; SQL 18 matchs] ; aucune règle de fatigue ni de rotation ; ne propose jamais de « faire tourner ». Nos défaites se perdent en **1re mi-temps** (−4,5 en moyenne), pas en 2e (−1,0) ; J17 : menés 16-19 à la pause (à l'extérieur), 2e MT 13-14.
+- **Vente / libération** : effectif 7 minimum, 30 maximum (nous : 16) ; 500 € de frais ; pas pendant un match de ligue ; règlement toutes les 2 journées [W:Transfers]. Le mécanisme exact du minimum n'est pas documenté.
 - Tactique adverse : `teams.tactics` du match souvent vide → demander l'export du match juste après le coup de sifflet.
 
 ## Vues prêtes (lis-les avant de calculer toi-même)
