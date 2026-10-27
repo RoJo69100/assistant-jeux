@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-communaute
-description: Ce que disent le forum Team Soccer et ses administrateurs (Admin-Dev, le développeur ; Admin-PIPO68) — lu le 2026-10-19 (881 messages du 2026-04-29 au 2026-10-19, sujet « Questions and Answers » et annonces). Chronologie des changements de règles (BETA, remise à zéro du 2026-07-07, saisons 2 et 3), contradictions entre guide et forum, annonces dont seul le titre est capté, bugs récurrents à surveiller, conseils pratiques. Chaque point est daté et sourcé. À charger avec les skills de règles teamsoccer-*, surtout quand une règle semble avoir changé ou que le guide est muet.
+description: Ce que disent le forum Team Soccer et ses administrateurs (Admin-Dev, le développeur ; Admin-PIPO68) — lu intégralement le 2026-10-27 (936 messages du 2026-04-29 au 2026-10-27, sujet « Questions and Answers » et annonces). Chronologie des changements de règles (BETA, remise à zéro du 2026-07-07, saisons 2 et 3), contradictions entre guide et forum, annonces dont seul le titre est capté, bugs récurrents à surveiller, conseils pratiques. Chaque point est daté et sourcé. À charger avec les skills de règles teamsoccer-*, surtout quand une règle semble avoir changé ou que le guide est muet.
 ---
 
 # Team Soccer — communauté et annonces
@@ -40,6 +40,13 @@ Source : forum global (anglais), capté le 2026-10-19 : 842 messages du sujet «
 | 2026-10-14 | Candidatures de sélectionneur (voir teamsoccer-saison) | annonce 309 |
 | 2026-10-16 | Mi-temps tactique dans tous les matchs officiels | [F:PIPO68] |
 | 2026-10-18 | Forme = plafond, fatigue toutes les 5 min ; académie : totaux par niveau, max 75 ; vente par enchère de manager | [F:annonces 314, 315, 317] |
+| 2026-10-08 | Bug de remise à zéro du HPC corrigé | V-20261027-8 |
+| 2026-10-14 | Secteurs et notes 0-10 recalculés (matchs passés compris) | [F:PIPO68] |
+| 2026-10-18 | Trois scénarios Coupe du monde (8 pays, report, parrainage) | [F:PIPO68] |
+| 2026-10-19 | Sondage Women's TS League (contenu non capté) | forum |
+| 2026-10-25 | Real Favorite Club et Utopia-X3 | [F:Admin-Dev] |
+| 2026-10-26 | Écran de fiche : gain nul d'Endurance/Vitesse masqué | [F:PIPO68] |
+| 2026-10-27 | Correction du tableau de mi-temps (formation sans remplacement) | [F:Admin-Dev] |
 
 ## Annonces à capter (V-20261019-12 : 253, 281, 293, 294, 295, 296, 234, 288, 250 lues le 2026-10-19 ; numéros silver `news_id` 97–116 ≠ identifiants du forum, ne pas confondre)
 Restent : 282 « Coach Reset and Price Changes », 284 « Important change in ticket prices », 253 « Reduction of the training multiplier », 281 « Injuries adjusted based on player form », 293 « Major changes to physical training », 294 « Major changes to youth academies », 295 « Live match tactical changes », 296 « New Season Reset (Schedule and Dates) », 234 « Extra penalty to Goalkeeping and… », 288 « Scoring by pitch zone », 250 « Transfer limits », 152 « Players (Field Position Role + New Ratings) », 188 « Season 2 Launch ». Les ouvrir une fois avec le script pour compléter les skills.
@@ -55,6 +62,7 @@ Restent : 282 « Coach Reset and Price Changes », 284 « Important change in ti
 - **Simple = Avancé** selon le guide ; en pratique, les deux modes gardent des remplacements différents (2026-08-15/17).
 
 ## Bugs récurrents à surveiller
+- Crons de changement de saison (2026-08-03, 2026-10-05 à 10-08) [V-20261027-8]. Restent à capter : sondage du 10-19, barème X3, page Communauté après l'annonce 116.
 - Facturation de l'entretien du stade le lundi (ancienne formule) : 2026-10-13 et 2026-10-19, remboursé à chaque fois.
 - Page restée sur une ancienne version après une mise à jour : l'admin conseille F5 (ex. entraîneur payé à l'ancien prix, 2026-09-18).
 - Composition modifiée moins de 2 h avant le match : non prise en compte.
