@@ -64,6 +64,8 @@ Pourcentage de la capacité rempli selon la division et le rang au classement (l
 - L'abonnement Premium annuel donne une équipe féminine (Women's TS League) et l'accès à la Superligue Utopia ; même date d'expiration que le Premium.
 - Premium : flèches de progression, vitrine de trophées, changement d'horaire des matchs, 5 compositions par défaut, tournois personnalisés.
 - Compte inactif 45 jours → le club devient BOT [F:2026-08-29 PIPO68].
+- V-20261019-2 : équipe supplémentaire achetée à part dans la boutique [FAQ Team Soccer, export du 2026-10-19] ; la section Premium liste les pays disponibles, avec « Renouveler +1 an » : abonnement annuel par pays [F:2026-06-29 Admin-Dev]. Tout renouvellement Premium garde la même date d'expiration sur l'équipe première et l'équipe féminine [FAQ]. Prix absents de nos sources. Annonces Premium : mode texte des compétences (101, 2026-09-14), générateur de défis amicaux avec amical contre un BOT (113, 2026-10-07).
+- V-20261019-10 (marché) : plafond de 24 joueurs : à 24 aucune signature ; à 16 aucune vente. Refus d'achat fréquents : achat de la semaine utilisé, effectif qui atteindrait 25 avec les enchères actives, budget insuffisant. Une offre de dernière seconde prolonge l'enchère [FAQ]. ⚠️ L'annonce 99 (2026-09-10) parle de « acheter et vendre un joueur par semaine » ; la FAQ et Admin-Dev [F:2026-09-11] disent que les ventes sont illimitées : garder « ventes illimitées ».
 
 ## [Obs] Nos données
 - API : `team_finances` (lignes de la semaine et cumuls), `stadiums` (places par type), `transfer_listings` (prix, offres, échéance, type d'annonce), `players.value` et `players.wage`.

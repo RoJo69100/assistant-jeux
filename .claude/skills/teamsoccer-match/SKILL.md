@@ -9,7 +9,7 @@ Sources : voir teamsoccer-joueurs (**[G]** guide officiel capté le 2026-10-19, 
 
 ## Préparer un match [G:Composition : mode Simple et mode Avancé]
 - Matchs → le match → Configurer. **Enregistrer** sinon rien n'est appliqué ; on peut nommer une composition et la cocher « par défaut » pour les matchs suivants (3 emplacements, 5 en Premium) [G:Commencer à jouer 3.1].
-- **Le match est pré-calculé environ 2 heures avant le coup d'envoi** : une composition ou des remplacements enregistrés après ne comptent pas, la version précédente s'applique [F:2026-06-28 Admin-Dev] [F:2026-08-15 PIPO68]. Depuis fin juin, une composition modifiée avant le coup d'envoi déclenche un nouveau calcul (cron toutes les 5 min) [F:2026-06-28 Admin-Dev] ; règle prudente : **tout enregistrer au moins 2 h avant**.
+- **Le match est pré-calculé environ 2 heures avant le coup d'envoi** : une composition ou des remplacements enregistrés après ne comptent pas, la version précédente s'applique [F:2026-06-28 Admin-Dev] [F:2026-08-15 PIPO68]. Depuis fin juin, une composition modifiée avant le coup d'envoi déclenche un nouveau calcul (cron toutes les 5 min) [F:2026-06-28 Admin-Dev] ; règle prudente : **tout enregistrer au moins 2 h avant**. ⚠️ La FAQ dit qu'on peut changer la composition « jusqu'au coup d'envoi » [FAQ Team Soccer, export du 2026-10-19] : contradiction, garder 2 h (V-20261019-8). Sans composition enregistrée, le système remplit les 11 postes avec les joueurs disponibles : moins bon qu'une composition à soi, mais jamais de forfait [FAQ].
 - Sans composition enregistrée, la composition par défaut est utilisée [F:2026-07-18 Paolo, tournois].
 - « Composition automatique » place les 11 meilleurs et remplit le banc [G].
 - Garder un **banc configuré en permanence dans la composition par défaut** (recommandation de l'admin) [F:2026-06-28 Admin-Dev].
@@ -58,7 +58,7 @@ Match pré-calculé ; le visionneur rejoue seulement. Le jeu avance par zone sel
 - Le guide conclut : des joueurs complets (beaucoup de compétences) réussissent plus d'actions.
 
 ## Bots et managers récents
-- Club BOT : toutes ses compétences ×0,90 [F:2026-05-28 Admin-Dev] ; en plus, Gardien et Finition du bot −10 %, −18 % ou −25 % selon l'écart de niveau, dans tous les matchs depuis le 2026-09-07 [F:2026-09-07 Admin-Dev]. Les bots perdent plus de 90 % de leurs matchs.
+- Club BOT : toutes ses compétences ×0,90 [F:2026-05-28 Admin-Dev] ; en plus, Gardien et Finition du bot −10 %, −18 % ou −25 % selon l'écart de niveau, dans tous les matchs depuis le 2026-09-07 [F:2026-09-07 Admin-Dev]. Les bots perdent plus de 90 % de leurs matchs. ⚠️ V-20261019-7 : l'annonce 98 (2026-08-27) donnait un autre barème pour le malus Gardien/Finition en plus du −10 % : écart de niveau moyen (humain − bot) ≤ 3 = 0 %, 3 à 8 = −5 %, 8 à 15 = −10 %, > 15 = −15 % ; officiel seulement, bot contre humain seulement, banc compris, jamais sous 1. Version du 2026-09-07 plus récente (tous les matchs) ; à confirmer.
 - Manager humain inscrit depuis moins de 14 jours : compétences de champ ×1,05 [F:2026-05-28 Admin-Dev].
 - Un club inactif depuis 45 jours devient BOT ; un nouveau manager reprend un club bot [F:2026-08-29 PIPO68].
 
@@ -67,6 +67,7 @@ Match pré-calculé ; le visionneur rejoue seulement. Le jeu avance par zone sel
 - **Blessure** : remplacement automatique (poste couvert exact → même ligne → n'importe quel remplaçant). Banc vide → l'équipe joue à 10.
 - **Remplacements programmés** (minute, sortant, entrant) : à configurer à part ; mettre des joueurs sur le banc ne suffit pas. Utile avec la fatigue : un remplaçant entre avec tout son plafond de Forme.
 - **Mi-temps** : pause de 5 minutes avec changements tactiques et remplacements, dans tous les matchs officiels, sélections comprises, depuis le 2026-10-16 [F:2026-10-16 PIPO68]. Il faut regarder le match en direct pour s'en servir.
+- V-20261019-9 : maximum 3 changements au total (première mi-temps comprise) ; aucun si l'équipe joue à 10 ; seul un gardien peut aller au but ; une formation invalide n'est pas appliquée ; changements enregistrés et visibles dans le rapport (sélecteur 1re/2e mi-temps, tableau final avec minutes, poste, niveau moyen, note sur 10) [annonces 110 et 116]. Notes par zone visibles aussi pour le prochain adversaire d'après ses derniers matchs [annonce 105, 2026-09-22]. Composition automatique : exclut blessés et suspendus, remplit le banc de 6 [annonce 97]. Historique des 5 derniers matchs en un clic [annonce 107].
 
 ## Barres de secteurs [G:Équilibre des secteurs]
 - 8 barres 0–100 sous le terrain : Gardien, Défense centrale, Latéral gauche, Latéral droit, Milieu, Aile gauche, Aile droite, Attaque. Calculées avec les compétences du joueur à cet emplacement et le **nombre de joueurs** dans la zone (3 centraux renforcent l'axe, 5 milieux dominent le centre). Zone vide = moitié de la moyenne des zones voisines (marquée ~).

@@ -10,4 +10,4 @@ Mis à jour le 2026-10-19.
 | Guide | capté le 2026-10-19 (inchangé) | Non relu. |
 
 Prochain passage : forum `created_at > 2026-10-19 16:39`, annonces `news_id > 116`.
-Propositions du 2026-10-19 : V-20261019-1 à V-20261019-12, non appliquées (en attente de validation).
+Propositions du 2026-10-19 : V-20261019-1 à V-20261019-12 appliquées aux skills le 2026-10-27 (hypothèses marquées : V-6 blessures, V-1 limite HPC par club, V-7 bots, V-5 académie).

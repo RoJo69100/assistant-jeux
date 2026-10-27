@@ -33,11 +33,16 @@ Source : forum global (anglais), capté le 2026-10-19 : 842 messages du sujet «
 | 2026-10-07 | Challenger d'amical automatique ; voir les matchs des autres équipes | annonces 302, 303 |
 | 2026-10-10 | HPC : un seul joueur par club, à vie | [F:annonce 307] |
 | 2026-10-13 | Bug d'entretien du stade corrigé, +500 000 $ à tous | [F:PIPO68] |
+| 2026-09-14 | Mode texte des compétences (Premium) | annonce 101 |
+| 2026-09-15 | Traduction complète des rapports de match (21 langues) | annonces |
+| 2026-09-20 | Nouvelle page d'aide (14 catégories, recherche) | annonces |
+| 2026-09-22 | Trophées de la Ligue de rue (or +50, argent +30, bronze +15 points de quartier) | annonces |
+| 2026-10-14 | Candidatures de sélectionneur (voir teamsoccer-saison) | annonce 309 |
 | 2026-10-16 | Mi-temps tactique dans tous les matchs officiels | [F:PIPO68] |
 | 2026-10-18 | Forme = plafond, fatigue toutes les 5 min ; académie : totaux par niveau, max 75 ; vente par enchère de manager | [F:annonces 314, 315, 317] |
 
-## Annonces à capter (seul le titre est en base)
-282 « Coach Reset and Price Changes », 284 « Important change in ticket prices », 253 « Reduction of the training multiplier », 281 « Injuries adjusted based on player form », 293 « Major changes to physical training », 294 « Major changes to youth academies », 295 « Live match tactical changes », 296 « New Season Reset (Schedule and Dates) », 234 « Extra penalty to Goalkeeping and… », 288 « Scoring by pitch zone », 250 « Transfer limits », 152 « Players (Field Position Role + New Ratings) », 188 « Season 2 Launch ». Les ouvrir une fois avec le script pour compléter les skills.
+## Annonces à capter (V-20261019-12 : 253, 281, 293, 294, 295, 296, 234, 288, 250 lues le 2026-10-19 ; numéros silver `news_id` 97–116 ≠ identifiants du forum, ne pas confondre)
+Restent : 282 « Coach Reset and Price Changes », 284 « Important change in ticket prices », 253 « Reduction of the training multiplier », 281 « Injuries adjusted based on player form », 293 « Major changes to physical training », 294 « Major changes to youth academies », 295 « Live match tactical changes », 296 « New Season Reset (Schedule and Dates) », 234 « Extra penalty to Goalkeeping and… », 288 « Scoring by pitch zone », 250 « Transfer limits », 152 « Players (Field Position Role + New Ratings) », 188 « Season 2 Launch ». Les ouvrir une fois avec le script pour compléter les skills.
 
 ## Contradictions et points incertains
 - **Style d'équipe** : ±10 %/±5 % (guide actuel) contre ±25 %/±12,5 % (annonce moteur du 2026-05-28). Non tranché.
