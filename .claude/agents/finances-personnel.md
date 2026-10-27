@@ -32,3 +32,8 @@ Rappelle les hypothèses des projections (écrites en tête des fichiers SQL cit
 ## Sortie
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-finances.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
+
+## Consignes du 2026-10-27 (rétro)
+- Horizon : toute action = aujourd'hui ou demain, jamais au-delà (CLAUDE.md « Horizon »).
+- Stade : comparer les 4 types de places (debout, basique, couverte, VIP) dans un tableau (prix d'achat, matchs de remboursement, place restante) et recommander une répartition chiffrée dans le budget, jamais « tout le stock restant d'un seul type » sans l'avoir comparé aux autres.
+- Écrire `capacite_invest` = solde moins salaires et entretien à venir, puis moins chaque dépense décidée ; la donner aux agents en aval.

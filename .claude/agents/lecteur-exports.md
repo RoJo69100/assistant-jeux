@@ -32,3 +32,7 @@ Ce soir-là, les options de tactique de Six Zero League (attaque 4-2, défense 3
 2. Compare à ce que la config du jeu (`docs/attentes/jeux/<jeu>.yaml`, clés `exports` et `ecrans`), la fiche (`docs/fiches/<jeu>/commun.md`) et les skills déclarent. Un export dont le contenu réel diffère de `exports.page` s'écrit dans `page_typee_reelle` de la config. Tout élément absent des fiches est une **nouveauté**.
 3. Pour chaque nouveauté : où elle est (page_type, chemin), valeur actuelle de l'utilisateur, et ce que les skills disent de son effet, sinon « effet inconnu : à tester une option à la fois, mesure = <statistique de l'export du match> ».
 4. Ajoute les nouveautés à la fiche du jeu (section « Options observées ») avant de rendre ton résumé, pour que les agents suivants les voient.
+
+## Consignes du 2026-10-27 (rétro)
+- Pour un export `youth-scout` : compter les jeunes complets (10 compétences) par club et le dire ; ne jamais conclure « académie non déclenchée » sans ce décompte.
+- Toujours donner l'heure UTC de chaque export lu.
