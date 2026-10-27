@@ -11,7 +11,7 @@ Sources : voir teamsoccer-joueurs (**[G]** guide officiel capté le 2026-10-19, 
 - Chaque joueur reçoit **une compétence à entraîner** (les 10 sont possibles) et **une intensité** (0 à 100 %). Tous les joueurs s'entraînent, qu'ils jouent ou non ; les matchs n'entraînent rien [F:2026-05-31, 2026-07-16 Admin-Dev].
 - **Mise à jour une fois par semaine, le vendredi** (vers 00:00–01:00 UTC selon les messages). Seul compte le réglage en place au moment de la mise à jour ; on peut le changer toute la semaine [F:2026-07-20 PIPO68]. Les flèches de progression de la fiche montrent la dernière séance, pas la suivante (Premium).
 - Le gain dépend de **l'âge, de l'intensité et du niveau d'entraîneur** ; la formule est déterministe, sans hasard [F:2026-06-19 Admin-Dev].
-- **Saison 2 et suivantes : entraînement ×2**, car les saisons durent 10 semaines au lieu de 17 [P:Entraînement] [F:2026-07-14]. Ralenti ensuite (« Reduction of the training multiplier », 2026-09-13 ; « oui, ça a ralenti il y a quelques semaines » [F:2026-10-15 PIPO68]).
+- **Saison 2 et suivantes : entraînement ×2**, car les saisons durent 10 semaines au lieu de 17 [P:Entraînement] [F:2026-07-14]. Ralenti ensuite (« Reduction of the training multiplier », 2026-09-13 ; « oui, ça a ralenti il y a quelques semaines » [F:2026-10-15 PIPO68]). V-20261019-4 : le multiplicateur saisonnier est passé de ×2 à ×1,5 le 2026-09-13 ; multiplicateur effectif depuis la saison 2 : ×4,5 (×3 de base × ×1,5) ; avec talent Performance/Magique : ×9 (avant ×12). La courbe passive de Forme et de Rythme est inchangée [annonce 100].
 - Ordre de grandeur : environ +1 point (jusqu'à 1,5) par séance dans la compétence entraînée à 100 % (BETA) [F:2026-05-08 Admin-Dev] ; un joueur à 70 % gagnait +2 en une séance en juin [F:2026-06-19].
 
 ## Âge [G:Entraînements]
@@ -30,7 +30,7 @@ Barème de référence BETA (base 3 points sur 100) [F:2026-04-29 Admin-Dev] : �
 - Règle d'origine : entraîner une compétence technique **au-dessus de 60–70 %** fait perdre de l'Endurance et de la Vitesse ; entraîner l'une des deux au-dessus de 70 % fait baisser l'autre [F:2026-05-07, 2026-05-15 Admin-Dev]. Conseil de l'admin : rester vers 70 % sur la technique, et intercaler une ou deux semaines physiques à 100 % [F:2026-05-09 Admin-Dev] ; intensité > 70 % surtout pour les moins de 20 ans [F:2026-05-07].
 - Juin 2026 : un « rebond physique » lié à l'âge remplace la perte passive quand on entraîne la technique, l'Endurance ou la Vitesse : ≤ 18 ans 60 % du gain, 19–20 55 %, 21–22 50 %, 23–24 45 %, 25–26 40 %, 27–28 35 %, 29–30 25 %, 31–32 15 %, 33–34 10 %, ≥ 35 5 % [F:2026-04-29 Admin-Dev, texte édité].
 - **Depuis fin septembre 2026 : le physique ne monte plus tout seul, il faut l'entraîner comme les autres compétences** [F:2026-10-09 PIPO68] (annonce « Major changes to physical training » du 2026-09-26, contenu non capté).
-- **Physique critique : Endurance ≤ 30 → seul l'entraînement d'Endurance est possible** jusqu'à repasser au-dessus de 30 [P:Entraînement].
+- **Physique critique (V-20261019-3)** : verrou à ≤ 30. Endurance ≤ 30 → seuls Endurance ou Aucun ; Vitesse ≤ 30 → seuls Vitesse ou Aucun ; les deux ≤ 30 → Endurance, Vitesse ou Aucun. Déverrouillage au-dessus de 30. Si la Forme ≤ 30, l'intensité est plafonnée à 50 % (+6 de Forme à 50 %, +10 à 40 % ou moins). Le serveur applique ces règles le vendredi. Plus aucun gain passif d'Endurance ou de Vitesse en entraînant une compétence technique [annonce 108, 2026-09-26] [P:Entraînement].
 
 ## Forme et intensité [F:2026-06-27 Admin-Dev]
 Variation de la Forme à chaque mise à jour du vendredi :
@@ -50,7 +50,7 @@ Variation de la Forme à chaque mise à jour du vendredi :
 - Créée avec **16 jeunes de 16 à 18 ans** ; toujours 16 (chaque départ est remplacé).
 - 10 compétences cachées. **3 révélations par jour, au plus 1 par jeune** (donc 3 jeunes différents). Remise à zéro **01:00 UTC** [P:Académie] (le guide dit 00:00 UTC). Un jeune complet prend 10 jours.
 - Une fois les 10 révélées : **monter en équipe première** (si l'effectif reste ≤ 24), vendre, ou libérer.
-- **Niveaux** : 6, atteints à 0, 10, 20, 35, 50 et 70 jeunes complétés. Total de compétences à la création : 250 (225–275), puis 300, 350, 400, 450, 500 (±25) ; **aucune compétence au-dessus de 75** à la création [F:2026-10-18 Admin-Dev].
+- **Niveaux** : 6, atteints à 0, 10, 20, 35, 50 et 70 jeunes complétés. Total de compétences à la création : 250 (225–275), puis 300, 350, 400, 450, 500 (±25) ; **aucune compétence au-dessus de 75** à la création [F:2026-10-18 Admin-Dev], confirmé par PIPO68 le 2026-10-19. ⚠️ Contradiction (V-20261019-5) : l'annonce 109 (2026-09-26) donnait des totaux de 350 / 400 / 450 / 500 / 550 / 600 (±25) pour les niveaux 1 à 6, avec 1 ou 2 compétences « étoile » à 75, 80 ou 90 (plafond 100), âge 16–18, minimum 10 par compétence, nouveaux jeunes seulement. Garder la version du forum (plus récente) sans effacer l'annonce ; ne pas juger un jeune avec les anciens totaux. Noms des niveaux de l'annonce : Débutant (0 complété), Novice (10), Intermédiaire (20), Université (35), Avancé (50), Expérimenté (70).
 - Noms des niveaux vus : Débutant (1), Noble (2), Intermédiaire (3), Université (4, « encore 2 niveaux » après) [F:2026-08-22, 2026-10-19 PIPO68].
 - L'âge du jeune ne dit rien de son niveau [F:2026-09-18]. Talents : 7 %, Magique 3 % (voir teamsoccer-joueurs), visibles seulement après la montée.
 - Stratégie de révélation : commencer par les 4 compétences de poste (Gardien, Défense, Conduite, Finition) pour repérer vite un jeune intéressant (déduction, pas une règle du jeu).
@@ -61,6 +61,7 @@ Variation de la Forme à chaque mise à jour du vendredi :
 - **Il faut atteindre 50 TSC investis dans la saison**, sinon les TSC sont rendus et tout recommence. Âge du jeune aléatoire.
 - **Depuis la saison 3, un club qui a déjà obtenu son joueur HPC ne peut plus en avoir un second** [F:2026-10-10 Admin-Dev].
 - [P:Haute Performance] Au 2026-10-19 : 45 TSC disponibles, 0 investi cette saison, 6 semaines restantes, aucun paiement. **Décision Premium à laisser à l'utilisateur.**
+- V-20261019-1 : les TSCredits ne servent pas qu'au HPC : personnalisation (TS-PoPs payés en TSC) [F:2026-07-11 PIPO68], fonctions sociales [FAQ Team Soccer, export du 2026-10-19], revente d'équipe secondaire à la banque (voir teamsoccer-club). Tous les clubs ont reçu 50 TSC gratuits à l'inscription ; depuis la saison 3 un club qui a obtenu son joueur HPC n'en reçoit pas de second, et la page HPC n'est visible que pour ceux qui n'en ont pas [annonce 114, 2026-10-10]. Le HPC est la seule voie vers un jeune au-dessus de 75 [F:2026-10-19 PIPO68]. Limite par club ou par compte : non précisé (hypothèse : par club).
 
 ## [Obs] Nos données
 - API : `player_training_assignments` (`training_type`, `training_intensity`, `skill_progress`, `stamina_progress`, `pace_progress`, `last_change`), `youth_academy_players` (`revealed_skills`), `high_performance_scouts`.
