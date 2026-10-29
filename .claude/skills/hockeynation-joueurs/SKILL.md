@@ -42,3 +42,7 @@ Lignes FRM, U21, U17 : construites sur le **poste principal** d'abord ; le 2e po
 - Déclin possible dès 32 ans sur les compétences plafonnées (sauf DSC), maximal vers 35-39 ; les coachs n'y changent rien.
 - Retraite annoncée dès 35 ans (jour 1), effective en fin de saison ; pic de probabilité à 39.
 - Recrue (rookie) : 23 ans ou moins et 10 matchs PRO au plus.
+
+## [Veille 2026-10-29] Mises à jour (V-20261029-6, -7)
+- **Compétences clés par poste — hypothèse [H] complétée, avis de joueur** : SHO et PAS = buts ; SKA et PWR = possession du palet ; CHK et DEF = défense ; DSC = pénalités prises ; FOF : un bon joueur de mise au jeu par ligne suffit, pas forcément le centre. PWR serait donc à ajouter à SKA pour C/LW/RW/D, à tester sur les lignes avant de modifier `gold.hn_position_keys` (rendu tactique figé). [Discord #general, talonflame1, 2026-04-04 ; V-6]
+- **Gardiens** : END = nombre de matchs avant fatigue, titulaire 7+ ; STK est la compétence la moins utilisée ; un gardien à END bas arrive à ~60 % de condition en 3e période (avis talonflame1, 2026-04-04). La perte de condition pèse relativement plus sur les hautes compétences (d0ghouse, 2025-12-03). [V-7]

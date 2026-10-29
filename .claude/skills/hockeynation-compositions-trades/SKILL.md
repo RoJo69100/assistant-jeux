@@ -30,3 +30,6 @@ Sources : [U] consignes de l'utilisateur du 2026-10-25 ; [G:Teams], [G:Farm Team
 
 ## Contrôle
 Avant de rendre : 20 joueurs par équipe, VIDE marqués, aucun joueur annoncé « monte » absent de l'équipe d'arrivée, marge ≥ 0 à chaque étape.
+
+## [Veille 2026-10-29] Avis de marché (V-20261029-11, jamais une règle)
+- Valeur d'échange par note minimale (talonflame1, 2026-04-14) : 80+ = 1er tour, 70-79 = 1er, 60-70 = 2e, 60-64 = 3e, 55-60 = 4e, < 55 = 5e. Cap dump par salaire jeté : < 1 M = 4e, 1-2 M = 3e, 2-4,5 M = 2e, 4,5-7 M = 2e + 3e, 7-10 M = 1er. Marché S27 : surplus de U21 (30 à 35 joueurs par club), demande pour U21 C/RW/LD, RD de tête et gardiens U21. [Discord #general et #trade, 2026-10-24 à 10-29]
