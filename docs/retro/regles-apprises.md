@@ -3,6 +3,14 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-29 (soir)
+52. Fin de journée / après /clear : « les N autres jeux » = je liste d'abord, en une requête (fait-AAAA-MM-JJ.md + briefs + `bronze.raw_pages`), quels jeux ont déjà eu agents/briefs aujourd'hui, au lieu de demander. Fin d'après-midi sans /compact proposé = récidive 40.
+51. Un jeu dont le Discord n'a jamais été lu en entier : première passe de veille = lecture intégrale (messages lus vs retenus annoncés), pas le delta (HN : 12 propositions, puis A-25/B-7/C-14 après « tu as retenu que ça ? »).
+50. Ordre de priorité (entraînement, draft, scouts) = marge de progression / potentiel, jamais âge + note seuls.
+49. Scouts : objectif = couvrir le maximum de joueurs possible ; la liste des joueurs à scouter est donnée avec chaque tableau de scouts, pour tous les scouts.
+48. Coach faible ou remplacement impossible : je donne le plan B nommé (qui, prix, règle d'embauche vérifiée) dans la même réponse.
+47. Quand l'utilisateur dit « les 4 », je compte les entités déclarées (`silver.hn_declared`) avant d'écrire et je les traite toutes ; rendu = un tableau par équipe, jamais de puces.
+
 ## 2026-10-29
 43. RÉCIDIVE (règle 41 + mémoire « format tactique parfait ») : la saisie tactique se rend depuis `gold.bv_saisie_joueurs` / `bv_saisie_adversaires` (ordre de l'écran, un tableau joueur × Q + un tableau adversaires focus + zone), avec les changements du brief appliqués par-dessus ; jamais le tableau libre d'un brief d'agent. Les actions gardent 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI (pastille + mot). La zone vient de l'export (« Middle (3) » en coupe), pas du brief.
 44. (2026-10-29, « tu es con ou quoi, je te dis de reprendre le même FORMAT, pas les mêmes données ») RÉCIDIVE règles 41 et 43. Amical = composition de TEST, jamais le cinq de la coupe ni de la ligue ; réglages par joueur repris du dernier amical en base, un seul test (zone Rim/Middle/Perimeter OU un réglage de nos joueurs). Tableau adversaires d'amical : « les 12 : focus 3, zone X » suffit (pas de noms, donc pas d'aperçu à demander). Je rends ce tableau tout de suite, sans qu'on le réclame.
