@@ -1,3 +1,127 @@
+[2023-12-02 08:15] fab4218 : Question sur de la formation à long terme car j’aime bien prévoir un peu à l’avance pour optimiser mon équipe : je pars pour former un intérieur en défenseur passeur. J’ai vu ce qui est préconisé pour un u21. Mais est ce que ce profil est viable pour des joueurs plus âgés et si oui c’est quoi la cible (et les caracs où les trous sont à éviter. Mon rookie part de 1 en JS par exemple)
+[2023-12-02 10:46] flowran : C'est un profil viable bien au-delà des U21 avec des joueurs qui se vendent à prix d'or sur le marché.
+[2023-12-02 10:46] flowran : Plus ton joueur part de bas en JS et SI, mieux c'est !
+[2023-12-02 12:06] pouah : y'a un exemple de profil (même fictif) ? pour savoir ce que ça donne
+[2023-12-02 12:46] flowran : Sur le marché actuellement <@706803873133625396>
+[2023-12-02 12:46] flowran : On est pas loin du compromis idéal en club selon moi
+[2023-12-02 13:26] boulfe : Ce qui intéressant avec lui c'est sa taille
+[2023-12-02 13:53] krehigo : Un P de 1m98 ça change quelque chose à son niveau de jeu comparé à un 2m26 ?
+[2023-12-02 13:53] flowran : Non
+[2023-12-02 13:53] flowran : La taille a seulement un impact sur l'entraînement
+[2023-12-02 14:39] fab4218 : Parfait ça c’est le profil de mon gars on va donc s’amuser un peu. Merci pour la réponse (il faut donc viser de monter la passe, la dextérité et la de en carac extérieur)
+[2023-12-02 17:26] lagiggz : Du coup ne pas faire de 1vs1
+[2023-12-02 18:18] Deleted User : Pour faire un bel AF de Pro A ou NT genre Brésil/Grèce, vous iriez à combien en Portée Shoot ?
+[2023-12-02 18:19] slamdunk9 : 13+ JS 9+ PS
+[2023-12-02 18:19] flowran : Il y a plusieurs profils possibles !
+[2023-12-02 18:19] slamdunk9 : ça marche aussi pour la France 😂
+[2023-12-02 18:20] flowran : Offensif ? Défensif ? Pour AE ou AI ? Pour moi, 9 c'est un minimum en PS en AF
+[2023-12-02 18:22] Deleted User : 9 ? Ah merde, je suis déjà trop loin
+[2023-12-02 18:22] flowran : Comment ça ?
+[2023-12-02 18:23] Deleted User : oui bon, j'exagere. Mes gars ont 11-8-7
+[2023-12-02 18:24] slamdunk9 : Tu peux atteindre sans problème 13-14 PS, c'est surtout le JS qui bouffe du potentiel
+[2023-12-02 18:24] slamdunk9 : Mais bon est-ce que ça vaut la peine de faire 14 JS 14 PS ? Je suis pas sûr. Autant limiter le PS autour de 11 et faire autre chose genre DE ou passe
+[2023-12-02 18:24] flowran : Il n'y a jamais trop de PS, sauf à avoir beaucoup de DE aussi
+[2023-12-02 18:25] slamdunk9 : ou alors sur un profil inté 3-2 tu peux pousser plus haut le JS
+[2023-12-02 18:25] slamdunk9 : et donc la PS
+[2023-12-03 17:58] _shayka : Y a t il un impact entre le 48 min et le 48+ ? Il doit me manquer 10 secondes max à mes deux joueurs hier soir ...
+[2023-12-03 20:02] flowran : Il y en a un
+[2023-12-03 20:02] flowran : Mais te le chiffrer exactement est compliqué
+[2023-12-03 20:03] flowran : Il faut quand même se dire que le rapport entre minutes jouées et proportion de l'entraînement reçu n'est pas linéaire, les "dernières" minutes rapportent plus. Mais si tu es à 48, tu peux quand même tabler sur plus de 95% de l'entraînement je pense
+[2023-12-04 06:59] _shayka : C'est d'autant plus rageant ces micro changements de qq secondes
+[2023-12-04 11:39] gouloute : ouai...alors que le joueur il est positionné en tant que titulaire + remplaçant + réserviste j'imagine 😉
+[2023-12-04 15:06] _shayka : Exactement et sur les 20 dernières secondes le coach décide d'inverser des postes etc
+[2023-12-05 17:15] coyen1676 : Pour info ça ne joue plus rien si ton joueur a 47 minutes il aura 100% de l’entraînement c’est passé il y a pas longtemps dans un communiqué
+[2023-12-05 17:15] grand_tatou : Yes il y a une tolérance de +/- 1 minute sur les entraînements
+[2023-12-06 06:58] _shayka : Mais ce bonus est-il pris en compte sur la page entraînement ? Ça reste assez flou je trouve
+[2023-12-06 07:26] boulfe : Sur la page « diriger mon équipe » tu as un ✅ si le joueur a eu un nombre de minutes suffisant à avoir tout l’entraînement
+[2024-02-05 06:06] couac_bb : bonjour avant de m'engager et d'avoir encore un couac, j'aimerais savoir, le budget de départ. Une salle à combien de place. J'ai lu un peu le tuto, une salle d'entrainement à 15k par semaine, un training à 7,5k un entrainement supérieur, des match à gagner pour remplir sa salle donc des joueur potable à tous les postes. Tout ça ça a un coûp. Donc le budget de départ pour se lancer dans l'aventure est de combien celons vous ?
+[2024-02-05 08:21] coyen1676 : Pour le supérieur il te faudrai 200-350 k pour te faire la main acheter des joueurs franchise player 5-6 environ 300k aussi la salle là monte max en premier rang 1500-2000 gradin bas et 10000-12000 gradin bas et une 20 de vip et après pour les joueurs faut voir pour recruter des vieux max 32 ans a 10-20k de salaire mais au début c’est pas trop la priorité si tu as besoin de plus d’infos passe en privé
+[2024-02-05 14:03] couac_bb : ok pour passer en privé, si tu m'explique comment. Désolé mais dès que c'est nouveau, je suis très long à comprendre.
+[2024-02-20 23:28] diasinho73 : J’ai une question peut être bête mais, pour l’entraînement endurance faut-il un coach d’un certain niveau pour avoir des ups ou le minimal suffit ?
+[2024-02-20 23:33] joruus29 : Pour les entraînements équipe (endurance, lancers-francs et forme) le niveau du coach n'influe pas du tout.
+[2024-02-20 23:34] joruus29 : Que le coach soit niveau 1 ou 7, tu auras donc le même résultat.
+[2024-02-20 23:38] diasinho73 : Parfait merci 😁
+[2024-03-12 08:57] kobetim : https://lien.buzzer-manager.com/pfkh81p8qndtyr00456aa4vrgsqjcb71rva07p43kobfkd8a02mognhsd4uk-fr.png
+[2024-03-12 08:58] kobetim : Vous en pensez quoi ?
+[2024-03-12 09:00] boulfe : Très joli profil de départ 🙂
+[2024-03-12 09:08] b0ule. : à 18 ans la seule chose pour avoir mieux c'est d'inverser certaines compétences et éventuellement une meilleur endurance, mais intrinsèquement c'est un très très beau drafté
+[2024-03-12 09:17] kobetim : Pour une fois que je fais une affaire lol
+[2024-03-25 22:55] diasinho73 : En contact avec un manager US qui entraîne un 19 ans fr et un autre us, aux US ils pensent que de faire JS avant DE aux 19 ans est un gain de temps et permet à l’entraînement JS de bénéficier de l’entraîneur jeune. Vous en pensez quoi ? Nous qui faisons DE derrière le 1v1
+[2024-03-25 23:07] slamdunk9 : Le boost qu'ils gagnent en JS, ils le perdent en DE... Et tant qu'il n'y a pas d'aspi entre ces 2 skills ça ne change pas grand chose selon moi
+[2024-03-25 23:08] slamdunk9 : D'autant que leurs 5 meilleurs extés de la saison dernière ont suivi le classique 1v1 -> DE pour commencer
+[2024-03-26 06:22] boulfe : Je pense que la grosse différence serait surtout à quel niveau de dribble/dx le switch est fait. Nous on a tendance à pousser loin le 1vs1 au détriment du shoot très souvent faible en début de 21 ans. Eux ils font visiblement autrement
+[2024-03-26 06:23] gpolin : Si les US étaient les meilleurs formateurs, ça fait longtemps que ça se saurait
+[2024-03-26 06:28] boulfe : Ouuuh. Statement officiel de gpolin pour le championnat d’Amérique ! 😁
+[2024-03-26 06:44] gpolin : Je viens de commencer par 2 défaites donc bon
+[2024-03-26 06:46] gpolin : C'est juste que les US sont de piètres formateurs dans l'ensemble. Après, avec le nombre d'équipes et donc de joueurs possibles, ils en sortent des supers, heureusement
+[2024-03-26 06:48] boulfe : C’est comme IRL en gros
+[2024-03-26 06:49] slamdunk9 : Sur les 4 derniers mondiaux U21 ils finissent avec un titre et 3 finales perdues
+[2024-03-26 06:50] slamdunk9 : Et leur effectif de la saison dernière était ultra fort
+[2024-03-26 07:35] diasinho73 : A 13 dx/dr ils switchent si j’ai bien compris
+[2024-03-26 07:35] diasinho73 : Bon après ils font peut être pas ça sur tous le monde, c’est peut être juste 1 cas isolé ou un petit échantillon
+[2024-03-26 08:15] flowran : Personnellement, je vois un intérêt à faire JS avant DE, c'est que ça te permet de garder plus longtemps 6 joueurs et donc de repousser d'autant plus le moment du choix pour les 3 que tu gardes, donc tu diminues l'aléa de perte d'entraînements pour tes 3 meilleurs. Mais j'y mets deux conditions : - faire du JS M/AR après le 1vs1 AS/AF pour continuer à donner de l'aspiration, même moindre - se garder suffisamment de temps pour atteindre 14 DE en début de 21 ans
+[2024-03-26 09:02] b0ule. : J'ai essayé pas mal de type de formation, et la formation de 6 joueurs, dans un objectif uniquement de revente, en faisant au départ que du biposte et la DE après de nombreuses sessions de 1vs1 et JS, j'avais trouvé qu'ensuite l'entrainement DE tu le sens passer à un âge avancé (rappel de l'ordre de -8 de points de pourcentage de  gain par année > 18ans). J'imagine que ce qu'ils font c'est forcément par palier, c'est pas possible autrement. Et ça peut avoir du sens pour des U21 où un +1/+2 quelque part peut faire toute la différence. Sur le fond, je pense que le 1vs1 M/AR est censé donner quasiment autant de JS que l'entrainement JS avec la création d'aspiration en même temps, dans une formation orienté TSP je ne vois pas l'intérêt d'entrainer JS sauf à fonctionner par archétype.
+[2024-03-26 10:22] cp6694 : Quand j'ai formé un U21 au poste d'AS pour eux, Antwon, leur ancien sélectrionneur me disait que "the best road" c'était de s'arrêter à 15 Dextérité
+[2024-03-26 10:34] cp6694 : Joueur U21 en S62
+[2024-03-26 16:48] Deleted User : ouais, mais ils forment mal
+[2024-03-27 06:58] gpolin : J'avoue que j'ai pas suivi les mondiaux ces dernières saisons donc je suis resté sur ce que je connaissais d'eux et sur ce qu'ils m'ont montré y a 2 saisons aux championnats des Amériques où on était pas loin avec le Canada de les battre (on les a même battu en poules) avec une équipe correcte mais loin du niveau top mondial quand même
+[2024-03-27 07:35] flowran : Vraisemblablement ils concentrent leurs efforts (niveau farm notamment) sur les mondiaux, considérant que le titre continental est quasiment acquis. À toi de leur prouver le contraire ! 😉
+[2024-03-27 07:37] gpolin : Cette saison,  je serai déjà heureux d'arriver en demi. Mais pour ça, va falloir que les mecs taffent !
+[2024-03-30 15:38] uso__64 : Bonjour, je reprends sérieusement goût au jeu après un bref passage il y a quelques années de cela. J'ai pu lire par ci par là que la formation pouvait jouer un rôle important dans la constitution d'une équipe et je voulais savoir quels étaient les meilleurs entraînements à privilégier. Car j'ai pu lire que le monoposte ou le biposte étaient les plus intéressants, pour les entraînements spéciaux. Qu'en est il de l'efficacité des entraînements ciblés, du style 1vs1, rebond, JS, SI, etc mais en le privilégiant pour toute l'équipe et pas seulement un monoposte ou biposte ? Y'a t'il une grosse différence ?   Bonne fin de journée à tous ✌️
+[2024-03-30 15:56] cp6694 : <@1132222162531532850> Les entrainements d'équipe et tripostes sont à proscrire, sauf pour l'endurance ! Pour le reste, tous les types d'entrainements peuvent avoir leur utilité dépendant des profils de joueurs formés et des profils de joueurs ciblés. Certains entrainements sont optimaux en biposte étant donné qu'ils n'existent pas en monoposte (JS/1vs1/Rebond). Pour le reste, le monoposte est traditionnellement privilégié mais le biposte peut être un choix judicieux notamment en début de jeu pour faire progresser plus de joueurs simultanément
+[2024-03-31 10:02] uso__64 : D'accord merci pour les renseignements ! Du coup si j'ai bien compris, un entraînement 1vs1 pour toute l'équipe n'est pas optimal ? Car je l'ai fait la semaine dernière et j'ai quand même plusieurs joueurs qui ont up.. du coup je me posais la question sur ce genre d'alternative, étant donné que je n'ai pas de jeune à former en ce moment.
+[2024-03-31 12:33] cp6694 : Si tu n'as pas de jeunes joueurs à former ça n'a pas beaucoup d'importance
+[2024-03-31 12:34] cp6694 : Tu as eu des ups car tu devais avoir des joueurs haut dans les décimales des caracs entrainées pas le 1vs1, mais il faudra attendre pas mal de temps avant d'obtenir des ups à nouveau dans ces caracs
+[2024-04-01 08:31] gpolin : certaines équipes font des entrainement équipes car ils sont dans une logique Homegrown (former ses propres joueurs, sans en acheter). Cela demande donc souvent de faire des entrainements plus larges que ce qui est conseillé.  Ce qu'il faut garder en tête c'est que plus tu ajoutes des joueurs à un entrainement par rapport au minimum proposé par BB, plus ton entrainement perd en efficacité. Et cette perte n'est pas linéaire, mais plutôt exponentielle. Donc pour former de bons joueurs, il faut privilégier le monoposte (et bisposte pour JS/1vs1 où il n'y a pas le choix).
+[2024-04-01 08:53] b0ule. : Exponentiel je ne sais pas, mais perdre 25% en faisant du biposte à la place de monoposte, ça peut se faire. Tu formes deux fois plus de joueurs. Je te rejoins sur le fait que c'est plutôt pour faire des profiles spéciaux ou du homegrown sur quelques saisons et en sachant que tu vas atteindre tes objectifs avec une ou deux saisons de retard. Perso je l'ai fait deux fois, la première fois ça m'a permis de former quelques joueurs qui ont servi de complément à ma première montée en pro A dont quand même un titulaire. La deuxième fois sur Utopia ça m'a permis de vendre des joueurs, bien vendus, ensuite pour accumuler du cash. C'est pas idéal, mais quand tu dois tout construire, que ton staff n'est pas optimal etc. c'est quand même un moyen à ne pas écarter. Il faut être patient quand même 🙂
+[2024-04-01 09:52] gpolin : il me semble que la perte est de plus de 25% entre monoposte et biposte non ?
+[2024-04-01 09:53] gpolin : mais oui, ça peut se faire, et dans ce cas, privilégier des petits potentiels (FP max). C'est même une façon de se faire la main
+[2024-04-01 15:03] b0ule. : non, sincèrement en faisant attention à la taille et à l'âge, oui il y a une perte mais ça ressemble plus à 25% que plus que ça. Surtout quand tu vois les calculs à la con que donne @coachParrot quand tu es à 17 DE et qu'il te dit que tu vas faire 11 semaines pour un up. Il est alors totalement faux sur les gains potentiels, de mémoire il fallait faire 4-5 semaines pour faire faire un +1DE en biposte avec des joueurs à 10k de salaire.
+[2024-04-01 15:13] b0ule. : Alors pour pondérer, j'ai vu sur le marché des joueurs formés 100% DE qui peuvent être (encore une fois relatif à l'âge et à la taille) à 18DE la première semaine des 20 ans. Donc en deux saisons pleines, et full house ce que je n'avais pas à l'époque, même pas sûr que j'avais un entraineur > lvl5. Vu que former des pions c'est pas former un international.
+[2024-05-26 09:40] b0ule. : a-t-on des nouvelles de ce qui sera dans les news de la prochaine saison ? du genre un changement dans la manière d'entrainer ou pas ? c'est pour mes choix de draft.
+[2024-05-26 11:30] flowran : Avoir des informations importantes à l'avance ? Quelle idée ! Il faut être le copain de Alonso ou de Justin pour ça 😏
+[2024-05-26 12:00] b0ule. : Bien d'accord que sur le principe ce serait mieux d'annoncer avant
+[2024-05-26 15:27] couac_bb : J'ai du rater un épisode, vendredi je cherchai l'entrainement pressing, pour monter la DE, avant de m'apercevoir qu'il était remplacé par "entrainement défense extérieur" . Du même coup, ma question est : pour les UP,  sur poste M , c'est toujours 8 semaines pour dex, DR et DI ?
+[2024-06-06 19:19] Deleted User : et encore 😂
+[2024-06-08 16:20] flowran : Petit rappel pour les personnes qui forment des 19 ans actuellement : c'est le moment de vous séparer de votre entraîneur jeunes 😉
+[2024-06-08 17:50] b0ule. : nan je compte drafter !!!!
+[2024-06-08 18:49] flowran : https://tenor.com/view/dasding-joost-dd-okay-okay-h%C3%A4nde-hoch-calm-down-gif-8787689584547734038
+[2024-06-13 12:06] diablue : Salut à tous, je faisais un peu le tour sur les forums EN de BB et je suis tombé sur certains posts où ça parle de temps en semaines  pour les ups des entraînements. Savez-vous si on pourrait encore si fier ?  Ou alors si vous avez quelques infos là dessus je serais preneur. 😁  https://www2.buzzerbeater.com/community/forum/read.aspx?thread=78242&m=1
+[2024-06-14 08:29] flowran : Petite question pour les experts des chiffres : si je veux donner du pressing à un joueur qui a joué AR, il vaut mieux bi-poste M-AR ou mono AR ?
+[2024-06-14 08:32] flowran : Est-ce que tu fais référence au fait qu'il faut qu'un joueur joue 48 minutes minimum au poste concerné pour avoir le plein entraînement ?
+[2024-06-14 08:33] flowran : Si oui <@415215874337931284> , je te conseille de jeter un oeil à <#1169673914771836998>
+[2024-06-14 08:36] diablue : Non plutôt au nombre de semaines d'entrainement pour up une (ou plusieurs )caractéristique(s)
+[2024-06-14 08:37] flowran : Aaaah
+[2024-06-14 08:41] slamdunk9 : Mono
+[2024-06-14 08:55] flowran : C'est ce que je pensais, merci !
+[2024-06-14 09:27] lagiggz : Sinon personne ne ferait du mono😉
+[2024-06-14 09:27] b0ule. : bi-poste selon les notes de @joka c'est à 75% d'efficacité mais sur 6 joueurs, changer de position c'est 90% sur trois joueurs. Du coup c'est ton choix.
+[2024-06-14 09:29] b0ule. : une version espagnole:
+[2024-06-14 09:32] diablue : Merci bien pour ce petit tableau, en plus il a l’air bien complet 😁. Je vais potasser tout ça bien tranquillement.
+[2024-06-14 09:32] flowran : Je parlais de mono décalé 🙂
+[2024-06-14 09:32] flowran : Merci <@1112653388426006548>
+[2024-06-17 17:18] bobiwanekilobits : Ce tableau est fiable ? Il existe au moins en anglais ?
+[2024-06-17 17:47] diablue : Je l'ai refait en xlsx et en FR (J'espère ne pas avoir fait de fautes :p )
+[2024-06-17 17:59] bobiwanekilobits : Je te remercie mais ca se lit comment les valeurs numériques dans les cellules ? C'est la progression par semaine entrainées ?
+[2024-06-17 17:59] diablue : oui c'est ça
+[2024-06-17 18:02] bobiwanekilobits : Tout simplement.
+[2024-06-28 10:39] kobetim : Hello, je ne suis pas spécialement scooté pour ce joueur et je me demandais si il avait un avenir u21 ou pas
+[2024-06-28 10:50] slamdunk9 : Hello ! Tu peux tenter ta chance en AF en visant au moins 16 SI-DI 11 Rbd et le reste en secondaires (1v1 et JS AS/AF). Mais je ne peux pas assurer qu'il sera sélectionné, ça dépendra notamment de ton staff, de tes infras et des autres intés, sachant qu'il y a déjà 2 farms intés sur cette génération
+[2024-06-28 10:50] slamdunk9 : En formation AS U21 il part de trop loin en DE vu sa taille
+[2024-07-04 11:58] _alph0nse_ : Salut !   Ce joueur peut  être en vente et son manager et ouvert pour discuter de son prix   Est-ce que quelqu'un est intéressé ? Il peut potentiellement faire le cut pour les U21   https://lien.buzzer-manager.com/36lhgmk7rtd5kdpnfb5r13pr03zk0u5aqogj3edrxcg2sr3wxhb5j7remoam-fr.png
+[2024-07-05 12:16] pierre_sgs : Salut ! Je pourrais être intéressé, je suis sur une formation exté U21. Il pourrait remplacer mon 3eme spot
+[2024-07-05 12:29] _alph0nse_ : Je vois avec son manager et je te dis ça vite 😉
+[2024-07-06 17:35] _alph0nse_ : Tu serais prêt à mettre combien ?
+[2024-07-07 11:12] pierre_sgs : Je dirais autour des 100k En regardant rapidement sur le marché des transferts, c'est ce qui me semble être le prix ?
+[2024-07-07 12:55] _alph0nse_ : Il a mis une première vente à 300k mais si il part pas (probable) on peut voir pour trouver un prix ensemble
+[2024-07-13 19:06] _shayka : Je galère cette saison a faire prendre les 48 minutes d'entrainement sur un match a un joueur en particulier. Le GE le sors sans raison pendant 2-3 minutes, soit a la fin du match soit, comme ce soir, en fin de 3eme quart ... Est-ce que c'est le 4 endu qui rend la tache compliquée ? C'est bien frustrant en tout cas, lors de ses 19 ans c'était moins handicapant mais la ...
+[2024-07-13 19:51] Deleted User : S'il sort 2-3 minutes, c'est pas suffisant pour un entraînement 100% ? J'ai du mal à savoir les nuances actuelles du temps de jeu requis pour 100% qui change quasi chaque année
+[2024-07-13 19:53] _shayka : A partir de 20 ans il faut les 48 minutes, 47.1 a la limite mais il enchaine les 45/46 depuis le début de saison
+[2024-07-13 20:44] Deleted User : j'imagine que tu as bien 9 joueurs sur la feuille de compo ?
+[2024-07-13 20:44] couac_bb : trop de fautes personnelles, peut être ?
+[2024-07-13 20:44] Deleted User : tu gagnes tes matchs largement ?
+[2024-07-13 20:44] Deleted User : Sinon, oui, ça doit être l'endu. Ou les fautes
+[2024-07-13 20:58] _shayka : Pas de pb de faute ça c'est sur. Je viens de vérifier, il a joué principalement dans des blow-out cette saison (ligue ou coupe), la seule fois a 48 c'est dans un amical serré. Je reste sur ma première idée du manque d'endurance mais je vais tester contre un adversaire plus solide
 [2024-07-14 07:51] grand_tatou : Pour éviter ça quand je sais que le match va finir en blowout, je mets que 5 joueurs sur la feuille de match, je sais pas si c'est faisable en gérant les minutes avec ton effectif, mais c'est assez efficace
 [2024-07-14 18:10] teamcaverne : Y'vait un vieux bug, je sais pas s'il existe toujours. Si un autre joueur "devrait" sortir, mais doit tirer des LF, son remplaçant rentre quand même..... mais sur un autre poste. Vérifie dans tes logs de match détaillés si ton joueur se fait pas sortir au moment ou un de ses coéquipier tire des LF.
 [2024-07-14 18:21] teamcaverne : Edit : je viens de regarder ton match, ça ressemble bien à ça. Si tu lance le live et que tu met à 34 min, y'a une faute de faite sur ton meneur qui l'envoie au LF. Arret de jeu, "il semblerait qu'il n'y'ai plus d'enjeu désormais". Ton meneur remplaçant doit entrer, mais ton menru titu est au LF, c'est Losson qui sort .......

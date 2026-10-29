@@ -1,3 +1,575 @@
+[2026-01-23 19:10] maridiba : Great!
+[2026-02-02 16:30] xpermanx : it would be great to have access to the match commentary (minute-by-minute report). Right now I only have match data (score, players, events), but the commentary isn't in the /match/xxx endpoint. Is there any way you could add it to the API or provide an endpoint like /match/xxx/commentary? Thanks!
+[2026-02-02 16:36] maridiba : That would definitely be easier than scraping it from the website
+[2026-02-02 16:39] maridiba : But it would be much bigger than the other match data, and if someone is only interested in the match stats, it would be a waste
+[2026-02-02 16:39] maridiba : Maybe a dedicated endpoint for the match commentaries could be more efficient?
+[2026-02-02 16:54] xpermanx : Yes, i dont want to scraping the web… i guess its banneable
+[2026-02-02 16:54] xpermanx : Yes that would be nice
+[2026-02-06 15:21] nicmo7829 : https://api.kickoffboss.com/v1/match_commentary/4237451?key=YOURKEY&lang=pt-PT or https://api.kickoffboss.com/v1/match_commentary/4237451?key=YOURKEY&lang=en
+[2026-02-06 15:22] nicmo7829 : is that what you wanted?
+[2026-02-06 15:32] xpermanx : yes thats perfect! really thanks!
+[2026-08-03 18:03] smar7 : I do wonder, is there an API for the financemarket?
+[2026-08-03 19:31] nicmo7829 : no
+[2026-08-03 19:31] smar7 : Oh okay
+[2026-08-25 18:26] kickoffknol : Is there an api coming for the financial market? <@328958916908285954>
+[2026-08-25 20:43] nicmo7829 : hey, no or else people will automate buy/sells and thats not very good
+[2026-08-25 21:15] b1c10 : Hey nicmo, will have microservices api and creation game for mobile?
+[2026-08-27 16:14] nicmo7829 : i dont understand
+[2026-08-28 16:59] b1c10 : I say, can you deliver api function? open a possibily build app for mobile, for example, login and buy shares, is totally possible.
+[2026-10-06 21:29] b1c10 : Hello <@328958916908285954>  I`m refreshing my app to consume api for players of team, have some "cota" or size calling with api token?  I not see my resquests here, just to be transparency for me.
+[2026-10-07 11:48] nicmo7829 : you want to know the api limitations?
+[2026-10-07 16:13] b1c10 : I just want see request from api key... for example.
+[2026-10-07 16:44] nicmo7829 : There are limits per API key: 120 requests per minute, 5,000 per hour and 100,000 per day.   If you go over you get a 429 error. Each response also has X-RateLimit-Limit and X-RateLimit-Remaining headers, so your app can check how many calls it has left in the current minute. You are far below the limits right now.
+[2026-10-07 16:44] nicmo7829 : I delete all api calls after 24h, so i cant show you a decent list
+[2026-10-07 16:46] b1c10 : Hum only for validate, is good or not, is optimized or need adjust.
+[2026-10-07 17:47] b1c10 : Excellent! Is fine for extension and for use when I will release new version.
+[2026-10-07 19:00] pit619 : Great!
+[2026-10-10 03:16] edhy_khal : hello <@328958916908285954>, can add international caps to player endpoint?
+[2026-10-10 11:13] nicmo7829 : added
+[2026-10-10 12:50] edhy_khal : thanks
+==========================================
+=== CANAL : #română ===
+==========================================
+[2024-08-05 19:59] alinnn4601 : salut!
+[2024-08-05 19:59] bambino1715 : Salut!
+[2024-08-05 20:00] mina8602 : Salut
+[2024-08-05 20:01] ralf00048 : In sfarsit
+[2024-08-05 20:01] ralf00048 : Salut
+[2024-08-05 20:01] mina8602 : Salut românâ ?
+[2024-08-05 20:02] alinnn4601 : sa vezi de acu conversatii aprinse
+[2024-08-05 20:02] alinnn4601 : :)))
+[2024-08-05 20:02] alinnn4601 : <@923127062481481758>
+[2024-08-05 20:02] bambino1715 : Na ma vrea 100 de dolari
+[2024-08-05 20:02] bambino1715 : 🤣🤣
+[2024-08-05 20:02] marian26. : Vai de ...🤣🤣🤣
+[2024-08-05 20:03] ralf00048 : Zi ms ca nu vrea 100 euro
+[2024-08-05 20:03] marian26. : Salutare!🤚
+[2024-08-05 20:03] marian26. : Daca-l mai întrebi o data, o sa ceara în lire sterline 🤣🤣🤣
+[2024-08-05 20:04] ralf00048 : Aline...scoate-ma din chatul italienilor in spanac
+[2024-08-05 20:04] ralf00048 : 🤣🤣
+[2024-08-05 20:04] bambino1715 : Sa nu sara direct in yeni🤣
+[2024-08-05 20:04] ralf00048 : Si de la cristiano ronaldo
+[2024-08-05 20:04] marian26. : Lasă că e bine sa fim spioni și la italieni😈🤣🤣
+[2024-08-05 20:05] ralf00048 : Ce sa spionezi...
+[2024-08-05 20:05] marian26. : Ce mai trag ăia la tineri
+[2024-08-05 20:05] ralf00048 : Tactica cum sa retrogradezi cu echipa top 3 in europa?
+[2024-08-05 20:06] ralf00048 : I-a scris nicmo ca la prosti...ca de aia am luat foc ieri
+[2024-08-05 20:06] ralf00048 : Nu e bine sa faci asta si asta
+[2024-08-05 20:06] ralf00048 : Asta seara a jucat la fel🤣🤣
+[2024-08-05 20:06] marian26. : Le-a mai scris și la alții și tot degeaba 🤣🤣🤣
+[2024-08-05 20:06] ralf00048 : Iar nu a batut
+[2024-08-05 20:06] bambino1715 : Pai nu vrea nici el sa ii piarda
+[2024-08-05 20:06] bambino1715 : Ii tine activi:))
+[2024-08-05 20:06] marian26. : Lasă că îl prind cu moralul la pământ mâine, sper sa sparg gheata, sa iau prima victorie în C.L😂
+[2024-08-05 20:07] ralf00048 : Bambino sunt in tabara de amici aici sau jucam un joc unu contra altu?
+[2024-08-05 20:07] ralf00048 : Ca daca doream fratie...nu bagam niciun euro..si o ardeam chill si pe caterinca
+[2024-08-05 20:07] ralf00048 : Non stop
+[2024-08-05 20:07] bambino1715 : Stiu ce spui
+[2024-08-05 20:07] ralf00048 : Un admin trebuie sa explice jocul si lucruri general
+[2024-08-05 20:08] alinnn4601 : da nu sunt mod boss...
+[2024-08-05 20:08] ralf00048 : Nu sa-si dea cu parerea cu e bine si cum nu sa joci
+[2024-08-05 20:08] alinnn4601 : aici suntem toti pe chaturi
+[2024-08-05 20:08] alinnn4601 : da le mut
+[2024-08-05 20:08] alinnn4601 : :))
+[2024-08-05 20:08] ralf00048 : ...
+[2024-08-05 20:09] alinnn4601 : a disparut de la mine...itaaliano
+[2024-08-05 20:09] alinnn4601 : aa...am dat eu mut
+[2024-08-05 20:10] ralf00048 : Nu am investit ca marian
+[2024-08-05 20:10] marian26. : Mai vreau și eu niște voturi aici🤣🤣
+[2024-08-05 20:10] ralf00048 : Dar o suma importanta am bagat si eu in saracia asta de echipa a mea
+[2024-08-05 20:10] alinnn4601 : te rezolv eu acu
+[2024-08-05 20:10] ralf00048 : Mariane...nu joaca pronosticurile 😁
+[2024-08-05 20:11] alinnn4601 : eu cred ca iese egal...da am dat 2 solist
+[2024-08-05 20:11] alinnn4601 : :))
+[2024-08-05 20:11] alinnn4601 : sa fie intr un ceas bun!
+[2024-08-05 20:11] ralf00048 : Si eu
+[2024-08-05 20:11] alinnn4601 : ce plm...speak si franceza de acu?
+[2024-08-05 20:11] alinnn4601 : :))
+[2024-08-05 20:12] ultraspynall2047 : Eu doar vă salut atât,mai mult nu pot vorbi, după ce m-a bătut unul inactiv de două săptămâni și echipa lui mi-a dat 3-0😅😁 vă salut și o seară bună.
+[2024-08-05 20:12] alinnn4601 : voi ati jcuat mortal combat Marius...
+[2024-08-05 20:12] ralf00048 : Mda
+[2024-08-05 20:13] bambino1715 : Stai linistit nu esti primu si nici ultimul
+[2024-08-05 20:13] alinnn4601 : a a[asat ala L2 L2 L2 patrat patrat patrat acu 2 saptamani
+[2024-08-05 20:13] ralf00048 : Chiar spuneam ca ai inceput si tu Shaow sezonul fara violuri
+[2024-08-05 20:13] ralf00048 : Si te-a prins ala
+[2024-08-05 20:13] alinnn4601 : eu n am inteles nimic din meciul ala...
+[2024-08-05 20:14] alinnn4601 : stai cuminte...ca urmez eu sa mi iau un viol acush...si mi l iau HARD
+[2024-08-05 20:14] alinnn4601 : :))
+[2024-08-05 20:14] alinnn4601 : la toti ne vine randu
+[2024-08-05 20:15] ultraspynall2047 : Mă așteptam să pierd cu ceilalți,dar am pierdut unde nu mă așteptam 😁 asta e ,mergem înainte,vedem ce update uri "" mai  face nicmo
+[2024-08-05 20:15] marian26. : Ne învârte cu tacticile lui, de numai știm cum sa jucăm
+[2024-08-05 20:15] ralf00048 : Lunga si pe a doua
+[2024-08-05 20:15] marian26. : E trist ca nu contează absolut deloc valoarea jucătorilor
+[2024-08-05 20:16] ralf00048 : Si cu Dumnezeu inainte
+[2024-08-05 20:16] ralf00048 : 😁
+[2024-08-05 20:16] ralf00048 : Conteaza valoarea
+[2024-08-05 20:16] alinnn4601 : spirituala
+[2024-08-05 20:16] alinnn4601 : daca e credincios jucatorul...
+[2024-08-05 20:16] ralf00048 : Dar mai conteaza si alte lucruri ce putini jucatori tin cont
+[2024-08-05 20:16] alinnn4601 : sau ce?
+[2024-08-05 20:16] marian26. : Doar skill-urile
+[2024-08-05 20:17] bambino1715 : Sa vezi ca multi o sa faca greseala sa bage multi tineri la joc cand fac varsta doar pentru ca au avq mare😅
+[2024-08-05 20:18] bambino1715 : Atunci sa vezi nemultumiri si explicati
+[2024-08-05 20:20] ralf00048 : Nu prea
+[2024-08-05 20:20] ralf00048 : Cine urmareste discord a inteles mesajul
+[2024-08-05 20:20] ralf00048 : Din pacate🤣🤣
+[2024-08-05 20:21] marian26. : Ai mei au câștigat azi 2 meciuri, având GK și SC tineri...al doilea chiar la scor 😂
+[2024-08-05 20:22] marian26. : Dar în C.L. nu ma risc mâine, ca deja sunt ultimul în grupa🤣🤣🤣
+[2024-08-05 20:22] bambino1715 : Ce punctaj are capitanul?
+[2024-08-05 20:22] bambino1715 : Poate influenteaza
+[2024-08-05 20:23] marian26. : 524
+[2024-08-05 20:23] ralf00048 : Eu ii cresc usurel...ca nu ma grabesc
+[2024-08-05 20:23] bambino1715 : Bun
+[2024-08-05 20:23] ralf00048 : Am timp tot sezonul
+[2024-08-05 20:23] bambino1715 : Al meu la cat e de slab daca bag 5 tineri se apuca de spart seminte
+[2024-08-05 20:25] marian26. : Care aveți loc la tineri, luati-l, ca e pomană curata
+[2024-08-05 20:26] marian26. : Eu l-as fi luat, dar am deja prea mulți MC
+[2024-08-05 20:26] bambino1715 : De unde spatiu
+[2024-08-05 20:26] bambino1715 : E plin cu legume
+[2024-08-05 20:26] bambino1715 : 😂😂
+[2024-08-05 20:26] ralf00048 : Nici eu
+[2024-08-05 20:26] marian26. : Eu țin non-stop 1-2 locuri libere la tineri😄
+[2024-08-05 20:26] marian26. : Tocmai pt astfel de oferte🤣
+[2024-08-05 20:27] bambino1715 : Ai procedat bine
+[2024-08-05 20:27] bambino1715 : Am luat repede sa creasca
+[2024-08-05 20:27] bambino1715 : Si am nevoie de 7 sezoane sa ii duc la 50
+[2024-08-05 20:27] bambino1715 : 🤣
+[2024-08-05 20:27] ralf00048 : Mie mi se pare slab acel jucator
+[2024-08-05 20:27] ralf00048 : Abdou ala
+[2024-08-05 20:28] marian26. : Pana în ziua 22 mai crește
+[2024-08-05 20:28] ralf00048 : Mai creste 10-13 puncte
+[2024-08-05 20:29] ralf00048 : Adica e ok jucatorul...dar nu e wow
+[2024-08-05 20:29] ralf00048 : Nimic spectaculos
+[2024-08-05 20:29] ralf00048 : Un jucator bun si cam atat
+[2024-08-05 20:29] marian26. : Pt 4 stele e top
+[2024-08-05 20:29] ralf00048 : Cum or sa fie in urmatoarea luna destui
+[2024-08-05 20:29] marian26. : Da, o sa scadă preturile, cu siguranță
+[2024-08-05 20:29] ralf00048 : Avem pareri diferite si vederi diferite😁😁😁
+[2024-08-05 20:30] bambino1715 : Eu zic ca o sa ajunga pretul la 100 pe acel jucator
+[2024-08-05 20:37] lysybandyta : buna dimineata thats all i know to say in romanian 😉
+[2024-08-05 20:39] ralf00048 : Please erase the link
+[2024-08-05 20:40] ralf00048 : Romanian chat here
+[2024-08-06 12:03] bambino1715 : <@923127062481481758> 😵‍💫
+[2024-08-06 12:21] marian26. : Ma f.. în jocul lui
+[2024-08-06 12:21] creepydoc : 🤣
+[2024-08-06 12:21] adrian09 : =))))))))))))))))))))))))))
+[2024-08-06 12:23] marian26. : N-ai cum 0-5 la nivelul ala
+[2024-08-06 12:23] marian26. : Am înțeles, tactică, juca acasă...dar e bătaie de joc
+[2024-08-06 12:23] marian26. : Bagi mii de € degeaba
+[2024-08-06 12:24] bambino1715 : Nu auzi ca portarul lui a prins o zi buna🤣
+[2024-08-06 12:24] marian26. : Da, cea mai proasta scuza
+[2024-08-06 12:24] adrian09 : Tre sa joci acu dumnezeieste
+[2024-08-06 12:24] adrian09 : Si sa fie serios palermo, ca de vrea, te tine afara din ucl
+[2024-08-06 12:25] adrian09 : Depinde de se fac aranjamente 🤣
+[2024-08-06 12:25] adrian09 : Ti ar fi bun un egal la grubas cu buster ala...
+[2024-08-06 12:28] ralf00048 : adrian...lasa-l azi in pace cu explicatiile astea
+[2024-08-06 12:28] ralf00048 : omu e nervos...si pe buna dreptate
+[2024-08-06 12:28] ralf00048 : nu cred ca vrea sa citeasca...ce si cum are de facut ca sa se califice
+[2024-08-06 12:28] ralf00048 : serios vorbind 🙂
+[2024-08-06 12:28] ralf00048 : lasa-l astazi
+[2024-08-06 12:29] ralf00048 : va analiza el ce are de facut...dupa ce se linisteste
+[2024-08-06 12:31] bambino1715 : A iesit de pe discord
+[2024-08-10 11:29] alinnn4601 : Salut
+[2024-08-10 11:29] alinnn4601 : Da ala care o tot suge cu tiganii? 😂 😂
+[2024-08-10 11:29] alinnn4601 : Ce vrea frate? Crapa inima n el ca baga romanii bani in joc?
+[2024-08-10 11:30] ralf00048 : e greu sa-ti dai seama la cine se refera ala
+[2024-08-10 11:30] ralf00048 : 😄
+[2024-08-10 11:31] ralf00048 : numa' prostii scrie ala
+[2024-08-10 11:31] ralf00048 : sau aia...ce spanac e
+[2024-08-10 11:34] bambino1715 : Cine?
+[2024-08-10 11:34] alinnn4601 : Pe intrebari si raspunsuri
+[2024-08-10 11:34] alinnn4601 : Orcum... La general romanii sunt forta la portofele aici
+[2024-08-10 11:34] alinnn4601 : 😂 😂 😂 😂
+[2024-08-10 11:34] alinnn4601 : Asa ca.. Sa suga cucu
+[2024-08-10 11:35] alinnn4601 : Daca acolo bate
+[2024-08-10 11:35] bambino1715 : Da
+[2024-08-10 11:35] bambino1715 : Dar nu e ok oricum sa fie rasist
+[2024-08-10 11:35] ralf00048 : 😄
+[2024-08-10 11:35] bambino1715 : Nu suntem in padure
+[2024-08-10 11:35] alinnn4601 : Nu mai zic ca o mare parte din noi.... Au mai multa scoala decat are a avut el vacanta
+[2024-08-10 11:36] alinnn4601 : 🤷‍♂️
+[2024-08-10 11:36] ralf00048 : sa-l intrebe cineva...daca doreste ca ma-sa sa fie facuta posta de catre tigani? 😄
+[2024-08-10 11:36] alinnn4601 : Altu batut de vruen " nigger"csnd era mic
+[2024-08-10 11:36] ralf00048 : am la scoala...si educatie...cat cuprinde...dar ma pot cobori si la nivelul asta ff usor 😄
+[2024-08-10 11:37] alinnn4601 : 😂 😂
+[2024-08-10 11:37] alinnn4601 : Da e dificil de vb cu el
+[2024-08-10 11:37] ralf00048 : romanii sunt versatili 😉
+[2024-08-10 11:37] alinnn4601 : Are niste sugestii..te ia mintea
+[2024-08-10 11:37] alinnn4601 : 😂 😂 😂
+[2024-08-10 11:37] alinnn4601 : Mai era aia cu pauza in meci... Deja ma lua inima 😂🤣
+[2024-08-10 11:38] alinnn4601 : Ca e frumos asa... Am fcaut meciul acum... Mai intru diseara la 10 si gata
+[2024-08-10 11:39] bambino1715 : Dupa numele de pe discord pare a fi roman/romanca
+[2024-08-10 11:39] ralf00048 : romanii...nu stiu sa-i faca tigani pe romani...sau pe indieni
+[2024-08-10 11:39] ralf00048 : britanicii fac asta de fel
+[2024-08-10 11:40] ralf00048 : legat de indieni sau asiatici
+[2024-08-10 11:40] ralf00048 : sau italienii pe romani
+[2024-08-10 11:40] ralf00048 : etc
+[2024-08-10 11:41] bambino1715 : Stai cuminte ca sunt multi romani care au uitat ce natie sunt😂
+[2024-08-10 11:41] alinnn4601 : Ehh, il curentam noi pe teren
+[2024-08-10 11:41] bambino1715 : Dupa 1 2 ani afara
+[2024-08-10 11:41] alinnn4601 : Sa vezi ce cant pe aici gypsy king daca l plesnesx intr o europeana
+[2024-08-10 11:41] alinnn4601 : 😂 😂
+[2024-08-10 11:41] ralf00048 : ce sa curentezi aline..
+[2024-08-10 11:41] ralf00048 : ca e vai mortii lui
+[2024-08-10 11:41] alinnn4601 : Plus in hard in return, meciul 5
+[2024-08-10 11:41] alinnn4601 : 😂 😂
+[2024-08-10 11:42] alinnn4601 : Da... Raman la "kop that shit" 😅 Scousematic 2
+[2024-08-10 11:42] alinnn4601 : 😂 😂 😂
+[2024-08-10 11:42] bambino1715 : L am batut pe Thuru acasa la el😂
+[2024-08-10 11:42] alinnn4601 : Da... Da e Thuru
+[2024-08-10 11:43] alinnn4601 : Ala se duce pe tinder sa faca recruti
+[2024-08-10 11:43] ralf00048 : am vazut
+[2024-08-10 11:43] alinnn4601 : 😂 😂 😂
+[2024-08-10 11:43] bambino1715 : Vad ca nu mai vorbeste cu mine
+[2024-08-10 11:43] bambino1715 : 🤣
+[2024-08-10 11:43] alinnn4601 : Da o ma n... Mama ei de treaba
+[2024-08-10 11:43] alinnn4601 : Cat de tut sa fii
+[2024-08-10 11:43] ralf00048 : thuru joaca cu toti juniorii la -25% deodata
+[2024-08-10 11:43] ralf00048 : si acum risca sa nu prind CL sezonul viitor
+[2024-08-10 11:43] ralf00048 : 😄
+[2024-08-10 11:43] alinnn4601 : Da nu mai prinde el mult
+[2024-08-10 11:43] alinnn4601 : 😂 😂 😂
+[2024-08-10 11:43] alinnn4601 : Batalaia va fi tu si Marian
+[2024-08-10 11:43] alinnn4601 : 😂 😂
+[2024-08-10 11:43] bambino1715 : Daca il bate marian in ambele meciuri e dus
+[2024-08-10 11:43] bambino1715 : 🤣
+[2024-08-10 11:44] alinnn4601 : Mai incepe si Iordache sa prinda firu
+[2024-08-10 11:44] ralf00048 : si sa vedem ce juniori va avea bambimo sezonul viitor
+[2024-08-10 11:44] ralf00048 : 🙂
+[2024-08-10 11:44] alinnn4601 : Thuru... CC
+[2024-08-10 11:44] bambino1715 : Sunt vai mama lor
+[2024-08-10 11:44] alinnn4601 : Mie parca imi e frica sa mai trag
+[2024-08-10 11:44] alinnn4601 : 😂 😂 😂
+[2024-08-10 11:44] alinnn4601 : Am prins 2 buni deja
+[2024-08-10 11:44] alinnn4601 : Ma gandesc ca mi da jocul... De ma satura
+[2024-08-10 11:44] ralf00048 : ce ghinionist si tu
+[2024-08-10 11:44] ralf00048 : 😄
+[2024-08-10 11:45] alinnn4601 : Mai iau la misto 1 gk, 1 RB si un cm
+[2024-08-10 11:45] bambino1715 : 5 stele 42 avq
+[2024-08-10 11:45] bambino1715 : 😭
+[2024-08-10 11:45] alinnn4601 : Si pun pe mentor si aia e...
+[2024-08-10 11:45] alinnn4601 : Cred ca mi ajung 5 juniori de data asta
+[2024-08-10 11:45] alinnn4601 : Si 50 euro mana....
+[2024-08-10 11:45] bambino1715 : Cel mai mare a fost 51 tras de mine
+[2024-08-10 11:45] bambino1715 : 🤣
+[2024-08-10 11:45] alinnn4601 : Ultima oara cand am jucat la pacanele.....
+[2024-08-10 11:46] alinnn4601 : Jucam 0.4 euro
+[2024-08-10 11:46] alinnn4601 : 😂 😂 😂 😂 😂
+[2024-08-10 11:46] alinnn4601 : Si nu mi a plaxut....
+[2024-08-10 11:46] alinnn4601 : Asa ca... 50 euro... Mana... Mda
+[2024-08-10 11:47] ralf00048 : sa simti ceva 😄
+[2024-08-10 11:49] alinnn4601 : Asa zic acu....
+[2024-08-10 11:49] alinnn4601 : Stai sa vezi pana la sf lunii
+[2024-08-10 11:49] alinnn4601 : Poc 11
+[2024-08-10 11:49] alinnn4601 : 😂 😂
+[2024-08-10 11:49] alinnn4601 : Ca pe mpl... Doar o companie ralf... Una iau
+[2024-08-10 11:49] alinnn4601 : Si... Sfarsitul... Deja stim 😅
+[2024-08-10 11:50] bambino1715 : Da iordache cum a pierdut cu roboti aia?
+[2024-08-10 11:50] bambino1715 : Joaca cu antrenori?
+[2024-08-10 11:50] alinnn4601 : Joaca suporterii la ea
+[2024-08-10 11:50] alinnn4601 : Na.. Greu
+[2024-08-10 11:50] bambino1715 : 😂😂
+[2024-08-10 11:50] alinnn4601 : A plecat Mutu
+[2024-08-10 11:50] alinnn4601 : 😂 😂
+[2024-08-10 16:29] bambino1715 : Ce face Iordache cu 8 portrai?
+[2024-08-10 16:30] bambino1715 : E ceva ce nu stiu?😂
+[2024-08-10 17:52] ralf00048 : ii vinde 🙂
+[2024-08-10 17:52] bambino1715 : Da sunt varza toti
+[2024-08-10 17:54] ralf00048 : ii creste?!
+[2024-08-10 18:03] bambino1715 : Daca spui tu
+[2024-08-10 18:03] bambino1715 : 😅
+[2024-08-10 18:09] adrian09 : 🤣
+[2024-08-10 18:09] adrian09 : O primit ban ala si pe joc sau doar discord?
+[2024-08-10 18:10] bambino1715 : Rasistu?
+[2024-08-10 18:10] bambino1715 : Doar aici
+[2024-08-10 18:14] ralf00048 : acum vad
+[2024-08-10 18:14] ralf00048 : credeam ca spui de juniori
+[2024-08-10 18:14] ralf00048 : 😄
+[2024-08-10 18:15] ralf00048 : da...nu pot sa inteleg ce ar face cu ei
+[2024-08-10 18:15] bambino1715 : 😂
+[2024-08-10 18:19] adrian09 : Face aroganta si joaca cu 11 portari 🤣
+[2024-08-11 18:01] creepydoc : bosii
+[2024-08-11 18:02] creepydoc : ce program ati folosit sa faceti logo 150 X 150 exact? 😄
+[2024-08-11 18:05] ralf00048 : cine se pricepe 😄
+[2024-08-11 18:05] creepydoc : vad ca nu merge sa uploadezi numai 150 X 150
+[2024-08-11 18:06] creepydoc : ce cacat ambalat a facut asa
+[2024-08-11 18:09] ralf00048 : habar nu am...nici nu m-am chinuit eu
+[2024-08-11 18:09] ralf00048 : 😄
+[2024-08-11 18:09] ralf00048 : ma f...t in ea de emblema
+[2024-08-11 18:09] ralf00048 : important este sa castig
+[2024-08-11 18:09] ralf00048 : 😄
+[2024-08-11 18:12] creepydoc : am resit eu pana la urma
+[2024-08-11 18:12] creepydoc : daca mai vrea careva redimensionare la logo va ajut cu drag
+[2024-08-11 18:13] ralf00048 : am sa tin minte la cine sa apelez 😄
+[2024-08-12 19:39] marian26. : Salutare!🤚
+[2024-08-12 20:07] marian26. : Asa cuminți ați ajuns, de când am ieșit eu?🤣
+[2024-08-12 21:06] ralf00048 : Salut
+[2024-08-12 21:10] ralf00048 : <@257621645349486593> ai sa dai o bere😂
+[2024-08-13 00:17] alinnn4601 : <@409299187197542405>
+[2024-08-13 00:17] alinnn4601 : Am cautat pe Google un site
+[2024-08-13 00:18] alinnn4601 : https://imresizer.com/resize-image-to-150x150
+[2024-08-13 00:18] alinnn4601 : Aaa. Ai rezolvat 😅
+[2024-08-13 03:31] creepydoc : Neatza, oui 😅
+[2024-08-13 05:21] adrian09 : Pfiu , ca ma apropi 🤣
+[2024-08-13 18:08] marian26. : <@939130207342854155> ți-am zis ca o să fii pe primul loc după etapa asta🤣🤣
+[2024-08-13 18:09] marian26. : Dar tu batman, batman =))))
+[2024-08-13 18:09] bambino1715 : Fix cu tactica aia l am batut eu in deplasare
+[2024-08-13 18:09] marian26. : Mama lui de deep drop🤣
+[2024-08-13 18:10] bambino1715 : Defence cu deep drop e pericol in deplasare
+[2024-08-13 18:10] bambino1715 : 😂
+[2024-08-13 18:10] marian26. : Ala parchează autobuzul la fiecare meci cu mine🤣
+[2024-08-13 18:17] ralf00048 : vrei sa joace deschis?
+[2024-08-13 18:17] ralf00048 : nu e nimic rau sa joace defensiv...
+[2024-08-13 18:18] ralf00048 : doar ca de data asta nici eu nu am vreo explicatie
+[2024-08-13 18:18] ralf00048 : asta incerc sa inteleg acum
+[2024-08-13 18:18] ralf00048 : cum te-a batut
+[2024-08-13 18:18] bambino1715 : E ca pl
+[2024-08-13 18:19] bambino1715 : Marian ma batut pe mine eu pe thuru si thuru pe marian
+[2024-08-13 18:19] bambino1715 : 🤣🤣
+[2024-08-13 18:19] adrian09 : eu cand am jucat cu tineri n am batut epave :)) si aveam 3
+[2024-08-13 18:19] adrian09 : are soarta :))
+[2024-08-13 18:20] adrian09 : actiunile ii dau boost ;))))))
+[2024-08-13 18:23] ralf00048 : <@257621645349486593> ai sperante la retur
+[2024-08-13 18:23] ralf00048 : 😄
+[2024-08-13 18:23] adrian09 : lejer
+[2024-08-13 18:23] adrian09 : mai iau acu un fundas, ar trebui sa bat epavele alea
+[2024-08-13 18:23] adrian09 : de ma chinui, te si bat :p
+[2024-08-13 18:23] adrian09 : baga si tu 11 tineri :))_
+[2024-08-13 18:23] ralf00048 : nu am nici macar 5
+[2024-08-13 18:23] ralf00048 : 😄
+[2024-08-13 18:24] bambino1715 : Faza e ca la batut pe marian si ieri a facut egal cu heracles
+[2024-08-13 18:24] bambino1715 : Ciudat
+[2024-08-13 18:24] bambino1715 : Si acasa
+[2024-08-13 18:30] ralf00048 : plm...
+[2024-08-13 18:31] bambino1715 : Ori vrea nicmo sa ma tina pe primul loc🤣
+[2024-08-13 18:31] bambino1715 : Pana in ultimele 3-4 etape
+[2024-08-13 18:40] adrian09 : Iei si titlu si ucl-ul viitor 😆🤣
+[2024-08-13 18:40] bambino1715 : Mne
+[2024-08-13 18:40] bambino1715 : E grele
+[2024-08-13 18:44] adrian09 : Esti tu pesimist 😆
+[2024-08-13 18:46] ralf00048 : <@939130207342854155> stii de cat timp ma ameninta adrian ca ma bate 😄
+[2024-08-13 18:46] ralf00048 : el e mereu optimist 😄
+[2024-08-13 18:46] ralf00048 : si vezi ca joc am jucat cu el si in D si in C si in B acum
+[2024-08-13 18:46] ralf00048 : 😄
+[2024-08-13 18:48] bambino1715 : 😂😂😂
+[2024-08-13 18:48] bambino1715 : <@257621645349486593> baga tare sa ajungi in A
+[2024-08-13 18:49] ralf00048 : are de bagat materiale multe in retur 😄
+[2024-08-13 18:49] adrian09 : Am ca pe mine m o ars ca am jucat cu 3 tineri
+[2024-08-13 18:50] adrian09 : La astalaltu ii da wins 😆
+[2024-08-13 18:50] adrian09 : Cu toata echipa 🤣
+[2024-08-13 18:50] bambino1715 : 🤣🤣🤣
+[2024-08-13 18:50] ralf00048 : da adriane...ca de acolo ti se trage
+[2024-08-13 18:50] ralf00048 : :)))))
+[2024-08-13 18:50] adrian09 : Da
+[2024-08-13 18:50] ralf00048 : nu te mai vaita
+[2024-08-13 18:50] adrian09 : Am facut 2 egale ampulea
+[2024-08-13 18:50] adrian09 : Is 4 pct :0
+[2024-08-13 18:50] adrian09 : :))
+[2024-08-13 18:51] ralf00048 : cu lupesti e fair egalul daca ma intrebi pe mine
+[2024-08-13 18:51] adrian09 : Cu el
+[2024-08-13 18:51] adrian09 : Da primele 2
+[2024-08-13 18:51] adrian09 : Nu sunt 😆
+[2024-08-13 18:51] adrian09 : Da nu i bai, recuperez oe retur 🤣
+[2024-08-13 18:51] ralf00048 : cu constantinopel??
+[2024-08-13 18:51] ralf00048 : lol
+[2024-08-13 18:52] adrian09 : Avea jucatorii morti
+[2024-08-13 18:52] adrian09 : La acel meci
+[2024-08-13 18:52] bambino1715 : Baga si tu tineri pe final de meci
+[2024-08-13 18:52] adrian09 : Urziceni la fel
+[2024-08-13 18:52] adrian09 : 😆😆
+[2024-08-13 18:52] bambino1715 : Prin rotatie
+[2024-08-13 18:52] adrian09 : N a fost sa fie
+[2024-08-13 18:52] adrian09 : Acuma au xp, ii bag din min 1 🤣
+[2024-08-13 18:52] ralf00048 : la meciul cu mine nu ai nimic de protestat? 😄
+[2024-08-13 18:52] adrian09 : A fost manarie arbitraju :p
+[2024-08-13 18:53] ralf00048 : ai dreptate
+[2024-08-13 18:53] ralf00048 : ai scapat ieftin cu 4-0 🤣
+[2024-08-13 18:53] adrian09 : Nah
+[2024-08-13 18:53] ralf00048 : era 3-0 in min 10
+[2024-08-13 18:53] ralf00048 : 😄
+[2024-08-13 18:53] adrian09 : Pacat ca ne intalnim orea repede
+[2024-08-13 18:53] ralf00048 : mai verifica odata
+[2024-08-13 18:53] ralf00048 : zi ms...ca au lasat-o mai moale
+[2024-08-13 18:53] ralf00048 : 😄
+[2024-08-13 18:53] adrian09 : De era 2 etaoe mai tarziu
+[2024-08-13 18:54] bambino1715 : Ralf il bati pe valdin?😅
+[2024-08-13 18:54] ralf00048 : ramane de vazut
+[2024-08-13 18:54] ralf00048 : 🙂
+[2024-08-13 18:54] ralf00048 : va fi echilibrat meciul
+[2024-08-13 18:54] adrian09 : Vezi ca a zis ca baga o competitie ptr cine ia cupa
+[2024-08-13 18:54] adrian09 : De vrei, poti incerca s o iei 😅
+[2024-08-13 18:54] ralf00048 : eu si anul trecut am incercat
+[2024-08-13 18:55] ralf00048 : m-am oprit in finala
+[2024-08-13 18:55] ralf00048 : 😄
+[2024-08-13 18:55] ralf00048 : eu incerc sa castig tot ce pot
+[2024-08-13 18:55] adrian09 : Bagi 1 suta la thuru oe paypal si ti face coaching 😉 🤣
+[2024-08-13 18:56] ralf00048 : 😄
+[2024-08-13 18:56] ralf00048 : bag doua
+[2024-08-13 18:56] ralf00048 : ca sa fie private coaching
+[2024-08-13 18:56] ralf00048 : 😉
+[2024-08-13 18:57] adrian09 : Daca vrei rezultate, n-ai incotro 🤣
+[2024-08-13 18:59] bambino1715 : Am doar doi atacanti
+[2024-08-13 18:59] bambino1715 : Daca unu are probleme cu stomacu am belito
+[2024-08-13 18:59] ralf00048 : ii dai heal si gt
+[2024-08-13 18:59] bambino1715 : Doar cu ei le folosesc
+[2024-08-13 19:00] bambino1715 : Dar se cam termina
+[2024-08-13 19:00] bambino1715 : 😂😂
+[2024-08-13 19:01] bambino1715 : In timpul meciului daca se accidenteaza intra mc pe pozitia sc😂
+[2024-08-13 19:04] adrian09 : Fi jmk, baga atacantii pe sc 🤣
+[2024-08-13 19:04] adrian09 : Baga portarii*
+[2024-08-13 19:05] bambino1715 : Acum am vazut
+[2024-08-13 19:06] bambino1715 : Cum e posibil?
+[2024-08-13 19:06] bambino1715 : 🤣🤣🤣
+[2024-08-13 19:06] ralf00048 : intreaba-l pe nicmo
+[2024-08-13 19:06] marian26. : L-ai pus pe poziția de GK?
+[2024-08-13 19:07] bambino1715 : Nu
+[2024-08-13 19:07] bambino1715 : Sa accidentat
+[2024-08-13 19:07] bambino1715 : Si a bagat gk
+[2024-08-13 19:08] bambino1715 : S au am facut eu ceva gresit?
+[2024-08-13 19:09] bambino1715 : Cum cacat sa trimit portarul in atac
+[2024-08-13 19:09] bambino1715 : 🤣🤣
+[2024-08-13 19:10] adrian09 : Cand nu ai, baga gk
+[2024-08-13 19:10] adrian09 : Am patit si eu
+[2024-08-13 19:10] adrian09 : I-am scris la nicmo, a zis ca asta e
+[2024-08-13 19:10] adrian09 : Sa am rezerve 😆
+[2024-08-13 19:10] bambino1715 : Pai de ce nu ia ce am pus eu pe pozitia x
+[2024-08-13 19:10] bambino1715 : Ia random?😂
+[2024-08-13 19:11] adrian09 : Cearta te cu el 🤣
+[2024-08-13 19:11] bambino1715 : Un mc in atac mai merge dar gk
+[2024-08-13 19:11] bambino1715 : Plm
+[2024-08-13 19:11] ralf00048 : dar cumpara o rezerva si gt
+[2024-08-13 19:11] bambino1715 : Era culmea sa si inscrie
+[2024-08-13 19:11] ralf00048 : de SC
+[2024-08-13 19:11] ralf00048 : 4 euro si gt
+[2024-08-13 19:11] bambino1715 : 😵‍💫
+[2024-08-13 19:11] bambino1715 : Asta nu e o problema
+[2024-08-13 19:12] bambino1715 : Dar nu e normal
+[2024-08-13 19:12] bambino1715 : 😂
+[2024-08-13 19:16] marian26. : Da, ar trebui sa ia ce ai pe poziția aia, nu sa aleagă
+[2024-08-13 19:16] marian26. : Totul e random în jocul ăsta 🤦‍♂️
+[2024-08-13 20:10] bambino1715 : Hai ca e baiat de treaba nicmo🤣
+[2024-08-13 20:36] marian26. : Da, pământul e rău că-l ține 🤣🤣
+[2024-08-14 12:09] ralf00048 : ce se apuca baietii sa vanda juniori
+[2024-08-14 12:09] ralf00048 : 🙂
+[2024-08-14 12:09] ralf00048 : pacat ca n-au cui
+[2024-08-14 12:09] ralf00048 : 😄
+[2024-08-14 12:13] bambino1715 : Vor aceiasi bani ca atunci cand un euro era 35 gold
+[2024-08-14 12:14] ralf00048 : mai cumpara marian cate unu
+[2024-08-14 12:14] ralf00048 : 😄
+[2024-08-14 12:14] ralf00048 : sub 100 euro
+[2024-08-14 12:14] ralf00048 : in rest..
+[2024-08-14 12:15] adrian09 : E irelevant asta, ca tot acelasi pret il au in Euro 😅
+[2024-08-14 12:15] bambino1715 : Stai sa vezi peste 3 4 saptamani
+[2024-08-14 12:15] adrian09 : 😄
+[2024-08-14 12:15] bambino1715 : Pai ei au cumparat probabil vu 1500 gold
+[2024-08-14 12:16] ralf00048 : n-are legatura asta
+[2024-08-14 12:16] ralf00048 : vorbim strict in euro
+[2024-08-14 12:16] adrian09 : Tot 50E au dat
+[2024-08-14 12:16] ralf00048 : dar vand de 4 stele adrian
+[2024-08-14 12:16] ralf00048 : nu 5
+[2024-08-14 12:16] ralf00048 : tu credeai ca astia au dat 50 si vand cu 100? :)))
+[2024-08-14 12:16] adrian09 : Pai vor sa vanda 🤣 , nu ca se si vand 😄
+[2024-08-14 12:16] ralf00048 : lol
+[2024-08-14 12:17] adrian09 : Cei cu dare de mana aduna de 5 oricum 😅
+[2024-08-14 12:17] adrian09 : Aia s de cursa lunga 😅
+[2024-08-14 12:17] ralf00048 : ai vazut
+[2024-08-14 12:17] ralf00048 : 😉
+[2024-08-14 12:17] bambino1715 : Eu joc cu pensionari
+[2024-08-14 12:17] ralf00048 : am eu vreo 2 buni pt tine bambino
+[2024-08-14 12:17] ralf00048 : 😄
+[2024-08-14 12:17] ralf00048 : cand te hotarasti sa mai cumperi
+[2024-08-14 12:17] ralf00048 : 😄
+[2024-08-14 12:17] adrian09 : Pai am vazut de la inceput. Doar incercam sa l fac pe bambino sa inteleaga ca pretul lor in gold acu e irelevant 😅
+[2024-08-14 12:18] adrian09 : Cumoarai repede, sa l bat in retur 😆
+[2024-08-14 12:18] bambino1715 : Am vrut sa iau unu aseara
+[2024-08-14 12:18] bambino1715 : Dar a sarit de 3€
+[2024-08-14 12:18] bambino1715 : 🤣🤣
+[2024-08-14 12:18] ralf00048 : :)))))
+[2024-08-14 12:18] adrian09 : Buget serios 🤣
+[2024-08-14 12:18] ralf00048 : ai mei sunt ieftini...dar nu atat de ieftini 😄
+[2024-08-14 12:19] bambino1715 : Am 13 tineri
+[2024-08-14 12:19] bambino1715 : Nici nu mai cumpar alti
+[2024-08-14 12:19] ralf00048 : atunci e bun
+[2024-08-14 12:19] ralf00048 : 😄
+[2024-08-14 12:19] ralf00048 : eu ca prin minune am vandut azi unul
+[2024-08-14 12:19] ralf00048 : in ultimele 10 min...a dat cineva bid
+[2024-08-14 12:19] ralf00048 : 😄
+[2024-08-14 12:19] bambino1715 : 11 de 4 si 2 de 5
+[2024-08-14 12:20] bambino1715 : Aia de 5 sunt vegetarieni
+[2024-08-14 12:20] ralf00048 : mai trebuie sa vand 2 😄 pana la sfarsitul lunii
+[2024-08-14 12:20] ralf00048 : 😄
+[2024-08-14 12:20] adrian09 : S a umplut de indonezieni ce farmeaza ron
+[2024-08-14 12:20] adrian09 : 😆
+[2024-08-14 12:21] bambino1715 : Da si tu pandesti ceva
+[2024-08-14 12:21] bambino1715 : 🤣
+[2024-08-14 12:21] adrian09 : Evident
+[2024-08-14 12:21] adrian09 : 🤣
+[2024-08-14 12:21] bambino1715 : O cadere masiva
+[2024-08-14 12:21] bambino1715 : :))
+[2024-08-14 12:21] ralf00048 : pandesti finalul de luna
+[2024-08-14 12:21] ralf00048 : 😄
+[2024-08-14 12:21] bambino1715 : 😅
+[2024-08-14 12:21] adrian09 : 😄
+[2024-08-14 12:21] ralf00048 : jumate pe aici...zici ca joaca MPL
+[2024-08-14 12:21] ralf00048 : :)))))
+[2024-08-14 12:22] bambino1715 : 🤣🤣🤣
+[2024-08-14 12:22] ralf00048 : n-au nicio treaba cu football manager
+[2024-08-14 12:22] ralf00048 : ei fac specula
+[2024-08-14 12:22] ralf00048 : joaca la curs
+[2024-08-14 12:22] ralf00048 : plm...
+[2024-08-14 12:22] adrian09 : Dar nu i doar specula
+[2024-08-14 12:22] adrian09 : Am ron pe dreapta
+[2024-08-14 12:22] adrian09 : 😆😆
+[2024-08-14 12:22] ralf00048 : da-le-n plm de salarii
+[2024-08-14 12:22] adrian09 : Zici acu
+[2024-08-14 12:23] ralf00048 : pe bune acum...te plangi de salarii?!
+[2024-08-14 12:23] adrian09 : Nu ma plang
+[2024-08-14 12:23] adrian09 : Dimpotriva
+[2024-08-14 12:23] adrian09 : Imi pun ron de o parte
+[2024-08-14 12:23] adrian09 : 😉
+[2024-08-14 12:23] ralf00048 : pune
+[2024-08-14 12:23] adrian09 : Ca sigur vor vreste mai incolo
+[2024-08-14 12:23] ralf00048 : 🤣
+[2024-08-14 12:23] ralf00048 : incearca sa promovezi sezonul asta
+[2024-08-14 12:23] bambino1715 : Poate face iar Loretty o schema
+[2024-08-14 12:23] ralf00048 : ca vor fi bonusuri bune sezonul viitor
+[2024-08-14 12:23] ralf00048 : 😄
+[2024-08-14 12:23] adrian09 : pai si aproape
+[2024-08-14 12:23] adrian09 : :))
+[2024-08-14 12:24] bambino1715 : Viniti si voi in A cu stadioanele max😖
+[2024-08-14 12:24] adrian09 : eu am mai mult decat umplu :))
+[2024-08-14 12:24] ralf00048 : o sa ajung cu 60k. e suficient pt prima parte a sezonului...pana fac 100 la popularitate...fac 80k
+[2024-08-14 12:24] adrian09 : e greu sa ai 100 pop
+[2024-08-14 12:24] adrian09 : tre sa nu iei bataie deloc
+[2024-08-14 12:25] bambino1715 : Dar pe la 90-96 stai sigur
+[2024-08-14 12:25] ralf00048 : aproape ce? deja te vezi promovat?...tu nu iei in calcul...ca o infrangere in retur...o ai automat 😄 😛
+[2024-08-14 12:25] adrian09 : stii tu sigur? :))
+[2024-08-14 12:25] adrian09 : si de pierd eu, pierd si aia
+[2024-08-14 12:25] adrian09 : tot aia e
+[2024-08-14 12:25] adrian09 : fix pix :))
+[2024-08-14 12:26] ralf00048 : juniorii aia ai tai..sunt fix pix maine seara 😄
+[2024-08-14 12:26] ralf00048 : ai sa vezi
+[2024-08-14 12:26] ralf00048 : 😉
+[2024-08-14 12:26] bambino1715 : 50€ si ii dai meciu🤷‍♂️
+[2024-08-14 12:26] adrian09 : da, inca au 10% penalty
+[2024-08-14 12:26] adrian09 : de ne vedeam peste 3 zile
+[2024-08-14 12:26] ralf00048 : tot aia era
+[2024-08-14 12:26] adrian09 : 25E iti dau sa mi dai meciu :))
+[2024-08-14 12:26] ralf00048 : 25?
+[2024-08-14 12:26] bambino1715 : Eu acceptam
+[2024-08-14 12:26] ralf00048 : da ce sunt mai? curva pe centura buzaului?
+[2024-08-14 12:26] bambino1715 : Oricum ramai tot pe 1
+[2024-08-14 12:26] bambino1715 : 😅
+[2024-08-14 12:26] ralf00048 : eu sunt de lux
+[2024-08-14 12:26] ralf00048 : :))))
+[2024-08-14 12:27] bambino1715 : 🤣🤣
+[2024-08-14 12:27] adrian09 : ii dau 10 la indonezian si pierde ala tot sez rmaas :))
+[2024-08-14 12:27] ralf00048 : bine...
+[2024-08-14 12:27] adrian09 : de te razgandesti, imi zici :))
+[2024-08-14 12:27] ralf00048 : poate joc numai cu juniori cu -25% in ultimele 10 etape 😄
+[2024-08-14 12:28] adrian09 : aia e, n o fi sfarsitul lumii :))
+[2024-08-14 12:28] ralf00048 : la 25 de euro nici nu ma asez la masa tratativelor 😄
+[2024-08-14 12:28] bambino1715 : O sa fie masacru sezonu urmator in A😅
 [2024-08-14 12:29] ralf00048 : asta da
 [2024-08-14 12:30] adrian09 : oare cat e bonusu cand joci acasa?
 [2024-08-14 12:30] adrian09 : bag acu o integrala si sigur aflu ca te bat :))

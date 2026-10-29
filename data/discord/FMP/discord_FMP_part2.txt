@@ -3754,6 +3754,9 @@
 [2026-10-18 16:50] polishfighterms : Will friendly matches be included?
 [2026-10-18 16:50] led.lennon.atleticogranata : Only the owner, at this time
 [2026-10-18 16:51] led.lennon.atleticogranata : Team's calendar include friendly matches, but they can be seen only by the owner
+[2026-10-27 20:08] b1lly : the inflation is skyrocketing <:FMPcool:1085600347365572668>
+[2026-10-28 02:19] mibo03 : https://klipy.com/gifs/burning-money-burn-money
+[2026-10-28 05:56] 3lv1s : Amazing. Let's rely on the academy and the potentiel 12 i get every week 💪
 ==========================================
 === CANAL : #⌨️game-tools ===
 ==========================================
@@ -3920,6 +3923,9 @@
 [2026-05-30 03:14] b1lly : Thats great
 [2026-10-21 18:43] gamesh0401 : FMP national summary is no longer working for me 🙁
 [2026-10-22 09:25] selo1775 : Yes, sorry, I need to solve an issue on the script
+[2026-10-23 11:50] selo1775 : Updated to version 1.4. Solved a bug that completely broke the script due to a change of format on an internal API call of the FMP Website (Led changed how the matches information is shown internally).
+[2026-10-23 11:50] selo1775 : NT Summary on Players Page 👆
+[2026-10-23 11:58] selo1775 : Shit now Rating broke
 ==========================================
 === CANAL : #balkan ===
 ==========================================
@@ -6486,6 +6492,7 @@
 [2026-07-14 05:54] polishfighterms : Jest ok
 [2026-07-19 08:22] legionista1984 : panowie jak załozyc druzyne w innym kraju bo nie umię tego znaleść raz trafiłem na liste państw ale nie pamietam gdzie to grzebałem 🙂
 [2026-07-19 08:49] legionista1984 : dobra ogarnołem
+[2026-10-29 07:08] diss66612322 : Pany, nowa ciekawa gra jest, właśnie 1 sezon. I w Polsce się zapełnia. Gra w mojej ocenie wygląda imponująco. Zmiany graczy i taktyczne live w czasie meczu. Czas gry uzgadnia się specjalnym narzędziem do wyboru preferowanych godzin, ciekawy system pozyskiwania zawodników gdzie trzeba tez zawodnika i agenta przekonac skonstruowanym kontraktem, dużo strategicznych decyzji jak to jaki typ stadionu sie buduje , miejski, czy tam inny gdzie kazdy ma swoje korzysci. wiele ustawien taktycznych plus indywidualne polecenia zawodników. ISilnik po 2 kolejkach tez widze ze dobry. Na pewno warto sprawdzić samemu. A fajny klimat sie robi na polskiej scenie. Gra to https://total.football/
 ==========================================
 === CANAL : #🇪🇸spanish ===
 ==========================================

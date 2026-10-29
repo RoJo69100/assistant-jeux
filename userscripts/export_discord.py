@@ -88,7 +88,7 @@ GAMES_CONFIG = {
     },
     "SixZeroLeague": {
         "base_filename": "discord_SixZeroLeague",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1549040122270584973",
             "1492995699217006598",
@@ -98,7 +98,7 @@ GAMES_CONFIG = {
     },
     "KickOffBoss": {
         "base_filename": "discord_KickOffBoss",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1249689955400290304",
             "1242874530846867537",
@@ -120,7 +120,7 @@ GAMES_CONFIG = {
     },
     "VM": {
         "base_filename": "discord_VM",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "802965807072018436",
             "1267142241705787454",
@@ -132,7 +132,7 @@ GAMES_CONFIG = {
     },
     "FinalWhistle": {
         "base_filename": "discord_FinalWhistle",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "710088497763057698",
             "710100750822408232",
@@ -145,7 +145,7 @@ GAMES_CONFIG = {
     },
     "BuzzerBeater": {
         "base_filename": "discord_BuzzerBeater",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1130517733201678439",
             "1132657055392600094",
@@ -173,7 +173,7 @@ GAMES_CONFIG = {
     },
     "RedZoneAction": {
         "base_filename": "discord_RZA",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1422755014765576254",
             "1422755620196712508"
@@ -181,7 +181,7 @@ GAMES_CONFIG = {
     },
     "Hardwood": {
         "base_filename": "discord_HW",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "410154228292780042",
             "567195205430804511",
@@ -192,7 +192,7 @@ GAMES_CONFIG = {
     },
     "FromThePavillon": {
         "base_filename": "discord_FromThePavillon",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "481436738460450816",
             "1538850317398052874",
@@ -203,7 +203,7 @@ GAMES_CONFIG = {
     },
     "FMP": {
         "base_filename": "discord_FMP",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1020944123529797682",
             "1021108387473264780",
@@ -221,7 +221,7 @@ GAMES_CONFIG = {
     },
     "HockeyNation": {
         "base_filename": "discord_HN",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1267768929519013950",
             "922093338595831811",
@@ -233,7 +233,7 @@ GAMES_CONFIG = {
     },
     "Perso": {
         "base_filename": "discord_Perso",
-        "force_reset": True,  # 👈Passe cette valeur à True
+        "force_reset": False,  # 👈Passe cette valeur à True
         "channels": [
             "1461389039419658435",
             "1422297287769587766",

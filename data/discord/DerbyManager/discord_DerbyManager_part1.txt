@@ -1,300 +1,75 @@
 ==========================================
-=== CANAL : #📢updates ===
-==========================================
-[2026-10-25 22:11] derbymanager : Condition issues: there are no issues. The game was showing you the injury chance, which is a combination of condition and form. But that was confusing so now it's showing condition only and exact injury chance is not visible.  Injury chance was a bit too high so I reduced it.  Changed how subs work a bit. You can set player's match status for any player (pitch or bench) like so:  Gets in: - RAT: Replaces a player in his position that has a rating 0.5 or more lower than the average of his team - CON: Replaces a player in his position that has condition below 80% - AUTO: Only gets in when he fits someone else's get out requirement (he is the right position) - DEV: Gets in only when the score is +/-2, combining rating and condition who to replace - IMP: Gets in as a priority if the team isn't winning - EMR: Only gets in on an injury  Gets out: - RAT: If he has a rating 0.5 or more lower than the average of his team or lower than 6.5 if anyone on the bench can replace him. - CON: If he has less than 80% condition if anyone on the bench can replace him - AUTO: combines rating and condition - DEV: Gets out as a prioirty when the team isn't winning. When winning he is treated as auto. - IMP: Can get out only if winning by two goals, in which case he is treated as auto. - EMR: Not a part of planned changes, only gets out on an injury  Yellow cards add a bit of weight to all of these. Subs always happen between 55-65 minutes (and a 3rd around 110 if it comes to that).  Player's training requirement behaves like this: - it goes down by 1 if he plays at least 20 minutes - it goes down by 2 if he played at least 45 minutes - it goes back to 1 no matter where it was if he played 75 minutes or more  Build up now warns you when there is an overflow of players in some area or when there are too few players in a critical area. Each warning reduces your build up.  And adjustments to the engine so defenders hold the line better, players don't tire so much from running, etc.
-==========================================
-=== CANAL : #discussion ===
-==========================================
-[2026-10-23 11:50] .burningrain : I've stopped watching all of my games because there's just too many shots/goals, so it takes too long 😬
-[2026-10-23 11:51] .burningrain : I somehow scored 3 (and 2.95 xg) against Anderlecht today with a defensive 5-4-1
-[2026-10-23 11:52] .burningrain : (and conceded 6)
-[2026-10-23 12:30] yasen_gg : https://klipy.com/gifs/getout-28
-[2026-10-23 12:31] faro1 : you can watch my game today as it went 0-0
-[2026-10-23 13:19] synistajay : <@530694771900153871> thank you for fixing the long passes 🙂‍↕️
-[2026-10-23 13:25] skuld6666 : Thought they might have brought on the ML on bench to replace the ML not the MC. Maybe my poor instructions?
-[2026-10-23 14:38] synistajay : Was watching Como game and notice their WB positioning on the opponents Goal Kick
-[2026-10-23 14:57] yasen_gg : Maybe one is a FB and one is an AWB ?
-[2026-10-23 14:59] synistajay : Na just WB
-[2026-10-23 15:00] synistajay : 13 is WB, its an interesting role they're aggressive but get caught out, for some reason engine doesn't want to consistently exploit that space in behind
-[2026-10-23 15:07] yasen_gg : I mean, to be fair - I want this to happen
-[2026-10-23 15:07] yasen_gg : It probably has something to do with experience, positioning, fatigue, etc.
-[2026-10-23 15:07] yasen_gg : if that is the case, then we can only applaud Derby, because that's how it is in real life too
-[2026-10-23 15:08] yasen_gg : As for the Engline not exploiting it - it might be just the keeper being dumb to not exploit it... I don't think we'll be able to tell 🙂
-[2026-10-23 15:09] yasen_gg : There's a reason Harry Kane took that goal kick in the game vs Arsenal the other day - he had the experience, awareness and ability to create that play.
-[2026-10-23 15:43] synistajay : If you want games with WB again a WG or FLR they usually so open especially if the team with the WB just lost the ball
-[2026-10-23 15:43] synistajay : Anyone else experiencing players not training even though they played?
-[2026-10-23 17:20] vrijstijler : Some players did not increase a single point durong this season (defender and forwards). A freshly signed midfielder and defender increased 4 points one day after signing. All have good potential.  There is some info in the wiki about training.
-[2026-10-23 18:55] imamzade : leicester scored this
-[2026-10-23 19:20] yasen_gg : I'm doing mental gymnastics to figure out how it happened hahah
-[2026-10-23 19:33] alin35 : Conceded a goal like this too
-[2026-10-23 19:34] alin35 : But that one from leicester is more outrageous 😂
-[2026-10-23 19:35] futurexskeleton : y'all. I watch MLS. none of this is surprising. 😂
-[2026-10-23 19:45] marius36 : https://www.derbymanager.com/matches/138833?view=live-tab&min=87
-[2026-10-23 19:45] marius36 : Beautiful counter-attack
-[2026-10-23 21:03] imamzade : https://www.derbymanager.com/matches/132533?view=live-tab&min=90.01
-[2026-10-24 09:35] marius36 : Did conditions for you guys happened?i think they didn't grow +3 but I'm not sure cause I was looking at the 01:00 AM and still they are the same now,idk when is the update for them
-[2026-10-24 10:12] niksty16 : There is condition like before and condition + form.
-[2026-10-24 10:12] niksty16 : this should explain it
-[2026-10-24 18:19] synistajay : I'm guessing we need an updated test your tactics tab? <@530694771900153871>
-[2026-10-25 09:00] synistajay : Players that are retiring contract play time should automatically go to backup player imo
-[2026-10-25 11:09] alin35 : Pretty sure my players condition were higher, condition dropped even for the players that didn't play today. Did something happen?
-[2026-10-25 11:11] synistajay : https://discord.com/channels/530678438164430860/1563507260607561788
-[2026-10-25 11:19] shaqattack293 : Yeah big issues with condition in my team today post game too - some players down to 70ish percent which is way less than it should be, but i didnt track before and after
-[2026-10-25 11:20] alin35 : Maybe this is the true value, not the ones we saw yesterday? I dunno
-[2026-10-25 11:23] alin35 : I remember we had a few days of very low players conditions, then it suddenly spiked up into the 85ish, now back to very low condition... Thats why i say maybe this is the true players condition.
-[2026-10-25 11:44] synistajay : I think they might be the true numbers
-[2026-10-25 14:09] forasteiro2000 : Tactical screen is not moving😢 for everyone?
-[2026-10-25 22:50] furysk : i guess the one concern i have is the subs seem to be problematic towards training eligibility for full training
-[2026-10-25 22:51] furysk : a 63 minute player for me should be given the training reset
-[2026-10-26 08:30] alin35 : <@530694771900153871> , what does "Replaces a player in his position" mean? I gave my sub DC the instruction "RAT" and he went on and substituted my DR
-[2026-10-26 08:37] derbymanager : D for D, M for M... Otherwise you couldn't cover your whole team with only 4 subs.
-[2026-10-26 08:37] derbymanager : DC playing as DR has a tiny penalty so it's not that bad
-[2026-10-26 09:04] randykeys : New meta, everyone plays LCR
-[2026-10-26 12:31] synistajay : <@530694771900153871> so with no dots are we back to the defence + L/C/R again? I am confused
-[2026-10-26 12:43] derbymanager : L/C/R in defence should flag red
-[2026-10-26 13:17] synistajay : So is it like before or is it still build up and pressing?
-[2026-10-26 14:14] marius36 : I still want to know what is L/C/R
-[2026-10-26 14:23] derbymanager : same skills as before
-[2026-10-26 14:56] synistajay : Okay so it’s back to build up defence then LCR but we can’t chose side or central no more  I did like the dots tho. Also think that injury chances should be visible ! Maybe you can do like a medical page like FM
-==========================================
 === CANAL : #🗣general ===
 ==========================================
-[2026-10-23 13:59] gardai : Derby made the subs update specifically to make sure I can't get promoted
-[2026-10-23 14:00] gardai : Ever since update came out all my good players be getting subbed just before they score ong
-[2026-10-23 14:28] imamzade : Probably our last day at the top.
-[2026-10-23 14:30] gardai : suffering from success
-[2026-10-23 14:35] synistajay : <@267750523648737283> look at you shining, gonna win EN4 again love to see it!
-[2026-10-24 09:28] marius36 : https://youtube.com/watch?v=f3ED9Mo9CHY&feature=shared
-[2026-10-24 09:29] marius36 : Another win,another top performance
-[2026-10-24 09:50] randykeys : I got mad today when two of my defenders were subbed out for two midfielders when we were 2:1 down... only to turn it around and win 3:2 😂 I'm retiring, the assistant can take over.
-[2026-10-24 13:24] forasteiro2000 : <@874916864805974018> which one is you?
-[2026-10-24 13:25] marius36 : White....GK from white team
-[2026-10-24 13:25] marius36 : Inter
-[2026-10-24 15:54] forasteiro2000 : well played! handling 12, reaction 18, agility , 17😁
-[2026-10-24 15:54] forasteiro2000 : https://klipy.com/gifs/triangulo-isosceles-cursinho
-[2026-10-24 17:44] vrijstijler : Forward for sale. Shooting = 15 (SHO + ACC + TEC).  https://www.derbymanager.com/players/236728
-[2026-10-24 19:58] questionmark4 : This subs update is probably the best update to DM ever <@530694771900153871> 👏 I am very impressed by this version of DM in general tbh.
-[2026-10-24 20:04] questionmark4 : Sorry just wanted to make a appreciation post
-[2026-10-24 22:49] marius36 : Better than my main GK Nisbet😂
-[2026-10-25 15:14] experimental3800 : The development of the game in this season is just immense. Congrats to <@530694771900153871>  🙂
-[2026-10-25 18:23] gardai : derby manager awakens people with unc accounts
-[2026-10-25 18:23] gardai : I swear I've seen like 2 people in this server with an account younger then 5 years
-[2026-10-25 18:25] imamzade : It cost me D1 title, and honestly, I hate mid-season updates.
-[2026-10-25 18:30] marius36 : It would've cost me also if I would've stayed with 3-4-3 how I used to play but I changed
-[2026-10-25 18:32] marius36 : You still have chances....if you see that something is not clicking
-[2026-10-25 19:25] imamzade : We're not in the same situation. This is our first time fighting for the title. It's hard to compete with experienced teams like Liverpool, Newcastle, Chelsea and Manchester, and we've done it with a small squad. I'm sure we would've won D1 this season without the update. This isn't Spain. You don't have any serious rivals there.  You and Liverpool also have more options. You both have really good strikers, I only have one. The whole idea behind our title challenge was having a small squad with a high xi value. Update ruined that. Derby literally said, "If you want the title, you need a deep and strong squad" 🙂
-[2026-10-25 20:12] marius36 : Maybe you right
-[2026-10-25 20:14] marius36 : Huesca this year was actually a team very well composed so it's a bit unhealthy saying that I didn't have competion Cartagena is another good team,Barcelona always hard to beat but yeah England is another story
-[2026-10-25 20:18] marius36 : Yeah,I always had a love story for good strikers,if you could've see what awfull strikers I had in my first day at Madrid
-[2026-10-25 20:21] marius36 : Your team btw looks amazing
-[2026-10-25 20:22] marius36 : And I wanted to write at the beggining of the season that you will win the league but I just didn't want you to think that saying that I will ruin everything for you
-[2026-10-25 20:22] marius36 : Is true....believe or not
-[2026-10-25 20:23] marius36 : Good luck
-[2026-10-25 20:48] agunbiac9498 : Your tune has changed 👀
-[2026-10-25 21:07] agunbiac9498 : Adjustments not excuses. You can find in my book
-[2026-10-25 21:46] furysk : if only that book had Carrick's picture on the front
-[2026-10-25 21:46] furysk : would be truly a good meme shitpost 😄
-[2026-10-25 21:47] imamzade : Thank you, but I will rebuild the team. This is not sustainable. I had only one chance, and I used it. I will keep doing what I have been doing. I will try my luck again in 4 seasons.  I think Cartagena will win the league soon. It will be hard for you to stop them, but there is no other threat in Spain.
-[2026-10-25 21:49] imamzade : People have a lot to say when they succeed. They write newspapers, make public statements, and even write books 🙂 But when they fail, you hear nothing but dead silence.
-[2026-10-25 21:52] agunbiac9498 : I agree with you. A lot of people do hide when they fail. Not me though 😏 I love it
-[2026-10-26 08:09] marius36 : Ohhh so it's better for me to change the team...if is hard?
-[2026-10-26 09:34] imamzade : Why would you do that?
-[2026-10-26 09:44] marius36 : Cause I like the easy way
-[2026-10-26 16:34] marius36 : I'm just joking!how could I do that when I'm heading to 550 TTV?
-[2026-10-26 16:35] marius36 : My main goal is in 2 seasons to have a 350 ttv at my first 11
-[2026-10-26 16:35] marius36 : I'm very close now
-[2026-10-26 16:36] marius36 : Cartagena is a good team but we are just other level mate He still need to do more not only winning against Madrid
-[2026-10-26 16:37] marius36 : But yeah in 3/4 seasons if he stay with the actual players he has he can be a real contender
-[2026-10-26 16:37] marius36 : Now they just can't battle with us,they have a too young team
+[2026-10-29 11:47] marius36 : <@530694771900153871> why didn't you add Turkey instead of Scotland?there are some great teams in Turkey.... Scotland was always a bad league because of the fight between 2 teams only
+[2026-10-29 12:22] imamzade : <@530694771900153871> Please do it.
 ==========================================
-=== CANAL : #❓quick-questions ===
+=== CANAL : #📰press-releases ===
 ==========================================
-[2026-10-23 09:56] alin35 : Watch me 😅
-[2026-10-23 11:37] marius36 : Let me rephrase then,would you play in AC semifinal with a red dot ?would play against Firenze and Como if you would be at 1pt behind?
-[2026-10-23 12:14] alin35 : Why not, red dots don't scare me... Depends on the situation, if i really want to use a specific formation against top opposition, a red dot won't stop me
-[2026-10-23 12:15] marius36 : Easy to speak when you have no pressure🤨
-[2026-10-23 13:05] skuld6666 : I think 3 CMs, 3 strikers is very powerful so I think this adds the issue they may get in one one another’s way a bit as a nerf?
-[2026-10-23 13:20] alin35 : It didn't stop Randy when he beat Bruges away 😂
-[2026-10-23 13:22] skuld6666 : Ahhhhh. Good to know!
-[2026-10-23 13:24] alin35 : Its just one game but it still looks powerful
-[2026-10-23 15:45] vrijstijler : How much days is a season? One of my scholars has 74 days left and I want to know if I will pull him in next of the fore-next season since I want to let him stay as long as possible.
-[2026-10-23 16:15] shaqattack293 : Season ends day after the last game is played
-[2026-10-23 16:21] vrijstijler : Ahhh. Thanks. Very helpfull 😁
-[2026-10-23 16:23] vrijstijler : When a season lasts around 30 days that means a player can be in school for three full seasons!
-[2026-10-24 03:09] bokosox : In all seriousness though, if there are no viable formations that include FL/FR (as in formations that can fill all 10 dots and therefore not give up build-up/pressing %)  then why even have these positions? It just doesn't seem a very accurate representation of the modern game to me.
-[2026-10-24 03:28] bokosox : Actually, I take it back. Apparently a 4-1-5 is viable formation now.
-[2026-10-24 09:30] marius36 : What about a 424?I think is better....with 2 hm
-[2026-10-24 11:40] imamzade : In the last game, there was a DC-FC sub, which I expected, but something weird happened. My bench had a GK and two FCs. The second FC I listed had high Tackling, so I expected him to come on automatically if we had defensive problems. But the third player came on instead, and then we conceded four goals.  How do automatic subs work? How does the game decide which player to bring on? I'm talking about situations where I have five forwards on the bench, of course.
-[2026-10-24 13:49] synistajay : Well for one I wouldn’t leave it on automatic  I’ve put players I want to sub on and off as “always sub” and at 60th minute the changes are made…
-[2026-10-24 13:51] synistajay : There’s defo rng in it but that’s the whole point of having an AM
-[2026-10-24 16:13] forasteiro2000 : when we put a sub-on and he plays, lets say 45 min or 30 min, whats the impact on the training requirement units?
-[2026-10-25 07:24] shaqattack293 : Are the games the same time in the UK with clocks going back an hour?
-[2026-10-25 09:20] vrijstijler : If a player is DC/MC and I buy him. How will I know in which line he will be available as mentor (since he is 33)?
-[2026-10-26 14:02] forasteiro2000 : club reputation increase gets you better sponsorship deals?
-==========================================
-=== CANAL : #🌍international ===
-==========================================
-[2026-10-23 18:00] IFA : :trophy: **Champions Cup Semifinal**  ||Nantes|| vs ||Malmö||  ||CS Firenze|| vs ||Madrid||
-[2026-10-23 18:06] alin35 : The true final happens in semis i guess
-[2026-10-23 18:07] alin35 : Congratz guys
-[2026-10-23 18:08] alin35 : Firenze's match was legendary. Last minute equalizers, red cards and 8-7 on pk 🍿 ; they can't even lose in 9 men 🤣
-[2026-10-23 18:16] marius36 : Will see about that
-[2026-10-23 18:16] marius36 : 🤣
-[2026-10-23 18:17] marius36 : Didn't though that I will pass Como but we totally dominate the game
-[2026-10-23 18:18] marius36 : Maybe was better that I had bought Mr injured for this game😁
-[2026-10-23 18:26] imamzade : damn liverpool
-[2026-10-23 18:36] marius36 : Looking back I had some balls playing with a 18y old player against Como  Gg <@703275045002412162>
-[2026-10-23 18:38] bokosox : Ugh, I probably should have been less stubborn and just played a different formation.
-[2026-10-23 19:39] marius36 : Honestly I thought you will change your formation, didn't thought that you will play with a red dot against me
-[2026-10-24 01:59] bokosox : The dots just came out. My roster was built for a 4-3-3, at least the optimal lineup. There wasn't even enough time to test out how big of an impact it would have.
-[2026-10-24 06:17] agunbiac9498 : 4-3-3 form since update … PATCHED
-[2026-10-24 07:54] synistajay : Idk if missing 1 dot is the be all end all but you can easily switch to narrow 433 like <@874916864805974018> did   Maybe 433 has a dot because the FLR roles get in behind easily idk
-[2026-10-24 09:07] skuld6666 : Truly insane game. 5-5 after extra time.  I'm away at the moment with no wi-fi or phone signal. I had to climb to the top of a hill in the night to get a signal to find out the score. So couldn't watch sadly. Just saw the result until now.  Lost my best MC for 12 games and my best winger for 9 games too. Barely have 11 players now to field (I know no one is crying for me). Just promoted all of my shite youth team to go on the bench to patch up the team.
-[2026-10-24 09:09] skuld6666 : Yeah they equalised 3 mins into the 90 then 1 minute into the 120 extra time.
-[2026-10-24 09:16] marius36 : Yeah, injury are really long now,against Como I had no MR so I needed to adjust.Is hard to believe that against you I will have all my players fit cause we play a lot of games(cup,CC ,league ) and we always need to win so yeah is even harder now with this injuries
-[2026-10-24 10:56] skuld6666 : Will be reserves v reserves for CL final 😭
-[2026-10-24 15:41] skuld6666 : I think I'd rather Derby add 2 more teams to each leagues and make it more intense with some double game days or something, in terms of extra games and intensity/rotation and bigger squad needed. Not sure if possible. Already with subs and live injuries we need more quality so that would be enough maybe. In a matter of days I've had a 12 and two 9 match injuries I think, which is pretty epic.  I also wonder if a defender gets a red early the ass man just leaves a big gap there or brings on a defender for an attacker etc?
-[2026-10-25 17:38] marius36 : Happened for me today,a MC got a red card ...one of my striker was substitute with a mid
-[2026-10-25 17:45] marius36 : In my case was a prevention because I was 2-0 lead,idk if the result would've be 0-0 what change he will make but we will probably find out soon
-[2026-10-26 18:00] IFA : :trophy: **Association Cup Final**  ||Brøndby|| vs ||A.C. Chievo||
+[2026-10-29 12:32] joseph9867 : *Reporter:* Niels, one game to go. The board expected Division 1 football for the first time in the club's history. Any word?  *Frandsen, calm.*  "Reaching Division 1 was never the goal. Winning it is, and always has been.  I'd love to keep working with this great club. But all the talk of the future stays on hold until the season's done.  One game. Let's finish it."
 ==========================================
 === CANAL : #italy ===
 ==========================================
-[2026-10-25 08:00] IFA : :bar_chart: **Italia - Primo campionato** — 5 rounds to go  1. CS Firenze — 71 pts 2. Como — 66 pts 3. A.C. Chievo — 61 pts
-[2026-10-26 08:33] alin35 : Injury chance reduced - one of the few key man used in todays match down injured 6 matches 😀   🩼 🤕
-[2026-10-26 08:35] alin35 : Our job vs Barcelona just got definetely much harder
-[2026-10-26 08:38] alin35 : gg <@536159477489991682> , international competition participation almost secured 👏
-[2026-10-26 08:39] majo_lfc : gl in the ass cup and sorry about jelavič 😄
-[2026-10-26 08:47] marius36 : Firenze lost👀
-[2026-10-26 08:50] marius36 : Derby job 100% done
-[2026-10-26 08:56] alin35 : Not your fault 🙂
-[2026-10-26 08:56] derbymanager : Season is saved 😅
-[2026-10-26 08:56] alin35 : For who? 😂
-[2026-10-26 08:57] marius36 : Yeah but you think is possible to add another one for them?
-[2026-10-26 08:58] marius36 : To be more specific....I don't want them to loose in league matches
-[2026-10-26 09:18] skuld6666 : 7-8 first choice players out last games didn’t expect anything. Likely have to throw the cups to try and win league now I think 🤷
-[2026-10-26 09:21] alin35 : Yeah, all plans are out the window i guess... The amount of injuries we're having requires for big squads (24-25 players) to be able to cope with it
-[2026-10-26 09:21] randykeys : Finally
-[2026-10-26 09:21] alin35 : And when your squad is healthy they'll be unhappy about playtime
-[2026-10-26 09:22] alin35 : So, you don't really know which way to go
-[2026-10-26 09:23] alin35 : Also, why does my defender, who played 63 minutes today will not receive training at the update?
-[2026-10-26 09:46] marius36 : You can't even have 21...imagine 25
-[2026-10-26 09:46] marius36 : Or you can have 25 but if you have only 3/4 key players
-[2026-10-26 09:46] marius36 : But then you will not be a top team
-[2026-10-26 09:55] skuld6666 : Yeah resting 1-2 very low energy players and they are unhappy is tricky. With 60-70 percent can’t play them? I’ve a feeling I’ll end up with zero trophies let’s see can’t win against Como/Madrid with current players I think. No problem though good luck for run in all 🍿
-[2026-10-26 11:01] marius36 : Seems like your situation is almost the same I had last season in my last matches.But I think mine was much worse,I had like 5 mids out  my right defender was also out .There are still time for this things to happen again
-[2026-10-26 11:16] skuld6666 : Yeah I’ve been lucky generally with injuries TBH.
-[2026-10-26 11:24] marius36 : I'm not that great either
-[2026-10-26 11:30] alin35 : Did Derby gave Barcelona a secret pill? No players unavailable lol 😅
-[2026-10-26 13:18] alin35 : https://www.derbymanager.com/matches/134539?view=live-tab&min=7  i know it was my shit keeper, but think the atacker stopped for a few seconds thinking: "Is this guy serious?" 🤣
-[2026-10-26 15:17] marius36 : After seeing this is no doubt that he is an amateur....your GK.I am an amateur GK but never ever did such things
+[2026-10-29 10:00] skuld6666 : -10/11 million and -13 stats this season aged 30 after a long injury:
+[2026-10-29 10:05] skuld6666 : Similar for my other midfielder aged 30 who was injured for 9 games. I guess these can be career ending injuries now?
+[2026-10-29 10:27] synistajay : Interesting
+[2026-10-29 10:34] alin35 : Similar situation here; he's gonna be dead after the preseason. I'd expect these things to happen to players over 33 though
+[2026-10-29 11:12] synistajay : <@1006939510791225404> welcome to the best country in the game. Why did you leave Huesca?😮
+[2026-10-29 11:16] marius36 : Did you leave Huesca and CC for a L2 team?man ,when I thought I will have a rivalry for the next seasons
+[2026-10-29 11:17] marius36 : Good luck there
+[2026-10-29 11:17] alin35 : Oh wow 😮
+[2026-10-29 11:22] synistajay : Come to Italy bro, it’s the super league!
+[2026-10-29 11:23] marius36 : I will came one day with my second manager😁
+[2026-10-29 11:23] marius36 : Maybe...depends on opportunities
+[2026-10-29 11:28] synistajay : Come back to that Italy club you left for Madrid, it’ll be like coming back a legend that has a job to finish 😆
+[2026-10-29 11:30] marius36 : Never
+[2026-10-29 11:32] marius36 : But if you need a new player from Madrid you know where to find me
+[2026-10-29 11:32] marius36 : 😁
+[2026-10-29 11:33] marius36 : Everywhere you are you have ex youth academy Madrid players,great strategy
+[2026-10-29 11:33] marius36 : You can't fail with this strategy 😅
+[2026-10-29 11:34] synistajay : It’s the best academy in DM, tried and tested we love doing business with Madrid!
+[2026-10-29 11:34] synistajay : Porcu is next on my wish list 😉
+[2026-10-29 11:35] marius36 : You can porcuforget him already
+[2026-10-29 11:36] marius36 : I'm not selling him
+[2026-10-29 11:36] marius36 : But I will probably sell the last DL from youth academy
+[2026-10-29 11:37] agunbiac9498 : Sudreau didn’t come from Madrid 👀
+[2026-10-29 11:48] synistajay : Need a DL and DR so I’ll take that too 😂
+[2026-10-29 11:48] marius36 : 11 days still to wait before I sell him
+[2026-10-29 11:50] alin35 : You're Madrid's feeder club or what? 😂
+[2026-10-29 11:51] marius36 : He just enjoy buying from Madrid, can't blame him....without Perlazza he will be still in L2
+[2026-10-29 11:52] marius36 : Vincent,Perlazza,Luna
+[2026-10-29 11:53] marius36 : In Belgium he has Unterainner I think
+[2026-10-29 11:53] marius36 : So yeah...he love Madrid academy
+[2026-10-29 12:01] agunbiac9498 : What did they do against Leeds 👀
+[2026-10-29 12:01] synistajay : Unterainner is peak tier might be a quick flip! We do believe in the ex-Madrid profile
+[2026-10-29 12:13] alin35 : Did you actually pull off a screenshot when they were worth 3-4 mil to make yourself look good? 🤣
+[2026-10-29 12:22] agunbiac9498 : They couldn’t get through Doria then, they won’t get through him now 👀
 ==========================================
 === CANAL : #england ===
 ==========================================
-[2026-10-24 11:15] imamzade : auto subs are terrible
-[2026-10-24 11:29] imamzade : I was literally this guy before the update
-[2026-10-25 12:00] IFA : :bar_chart: **England First Division** — 5 rounds to go  1. Liverpool — 60 pts 2. Sunderland — 58 pts 3. Newcastle — 57 pts 4. Chelsea — 57 pts 5. Manchester — 54 pts
-[2026-10-26 07:02] rabbit.9778 : I'm about to get relegated
-[2026-10-26 12:22] gardai : redemption
-[2026-10-26 12:22] gardai : then me and you will get to fight
-[2026-10-26 12:53] agunbiac9498 : <@883402259461992489> how are you feeling for tomorrows match?
-[2026-10-26 14:25] rabbit.9778 : Sounds fire
-[2026-10-26 17:01] marius36 : Great fight for L1 champion
-==========================================
-=== CANAL : #spain ===
-==========================================
-[2026-10-24 13:46] marius36 : We had some games this season  Madrid -Huesca 3-3 Huesca-Madrid 3-4 Cartegena-Huesca 3-3
-[2026-10-24 13:47] marius36 : And I think it's not over😅
-[2026-10-24 14:29] niksty16 : I'm tired of these interesting games lol. Also congrats on the title🏆. It was a nice experience for me to fight for the league with you.
-[2026-10-24 17:08] marius36 : It's not over yet,we have a lot of dificull games
-[2026-10-24 17:32] marius36 : 5 points are nothing when you play with Deportivo, Barcelona,Cartagena and Huesca in last 4 games
-[2026-10-24 17:36] marius36 : + the fact we play NC finals,semifinal of CC against Skuld
-[2026-10-25 09:10] niksty16 : ~~It's 6 if you count gd. The last two matches are going to be *interesting*, for sure.~~
-[2026-10-25 11:00] IFA : :bar_chart: **España - Primera división** — 5 rounds to go  1. Madrid — 68 pts 2. Huesca — 60 pts 3. Sevilla — 49 pts 4. Barcelona — 46 pts
-[2026-10-25 17:40] marius36 : Ohhh 8 points now....a lot.How did you lost against Valencia 4-1 is just outrageous
-[2026-10-25 17:42] marius36 : But you were amazing  and I'm sure next season will be even more intense
-==========================================
-=== CANAL : #france ===
-==========================================
-[2026-10-25 10:00] IFA : :bar_chart: **France - Première ligue** — 5 rounds to go  1. Paris — 61 pts 2. Nantes — 61 pts 3. Monaco — 57 pts
+[2026-10-29 12:54] noragarden : <@408917114238533643> im kinda sad for the both of us you know
+[2026-10-29 12:54] noragarden : Liverpool and Newcastle have been ruling with an iron hands for 20+ seasons
+[2026-10-29 12:55] noragarden : With the starts of the season and your major entrance i was kinda hoping it would come to an end
+[2026-10-29 12:56] noragarden : But i guess not this time
 ==========================================
 === CANAL : #belgium ===
 ==========================================
-[2026-10-23 09:34] vrijstijler : <@571229278478532628> Great game. Lots of changes. Great watch.
-[2026-10-23 09:36] vrijstijler : Thanks for injuring one of my best players for 13! matches. Hope your satisfied 😆
-[2026-10-23 09:49] poletz : 13?? 🤣
-[2026-10-23 09:59] alin35 : Half a season injuries? <@530694771900153871> , these long injuries shouldn't be rare to see?
-[2026-10-23 10:01] alin35 : +9, 13, whats this,? Lol😂
-[2026-10-23 10:19] questionmark4 : ACL injuries finally in DM
-[2026-10-23 11:13] vrijstijler : It sure ain't funny man. Nothing to Lol about. 😁
-[2026-10-23 11:59] marius36 : Derby make this long injuries just for us to play all type of formations possible
-[2026-10-23 11:59] marius36 : Had two MR available,both injured
-[2026-10-23 12:02] marius36 : And who is my next opponent?Como
-[2026-10-23 12:02] synistajay : Lool you got the wrong guy! Blame <@135441758413651968>
-[2026-10-23 12:05] synistajay : I think long injuries is good for the game loool
-[2026-10-23 12:05] vrijstijler : Ahhh. Blast, I confused Lierse with Liege..  And I was unawere who <@135441758413651968> was managing. That also explaines the weird setup..
-[2026-10-23 12:06] vrijstijler : Not for my game it ain't. Haha. But I fully agree, it makes it more realistic and forces us to be creative.
-[2026-10-23 12:14] alin35 : Yeah, my bad... Maybe its funny to Derby? 😬
-[2026-10-23 12:58] skuld6666 : New game name soon - Demolition Derby
-[2026-10-23 12:59] skuld6666 : Think Derby wants us to have bigger squads…
-[2026-10-23 13:20] marius36 : Probably after this season I will try it... bringing some young players and sell my old players with huge wages
-[2026-10-23 14:08] synistajay : I think if you have 18 man squad you deserve to suffer an injury crisis like any thin squad would in real life
-[2026-10-23 14:19] agunbiac9498 : I agree
-[2026-10-23 14:19] agunbiac9498 : That’s why I maintain a 20 man squad
-[2026-10-23 16:42] marius36 : You don't know what means having a top team.A top team means 7 key players at least,you need to play them regularly and what I mean by that is 2 games in 1 out is the least of what you need to do.Having more than 20 players and you will suffer of TS and unhappiness. Everything is great when you have 2/3 key players but a top team gives you headache
-[2026-10-23 17:06] vrijstijler : I know man.  The struggle is real.
-[2026-10-23 17:14] agunbiac9498 : Yeah exactly brother - I’m with you on this, I identify as a top team
-[2026-10-23 17:24] marius36 : You only have 5!not quite but you are close
-[2026-10-23 18:25] synistajay : Managing top team should be a headache though, it shouldn't get easier it should be more difficult
-[2026-10-23 18:28] marius36 : You will see,I hope soon.Then you will tell me if you like pain
-[2026-10-23 19:28] synistajay : Lool I do   I just believe it should be harder to manage a top team that’s why it’s a hard job to get. It shouldn’t get easier
-[2026-10-23 19:29] synistajay : I’d even argue there should be rng where you can’t renew contracts because they want a new challenge etc
-[2026-10-24 09:24] alin35 : Nice to see players exchanging passes with themselfs 🤣
-[2026-10-24 09:48] randykeys : Oi! 😂
-[2026-10-24 09:55] poletz : Individualistic? 😬
-[2026-10-24 09:58] randykeys : Nah derby just nerf me bro 😂 🙈
-[2026-10-24 09:59] randykeys : Don't even need strikers, CMs doing everything on their own
-[2026-10-24 10:12] alin35 : Nope
-[2026-10-24 10:13] poletz : Was a joke
-[2026-10-24 10:17] yasen_gg : Daily Rant time
-[2026-10-24 10:17] yasen_gg : How is it that we ended up with even less tactical options now?
-[2026-10-24 10:18] yasen_gg : We have all kinds of positions and roles, but we can't even tell our players to attack through the wings ?
-[2026-10-24 10:18] yasen_gg : The best solution is again - limit the choices a player can make in order to force something.
-[2026-10-24 10:19] yasen_gg : The newly added BU and Pressure points are not visible anywhere in the reports.
-[2026-10-24 10:20] yasen_gg : I can't tell if my opponent sacrificed buildup or not.
-[2026-10-24 10:21] yasen_gg : We also lost the team stats under the starting elevens on the post-match screen, so it would be nice to get those back.
-[2026-10-24 10:22] yasen_gg : Lastly u-25 year olds playing with a constant nerf and being unable to use their skills is really off-putting
-[2026-10-24 10:22] randykeys : https://www.derbymanager.com/matches/137971?view=live-tab&min=10  Very telling situation here. Guy is through on goal, 1v1 with the keeper, then for some reason drifts right and shoots from outside the box. My formation gets caught out like this a lot, but it's not punished enough. This is a goal 9 times out of 10.
-[2026-10-24 10:23] randykeys : Same situation not 5 minutes later,  another guy shoots the moment he enters the box, why not take an extra step and take a close shot?
-[2026-10-24 10:25] randykeys : And it is possible cus the next chance is my player doing exactly that, one on one, steps into the box, and completely whiffs the shot 😂 so it's not like there's a limitation or anything, unless this new fatigue thing is telling them to shoot early
-[2026-10-24 10:37] alin35 : Yeah, lately i kinda failed to realize what is joke or not 😂 .. Sorry!
-[2026-10-24 12:55] derbymanager : rub it in, yeah 😏
-[2026-10-25 11:45] synistajay : <@607683593686352012> tried the nasty formation 👀
-[2026-10-25 11:46] randykeys : https://klipy.com/gifs/youre-a-wannabe-1
-[2026-10-25 12:15] poletz : Not the first time Just trying to save condition
-[2026-10-25 12:30] derbymanager : It only works if you're also the better team 😅
-[2026-10-25 13:01] poletz : If u r the better team, everything works
-[2026-10-25 13:02] derbymanager : Even 1-4-5? 😏
-[2026-10-25 13:03] derbymanager : JK, I'm working on reducing the difference. Firenze lost another 2 points, can't you see they're starting to fall apart 😄
-[2026-10-25 17:51] marius36 : They still didn't lost so maybe you need to figure out soon how it can be done and then explained to me privately
-[2026-10-25 18:03] yasen_gg : So Liège is a better team than Brussels?
-[2026-10-26 07:02] alin35 : Greedy fucks 😅
-[2026-10-26 09:11] dian.grancharov : Please check goal of the day
-[2026-10-26 09:11] dian.grancharov : Looks like a ghost kick
-[2026-10-26 09:13] dian.grancharov : Also my 32 yr old RM now wants to retire, wtf, isnt it early??
-[2026-10-26 09:14] marius36 : Yeah, definitely a ghost
-[2026-10-26 09:14] marius36 : That's why GK didn't see it
-[2026-10-26 09:17] dian.grancharov : https://klipy.com/gifs/i-dont-believe-you-nope
-[2026-10-26 10:18] alin35 : 2 instances of how my central forward behaved in today's match. In the first one he's clean on goal with a mile head start, he's advancing like he has midget feet and fatigues thus he gets dispossed by the opponent
-[2026-10-26 10:20] alin35 : In the second one, he's also clean on goal, not like last time though, he advances laterally instead of taking a shot and crosses to a teammate and the ball is lost of course
-[2026-10-26 10:21] alin35 : The FC has individualistic personality
-[2026-10-26 10:23] randykeys : I'm not fully getting subs yet. Had two early subs, two mids on for two forwards. Do i need to pick them myself? Were they injury related? I'm probably just dumb
-[2026-10-26 10:24] randykeys : Still, pack the mid still works, somewhat 😂 🙈
-[2026-10-26 10:27] derbymanager : What is this <@607683593686352012>?
-[2026-10-26 10:28] derbymanager : you know you can share links 😅
-[2026-10-26 10:28] derbymanager : at least screenshots so a minute is visible 😬
-[2026-10-26 10:59] dian.grancharov : But my screen is about something else. He was +9 until yesterday, all good.Today he is +10 but -1 mil value. Why?
-[2026-10-26 11:25] alin35 : Sorry lol    https://www.derbymanager.com/matches/137984?view=live-tab&min=23
-[2026-10-26 11:27] alin35 : https://www.derbymanager.com/matches/137984?view=live-tab&min=27
-[2026-10-26 12:15] yasen_gg : Were you trianing an outfield player Handling? 😅
-[2026-10-26 13:12] juema : Change of position?
+[2026-10-29 10:28] randykeys : I see Belgium died again
+[2026-10-29 10:30] randykeys : I swear I'm doing my best
+[2026-10-29 10:30] randykeys : <@687554939798552596> get ready for the 0-5-5
+[2026-10-29 10:36] alin35 : i saw ur 1-5-4 lol.... i would try 5-0-5 too if players wouldn't drop like flies cause of injuries 😝
+[2026-10-29 11:16] .burningrain : I enjoyed watching my forwards passing out to the flanks when 4v1 lol
+[2026-10-29 11:17] .burningrain : 11 of my 13 shots were headers
+[2026-10-29 11:17] randykeys : Feet are lava
+[2026-10-29 11:28] synistajay : You use wingbacks?
+[2026-10-29 11:32] .burningrain : today I did yeah
+[2026-10-29 11:35] synistajay : That’s the pattern they do that’s why I HATE them
+[2026-10-29 11:37] randykeys : This was my favourite moment. Have a guess at what happens next.
+[2026-10-29 11:43] alin35 : He passes to the wings? 😅
+[2026-10-29 11:43] randykeys : You can bet your ass he did
+[2026-10-29 11:44] alin35 : i had my striker using the same behaviour a few matches ago 😂
+[2026-10-29 11:46] synistajay : Defo passed to 15 lool
+[2026-10-29 11:46] synistajay : https://klipy.com/gifs/shannon-sharpe-this-guy
+[2026-10-29 11:47] synistajay : It started happening this season, I stopped using WB quite early because it was one of the most frustrating things to watch😂
+[2026-10-29 12:07] randykeys : Players 100% need an override for when they're in positions like this where their only choice is to shoot.
+[2026-10-29 12:11] synistajay : It defo still does a decision action when there’s only one decision to make there 😂
