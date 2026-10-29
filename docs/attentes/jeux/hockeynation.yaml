@@ -108,6 +108,10 @@ vues_gold:
   saisie: "gold.hn_saisie_lignes (lignes PRO enregistrées, contrôle joueur parti / hors poste)"
   offres_en_cours: silver.hn_trade_offers
   plafond_direct: silver.hn_cap_now
+  potentiel: gold.hn_player_potential
+  scouts: gold.hn_scout_priority
+  coachs: gold.hn_coach_options
+  rachats: gold.hn_buyout_calc
   rapport_match: "silver.hn_game_detail (pas de vue gold)"
   base_transferts: gold.hn_trade_value
   resultat_champ: "silver.hn_games.my_result (W/L, NULL si pas notre match ; filtrer le niveau d'équipe)"
