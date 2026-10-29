@@ -1,493 +1,134 @@
 ==========================================
 === CANAL : #general ===
 ==========================================
-[2026-10-23 11:33] foo_13 : <@1510400404708393120> can you give us more info about offseason cup? About Fatigue, injuries and ticket income
-[2026-10-23 11:59] vachacz : I will work on communication today evening
-[2026-10-23 12:00] grobarbrate : I am so excited about first round exit 🥲
-[2026-10-23 13:28] upkep123 : lol
-[2026-10-23 13:35] upkep123 : can't wait
-[2026-10-23 16:29] vortexraijin : anyone knows/remember what will happen to the inactive and bot teams in league? specially the ones in higher league.
-[2026-10-23 16:37] marekb9231 : Remind me please. Next season we stay in current leagues? Or will there be separate leagues for larger countries?
-[2026-10-23 16:39] mrnt. : I hope I get into a higher league Im currently #2 due to starting the game late
-[2026-10-23 16:46] grillanza_60069 : Bot will be removed and league will be filled with human teams. So there are chances to be promoted with second place (second in 4 league wil be surely promoted I think) No separate league for larger countries yet
-[2026-10-23 16:55] mrnt. : Thank god then
-[2026-10-23 18:01] vachacz : yes, bot and banned teams will be be relegated to leagues leaving space for human teams
-[2026-10-23 20:04] grobarbrate : <@1510400404708393120> You should put same rules for BV Cup tbh. Point is tactick and teams to play strongest they can and to see who is best. We are already getting more than enough fatigue during league + friendlies...
-[2026-10-23 20:06] vachacz : with daily matches? I didn't want to calculate all of that. we will start the league season without 20% fatigue
-[2026-10-23 20:18] grobarbrate : No daily , just like it was just no fatigue. I am looking my fatigue , i left BV cup in first round so playing only league and friendlies. Yeah , 48 minutes but on soft def and my players are over 30 fatigue. Now imagine playing on normal or even agg + playing 2 BV cup games per week. It really becomes to paintfull for brain even to calculate your fatigue + to menage it for 5 games a week. Too much. I dont have anything with that , i wont winn it now for sure but I just think its better for the game. Let people play agg in bv cup with strongest lineups to see who is best...
-[2026-10-23 20:21] vachacz : aaa, I missunderstood. I wrote about BV cup not NCup. got it
-[2026-10-23 20:22] vachacz : I think I will stick to the S1 rules. Unless more players are against. But let's not start a holy war about that
-[2026-10-23 20:31] grobarbrate : And one round out can be too random. But ok , as you wish...
-[2026-10-23 20:32] elemke. : Its a cup. Like what do you want back to back? There is not enough time.
-[2026-10-23 20:33] elemke. : cups are random IRL as well
-[2026-10-23 20:33] grobarbrate : Do teams in Euroleague goes out after one loss ? Champion league ? NBA ?
-[2026-10-23 20:33] elemke. : thats the beuty
-[2026-10-23 20:33] grobarbrate : Bv Cup should be best competiton in the game
-[2026-10-23 20:34] grobarbrate : For National Cup its ok to be one loss you are out , for BV Cup i think its stupid honestly but ok...
-[2026-10-23 20:34] elemke. : I would like group games and playoffs tbh
-[2026-10-23 20:35] grobarbrate : Agree , much better
-[2026-10-23 20:35] giovannidziadzia : like in world cup
-[2026-10-23 20:35] grobarbrate : Or winers and losers bracket so you at least have 2nd chance
-[2026-10-24 00:56] upkep123 : <@1510400404708393120>
-[2026-10-24 00:57] upkep123 : WHy am I not in the multinational cup
-[2026-10-24 00:57] upkep123 : or <@330694012073803777>
-[2026-10-24 00:57] upkep123 : i see a team that just joined my league in it
-[2026-10-24 00:57] upkep123 : but not mine?
-[2026-10-24 00:59] elemke. : You are a French team brother. You should be in the French cup. Are you in the French cup?
-[2026-10-24 00:59] upkep123 : i am in french cup
-[2026-10-24 00:59] upkep123 : is the multinational
-[2026-10-24 00:59] elemke. : So?
-[2026-10-24 00:59] upkep123 : for everyone
-[2026-10-24 00:59] upkep123 : I assume
-[2026-10-24 00:59] elemke. : No
-[2026-10-24 00:59] upkep123 : is it leagues without the req ammount of players?
-[2026-10-24 00:59] elemke. : Yes
-[2026-10-24 00:59] upkep123 : oh
-[2026-10-24 00:59] upkep123 : so serbia
-[2026-10-24 01:00] elemke. : Can you look at the release notes please? It's all there.
-[2026-10-24 01:03] upkep123 : sorry about that
-[2026-10-24 01:06] upkep123 : <@330694012073803777>
-[2026-10-24 01:06] upkep123 : can u check pot for kristijan veski
-[2026-10-24 01:06] upkep123 : he aint training like a 3 star pot player
-[2026-10-24 01:07] upkep123 : despite being listed as one
-[2026-10-24 01:07] upkep123 : he is training like a 5-7 player
-[2026-10-24 01:07] elemke. : He is 24.
-[2026-10-24 01:07] upkep123 : ooh
-[2026-10-24 01:07] upkep123 : im learning everyday
-[2026-10-24 01:09] elemke. : Yeah from the age of 19 training slows down.
-[2026-10-24 01:09] upkep123 : ig significantly
-[2026-10-24 01:13] elemke. : Based on my calculations a 24 year old player with 8-10 POT trains around 29-30% slower than a 16-18 year old.
-[2026-10-24 01:31] upkep123 : yeah I did calculation on his training he is 9 pot
-[2026-10-24 04:38] random_player_123. : He cannot be more than pot 7 because all players older than 19yo were generated with maximum pot 7...
-[2026-10-24 05:42] marekb9231 : In the other channel someone posted 3 star 24yo
-[2026-10-24 07:03] random_player_123. : oh I see, so free agents can be with higher potential then
-[2026-10-24 07:03] random_player_123. : my bad, sorry
-[2026-10-24 07:49] isr_shay : You mentioned that there is no fatigue in NT cup matches. does that mean players don't get tired at all?  Also, if a player plays the full 48 minutes, does the penalty for playing more than 36 minutes still apply?
-[2026-10-24 08:31] vachacz : Yes, 48 min penalty still applies
-[2026-10-24 11:01] jorgeac25 : But the fatigue in the regular league matches still impacts NT cup matches correct?
-[2026-10-24 11:03] elemke. : There is not gonna be much fatigue while the cup is ongoing. The reset is before the cup starts.
-[2026-10-24 16:13] upkep123 : the math proves it different
-[2026-10-24 16:32] inkamint : Basically, if I'm hiring 16 yrs · SF · 193 cm · 90 kg from the Academy, I can expect that he will become a Center within a few years and grow 15-20cm?
-[2026-10-24 17:14] vachacz : Sf will end growing in SF height range. It rather unlikely he will reach 210cm.
-[2026-10-24 17:18] marekb9231 : Does changing position impact player growth?
-[2026-10-24 17:38] elemke. : You can't change position for a youth player
-[2026-10-24 17:38] elemke. : I assume this is the exact reason for it
-[2026-10-24 19:06] grobarbrate : Can i somehow choose my player to not grow ? And why not ? 🥲
-[2026-10-24 19:07] usylum : <@1510400404708393120> Im from Australia (total 11 users) and we are not listed in any cup. Please advise?
-[2026-10-24 19:15] vachacz : <@918253035606671411> might be related to a bug I fixed. will try to fix that. in general I excluded inactive players and in AU 3 are inactive. so you're 8 which makes the country eligible. let me have a look
-[2026-10-24 19:15] usylum : Yeah much appreciated. I do remember last night i had a cup game scheduled but now its completely disappeared. I will await to hear back from you. Cheers
-[2026-10-24 19:18] vachacz : aaaa. I understand what happened technically. will not try to explain but it makes the fix easier 🙂
-[2026-10-24 19:18] usylum : No worries mate.
-[2026-10-24 19:46] vachacz : <@918253035606671411> it's almost good. thanks to your feedback also Canada was recovered. same issue. both countries have now national cups. the only thing is that inactive teams were not excluded in AU. I will regenerate the bracket once more but we're almost there
-[2026-10-24 19:54] grillanza_60069 : Will be injured players able to play in National Cup?
-[2026-10-24 19:55] vachacz : No. I wouldn't add extra rules like that because that complexity is carried over over time and can cause issues elsewhere
-[2026-10-24 20:10] grillanza_60069 : So I need to hire some doctors ahahhaha
-[2026-10-24 20:35] vachacz : <@918253035606671411> everything is perfectly sorted AU has now a cup with 8 active players. 12% chances to get a first trophy 😉
-[2026-10-25 10:12] usylum : Cheers mate
-[2026-10-25 13:28] inkamint : I have never seen Youth Player as C. Maybe that's why C prices are higher in the Transfer market, because youth cannot become C?
-[2026-10-25 13:30] elemke. : I pulled a Center for example
-[2026-10-25 13:30] elemke. : Maybe no one wants to sell their young Centers?
-[2026-10-25 13:39] marekb9231 : My first (and only rookie) was C. Usually in games good C are more expensive. Height factor is important and pricy.
-[2026-10-26 08:57] dcarra. : Can we have players of bot/banned teams on TM? Maybe there are hidden gems that shouldn't be wasted😁
-[2026-10-26 10:08] grillanza_60069 : Do we really want TM full of good players? Because inactive teams have similar players to the ones we have
-[2026-10-26 11:48] neco0881 : 18 minutes in the game fouled out T_T
-[2026-10-26 11:49] neco0881 : not even 2 quarters in bruv
-[2026-10-26 12:02] elemke. : 5/5 aggro or a much better opponent?
-[2026-10-26 12:13] neco0881 : 5/5 aggro but i have 3 5/5 aggro and he is the one that get fouled out 2 games alr
-[2026-10-26 12:23] elemke. : Maybe it's time to lower it for him. 😉
-[2026-10-26 12:26] neco0881 : ye ty ❤️
-[2026-10-26 12:48] foo_13 : Maybe but not for all players Only transferred to club… If you put all, there will be much players on TM which will destabilise the market.  But problem for lost players may occur when NT arrive, if a cheater buys NT player and gets banned. NT loses a player
-[2026-10-26 13:06] grillanza_60069 : If a player has one cap in the NT he should go on the market if released or of the owner gets banned/is inactive
-[2026-10-26 13:13] br0kh3n : https://klipy.com/gifs/snitches-get-stitches-2
-[2026-10-26 13:20] foo_13 : Yeah, but we don’t have NT yet 😁 So some may already lose potential NT players
-[2026-10-26 13:25] dixi2499 : I agree, the NT players that belong to a banned team should be put in the transfer market immediately
-[2026-10-26 13:27] montabelas : <@1510400404708393120> Please put a bid confirmation I made a bid by mistake, its very easy i was going to check the bid history
-[2026-10-26 13:28] montabelas : now i cannot undone
-[2026-10-26 13:30] grobarbrate : Not only NT players , cuz NT will have space for like 20 players and there are many outside of it that have pot to be in it in future , like young players. And many countries have less than 10 teams in totall , we need to save good players from banned or inactive teams...
-[2026-10-26 13:32] arodrigues84 : Yes, i also think that should exist a confirmation bid before bidding like there is when you are placing a guy in the TM. Or at least we could remove our bid...
-[2026-10-26 13:33] montabelas : I dont want the player and his a 3M bid 😫
-[2026-10-26 13:35] br0kh3n : willit not be illegal to get something from someone who get it first suing illegal means?
-==========================================
-=== CANAL : #economy ===
-==========================================
-[2026-10-25 09:23] baldurazz0 : Season end rules had been published. Qq on finances: this week i will play last league match away, thus i will lose any match income. Is that right? Im on a safe side economy but don't now if this is like for everyone
-[2026-10-25 09:31] elemke. : Away matches = no income. Some people has their last game at home some away.
-[2026-10-25 12:48] baldurazz0 : Yes i understand. Was simply thinking that this week some teams will not get league matches income, and was wondering if was under development ideas to rationalize it
-[2026-10-25 13:14] elemke. : Personally, I don't see the issue
-[2026-10-25 13:16] elemke. : Some weeks you have home games other weeks no.
-[2026-10-25 13:19] vachacz : Economy is inflating. Means teams are earn more than spend and diff is big enough to accept one week without ticket income.
-[2026-10-25 13:24] giovannidziadzia : In total everyone gets money from 11 home league games per season so there is no issue
-[2026-10-25 13:36] baldurazz0 : Perfect, wanted just to say if this was considered . Thank you !
-==========================================
-=== CANAL : #academy ===
-==========================================
-[2026-10-24 00:41] br0kh3n : how many weeks before he Age up to 17? was it worth the pull?
-[2026-10-24 07:54] montabelas : Good morning, i think an end season schedule is going to be announced soon, but the age should be on 27 Oct
-[2026-10-24 07:55] montabelas : Only worth pull if his Michael Jordan prospect 😉
-==========================================
-=== CANAL : #help ===
-==========================================
-[2026-10-24 11:56] pijonghoo : Fatigue gets reset after the season end right? How about injuries?
-[2026-10-24 12:09] vachacz : Imjuries not
-[2026-10-24 12:15] pijonghoo : Thanks
+[2026-10-29 09:30] foo_13 : Can someone tell which bar means what? Thanks in advance
+[2026-10-29 09:39] elemke. : The orange is the new defensive area I would say.
+[2026-10-29 10:45] foo_13 : “I would say” doesn’t help 😂 When you’re on PC is there a description ? Can anyone screenshot ?
+[2026-10-29 10:46] elemke. : You can just change to desktop view
+[2026-10-29 11:25] foo_13 : Thanks 🙂
 ==========================================
 === CANAL : #「🇷🇸🇭🇷🇸🇮🇧🇦🇲🇪🇲🇰」ex-yugo ===
 ==========================================
-[2026-10-23 20:45] foo_13 : Samo 10 srpskih klubova?  Trebao sam ja srpsku zastavu za metnem, ovaj pokaza da u Francuskoj ima 31 klub 😂😂😂
-[2026-10-23 20:48] antoski.a : https://www.basketvibe.com/world?tab=countries
-[2026-10-23 20:49] antoski.a : tu se vidi koliko ima klubova i gde, po IP adresi se sortiraju ekipe, ne moze po zastavi😆
-[2026-10-23 21:18] lolek5232 : Ma po zastsvi sortira haha
-[2026-10-23 21:18] lolek5232 : Promijenit zastavu pa ces vidit ds ces pojavit na tom popisu u toj drzavi😀
-[2026-10-23 21:18] lolek5232 : <@421644594674008064> a mogo si u luxembourgu ostat
-[2026-10-23 21:18] foo_13 : Pa kako po IP adresi?
-[2026-10-23 21:19] lolek5232 : Samo 3 ekipe lagano polufinale bi igro 😀
-[2026-10-23 21:19] foo_13 : Ne bih igrao kup Kaže 8+ timova
-[2026-10-23 21:19] lolek5232 : Aha igro bi ovaj internacionalni
-[2026-10-23 21:19] foo_13 : Neka, idem da probam da razbucam Francuze 😂
-[2026-10-23 21:20] lolek5232 : Ja sam prvo kolo proso a kup ni poceo😂
-[2026-10-23 21:20] grobarbrate : https://klipy.com/gifs/cmon-20
-[2026-10-23 21:20] grobarbrate : Svarog u našem kupu :
-[2026-10-23 21:20] grobarbrate : 🤣
-[2026-10-23 21:20] foo_13 : Pitao sam Francuze ko će biti 2. Niko ne odgovara 😂😂😂
-[2026-10-23 21:20] antoski.a : Moguce da moze da zamenis drzavu, ali svuda ide po IP lokalizaciji... ne znam kakav je sistem toga, ali kako je tako , bice jednog dana vise timova 😄
-[2026-10-23 21:20] lolek5232 : A isto dobra prica. Mozes skupit sve kupove sa svim zastsvicama😂
-[2026-10-23 21:22] grobarbrate : <@491622362161348609> Jel da te pustim ili ne ? 😜😂
-[2026-10-23 21:23] foo_13 : Pa kako odeš na odmor u Španiju, nakačiš se na wifi od hotela ip ti je španski?
-[2026-10-23 21:23] antoski.a : Nemoj, samo jako ko sinoc, do kraja 🙂
-[2026-10-23 21:24] grobarbrate : Ma zajebavam se nemam ja igrace ideš Svarogu na megdan 😅
-[2026-10-23 21:24] antoski.a : Slazem se, treba to ispitati kako ide 🙂
-[2026-10-23 21:25] antoski.a : vidim da si resio mladost da spremas za buducnost osvajanja svih pehara u nizu 🙂, a svarog ima da me ocisti, nisam ja dobar, imam 2 igraca koja su dobra, ostali prosecni za otpustanje 🙂
-[2026-10-23 21:25] grobarbrate : Ma treba da zabrani menjanje zastavica realno. Šta ćemo kad dobijemo lige ? Da prelazimo iz jedne države u drugu svake sezone ? 🤣
-[2026-10-23 21:26] grobarbrate : Nemam još ni petorku tako da ima tu posla dosta , al zadovoljan sam sa ova 4 što imam za sad
-[2026-10-23 21:26] foo_13 : Ooo pa to već napravljen žreb za kup!!
-[2026-10-23 21:27] grobarbrate : Cek jel ova prva utakmica u sredu spada idalje u sezonu 1 ? Tj još uvek neće biti resetovan umor pre te utakmice?
-[2026-10-23 21:27] lolek5232 : A nema u kupu umora
-[2026-10-23 21:27] lolek5232 : Tako je piso
-[2026-10-23 21:27] antoski.a : u kupu nema nista, samo se igra basket 😄
-[2026-10-23 21:28] grobarbrate : A da bre glup sam nema ni povreda. Jbg navika je čudo xD
-[2026-10-23 21:28] foo_13 : Izgleda da je po zastavicama napravljen, što je i logično. Al dobro i IP i zastavica su mi bili francuski u vreme pravljenja kupa ja mislim
-[2026-10-23 21:28] lolek5232 : Al isto treba vidit  kako cu iz ovog kupa ispast. Ja kad uzmem neko kup natjecanje mozemo gasit igricu😂
-[2026-10-23 21:28] antoski.a : pa jel si u francuskoj sada? gde si kreirao tim?
-[2026-10-23 21:29] foo_13 : Jel stvarno hoćeš odgovore na sva ta pitanja? 😂😂😂
-[2026-10-23 21:29] grobarbrate : Foo ti je nomad , ne zna ni on gde je 😂
-[2026-10-23 21:30] antoski.a : e pa onda nista, bitno da si negde 😄
-[2026-10-23 21:30] foo_13 : Nisam sad u Francuskoj, upravo sam došao u Srbiju. Kad sam kreirao klub fizički sam bio u Luksemburgu, ali na francuskoj mreži 😂😂😂
-[2026-10-23 21:31] grobarbrate : Imam tačan broj ! 😂
-[2026-10-23 21:31] antoski.a : 😎  e to je super, evo ja sad promenio zastavu na makedoniju i to radi... nije to dobro ako je tako 🙂
-[2026-10-23 21:31] grobarbrate : Nemoj da bezis 😜
-[2026-10-23 21:32] antoski.a : Necu, nisu me pustili, vratio sam se u kup 😄
-[2026-10-23 21:32] foo_13 : Ma to je extra. Ja menjam zastavu kad izvučem rukija 😂😂😂 Hoću da imam kućice sa različitim zastavama 😂😂😂
-[2026-10-23 21:32] grobarbrate : Ti si beše pravio plavu temu za sajt ?
-[2026-10-23 21:33] antoski.a : To ti je dobro 😄
-[2026-10-23 21:33] antoski.a : Da. Ideja.
-[2026-10-23 21:34] grobarbrate : Top brt totalno mi je drugi doživljaj sa ovom plavom temom
-[2026-10-23 21:34] grobarbrate : Mozda ne bi bilo loše da napravi još nekoliko tema tako da svako može da stavi svoju omiljenu boju
-[2026-10-23 21:35] foo_13 : Ti bi stavio tirkiz 😂
-[2026-10-23 21:36] foo_13 : Jel može za mene i <@346596514820259841>  da se napravi tema u boji fušija 😂😂😂
-[2026-10-23 21:36] antoski.a : Verovatno da bice u buducnosti. To je najmanji problem da se uradi tema, veci problem je dobar engine i razna takmicenja. Covek sam radi sve.
-[2026-10-23 21:36] lolek5232 : Engine kolko god jos treba doradit ovo je milina s onim sta je bilo na pocetku😂
-[2026-10-23 21:37] foo_13 : Ma nije sam. Mora da mu radi chatgpt, nije moguće da je sam tako brz 😂😂😂
-[2026-10-23 21:37] lolek5232 : Mislim da je reko claude😂
-[2026-10-23 21:38] foo_13 : Pa neki od njih sigurno 😂😂😂
-[2026-10-23 21:39] antoski.a : Svi danas koriste AI za sve, tako i programiranje je dosta lakse. 🥳
-[2026-10-23 21:42] grobarbrate : Tako je 😄 Ova plava tema ima tirkizne ikonice zato mi i jeste top , i plus tamnija pozadina. Svetlija mi smeta za oci...
-[2026-10-24 06:41] svarog_ : Ne mogu da otvorim ceo zreb, ne znam ko je sve kod nas. Ali agresije na max, ce da iskidam svr zivo😁
-[2026-10-24 06:42] svarog_ : Mada kup sa 8-10 ekipa, onako😏
-[2026-10-24 06:48] foo_13 : To ti je ceo žreb 😂😂😂 Nema više 😂😂😂 Jeste da izgleda da fali, Al to je to 😂
-[2026-10-24 06:55] lolek5232 : Jel i kod vas ovako😂
-[2026-10-24 07:18] foo_13 : Ne kod nas nisi plavim slovima Ali ostalo je tako prikazano 😂
-[2026-10-24 07:19] foo_13 : Mada biće zanimljivo kad odradi debotifikaciju na kraju sezone 😂😂😂
-[2026-10-24 07:19] foo_13 : Meni se čini da u FR ima dosta neaktivnih klubova
-[2026-10-24 07:20] foo_13 : Ne znam koliko vredi TS ovde, ali moj je najveći u mojoj polovini žreba 😁
-[2026-10-24 07:20] foo_13 : Nadam se finalu 😂😂😂
-[2026-10-24 07:21] foo_13 : A ti ćeš <@421660865062895638> opet u polufinalu da ispadneš? 😂
-[2026-10-24 07:29] svarog_ : U pa medjedi imaju dosta veci timski PS od mene. Nznm jel dimich ovde
-[2026-10-24 07:30] svarog_ : Nece bas biti setnja
-[2026-10-24 07:37] foo_13 : Izgleda da su najjače ekipe dobile prolaz u drugu rundu
-[2026-10-24 07:46] lolek5232 : A ne. Sad ili odmah ili u finalu. Ispadanje u polufinalu se vec odradilo
-[2026-10-24 11:04] joomi1 : ako ja prođem, finale mu je sigurno
-[2026-10-24 13:59] jeremiahcross. : Tu sam. Ceracemo se 🙂
-[2026-10-24 19:18] svarog_ : Jel ulazis u 2. ligu?
-[2026-10-25 17:29] jeremiahcross. : Ulazim
-[2026-10-25 19:55] mrnt. : kod mene jeste
-==========================================
-=== CANAL : #「🇵🇱」polska ===
-==========================================
-[2026-10-23 14:47] vachacz : <@435491661204946955> pamiętaj, że za zmiana w silniku v4 dosiska obronę (-3% do FG%), ale zostawia większą lukę (+5% do FG%) w niebronionej strefie. używanie tej funkcji nie jest oczywiste bo można się nadziać na centra rzucającego za 3p 😉
-[2026-10-23 16:35] marekb9231 : No no, ile takich jest.
-[2026-10-23 17:17] giovannidziadzia : W sumie fajnie by było żeby jakaś nisza dla takich grajków była. Nudno będzie jak wszyscy będą wyglądać tak samo.
-[2026-10-23 17:20] giovannidziadzia : A co myślicie o tym żeby skille zawodników były zupełnie niewidoczne poza RT? Można by podać zakres PSa ale skille byłyby widoczne tylko na RT.
-[2026-10-23 20:03] marekb9231 : Jak widać przedziały mniej więcej wiesz z jakim graczem masz do czynienia. Podoba mi się, wygodniejsze to niż wróżenie z fusów.
-[2026-10-24 13:11] giovannidziadzia : Trudno sie w sumie nie zgodzić, ukryte skille miały swój klimat ale chyba faktycznie to co mamy w BV jest bardziej grywalne. Pamiętam jak reprezentacje w CBMie miały swoich skautów, miałem cały pulpit w screenach jakiś juniorów 🤣
-[2026-10-24 16:27] gothart_90207 : <@1510400404708393120> kiedy będą kadry? 😀
-[2026-10-24 17:01] vachacz : W tym roku na pewno zrobie mechanike powolywania kadr. Ma ktos z was doswiadczenir z prowadzenia kadr w cbm, ht?
-[2026-10-24 17:47] celnik1989 : Witam serdecznie wszystkich
-[2026-10-24 17:52] marekb9231 : Ja dużo czasu przy kadrach spędziłem
-[2026-10-24 17:53] marekb9231 : Cała zabawa była z ukrywaniem skilli graczy, nabijaniem lub zbijaniem statystyk, żeby potem w jakimś meczu zaskoczyć. Tutaj jest lepiej.
-[2026-10-24 17:53] jopencjusz : Proszę cię, masz tutaj jedną z twarzy mitycznego "układu", który nie dopuszczał podobno nikogo do prowadzenia kadr 🤪
-[2026-10-24 17:54] jopencjusz : Bym dodał jeszcze zabawę w negocjowanie zmęczenia zawodników i ich treningu
-[2026-10-24 17:55] jopencjusz : Z niektórymi managerami było to szczególnie ciekawe zadanie
-[2026-10-24 17:55] marekb9231 : Ta, ale to w kontekście scoutowania rywali było
-[2026-10-24 17:56] marekb9231 : Ja z Albertem Drozdem miałem tak, że jego manager był obrażony i jak Drozda powołałem, to nabijał mu zmęczenie, żebym nie mógł go używać w meczach
-[2026-10-24 17:56] jopencjusz : Scoutowanie to całą bazę naszych graczy jeszcze mam gdzieś na dysku Google z końcówki działalności CBM
-[2026-10-24 17:57] jopencjusz : No i oczywiście w pakiecie były bazy ze skillami rywali, jak tylko ktoś trafił na rynek
-[2026-10-24 17:57] celnik1989 : Czy w tym menadżerze będzie opcja rozbudowy hali?
-[2026-10-24 18:00] marekb9231 : Pewnie tak. Na razie jeszcze nie ma potrzeby, bo hale się nie zapełniają
-[2026-10-24 18:01] jopencjusz : Drozd tak, to pamiętam
-[2026-10-24 18:02] jopencjusz : Jeszcze był słynny Antek, jak nie przekręciłem ksywki
-[2026-10-24 18:11] marekb9231 : A nie Zieliński?
-[2026-10-24 18:11] marekb9231 : Paweł
-[2026-10-24 18:11] jopencjusz : A to nie manager miał ksywę Antek?
-[2026-10-24 18:12] marekb9231 : A chyba że tak. Nie pamiętam
-[2026-10-24 18:12] jopencjusz : Bo Antek to wydaje mi się był manager od któregoś z naszych wiodących podkoszowych
-[2026-10-24 18:59] marekb9231 : W lidzę przegrywam wszystko jak leci. Może uda się coś pocisnąć w pucharze. Na pierwszy ogień czarny. Nick znany z charazay, ale tu chyba nie pograł za dużo.
-[2026-10-24 21:17] vachacz : <@1413997790475981075> pytałeś o halę. nie jesteś pierwszy. pewnie zrobię możliwość rozbudowy, ale generalnie nie jestem fanem robienia w grze jakiejś mega infrastruktury bo ona utrwala przewagę starych graczy a chcę, żeby w grze nowi też mogli powalczyć. muszę przemyśleć koncepcję jako całość, bo sama hala to mało, musi być za nią jakaś mechanika liczenia kibiców a fankluby to właśnie kolejny element, który wpływa na utrwalanie przewagi
-[2026-10-24 21:23] vachacz : inna kwestia jest taka, że w rzeczywistości kluby rozbudowują/zmieniają hale raz na x-dziesiąt lat i to nie klub buduje halę tylko miasto jako jakiś samorząd. niejednokrotnie klub by chciał rozbudować ale nie może bo miasto woli piłkę nożną albo żużel
-[2026-10-24 21:30] giovannidziadzia : Coś w tym jest, mi się osobiście podoba że nie ma zaplecza jak w każdej innej grze tego typu, szczególnie spoko jest to że trenujemy na 100% od samego początku. Co do rozbudowy stadionu to pewnie przyjdzie czas że trzeba będzie wymyślić jakiś system rozbudowy. Abstrahując, widziałem że w roadmapie jest pomysł z dodaniem jakiś cech zawodnikom, może to być bardzo ciekawe. Jak ktoś zna grę Rocking Soccer to tam było coś takiego.
-[2026-10-24 21:31] vachacz : tak. mi się to podoba. największy benefit dla gry to paradoksalnie "bogatszy" rynek transferowy. wycena tych traitów może być bardzo ciekawa gdyby je dobrze zaprojektować
-[2026-10-24 21:32] vachacz : generalnie z dyskusji, który były myślę, że mam dość dobrą wizję jak to zrobić i to dość proste. największy problem to przetestowanie mnogości przypadków. pewnie dlatego jeszcze tego nie mamy bo nie lubię testować złożonych rzeczy 😉
-[2026-10-24 21:33] vachacz : na pewno to zrobimy
-[2026-10-24 21:33] vachacz : ale 10 cech max, żeby nie przekomplikować gry
-[2026-10-24 21:35] giovannidziadzia : Nie mogę się doczekać 🔥
-[2026-10-25 06:55] marekb9231 : Mój najlepszy SF już chyba ma ukrytą cechę. Brzmi ona "nie lubi rzucać". Ciężko mi dużo rzutów z niego wycisnąć
-[2026-10-25 10:28] celnik1989 : Słuszne wnioski, ale dla mnie frekwencja meczowa a w tym przychody z biletów i ew. wpływy od sponsora powinny być uzależnionae od popularności klubu a ta z kolei od siły zespołu, wyników meczowych, pozycji w lidze, siły ligi i obecności w pucharach. To prawda, że taka mechanika może utrwalić przewagi starszych klubów, ale nowe tez z czasem mogłyby się wykosić. Zawsze można tak poukładać wpływy, żeby to transfery stanowiły o kondycji finansowej klubu a hala np. w 30%
-[2026-10-25 20:04] vachacz : Taki pomysł z halą: zamiast budować halę dajmy możliwość grania cenami biletów i kilka czynników, które wpływają na frekwencję:  - popularność tak jak dzisiaj - pozycja rywala w tabeli - winning streak (dodatkowy boost ponad popularność) - boost za awans. np. +10% - do tego +-10-20% random  kumulacja bonusów przy domyślnej cenie biletów mogłaby dawać popyt na 10-12k i wtedy możnaby podbijać cenę biletów i to obniązałoby frekwencję. co o tym sądzicie?
-[2026-10-25 21:51] celnik1989 : To co proponujesz jest sensowne, ale dodałbym boost  za mecz pucharowy/ligę mistrzów (+20% frekwencji) i dodatkowy przyrost popularności za mecze pucharowe z przeciwnikami, którzy mają siłę wyższą od Twojego klubu lub niższą, ale o maks 20%. Za wygrywanie z dużo słabszymi klubami (siła o 20% niższa lub więcej) w pucharach brak boosta frekwencji i brak wzrostu popa. W kontekście popa myślę o wzroście o 1 pkt za wygraną niezależnie od tego czy mecz w domu czy na wyjeździe).
-[2026-10-25 22:03] marekb9231 : Nie pozycja rywala, ale jego popularność.
-[2026-10-25 22:10] giovannidziadzia : Mi sie generalnie podoba co piszecie. Ja trochę o tym myślałem i coraz bardziej widzę że pewnego rodzaju prostota całej gry może być jej najmocniejszą stroną więc nie upychałbym zbyt wielu premii choć nagradzanie zwyciężania jest jak najbardziej pożądane. Myślę sobie że fajnie jakby w grze był system rankingu klubowego. Za zwycięstwa zdobywamy punkty, za przegrane tracimy, proporcjonalnie do pozycji w rankingu danego oponenta. Zawsze to dodatkowa ambicja piąć się w rankingu, można to powiązać właśnie z halą, można zrobić puchary rankingowe o różnym poziomie określanym właśnie przez miejsce w rankingu, co dałoby bardziej wyrównane turnieje. Myślę że idealnie współgrało by to również z jakimiś tam bonusami do przychodów z biletów 🤷
-[2026-10-25 22:13] vachacz : znam taki ranking z szachów 😉 za wygraną zdobywasz punkty rywala a on traci. żeby to miało sens musiałaby być większa rywalizacja między klubami z różnych lig. nawet przeszło mi to już przez myśl 😉
-[2026-10-25 22:18] celnik1989 : Pytanie vachacz czy chcesz iść w stronę pucharu krajowego, gdzie zwycięzca gra w jakimś pucharze zdobywców pucharów i dodatkowo ligę mistrzów grupującą najlepsze kluby z różnych krajów (po miejscach w pierwszych ligach krajowych ew. z uwzględnieniem rankingu/siły zespołu/popularności) czy chcesz stworzyć zupełnie odmienny od innych menadżerów system kwalifikacji do klubowych rozgrywek na podstawie jakiegoś unikalnego rankingu?
-[2026-10-25 22:31] vachacz : nie mam tego przemyślanego. puchar krajowy zrobiłem, żeby coś się działo w przerwie międzysezonowej 😉
-[2026-10-25 22:32] celnik1989 : Podeślij mi maila na priv, wyślę Ci co mi wypluł kolega claude 🙂
+[2026-10-29 09:35] svarog_ : 3x dve zvezdice 😟
+[2026-10-29 09:37] foo_13 : Šta mislite? Akademija 83
+[2026-10-29 09:39] lolek5232 : Novi je ovo. Od jutros
+[2026-10-29 09:39] lolek5232 : Ja nebi samo radi defa. Ako te usere 35 def jbg
+[2026-10-29 09:46] foo_13 : Pa i ja to gledam… def stamina i ath loši
+[2026-10-29 10:05] markoivica : <@442801289592700928> da još čekam? 🤣
+[2026-10-29 10:32] grobarbrate : Pa normalno , prvi nije tolko dobar a ostala dvojica su medium pot , naravno da čekaš 🤣
+[2026-10-29 10:34] markoivica : Akademija mi je već na 120% dok ja čekam Godota.....  😂
+[2026-10-29 10:44] foo_13 : Na 200% ti dolazi Jordan  Sačekaj još malo 😂😂😂
+[2026-10-29 11:03] antoski.a : kad stize Jokic? 😂
+[2026-10-29 11:04] grobarbrate : Čekam i ja vec celu sezonu al jbg
+[2026-10-29 11:04] grobarbrate : Mora da se dočeka ovakav ko Lolek što izvlači već drugi put 😅
+[2026-10-29 11:05] grobarbrate : Jedan je kod mene za drugog nemam para , tako da moram sam da izvučem 😂
+[2026-10-29 11:09] lolek5232 : Ja izvucem ali i prodam
+[2026-10-29 11:09] lolek5232 : Tako da sve sam vam omogucio😀
+[2026-10-29 11:11] grobarbrate : Jesi al jbg nema se para za sve 😅
+[2026-10-29 11:11] lolek5232 : imam 1.8 ponudu
+[2026-10-29 11:11] lolek5232 : Ja cu njega svakako prodat
+[2026-10-29 11:11] lolek5232 : Samo se razmiljam za 1.8 il od 0 😂
+[2026-10-29 11:11] grobarbrate : Nmg da dočekam petog igraca u postavi
+[2026-10-29 11:11] grobarbrate : Ko ti dao tu ponudu ? Dcara mouda ?
+[2026-10-29 11:12] lolek5232 : Nije. S njim sam imo dogovor al dok sam ja povuko on kupio
+[2026-10-29 11:12] lolek5232 : Neki drugu talijan
+[2026-10-29 11:12] lolek5232 : Jer sam 4/5 tjedana smeca povlacio haha
+[2026-10-29 11:12] grobarbrate : Icice taj igrač svakako za 3.5 ako ne i 4 miliona
+[2026-10-29 11:12] grobarbrate : Evo meni ni na 98 akademiju ne daje dobrog
+[2026-10-29 11:12] lolek5232 : Ma glavno da vrijedi vise od 1.8 pa nek se onda bida
+[2026-10-29 11:12] grobarbrate : Al jbg cekacu
+[2026-10-29 11:12] lolek5232 : Meni je 100 bila
+[2026-10-29 11:12] grobarbrate : Najs
+[2026-10-29 11:13] lolek5232 : moram i to oglasit mozda ode vise radi vece sanse za 10 pot
+[2026-10-29 11:13] grobarbrate : Kontam da ću ja povući bilo koju poziciju da mi da pa cu da prodam ako nije nizak i da jurim nešto sa tm
+[2026-10-29 11:13] grobarbrate : Mnogo visoku ekipu cu imati to mi se ne svidja
+[2026-10-29 11:13] lolek5232 : To je dobro
+[2026-10-29 11:13] lolek5232 : Visina daje prednost u napadu
+[2026-10-29 11:13] grobarbrate : Samo molim boga Loncar da ne raste uopšte xD
+[2026-10-29 11:14] grobarbrate : Ma jeste al ne moze igrač od 210 na sf
+[2026-10-29 11:14] grobarbrate : Moraću da nadjem koja je granica za sf
+[2026-10-29 11:14] grobarbrate : Loncar mi je 200cm sa 17 godina
+[2026-10-29 11:14] grobarbrate : Ima još 4 rasta
+[2026-10-29 11:14] grobarbrate : Da se pomolim bogu da će biti nekih 205-207 max 😅
+[2026-10-29 12:20] svarog_ : Daj link ovde kad ga stavis na tm
 ==========================================
 === CANAL : #「🇮🇹」italia ===
 ==========================================
-[2026-10-23 09:29] grillanza_60069 : Si anche io A volte ascolta anche troppo😅 🤣  Questa cosa della tassa ci sta secondo me, bisogna vedere i numeri
-[2026-10-23 09:33] dixi2499 : La tassa deve essere alta, almeno 50% a scendere di 10% ogni settimana così almeno sta mezza stagione
-[2026-10-23 09:37] grillanza_60069 : Su questo non sono molto d'accordo, il mercato è una parte importante del gioco
-[2026-10-23 09:38] dcarra. : Raga convincetemi sul perché inserire la tassa dovrebbe essere una buona idea. Io continuo a pensare che se i trasferimenti tra manager sono leciti, un manager bravo a trovare buone occasioni a basso prezzo per rivendita non dovrebbe essere punito eccessivamente. È un qualcosa che potremmo fare tutti. L'importante è che non Ci siano accordi sottobanco tra chi vende e chi compra
-[2026-10-23 09:48] grillanza_60069 : Serve a togliere un po' di soldi dal gioco, però non deve essere troppo alta
-[2026-10-23 09:56] dixi2499 : Su charazay era alta a scendere per disincentivare cheat e rendere più realistico il mercato perché nessuno compra un giocatore per rivenderlo subito
-[2026-10-23 10:07] tankre1792 : La mia opinione è che bisogna incentivare chi pianifica. Con compravendita continua si crea solo inflazione
-[2026-10-23 10:14] grillanza_60069 : Questo però non è vero...  L'inflazione si crea perché gli incassi sono più alte delle uscite (incassi alti, stipendi bassi)  Di per sé la movimentazione del mercato sposta solo soldi da una squadra a un'altra non genera più soldi
-[2026-10-23 10:15] grillanza_60069 : Mi spiego, se per un mese non ci sono movimenti di mercato ma tutto il resto rimane uguale e poi riapre il mercato, l'inflazione c'è comunque con il sistema attuale
-[2026-10-23 10:19] tankre1792 : Si, concordo mi sono espresso male. Chiaramente si andrà verso una situazione dove chi vince non fa guadagni enormi causa stipendi alti a parte situazioni particolarmente virtuose
-[2026-10-23 10:22] tankre1792 : Però ecco, io tenderei a premiere chi pianifica ed allena non chi sonda il mercato prende a x e rivende due settimane dopo a x +100. Poi possiamo anche dirci che ora questo giochino funziona perché il mercato ha pochi giocatori e quindi la scarsità di scelte + un economia sempre in positivo ti porta sempre a spendere.
-[2026-10-23 10:23] tankre1792 : Però ecco un sistema per calmierarlo ce lo metterei altrimenti la gestione di ingaggi, sponsor e stadio (se verrà aggiunto) andrà in secondo piano rispetto a magari chi ha tempo per passare ore ogni giorno a guardarsi il mercato, comprare e rivendere
-[2026-10-23 10:38] dcarra. : Sono d'accordo in parte, il problema ulteriore è che non siamo tantissimi e ci sono sempre meno di 150 giocatori sul TM, così facendo ridurremmo decisamente questo numero (non so quanti utenti in più prenderemo, anche se spero di sbagliarmi). Inoltre Vibe è il gioco più statico potenzialmente a livello di mercato, cioè potendo allenare tutte le skills io volendo mi posso prendere 10 giovani e non toccare più il mercato per diverse stagioni. MBT aveva il vincolo dei due slot dell'allenamento che ti costringeva per forza a comprare e vendere.  Tutto questo per dire che prima di vincolare il mercato, dobbiamo fare attenzione a non ritrovarci con 50 giocatori totali sul TM.  Poi sul vostro discorso lo comprendo, ma lo condivido solo in parte
-[2026-10-23 10:45] grillanza_60069 : Condivido assolutamente il discorso di dcarra... Col fatto che puoi allenare come vuoi i giocatori il mercato non sarà florido. Quello sarà un problema
-[2026-10-23 10:45] grillanza_60069 : Poi la tassa ha senso per togliere qualche soldo dal gioco
-[2026-10-23 11:06] uthred9751 : Però se Chi ha più tempo/volgia di fare plusvalenze e’ Più avvantaggiato di chi programma si crea uno Sbilanciamento
-[2026-10-23 11:07] uthred9751 : Diventa come Ultimate su fifa
-[2026-10-23 11:07] faraone85_69754 : come fai a capire se non ci sono accordi sottobanco e ad esserne sicuro? Serve sempre qualcuno che controlla, più semplice, non più giusto, mettere una tassa per limitare la compra-vendità eccessiva. Nella mia divisione c'è un utente che non fa altro che comprare e vendere, ad un certo punto aveva un roster di oltre 20 giocatori. ha fatto 52 movimenti di mercato in entrata ed in uscita.
-[2026-10-23 11:07] uthred9751 : Saldo?
-[2026-10-23 11:07] uthred9751 : È’ Il Tedesco ?
-[2026-10-23 11:07] faraone85_69754 : si
-[2026-10-23 11:08] faraone85_69754 : che poi magari lui lo sta anche facendo male secondo me, perchè ha più uscite che entrate
-[2026-10-23 11:08] faraone85_69754 : si è fermato ultimamente
-[2026-10-23 11:09] uthred9751 : Meno un 1M , sicuro il mio cinese che mi ha preso senza potenziale e’ una sola
-[2026-10-23 11:10] uthred9751 : Anche il Portoghese c’è sempre
-[2026-10-23 11:11] uthred9751 : Questo era mio
-[2026-10-23 11:11] uthred9751 : Gli ha cambiato ruolo raddoppiato bravo lui
-[2026-10-23 11:11] uthred9751 : Avevo anche pensato di riprendermelo ( triplicato scusate )
-[2026-10-23 11:27] daniel3duarte : Sono pienamente d'accordo con quello che state dicendo, però penso che bisogna anche tenere in considerazione cosa viene fatto con i giocatori che vengono comprati e poi rivenduti.  Il caso di Martino (è proprio quello che mi ha incuriosito e mi ha fatto tradurre la vostra conversazione 😂) è un esempio di quello che intendo.  Secondo me c'è anche un certo merito nel riuscire a identificare un giocatore sottovalutato, sfruttare bene le sue caratteristiche all'interno della propria squadra e poi, quando il mercato cerca un giocatore con quelle caratteristiche, approfittarne per fare profitto.
-[2026-10-23 11:28] daniel3duarte : Comunque, vengo in pace 😂🇵🇹
-[2026-10-23 12:05] dixi2499 : Io a charazay ho vinto la serie A una volta e confermo che compravo e rivendevo facendoci guadagni anche molto buoni ma solo dopo aver sviluppato un po i giocatori. E lì c'era la penale se si rivendeva subito.. per me è essenziale. Trovo inoltre corretto che ogni giocatore venga allenato dove ai vuole e non ci siano solo gli slot fissi così si possono specializzare i giocatori in più caratteristiche e non ai trovano sempre e solo giocatori standard
-[2026-10-23 12:46] grillanza_60069 : Va bene ma Martino ha triplicato il valore ma in termini assoluti ha fatto neanche 200k di plusvalenza che è poco
-[2026-10-23 12:46] grillanza_60069 : Ci sono plusvalenze anche da 1.5M in giro...
-[2026-10-23 12:51] grillanza_60069 : PS benvenido <@758017277667967028> 🤣
-[2026-10-23 12:51] uthred9751 : Ciao Daniel,   Você acabou levando vários jogadores que eu estava monitorando (por um preço de pechincha)! Na verdade, eu queria recomprar o Martino para usá-lo como armador — eu o tinha vendido anteriormente no meu save — e, para piorar, eu nem tinha um armador reserva! Você fez um ótimo trabalho ao mudar a posição dele (eu ainda não conseguia fazer isso na época). Enfim, como você percebeu, a ideia era promover uma discussão — que espero que tenha sido construtiva —, e o seu exemplo se encaixou perfeitamente na situação! Espero que faça sentido!
-[2026-10-23 12:52] grillanza_60069 : Comunque la compravendita è  una skill. Chi sa sfruttarla è giusto secondo me che ne tragga vantaggio. Ovviamente deve essere bilanciata la cosa
-[2026-10-23 20:08] uthred9751 : Bella la Coppa nazionale solo per la gloria
-[2026-10-23 21:00] faraone85_69754 : mi preoccupa una cosa...no fatica, no infortunio...significa che posso fare giocare 48 minuti senza penalità??
-[2026-10-24 05:58] grillanza_60069 : Vabbè tanto non conta niente
-[2026-10-24 06:40] faraone85_69754 : la coppa nazionale conta sempre 😄
-[2026-10-24 07:34] uthred9751 : Spero di no, comunque la gloria è’ eterna ricordati
-[2026-10-24 07:48] baldurazz0 : Credo sopra i 36 minuti scatti comunque il -20%. Ma il format così mi piace parecchio. Ti fa vedere i valori assoluti. La forma mi pare l'unica cosa che rimanga nel calcolo
-[2026-10-24 08:11] grillanza_60069 : Senza premi però magari da qualcuno verrà snobbata. Personalmente penso di giocarla al massimo, anche per testare le tattiche aggressive o altro
-[2026-10-24 08:15] baldurazz0 : Credo ci sia il gusto del gioco, non penso verrà snobbata anche grazie alle conseguenze praticamente assenti. Anche io pensavo ad aggressività tipo lock, ma ho comunque paura dei falli, non ho mostri in difesa
-[2026-10-24 08:18] dixi2499 : Mah io le avrei dato importanza come exp extra altrimenti è identica alle amichevoli
-[2026-10-24 08:31] baldurazz0 : Le amichevoli le snobbo per rischio infortuni, non vedo il valore aggiunto. Certo concordo che  un mini reward poteva essere più intrigante..
-[2026-10-24 08:40] dixi2499 : Le amichevoli non snobbarle incassi sempre un po' di soldi
-[2026-10-24 10:57] svg07 : E non ci sono infortuni nelle amichevoli 😉
-[2026-10-24 11:18] uthred9751 : E la fatica è’ quasi zero, però faccio giocare i giovani
-[2026-10-24 11:18] uthred9751 : Che senso ha snobbarla , c’è in ballo la gloria
-[2026-10-24 19:04] uthred9751 : Delusione 😞
-[2026-10-24 19:35] faraone85_69754 : non mi aspettavo di perdere sinceramente, è anche vero che non ho nemmeno fatto una tattica particolare, era difficile da ribaltare il mio +39 dell'andata...speriamo di non fare cazzate all'ultima giornata!
-[2026-10-24 19:44] baldurazz0 : Ero convinto di si...
-[2026-10-24 21:14] tankre1792 : Oh i 16enni che si rompono il giorno prima dell'allenamento, che bello
-[2026-10-25 08:16] uthred9751 : Ma è possibile che uno mi sia salito di 3?
-[2026-10-25 08:22] grillanza_60069 : Si se hai un pot 10
-[2026-10-25 08:22] grillanza_60069 : Prendono 2.2 ad allenamento nella primaria quindi con i decimali può capitare
-[2026-10-25 08:24] uthred9751 : Infatti è’ Il Quinto allenamento, ( tranne uno che non so perché avevo invertito )
-[2026-10-25 08:25] faraone85_69754 : senza fare troppi conti, non mi va, ma non c'è il "rischio" che un 16enne con potenziale 3 stelle, possa arrivare a 100 in una skills?
-[2026-10-25 08:25] uthred9751 : In 6 allenamenti più 12 difesa e più 7 rimbalzo
-[2026-10-25 08:26] uthred9751 : Probabile se parte da 55, secondo me si
-[2026-10-25 08:26] uthred9751 : Vabbè poi cambi
-[2026-10-25 08:28] uthred9751 : In una stagione son 8 allenamenti,
-[2026-10-25 08:30] uthred9751 : Così a spanne 8x2,2  fa 17,6 X 3 fino si 18 anni son 52,8
-[2026-10-25 08:30] uthred9751 : 1 Quindi direi di sì
-[2026-10-25 08:30] uthred9751 : Ma non vi fidate di me 😉
-[2026-10-25 08:31] grillanza_60069 : Ti direi di si, anche se non ha molto senso  Però da dopo i 70 c'è un malus  Dopo i 90 c'è moltiplicatore 0.5
-[2026-10-25 08:31] uthred9751 : Ci sta
-[2026-10-25 08:31] grillanza_60069 : Quindi secondo me potrebbe arrivarci ma ci voglio tante settimane per questo non ha senso
-[2026-10-25 08:32] uthred9751 : Comunque voi due avrete il mio voto per la nazionale
-[2026-10-25 08:37] dcarra. : Non è possibile, devi venderlo e il bug si risolve 😜🔥
-[2026-10-25 08:37] uthred9751 : 3M e ci penso 🤔
-[2026-10-25 08:38] uthred9751 : No seriamente ormai lo tengo e non era un top partiva da 41 mi pare
-[2026-10-25 08:39] uthred9751 : Secondo voi non avrebbe senso che negli allenamenti ti mostri anche se aumenta il Totale ?
-[2026-10-25 08:39] uthred9751 : O comunque Lo Mostri da qualche parte
-[2026-10-25 08:43] dcarra. : Ci potrebbe stare, effettivamente vado a controllare se sale ogni volta
-[2026-10-25 08:45] faraone85_69754 : che poi...a che serve avere un valore cosi alto? Basta secondo me superare i 70/75, poi alleni altro in effetti. Tra l'altro non ricordo, ma immagino più aumenta l'età del giocatore più tempo ci vuole a scattare...o no?
-[2026-10-25 08:48] grillanza_60069 : Si esatto
-[2026-10-25 08:49] grillanza_60069 : Con l'età c'è un malus
-[2026-10-25 08:59] dcarra. : Esatto, non sappiamo come ma sappiamo che a 25 anni la situazione è questa
-[2026-10-25 09:00] dixi2499 : Il malus vale anche per i giovani?
-[2026-10-25 09:05] dcarra. : Secondo me non ha alcun senso andare sopra il 70 da giovani, conviene prima tipo per un lungo fare 702p +70 def + 70 reb e poi ci penso
-[2026-10-25 09:06] dcarra. : Sì per tutti in teoria
-[2026-10-25 09:19] grillanza_60069 : Si si per tutti
-[2026-10-25 09:19] grillanza_60069 : Almeno leggendo il manuale sembra per tutti
-[2026-10-25 18:27] uthred9751 : 500.000k di plusvalenza con il lituano non male
-[2026-10-25 18:27] uthred9751 : Lettone mi sa
-[2026-10-25 18:36] dixi2499 : Ahahah che niubbi
-[2026-10-26 09:25] grillanza_60069 : Ultima di campionato contro un inattivo... Cerchiamo di non fare pazzie
-==========================================
-=== CANAL : #「🇵🇭」pilipinas ===
-==========================================
-[2026-10-25 20:58] delinaaaaaaa : Tagal ng promotions. Hahahahaha
-[2026-10-25 22:01] vortexraijin : Intayin mo ako. Season 400 nasa T1 na ako.
-==========================================
-=== CANAL : #「🇪🇸」españa ===
-==========================================
-[2026-10-26 04:11] blackdead6468 : hablando de la liga me gustaria que hubiera un segundo ascenso por play off, asi la liga se hace mas entretenida, sino llega un momento que ya no jugas por nada.
+[2026-10-29 10:26] tankre1792 : Io non volevo un C
+[2026-10-29 10:26] tankre1792 : Ma temo sia doveroso
+[2026-10-29 10:26] tankre1792 : Che dite?
+[2026-10-29 10:27] tankre1792 : Yes io l'ho fatto
+[2026-10-29 10:29] dixi2499 : Potenziale?
+[2026-10-29 10:30] tankre1792 : 3 stelle
+[2026-10-29 10:30] tankre1792 : Non si vede dallo screen?
+[2026-10-29 10:31] tankre1792 : Il poco rimbalzo puzza un po
+[2026-10-29 10:37] grillanza_60069 : Peccato per il rimbalzo
+[2026-10-29 10:37] grillanza_60069 : Però non è malissimo
+[2026-10-29 10:40] tankre1792 : Eh non so se prenderlo o meno, a livello dif e Atl è molto bello
+[2026-10-29 10:40] tankre1792 : Attendo suggerimenti 😆
+[2026-10-29 10:46] dcarra. : Se lo prendi per tenerlo e non ti serve un C aspetterei. Per carità ti viene su un 16 enne 46-47 che è ottimo, ma quel rimbalzo lo penalizza tanto, e hai accademia al 100%
+[2026-10-29 10:46] dcarra. : Poi pure io avrei il dubbio
+[2026-10-29 10:48] grillanza_60069 : Nel caso lo vendi io sono interessato se esce con skill medio-buone Però è una scelta difficile, non saprei se prenderlo o meno
+[2026-10-29 10:49] tankre1792 : O lo prendo e vendo moretti a un pacco di soldi
+[2026-10-29 10:49] uthred9751 : Aspetto grazie
+[2026-10-29 10:49] tankre1792 : Almeno poi i ruoli che mi mancano ho il cash
+[2026-10-29 10:49] tankre1792 : O lo lascio
+[2026-10-29 10:50] uthred9751 : Secondo me in sto gioco possono uscire veramente dei crack più facilmente che a chara io aspetterei il crack
+[2026-10-29 10:51] tankre1792 : Va bè facile metto moretti a 3.5 M
+[2026-10-29 10:51] tankre1792 : Se qualcuno lo prende tiro su questo
+[2026-10-29 10:51] tankre1792 : 😂
+[2026-10-29 10:56] dixi2499 : C'è l'inglese in vendita che è dio
+[2026-10-29 10:57] dixi2499 : L'ho tirato su al polacco fino a 4 milioni. In pratica penso di avergli fatto spendere quasi tutto quello che aveva
+[2026-10-29 11:01] tankre1792 : Se tra l'altro è di uno della mia divisione
+[2026-10-29 11:16] tankre1792 : Che palle poteva uscirmi una Sg così
+[2026-10-29 11:19] dixi2499 : Ma che ti lamenti? Promuovilo e vendilo
+[2026-10-29 11:19] dixi2499 : Perdi una settimana
+[2026-10-29 11:21] tankre1792 : Metto in vendita il mio C 17enne. Poi decido, se prendo abbastanza soldi lo promuovo.
+[2026-10-29 11:21] tankre1792 : Tanto nel caso perde solo un paio di amichevoli
+[2026-10-29 11:30] lucadrago5 : Per me non promuoverlo
+[2026-10-29 11:42] dixi2499 : Per me se non lo promuovi fai una cazzata. Perdi 100k di accademia per una settimana in cui sei già al 100  quando potresti già risalire dalla prossima
+[2026-10-29 11:45] dixi2499 : Prendi un pacco di soldi e se esce la guardia ala che cerchi te la compro
+[2026-10-29 11:45] dixi2499 : Probabilmente a meno
+[2026-10-29 11:46] lucadrago5 : Va beh 100k in piú o in meno cosa cambia? Io preferisco un giocatore con le skills al suo posto. É lecito il discorso sui 100k ma mediamente sono tutti ormai ottimi al 100 e comunque sul mercato ci fai ben piú di quei 100k in piú. Io non lo promuoverei però é giusto avere altri pareri, se devi venderlo però devi almeno ripagarti di quello che hai speso
+[2026-10-29 11:49] tankre1792 : Il ragionamento sarà il seguente. Io cerco Un Sf, 2 Sg e una Pf. Che devono essere giocatori seri. Considerando che i giovani un pelo più scarsi li ho già tirati su
+[2026-10-29 11:49] tankre1792 : Non top top perché non i soldi per prendere 4 top
+[2026-10-29 11:50] tankre1792 : Detto questo. Il ragionamento è metto il mio 17enne sul mercato, che forse in generale è un pelo più scarso, ma con gli stessi difetti, lui ha basso Atletismo e 2p quindi anche lui non ha skill perfette
+[2026-10-29 11:51] tankre1792 : Se prendo abbastanza soldi da aumentare il budget seriamente su 4 giocatori lo promuovo. Altrimenti rimarrà li
+[2026-10-29 11:54] tankre1792 : Lui sicuramente in generale è più forte di Moretti che è nato mi pare ps 43, mentre questo sarà sui 47/48 a occhio
+[2026-10-29 12:07] lucadrago5 : Io rimango del mio parere sul valore del giocatore netto, rinbalzo e tiro da due sono fondamentali per un lungo. Però vedi tu, in fondo bisogna vedere come sono effettivamente le skills
+[2026-10-29 12:08] dollarius_80489 : considerate anche che è la prima pescata della stagione e ha da 1 a n allenamenti in più rispetto a chi eventualmente pescherete dopo
+[2026-10-29 12:11] tankre1792 : Questa è la vera cosa che me lo fa considerare, altrimenti avrei già scartato
+[2026-10-29 12:15] tankre1792 : Potrei anche volendo tenere 3 C. Farne giocare uno fisso Pf. E poi vendere il lituano a una certa che è sicuro quello più scarso
+[2026-10-29 12:16] dixi2499 : Infatti io farei così. Del ruolo che te ne frega, se giochi coi giovani sai già che non vinco. Qui di anche far giocare un play in centro e viceversa non cambia nulla all'inizio
+[2026-10-29 12:16] dixi2499 : Basta fargli fare exp ed allenamenti.
+[2026-10-29 12:17] dixi2499 : Poi ripeto, confermando adesso a metà stagione ne hai un altro potenzialmente molto forte e a inizio della prox di nuovo altrimenti vai sempre più a scalare
+[2026-10-29 12:21] tankre1792 : Si ma più lo guardo, meno mi convince rischia di avere 2p sotto il 40 o comunque 40 basso, sono tanti allenamenti
+[2026-10-29 12:40] dixi2499 : Con potenziale 3 ti sale 2 scatti a settimana, a volte anche 3 se ha max potenziale..
+[2026-10-29 12:49] tankre1792 : Comunque grazie a tutti per la discussione. Ci penso 😁
+[2026-10-29 12:54] lucadrago5 : Sicuramente é inizio stagione e rispetto a chi abbiamo pescato la scorsa ha davanti a se piú allenamenti però neanche tanti, quello che ho pescato la scorsa stagione ha fatto 5 allenamenti su 8-9? Quello che ho pescato io era nettamente piú forte di questo sinceramente
 ==========================================
 === CANAL : #「🇵🇹」portugal ===
 ==========================================
-[2026-10-23 09:39] chanceler : Eu cá perdi 11 pontos com o <@1526127424322928682> . Jogo engraçado, varias nuances tacticas ali de ambos os lados
-[2026-10-23 09:39] chanceler : Basicamente a 1º parte do jogo foi minha, na 2º parte o jogo virou para o lado dele e nunca mais perdeu a vantagem
-[2026-10-23 09:40] chanceler : Nao ganhei a luta das tabelas, mas estatisticamente valores muito identicos de ambos os lados a nivel de assists, TOs, Faltas, steals
-[2026-10-23 10:57] carlomtlopes_69000 : Muitas fintas na táctica, de ambos os lados, interessante de analisar. Havemos de repetir isto daqui a uns dias para ver como corre
-[2026-10-23 11:17] montabelas : LEI EM BACARENA: CAPITÃO DEMOLIDOR COM 41 PONTOS E 28 RESSALTOS APÓS RUA DE AMARGURA COM O MAIA BASKET  A hecatombe frente ao Maia Basket ficou definitivamente para trás. No regresso à competição, as instruções não deixaram margem para dúvidas: zero facilitismos na retaguarda, fim das "bailarinas" na defesa e foco absoluto em travar as investidas contrárias com o rigor e a agressividade que há muito eram exigidos.  A resposta da equipa esteve à vista de todos, mas o holofote pertenceu por inteiro ao capitão da formação dos Leiteiros. Recusando aceitar o desaire no último jogo em casa como padrão, o líder da equipa entrou com fome de afirmação e assinou uma exibição de antologia para mostrar quem manda no seu reduto: uns astronómicos 41 pontos e 28 ressaltos. Uma prestação dominante debaixo das tabelas que devolveu o orgulho à equipa!
-[2026-10-23 11:26] heldermoreno : Já lhe deu para 2 jogos. Agora descansa no próximo!
-[2026-10-23 11:43] heldermoreno : Por aqui os amigáveis tudo ao mesmo ritmo dos oficiais, com exceção do Canidelo que é um bruto e aviso desdeque não volto a brincar com ele.!!!! não volta a ser convidado para as festas, que onde vai come o bolo todo só ele!!!!
-[2026-10-23 11:44] heldermoreno : só para que saibam como é a besta!.. descubram o que quero dizer com isso!
-[2026-10-23 12:03] nhegas12 : Eu do Canidelo foram 32 de diferença 😅
-[2026-10-23 12:12] arodrigues84 : Massacre em BACARENA, nos cinemas próximos de si. E o meu gajo que está de partida em 48 minutos não repetiu a façanha que tinha feito contra o MAIA e assim se despede com uma exibição fraquinha. Parabéns pela vitória. Mas que exibição fabulosa do Miguel, mais uma vez nem jogar 48 minutos o cansa lol
-[2026-10-23 12:13] arodrigues84 : Eu com o CANIDELO perdi 100-118
-[2026-10-23 12:13] arodrigues84 : Esta derrota com os Leiteiros sem dúvida foi a pior em amigáveis até agora eheh
-[2026-10-23 13:06] heldermoreno : mas têm dúvida que sou o pior...
-[2026-10-23 13:06] heldermoreno : Proponham que se criem taças privadas na off season para nos divertirmos ... bom, eu vou com o bojão bem apertadinho e protegido com cinto de castidade.
-[2026-10-23 13:18] chanceler : Acho muito bem. Se quiserem novas rondas de jogos, fiz-vos o favor e o fairplay de visitar os vossos pavilhoes ... agora vinde aqui á Maia faz favor 😎
-[2026-10-23 13:45] arodrigues84 : Tu e os mind games lol
-[2026-10-23 13:48] arodrigues84 : Eu gosto do nome Maia, é o nome da minha esposa por isso irei com todo o gosto!
-[2026-10-23 14:07] carlomtlopes_69000 : Convite feito para a 2ª mão, viagem curtinha de Penafiel à Maia a ser marcada!
-[2026-10-23 14:54] chanceler : Aceite. Parece que vai ser apenas na proxima época
-[2026-10-23 16:19] heldermoreno : amanhã faz sol!
-[2026-10-23 20:02] carlomtlopes_69000 : PT Cup!
-[2026-10-23 20:02] chanceler : Porquê que começo na bracket anterior carago ?
-[2026-10-23 20:03] chanceler : ai o carago !
-[2026-10-23 20:03] chanceler : discriminaçao pura !
-[2026-10-23 20:03] chanceler : esqueci-me da cunha ....
-[2026-10-23 20:03] chanceler : fuck
-[2026-10-23 20:03] carlomtlopes_69000 : Infelizmente temos duas equipas semi-bot na ronda seguinte
-[2026-10-23 20:03] carlomtlopes_69000 : foi por TS, certo?
-[2026-10-23 20:04] carlomtlopes_69000 : apanhei o <@634127929395118110> , portanto já fui à vida 😂
-[2026-10-23 20:04] chanceler : Fica ja o disclosure feito. Vou jogar esta cup com os seniores tambem
-[2026-10-23 20:05] chanceler : Aqui é para competir á seria
-[2026-10-23 20:17] carlomtlopes_69000 : Povoa vs DD Boys na metade de cima Braga Warriors vs Nhegas na metade de baixo  As minhas apostas para as semifinais da nossa taça
-[2026-10-23 20:18] jorgeac25 : 🙂 Era esta a surpresa que o vachacz me tinha antecipado
-[2026-10-23 20:18] jorgeac25 : Enquanto não há ligas, ia introduzir National cups na offseason
-[2026-10-23 20:24] sakota0 : 😮
-[2026-10-23 20:24] chanceler : Bate muito no Moreno please ! 😎
-[2026-10-23 20:25] sakota0 : nem me tenho preocupado com táticas, só tenho gerido fadiga e agora tenho um jogo a sério, não estou preparado xD
-[2026-10-23 20:25] sakota0 : o moreno é a equipa dos miúdos?
-[2026-10-23 21:20] nhegas12 : Desta CUP não estava mesmo à espera.
-[2026-10-23 21:22] daniel3duarte : estás a acreditar demasiado no meu trabalho 🙂
-[2026-10-23 21:23] nhegas12 : Será a primeira competição interna. A fadiga vai pesar um pouco, pois os jogos são em dias seguidos
-[2026-10-23 21:24] carlomtlopes_69000 : sem fadiga nem lesões, é tudo a zero
-[2026-10-23 21:25] carlomtlopes_69000 : penso que só continua a penalização de jogar 48 mins com o mesmo, mas penalização no jogo, não de fadiga
-[2026-10-23 21:25] nhegas12 : não tinha reparado nas regras que colocaram 😅
-[2026-10-23 21:27] nhegas12 : hehehe serei a equipa a abater por ter o PS mais elevado 😆
-[2026-10-23 21:30] chanceler : Hell yeah. E estas do meu lado da bracket .... Se chegar la, coisa que vou fazer por isso ... vou jogar muito agressivo mesmo e com os seniores tambem, quero testar esta malta contra a tua team 😎
-[2026-10-23 21:39] nhegas12 : Estou à espera de jogos complicados, há malta por aqui a perceber muito de basket e aí estou em grande desvantagem
-[2026-10-23 21:44] chanceler : Importa é a competiçao. Uma pena que as chances de apanhar o <@1526127424322928682> e o <@1544388591277572228> na cup sejam diminutas , teria a minha revenge 😎
-[2026-10-23 21:44] chanceler : Isto é que o povo gosta !
-[2026-10-23 23:59] heldermoreno : Podem bater, mas não montar!
-[2026-10-23 23:59] heldermoreno : olha o respeito!
-[2026-10-24 00:00] heldermoreno : Quem é o dono dos cães de Sintra?
-[2026-10-24 06:07] arodrigues84 : Calhei com uma equipa chamada Carecon’s, não conheço sinceramente. Mas esta cena de uns passarem diretamente é que é muito suspeita, não sei não eheh
-[2026-10-24 06:10] arodrigues84 : PS: Ja vi que é uma equipa relativamente nova, registou-se a 15/10. Já lhe enviei mensagem a convidar aqui para a nossa comunidade.
-[2026-10-24 06:16] arodrigues84 : Não apanhas de certeza pois duvido que vença este jogo lol
-[2026-10-24 06:16] arodrigues84 : Belos jogos em perspectiva, eu já sei que vou ser eliminado mas tudo bem.
-[2026-10-24 11:00] heldermoreno : é o Rui, da Guarda...o Carecons do Charazay
-[2026-10-24 11:06] arodrigues84 : Sim, o Hélder já me disse.
-[2026-10-24 11:11] heldermoreno : O Maia, suou... tenho que me empenhar mais nas táticas, mas à parte de vir aqui escrever de forma rapida, não tenho a coisa estudada e definitivamente tem que melhorar a forma como enquadro os jogadores em cada parte.
-[2026-10-24 11:11] heldermoreno : E isso nota-se, ao perder com o <@246418834989383681> 😋
-[2026-10-24 11:32] chanceler : hahaha, nao sejas coisinho . Foi um jogo disputado mas foi sem espinhas, desde o meio do 1º periodo que tive a liderança e nunca mais a perdi 😝
-[2026-10-24 11:32] chanceler : Vitória por 13 pontos, sólido mas sempre disputado .. so disparei no marcador um pouco mais no ultimo periodo
-[2026-10-24 11:33] chanceler : Ja vi que mandaste o segundo convite aqui para a Maia e ja está aceite
-[2026-10-24 15:11] jorgeac25 : <@634127929395118110> em bidwar com o dev pelo meu PG de 17 anos 😁😁
-[2026-10-24 15:12] montabelas : Ele tem pouco guito, e so aproveita pechinxas
-[2026-10-24 15:13] montabelas : Preciso de bases, este embora seja potencial 6 tem as skills certas
-[2026-10-24 15:14] montabelas : Assim ja nao tenho de jogar com um Poste a SG
-[2026-10-24 15:15] jorgeac25 : <@758017277667967028> ves, o montanelas tb aponta para 6. E o simulador dele é top
-[2026-10-24 15:15] montabelas : Ja ca canta, ja vai jogar hoje para  a liga
-[2026-10-24 15:16] jorgeac25 : Tá um pouco em baixo de forma.. Mas para 17 anos tem belo PS
-[2026-10-24 15:17] jorgeac25 : Vendi pk vou adaptar este a PG, tem skills mais de PG do que de SG. E o potencial é 8 ou 9
-[2026-10-24 15:23] montabelas : Eu acho que fizeste mal as contas, eu vou pedir ao meu staff uma simulação dos dois jogadores nas proximas 5 épocas, e ja te envio de como vao estar os jogadores to teu a começar a epoca com 22 e o meu com 23
-[2026-10-24 15:25] jorgeac25 : Não fui por ai, o teu é capaz de estar melhor
-[2026-10-24 15:25] jorgeac25 : Mas tb precisava do saldo
-[2026-10-24 15:26] jorgeac25 : Ja Agora compara tb aos 24/25 🙂 pk até lá tenho o Manuel Simões
-[2026-10-24 15:29] jorgeac25 : Já agora se for possível partilha o fator idade que estás a considerar no teu simulador
-[2026-10-24 15:30] jorgeac25 : O dev só revelou para os 25 anos, o resto tou a tentar descobrir
-[2026-10-24 15:30] jorgeac25 : Acho que já tou próximo nos 22 pois tenho 2 jogadores com essa idade e tou quase a chegar la
-[2026-10-24 15:31] jorgeac25 : Feito! Precisava de guito para comprar este bicho! Vão ter de lidar com ele na NT cup!!
-[2026-10-24 15:35] chanceler : E quando vieres a Maia deduzo que o tragas .....
-[2026-10-24 15:40] montabelas : Aos 22 e o meu 23 vão estar praticamente iguais
-[2026-10-24 15:41] montabelas : São melhores que qualquer pg no mercado com 27 anos ou mais anos
-[2026-10-24 15:41] montabelas : Claro, estava a jogar com um poste a base
-[2026-10-24 15:43] montabelas : E já vai jogar hoje no jogo que pode ditar o campeão da minha liga, se eu ganho o Juventos ganha o campeonato, e Grillo já foi ao meu pavilhão com o famoso saco azul 😉
-[2026-10-24 15:46] jorgeac25 : O meu ainda não sei se é 8 ou 9. Ainda só. Fez 2 treinos
-[2026-10-24 15:50] montabelas : Se for 8 tens de tirar prai umas 14 skills a menos
-[2026-10-24 15:51] montabelas : Mas ele tem sempre 1 ano a menos por isso se for a comparar com a mesma idade tem mais 16 skills
-[2026-10-24 15:52] montabelas : Por isso vai ser melhor a longo prazo
-[2026-10-24 15:54] montabelas : Maquina ele pode jogar a SF tambem se quiseres
-[2026-10-24 15:56] montabelas : Não gostei foi da stats dele, deveria ter melhor percentagens
-[2026-10-24 16:04] jorgeac25 : Isso depende do offensive focus do antigo dono
-[2026-10-24 16:04] jorgeac25 : Basta que o tenha colocado num papel secundarii
-[2026-10-24 16:04] jorgeac25 : Vou trabalhar a defesa e o atletismo
-[2026-10-24 17:11] daniel3duarte : vou confiar... o homem tem uma equipa de elite do lado dele
-[2026-10-24 18:48] chanceler : Lindo carago ! Vitoria por 15 pontos em casa contra a team humana mais forte da divisao, contra as odds (ainda que o jogo foi em casa)
-[2026-10-24 18:48] chanceler : E com isso somos oficialmente campeoes da div 4.39 !
-[2026-10-24 18:50] chanceler : Jogo de pouca inspiraçao para os atiradores ... a team lançou 24 vezes de 3pts e marcou .... pasme-se ..... 4 vezes, dando uma bela percentagem de 16,7%. Fantastico 😎 😎
-[2026-10-24 18:51] chanceler : Valeu-nos a nossa dupla PF e C de seniores a dominarem a tabela e consecutivamente o jogo a nosso favor.  PF com 28 pontos e 13 ressaltos e o C com 20 pontos e 20 ressaltos.
-[2026-10-24 18:53] heldermoreno : Vou para a última jornada com a máquina de calcular, pois vou jogar contra o primeiro e deve estar entregue o jogo.
-[2026-10-24 18:53] heldermoreno : A ver se sei fazer contas.
-[2026-10-24 19:04] nhegas12 : Derrota que me surpreende um bocado...muitas faltas, muitas perdas de bola. Ainda consegui uma boa recuperação no último período, mas nos segundos finais fizeram as faltas mas o adversário aproveitou😔 última jornada entre os 4 primeiros 1-4 e 2-3. Vamos lá ver se conseguimos a vitória 🙏🏻
-[2026-10-24 21:18] jorgeac25 : <@758017277667967028> tb queres o finlandês?
-[2026-10-24 21:18] jorgeac25 : Como vi que eras tu, não bidei pelo leone
-[2026-10-24 23:11] daniel3duarte : quero mas não queria esticar muito o preço, se passar os 700K salto fora
-[2026-10-25 09:05] arodrigues84 : Ganhei mais um joguinho, os meus putos contra uma equipa só com gajos muito mais velhos deu para ganhar 🙏
-[2026-10-25 09:05] montabelas : Ontem jogo que quase teve para ser uma vitória épica, entramos a ganhar no último periodo e nos últimos minutos  perdemos por faltas o capitão e consequentement o controlo do jogo.
-[2026-10-25 09:06] montabelas : E a chave do jogo teve no nosso pior jogador que já tinha colocado no mercado a 0 euros e não teve nenhum bid, e só jogou 24m, se tivesse colocado mais 12m se calhar tinha ganho o jogo.
-[2026-10-25 09:09] carlomtlopes_69000 : Podes meter esse 48 mins comigo na cup 😂
-[2026-10-25 09:11] montabelas : Esta é a maquina que contra uma super equipa com uma defesa média absurda fez as seguintes stats:
-[2026-10-25 09:13] carlomtlopes_69000 : Ele deve ter dado pouco foco defensivo nele
-[2026-10-25 09:15] montabelas : Eu perguntei ao Grillo da equipa juventos como iria passar a defesa dele e ele respondeu o seguinte "His squadra Is very good. Try to give shot to whom you think he won't lock" - E foi o que fiz, o meu jogador nunca joga, tava com forma 9 e dei instruções expressas para ser o meu homem mais ofensivo de todos, mesmo com 41 a 2pts teve uma eficácia absurda.
-[2026-10-25 09:16] montabelas : E eu por diversas vezes tive para despedir o jogador pois se ninguem da 0 euros por ele, mais vale despedir.
-[2026-10-25 09:22] montabelas : Outra particularidade tive de o colocar fora de posição a PF, com menos de 40 a ressaltos e perto de 40 a defesa, ganhou ressaltos e roubou bolas. A forma dos jogadores aparenta ter muita importância no seu desempenho.
-[2026-10-25 11:33] arodrigues84 : Foi a forma como já te disse. Isso conta muito no rendimento do jogador.
-[2026-10-25 16:55] jorgeac25 : 410k. Que acham? Pareceu bom negócio, com as skills que interessam já próximas dos 50
-[2026-10-25 16:56] jorgeac25 : E P8/P9 ainda sobe um pouco
-[2026-10-25 16:58] arodrigues84 : Sim acho justo
-[2026-10-25 19:36] nhegas12 : Boas tenho um miúdo que comprei, no dia 29 do mês passado e tem-me subido assim nas últimas semanas de treino. Será que é por ter níveis baixos que tem subido 2 níveis nas últimas 3 semanas no treino principal???
-[2026-10-25 19:37] nhegas12 : ele foi promovido no dia 20/9 e comprei-o a 29/9 por 26.000k
-[2026-10-25 19:38] nhegas12 : comprei para rodar nos amigáveis e para no futuro poder ganhar uns trocos com ele, mas assim a subir até pode vir a ter  qualidade para um dia jogar na principal
-[2026-10-25 19:43] chanceler : Dado que ele subiu sempre a secundaria tambem, ele parece-me mesmo um pot alto
-[2026-10-25 19:43] chanceler : ta a evoluir como um pot8-9
-[2026-10-25 20:00] nhegas12 : Como é que uma equipa se desfaz de um tipo de pot alto??? ainda por cima por um valor tão baixo....Só se for por ter tão baixo PS
-[2026-10-25 20:13] chanceler : Se calhar sacou sem saber o potencial na altura
-[2026-10-25 20:13] chanceler : como part do onboarding
-[2026-10-25 20:15] nhegas12 : Sacou no dia que entrou, ou então vinha nos jogadores que começaram com a equipa
-[2026-10-25 23:32] montabelas : É 100% pot 9
-[2026-10-26 13:49] heldermoreno : Agora todos me vão aos 123 e 113!!!! Tá bonito
+[2026-10-29 09:57] montabelas : <@1547707185407205387> Então mostra aí o teu Nemias!!!
+[2026-10-29 10:04] chanceler : <@634127929395118110> Ajuda aí aqui sobre estes 2 meninos :
+[2026-10-29 10:06] chanceler : Academia a 69%, se calhar até vale a pena algum deles
+[2026-10-29 10:07] arodrigues84 : Comprei um puto de 2.11cm, agora sim temos um Center à altura literalmente 😅
+[2026-10-29 10:08] arodrigues84 : Eu não tenho o conhecimento do Mestre Miyagi do jogo, mas diria que se tiveres a academia 100% não promovas.
+[2026-10-29 10:12] montabelas : Estou em viagem, mas olhando de relance não promovia nenhum a mim saiu muito melhor e não vou promover
+[2026-10-29 10:20] chanceler : Onde estou tentado a sacar algum, é porque a academia está a 69%, logo nao ha muito a perder ... ambos têm 1 skill em falha, defesa no caso do poste, ball handling no caso do base mas é ainda cedo na época e dá para corrigir um pouco no decorrer da epoca com o primary training
+[2026-10-29 10:20] chanceler : é mais nisso que estou tentado
+[2026-10-29 10:20] jorgeac25 : Se está a 69 não é mal pensado
+[2026-10-29 10:20] jorgeac25 : Não perdes tanto a reiniciar
+[2026-10-29 10:21] heldermoreno : se está a 69, mantem-na e serás feliz
+[2026-10-29 10:22] chanceler : Eh pah, essa frase vindo de ti nao consigo levar a sério .... porra ... nao dá ! 😂 😂 😂 😂 😂 😂
+[2026-10-29 10:28] heldermoreno : ainda bem que não sou eu que tenho que pensar e decidir..já subir para 82% a academia, e gastei 50k a ver se dois deles podiam ser  3start.. semana má, mas poupei nos neurónios.
+[2026-10-29 10:29] heldermoreno : um gajo não pensar.... e escrevo isto e vejo que foram 150k na academia desta semana, sem nada de jeito e já vão umas 4 semanas sem nada de jeito... são uns 550 a 600k gastos.
+[2026-10-29 10:29] heldermoreno : Resumindo teria agora mais de 1M e ando pelo 750k em cash.. isso também há que pensar
+[2026-10-29 10:30] jorgeac25 : Eu tb investi 25k num e saiu 2*
+[2026-10-29 10:30] jorgeac25 : Bem, aguardarei pela proxima
+[2026-10-29 10:30] heldermoreno : eu em dois... sou asno, e faço as coisas sem pensar hahaha
+[2026-10-29 10:32] arodrigues84 : Ainda por cima são de 17 e tem skills de 16, esquece isso
+[2026-10-29 11:01] heldermoreno : potencial 3 faz pensar... em teoria a grande maioria dos jogadores deverá ser potencial 2.
+[2026-10-29 12:39] heldermoreno : Que bicho para começar a epoca assim!!! são 4 milhoes quase certo, logo na primeira semana 🙂
+[2026-10-29 12:40] jorgeac25 : 3*?
+[2026-10-29 12:40] heldermoreno : eu não vou gastar o meu cash para saber, mas se tu sim, diz-me depois 😉
