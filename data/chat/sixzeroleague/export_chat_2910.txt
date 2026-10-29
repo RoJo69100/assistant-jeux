@@ -1,0 +1,230 @@
+Gazelle:you're right on that, but this is the setup that we have so far. The tactics can still be improved on a lot of areas, but for now I couldn't just allow wingers to play on the outside due to balance, otherwise I'm allowing 4 different roles for outside defenders and it's not ideal right now
+
+Gazelle:this alone would make LB, RB, CB, LW, RW stronger roles than P and GK
+
+Gazelle:But I'll figure out a solution for that meanwhile, while allowing wingers to play outside when defending
+
+Erin:I had such bad luck, that i got 3 players sent off in last 6 mins1
+
+Erin:1 came back and another one was sent off
+
+Erin:Last 6 mins of the game
+
+Erin:I almost lost the semi-final
+
+Erin:First time i had to play with only 3 outfield players lol
+
+Gazelle:glad you made it then!
+
+M prata:no subs on orders?
+
+Urban Fox:not yet
+
+Bergkamp:Yes, I understand that. Just discussion :)
+
+DErick:If a player its injured will receive training points?
+
+Gazelle:he does not
+
+Erin:we got a money transfer attempt
+
+Erin:2 accounts
+
+Erin:1
+	
+Adrian Nikaj
+	
+CB
+	
+9
+	
+27
+	
+	
+	
+Perosinho Reborn
+	
+25,000 €
+	
+25,000 €
+	
+tiagovski
+
+Erin:sry, copy-pasted from transfers
+
+Erin:oh, same team selling 2 crap players for 25k each
+
+Erin:Perosinho Reborn is a cheater
+
+Stoik:agree
+
+Chucky0013:can you exclude him from the game for this?
+
+Gazelle:hi! this guy has been on my radar for some time. thanks :)
+
+M prata:regarding defense for LB/RB, when are they at the half spot or centre spot?
+
+Gernhart Reinrammen:Can I revert Transfer Listings? I Made a mistake and listed a Player i dont want to sell
+
+Gazelle:Prata you can check that on the defense tab
+
+Gazelle:Gernhart there's no way to cancel a transfer listing right now
+
+Ivaaa_:can you see who got a red card in reports?
+
+Gazelle:no. I'll add that once we have player stats
+
+Gernhart Reinrammen:Can you add the Option to cancel Transfer Listing? Maby not now, that would be to spontaneus but it is really unlucky because i wanted to keep that Player xD
+
+Gazelle:I understand that. The reason why we don't have it its because the listings are not based on 'real' time
+
+Gazelle:I want to add the option to cancel, but I don't think I should allow to cancel any time during the bidding, otherwise there might be abuse
+
+Gazelle:Maybe just allow in like the first 3 hours
+
+Gazelle:You have the confirmation step before listing though ;)
+
+97777ali:5th Division - Malachite:
+Les Gaulois has played 17 matches, won all 17, with GD on 110
+
+Just me that feel something's fishy or they actually are that good?....
+
+Bergkamp:2 questins. How are penalty taker decided? Shoting, tehnique or? Will work ethic change in the time?
+
+Gazelle:dont think so ali, remember that some teams are extremely active and might have 1/2 seasons on their belt. This makes some difference since the game is being playing in a faster pace
+
+Gazelle:Yes, penalty taker is decided by shooting and technique. If there is someone in the team that surpasses the penalty taker, then the simulation automatically chooses him
+
+Stoik:Hi, what about ambidextrous players ? I don't know the percentage of left handed players, but if it's around 10 or 20 %, 1% of ambidextrous players would be cool in imho :)
+
+Ottendahl:Seems like left handed players are very rare. And agree about ambidextrous, would be nice
+
+Gazelle:I'm planning to add ambidextrous players! Left hand chance is 10%, it's according to real life statistics 😅
+
+DErick:Beside ambidextrius you will add other skills, like sprinter, powershoot or something like this?
+
+Gazelle:thinking about that in the form of perks. very small chance of a player getting a perk
+
+Gazelle:ambidextrous + perks + talent, three more layers on players
+
+DErick:Also, talent or work ethic can be visible when we extract u18 from academy?
+
+Gazelle:I'm not sure 😅
+
+Stoik:Nice ! But it would be logical to see the used hand(s) and the height about the youth academy ;)
+
+Stoik:at least at high level of academy :)
+
+verflixxt:that would be cool yes!
+
+Bergkamp:10% of left hand is realistic (there are reason for that I get 1 million more in salary!). If there will be ambidextrius players I really hope I have no one!
+Trained with few and normally coaches try to stop it because the benefit is very little but the effect on less jump is huge.
+
+Bergkamp:About wirk ethic. If it is like 10, will it change in the player career? Because if it is little, it is better to sell
+
+Draugar:Bergkamp - I don't think it will change, he's just gonna gain training points slower till the end of his career
+
+beardrik:When is the next season going to start?
+
+Urban Fox:Hi guys. Just to clarify, although it appears that the season has ended on some places, it actually just ends tomorrow (cup finals)
+
+Urban Fox:oops, talking from this account again
+
+Gazelle:but all of you should've received the league prizes by now + you'll have better sponsor picks in case you're going to be promoted
+
+Antarez:My training progress haven't gone through yet. Is it just me?
+
+Toca:mine either, i got the age ability drop but not the improvement
+
+Gazelle:Yeah I see that. I'll sort that out tomorrow, no one is going to lose any progress
+
+beardrik:I mean I'm waiting for my cup round but I was kicked out on like the 2 round or so. So nothing for me to win on that end :D
+
+Gazelle:I meant training results. This is probably general for everyone
+
+Draugar:Gazelle - so with sponsors do we have better ones already or will we have a better option once were assigned to new league? What if someone already picked a sponsor?
+
+Gazelle:From what I see, the ones who are to be promoted already have the better offers. This was not intended though since the season didn't really end yet, but some parts of the system think so it seems
+
+Gazelle:But picking early won't be an issue, the league competition is finished for this season
+
+Bergkamp:Draugar Yes, that is what I thought. Must admit I missed this part. But that mean too that low work etnic mean that it is better to sell as it should be big difference in trainng.
+
+Bergkamp:But very happy to see that the orders works well. Something to use
+
+Draugar:Work ethic is something that makes players special and unique, so it cannot be too common to pick players with 90+ work ethic, cause it will very quick end up with everyone having a team full of TOP potential players that just need to be trained until they retire. With low work ethic i think it makes it more interesting as people progress slowly.
+
+Erin:When do transfers expire? Tonight or when 1st championship match is played?
+
+Gazelle:now it's when we get to off-season I believe. I'll let you know more about the new season today
+
+verflixxt:we have the next fishy transfer on the market :/
+
+Filipe:ZG Hooligans is a cheater. See the transfer list
+
+Erin:No, i want to know if transfers will expire tonight, or no?
+
+Gazelle:no, not tonight
+
+razvee:When do I found out in which league I will play?
+
+Gouveia84:When will week 9 training progress be updated? I also sold a player for 2000 but received no money in tbe finances update too.
+
+Gazelle:you will know once the new season starts (in a few days)
+
+Gazelle:Gouveia I will sort these out today
+
+Gouveia84:Thank you Gazelle. This is a fun game.
+
+Antarez:Gazelle - i made 4 new suggestions on Discord 👍
+
+verflixxt:gj Antarez. great ideas!
+
+Gazelle:thanks! 👍
+
+razvee:How many matches are played per week?
+
+Gazelle:ravzee currently since this is a alpha, all competition matches happen during the day, each day 2 league matches + cup match
+
+Gazelle:but this is to be changed in the future, and the matches to be spread across the week + other events
+
+Gazelle:hey guys! so, I was wrong about some info after all, some of the issues are going to solve themselves after the final cup round is played today. The fact that I've placed the cup final as the last match of the season maybe bamboozled the system a bit
+
+Gazelle:- Week 9 training and finance report: the last week's training results and finance report are held back until the cup final is played.
+- "The season is over" messages: some screens already say the season is over because the league has ended. The season actually ends after the cup final.
+- Sold a player at the last settlement? The money is already in your balance. It just doesn't in the report yet.
+- Current transfer listings resolve during the next off-season
+
+Gazelle:I also have a pretty interesting update to ship during the off-season! Everything will fall in place afterwards. I'll let you know more on discord soon.
+
+Scottern::O
+
+Bergkamp:Draugar. Agree but as in meat world it had effect if you want to have players with low. I don´t because it is less profit in long run. I are talking about very low. Most clubs don´t want players like that
+
+davidesoli:when its the new season starting?
+
+Gazelle:hey david. in a few days. we need more time in the off season for the next update
+
+Gazelle:Hey! Six Zero League update 0.6.2 - National Teams is now here!
+
+Gazelle:You can now apply or vote for national manager of your country! I'll leave the game in off season for a few days so elections take place. Then the new season will begin afterwards. As it stands, this is how every day will look like during the season:
+
+- 12:00 PM - First league round of the day
+- 16:00 PM - Cup round of the day, if there's any
+- 18:00 PM - World cup round of the day, if there's any
+- 20:00 PM - Second league round of the day
+(Europe/Lisbon)
+
+Gazelle:More info on discord
+
+Erin:Nice update!
+
+Erin:do u get autoelected if u r the only player from ur country?
+
+Gazelle:yes! as long as you're applied
+
+Gazelle:time to bring friends to help on the national team :)
+
+M prata:do players only get injured on matches or also on training rounds?
+
+Gazelle:training and matches

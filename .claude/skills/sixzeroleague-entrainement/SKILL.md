@@ -55,3 +55,6 @@ Après une signature, l'horloge repart : la paire suivante arrive 8 journées pl
 - Un joueur blessé ne reçoit pas de points d entraînement [Dev chat, Gazelle, 2026-10-26 13:06 UTC ; V-20261026-4].
 - Hypothèse (avis de joueur) : académie niveau 10 = compétences de 10 à 38, tirage moyen ~24, cohérent avec min = niveau et max = 18 + 2 x niveau [Com chat, Stoik, chat France 2026-10-23 08:45 ; V-20261026-8].
 - Un rôle appris **reste avec le joueur s'il est vendu** (devlog 0.5.7). La fiche d'un joueur au marché montre les points physiques perdus avec l'âge la saison dernière (0.6.1). [Dev chat, D:L5, D:L9 ; V-20261026-21]
+
+## [Veille 2026-10-29] Mise à jour (V-20261029-5)
+- **Rapport de la semaine 9 retenu** : les rapports d'entraînement et financier de la dernière semaine restent bloqués jusqu'à la finale de coupe (2026-10-28 11:38 UTC). Des joueurs n'avaient reçu que la baisse d'âge sans l'amélioration ; Gazelle : « no one is going to lose any progress » (2026-10-27 22:09 UTC). Un joueur blessé ne reçoit pas de points d'entraînement (2026-10-25). Les blessures arrivent à l'entraînement et en match (2026-10-28 22:11 UTC). Hors saison, aucune semaine ne passe (déjà 8.6). [Dev chat Gazelle ; V-5]

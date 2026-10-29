@@ -247,4 +247,25 @@ Faits de la lecture intégrale appliqués à la situation du 2026-10-26 (J16 ce 
 | Chat du jeu (base) | 2026-10-26 | Global 2026-10-26 13:06 UTC ; France 2026-10-25 12:30 | lecture intégrale des 241 messages |
 | `export_2310.txt` | 2026-10-26 | fin (244 lignes) | doublon de la base jusqu'au 2026-10-22 |
 | Wiki | capture 2026-10-18 | — | antérieur à 0.6.0/0.6.1 ; à refaire |
+| Discord #dev-log + #chat (delta) | 2026-10-29 | #dev-log **0.6.2** 2026-10-28 12:08 UTC ; #chat 2026-10-28 18:42 UTC | 11 messages ; 0.6.2 National Teams (voir ci-dessous) |
+| Chat du jeu (base) + `export_chat_2910.txt` | 2026-10-29 | base 2026-10-28T22:11:49Z (Gazelle) ; fichier = doublon intégral | ~85 messages nouveaux depuis 2026-10-26 13:06 UTC |
 | Recherche ciblée (fatigue, remplacements, effectif minimum) | 2026-10-27 | Discord 2026-10-25 10:35 ; chat base 2026-10-26 13:06 UTC ; wiki 2026-10-18 | rien de nouveau dans Discord/chat ; wiki : remplacements automatiques, sur blessure/rouge seulement (2.14b), effectif 7-30 (6.12) ; SQL : 2.14d, 2.14e |
+
+### Delta du 2026-10-29 (source : rapport `2026-10-29.md`, propositions V-20261029-1 à 12)
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 10.x | **0.6.2 National Teams** : sélections par pays, élection du sélectionneur en intersaison, Coupe du monde (poules de 3-4, finale, 3e place), intersaison en 2 étapes, tour 18 de ligue = dernier match après les deux finales, onglet Coupe du monde, page Équipes nationales, aperçu refait, tactiques favorites au scouting et dans les rapports, trophées empilés | devlog 2026-10-28 12:08 UTC ; chat 19:08 UTC | 2026-10-28 | Gazelle | CONFIRMÉ. Complète 10 (versions). Aucun changement de moteur annoncé |
+| 8.10 | Horaires de saison (Lisbonne) : 12:00 ligue, 16:00 coupe, **18:00 Coupe du monde**, 20:00 ligue | chat 2026-10-28 19:08 UTC | 2026-10-28 | Gazelle | CONFIRMÉ (complète 8.1, 8.2) |
+| 8.5b | La saison 3 s'est terminée avec la finale de coupe le **2026-10-28**, pas le 10-27 ; la ligue finie affichait déjà « saison terminée » | chat 2026-10-27 21:24, 2026-10-28 11:36-11:38 UTC | 2026-10-28 | Gazelle | COMPLÉTÉ (corrige la date prévue en 8.5) |
+| 8.11 | Intersaison de « quelques jours » (élections) avant la saison 4 ; date non donnée | chat 2026-10-28 10:19, 18:31, 19:08 UTC | 2026-10-28 | Gazelle | CONFIRMÉ, date inconnue |
+| 8.12 | Rythme futur : matchs répartis sur la semaine + événements ; « slower pace since the beginning » | chat 2026-10-28 11:08, 18:42 UTC (+ Discord #chat 18:42) | 2026-10-28 | Gazelle | EN DOUTE (intention, sans date) |
+| 6.14 | Annonces de transfert en cours : résolues à la prochaine intersaison ; pas de résolution le 10-28 au soir ; annulation impossible (idée : première ~3 h) ; vente du dernier règlement déjà dans le solde, absente du rapport | chat 2026-10-27 09:16, 10:41 ; 2026-10-28 09:01, 09:57, 11:38 UTC | 2026-10-27/28 | Gazelle | CONFIRMÉ (annulation : EN DOUTE, idée) |
+| 6.15 | Sponsor : les promus voient déjà de meilleures offres (non voulu) ; choisir tôt n'est pas un problème ; prix de ligue déjà reçus | chat 2026-10-27 21:25, 22:57, 22:58 UTC | 2026-10-27 | Gazelle | CONFIRMÉ |
+| 5.x | Rapport d'entraînement et de finances de la semaine 9 retenus jusqu'à la finale ; « personne ne perd de progression » ; joueur blessé = pas de points ; blessures à l'entraînement et en match | chat 2026-10-25, 2026-10-27 22:09, 2026-10-28 11:38, 22:11 UTC | 2026-10-25/28 | Gazelle | CONFIRMÉ |
+| 2.x | Tireur de 7 m : Shooting + Technique ; remplacé automatiquement si un coéquipier le dépasse | chat 2026-10-27 13:36 UTC | 2026-10-27 | Gazelle | COMPLÉTÉ (précise « meilleur tireur ») |
+| 1.x | Places défensives LB/RB (demi ou centre) : onglet Défense ; qui a reçu un rouge : pas dans le rapport, prévu avec les stats de joueurs | chat 2026-10-27 09:16, 09:28 UTC | 2026-10-27 | Gazelle | CONFIRMÉ |
+| 4.x | Couches futures sur les joueurs : ambidextres (main gauche 10 %), perks (très petite chance), talent ; visibilité de la main/taille à l'académie demandée, Gazelle « not sure » | chat 2026-10-27 14:36, 15:32, 15:49 UTC | 2026-10-27 | Gazelle / Stoik, DErick | EN DOUTE (futur) |
+| 6.16 | Éthique de travail : ne change pas dans la carrière, ralentit l'entraînement (avis Draugar) | chat 2026-10-27 21:13 UTC | 2026-10-27 | Draugar | EN DOUTE (avis) |
+| 6.17 | Comptes liés qui revendent deux joueurs à 25 000 € (Perosinho Reborn, ZG Hooligans) ; Les Gaulois (5e division) 17 victoires sur 17, +110 : Gazelle écarte le soupçon | chat 2026-10-26 20:49 → 2026-10-28 09:17 ; 2026-10-27 13:35 UTC | 2026-10-26/28 | Erin, Filipe / Gazelle | observation ; prix de 25 000 € = pas un repère de marché |
+| 8.13 | Sélections : un manager seul de son pays, élu d'office s'il postule (Erin, 10-28 19:13) ; Stoik candidat France (RoJo a voté pour lui) | chat 2026-10-28 19:35, 20:09, 20:53 UTC | 2026-10-28 | Gazelle / Stoik | CONFIRMÉ |
+Registre : 8.5 (fin de saison 10-27) est complétée par 8.5b ; la ligne « Calendrier » de « Ce qui change nos décisions » (J18 au soir du 10-27) est périmée.

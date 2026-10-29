@@ -17,7 +17,9 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 | Cycle (finances, entraînement, blessures, transferts) | chaque soir après 21:00 (2 journées = 1 cycle) | entraînement avant le cycle suivant |
 | Choix U18 | toutes les 8 journées (2 prospects) | signer / ignorer |
 | Fin de saison | tous les 9 à 11 jours | +1 an pour tous ; salaires fixés ; sponsor changeable une fois (re-signer = pas de prime) |
-- Annonces de transfert closes au coup d'envoi suivant [Dev chat]. Revenus, coûts, entretien × division (pas les salaires) [W:Competitions].
+- **Corrigé 2026-10-29 (V-20261029-4)** : les annonces de transfert en cours ne se résolvent qu'à la **prochaine intersaison**, sans annulation possible ; ne lance aucune annonce à retirer [Dev chat Gazelle 2026-10-28].
+- **0.6.2 (2026-10-28)** : Coupe du monde 19:00 Paris (sélectionneurs seulement) ; la saison 3 s'est finie le 2026-10-28 (finale de coupe) ; intersaison en cours, date de la saison 4 inconnue ; l'aperçu et le rapport de match montrent les tactiques favorites des deux camps (à relever) ; aucun changement de moteur [V-20261029-1, -2, -9].
+- Revenus, coûts, entretien × division (pas les salaires) [W:Competitions].
 
 ## Écrans (ordre de saisie)
 - Tactique : formation d'attaque `5-1` / `4-2` (sans CB) ; défense `6-0` / `5-1` / `3-2-1` / `3-3` ; direction `mixed`, `left`, `right`, `centre`, `left + centre`, `right + centre`, `left-right` ; agressivité `Light` / `Normal` / `Hard`. Places défensives : par défaut sauf test justifié.
