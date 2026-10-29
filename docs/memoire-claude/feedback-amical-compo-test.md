@@ -1,6 +1,6 @@
 ---
 name: feedback-amical-compo-test
-description: "Amical BasketVibe = composition de TEST (jamais le cinq de coupe/ligue), même FORMAT tactique, un seul test, adversaires = « les 12 : focus 3, zone X » sans noms ni aperçu à demander"
+description: "Amical BasketVibe = composition de TEST (jamais le cinq de coupe/ligue), même FORMAT tactique, un seul test, adversaires = « les 12 : <focus en mot>, <zone> » en mots, jamais mélangé avec des chiffres, sans noms ni aperçu à demander"
 metadata:
   node_type: memory
   type: feedback
@@ -8,7 +8,7 @@ metadata:
   modified: 2026-10-29T11:02:35.943Z
 ---
 
-Pour un amical, je rends tout de suite le tableau joueur × Q (format parfait [[feedback-format-tactique-parfait]]) avec une composition de test : remplaçants qui jouent, étoiles au repos ou en prolongation, réglages par joueur repris du dernier amical (`gold.bv_saisie_joueurs`). Adversaires : une ligne « les 12 : focus 3, zone X ». Un seul test : zone (Rim/Middle/Perimeter, suivie dans `gold.bv_zone_jouee`) ou un réglage de nos joueurs.
+Pour un amical, je rends tout de suite le tableau joueur × Q (format parfait [[feedback-format-tactique-parfait]]) avec une composition de test : remplaçants qui jouent, étoiles au repos ou en prolongation, réglages par joueur repris du dernier amical (`gold.bv_saisie_joueurs`). Adversaires : une ligne « les 12 : Normal, Perimeter » (MOTS seulement ; ou chiffres seulement, jamais « focus 3 » + « zone Perimeter » mélangés). Un seul test : zone (Rim/Middle/Perimeter, suivie dans `gold.bv_zone_jouee`) ou un réglage de nos joueurs.
 
 **Why:** 2026-10-29, colère : je lui ai donné le cinq de la coupe pour l'amical, demandé l'aperçu de l'adversaire, et attendu qu'il réclame le tableau. « L'adversaire on s'en fout », « je te dis de reprendre le même format, pas les mêmes données ».
 
