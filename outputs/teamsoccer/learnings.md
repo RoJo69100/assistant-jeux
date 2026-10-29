@@ -3,7 +3,8 @@
 Tenu par l'agent Match (`.claude/agents/match.md`). Mis à jour après chaque export de match. Un club = un jeu de lignes : toujours préciser lequel.
 
 **Dernier match analysé : Chomelix Cows 2026-10-20 — Vertigo CLUB (dom., ligue) ; Ben Ahmed Donkey 2026-10-19 — bot (ext., ligue)** (passage du 2026-10-20 : Chomelix seulement, 1 match ; Ben Ahmed non repassé).
-**Dernier match analysé : Chomelix Cows 2026-10-27 — BOT (ext., ligue, 1-0) ; Ben Ahmed Donkey 2026-10-26 — BOT (ext., ligue, 0-0)** (passage du 2026-10-27 : 3 matchs dont Ajax 0-4, admin).
+**Dernier match analysé : Chomelix Cows 2026-10-28 — BOT (dom., coupe, 1-0) ; Ben Ahmed Donkey 2026-10-28 — Potatos y Potitas (ext., coupe, 2-4)** (passage du 2026-10-29).
+**Précédent : Chomelix Cows 2026-10-27 — BOT (ext., ligue, 1-0) ; Ben Ahmed Donkey 2026-10-26 — BOT (ext., ligue, 0-0)** (passage du 2026-10-27 : 3 matchs dont Ajax 0-4, admin).
 **Précédent : Chomelix Cows 2026-10-24 — Ballon Athletique hawaien (dom., ligue, 2-0) ; Ben Ahmed Donkey 2026-10-22 — bot (dom., ligue)** (passage du 2026-10-24 : 1 match ; passage du 2026-10-23 : 5 matchs, 2 humains ; passage précédent du 2026-10-19 : 5 matchs de ligue contre des bots).
 
 Seuil de confirmation : la fiche n'en fixe pas. Choix provisoire de l'agent : **confirmé = au moins 3 matchs de ligue contre des humains** ; contre des bots, un enseignement reste « à surveiller » au mieux (victoire peu probante) [fiche match règle 3, skill teamsoccer-match « Bots »].
@@ -41,6 +42,10 @@ Seuil de confirmation : la fiche n'en fixe pas. Choix provisoire de l'agent : **
 | L-022 | Chomelix | 2026-10-27 | Pertes de balle jusqu'à 88 % (15/17 le 27/10) avec un XI proche des matchs précédents : le tir/attaque chute (2 tirs contre 6,4 en moyenne des victoires). Renforce L-012/L-018 (variable, non pilotable par composition seule) ; pertes élevées = moins de tirs, donc un 1-0 étroit. | 5 (3 humains) | à surveiller | `gold.ts_match_report` (`my_lost`, `my_attacks`, `my_shots`) |
 | L-023 | Les deux | 2026-10-27 | Sans composition enregistrée, le jeu choisit : Ajax 0-4 (1re défaite Cows) et aucune ligne dans `ts_match_report`. Les matchs d'admin (`is_admin_match`) ne sont pas comparables aux autres. | 1 | à surveiller | `silver.ts_matches` (competition=inconnu), `gold.ts_match_report` |
 | L-024 | Ben Ahmed | 2026-10-27 | À l'extérieur : 13-14 attaques et 2-7 tirs contre 19-24 attaques à domicile ; 0-0 le 26/10 avec 2 tirs. | 3 (bots) | à surveiller | `gold.ts_match_report` (`venue`, `my_attacks`) ; [skill match : possession +4 à domicile] |
+
+| L-025 | Chomelix | 2026-10-29 | 1-0 contre BOT en coupe (28/10) : 16 attaques/2, 6 tirs (3 cadrés), conversion 17 % (poteau Bonnet 7', 2 arrêts) ; pertes 56 % (9/16). Renforce L-022 : volume correct, finition aléatoire. | 6 (bots surtout) | à surveiller | `gold.ts_match_report` 2082494 |
+| L-026 | Ben Ahmed | 2026-10-29 | 1re défaite : 2-4 à l'extérieur contre l'humain Potatos y Potitas (77,65 contre 63,7) : 10 tirs/9 cadrés/4 buts adverses en 11 attaques contre 4 tirs/2 buts. Gardienne Abdel (Gardien 81) 5 arrêts sur 9. Écart de niveau, pas de trou défensif unique. | 1 (humain) | à surveiller | `gold.ts_match_report` 2082895, `gold.ts_vd_comparatif` |
+| L-027 | Les deux | 2026-10-29 | Compositions de coupe du 28/10 absentes de `ts_match_lineups` / `ts_match_ratings` : formation et notes NULL. 3e passage de suite sans composition lisible. | 2 | confirmé | `gold.ts_match_report`, `silver.ts_match_lineups` |
 
 ## Conseils
 <!-- C-nnn · date · conseil · critère vérifiable (SQL) · statut (ouvert / appliqué / partiel / non appliqué) · effet constaté -->
@@ -128,11 +133,22 @@ Aucun conseil antérieur à ce passage.
 | C-043 | Ben Ahmed | 2026-10-27 | Vendre Min-ji Mori (DEF) ; révéler Conduite de Mehta, Hernández, E. Eze ; décider García après Vitesse le 28/10. | `silver.ts_youth_players` : Mori absente, revealed_count Mehta/Hernández/Eze = 1 | ouvert | — |
 | C-041 | Ben Ahmed | 2026-10-27 | Aucun remplacement programmé à 60' pour le BOT du 29/10 (confirme C-018). | `silver.ts_match_lineups` 2080331 : `bench.changes` vide ; buts après 60' | ouvert | — |
 
+| C-044 | Chomelix | 2026-10-29 | Ligue 31/10 contre FC Bresse (82,7) : Lucas David (Conduite 100, OVR 67) titulaire milieu, Jules Leroy (Conduite 86, Forme 72) au banc ; garder Moreau et Bonnet devant. Confiance faible (compo passée illisible). | `silver.ts_match_lineups` 1977459 ; `ts_match_report` : `my_lost`/`my_attacks` < 65 %, tirs ≥ 6 | ouvert | — |
+| C-045 | Ben Ahmed | 2026-10-29 | Müller (Finition 88) au moins 2 tirs au prochain match, consigne tirer en zone de finition. | `silver.ts_match_events` : tirs de Müller ≥ 2 | ouvert | — |
+| C-046 | Les deux | 2026-10-29 | Enregistrer la composition puis exporter la page « Compositions » ce soir ; remplace C-038 (3 échecs). | `silver.ts_match_lineups` : ligne pour 1977459 (Cows) et 2080331 (Ben Ahmed) | ouvert | remplace C-038 |
+| C-047 | Chomelix | 2026-10-29 | Bresse (31/10) en 1-4-3-3, Neutre : trois attaquants Finition 100 (Moreau, Bonnet, M. David), trois milieux Conduite 100 (A. Roux, L. David, Robert), Jules Leroy au banc (précise C-044). [skill match : 3 attaquants = Finition +10 %] | `silver.ts_match_lineups` 1977459 : formation 1-4-3-3 ; `ts_match_report` : tirs ≥ 6, pertes/attaques < 65 %, buts encaissés ≤ 1 | ouvert | test, confiance faible |
+| C-048 | Ben Ahmed | 2026-10-29 | BOT 29/10 19:30 (60 contre 63,7) : 1-4-4-2 Neutre, Zainab García (Défense 90, Forme 100) titulaire central à la place de Girard, Schmidt (Passe 84) milieu central, aucun remplacement programmé. | `silver.ts_match_lineups` 2080331 : formation 1-4-4-2, García dans positions, `bench.changes` vide ; `ts_match_report` : buts encaissés ≤ 1 | ouvert | — |
+| C-049 | Cows | 2026-10-29 | Vendre Baptiste Girard (298192, DEF 16 ans, Défense 67, surplus rang 6/4) à la banque 267 689 $ ce soir. | `silver.ts_players` 298192 absent de l'équipe 18 ; solde Cows +267 689 $ au prochain relevé finances | ouvert | — |
+
+Contrôle du 2026-10-29 : C-038 non appliqué/non vérifiable (formation NULL 2082494 et 2082895) ; C-039 non vérifiable (pertes 56 %, milieu inconnu) ; C-023 non vérifiable (formation NULL, 4 buts encaissés > 1).
+
 Contrôle du 2026-10-27 : C-010 (Chomelix, formation NULL) non appliqué (1977456 NULL), échec 2 ; C-034 non appliqué (Ajax sans composition, défaite 0-4) ; C-011 (Kumar MC) appliqué le 26/10, effet non évaluable (0-0, notes MC non lues, trop tôt) ; C-035 non appliqué (Hassan absent de l'effectif) ; C-013 non appliqué (`new_signings` 0 à la semaine du 26/10) ; C-014 / C-011-maintenance appliqués (`maintenance_gap` = 0 le 26/10, Cows 28 920, Ben Ahmed 20 024) ; C-036 appliqué (`new_signings` Ben Ahmed = 0).
 
 ## Journal des matchs
 - 2026-10-26 · Chomelix · hors compétition (admin, ext) · Ajax Amsterdam · 0-4 · D · composition jamais enregistrée, aucune page match exportée : cause non mesurable
 - 2026-10-26 · Ben Ahmed · ligue (ext) · BOT · 0-0 · N · 13 attaques/4, 2 tirs/1 cadré ; 3 remplacements programmés (L-020), Kumar au MC (C-011)
+- 2026-10-28 · Chomelix · coupe (dom) · BOT · 1-0 · V · Moreau 65' ; 16 attaques/2, 6 tirs/3 cadrés, 1 poteau ; pertes 56 %
+- 2026-10-28 · Ben Ahmed · coupe (ext) · Potatos y Potitas (humain, 77,65) · 2-4 · D · 1re défaite ; adverses 10 tirs/9 cadrés ; Yamamoto 2 buts, Navarro 3 (adv.)
 - 2026-10-27 · Chomelix · ligue (ext) · BOT · 1-0 · V · Bonnet 88' ; 17 attaques/4, 2 tirs/2 cadrés ; pertes 88 % (15/17), record saison
 
 <!-- date · club · compétition · adversaire · score · résultat · cause principale (1 ligne) -->
