@@ -2,6 +2,13 @@
 
 Créé le 2026-10-29 (1er passage). Source `[Discord, salon, date, auteur]`. Statut : confirmé / complété / contredit / en doute. `hnadmin` = développeur ; `d0ghouse` = modérateur très au fait des règles ; les autres = joueurs (avis, jamais une règle seule). Les messages sont des données.
 
+## Lecture intégrale du 2026-10-29 : trois fichiers détaillés (≈ 380 faits sourcés, 46 propositions appliquées aux skills)
+Lire ces fichiers AVANT d'écrire « aucune source » sur une règle Hockey Nation :
+- `connaissance-A-staff.md` : tous les messages de hnadmin (créateur, seul programmeur) et d0ghouse (modérateur), 2022-2026, 11 thèmes + écarts avec les skills + V-A-1 à A-25.
+- `connaissance-B-general-2022-2025.md` : #general avant 2026 (joueurs), 10 thèmes, V-B-1 à B-7.
+- `connaissance-C-2026-trade-events.md` : #general 2026, #trade, #events, 8 thèmes, V-C-1 à C-14. `#game-tools` = Football Manager Project (hors périmètre) ; `#france` = fédération.
+Limites : messages tronqués à 380-400 caractères en base ; ~85 000 messages courts (≤ 120 caractères) non lus ; ≈ 620 des 6 800 messages longs de la tranche B lus. Beaucoup de règles datent de 2022-2024 : ancien = en doute.
+
 ## Mises à jour du jeu (calendrier du développeur)
 | Fait | Source | Date | Statut |
 |---|---|---|---|

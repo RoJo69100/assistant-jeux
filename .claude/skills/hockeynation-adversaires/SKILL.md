@@ -39,3 +39,6 @@ Tableau `point fort | preuve | notre réponse` (3 lignes au plus), puis un régl
 - Staffs complets (4 coachs par club) : `silver.hn_club_staff`, `gold.hn_coach_specials`, `gold.hn_club_compare`.
 - Matchs joués contre eux : `silver.hn_game_detail` (boxscore, players, coaches).
 - Marché, trade chat : `silver.hn_market_players`, `silver.hn_trade_chat`.
+
+## [Veille intégrale 2026-10-29] Note d'équipe (V-A-19, V-B-3, V-C-6)
+- **Note d'équipe** : seuls les 18 meilleurs patineurs comptent pour OFF / DEF / PHY (6 groupes de pondération par rang) ; GOA = 80 % du meilleur gardien + 20 % du 2e ; poste vide compté à 25 ; l'expérience n'entre pas encore. Avis talonflame1 (2026-03-26) : moyenne des 20 meilleurs par compétence — écart 18/20 non tranché. Ajouter un joueur ne baisse pas la note. Pour un adversaire : regarder le gardien n° 1 en priorité, puis les 18 patineurs au-dessus du lot. [d0ghouse 2022-11-11, 2023-05-23 ; mr.president13 2024-07-29 ; V-A-19]
