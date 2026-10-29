@@ -32,3 +32,8 @@ Lineups B et C = copie exacte de A (rôle inconnu).
 2. Deux meilleurs FOF parmi les attaquants (mises au jeu).
 3. Gardien titulaire et remplaçant ; nombre de matchs d'affilée avant fatigue (= END).
 4. Lignes FRM, U21, U17 automatiques : seul levier = poste principal (« Swap position »).
+
+## Rendu figé et objectif (2026-10-29, « ne change jamais le rendu »)
+- Le rendu (tableaux, ordre, colonnes, pastilles, « jeu : X » entre parenthèses) ne change plus : mêmes vues, mêmes blocs, même ordre à chaque fois.
+- Objectif permanent : **la meilleure tactique possible**, et la meilleure équipe possible. Chaque passage Transferts / Effectif / Match compare l'équipe à `gold.hn_tactique_effectif_poste` : une cible d'achat ou d'échange se juge sur ce qu'elle change dans la lineup (poste, END, FOF, PP/PK), puis la lineup cible est mise à jour (procédure ci-dessus).
+- Lineup v2 saisie par l'utilisateur le 2026-10-29 (déclaré) ; à vérifier au prochain export des lineups (`gold.hn_tactique_controle`).
