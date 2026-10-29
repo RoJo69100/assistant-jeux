@@ -63,3 +63,8 @@ Sources : **[W:Rubrique]** = wiki officiel du jeu, lu en entier le 2026-10-18 (c
 ## [Veille 2026-10-27] Remplacements (V-20261027-1)
 - Remplacements **automatiques** : on choisit la composition avant le match, pas pendant [W:Match « Where we simplify »]. Un remplaçant par rôle entre sur blessure, exclusion ou rouge, une fois par match [W:Injuries « Substitutes »] ; confirmé en SQL sur 18 matchs (aucune entrée sans blessure ni rouge).
 - Stamina baisse le rendement au fil du match [W:Attributes], sans chiffre ; **aucune source** pour un remplacement par fatigue (hypothèse non soutenue : nos 2e mi-temps ne s'effondrent pas en moyenne).
+
+## [Veille 2026-10-29] Mises à jour (V-20261029-2, -7, -9)
+- **Fin de saison (0.6.2)** : le dernier match est le tour 18 de ligue, joué après les deux finales (coupe et Coupe du monde) ; la saison ne se termine qu'après la finale de coupe (saison 3 : 2026-10-28, pas le 10-27). L'intersaison a deux étapes : élection des sélectionneurs (« Managers take office »), puis démarrage de la saison. [Devlog 2026-10-28 12:08 UTC ; Dev chat 2026-10-28 11:36 et 18:31 UTC ; V-2]
+- **Tireur de 7 m** : décidé par **Shooting et Technique** (et non « meilleur tireur ») ; si un autre joueur dépasse le tireur désigné, la simulation le choisit. Places LB/RB (centre ou demi) : à lire dans l'onglet Défense. Le rapport de match n'indique pas qui est expulsé (ajout prévu avec les stats de joueurs). [Dev chat Gazelle, 2026-10-27 13:36, 09:16 et 09:28 UTC ; V-7]
+- **Aperçu et rapport (0.6.2)** : le scouting montre les **tactiques favorites** de chaque camp, le rapport de match les tactiques **les plus utilisées** dans ce match, l'en-tête du club ses favorites. Aucun changement de moteur annoncé. [Devlog 2026-10-28 12:08 UTC ; V-9]
