@@ -24,8 +24,8 @@ Lineups B et C = copie exacte de A (rôle inconnu).
 - `silver.hn_lineups`, `gold.hn_player_fit`, `silver.hn_players` (END, FOF, DSC, compétences), `gold.hn_position_keys`.
 
 ## Il me manque
-- Libellés des échelles du plan de jeu (tempo, mentalité, agressivité, retrait du gardien, présences, pression) : écran Plan de jeu, lire et exporter.
-- Capitaine et assistants : non présents dans l'export des lineups.
+- Le sens exact de 0/1/2 pour chaque réglage (lu dans l'ordre des libellés, voir mémoire `reference-hn-plan-de-jeu-libelles`) : à confirmer par un changement test.
+- Capitaine et assistants : attributs cachés (leadership), non lisibles ; choix par expérience, aucun écart affiché.
 
 ## Livrable
 1. Lignes A, B, C poste par poste, **joueur au poste où ses talents collent** ; aucun joueur hors de ses postes (−20 %).
