@@ -102,8 +102,12 @@ seuils:
   cap_space: "jamais négatif"
 
 vues_gold:
-  agenda: gold.hn_calendar
+  agenda: "gold.hn_today (jour de saison) + gold.hn_calendar"
   alertes: gold.hn_daily_alerts
+  etat_exports: gold.hn_exports_state
+  saisie: "gold.hn_saisie_lignes (lignes PRO enregistrées, contrôle joueur parti / hors poste)"
+  offres_en_cours: silver.hn_trade_offers
+  plafond_direct: silver.hn_cap_now
   rapport_match: "silver.hn_game_detail (pas de vue gold)"
   base_transferts: gold.hn_trade_value
   resultat_champ: "silver.hn_games.my_result (W/L, NULL si pas notre match ; filtrer le niveau d'équipe)"

@@ -46,5 +46,5 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 - [x] Étude des adversaires (brief `2026-10-23-adversaires.md`, 4 clubs de l'autre ligue ; schedules et Team Ratings à exporter pour aller plus loin)
 
 ## F. Routine
-- [ ] « Que faire aujourd'hui » Hockey Nation (agenda par jour de saison)
+- [x] « Que faire aujourd'hui » Hockey Nation (agenda par jour de saison) (vérifié le 2026-10-29 : `gold.hn_today` donne le jour 5, `gold.hn_daily_alerts` sort les 2 offres reçues et les 7 cases vides de la lineup A, `gold.hn_exports_state` les exports périmés ; résumé `docs/fiches/hockeynation/resume.md`)
 - [ ] Première chaîne d'agents complète en medium + Sonnet
