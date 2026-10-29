@@ -31,7 +31,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 
 ## Écrans (ordre de saisie)
 - Lineups PRO A, B, C : L1–L4 (LW, C, RW), paires D1–D3 (LD, RD), G (titulaire, remplaçant), PP1, PP2, PK1, PK2, PK 3 hommes 1–2, 4 contre 4 L1–L2, EXT. Un joueur une seule fois par type d'unité.
-- Plan de jeu : tempo, mentalité, agressivité, retrait du gardien, durée des présences, pression (libellés des échelles encore à lire).
+- Plan de jeu : mentality (defensive/balanced/offensive), puck pressure (light/normal/heavy), tempo (slow/normal/fast), aggression (calm/normal/aggressive), shift length (short 35-40 s / normal 41-49 s / long 50-55 s), pull goalie 1 et 2 buts de retard (never/sometimes/always). Libellés : mémoire `reference-hn-plan-de-jeu-libelles`.
 - Coach pick order par équipe ; Training PRO / FRM : compétence + coach par joueur.
 
 ## Vues prêtes (lis-les avant de calculer toi-même ; colonnes choisies, `LIMIT`)
@@ -64,3 +64,5 @@ Veille → Match → Effectif → Finances-personnel → Académie → Entraîne
 - Lignes enregistrées : un `player_id` sans nom = joueur parti (le jeu met un amateur).
 
 - **Rendu scouts [U, 2026-10-29]** : à « on fait quoi Hockey Nation », afficher `gold.hn_scout_liste` EN TABLEAU (une ligne par scout, colonnes top poste+nation / poste / nation avec les joueurs nommés et leur rang) puis `gold.hn_scout_board`. Jamais « pour voir la liste, requête X ». Rachat Eskelinen fait (pénalité 1 285 000 $ par saison S27-S29, dans `silver.hn_declared`).
+
+- **Tactique PRO, rendu FIGÉ [U, 2026-10-29, « ne change jamais le rendu », « TRÈS satisfait »]** : toujours lire `gold.hn_tactique_effectif_poste` (tous les joueurs par poste), `gold.hn_tactique_rendu` (lignes, gardiens, PP1/PP2, PK4, PK3, 4v4, EXT, rôles, « (jeu : X) », 🟥 case vide / 🟧 à changer), `gold.hn_tactique_plan_rendu`, `gold.hn_tactique_controle`, et les afficher tels quels. Objectif permanent : meilleure tactique et meilleure équipe possibles ; trades, effectif et analyse de matchs se jugent sur leur effet dans la lineup cible (procédure de mise à jour : `docs/fiches/hockeynation/tactique.md`). Capitaine et assistants = cachés. Lineup v2 saisie le 29/10 ; shift length short = test (revenir à normal si la L1 encaisse plus de buts après 10 matchs).
