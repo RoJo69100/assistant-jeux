@@ -25,3 +25,6 @@ Sources : **[G:Draft]**, **[G:Scouting]**, **[G:Calendar]** (guide du 30/09/2026
 
 ## Vues
 `silver.hn_draft_class`, `silver.hn_draft_picks` (préférences), `gold.hn_draft_board` (ligue, talents vs poste, état du scouting), `silver.hn_scouts`, `silver.hn_scouting_budget`.
+
+## [Veille 2026-10-29] Mise à jour (V-20261029-10)
+- **Pré-instructions** : sans cible principale, la sim suit le classement pré-draft du GM combiné aux besoins de poste réglés (d0ghouse, 2026-10-24 10:46). **U17** : chaque saison 7 jeunes de 15 ans, on en choisit un, les 6 autres reçoivent un poste pour qu'aucun poste ne manque (5 draftables dans 3 saisons, 2 non draftables joignent l'U21) (hnadmin, 2026-09-19). [Discord #general]
