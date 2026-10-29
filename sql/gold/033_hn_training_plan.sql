@@ -1,6 +1,7 @@
--- Hockey Nation (2026-10-29) : plan d'entraînement PRO + FRM sans agent.
--- Par joueur : compétence clé du poste principal, non plafonnée, talent fort d'abord puis meilleur coach disponible ;
--- coach = meilleur niveau dans cette compétence parmi les 4 coachs de l'équipe ; ordre de choix = plus jeunes d'abord, puis note.
+-- Hockey Nation (2026-10-29) : plan d'entraînement des 4 équipes sans agent.
+-- Compétence (PRO/FRM seulement ; U21/U17 = hasard) : clé du poste non plafonnée avec un coach compétent (talent fort d'abord), sinon la meilleure non plafonnée.
+-- Coach = meilleur niveau dans cette compétence parmi les coachs de l'équipe.
+-- Ordre de choix = marge de progression attendue d'abord ((pot_min + pot_max) / 2 - note, gold.hn_player_potential), puis âge, puis note.
 -- Sources : dernier /team/:id/roster de chaque équipe, dernier /club/:id/coaching-staff, gold.hn_position_keys.
 create or replace view gold.hn_training_plan with (security_invoker = true) as
 with ros as (
@@ -26,10 +27,17 @@ with ros as (
 ), best as (
   select distinct on (team_level, player_id) *
   from cand order by team_level, player_id, (cle and niveau_coach > 0) desc, talent_fort desc, niveau_coach desc, niveau
+), pot as (
+  select player_id::text as player_id, pot_min, pot_max, round((pot_min + pot_max) / 2.0 - rating, 1) as marge
+  from gold.hn_player_potential
 )
-select team_level, row_number() over (partition by team_level order by age, note desc) as ordre,
-       joueur, age, note, pos as poste, skill as competence, niveau, talent_fort, coach, niveau_coach, cle
-from best
+select b.team_level,
+       row_number() over (partition by b.team_level order by coalesce(pot.marge, 0) desc, b.age, b.note desc) as ordre,
+       b.joueur, b.age, b.note, b.pos as poste, b.skill as competence, b.niveau, b.talent_fort, b.coach, b.niveau_coach, b.cle,
+       pot.pot_min, pot.pot_max, pot.marge
+from best b left join pot on pot.player_id = b.player_id
 union all
-select pl.team_level, null, pl.joueur, pl.age, pl.note, pl.pos, 'toutes plafonnées', null, null, null, null, null
-from pl where not exists (select 1 from best b where b.player_id = pl.player_id);
+select pl.team_level, null, pl.joueur, pl.age, pl.note, pl.pos, 'toutes plafonnées', null, null, null, null, null,
+       pot.pot_min, pot.pot_max, pot.marge
+from pl left join pot on pot.player_id = pl.player_id
+where not exists (select 1 from best b where b.player_id = pl.player_id);
