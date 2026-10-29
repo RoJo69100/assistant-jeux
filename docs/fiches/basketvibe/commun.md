@@ -63,6 +63,18 @@ Ajouts du lecteur-exports 2026-10-26 (export de 20:08 UTC) :
 | `popularity`, `weekly_medical_staff_cost`, `weekly_medical_staff_peak_cost`, `transfer_lock` | page typée `academy` (en réalité finances) | 0,67 ; 60 000 ; 60 000 ; false | Le journal montre 85 000 de personnel médical le 25/10 contre 60 000 affichés : écart à expliquer |
 | `skills_visibility`, `is_academy_junior`, `primary_display` / `secondary_display` | `training`, `body.players[]` | « full » ; false | Affichage entier des compétences (skill_display) vs `stats` décimales |
 
+Ajouts du lecteur-exports 2026-10-29 (export de 09:59-10:01 UTC) :
+
+| Élément | Où | Valeur actuelle | Effet |
+|---|---|---|---|
+| Moteur v5 (amicaux seulement) | `news`, article du 28/10 | fin de quart sans 20 s mortes, tirs de fin de quart (buzzer, heaves), pas de possession > 24 s, derniers tirs aux joueurs à focus élevé | Annonce du développeur ; effet sur nos scores inconnu : mesure = points par quart Q4 des amicaux depuis le 28/10 |
+| `skills_visibility` « bracket » (adversaire) | cup `preview`, `away_players[].skill_brackets` | PSG : fourchettes de 20 points par compétence (ex. Robert SG 2PT 81-99) ; nos joueurs « full » | Les compétences adverses ne sont pas exactes en coupe : lecture par fourchette |
+| `/cup-fixtures/<id>/match-tactics` | page tactique de coupe (`presets`, `defensive_focus`, `player_directives`, `has_saved_match_tactics`) | PSG : `has_saved_match_tactics` false, focus `normal` / `area_step` 3 pour les 13 adverses | Tactique de coupe enregistrable par match ; non lue par silver |
+| Notification `sponsor_offers_available` | `notifications` | saison 2, échéance de choix 02/11 18:45 UTC | Choix du sponsor : à trancher aujourd'hui (agent Finances) |
+| Notification `academy_day_ready` | `notifications` | score académie 59 -> 70, investissement 100 000, rapport non signé remplacé | Rapport remplacé : voir agent Académie |
+| Notification `transfer_listing_bid` | `notifications` | Klein (nôtre, C) : offre 1 000 de Smart Signs. | Mise en vente en cours |
+| Réglage de club « masquer la vue terrain » | `news`, article du 28/10 | non exporté | Affichage seulement |
+
 ## Sorties
 - Briefs : `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md`.
 - Journal : `outputs/basketvibe/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`).

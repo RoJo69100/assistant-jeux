@@ -18,3 +18,4 @@
 - [Initiative multi-jeux](feedback-initiative-multi-jeux.md) — faire pour un jeu = vérifier et compléter les autres sans demander (A-10) ; transferts SZL/TS à faire
 - [Effectif, V/D, vue gold systématique](feedback-effectif-questions-vue-gold-systematique.md) — me poser seul les questions effectif (améliorer/vendre/acheter), analyse V/D poussée, vue gold dès qu'un gain de temps existe
 - [Horizon aujourd'hui/demain](feedback-horizon-aujourdhui-demain.md) — l'utilisateur n'agit que le jour même : toute action = aujourd'hui, jamais demain (2026-10-27)
+- [Amical = compo de test](feedback-amical-compo-test.md) — pas le cinq de coupe, même format, adversaires « les 12 : focus 3, zone X », aucun export à demander (2026-10-29)

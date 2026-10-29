@@ -12,7 +12,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 |---|---|---|
 | Ligue | lun / mer / sam 20:00, verrou 19:45 ; saison 2 dès lun 02/11, moteur **v4** | oui, preset « League Tactic », à re-sélectionner sur chaque match planifié |
 | Coupe | ex. 28/10 18:00 | oui, preset « League Tactic » (même id) |
-| Amical | chaque jour 08:00, verrou 07:45, moteur v4 | composition complète + réglages de test, **pas de preset** ; un seul test à la fois (zone Rim/Middle/Perimeter) |
+| Amical | chaque jour 08:00, verrou 07:45, moteur v4 | composition de TEST complète (jamais le cinq de la coupe/ligue), réglages repris du dernier amical, **pas de preset**, adversaire sans importance (aucun aperçu à demander) ; un seul test à la fois (zone Rim/Middle/Perimeter ou un réglage de nos joueurs). Zone jouée : `gold.bv_zone_jouee` |
 | Entraînement, salaires, personnel | dimanche 04:00 | réglages avant 04:00 |
 | Rapport d'académie | jeudi 09:00 | — |
 - Ligue ≠ amical : fatigue et expérience ≈ 1/10 en amical, pas de blessure [M§1.2]. Ne mélange pas v3 (ligue ≤ 26/10) et v4.
@@ -32,6 +32,7 @@ Veille → Match → Effectif → Finances-personnel → Académie / Entraîneme
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Rendu** : maintenant + demain seulement (R-1) ; des actions « fais X » avec joueur, valeur, heure limite (R-2) ; tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action (R-3) ; saisie complète dans l'ordre de l'écran (R-4) ; aucun « si », aucun seuil générique, donnée manquante = « il me manque X, fais l'export Y » (R-5) ; court (R-6) ; ne jamais redemander ce que `outputs/basketvibe/fait-AAAA-MM-JJ.md` ou la base prouvent (R-7) ; une décision, le doute en une demi-ligne avec ce qui prouvera l'erreur (R-8) ; tout chiffre vérifié en base (R-9).
 - **Tactique (R-10)** : tableau joueur × quart-temps (Joueur, Poste, Q1–Q4, Prol., Min, Off. focus, Rôle, Tir, Agress.) + tableau adversaires (focus 1–5 ET zone), pour ligue, coupe et amical ; jamais « preset inchangé ».
+- **Amical, tableau adversaires** : une ligne « les 12 : focus 3, zone X » (pas de noms). Tableau joueurs = format R-10 avec une composition de test ; la vue `gold.bv_saisie_joueurs` donne les réglages du dernier amical enregistré (lacune connue : pas d'export de tactique pour les amicaux du 28 et du 29/10).
 - **Décider** : série de défaites = changement fort (A-1) ; défaite = analyse chiffrée joueur par joueur contre toute la saison (A-2) ; Finances dit quoi faire de l'argent (A-3) ; chaque rendu propose un achat / une vente nommé·e avec prix max, **jamais d'enchère ni de vente lancée sans accord** (A-4) ; nouveauté = test en amical (A-6) ; conseils suivis `C-nnn` → `L-nnn` dans `outputs/basketvibe/learnings.md`, deux échecs = conseil réécrit (A-7) ; retard mesuré contre les autres clubs (A-8) ; chercher dans toutes les sources avant « absent » (A-9).
 - **Coût** : brief d'une page, résumé de 10 lignes, delta du jour seulement.
 
@@ -39,3 +40,4 @@ Veille → Match → Effectif → Finances-personnel → Académie / Entraîneme
 - Personnel médical : 85 000 au journal le 25/10 contre 60 000 affichés (à confirmer le 01/11).
 - Page « academy » parfois en réalité la page finances (26/10).
 - Options d'écran observées et non documentées : → source `commun.md` § Options observées (lecteur-exports seulement).
+  Ajouts du 29/10 : moteur **v5 en amicaux seulement** (annonce du 28/10 : pas de 20 s mortes, tirs de fin de quart ; effet inconnu, mesure = points de Q4 des amicaux) ; compétences adverses de coupe en **fourchettes de 20 points** (`skill_brackets`) ; tactique de coupe enregistrable par match (`/cup-fixtures/<id>/match-tactics`, lue par silver depuis la migration 022) ; zone réellement jouée : `gold.bv_zone_jouee`.
