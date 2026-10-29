@@ -2,6 +2,9 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-29
+43. RÉCIDIVE (règle 41 + mémoire « format tactique parfait ») : la saisie tactique se rend depuis `gold.bv_saisie_joueurs` / `bv_saisie_adversaires` (ordre de l'écran, un tableau joueur × Q + un tableau adversaires focus + zone), avec les changements du brief appliqués par-dessus ; jamais le tableau libre d'un brief d'agent. Les actions gardent 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI (pastille + mot). La zone vient de l'export (« Middle (3) » en coupe), pas du brief.
+
 ## 2026-10-27 (soir)
 42. Vitesse : agents → `docs/fiches/<jeu>/resume.md` au lieu de 4 fichiers ; 3 agents au plus ; tableau de données = vue gold sans agent ; vérification = requête du même tour ou `synthese`, `verificateur` seulement sans l'un ni l'autre (CLAUDE.md « Vitesse »). À mesurer au prochain passage avec `optimisation` contre `outputs/optimisation/2026-10-27-basketvibe.md`.
 41. Rendu de saisie BasketVibe = `select * from gold.bv_saisie_joueurs` / `gold.bv_saisie_adversaires` (filtre `kind`, `match_day`, `order by ordre`), sans agent. Coût mesuré en fin de session par l'agent `optimisation` (`pipelines/mesure_session.py`) ; mesure du 27/10 : 85 min, contexte max 108 %, 9 agents = 8,2 M tokens relus, `basketvibe.yaml` relu par 8 agents.
