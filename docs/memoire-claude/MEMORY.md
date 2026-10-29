@@ -19,3 +19,5 @@
 - [Effectif, V/D, vue gold systématique](feedback-effectif-questions-vue-gold-systematique.md) — me poser seul les questions effectif (améliorer/vendre/acheter), analyse V/D poussée, vue gold dès qu'un gain de temps existe
 - [Horizon aujourd'hui/demain](feedback-horizon-aujourdhui-demain.md) — l'utilisateur n'agit que le jour même : toute action = aujourd'hui, jamais demain (2026-10-27)
 - [Amical = compo de test](feedback-amical-compo-test.md) — pas le cinq de coupe, même format, adversaires « les 12 : focus 3, zone X », aucun export à demander (2026-10-29)
+- [Hockey Nation plafond S27](project-hockeynation-cap-s27.md) — rachat Eskelinen 1 285 000 $/saison S27-S29, offres coachs 29/10, silver.hn_declared
+- [Hockey Nation rendu](feedback-hockeynation-rendu-tableaux.md) — tableaux par équipe, scouts avec joueurs en colonnes, règles coachs U17/U21

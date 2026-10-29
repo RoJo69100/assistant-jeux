@@ -1,3 +1,4 @@
+- 2026-10-29 Hockey Nation : tableaux par équipe TOUJOURS (puces = récidive 2), afficher les listes au lieu de renvoyer à une vue, règles coachs par expérience (U21 ≤ 7, U17 ≤ 4), joueurs bloqués (Carpentier, Jasiński) lus dans silver.hn_declared avant tout plan.
 # Règles apprises (à lire en début de session — mises à jour par la rétro de fin de session)
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
