@@ -5,7 +5,7 @@
 create or replace view gold.hn_training_plan with (security_invoker = true) as
 with ros as (
   select distinct on (body->>'level') body->>'level' as team_level, body
-  from silver.hn_api where route = '/team/:id/roster' and body->>'level' in ('PRO', 'FRM')
+  from silver.hn_api where route = '/team/:id/roster' and body->>'level' in ('PRO', 'FRM', 'U21', 'U17')
   order by body->>'level', captured_at desc
 ), pl as (
   select r.team_level, p->>'id' as player_id, p->>'lastname' as joueur, (p->>'age')::int as age, (p->>'rating')::int as note,
@@ -15,7 +15,7 @@ with ros as (
   select k.key as team_level, c->>'lastname' as coach, s->>'id' as skill, (s->>'lvl')::int as lvl
   from (select body from silver.hn_api where route = '/club/:id/coaching-staff' order by captured_at desc limit 1) a,
        jsonb_each(a.body->'staff') k, jsonb_array_elements(k.value) c, jsonb_array_elements(c->'skills') s
-  where k.key in ('PRO', 'FRM')
+  where k.key in ('PRO', 'FRM', 'U21', 'U17')
 ), cand as (
   select pl.*, s->>'id' as skill, (s->>'lvl')::int as niveau, (pl.forts ? (s->>'id')) as talent_fort,
          exists (select 1 from gold.hn_position_keys k where k.position = pl.pos and k.skill = s->>'id') as cle,
