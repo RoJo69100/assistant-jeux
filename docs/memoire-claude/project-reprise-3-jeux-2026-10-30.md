@@ -17,3 +17,5 @@ Demandé le 2026-10-29 : « on fera demain, mets-le dans la première chose à f
 
 **Why:** la session du 29/10 s'est arrêtée avant le lancement ; l'utilisateur n'a pas pu continuer ce soir.
 **How to apply:** au début de session, demander `/effort medium` (règle 26), charger deja-fait, relire ce plan, annoncer la durée, puis commencer par Six Zero League. Voir [[feedback-horizon-aujourdhui-demain]].
+
+**Ajout 2026-10-29 (soir)** : avant les agents, séance de conception en Opus pour SZL puis Team Soccer : créer les vues gold du modèle Hockey Nation (`*_today`, `*_exports_state`, `*_saisie_*`) car SZL n'a que `sz_agenda` (11 vues) et TS que `ts_agenda` + `ts_saisie_composition` (20 vues) contre 34 pour HN et 48 pour BV. Team Soccer : marché féminin à ré-exporter (dernier relevé 27/10), état des 8 enchères Cows absent en base, vente Girard (267 689 $) à décider, veille la plus ancienne (27/10). Retour Sonnet + medium ensuite.
