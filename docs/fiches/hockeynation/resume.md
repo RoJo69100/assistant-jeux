@@ -62,3 +62,5 @@ Veille → Match → Effectif → Finances-personnel → Académie → Entraîne
 - `hn_scouts` / `hn_scouting_budget` ne bougent que si l'utilisateur exporte Scouting : regarder la date du relevé avant d'écrire « 2 scouts ».
 - `gold.hn_today.day1` se déduit de la fermeture de la fenêtre I (jour 35) : à revoir à l'ouverture de la fenêtre II (jour 51).
 - Lignes enregistrées : un `player_id` sans nom = joueur parti (le jeu met un amateur).
+
+- **Rendu scouts [U, 2026-10-29]** : à « on fait quoi Hockey Nation », afficher `gold.hn_scout_liste` EN TABLEAU (une ligne par scout, colonnes top poste+nation / poste / nation avec les joueurs nommés et leur rang) puis `gold.hn_scout_board`. Jamais « pour voir la liste, requête X ». Rachat Eskelinen fait (pénalité 1 285 000 $ par saison S27-S29, dans `silver.hn_declared`).
