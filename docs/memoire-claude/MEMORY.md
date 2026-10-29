@@ -22,3 +22,4 @@
 - [Hockey Nation plafond S27](project-hockeynation-cap-s27.md) — rachat Eskelinen 1 285 000 $/saison S27-S29, offres coachs 29/10, silver.hn_declared
 - [Hockey Nation rendu](feedback-hockeynation-rendu-tableaux.md) — tableaux par équipe, scouts avec joueurs en colonnes, règles coachs U17/U21
 - [HN tactique rendu fixe](feedback-hn-tactique-rendu-fixe.md) — vues gold.hn_tactique_*, même rendu à chaque fois, lineup mise à jour après chaque étude de matchs
+- [HN plan de jeu : libellés](reference-hn-plan-de-jeu-libelles.md) — mentality/pressure/tempo/aggression/shift/pull goalie en toutes lettres, instructions en match, capitaine = caché (2026-10-29)
