@@ -133,3 +133,6 @@ Valeur de la carte → forme → fatigue → expérience → minutes lourdes →
 
 ## Âge
 - La progression ralentit avec l'âge ; **0 gain à partir de 30 ans** ; déclin chaque dimanche à partir de 31 ans ; retraite à la fin de la saison des 38 ans [M§8.2, §8.5, §4]. Détail dans basketvibe-entrainement.
+
+## [Veille 2026-10-29] Blessures (V-20261029-5)
+- Chaque blessure a des **points de blessure** décomptés chaque jour ; les médecins en retirent davantage, donc la durée est fractionnaire. L'âge n'est pas un facteur de blessure (le développeur envisage de l'ajouter). [Dev 2026-08-31 15:43, general ; 2026-08-10 16:22, help]
