@@ -20,5 +20,6 @@ Sources : `gold.ts_agenda` et `gold.ts_daily_alerts` (`sql/gold/018_ts_agenda.sq
 ## Format de réponse
 - **Pas d'heures** : écris « Ce soir : » puis **au plus 6 puces simples**, dans l'ordre logique (exports, compositions des prochains matchs, académie, agents), en nommant le club, sans `HH:MM`, sans « avant », « après » ni « il est … ».
 - Puis les alertes de priorité 1, une ligne chacune.
-- Termine par « Exports de ce soir : … ».
+- Pas de ligne « Exports de ce soir » ni de « puis / après » (retiré le 2026-10-30 : redite et temporalité) ; un export figure dans le tableau seulement s'il est à faire maintenant.
+- Une composition à enregistrer se rend **complète** : formation, style, onze par emplacement 0–10 dans l'ordre de l'écran (GB, DEF, MIL, ATT), consignes des 5 zones par joueur, banc de 6, remplacements programmés. Jamais le onze seul.
 - Pas de règle de jeu sans source ; pas de recommandation nouvelle : seulement ce que les briefs ont validé. Si une décision manque, propose l'agent (Tactique, Match, Académie, Finances, Entraînement, Transferts), avec le jeu et le club dans la demande.
