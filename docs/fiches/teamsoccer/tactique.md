@@ -36,6 +36,8 @@ Base : [skill teamsoccer-match § Avancé] 5 zones (Ultra défensive, Défensive
 
 Règle de choix : pour chaque joueur et chaque zone, l'action = la compétence la plus haute parmi celles qui servent l'action (Passe → passer, Conduite → dribbler, Centres → centrer, Finition → tirer), sauf dans la zone Ultra défensive (dégager). Les défenseurs et milieux qui « dribblent puis tirent » privent les attaquants de ballons [F:2026-09-15 PIPO68].
 
+**Cible de la passe (OBLIGATOIRE, 2026-10-30, l'utilisateur)** : dans le jeu, choisir « passer » oblige à choisir vers qui (défenseurs / milieux / attaquants ; API `defensas` / `mediocentros` / `delanteros`). Chaque « Passer » du rendu porte sa cible, dans toutes les zones. Cibles par défaut (déduites, à confirmer) : défenseurs → milieux ; milieux → attaquants ; attaquants → milieux en Ultra défensive, Défensive et Médiane. « Centrer » → attaquants. Le rendu d'une composition finit toujours par la ligne **Remplacements programmés** (aucun + raison, ou minute / sortant / entrant).
+
 ## Emplacements (confirmé par l'utilisateur, 2026-10-23)
 - Défense à 4 : emplacements 1 et 4 = latéraux, 2 et 3 = centraux. Milieu à 3 : 1 latéral, 1 central, 1 latéral. Les centraux ne centrent pas (ils passent) ; seuls les latéraux et les ailiers centrent.
 - Gardien : une seule consigne (dégager). Aucune consigne en zone de Finition pour les défenseurs ni le gardien.
