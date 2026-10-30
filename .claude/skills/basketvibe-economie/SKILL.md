@@ -17,6 +17,7 @@ Sources : **[M§x]** = manuel officiel https://www.basketvibe.com/guide (lu le 2
 - Salle de **8 000 places**, billet à **50**, dans toutes les ligues. Spectateurs = places × popularité.
 - Popularité : **+2 points par victoire à domicile** en ligue ; **−3 points par défaite à domicile**, −1 point de moins par spécialiste marketing (minimum 1 point avec deux). Les matchs à l'extérieur et les amicaux ne la changent pas.
 - Popularité bornée entre 40 % et 100 % pendant la saison, remise à **70 %** en début de saison (≈ 5 600 spectateurs, **280 000** par match à domicile).
+- ⚠️ Hypothèse (V-20261030-7, un message) : le développeur écrit « je la remettrais certainement si elle est sous 70. Les fans qui aiment une équipe pardonnent une mauvaise saison. Mais quand c'est au-dessus… » (phrase inachevée) : un club au-dessus de 70 % la garderait peut-être [Dev help 2026-10-07 20:24 et 20:45]. Il envisage de compter aussi les matchs à l'extérieur (non livré). Notre club : 0,65 (25/10) puis 0,70 (29/10), non concluant. Ne pas compter sur une remise à 70 % si le club passe au-dessus ; test au prochain changement de saison.
 - Amical : ~6 % de la recette d'un match de ligue à domicile, la même pour les deux clubs.
 - Coupes : pas de billetterie par défaut [M§3.3].
 - [Obs] Billetterie de ligue de la saison 1 : 1 984 000 pour 8 matchs à domicile, soit 248 000 en moyenne ; popularité à 0,61 le 2026-10-16.
