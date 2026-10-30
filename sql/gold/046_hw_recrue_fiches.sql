@@ -83,8 +83,12 @@ with cap as (
          greatest((p.idef + p.pdef) / 2.0,
                   coalesce(c.c_def, (coalesce(c.c_idef, p.idef) + coalesce(c.c_pdef, p.pdef)) / 2.0)) as x_def,
          c.c_ins, c.c_os, c.c_reb, c.c_iq, c.c_pass, c.c_hnd, c.c_spd,
-         coalesce(c.c_def, c.c_idef, c.c_pdef) as c_def_any
+         coalesce(c.c_def, c.c_idef, c.c_pdef) as c_def_any,
+         hp.height_m as liste_height_m
   from silver.hw_recruit_page p left join cap c using (player_id)
+  -- 222 pages sur 390 n'affichent aucune taille : repli sur la taille de la liste des prospects
+  left join lateral (select h.height_m from silver.hw_prospects h where h.prospect = p.name
+                     order by h.captured_at desc limit 1) hp on true
 ), g(grp, ord, slots) as (values ('PG', 1, 1), ('SG', 2, 1), ('SF', 3, 1), ('Grand', 4, 2)),
 k as (
   select v.*, g.grp, g.ord, g.slots,
@@ -106,14 +110,14 @@ k as (
          case when pot >= 13 then 5 when pot = 12 then 4 when pot = 11 then 3 when pot = 10 then 2 else 1 end as avenir
   from k
 )
-select player_id, name, grp, ord, slots, positions, si, pot, coalesce(projected_height_m, height_m) as height_m,
+select player_id, name, grp, ord, slots, positions, si, pot, coalesce(projected_height_m, height_m, liste_height_m) as height_m,
        round(cles, 1) as cles, round(cles_plafond, 1) as cles_plafond, cles_non_dites,
        niveau, adequation, round((niveau + adequation) / 2.0, 1) as note_now,
        avenir, adequation_plafond, round((avenir + adequation_plafond) / 2.0, 1) as note_plafond,
        case when coalesce(positions, '') ~ (case grp when 'Grand' then '(^|\s)(PF|C)(\s|$)' else '(^|\s)' || grp || '(\s|$)' end) then 'maîtrisé'
             when coalesce(positions, '') ~* (case grp when 'Grand' then '(^|\s)(pf|c)(\s|$)' else '(^|\s)' || grp || '(\s|$)' end) then 'apprentissage'
             else 'jamais' end as mastery,
-       coalesce(projected_height_m, height_m) >= 1.95 or grp <> 'Grand' as height_ok,
+       coalesce(projected_height_m, height_m, liste_height_m) >= 1.95 or grp <> 'Grand' as height_ok,
        coalesce(risque_5050, false) as risque_5050, coalesce(engage_tot, false) as engage_tot, phrases_hors_ref,
        ins, os, rng, fin, reb, idef, pdef, iq, pass, hnd, drv, str, spd, sta
 from n;
@@ -134,7 +138,7 @@ with best as (
   from gold.hw_recruit_board order by prospect, contacts nulls last
 ), f as (
   select p.player_id, p.name, coalesce(bt.grp, '—') as poste, bt.mastery, p.positions, b.class, b.state, b.region, b.stars,
-         coalesce(bt.height_m, coalesce(p.projected_height_m, p.height_m)) as height_m, p.si, p.pot,
+         coalesce(bt.height_m, p.projected_height_m, p.height_m, (select h.height_m from silver.hw_prospects h where h.prospect = p.name order by h.captured_at desc limit 1)) as height_m, p.si, p.pot,
          bt.cles, bt.cles_plafond, bt.cles_non_dites, bt.note_now, bt.note_plafond, bt.slots,
          (select count(*) from stay s where s.groupe = bt.grp and s.note > bt.note_now) as boursiers_devant,
          (select max(s.note) from stay s where s.groupe = bt.grp) as meilleure_note_poste,
