@@ -43,23 +43,23 @@ Pas de remplacement programmé. Depth chart inchangé (SG Bonnet > Dang > Henry 
 Les valeurs en gras sont celles du plan PSG sauvegardé (le preset Cup les remet à 3/3). Tout le reste = valeurs du preset Cup affichées. Agressivité 3 partout : coupe sans fatigue ni blessure. Klein (vendu) et Fontaine (absent du relevé) : ne pas placer.
 
 ## Écran 3 : focus défensif (1 Give up, 2 Light, 3 Normal, 4 Intense, 5 Lock) et zone
-Zone : l'export de la coupe porte bien un champ `area_step` (3 = Middle) sur les 13 adversaires ; la fiche et le skill disent « amicaux seulement » et V-20261027-3 (coupe/ligue) reste une hypothèse non tranchée (C-089 ouvert). Décision : Middle (3) partout, aucun test de zone dans un match à élimination. Si l'écran n'affiche pas de sélecteur de zone, ne rien toucher.
+**Zone (correction du 2026-10-30, l'utilisateur : « Rim existe, c'est une nouveauté du nouveau engine ») : la zone Perimeter (1) / Middle (3) / Rim (5) existe en coupe et en ligue, comme en amical. Elle s'applique à chaque adversaire, toujours affichée avec le focus.** Choix (inférence, effet ±3 à 5 % [News 2026-10-19], non testé en coupe) : Rim (5) si son 2PT est sa meilleure fourchette, Perimeter (1) si son 3PT est sa meilleure, Middle (3) sinon (fourchettes égales, blessé).
 | Adversaire (ordre de l'export) | Poste | Fourchettes utiles | Focus | Zone |
 |---|---|---|---|---|
-| Gautier | PG (23) | 2PT 0-20, 3PT 21-40, Pass 21-40 | **2 Light** | Middle (3) |
-| Jourdan | PG (19) | blessé, retour 06/11 | 3 | Middle (3) |
-| Lacroix | PG (26) | Déf, Pass, Dribble 61-80 (passeur) | 3 | Middle (3) |
-| Marchal | PG (17) | 3PT 21-40, reste 41-60 | **2 Light** | Middle (3) |
-| Guerin | SG (28) | 3PT, Déf, Ath 61-80 | **4 Intense** | Middle (3) |
-| Lopez | SG (25) | 3PT 21-40, reste 41-60 | 3 | Middle (3) |
-| Dupont | SF (25) | 2PT, 3PT, Ath 61-80 | **5 Lock** | Middle (3) |
-| Roussel | SF (27) | blessé, retour 05/11 | 3 | Middle (3) |
-| Bernard | PF (29) | 3PT 61-80, Pass 0-20 | 3 | Middle (3) |
-| Fontaine | PF (26) | 2PT, Déf 61-80 | 3 | Middle (3) |
-| Meyer | PF (18) | tout 41-60 | **2 Light** | Middle (3) |
-| Cousin | C (29) | Déf 61-80 | 3 | Middle (3) |
-| Laporte | C (31) | Pass, Ath 61-80 ; 3PT 0-20 | 3 | Middle (3) |
-13 adversaires listés (pas 12). Aucun Give up. Jourdan et Roussel sont blessés : leur focus n'a pas d'effet, 3 par neutralité.
+| Gautier | PG | 2PT 0-20, 3PT 21-40 | **2 Light** | Middle (3) |
+| Jourdan | PG | blessé, retour 06/11 | 3 Normal | Middle (3) |
+| Lacroix | PG | Déf, Pass, Dribble 61-80 ; tirs 41-60 | 3 Normal | Middle (3) |
+| Marchal | PG | 3PT 21-40, 2PT 41-60 | **2 Light** | **Rim (5)** |
+| Guerin | SG | 3PT 61-80, 2PT 41-60 | **4 Intense** | **Perimeter (1)** |
+| Lopez | SG | 3PT 21-40, 2PT 41-60 | 3 Normal | **Rim (5)** |
+| Dupont | SF | 2PT 61-80, 3PT 61-80 | **5 Lock** | Middle (3) |
+| Roussel | SF | blessé, retour 05/11 | 3 Normal | Middle (3) |
+| Bernard | PF | 3PT 61-80, 2PT 41-60 | 3 Normal | **Perimeter (1)** |
+| Fontaine | PF | 2PT 61-80, 3PT 21-40 | 3 Normal | **Rim (5)** |
+| Meyer | PF | tout 41-60 | **2 Light** | Middle (3) |
+| Cousin | C | Déf 61-80, reste 41-60 | 3 Normal | Middle (3) |
+| Laporte | C | 3PT 0-20, 2PT 41-60 | 3 Normal | **Rim (5)** |
+13 adversaires (pas 12), ordre de l'export : par poste, alphabétique dans le poste. Aucun Give up. Jourdan et Roussel sont blessés : focus 3 et zone 3 par neutralité.
 
 ## Réglages d'équipe
 Preset : laisser « Cup » (celui affiché) ; sauvegarder le plan du match uniquement. Remplacements programmés : aucun (le cinq change au début du quart [M§6.2]). Aucun autre réglage d'équipe à modifier.
