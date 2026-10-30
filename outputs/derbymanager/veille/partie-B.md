@@ -1,0 +1,627 @@
+# Derby Manager - veille partie B (réponses du développeur, mai 2024 - octobre 2026)
+
+Source : tranche B (2 545 messages du compte `derbymanager`, #quick-questions, #general, #belgium, #england, #france, #spain, #international, #inconnu). Format : fait - source (#canal, date, auteur) - statut. Le plus récent l'emporte : une règle remplacée est notée « contredit » ou « remplacé ». Les entrées sont dans l'ordre chronologique à l'intérieur de chaque thème ; en cas de conflit, lire la date la plus tardive.
+
+Légende des statuts : confirmé / complété / contredit / en doute (idée annoncée, hypothèse, échantillon unique).
+
+## Chronologie des changements majeurs (repères)
+
+- **2024-05-27** : début de la bêta DM2 (5 ligues jouables, saison de 5 semaines).
+- **2024-08-21 à 2024-09** : cohésion puis sharpness (remplace l'« effort d'entraînement » et la cohésion).
+- **2024-12 / 2025-01** : fin de la subvention IFA, primes de victoire (200k), xG « réel » affiché.
+- **2025-02** : coups de pied arrêtés, corners, penalties présents ; build up en deux étapes expliqué.
+- **2025-06-02 / 2025-07-06 / 2025-08-12** : facilities (limite puis investissement manuel autorisé, conseil n'investit plus l'argent thésaurisé).
+- **2026-03** : refonte du moteur (positionnement des défenseurs, têtes) ; amicaux retirés puis revenus (avril).
+- **2026-06-17** : nouveau système de marché/scouting par régions ; **2026-07/08** : jeunes à salaire lié aux facilities, école 8 places ; **2026-08/09** : Team Spirit (TS) remis en place.
+- **2026-09/10** : nouvelles ligues (Pays-Bas, Portugal, Belgique, Écosse), solidarité 5 %, pré-saison de 5 jours ; **2026-10-19/22** : « saison de transition », remplacements programmés, matrice build up/pressing, condition en pourcentage du restant.
+
+## Global : calendrier, divisions, montée/descente, réputation, conseil
+
+- **DM2 (version actuelle) est une bêta développée seul par le développeur sur son temps libre ; "it's still a beta product that I'm still coding by myself in my spare time"** — (#general, 2024-05-10, derbymanager) — confirmé
+- **Au lancement de la bêta (mai 2024) le moteur de match n'avait ni hors-jeu, ni corners, ni coups francs, ni passes en profondeur ("through balls")** : "There are no offsides, corners, free kicks, through balls" — (#general, 2024-05-10) — contredit partiellement par ajouts ultérieurs (voir plus bas pour les dates)
+- **Faible score moyen attendu au lancement : peu de tirs par match car pas de penalties/corners/coups francs ; "Get used to low scoring games"** — (#spain, 2024-05-28) — en doute (moteur rééquilibré depuis, voir dates ultérieures)
+- **Saison = 5 semaines, premier jour = lundi ; quelques jours de intersaison ("few days offseason")** : "5 weeks total, monday first day" ; "a month and 4-5 days extra. Except in february" (âge) — (#quick-questions, 2024-06-04, derbymanager) — confirmé (vérifier changements ultérieurs)
+- **Dernier match de la saison = samedi (finale Champions Cup "cc final"), premier match de la saison suivante = mercredi (coupe nationale)** — (#quick-questions, 2024-07-11) — confirmé
+- **Chaque place au classement final compte : récompenses de fin de saison, un peu plus pour chaque position** : "Every place counts. There are end of season rewards and you get a bit more for every position" — (#general, 2024-06-06) — confirmé
+- **Coupe (premier tour) : 500k si victoire au 1er tour, 5M si on remporte la coupe** : "If you win it is 500k for the first round, 5M if you win it" — (#quick-questions, 2024-06-12) — confirmé (compétition non précisée dans la question)
+- **Format Champions Cup / autre coupe en phase de groupes (système suisse type UEFA 2024) : 24 équipes passent, critiqué par le développeur ; l'ancien DM avait 4 groupes de 8 et 3 matchs par groupe, DM2 a plus de matchs dans CC et AC** — (#international, 2024-06-10) — complété ; "just the rewards if you go through the group" = récompenses seulement si on passe la phase de groupes (2024-06-10)
+- **Seules 5 ligues sont jouables par des humains au lancement ; équipes non jouables créées fortes** — (#international, 2024-07-10) — confirmé
+- **Les bots ("AI") achètent selon leurs finances : s'ils ont l'argent ils achètent de meilleurs joueurs, comportement très basique** — (#quick-questions, 2024-05-27) — confirmé
+- **Au départ tous les managers ont commencé avec des équipes de bas de classement et n'ont joué que le dernier tiers de la première saison** — (#quick-questions, 2024-06-07) — contexte
+- **Après 3 semaines dans un club on peut démissionner ("quit") et choisir une autre équipe ; il faut d'abord quitter pour ne pas prendre un autre poste par accident** — (#quick-questions, 2024-06-07 et 2024-07-16) — confirmé
+- **Le conseil laisse de la patience quelques semaines à l'arrivée dans un club ; on peut être licencié ("you can get fired")** — (#spain, 2024-06-06 ; #quick-questions, 2024-05-28) — confirmé
+- **Message "International Football Association subsidy" : la quantité totale d'argent du jeu est régulée ; quand il y a trop d'argent sur les comptes la subvention baisse, quand il y en a trop peu elle monte** — (#quick-questions, 2024-05-30) — confirmé
+- **Actualités (news) : jaune = rumeurs, nouveaux managers, news hors équipe ; vert = contrats signés ; rouge = contrats refusés ; bleu = matchs et contrats proposés ; "3rd scout" (un joueur scouté 3 fois) fait la une pour tout le pays** — (#international, 2024-06-03) — confirmé
+- **Le jeu n'a aucun système de records** — (#international, 2024-06-03) — confirmé à cette date
+- **Un joueur déjà en jeu peut avoir changé de pays/nationalité : petit pourcentage de joueurs d'un pays reçoit +2 à une compétence (test du 2024-07-15)** : "It's just a small chance for some players from that country to get +2 to that skill. I want to see if it'll be noticeable at all..." — (#general, 2024-07-15) — en doute (test)
+- **Les noms ou données d'équipes jouables peuvent être modifiés par CMS par le développeur (ex : ligue d'Espagne D4)** — (#france, 2024-06-07) — contexte
+- **Version précédente (DM1) avait atteint ses limites : le jeu a été réécrit à zéro (~mi-2023) dans un autre langage ; "not 7 years worth of work"** — (#quick-questions, 2024-12-04) — contexte
+- **Les conseils d'administration attendront plus quand l'équipe devient meilleure : les clubs de tête licencient vite en cas de sous-performance** — (#quick-questions, 2024-12-06) — confirmé
+- **Le développeur peut sauver le poste d'un manager actif qui apprend s'il y a des rumeurs de licenciement** — (#france, 2024-12-18) — info
+- **Mise à jour d'octobre 2024 : bots/ligues, statistiques de classement par poste ajoutées (2024-10-20/21)** — (#general, 2024-10-20) — info
+- **Pas d'avantage de réputation de manager dans les matchs ; D1 non atteinte en octobre 2024** — (#france, 2024-10-27) — info
+- **Méta voulue par le développeur : "moderate" : mélange jeunes/vieux, joueurs solides partout plutôt que 2 superstars + 9 nuls, formation avec défenseurs, milieux et attaquants, pas 1-4-5 ni 5-0-5** — (#general, 2025-04-25) — confirmé
+- **"This is a slow moving online browser game that you can play for years, spending 10 minutes each day"; 80% du plaisir vient de la communauté** — (#general, 2025-01-16) — contexte
+- **17 équipes disponibles pour nouveaux joueurs parmi les 5 ligues (2025-01-16)** — (#general, 2025-01-16) — info
+- **Inscription : cliquer en haut à gauche du site, se connecter avec Discord, choisir nationalité et club** — (#general, 2025-01-09) — confirmé
+- **Dernier jour de saison / changement de saison : après la dernière finale, transferts plus rapides, bonus du lundi selon la place** — (#quick-questions, 2024-10-25) — confirmé
+- **Pas de reset prévu : le jeu reste en bêta** — (#quick-questions, 2024-12-21) — confirmé
+- **Amicaux envisagés plus tard** — (#quick-questions 2024-09-17 ; 2024-10-25) — en doute à cette date (voir suite)
+- **Plan DM1 : DM1 a duré plus de 40 saisons, fermé ; DM2 est un autre jeu** — (#general, 2025-04-30) — contexte
+- **Le développeur reporte les premiers matchs après une panne pour laisser un jour libre** — (#quick-questions, 2025-04-21) — info
+- **Équipes sans humains sont rapprochées en équilibre : les bots dirigent un meilleur effectif via transferts (chantier 2025-04-08)** — (#general, 2025-04-08) — info
+- **Association Cup : finale regardable, phase à élimination directe reportée le 2025-02-07 (4 matchs ce jour)** — (#international, 2025-02-07) — info
+- **CHANGEMENT D'ÉQUIPE / RÉPUTATION (2025-07/08) : liste d'offres = sélection des équipes de meilleure réputation accessibles ; bonus de fidélité si on reste longtemps dans la même équipe ; réputation manager 596 avec équipe 626 permet de prendre une équipe de rep 740 ; la réputation du manager ne croît que si on fait monter l'équipe ; promotion = environ +200 ; plus on est haut plus ça va vite** — (#england, 2025-08-03 / 2025-08-07) — confirmé
+- **Il faut rester 2-3 saisons dans une équipe et bien faire pour monter en réputation ; sauter toutes les 2-3 semaines ne sert à rien** — (#england, 2025-08-03) — confirmé
+- **Boost de réputation si on améliore la réputation de l'équipe (200 -> 400 donne un boost) ; Burgos 336 -> 337 en quelques semaines** — (#quick-questions, 2025-07-31) — confirmé
+- **Il faut faire ses preuves à chaque niveau avant de recevoir des offres à ce niveau** — (#england, 2025-08-03) — confirmé
+- **Il n'y aura pas de reset (ni de fenêtres) : "There won't be a reset"** — (#england, 2025-08-03) — confirmé
+- **Le développeur travaille ~1h par jour en moyenne (2025-07-31)** — (#quick-questions, 2025-07-31) — info
+- **Possibilité de rejoindre des équipes déjà humaines : EN D2 compte 6 humains en 2025 ; France est la moins peuplée** — (#france/#england, 2025-07-19 et 2025-08-07) — info
+- **Saison 12 terminée 2025-07 ; 4800 matchs de ligue en une saison ; victoires domicile 95 vs extérieur 84 (échantillon d'un joueur) ; Premier League réelle 45% / 22% / 33% ; le jeu s'en approche** — (#england, 2025-07-12) — info
+- **Le développeur modifie le jeu pour affaiblir les méthodes dominantes : "When all-oldies teams perform too well, I nerf oldies. When all-youngsters teams do really well, I nerf youngsters"** — (#france, 2025-06-02) — confirmé
+- **Les ligues D1 sont pleines (12 places pour 7 grosses équipes et 5 humains en D1 anglaise, juillet 2025) ; "ironman" = rester dans le même club** — (#england, 2025-07-05) — info
+- **Les saisons durent un nombre de jours dont la longueur "1 season" (une saison) est revenue après plainte (2025-07-25) — question inconnue, réponse "I changed it to 1 season again"** — (#quick-questions, 2025-07-25) — en doute (sujet inconnu)
+- **Quitter l'équipe : 2-3 semaines minimum après la prise de fonction ; on peut retirer quelques joueurs à la retraite (fin de saison) en quittant** — (#quick-questions, 2025-06-24) — confirmé
+- **Pannes : premiers matchs reportés pour laisser un jour libre** — (#quick-questions, 2025-04-21) — info
+- **Bots : leurs formations ont été mises à jour mi-saison 2024/25 ; ils construisent mieux leurs équipes sauf gardiens, et font de la rotation** — (#general, 2025-08-11) — confirmé
+- **Statistiques des formations des bots (2025-07-25) : 433 = 1,82 pts/match ; 442 = 1,79 ; 343 = 1,77 (meilleures versions) ; 442 utilisée 1100+ fois, 433 950+, 343 850+ ; un autre 442 à 1,31 ; formations défensives (541, 523) jouées quand l'équipe doit perdre** — (#england, 2025-07-25) — confirmé
+- **Test d'analyse : ne comparer que les humains contre bots, jamais bot contre bot (un bot gagne toujours 3 points)** — (#general, 2025-08-11) — avis méthodologique
+- **Wiki : personne n'a voulu le maintenir (2025-08-12) ; il peut être périmé** — (#england, 2025-08-12) — info
+- **Chaque saison : "On Monday the new season will get generated and on Wednesday the first games will be played" (2025-09-02)** — (#england, 2025-09-02) — confirmé
+- **Saison 15 en cours en août 2025 ; match 18 un dimanche = dernier match avant reset** — (#quick-questions, 2025-08-21) — info
+- **Ligue Cup supprimée (16 équipes de la même division) car les managers l'évitent : pas de coupe de ligue prévue** — (#general, 2026-01-03) — confirmé
+- **Manager d'un mot : un manager sans limite de temps ; la réputation à 200 peut être remise ; historique conservé** — (#quick-questions, 2025-10-05) — confirmé
+- **Pour se connecter il faut être membre du serveur Discord ; vider le cache / autre navigateur** — (#quick-questions, 2025-12-11) — confirmé
+- **Le bouton de retraite du manager existe sur l'écran manager** — (#quick-questions, 2026-01-04) — confirmé
+- **Plan 2026-01-01 : "main dev" a des idées pour améliorer le marché cette saison ; plus de pouvoir aux humains** — (#general, 2026-01-01) — en doute
+- **64 nations choisies pour la base de noms ; scandinaves absents (2025-09-05)** — (#england, 2025-09-05) — info
+- **Association Cup / Champions Cup : quelques bots dominants (Liverpool, Ambrosiana) tiennent depuis longtemps en D1** — (#general, 2026-01-01) — info
+- **Amicaux supprimés le 2026-03-03 : ils seraient traités comme matchs normaux ; "Removed friendlies... Maybe next season" ; amicaux de nouveau présents en avril 2026 : "you switched teams after friendlies were generated" (2026-04-07) ; amicaux: aucun bénéfice à les jouer à chaque match, "they're here to get some training, experiment with formations" (2026-06-15)** — (#quick-questions, 2026-03-03, 2026-04-07, 2026-04-12, 2026-06-15) — confirmé (amicaux existent depuis ~avril 2026, aléatoires, pour entraînement/tests)
+- **Changer de club : 21 jours dans le club avant d'avoir des offres (pas 14, pour ne pas changer deux fois par saison) ; "21 days since forever"** — (#quick-questions, 2026-03-24) — confirmé (contredit les "2-3 semaines" imprécis plus haut ; message du 2026-03-16 "after 2 weeks ... always some offers" est inexact)
+- **Réputation du manager (2026-04-02) : monte lentement vers la réputation du club (plus vite en montant, plus lent en descendant) ; en D4 il faut atteindre D3 et y survivre 1 saison pour dépasser 200 ; la réputation de l'équipe suit la même règle ; boost de réputation pour changer d'équipe selon la durée et le niveau atteint (ex +40 pour D4->D2, +30 pour 3 saisons : chiffres indicatifs "not correct")** — (#quick-questions, 2026-04-02) — confirmé
+- **Un manager inactif peut perdre son poste : la "last sign in date" n'était mise à jour qu'à la connexion ; depuis 2026-06-11 elle est mise à jour à chaque sauvegarde de formation** — (#quick-questions, 2026-06-11) — confirmé
+- **Comptes multiples : le développeur supprime tous les utilisateurs ayant plus d'un compte AVEC une équipe (2026-02-12)** — (#general, 2026-02-12) — confirmé
+- **Pas de coupe de ligue ; friendlies envisagés ; développeur peu disponible (moins d'1h/jour, engagement faible en 2026), le jeu ne sera pas fermé** — (#general, 2026-02-07) — info
+- **Match international : critères de départage : points, différence de buts, buts marqués, tirage au sort (coin toss)** : "points, goal diff, goals scored, coin toss" — (#international, 2026-08-04) — confirmé
+- **Match comparatif : l'écran donne une puissance relative des deux équipes calculée à partir de la puissance de chaque joueur (indicatif)** — (#quick-questions, 2026-04-02) — confirmé
+- **Premier humain champion d'une coupe internationale pas encore (août 2026) ; Association Cup jouée avant la Champions Cup** — (#international, 2026-08-13) — info
+- **Pré-saison (2026-09-25) : 5 jours (6 cette saison à cause d'un bug) ; chaque joueur récupère 20% de condition et les blessures sont réduites de 5 ; la condition n'est pas remise à 100% au changement de saison ; "rest" = entraînement bas (low) ; le réglage précédent est mémorisé pendant l'intersaison et les blessures** — (#quick-questions, 2026-09-25) — confirmé
+- **Pas d'avantage domicile en coupe : "There is no home advantage in the cup, it's not applied" ; l'avantage domicile ne s'applique qu'aux matchs de championnat ; matchs internationaux sur terrain neutre avec revenus partagés** — (#england, 2026-09-16) — confirmé
+- **Licenciement : un avertissement dans les news d'abord ; les top clubs réagissent plus tôt ; aléatoire ; au 3e avertissement vous êtes viré** — (#quick-questions, 2026-09-23) — confirmé
+- **Nouvelles ligues (septembre-octobre 2026) : Pays-Bas, Portugal, Belgique, Écosse ; popularité Pays-Bas > Portugal > Belgique > Écosse ; "Better than d2, but not d1 level" ; moins d'argent et de réputation que les 5 grandes ; seuls 3 clubs des nouvelles ligues vont en compétition internationale** — (#belgium, 2026-10-01 et 2026-10-08) — confirmé
+- **Calendrier : les affiches sont générées pour placer les meilleures équipes de la saison dernière dans des journées intéressantes (semi-aléatoire)** — (#belgium, 2026-10-08) — confirmé
+- **Moteur de match "turn based underneath" (par tours), d'où l'interception imparfaite** — (#belgium, 2026-10-02) — confirmé
+- **Reputation: un classement dépend de la position en ligue seulement, pas des adversaires battus (2026-10-12)** — (#inconnu, 2026-10-12) — confirmé
+- **Les attentes du conseil : pas d'avertissement si on achète en liquide ; la saison est identique pour tout le monde dans les nouvelles ligues, il faut de la réputation pour les rejoindre** — (#quick-questions, 2026-09-28) — confirmé
+- **Équipes de départ des nouvelles ligues créées sur mesure (valeurs poussées) ; non symétriques mais compétitives** — (#belgium, 2026-10-08) — confirmé
+- **Saison 2026-27 = "transitional season" : refonte du moteur et du système ; objectif d'avoir "1 broken season instead of 2" ; le développeur a fait beaucoup de mises à jour avant le début de saison** — (#inconnu, 2026-10-19) — confirmé
+- **Équilibrage : certaines formations avaient 80% de victoires ; "no team should go into half season mark with 100% win rate" ; le développeur change des modificateurs en arrière-plan (décision de joueur, valeur du joueur libre pour les défenseurs...) sans pouvoir résumer** — (#belgium, 2026-10-13) — confirmé
+- **Équilibre précédent : saison précédente Ambrosiana a eu un score parfait pendant les 5 premiers tours alors que chaque humain avait déjà perdu au moins 4 points** — (#inconnu, 2026-10-19) — info
+- **Joueurs plus exigeants s'ils ont gagné des trophées : les salaires demandés montent (déjà implémenté octobre 2026) ; le développeur prévoit un chantier économie après le moteur** — (#inconnu, 2026-10-19) — confirmé
+- **Une victoire rapporte beaucoup ("800k+" cumulés pour un club qui gagne tous ses matchs)** — (#inconnu, 2026-10-19) — info
+- **Pas de limite artificielle voulue par le développeur (ex. limiter les victoires)** — (#inconnu, 2026-10-19) — confirmé
+- **Joueurs libres qui ont grandi : exemple +4M (+30%) en 17 jours (« 17 days would be like 6 months ») ; avec 76 jours de contrat restants = presque une saison** — (#inconnu, 2026-10-15) — confirmé (1 jour réel ≈ 1 semaine de jeu environ ; 17 jours ≈ 6 mois affichés par le développeur)
+- **Ligue Écosse ajoutée (modèle différent) ; d'autres ligues ajoutées si les ligues sont remplies à 50%** — (#inconnu, 2026-10-29) — confirmé
+
+## Jeunes / School (école des jeunes) : durée, scouting, coût, contrats, intégration
+
+- **Garder un jeune à l'école ("school") aussi longtemps que possible tant qu'il s'entraîne bien ; pas de règle exacte** : "if he trains well, keep him in school as long as possible" — (#quick-questions, 2024-05-27) — confirmé
+- **Mentor : un défenseur est mentor de tous les autres défenseurs, y compris ceux de l'école des jeunes ; le mentor n'améliore l'entraînement que pour les joueurs du même groupe (GK / défenseurs / milieux / attaquants), équipe première et jeunes confondues** — (#quick-questions, 2024-05-28) — confirmé
+- **Message "progress near the limit" à l'école : le joueur approche de la limite qu'il peut atteindre dans ton équipe parce que les infrastructures ne sont pas assez bonnes ; les mentors peuvent parfois aider ; améliorer le club (tier) et facilities aide, sans garantie** — (#quick-questions, 2024-05-28 et 2024-06-28) — confirmé
+- **Promouvoir (promote) le jeune en équipe première règle le message d'école spécifique** — (#quick-questions, 2024-06-28) — confirmé
+- **Un joueur sorti de l'école peut valoir 1,2 M puis 1,8 M rapidement (test serveur)** — (#general, 2024-06-03) — exemple
+- **Un joueur renvoyé ("bad") vaut mieux en école des jeunes : faible "club fit" et autres stats cachées peuvent le rendre inadapté à ton club, il progresserait ailleurs ; ne pas le supposer world class** — (#quick-questions, 2024-06-23) — complété
+- **L'école des jeunes tire des positions au hasard (mécanique de cartes à tirer, "deck shuffle") : on ne peut pas choisir la position ; on peut réentraîner (retrain) un joueur à une autre position. Le tirage favorise désormais les postes en sous-nombre (fix : plus de surcharge de gardiens)** — (#general, 2024-07-15/16) — confirmé
+- **Chance haute de tirer FL/FR/FC, moyenne GK, basse DL/DR/DC, nulle MR/ML/MC (algorithme décrit par le développeur pour l'école)** : "high chance to pull fl, fr, or fc; med chance to pull a gk; low chance to pull dl, dr, dc; no chance to pull mr, ml, mc" — (#general, 2024-07-15) — en doute : c'est l'énoncé d'un défi de programmation, pas nécessairement la règle finale ("you can decide what high/med/low chance is")
+- **10 points de mentors = une demi-étoile de facilities** : "10 in mentors is equal to half a star of facilities" — (#general, 2024-06-30) — confirmé
+- **Option future : changer la position d'un jeune à l'école (il s'entraîne alors 3 ans pour la nouvelle position)** — (#general, 2024-07-16) — en doute (projet annoncé)
+- **Si on manque d'un poste (ex : attaquants) et qu'on sort les siens de l'école, la chance d'en tirer un nouveau est nettement plus haute (non garantie) : on joue sur quels joueurs on garde à l'école** — (#general, 2024-07-16) — confirmé
+- **Un petit pourcentage de jeunes d'un pays reçoit un bonus de +2 à une compétence à la création du joueur ("chargen") seulement ; la boost n'existe qu'à la génération, l'entraînement l'écrasera** — (#general, 2024-07-17) — confirmé (expérience sociale, discret)
+- **Les jeunes non promus de l'école et les joueurs libérés manuellement alimentent le marché des joueurs libres** — (#general, 2024-07-16) — confirmé
+- **Générer trop de jeunes à l'école : le développeur prévoit de refaire le système (idées : scouts qui génèrent des jeunes sur le marché, marché des jeunes avec infos croissantes, re-roll ; il doit permettre de combler vite les trous de l'effectif, surtout pour les bots)** — (#general, 2024-11-18) — en doute (projet)
+- **Promotion de l'école : impossible de promouvoir un jeune si l'équipe est déjà à 25 joueurs ; un blocage à 30 existe pour les signatures** : "It'll block you at 30, but you can't promote youngsters if you're at 25 already." — (#general, 2024-12-16) — confirmé (question non connue)
+- **Promouvoir/libérer un jeune : possible quand il lui reste moins de 35 jours de contrat (délai « in 6 days »)** — (#general, 2024-12-02) — confirmé
+- **Scouts de jeunes : chaque semaine on voit plus d'infos sur un prospect ; si le graphe est bien le garder une semaine, si les compétences sont bien une autre semaine, puis signer ; pas d'urgence** — (#general, 2025-01-17) — confirmé
+- **Jeunes à l'école : s'entraînent même sans jouer ("they train in school") et on obtient plus d'infos chaque semaine** — (#quick-questions, 2025-01-27) — confirmé
+- **Un jeune promu en équipe première ne croît que s'il joue ("they won't grow unless they play")** — (#general, 2025-01-13) — confirmé
+- **On peut entraîner un jeune jusqu'à environ 3 étoiles pour son équipe (moins pour les grandes équipes, plus pour les bas de tableau) ; max d'environ 3 à 3,5 étoiles pour une équipe du bas ; garder les jeunes à l'école jusqu'au besoin** — (#general, 2025-04-25) — confirmé
+- **Développeur : "Personally, I don't look at schoolkids at all"** — (#general, 2025-04-25) — avis
+- **Un jeune à "first team status" joue ou est jeté ("ditch him") : promouvoir tous les jeunes n'est pas recommandé** — (#general, 2025-01-13) — avis
+- **Les bons mentors jouent et restent dans l'équipe un moment ; l'expérience compte aussi** — (#quick-questions, 2025-01-14) — confirmé
+- **Ecole (2025-07-31) : on peut observer 4 joueurs à l'école pendant une saison ; après 3 semaines on voit potentiel et toutes les compétences ; on peut en embaucher ou chercher un autre à tout moment ; un message signale que le joueur a atteint sa limite d'entraînement à l'école** — (#quick-questions, 2025-07-31) — confirmé
+- **Promotion bloquée à 25 joueurs ("you can't promote youngsters if you have 25 players already") : évite l'exploit de recruter 10 jeunes au-dessus du plafond avant de quitter** — (#quick-questions, 2025-05-10) — confirmé
+- **Un jeune à salaire trop cher : ne signe pas de contrat, peut être promu à la fin de son contrat** — (#quick-questions, 2025-04-25) — confirmé
+- **Acheter un 10M de 26 ans plutôt qu'un 10M de 19 ans : avec le jeune on paie un potentiel, avec le plus vieux ce qu'on voit** — (#france, 2025-05-22) — avis
+- **Mélange conseillé : acheter 2 bons joueurs plutôt que 7 adolescents pour l'entraînement** — (#france, 2025-05-21) — avis
+- **Promouvoir 2 jeunes + vendre 2 gros salaires + acheter 2 joueurs expérimentés pour mener une équipe de jeunes** — (#england, 2025-08-12) — conseil
+- **Nouvelle règle de l'école (2025-09-05) : un jeune scouté reste 35 jours dans l'école ; après 3 semaines on voit son potentiel ; après 2 semaines sur 5 on voit ses compétences ; on a encore 2 semaines pour le promouvoir ; "It's 25 days out of 35. But skills are revealed faster."** — (#england, 2025-09-05) — confirmé
+- **Interdiction de "jouer à la loterie de l'école" : on ne peut pas relancer 19 fois puis promouvoir immédiatement le meilleur après 0 jour d'école** — (#england, 2025-09-05) — confirmé
+- **L'info sur le développement est plus importante que le potentiel pour une équipe de bas niveau : "you need a player that fits with your team the best"** — (#england, 2025-09-05) — avis
+- **Trop de promotions de l'école pénalisent : manager précédent avait promu 10 jeunes ; sortir 10 jeunes coûte ~2M puis ~1M après le changement du 2025-09-12** — (#england, 2025-09-12) — confirmé
+- **NOUVEAU SYSTÈME DE JEUNES (juin-août 2026) : les jeunes sont gratuits à l'école (prix de transfert ~0 même si valeur de plusieurs millions) ; "school players are for 1 season only" ; leur salaire d'école est remplacé par un contrat prédéfini à la sortie** — (#quick-questions, 2026-07-10, 2026-08-03) — confirmé
+- **Salaire demandé par un jeune = salaire lié à ton niveau de facilities : "Every player asks exactly the same to your facility level" (ex facilities pauvres = 16k) ; exemple : un joueur de 2M demande ~20k, un de 4M ~30k ; sur le marché le même joueur demande 30-40k ; ce salaire est fixé à la sortie de l'école** — (#general 2026-07-22 ; #quick-questions 2026-07-23, 2026-08-03) — confirmé
+- **L'école (coach et joueur) ne compte pas dans le plafond de salaire mais compte dans les revenus (contre ton revenu)** : "School (both the coach and the player) doesn't go against the salary cap but it does count towards (or against) your revenue." — (#quick-questions, 2026-07-13) — confirmé
+- **Limite d'effectif : 25 pour promouvoir (reste 25) ; l'école a une capacité de 8 jeunes ; remplir 8 jeunes est "basically a trap" ; garder en école jusqu'à ce qu'on vende des joueurs** — (#general, 2026-07-05 et 2026-07-22) — confirmé
+- **Âge limite de recrutement dans l'école : 21 ans maximum** : "ok, 21 is the limit then" — (#quick-questions, 2026-08-15) — confirmé
+- **Un jeune ne peut plus s'entraîner quand il atteint la limite de l'école, liée au tier de l'équipe : l'école est "x% lower" que la première équipe ; en D4 on ne sort que des 3M de l'école (pas des 6M)** — (#quick-questions, 2026-08-15) — confirmé
+- **Coûts totaux jeune (2026-08-15) : facilities dans les 40s => 1 an d'école + 3 ans d'équipe première ~ 6M ; facilities dans les 20s ~ 3M ; un joueur de 2M coûte ~5M à l'achat sur le marché (3 ans de salaires + prime)** — (#quick-questions, 2026-08-15) — confirmé
+- **Prix d'un promu : plus bas car pas de matchs joués (pas de multiplicateur de performance)** — (#quick-questions, 2026-08-15) — confirmé
+- **"Facilities as a bet" : petites facilities -> prendre n'importe qui, entraîner, promouvoir, vendre avec petit profit (1M -> 3M) ; grandes facilities -> il faut de grands jeunes (3M+ -> 7M pour être rentable)** — (#quick-questions, 2026-08-14) — confirmé
+- **Les managers humains ont promu 2x plus de jeunes de l'école vers l'équipe première la dernière saison ; ~5 joueurs tirés du marché libre vers l'école par manager humain** — (#quick-questions, 2026-08-15) — info
+- **Le développeur prévoit d'autres restrictions sur les jeunes car l'école "drains money from the game" (un jeune promu = argent sorti du jeu)** — (#quick-questions, 2026-08-15) — en doute
+- **Salaire de jeune: proposition de réduction du coût de l'école de moitié ou exponentielle (1 joueur gratuit, 4 = 100k, 8 = 1M)** — (#general, 2026-07-22) — en doute
+- **Proposition: les jeunes demanderaient le même salaire que celui basé sur les facilities, sans coachs supplémentaires** — (#quick-questions, 2026-08-15) — en doute
+- **Les bots ne tirent pas de l'école les joueurs sous 2M** — (#general, 2025-11-07) — info
+- **Conseil du développeur (2026-02-05) : regénérer des joueurs à l'école jusqu'à en avoir un bon ; l'évaluer sur 10 jours (+5 en 10 jours => remplacé) ; un sur 5 est assez bon pour la D1 ; garder un 3-4M avec du temps de jeu, vendre s'il n'atteint pas 10M+ en 3 saisons ; il obtient un joueur de 3,8M à 13 jours de la fin environ chaque saison en re-rollant beaucoup** — (#england, 2026-02-05) — avis
+- **Exploit : l'achat de jeunes entre joueurs interdit (patch) ; on ne peut enchérir que sur les jeunes découverts** — (#quick-questions, 2026-08-16) — confirmé
+- **Salaires de l'école: exemple 2026-10-03 : tirer de l'école pour avoir de la "chair à canon" afin de gérer l'équipe première (si plafond salarial)** — (#quick-questions, 2026-10-03) — conseil
+- **Pas tous les jeunes ne réussissent : "not every youngster should succeed in getting into the first team, some just suck"** — (#quick-questions, 2026-10-05) — confirmé
+- **Limite d'effectif 25 toujours (juillet 2026) ; l'école permet d'avoir 8 jeunes ; "Back to 8 youngsters in school everyone" (2026-08-19) : les jeunes peuvent grandir à l'école (limite supprimée)** — (#quick-questions, 2026-08-19) — confirmé
+- **Jeunes à l'école : ils s'entraînent sans jouer mais ne peuvent pas jouer ; "for really young and not really great players"** — (#quick-questions, 2026-08-19) — confirmé
+
+## Finances : revenus, salaires, plafond, primes, sponsors, conseil
+
+- **Plafond de masse salariale ("wage budget") : le conseil interdit de signer tout contrat tant qu'on est au-dessus du budget salaires, même si la signature réduit la masse** — (#quick-questions, 2024-05-28) — confirmé
+- **Prolonger un contrat à mi-parcours = engagement plus long pour moins d'argent ; il faut compter aussi la prime de signature (sign-on fee)** — (#quick-questions, 2024-05-28) — confirmé
+- **Un joueur peut demander comme "sign-on" (prime de signature) son prix de transfert : l'argent qu'on paierait à un club, il le prend pour lui (ex : Mbappé et Real)** : "They are asking their price as sign on" — (#general, 2024-06-29) — confirmé
+- **Il faut payer la prime de signature même pour un joueur libre** : "You still have to pay a signing fee" — (#quick-questions, 2024-05-28) — confirmé
+- **Don au jeu : "5M in game money for donating"** — (#quick-questions, 2024-06-08) — confirmé (donateurs)
+- **Libérer un joueur (libération sur liste de transfert) : il doit être sur la TL une semaine, avoir 35 jours ou moins de contrat et être bon marché ; le salaire est récupéré** : "They need to be on TL for a week and have 35 or fewer days left on contract. Also, they must be cheap." — (#general, 2024-06-04) — confirmé (à vérifier plus tard)
+- **Un joueur de 500k médiocre est dur à vendre ; les meilleurs se vendent** — (#quick-questions, 2024-05-27) — confirmé
+- **La limite de la liste de transferts (TL) : on peut avoir plus de joueurs sur TL mais pour y mettre quelqu'un d'autre il faut retirer tous sauf N-1 ; les joueurs en fin de contrat sont ajoutés auto à la TL même au maximum** — (#general, 2024-06-04) — confirmé
+- **Revenu d'affluence : c'est la moyenne sur les x derniers matchs, pas une affluence par match** — (#quick-questions, 2024-06-13) — confirmé
+- **Fin de contrat : avant 2024-07-16, 2 semaines avant l'expiration le joueur était mis auto sur la TL ; désormais cela se fait APRÈS l'expiration du contrat** — (#general, 2024-07-16) — confirmé (contredit l'ancienne règle)
+- **Libération (release) : depuis l'écran "offrir un nouveau contrat" un bouton "release" apparaît si les conditions sont remplies (joueur bon marché, <35 jours de contrat) ; coût 0 si le contrat est terminé, sinon il faut payer le salaire restant** — (#general 2024-07-17 ; #quick-questions 2024-07-21, 2024-08-01) — confirmé
+- **Un joueur cher ne peut pas être libéré** : "you can't release an expensive player" — (#general, 2024-07-17) — confirmé
+- **La principale source d'argent est la promotion ; les récompenses de fin de saison font la différence même sans promotion (6e vs 16e)** — (#quick-questions, 2024-09-11) — confirmé
+- **Prix des joueurs : les prix changent avec retard, d'où l'absence de corrélation immédiate avec les compétences ; les vieux ("oldies") jouent mieux mais sont trop chers pour ce qu'ils apportent ; le développeur annonce une formule de prix qui ne dépend plus de l'expérience et tient compte du potentiel selon l'âge (un 18 ans acheté 2M qui ne gagne que +5 en 3 saisons peut tomber à 1,5M)** — (#quick-questions, 2024-08-05) — confirmé (annoncé, implémentation à vérifier)
+- **Les agents libres ont déjà des prix réduits** — (#quick-questions, 2024-08-08) — confirmé
+- **Sharpness ne sera pas intégrée dans le prix cette fois ("I don't intend to add sharpness to the price this time")** — (#general, 2024-08-23) — confirmé
+- **Pour ne pas dépasser le plafond : salaire max accepté par le conseil ; si on est au-dessus du cap on ne peut pas signer de nouveaux joueurs (sauf venant de l'école) ni prolonger avec un salaire plus élevé (baisser est permis si le joueur accepte)** — (#quick-questions, 2024-12-03) — confirmé
+- **Le plafond de salaire dépend de la réputation de l'équipe (construite longtemps) et du niveau de sponsoring : "The cap is based on your team's reputation... and sponsorship level"** — (#france, 2024-10-28) — confirmé
+- **Promotion : on obtient immédiatement un plafond salarial nettement plus haut et de l'argent de promotion ; renforcement possible les deux premières semaines ; D3 pas trop dur, D2 un défi, personne en D1 en octobre 2024** — (#france, 2024-10-27) — confirmé
+- **Le conseil n'autorise pas la libération gratuite d'un joueur au-dessus de 2,5M (même dans la meilleure équipe) : l'argent d'un contrat libéré sort de l'économie** — (#quick-questions, 2024-09-28) — confirmé
+- **Salaire minimum d'un joueur : 5k** : "Minimum is 5k" — (#general, 2024-12-04) — confirmé
+- **Après la fin de saison : les transferts sont traités plus vite et le lundi on reçoit un bonus d'argent selon la place en ligue ; premier match de la nouvelle saison le mercredi soir suivant** — (#quick-questions, 2024-10-25) — confirmé
+- **L'argent des dons/des récompenses va dans les infrastructures ("The money goes into facilities")** — (#general, 2024-10-05) — en doute (question inconnue)
+- **Récompense coupe : 0,5 ou 1 M pour le 1er tour gagné, plus à chaque tour** — (#france, 2024-09-26) — confirmé
+- **Les contrats expirés : dès que le contrat expire le joueur est inscrit à la TL, prix réduit, reste jusqu'à vente ; il joue "as bad as possible" (sharpness et forme pénalisées) pour empêcher d'exploiter des joueurs sans contrat au vieux salaire ; compensation : on gagne un joueur et l'argent de la vente plutôt qu'un départ libre** — (#general, 2024-11-26) — confirmé
+- **Les joueurs sans contrat voient leur prix baissé pour attirer des acheteurs ; baisser le prix de tous les joueurs sur TL est refusé (relisting quotidien)** — (#general, 2024-11-26) — confirmé
+- **Réputation du manager : sert à voir quelles équipes on peut gérer ; le score le plus haut = meilleure saison, les ligues supérieures donnent plus de points** — (#quick-questions, 2024-11-17) — confirmé
+- **Bots recoivent de l'argent en fin de saison (plus de pouvoir d'achat ensuite)** — (#general, 2024-11-22/26) — confirmé
+- **Subvention (subsidy) de l'International Football Association supprimée fin 2024 : remplacée par des primes de match ; 200k par victoire (match win bonus), 500k en coupe** : "Every win is 200k for you... (cup games are 500k)" — (#france, 2024-12-18) — confirmé
+- **Primes de victoire par division : +100k par division supérieure ; en D4 20 victoires = 2M, en D3 il suffit de 10 victoires** — (#france, 2025-01-01) — confirmé
+- **Revenu de diffusion (broadcasting) par division, qui détermine le plafond salarial : 200k, 300k, 500k, 1M (D4, D3, D2, D1)** : "higher division improves broadcasting revenue (which affects the salary cap) like so: 200k, 300k, 500k, 1M" — (#france, 2025-01-01) — confirmé
+- **Seule une partie de l'argent va aux infrastructures (facilities) ; l'argent disponible influence l'investissement** — (#general, 2024-12-20) — confirmé
+- **Avril 2025 : les revenus de diffusion/sponsor des D1 ont été réduits car il y avait trop d'argent dans le jeu ; les clubs qui "imprimaient de l'argent" sont fauchés ; le plafond salarial ne change pas les gains : seul réduire les revenus le fait** — (#general, 2025-04-08) — confirmé
+- **Le prix d'un joueur dépend aussi de sa performance, pas seulement de sa qualité : deux joueurs à 3M et 4M peuvent être identiques ; seul l'écart 15M vs 3M est fiable** — (#quick-questions, 2025-04-19) — confirmé
+- **Marché des gardiens (mars 2025) : pénurie, "over 100 players between 5M and 15M" hors GK ; correction prévue** — (#general, 2025-03-07) — confirmé
+- **Promotion (fin 2024/2025) : le conseil laisse un poste vacant ; un joueur trop cher peut être promu de l'école à la fin de son contrat ; il ne signera pas de nouveau contrat** — (#quick-questions, 2025-04-25) — confirmé
+- **Remboursement après achat/prix du joueur : le prix baisse après achat si le gain ne compense pas la baisse due à l'âge (déjà noté) — formule de prix non dépendante de l'expérience** — (#quick-questions, 2025-08-13) — "I changed prices, it's all connected" — en doute
+- **Nombre minimum d'effectif : "You need more than 18 and you can sell half of that extra" : avec 23 joueurs il y a 5 au-dessus de 18, la moitié = 3 joueurs à mettre sur la TL** — (#quick-questions, 2025-05-08) — confirmé (limite de joueurs en liste de transfert)
+- **FINANCES DU CONSEIL (2025-07-06) : revenus de stade et primes de match NE SONT PAS dans les finances quotidiennes (variables) ; le conseil utilise un revenu de stade quotidien estimé (moyenne 500k par jour) ; il investit dans les facilities autant que possible sans trop de solde quotidien négatif ; il n'investit pas si les facilities sont trop hautes pour la division** — (#quick-questions, 2025-07-06) — confirmé
+- **Facilities qui descendent : le conseil dégrade les facilities de 200k par jour (exemple) pour garder la trésorerie disponible pour acheter ; on peut racheter le niveau perdu au même prix que l'amélioration ; c'est financièrement identique** — (#quick-questions, 2025-07-06) — confirmé
+- **Nouvelle règle d'investissement (2025-08-12) : avant, le conseil investissait une partie de l'argent en banque dans les facilities (donc certains thésaurisaient 20-70M pour monter leurs facilities) ; supprimé car cassé ; désormais le conseil investit selon l'attente de la division/popularité, et le manager peut investir manuellement** — (#england, 2025-08-12) — confirmé
+- **Si on a plus de 25M en banque en D4 : se concentrer sur le retour en D3 et la réputation** — (#france, 2025-05-22) — avis
+- **Salaire minimum 5k** ; offre de 7k refusée dans un cas (2025-07-24) — (#quick-questions, 2025-07-24) — confirmé
+- **Seules les récompenses de division comptent : "the rewards basically double with each division"** — (#quick-questions, 2025-07-31) — confirmé
+- **Objectif conseillé aux petits clubs : monter en D3 avant de s'occuper de développement ou de facilities ; acheter des joueurs de 25+ ans de qualité** — (#quick-questions, 2025-07-31) — conseil
+- **Revenus : en cas de manque d'argent le conseil réduit la maintenance ; à 100% de maintenance = assez d'argent pour le niveau actuel** — (#general, 2025-06-29) — confirmé
+- **Frais de libération/renvoi d'un joueur réduits le 2025-09-12 : exemple Galdames licencié pour 122k (avant) vs 245k de salaire restant ; maintenant 80k ; les frais existent pour éviter de promouvoir tout le monde depuis l'école** — (#england, 2025-09-12) — confirmé
+- **Le conseil n'investit le cash en facilities que si on a 20-50 M en banque ; l'investissement est basé sur les revenus (2025-09-12)** — (#england, 2025-09-12) — confirmé (partiellement contredit ensuite par 2025-11-11 : le conseil investit selon le revenu et réduit si manque)
+- **Sponsors/facilities qui descendent : le conseil laisse baisser les facilities (au hasard le bâtiment qui régresse) plutôt que de vider la trésorerie ; exemple : club gagnant 300k/jour + recettes match où le manque pour facilities = 300k/jour ; contrats prolongés = ~9M en une saison** — (#france, 2025-11-11) — confirmé
+- **Pour garder le même niveau de facilities il faut vendre des joueurs ; la seule sortie est de monter d'un tier sans augmenter les salaires** — (#france, 2025-11-11) — confirmé
+- **On peut vendre un joueur et utiliser l'argent pour acheter immédiatement une amélioration : mathématiquement identique à l'investissement du conseil** — (#france, 2025-11-12) — confirmé
+- **Plafond de salaire : dépend de la réputation de l'équipe ; il peut bloquer un effectif trop cher à un niveau supérieur (3 relégations du développeur)** — (#france, 2025-11-12) — confirmé
+- **Récompenses de CC/AC peut-être augmentées (bonus de victoire en phase de groupes) ; l'argent total du jeu est plutôt bas** — (#general, 2026-01-01) — en doute
+- **Revenus de billetterie partagés entre les deux équipes (le stade ne compte pas) : jouer à l'extérieur contre un gros club rapporte plus** — (#general, 2026-01-01) — confirmé
+- **Fin de saison : reset des saisons : lundi nouvelle saison générée, mercredi premiers matchs ; les 1er et 2e reçoivent un bonus ; transferts plus rapides sans matchs** — (#england, 2025-09-02) — confirmé
+- **Primes et salaire jeunes : salaire d'école (5k pendant 3 ans) jugé trop bas, ramené à une valeur ancrée sur les facilities** — (#quick-questions, 2026-08-15) — confirmé
+- **Salaires demandés des joueurs ne dépendent plus de leurs compétences mais des facilities du club (pour les jeunes sortis de l'école)** — (#quick-questions, 2026-07-23) — confirmé
+- **Proposition rejetée : durée de contrat choisie par le joueur — calculable mathématiquement et exploitable** — (#quick-questions, 2026-08-15) — confirmé (rejet)
+- **Idée : +10% de salaire annuel pour pousser les joueurs au marché** — (#quick-questions, 2026-08-15) — en doute
+- **Santé des finances (2026-08-15) : ~80% des équipes ont un solde positif ; 50-60 sont sous 5M, surtout dans les ligues à faible popularité** — (#quick-questions, 2026-08-15) — info
+- **Argent thésaurisé : 200M en D3 jugé étrange ; le développeur a rétabli un manager (2026-02-21)** — (#france, 2026-02-21) — info
+- **Revenus billetterie : Everton a touché 31k contre Liverpool et en moyenne 8k par match (2026-08-03)** — (#quick-questions, 2026-08-03) — info
+- **Frais de libération d'un manager : le plafond de contrat "NC 6M D1 10M"** — (#general, 2026-01-23) — en doute
+- **Frais de signature : "1k salary = 100k sign on fee" (3 saisons = 105 jours × 1000 = ~100k) ; une offre à 35k de plus en salaire = 3,5M de frais en plus ; salaire garde le joueur content plus longtemps mais compte dans le plafond** — (#general 2026-09-01 ; #quick-questions 2026-10-03) — confirmé
+- **Exemple D4 (2026-10-03) : 19M en banque, à 125k sous le plafond ; perte quotidienne 280k sans matchs ; chaque victoire rapporte 200k + ~120k par match à domicile ; si l'argent devient négatif le conseil réduit l'investissement dans les facilities ; budget transferts 19M, 125k de salaire disponible** — (#quick-questions, 2026-10-03) — confirmé
+- **Le salaire demandé par un jeune est lié aux facilities (voir JEUNES) et les offres d'enchères tiennent compte du salaire et de la prime** — (#general, 2026-09-01) — confirmé
+- **Pas de hausse de salaire automatique ; un joueur moyen qui exige +60% reste normal** — (#spain, 2025-08-20) — confirmé
+- **Préparer l'effectif : 16 joueurs de valeur moyenne 12,5M sont meilleurs que 20 joueurs de 10M (même total 200M) ; les petits effectifs sont plus puissants ; 1 remplaçant par poste sauf gardien (le gardien joue tous les matchs)** — (#quick-questions, 2026-08-19) — confirmé (observation du développeur)
+- **Pénalité de plafond "-5M downgrade" implémentée contre un manager qui investissait 300% (plaisanterie)** — (#quick-questions, 2026-08-24) — en doute
+- **Joueur sous le plafond de salaire : "buy yourself the most expensive player from the market"** — (#inconnu, 2026-10-14) — conseil
+- **Revenus: les victoires rapportent 200k + domicile ~120k (rappel D4)** — (#quick-questions, 2026-10-03) — confirmé
+
+## Équipe / joueurs : compétences, forme, sharpness, condition, tiers, team spirit, temps de jeu, blessures
+
+- **Forme (form) : nombre caché de 1 à 20 qui varie cycliquement ; haute => elle va baisser, basse => elle remonte ; point de retournement dépend de club fit et du hasard** : "Form affects other stats (e.g. focus, anticipation) and cyclically rises and falls" — (#general, 2024-06-03 ; #quick-questions, 2024-05-31) — confirmé
+- **Forme croissante : jouer augmente la chance qu'elle se mette à baisser (plus forte quand haute). Forme décroissante : jouer diminue la chance de retournement (plus forte quand basse) ; faire reposer un joueur en baisse aide la forme à remonter** — (#general, 2024-06-03) — confirmé
+- **La forme est affichée par fourchette ("Superb form" = un intervalle, p.ex. 18 à 20), les autres compétences sont précises ; l'impact de la forme est à peu près celui d'une autre compétence ; la flèche indique la direction et la couleur la valeur** — (#quick-questions, 2024-06-14) — confirmé
+- **Satisfaction : la moyenne de satisfaction des joueurs du premier 11 agit comme modificateur de la performance en match** : "The average satisfaction of players in your first 11 acts as a modifier to match performance" — (#quick-questions, 2024-05-28) — confirmé
+- **Pénalité de poste ("position penalty") est élevée volontairement pour décourager de jouer hors poste ; chaque poste a 3-4 rôles donc un DL peut jouer "presque comme ML" sans le repositionner** — (#general, 2024-05-10) — confirmé
+- **Affichage du pourcentage de rôle : p.ex. un joueur peut montrer AWB 20% (ressenti 80% de pénalité) mais l'effet réel est ~6% ; la pénalité est donc faible à ce niveau** — (#quick-questions, 2024-05-28) — confirmé
+- **Pénalité de poste : jouer un DC en DR convient surtout s'il est "versatile" ; le développeur veut supprimer la pénalité de poste si le joueur connaît le rôle au-dessus d'environ 75%** — (#general, 2024-06-13/14) — en doute (projet)
+- **Condition : "natural fitness" et la fatigue de rôle déterminent la perte de condition par match ; la condition après le match fixe la probabilité de blessure (durée aléatoire, tend vers court) ; professionnalisme (part de l'expérience) et concentration (focus) réduisent la probabilité de cartons** — (#quick-questions, 2024-06-13) — confirmé ; calculé après le match (à déplacer vers événements de match)
+- **Âge : bug de l'âge arrondi corrigé le 2024-06-12 ; l'âge est stocké en date de naissance, affiché en années décimales (ex 20.629 ans)** — (#quick-questions, 2024-06-01/02/12) — confirmé
+- **Semaine = 1 mois d'âge ? Dans DM1 une saison = 1 mois ; dans DM2 la saison = 5 semaines, le calcul se fait en jours** — (#quick-questions, 2024-06-01) — contexte
+- **Il y a une valeur marchande qui peut monter fortement avec l'entraînement ; peu de joueurs ont gagné plus de 100k de valeur par entraînement (2024-06-30)** — (#general, 2024-06-30) — exemple
+- **Cohésion (cohesion), ajoutée 2024-08-21 : pénalité si on change beaucoup de joueurs d'un match à l'autre ; "You have to change 8 players at once to get it down. It's basically only a noticeable penalty if you rotate 10 or so players. Keep 3-4 players from the previous match"** — (#general, 2024-08-21) — contredit (remplacé par sharpness en septembre 2024)
+- **Cohésion au maximum pour tous après les matchs du 2024-08-21 (~90% pour tous)** — (#general, 2024-08-21/22) — historique
+- **SHARPNESS (remplace cohésion et "training effort") : croît en jouant ; sauter un match demande de jouer 2 matchs ou plus pour revenir au max (+5 à +10% par match joué) ; légèrement aléatoire** — (#general, 2024-08-22/23) — confirmé (implémenté depuis fin août 2024)
+- **Sharpness : un joueur à 100% qui saute un match tombe vers 85% ; au prochain match joué il regagne de +5 à +10%** — (#general, 2024-08-22) — confirmé
+- **Sharpness : "it incentivises using the same squad", réduit l'intérêt de la rotation A/B pour l'entraînement, réduit le gain d'un match sauté pour la condition, et permet d'entraîner les jeunes avec un match tous les 5-6** — (#general, 2024-08-23) — confirmé
+- **Sharpness : les blessures ne changent pas ; la sharpness s'affiche par couleur (vert / bleu) ; 18 joueurs utilisés régulièrement = 9 verts + 9 bleus (exemple du développeur) ; on peut garder ~15 joueurs en vert avec rotation** — (#spain, 2024-09-12) — confirmé
+- **Entraînement à la saison précédente : un joueur devait jouer au moins 1 match sur 3 (idéalement 2 sur 3) pour s'entraîner ; 22 joueurs étaient le maximum entraînable ("effectively")** — (#spain, 2024-09-12) — contredit (ancien système)
+- **Condition : on récupère +6% par jour sauté (85% -> 91%) ; un joueur à 85% peut faire "repos, jeu, jeu"** — (#general, 2024-08-24) — confirmé
+- **Condition naturelle : "natural fitness" culmine vers l'âge de 26 ans** — (#general, 2024-08-24) — confirmé
+- **Les rôles qui dépensent plus de condition : presser (gegenpress) coûte plus de condition ; le développeur veut un banc long (16 titulaires + 5 remplaçants/jeunes)** — (#general, 2024-08-24) — confirmé
+- **Pénalité de mauvaise position annoncée : pas encore d'indicateur de "rôle préféré" (2024-09-12 "Role preferences part is not implemented yet") ; il y aura un petit boost si on joue un joueur dans le rôle qu'il préfère** — (#quick-questions, 2024-09-05 ; #spain, 2024-09-12) — en doute (annoncé)
+- **Compétences importantes par rôle non définies officiellement : "I don't know which skills are the most important for each role"** — (#quick-questions, 2024-09-05) — confirmé : à documenter par la communauté
+- **L'avantage domicile existe : max 15% ("15% is the max... realistically 7-8% on average") ; au départ réglé à 10%, bug : appliqué aux deux équipes jusqu'à ~2024-09-09 ; ligue seulement ("only for the league")** — (#general 2024-08-24/25 ; #spain 2024-09-12) — confirmé (bug corrigé ~2024-09-09)
+- **Home-advantage bug (juillet 2024) : les joueurs à l'extérieur restaient en retrait au lieu d'avancer, plus de "holding the ball"/dribbles à l'extérieur** — (#general, 2024-07-26) — corrigé en août/septembre 2024
+- **Un joueur indisponible laissé dans la composition est remplacé automatiquement par le meilleur remplaçant, même s'il faut promouvoir un jeune ; on peut sauvegarder une composition avec un blessé** — (#england 2024-09-08 ; #general 2024-08-31) — confirmé
+- **Note du joueur (rating) : mesure la division ; le meilleur de D3 est noté moins que celui qui survit de justesse en D2** — (#general, 2024-09-13) — confirmé
+- **Les joueurs non jouants perdent de la valeur et des compétences ; le développeur veut qu'ils puissent perdre des compétences** — (#general, 2024-08-23) — confirmé (intention)
+- **Le développeur veut des équipes de 16 titulaires + 5 réservistes/jeunes plutôt que 11x4 étoiles + 11x1,5 étoile** — (#general, 2024-08-24) — confirmé (intention)
+- **Réputation du manager : démarre comme si l'on avait fini 2e de D4 ; en D4 elle reste sous 200 ; ne dépend pas de la satisfaction du conseil mais du tier de l'équipe (donc de la place en ligue) ; elle suit avec retard la réputation de l'équipe ; mise à jour en continu (toutes les saisons)** — (#quick-questions, 2024-07-19) — confirmé
+- **Réputation manager : exemple 8e -> 193, victoire -> 199, 12e en D3 -> ~206 ; la seule façon d'améliorer sa réputation est d'augmenter le tier de l'équipe** — (#quick-questions, 2024-07-19) — confirmé
+- **On ne peut pas sauter d'équipe en réputation : on ne peut rejoindre qu'une équipe en sous-performance dont la réputation baisse** — (#quick-questions, 2024-07-19) — confirmé
+- **Sharpness en début de saison : tout le monde démarre en zone bleue pour simuler les amicaux de pré-saison, légèrement aléatoire ; amicaux envisagés plus tard** — (#quick-questions, 2024-09-17) — confirmé
+- **Compétences mentales/statuts : focus = tir direct, événements défensifs et tirs ; creativity = build up court et toutes les actions offensives sauf tirs ; work rate = empêcher les deux build ups et mettre plus de pression** : "focus is for direct build up, defensive events and shots. Creativity is for short build up and all offensive actions except shots. Work rate is to prevent both build ups and to put more pressure on opponents." — (#quick-questions, 2024-09-17) — confirmé
+- **Build up direct = creativity + agility ; build up régulier (court) = creativity seulement ; forme et expérience interviennent partout** — (#quick-questions, 2024-10-28) — confirmé
+- **Aériens : attaquants = atteindre les centres ; défenseurs = dégager les centres ; gardiens = arrêter les têtes** — (#quick-questions, 2024-10-28) — confirmé
+- **Forme : couleur = valeur (rouge mauvais, vert bon) ; angle de flèche = évolution ; la couleur intermédiaire est entre jaune et vert** — (#quick-questions, 2024-10-29) — confirmé
+- **Expérience : barre à 4 niveaux (barely 0/3, fairly 1/3, highly 2/3, superbly pleine) ; forme/fitness 4 niveaux "bad, poor, great, superb"** — (#general, 2024-10-31) — confirmé
+- **L'expérience sert à la connaissance de poste ("position knowledge uses xp"), à la confiance et à une douzaine d'autres choses** — (#quick-questions, 2024-10-29) — confirmé
+- **Satisfaction/team spirit : "7+ red faced players" signale un problème de spirit ; visage rouge = pénalité importante (joueur hors poste)** — (#france 2024-12-18 ; #general 2024-11-16) — confirmé
+- **Joueurs de 35+ : il ne faut pas pouvoir prolonger un joueur de 36 ans ; max 38 ans** — (#quick-questions, 2024-12-16) — confirmé
+- **Réputation d'équipe ou de manager ne donne AUCUN avantage de match : "manager or team reputation has no effect on match results... just players"** — (#france, 2024-12-18) — confirmé
+- **Effectif : 19-20 joueurs suffisent au développeur ; 22 est plus que suffisant ; flexibilité 3 ou 4 derrière, 1 à 3 attaquants** — (#general, 2024-10-08 et 2024-12-18) — avis
+- **Les "rankings" des joueurs comptent le poste où il a le plus joué ; on peut filtrer par poste depuis le 2024-10-21** — (#general, 2024-10-21) — confirmé
+- **Pas de remplaçants (substitutions) en match au 2024-12-04** : "There are no substitutes yet" — (#quick-questions, 2024-12-04) — contredit ensuite (voir plus loin)
+- **Condition : au-dessus de 80% = "ok to play" ; 93% est le meilleur du développeur ; il fait de petites rotations quotidiennes (1-2 joueurs) pour garder ~15 joueurs en sharpness correcte** — (#france, 2024-12-18) — avis du développeur
+- **Les joueurs clés attendent de jouer tous les matchs ; en reposer un quelques fois par saison est possible ; en rater 6 sur 16 peut poser problème (insatisfaction)** : "Key players expect to play every single game." — (#france, 2024-12-18) — confirmé
+- **Temps de jeu : un joueur qui joue 1 match sur 2 (3 sur 6) convient à un remplaçant mais pas à un titulaire, qui deviendra de plus en plus mécontent** — (#quick-questions, 2025-01-07) — confirmé
+- **Un joueur non utilisé n'affecte pas le moral d'équipe : "If he doesn't play, team morale isn't affected"** — (#general, 2025-01-18) — confirmé
+- **Blessure (2025-01-24) : la probabilité de blessure = condition manquante : à 70% de condition = 30% de chance de blessure ; le développeur garde ses joueurs au-dessus de 80%** : "The chance is equal to the missing condition, so at 70% there is 30% chance for an injury" — (#quick-questions, 2025-01-24) — confirmé
+- **Les blessures varient : en moyenne au pire 3 matchs ; jouer un joueur qui n'a qu'un match de blessure restant est possible : toute blessure est automatiquement raccourcie d'un match (depuis 2024-12-18)** — (#general, 2024-12-18) — confirmé
+- **Statut "jaune" (blessure/retour) : n'augmente PAS la chance de se blesser, aucune pénalité de performance, mais augmente la durée d'une nouvelle blessure** — (#general 2025-04-08 ; #quick-questions 2024-12-19) — confirmé
+- **Natural fitness : plus haute vers 26 ans ; les jeunes la font croître** — (#quick-questions, 2025-02-04) — confirmé
+- **Note de match (rating) : les gardiens sans travail reçoivent un 6 par défaut qui réduit leur moyenne ; ajustement prévu (+1,0). Les notes montent si l'équipe gagne : ne pas s'y fier pour comparer deux joueurs, utiliser compétences et autres infos** — (#general, 2025-01-15) — confirmé
+- **Cartons directs rouges : "can't wait to implement direct red cards" (2025-01-08)** — (#general, 2025-01-08) — en doute
+- **Palier d'un joueur ("tier") : rang relatif parmi tous les joueurs : le meilleur = tier 10, le 50e = tier 9, le 250e = tier 8 ... ; un joueur peut être tier 8,06 (248e) puis 7,97 (251e) et changer d'étiquette. Les noms des tiers sont indicatifs** — (#general, 2025-03-31) — confirmé
+- **"Peak tier" : si un joueur est "solid" il ne dépassera probablement pas "solid" mais peut progresser dans la fourchette (bas solid -> haut solid)** — (#quick-questions, 2025-04-23) — confirmé
+- **Potentiel affiché par étapes : "low potential to reach <palier>" = incertain d'y arriver ; "high potential" = bonne chance ; ce n'est pas la limite, seulement l'indication pour l'étape suivante** — (#quick-questions, 2025-04-01) — confirmé
+- **Les étiquettes de tier évitent un mot dévalorisant : le développeur vise l'incertitude ("He can still grow to be superb")** — (#quick-questions, 2025-01-09) — confirmé
+- **Popularité des joueurs et des équipes : toutes les équipes sont triées par popularité chaque lundi ; tier d'équipe : 20 équipes dans le top tier, 50 dans le suivant, etc. ; pour les joueurs : les 200 meilleurs = top tier, les 1000 suivants = tier suivant. Cela détermine qui on peut acheter** — (#france, 2025-01-01) — confirmé
+- **La popularité d'une équipe se déplace chaque lundi d'un pourcentage vers la popularité de sa position (12e de D2 est plus populaire que 1er de D3) ; bonus de fin de saison pour classement et coupes ; monter en division améliore presque toujours la popularité/tier** — (#france, 2025-01-01) — confirmé
+- **Réputation du manager : démarre à 200 et converge lentement vers la réputation du club (club à 280, manager peu de changement en milieu de classement de D3) ; "boost" de 30-40 points quand on monte un club de 2 divisions en 2 saisons ; le boost n'est pas une mise à jour de réputation mais un coup de pouce pour la recherche d'emploi** — (#quick-questions, 2025-03-18, 2025-03-31, 2025-04-01) — confirmé
+- **Manager absent : le manager reste statique (il vieillit seulement), on peut revenir ; il se fait licencier ; la réputation baisse peut-être lentement chaque saison (non confirmé)** — (#quick-questions, 2025-04-28) — en doute
+- **Les 4 niveaux de forme : bad, poor, great, superb ; la sharpness en bleu/vert ; l'état affiché n'est qu'une estimation** — (#general, 2024-10-31) — confirmé
+- **Remise à zéro de condition en cours de saison (2025-08-21) : décidée pour "give everyone a reset" : condition complète et 2 blessures ; après le match 18 un dimanche sans matchs du soir ; boost de 10-15% débattu, "Full" choisi ("let's go with full as I planned and then we can reduce it to 15% if it's too much")** — (#quick-questions, 2025-08-21) — confirmé (événement unique de la saison 15 ; non récurrent connu)
+- **Prime/Salaire : joueur voulant 60% d'augmentation : "he wants more (either salary or signing fee)"** — (#spain, 2025-08-20) — confirmé
+- **Poste d'un joueur : pas de boost de compétences selon la position ; les meilleures compétences à la génération restent les meilleures ; croissance aléatoire entre compétences** — (#quick-questions, 2025-09-04) — confirmé
+- **Une compétence à 19 (agility) peut ne plus monter** — (#quick-questions, 2025-09-04) — confirmé
+- **Retraite : quand le joueur reçoit l'icône de retraite il prend sa retraite à la fin de la saison et n'accepte plus de contrat ; on peut le retirer plus tôt** — (#quick-questions, 2025-10-20) — confirmé
+- **Icône "doit jouer" (play icon, 2025-10-21) : tient compte de 1 ou 2 matchs dans la journée et du temps depuis le dernier match du joueur ; signifie le prochain match ; s'affiche après le dernier match de la veille s'il n'y a pas deux matchs** — (#general, 2025-10-21) — confirmé (peut mal fonctionner)
+- **Les joueurs veulent aller dans une meilleure équipe qui leur donnerait 8+ progressions de compétences ; les tiers sont larges (6M et 12M peuvent être dans le même tier)** — (#france, 2025-10-15) — confirmé
+- **L'heure affichée est UTC (2025-11-04)** — (#quick-questions, 2025-11-04) — info
+- **TEAM SPIRIT (retour annoncé 2026-07-22 / 2026-08-15, déjà en jeu le 2026-08-17) : comme dans DM1 : jusqu'à 5 leaders donnent +3% de performance globale ; les autres catégories donnent différents pourcentages (certains -1%) ; structure type = ~107% ; chaque joueur mécontent = -3% (même s'il ne joue pas) => 94% ; équipe pleine de jeunes ~83% ; équipe pleine de vieux 105% mais perd de la valeur** : "up to 5 players from your team could be leaders and would give you +3% to overall performance... every unhappy player gives you -3%" — (#quick-questions, 2026-07-23, 2026-08-15, 2026-08-17) — confirmé (chiffres de DM1 décrits comme modèle ; valeurs exactes DM2 en doute)
+- **Team spirit = "general atmosphere in the dressing room and you take it, exactly as written, to each match. Resolve or transfer list your complaining players, get enough leaders, and manage the whole squad."** — (#quick-questions, 2026-08-17) — confirmé
+- **Les joueurs très mécontents refuseront de signer un nouveau contrat** — (#quick-questions, 2026-08-15) — confirmé
+- **Les joueurs mécontents transfert-listés: la pénalité de spirit disparaît seulement si le joueur est listé depuis 1 jour ou plus** — (#quick-questions, 2026-08-17) — confirmé
+- **Bonus d'expérience/mentor : l'expérience ne fait que monter ; le bonus aux facilities dépend de l'expérience, du temps de jeu et autres ; on ne doit pas acheter un vieux joueur juste pour le bonus sans le faire jouer** — (#quick-questions, 2026-07-25) — confirmé
+- **Compétence "set pieces" était ignorée par tous les managers ; en avril 2026 elle devient plus pertinente (peut être entraînée)** — (#general, 2026-04-10) — confirmé
+- **Centres : un joueur bon passeur court mais pas long ; pour centrer il faut passing + technique** — (#quick-questions, 2026-04-16) — confirmé
+- **Icône « near/close/at the limit » (2026-06-15) : à near et close le joueur peut encore grandir** — (#quick-questions, 2026-06-15) — confirmé
+- **Pressing (2026-07-10) : "Building from defence and pressing just shift some numbers between different build up areas"; le pressing augmente la distance parcourue pour presser et consomme plus de condition** — (#quick-questions, 2026-07-10) — confirmé
+- **Toutes les compétences sont également importantes ; le total de puissance n'est pas une simple addition** — (#quick-questions, 2026-07-10) — confirmé
+- **Retraite automatique entre saisons ; les joueurs avec l'icône restent jusqu'à la fin de saison** — (#quick-questions, 2026-04-29) — confirmé
+- **TEAM SPIRIT (TS) — effet exact (2026-09-01) : "every player in your squad gets a modifier between 0.75 and 1.10 from TS. That's on top of all other modifiers."** — (#spain, 2026-09-01, derbymanager) — confirmé
+- **TS (2026-09-25) : "TS is literally what it says on the tin - every player in every action has his power multiplied with 0.96 if TS is 96%" ; différence 96 vs 91 = 5% de baisse de puissance ; sensible vers 15% d'écart** — (#quick-questions, 2026-09-25) — confirmé
+- **TS : les couleurs d'affichage ont été décalées de 5% vers le haut car un TS positif peut maintenant augmenter le modificateur ; 75% de TS doit inquiéter** — (#quick-questions, 2026-09-06) — confirmé
+- **TS : "it's not meant to go over 100%" mais le maximum théorique est 110% avec 10 leaders (« you can only ever have 10 leaders so bots with old squads would still have a max of 110% ») ; au-dessus de 90 c'est bien (comme la condition)** — (#quick-questions 2026-08-20 ; #general 2026-08-20) — confirmé
+- **TS : l'école compte dans le TS : un joueur de l'équipe première se sent menacé s'il y a 30 joueurs pour 11 places ; pénalité d'environ 1% (pour chaque jeune) ; "-1%TS" par jeune en école ; 8 jeunes en école = environ 3-4% de pénalité acceptable** — (#quick-questions, 2026-08-19) — confirmé (pénalité d'école au TS annoncée ; "I removed the limit" sur la croissance en école)
+- **Insatisfaction (3 comptes : temps de jeu / équipe / contrat) : le salaire et le rôle de contrat sont fusionnés en une plainte ; le temps de jeu se situe entre les icônes jaune et rouge de l'ancien système ; le nouveau système se calcule la saison prochaine ; les nouveaux (« newcomers ») sont "fringe" les premiers jours** — (#quick-questions, 2026-08-19/20) — confirmé
+- **ATTENTES DE TEMPS DE JEU (2026-08-20) : 75%, 60%, 40%, 25% des matchs ; soit sur 20 matchs 15, 12, 8, 5 ; catégories : joueur clé (key) 75%, première équipe 60%, rotation 40%, remplaçant (backup) 25% ; "2 out of 5" pour un joueur de rotation ; seuil rotation réglé à 40% pour ne pas être trop strict** : "It's 75, 60, 40, 25% right now" — (#general, 2026-08-20) — confirmé
+- **Calcul modèle : 20 matchs => 220 places ; 5 joueurs clés = 75, 5 première équipe = 60, 8 rotation = 64, 4 remplaçants = 20 => 219 places pour 22 joueurs ; 5 joueurs clés c'est déjà beaucoup** — (#general, 2026-08-20) — confirmé
+- **Le joueur ne compte que les matchs où il était disponible : blessé (même jaune), rouge, carton rouge ne génèrent pas d'insatisfaction ; les joueurs blessés n'accumulent pas d'insatisfaction** — (#general 2026-08-30 ; 2026-09-13) — confirmé
+- **Satisfaction de temps de jeu : les joueurs clés l'augmentent lentement et la perdent vite ; ils se fâchent sous 20-30% environ ; l'historique des saisons précédentes compte** — (#general, 2026-09-13) — confirmé
+- **Période de grâce avant les plaintes : actuellement 15-35 jours, à porter à 25-55 jours (1 à 1,5 saison de silence)** — (#quick-questions, 2026-08-20) — en doute (annoncé)
+- **Un nouveau contrat remet la satisfaction à 75% si elle est plus basse ; un nouveau contrat réinitialise les attentes** — (#quick-questions, 2026-09-21/22) — confirmé
+- **Un joueur transfert-listé depuis 24h voit son insatisfaction annulée (il n'est pas obligatoire de le vendre)** — (#spain 2026-09-08 ; #quick-questions 2026-09-29) — confirmé
+- **Trois blocages de prolongation (2026-08-24) : (1) joueur mécontent sur les 3 comptes (temps de jeu/équipe/contrat), facile à résoudre via le temps de jeu ; (2) trop bon pour le tier de l'équipe, difficile car la réputation évolue lentement ; (3) ne peut plus s'entraîner dans le club mais a du potentiel** — (#quick-questions, 2026-08-24) — confirmé
+- **Les demandes de contrat : "players have expectations that are about 5k-25k higher than what you can minimally offer"; vert = signe n'importe quelle offre ; le développeur offre environ 10k de plus** — (#quick-questions, 2026-10-03) — confirmé
+- **Sharpness = forme, club fit et autres modificateurs groupés puis légèrement randomisés pendant un match** : "Sharpness is form, club fit, and other modifiers grouped together and then slightly randomised in a match." — (#quick-questions, 2026-09-06) — confirmé (contredit l'ancienne définition : sharpness = jouer régulièrement)
+- **Forme change plus lentement (octobre 2026) : le pourcentage va de + à - selon le jour de la saison ; ~0,8 après 1 semaine, ~0,6 après 2 (réponse tronquée)** — (#quick-questions, 2026-10-04) — en doute
+- **Joueurs qui ne s'entraînent pas perdent de la valeur plus vite, surtout les vieux ; un joueur trop bon pour l'équipe ou mauvais club fit perd de la valeur ; exemple : un défenseur -30 points de compétence -4,5M ; un attaquant 25 ans 10M -16 compétences -2,2M** — (#belgium, 2026-10-08) — confirmé
+- **Âge réel caché : un joueur de 25 ans affiché peut être 28 ou 22 en arrière-plan** — (#belgium, 2026-10-08) — confirmé
+- **Statistiques de croissance (2026-10-09) : variation moyenne de puissance/prix par joueur en Belgique : Genk +0,08 / +385k ; Lierse 0,00 / +285k ; Standard -0,09 / -171k ... meilleures équipes par revenu : Huesca +0,11 / +721k ; Nijmegen +0,13 / +671k ; Cartagena +0,15 / +591k** — (#belgium, 2026-10-09) — info
+- **Un rapport "fringe" : joueurs nouvellement arrivés** — (#quick-questions, 2026-08-19) — confirmé
+- **Statut de la défense : le développeur change le plafond d'âge du recrutement 'youngster' à 21 ; autre mention de 18/21/23 (réponse imprécise)** — (#general, 2026-10-03) — en doute
+- **Solidarité : sur chaque vente 10% allait au joueur ; désormais 5% au joueur + 5% de solidarité (solidarity fee) ; les prolongations sont moins chères car elles n'ont pas de solidarité ; un bug a empêché la solidarité de fonctionner la plupart du temps jusqu'au 2026-09-13 (corrigé, sauf offres antérieures)** — (#quick-questions, 2026-09-06 ; 2026-09-13) — confirmé
+- **Condition (2026-10-19) : la perte de condition est un pourcentage de la condition restante : "It's not 2% flat, it's 2% of the remaining condition (so if your player is at 50% he would lose just 1%)" ; un joueur à 100% peut perdre ~7% par match ; BTB à 100% et à 80% perdent différemment** — (#inconnu, 2026-10-19) — confirmé
+- **Dépense de condition par rôle, échelle réelle 5 à 9 : BTB = 9, DWG = 8, DLP = 7 ; moyennes 8,5 et 8** : "btb has condition spend 9, dwg 8, dlp 7, on a scale from 1 to 9 ... the real scale is from 5-9" — (#inconnu, 2026-10-19) — confirmé
+- **Les rôles à forte dépense de condition (ex BTB) : ne pas y mettre un joueur à mauvaise forme physique ; idée d'une icône "fatigué" où le joueur accepte de sauter un match (sous 65%) ou d'un statut jaune** — (#inconnu, 2026-10-19) — en doute (idée)
+- **Les gardiens perdent peu de condition, donc risque de blessure plus bas** — (#inconnu, 2026-10-30) — confirmé
+- **Minutes jouées et entraînement : 30 minutes réduisent l'exigence d'entraînement de 1, 60 minutes de 2, 90 minutes la ramènent à 0 ; les minutes donnent aussi expérience, satisfaction de temps de jeu et autres, proportionnellement** : "If they play 30 minutes they get their training requirement reduced by 1, 60 minutes by 2, and 90 minutes back to 0." — (#inconnu, 2026-10-22) — confirmé (nouveau système d'octobre 2026)
+- **Risque de blessure (2026-10-22) : la chance de blessure commence à x quand la forme est 0, descend à un minimum quand la forme monte, puis remonte ; le risque le plus bas concerne les joueurs sous charge modérée** — (#belgium, 2026-10-22) — confirmé
+- **Pré-saison : les blessures guérissent encore en partie pendant la pré-saison, de 5 jours, et 2 amicaux de pré-saison portent le total à 7 (question d'un joueur : « Will injuries still partially heal in preseason? » ; réponse « yes, by 5 », « + 2 friendly matches = 7 »)** — (#inconnu, 2026-10-30) — confirmé
+- **Un DC joué en DR a une pénalité minime ; positions D pour D, M pour M, sinon 4 remplaçants ne couvrent pas l'équipe** — (#inconnu, 2026-10-26) — confirmé
+- **L/C/R en défense doit être marqué en rouge (hors poste)** — (#inconnu, 2026-10-26) — confirmé
+
+## Transferts : marché, enchères, scouts, régions, libération, frais
+
+- **Un joueur prend jusqu'à 3 jours pour répondre à une offre de transfert (juin 2024) ; le développeur annonce un maximum de 2 jours pour la saison suivante** : "I will make them decide faster, so at most 2 days" — (#quick-questions 2024-06-02 ; #general 2024-06-07) — contredit ensuite (voir dates ultérieures)
+- **Pas de fenêtres de transferts : volontairement, car les fenêtres compliquaient les finances, les bots et frustraient (DM 2.0 avait des fenêtres)** — (#general, 2024-06-07) — confirmé
+- **Le développeur refuse que les joueurs acceptent les offres très basses ("lowball") pour éviter que ce devienne la méta ; proposer un peu plus d'argent aide** — (#general/#quick-questions, 2024-06-07) — confirmé
+- **Scouting : un joueur scouté perd 1 niveau de rapport tous les 7 jours à partir du dernier scouting (rescout dans les 7 jours)** : "They lose 1 level every 7 days from the time you last scouted" — (#quick-questions, 2024-06-15) — confirmé
+- **Un joueur scouté 3 fois ("3rd scout") apparaît dans les news pour tous** — (#international, 2024-06-03) — confirmé
+- **Le "offer" dans la news : on voit les dernières offres entrantes et sortantes de son équipe** — (#quick-questions, 2024-06-02) — confirmé
+- **Les joueurs répondent "bientôt" = quelques heures ; le 3e scout fait passer la réponse à 6-12 heures ("within a day") ; le développeur envisage un petit boost aléatoire à la préférence** — (#quick-questions, 2024-08-12) — confirmé (le jeu tient déjà compte de la réputation de l'équipe)
+- **Les rapports de scouting : perdre 1 niveau tous les 7 jours / durée 2 semaines (réponse "2 weeks", 2024-08-17, question non connue)** — (#quick-questions, 2024-08-17) — en doute
+- **Le nombre de joueurs disponibles/arrivant sur le marché sera peut-être limité à 2-3 par saison ou fonction du nombre de joueurs disponibles (idée du 2024-08-23)** — (#general, 2024-08-23) — en doute
+- **Pour recruter : toujours monter le salaire ou la prime ("Don't attempt to min-max, just offer a bit more"). Le joueur choisit la meilleure offre quelle que soit la réputation de l'équipe** — (#general, 2024-12-11) — confirmé
+- **Offre de contrat : le joueur indique ce qu'il attend ; il ne signe pas sous ce montant ; proposer un meilleur statut n'apporte rien** — (#quick-questions, 2024-09-25) — confirmé
+- **Marché : environ 100 transferts en 2 jours en novembre 2024, 500 équipes dans le jeu** — (#general, 2024-11-26) — info
+- **Changement de club : impossible de démissionner ou rejoindre un autre club les 2-3 premières semaines (environ la moitié de la saison) ; offres visibles sur l'écran manager ; démissionner (resign) avant d'en accepter une** — (#quick-questions, 2024-09-22/23 et 2024-12-04) — confirmé
+- **Les limites d'âge : on ne peut pas signer de joueurs de 35 ans ou plus ; max atteignable 38 ans ; un joueur de 38 ans prend sa retraite à la fin de son contrat** — (#quick-questions, 2024-12-16) — confirmé
+- **Marché web : lien https://www.derbymanager.com/market (page marché publique)** — (#quick-questions, 2024-12-12) — info
+- **Sauter de club : volontairement difficile ; la réputation du manager monte lentement pour qu'on ne puisse pas sauter de D4 à Napoli ; le développeur envisage de rendre la réputation plus rapide ou d'ajouter un bonus de fidélité** — (#general, 2024-11-19) — en doute (envisagé)
+- **Contrat : les joueurs plus chers qu'attendu... 3 scouts gratuits par jour** : "You get 3 scouts every day, you can use them to get new youth prospects or to get more info on players on the market" — (#general, 2025-01-17) — confirmé
+- **Un acheteur humain a en général scouté 10 joueurs avant d'enchérir sur celui-ci (utile pour savoir si c'est un humain ou un bot)** — (#general, 2025-01-23) — info
+- **Un joueur peut être trop impopulaire pour ton équipe : "You're just not popular enough for this guy" (tier d'équipe insuffisant pour attirer le joueur)** — (#general, 2025-02-14) — confirmé
+- **Remplacer d'abord les contrats qui expirent ; pour deux joueurs vendus acheter un bon joueur ; promouvoir de l'école APRÈS avoir atteint le plafond salarial (la promotion reste possible au plafond, pas l'achat)** — (#general, 2025-01-02) — conseil du développeur
+- **Équipe de 25 : vendre lentement et réinvestir pour atteindre 20 joueurs meilleurs** — (#quick-questions, 2025-01-24) — conseil
+- **Un club avec 16 joueurs seulement provoque des bugs ; conseil : acheter 2 milieux très bon marché (~700k) pour atteindre 20** — (#general, 2025-01-02) — conseil
+- **Transferts plus rapides hors saison et plus lents vers la fin de saison ; pas de fenêtres car elles ne marchent pas** — (#quick-questions, 2025-07-28) — confirmé
+- **Un joueur d'exemple : "3M player and 4M player can be exactly the same" (prix aussi basé sur performance)** — (#quick-questions, 2025-04-19) — confirmé
+- **Conseil mercato petits clubs (2025-05-03) : vendre 7-8 joueurs au fil du temps et en acheter 3-4 très bons à 3-4M de 26-29 ans ; 19 joueurs suffisent en D4 ; vendre un 1,1M + un 0,8M pour acheter un 2M ; 1 ou 2 très bons joueurs par poste** — (#france, 2025-05-03) — avis
+- **Conseil début de jeu : 15 joueurs de 3-4 étoiles ; un bon effectif moyen vaut mieux que quelques stars + nuls ; 1-2 mauvais joueurs ne cassent pas l'équipe (jeune à 500k pour compléter)** — (#quick-questions, 2025-07-31) — avis
+- **Vendre un bon joueur et en acheter deux "ok" à 5-8M pour avoir 3,5 étoiles partout** — (#quick-questions, 2025-07-31) — avis
+- **Vendre un 2,5 étoiles 18 ans DL et le remplacer par un 4 étoiles** — (#general, 2025-04-25) — avis
+- **Mercato quotidien : les bids sur plusieurs joueurs sont traités ; "anytime now" = réponse imminente** — (#quick-questions, 2025-07-24) — confirmé
+- **Libération gratuite (release on free, 2025-10-21) : moins de ~70 jours de contrat restants et valeur sous un seuil jugé significatif par le conseil ; bouton rouge dans l'écran de discussion de contrat** : "fewer than 70 days or so on their contract" — (#quick-questions, 2025-10-21) — confirmé (remplace "35 jours" de 2024)
+- **Libération (2025-09-03) : prix très bas (sous ~2M pour son équipe), dernière année de contrat ; bouton rouge dans l'écran de nouveau contrat** — (#england, 2025-09-03) — confirmé
+- **Chaque joueur accepte la meilleure offre ; avec plusieurs bonnes offres la meilleure gagne (2025-09-08)** — (#general, 2025-09-08) — confirmé
+- **Le développeur n'extrait pas d'école les joueurs en dessous de 2M (bots, 2025-11-07)** — (#general, 2025-11-07) — info
+- **Marché : surplus d'attaquants et de gardiens ; marché bas peu actif (trop de joueurs de faible qualité), marché au-dessus de 10M fonctionne** — (#general, 2025-11-07) — confirmé
+- **Bots (depuis 1er nov 2025) ont promu 20 GK vs 42 par les humains ; 1421 gardiens actifs ; 2461 attaquants actifs ; seulement 39 joueurs promus par les bots vs 177 par les humains** — (#general, 2026-01-03) — confirmé
+- **Prix ajustés le 2026-01-03 : plus difficile de gonfler le prix des GK et attaquants ("The fewer skills a player needs - the easier it is to pump their price")** : — (#general, 2026-01-03) — confirmé
+- **Bots : priorité de vente modifiée 2026-01-03** — (#general, 2026-01-03) — info
+- **Les bons jeunes devraient rester quelques jours en transfert libre (idée 2025-08-28)** — (#quick-questions, 2025-08-28) — en doute
+- **Les transferts "seulement pour les transferts futurs" (changement 2025-09-16)** — (#general, 2025-09-16) — info
+- **Activité marché : 10.9 ~100 transferts, 11.9 ~50, 12.9 ~25** — (#england, 2025-09-12) — info
+- **SYSTÈME DE SCOUTING 2026 (annoncé 2026-02-07, mis en service ~2026-06-17) : 3 scouts par joueur : 0 scout = aucune connaissance (fourchettes énormes) ; 1er scout = compétences masquées (fourchettes réduites + autre info) ; 2e scout = personnalité, xp et le reste (et potentiel) ; 3e scout = compétences exactes et toutes les infos** : "0 scouts - 0 knowledge 1st scout - masked 2nd scout - personality, xp and all that 3rd scout - exact skills" — (#general, 2026-02-07, derbymanager) — confirmé (proposition de février, à rapprocher du système de juin)
+- **Idée du développeur (2026-02-07) : afficher les joueurs du pays de l'équipe comme déjà scoutés une fois ; fourchettes consistantes (1-18 au lieu de ??)** — (#general, 2026-02-07) — en doute (idée)
+- **Prix corrélé à la qualité : "there are no bargains. Prices correlate to quality too much"** ; conseil : prendre les 10 joueurs les plus chers abordables (bon âge, bon poste) et les examiner — (#general, 2026-02-07) — avis
+- **NOUVEAU MARCHÉ (juin 2026) : le système "révèle" automatiquement les meilleurs joueurs d'abord ; seulement 6 régions à scouter ; le plus gros pool (le plus cher) est toujours visible ; stratégie : scouter 2 régions en profondeur ou 6 en surface ; conseil : surveiller 2 ou 3 régions (Europe centrale -> Portugal, Pays-Bas ; Amérique du Sud ; éventuellement Europe de l'Est) ; 6-12 scouts par mois suffisent ; les bons joueurs se "fuitent" si plusieurs personnes les scoutent ; avant la mise à jour le marché n'avait que 12 gardiens au total** — (#general, 2026-06-17, derbymanager) — confirmé
+- **Après la mise à jour de juin 2026 : "auto-reveal" des joueurs plus âgés que X et/ou plus chers que Y envisagé pour que les gros clubs ne soient pas pénalisés** — (#england, 2026-06-20) — en doute
+- **Frais de signature (2026-07-09) : pour des joueurs de son propre pays pas de frais de signature ; autres pays/régions 500k minimum** : "for your own country you don't have to pay signing fee, while for other countries/regions it's 500k at minimum" — (#quick-questions, 2026-07-09) — confirmé
+- **Enchères : enchère aveugle mais les participants sont publics ; il faut dépenser un scout avant de pouvoir enchérir ; envisagé : les offres précoces reçoivent un petit boost pour rendre le sniping plus cher** — (#england, 2026-07-10) — en doute (idée)
+- **Les joueurs de l'école des jeunes ne peuvent être enchéris que s'ils ont été découverts par le système jeunes ; un joueur présent dans l'école d'un autre est invisible** — (#quick-questions, 2026-08-16) — confirmé
+- **Libération gratuite : conditions assouplies le 2026-07-13 ("I made the requirement a bit easier") ; retraite d'un joueur possible à moins de ~70 jours de contrat** — (#general, 2026-07-13) — confirmé
+- **Exploit corrigé le 2026-08-10 : on pouvait voir les jeunes non découverts en changeant l'id dans l'URL ; maintenant bloqué ; pas de ban pour les exploits** — (#england, 2026-08-10) — confirmé
+- **Retirer la pénalité (vente/libération) d'un jeune : valable seulement si le joueur est listé depuis 1 jour ou plus (24h de fenêtre pour qu'un autre l'achète)** — (#quick-questions, 2026-08-17) — confirmé
+- **Gardiens : si les équipes visent 3 gardiens il y a 550 gardiens en vente, si 2 il n'y en a aucun ; impossible de viser 2,5** — (#quick-questions, 2026-08-15) — confirmé
+- **Distribution d'âge des joueurs (2026-08-15) : 20 ans 574 (29 en vente) ; 21 ans 1089 (46) ; 22 ans 981 (47) ; 23 ans 1126 (39) ; 25 ans 363 (6) ; 26 ans 410 (11) ; 27 ans 492 ; 28 ans 542 ; 29 ans 724 ; 30 ans 805 ; 31 ans 849 (57) ; 32 ans 771 (39) ; 33 ans 551 ; 34 ans 270 ; 35 ans 91 ; 36 ans 43 ; 37 ans 20 ; 38 ans 3** — (#quick-questions, 2026-08-15) — info
+- **Les clubs doivent payer le reste du contrat si on vend un joueur avec 3 saisons restantes : 6M déduits du prix** — (#quick-questions, 2026-08-15) — confirmé (explication d'un système de durée de contrat choisie par le joueur, rejeté)
+- **Départ des joueurs : un joueur dont le contrat passe de 1 à 0 jour peut disparaître à cause des fuseaux horaires (0 jour = hors contrat)** — (#general, 2026-02-04) — confirmé
+- **"NC 6M D1 10M" : récompense wiki de coupe nationale 6M et D1 10M (réponse, contexte inconnu)** — (#general, 2026-01-23) — en doute
+- **Enchères : une offre faite plus tôt a un petit avantage : le bonus d'ancienneté est un % de la valeur totale (≈ +200k pour une offre immédiate, +199k 10 minutes plus tard), il sert à départager deux offres presque égales ; "every hour matters a bit"** — (#quick-questions, 2026-08-20 et 2026-09-04) — confirmé
+- **Une offre au maximum posée en premier ne peut plus être battue ("if I bid first and max out the offer then you can't do anything about it anymore")** — (#quick-questions, 2026-08-20) — confirmé
+- **Joueurs sur la TL doivent y rester 24h pour effacer l'insatisfaction/avoir les effets** — (#quick-questions, 2026-09-29) — confirmé
+- **Impossible de rejoindre à nouveau l'équipe qu'on a quittée récemment ("you can't join the same team you left recently")** — (#general, 2026-09-11) — confirmé
+- **Le développeur recommande des vétérans : "Oldies are really worth it", un offensive midfielder de confiance plutôt qu'un jeune qui sous-performe ; équilibre recommandé** — (#belgium, 2026-10-05) — avis
+- **Un gardien de 32 ans à 3M se vendra mal (bientôt 1M)** — (#belgium, 2026-10-05) — avis
+- **Transferts entre managers : le développeur a vu des dizaines de joueurs échangés entre mêmes managers (douzaine entre 2 managers en 6 saisons) ; règles de conduite à fixer** — (#quick-questions, 2026-08-19) — info
+- **Ordre de la liste "refus" : si on ne peut pas libérer, une info explique pourquoi (ajout 2026-08-24)** — (#general, 2026-08-24) — confirmé
+
+## Entraînement : progression, potentiel, mentors, satisfaction
+
+- **Entraînement : les infrastructures (facilities) augmentent le niveau maximum atteignable ET déplacent le pic de performance d'entraînement ; combiné avec le potentiel** : "Facilities improve max level and they modify where is the peak training performance..." — (#general, 2024-06-30) — confirmé
+- **Exemple (chiffres fictifs) : joueur pot 20 avec facilities 1 étoile = max 12, s'entraîne au mieux à 8 ; améliorer facilities/mentors déplace à 13 et 9 ; un Real avec 5 étoiles = 20 et 16** — (#general, 2024-06-30) — contexte (le développeur dit "not real numbers")
+- **Entraînement : les joueurs gagnent jusqu'à 70% d'"effort d'entraînement" à chaque match (moins avec certains paramètres, dont jouer dans un rôle inconnu) et en perdent 35% chaque nuit** : "They get up to 70% ... for each match, and lose 35% overnight." — (#general, 2024-07-18) — contredit/remplacé par sharpness (2024-08/09)
+- **L'entraînement dépend du niveau de la compétition : un joueur superbe s'entraîne mal en D4, un joueur faible mal en D1 (il se fait dominer par les plus expérimentés)** — (#general, 2024-07-18) — confirmé
+- **Un joueur qui joue en coupe et passe sous 35% d'effort le dépense toute la nuit ; un rôle mal connu réduit encore l'effort** — (#general, 2024-07-18) — confirmé
+- **Incident 2024-08-02 : entraînement exécuté deux fois (donc 3x avec la mise à jour nocturne) ; +6 condition ; l'effort affiché semble bas parce qu'il a été dépensé deux fois** — (#general, 2024-08-02) — confirmé
+- **Mentors (test développeur 2024-08-05) : première équipe +49/-11 avec 23 mentors, école +24/0 pour 12 joueurs ; "the value training boost provides probably isn't enough to counter the price drop"** — (#quick-questions, 2024-08-05) — confirmé (observation)
+- **Compétence tactique : s'assurer d'entraîner les compétences tactiques** — (#general, 2024-07-24) — avis
+- **"2kg weights / 4kg weights" : un joueur à son plafond ne progresse plus avec les infrastructures actuelles ; il faut améliorer les facilities** — (#general, 2024-09-13) — confirmé (métaphore, message « limite atteinte »)
+- **Courbe d'entraînement en cloche : chaque joueur a un niveau de "puissance" optimal (sommet de la cloche) déterminé par attributs cachés, club fit, facilities, tier du club ; à gauche du sommet il s'entraîne de mieux en mieux en grandissant, à droite de plus en plus mal** — (#general, 2024-09-13) — confirmé
+- **Message du jeu "Is getting close to his limit at this level" (choisi le 2024-09-13) = le joueur a dépassé ou approche son sommet d'entraînement chez toi ; son entraînement ralentit mais reste possible ; le changer de club, monter de division ou améliorer facilities peut déplacer le sommet (non garanti)** — (#general, 2024-09-13) — confirmé
+- **Message n'est pas "ce joueur est mauvais" : cela peut arriver à un joueur 4 étoiles dans d'autres circonstances ; il informe que l'entraînement va ralentir** — (#general, 2024-09-13) — confirmé
+- **Chaque compétence a la même chance de progresser : pas de compétences primaires/secondaires ; elles sont réparties pour avoir le même impact total dans le moteur (la finition sert plus à un FC qu'à un DC)** : "All skills have an equal chance to grow, there are no primary or secondary skills." — (#quick-questions, 2024-10-02) — confirmé
+- **Entraînement automatique : on choisit sur quoi se concentrer (focus) ; le wiki détaille** — (#quick-questions, 2024-12-03) — confirmé
+- **Un jeune ne s'améliore plus quand son "power" a dépassé l'optimum de l'école ("dumb kid" analogie : meilleures notes possibles dans cette école avec ce niveau d'entraînement)** — (#general, 2024-09-13) — confirmé
+- **Entraînement des jeunes à l'école sans jouer : possible ; entraînement de l'équipe première dépend du temps de jeu** — (#quick-questions, 2025-01-27) — confirmé
+- **FORMULE D'ENTRAÎNEMENT (2025-06-29) : variables = facilities (F), potentiel du joueur (P), club fit + âge + autres (C), sharpness (S) ; résultat "something like P * (F + C)" ; la sharpness donne le pourcentage de ce nombre qu'on obtient comme chance d'entraînement (0 = pas d'entraînement, 100% = entraînement au maximum de ses 3 variables)** — (#general, 2025-06-29, derbymanager) — confirmé
+- **P et C sont cachés : si un joueur ne s'entraîne pas alors qu'on a des facilities, l'une des deux est mauvaise ; les icônes rouge/jaune/bleu donnent des indices ; les seuls leviers sont améliorer les facilities ou embaucher des mentors ; le vrai choix est qui garder, qui mentor, combien investir** — (#general, 2025-06-29) — confirmé
+- **Toutes les compétences ont une chance de progresser, celle choisie a une chance bien plus grande ; un changement prévu pour que toutes les catégories comptent** — (#general, 2025-06-29) — confirmé (remplace "equal chance" d'octobre 2024 : contredit pour la compétence choisie)
+- **Satisfaction d'entraînement : 3 catégories (technique, décisions, mouvement). Nombre de catégories au-dessus de l'exigence du joueur : 0 => rouge, 1 => jaune, 2 => bleu, 3 => vert** : "Training satisfaction depends on how many are above his requirement: 0 => red 1 => yellow 2 => blue 3 => green" — (#quick-questions, 2025-08-02) — confirmé
+- **Satisfaction d'entraînement dépend de l'intensité d'entraînement (entraînement choisi + mentors) ; un meilleur mentor est toujours mieux ; un moins bon mentor n'aide pas le message** — (#general, 2025-06-29) — confirmé
+- **Mentors : dépendent de leur tier, xp, temps au club ; leurs points de mentor peuvent changer quand ils rejoignent un nouveau club et baisser s'ils ne jouent pas** — (#general 2025-06-29 ; #quick-questions 2025-08-02) — confirmé
+- **Un joueur près de sa limite dans ton club (icône jaune/rouge à l'écran d'entraînement) pourrait faire beaucoup plus dans une meilleure équipe (20-30 sauts de compétence) ; si promotion proche, le garder peut valoir le coup** — (#quick-questions 2025-08-13 ; 2025-07-31) — confirmé
+- **Progression ralentit pour tier "peak" : joueur au tier maximum peut encore grandir mais c'est improbable** — (#quick-questions, 2025-07-27) — confirmé
+- **Un joueur mis hors poste apprend la nouvelle position et y joue bien en 5-10 matchs** : "Don't shy away from playing players out of position, they'll learn the new position and will play well there in 5-10 games." — (#quick-questions, 2025-07-31) — confirmé
+- **Retrain : on peut réentraîner un joueur à un poste (ML) en quelques matchs** — (#france, 2025-05-03) — confirmé
+- **Entraînement automatique/pas de choix quotidien voulu ; le développeur refuse les mécaniques à faire quotidiennement** — (#general, 2025-06-29) — contexte
+
+## Tactique et moteur de match : rôles, formations, pressing, build up, xG, tirs, coups de pied arrêtés
+
+- **Rôles par poste : 3-4 rôles par poste ; l'écran affiche les rôles que le joueur peut jouer** — (#general, 2024-05-10) — confirmé
+- **BPD (ball playing defender) monte dans la ligne DM (entre défense et milieu) quand on attaque haut ; combiné avec AWB sur les côtés, la ligne défensive reste vide : contre-attaque dangereuse** — (#quick-questions, 2024-06-02 ; #spain, 2024-06-13) — confirmé (en cours de correction)
+- **Individualistic aide un BPD à jouer des ballons plus longs, mais n'affecte pas son défendre (2024-06-12)** — (#quick-questions, 2024-06-12) — confirmé
+- **Pas de réglage de ligne défensive (line) en juin 2024 ; "no option to change line"** — (#quick-questions, 2024-06-02) — contredit ensuite (voir plus loin si ajouté)
+- **Formations en 0-5-5 testées ; trois trequartistas peuvent former la ligne défensive ; "your players actually move over the field... often late"** — (#general, 2024-05-08) — anecdote
+- **Build up = étape 0 abstraite à gagner pour obtenir une action ; passing = quand l'action est une passe ; first touch = recevoir une passe** — (#quick-questions, 2024-05-28) — confirmé
+- **Test your tactic : outil pour déplacer le ballon et voir le comportement des rôles ; le moteur est exploitable, signaler les exploits** — (#quick-questions 2024-05-27 ; #england 2024-06-03) — confirmé
+- **Avec 5 postes sans milieu : peu d'actions mais l'adversaire aura beaucoup d'occasions ; les joueurs ne pressent que quand l'adversaire est près du but** — (#england, 2024-06-03) — confirmé (observation)
+- **Conseil du développeur : HM au milieu central et F9 en attaque ; on peut ajouter des rôles si nécessaire** — (#spain, 2024-06-13) — avis
+- **Consigne "pass preference / mentality" : les nouvelles consignes empêchent les passes plus directes => moins de build ups directs, mais ceux qui réussissent sont un peu plus dangereux (2024-06-29)** — (#quick-questions, 2024-06-29) — confirmé (à ajuster)
+- **Joueur "DLRC" : le développeur veut qu'un joueur puisse jouer DLRC ; avec 3-4 matchs il sera jaune (fatigue)** — (#general, 2024-06-13) — en doute
+- **Types de passes : au 2024-08-08 passes, centres (crosses) et passes longues ("long passes") ; les "through balls" ne sont pas implémentées ; les passes longues sont groupées avec les passes** — (#quick-questions, 2024-08-08 et 08-21) — confirmé
+- **Regroupement des actions 2024-08-21 : tirs normaux et longs pour attaquants ; 3 actions d'arrêt pour GK ; attaques aériennes = receive + head, défensives = prevent receive ; hold + dribble = dribble ; run with ball est avec les centres, renommé "wing play"** — (#quick-questions, 2024-08-21) — confirmé
+- **Aerials (jeu aérien) comptent ; le wiki "e.g." était faux ; ce sont les deux événements utilisés pour les aériens** — (#quick-questions, 2024-08-21) — confirmé
+- **Build up : phase abstraite (5 ou 50 passes) résolue en agrégeant la "build up power" de tous tes joueurs et en la comparant à celle de l'adversaire ; la formule utilise les compétences du wiki dont experience** — (#general, 2024-08-21) — confirmé
+- **xG (2024-07-26) : xG = chance de cadrer (distance + compétence de l'attaquant, modifiée par pression défensive, hors position) × chance basée sur la compétence ; exemple 0,5 x 0,4 = 0,2 ; un tir non cadré peut avoir un xG plus haut qu'un tir cadré** : "I'm doing a * b" — (#general, 2024-07-26) — confirmé (une grosse mise à jour a suivi, "throw all those analysis in water")
+- **Chance d'arrêt (save) calculée sur attaquant et gardien ; on vérifie d'abord si le tir est raté, puis arrêté ou non** — (#general, 2024-07-26) — confirmé
+- **Les bons défenseurs réduisent le xG de tes tirs même sans les empêcher ; un joueur "individualistic" tire plus qu'il ne passe** — (#france, 2024-09-12) — confirmé
+- **Formations bots : l'IA n'intervient sur la composition que si elle est invalide (ex : 10 joueurs)** — (#general, 2024-07-28) — confirmé
+- **Un tir de très près avec un gardien nul peut approcher xG 1 ; maximum réel inconnu** — (#general, 2024-07-26) — info
+- **Corners : ajout prévu après le 2024-08-31 (le développeur "focus on other things, like adding corners")** — (#general, 2024-08-31) — contredit ensuite (voir ajouts)
+- **L'écran de rôles : "roles are not right at the moment" (2024-09-08)** — (#england, 2024-09-08) — en doute
+- **Pressing par rôle : tous les rôles ont une zone de pressing ; LD ne presse pas vers l'avant, seulement à gauche ou à droite ; CD presse un peu vers l'avant ; BPD ou LIB beaucoup** — (#quick-questions, 2024-11-15) — confirmé
+- **Tir (shooting) en 4 options : Shoot = tirer dès que possible même de loin ; Box = tirer de plus près (moins d'occasions si on n'approche pas) ; Cross = centrer plus ; Mix = entre shoot et box** — (#quick-questions, 2024-11-23) — confirmé
+- **Décision de passe : le joueur évalue chaque option, valeur plus faible pour une passe en arrière, plus haute si la cible est libre ; passer vers l'avant = +1 ou +2 points ; focus de passe étroit (narrow) donne plus de points aux joueurs centraux sans exclure les côtés ; mentality n'a aucun effet sur les passes** — (#general, 2024-12-05) — confirmé
+- **Passes aux WB : avec "short passing" le ballon va aux CM/BTB déjà hauts ; AWB reste plus haut et est une cible plus attractive ; DLP et autres considèrent des balles longues vers WB si pas short passing** — (#general, 2024-12-05) — confirmé
+- **Rôles à forte "target preference" (ex : CM) attirent les ballons et en prennent aux attaquants ; la valeur "target" vaut un peu moins près du but (ajustement annoncé 2024-10-10)** — (#france, 2024-10-10) — confirmé
+- **Individualistic = plus de tirs et plus de courses avec le ballon ; trop de dribbles réduits le 2024-10-02** — (#france, 2024-10-02) — confirmé
+- **Target man a seulement 2 en tir pour ne pas tirer quand il reçoit tôt hors position** — (#quick-questions, 2024-12-12) — confirmé
+- **Rayon de couverture des défenseurs : avant le 2024-11-22 c'était un rayon (rond), pas un carré ; un DC pouvait être attiré vers le milieu (changement de moteur novembre 2024)** — (#general, 2024-11-22) — complété
+- **Tir de la tête par un défenseur placé en attaque : pénalité visible par visage rouge ; 50% de ses compétences = 7,5 vs gardien aériens 6** — (#general, 2024-11-16) — confirmé
+- **Mise à jour moteur de match du 2024-09-27 (soir) : moins de tirs observés après la mise à jour ; par la suite le développeur réduit la tendance au dribble (2024-10-02)** — (#france, 2024-10-02) — confirmé
+- **xG affiché 2,32 ne tient pas compte des compétences du joueur et du gardien : "Exact xg is unknown"** — (#general, 2024-11-16) — confirmé
+- **Zone de formation « 433 narrow » moins efficace contre 352/451 (milieu bondé)** — (#france, 2024-10-02) — avis
+- **Petits clubs (D4, joueurs <1M) : pas de gegenpress à tous les matchs** — (#general, 2024-08-24) — avis
+- **xG par équipe : si les tirs viennent de loin les attaquants (FC) en reçoivent moins ; conseil du développeur « shooting from the box » quand un finisseur est isolé** — (#france, 2024-12-18) — avis
+- **Pas de hors-jeu dans le jeu au 2025-02-13 : une ligne ultra-haute est inutile ; les attaquants restent derrière la défense sans couverture ; les libéros reviennent en défense dès que le ballon passe le milieu** — (#quick-questions, 2025-02-13) — confirmé
+- **Mécanique de build up (2025-02-25) : chaque minute une équipe tente de créer une action ; Étape 1 = build up défensif (ex 42 tentatives, 24 réussies) ; étape 2 = par aile (gauche, centre, droite) ; chaque réussite = action animée ; ensuite événements un par un** — (#general, 2025-02-25) — confirmé
+- **Contre-attaque : possible quand l'adversaire perd la balle, selon le nombre de joueurs attaquant ses défenseurs ; passes courtes demandent plus de joueurs, "counters" tactique permet même avec 1 joueur** — (#general, 2025-02-25) — confirmé
+- **Petits chiffres gris = valeurs exactes de chaque étape de build up (base) ; elles seront peut-être cachées car corrélées au taux de réussite ; nombre de gauche = équipe domicile** — (#general, 2025-02-25) — confirmé
+- **Attributs gardien : handling = positionnement tirs proches ; positioning = tirs longs ; aerial = têtes ; agility = réflexes (arrêt ou rebond/corner) ; set pieces = penalties et coups francs directs ; agility sert aussi de vitesse pour les joueurs de champ** — (#international, 2025-02-07) — confirmé
+- **Compétences du tireur des coups de pied arrêtés : long shots pour coups francs directs, finishing pour penalties, crossing pour corners, avec le poids de "set pieces"** — (#international, 2025-02-07) — confirmé
+- **Set pieces : le premier acte après le coup de pied arrêté est testé avec la compétence set pieces (extension à prévoir) ; l'objectif est que tout le monde ait un usage de SP** — (#quick-questions, 2025-02-10) — confirmé (corners, coups francs, penalties existent à cette date)
+- **Duels : le défenseur est testé contre le dribbleur ; si l'attaquant gagne il y a une chance de faute selon professionalism et condition du défenseur (fatigué = plus de fautes) ; aucune compétence pour éviter une faute côté attaquant** — (#quick-questions, 2025-02-10) — confirmé
+- **Fautes et corners moins nombreux qu'en réalité car 70% du match n'est pas simulé** — (#quick-questions, 2025-02-10) — confirmé
+- **Les formations asymétriques sont permises ; le développeur pousse les formations standard comme meilleures ; un seul défenseur sans latéraux est mauvais ; 343 avec défenseurs larges et 433 avec ailiers inversés ne devraient pas bien fonctionner ; statistiquement aucune formation ne domine, le meilleur effectif gagne plus souvent (analyse ancienne)** — (#spain, 2025-02-21) — confirmé
+- **Rôles IWB/HW "half winger" (rôle central sur poste latéral) : deux des quatre joueurs de côté sont toujours à l'intérieur** — (#spain, 2025-02-21) — confirmé
+- **Options tactiques mises à jour 2025-04-24 : "Risky" réduit la prévention du build up défensif adverse et permet plus d'actions adverses ; "Careful" l'augmente et réduit les actions adverses (corrigé selon la suggestion) ; le pressing ne change pas ; les autres options ne changent plus avec le score** — (#quick-questions, 2025-04-24) — confirmé (ancien : risky réduisait les actions adverses mais augmentait la 2e étape)
+- **xG « real world » (affichage) : distance, position de l'attaquant, défenseurs ; ne tient pas compte des compétences ; « exact xG » inclut compétence du tireur et du gardien ; le tableau affiche désormais le xG réaliste (changement entre 2024 et janvier 2025)** — (#england, 2025-01-20) — confirmé
+- **xG affiché peut être trompeur : 2,1 xG affichés pour des attaquants faibles = ~1,3 xG exact** — (#england, 2025-01-20) — confirmé
+- **Le coup de pied arrêté (set pieces) : le développeur envisage de supprimer la compétence ou la convertir (2025-02-07)** — (#international, 2025-02-07) — en doute
+- **Rôle spécial : joueur sans ballon traité comme pressing forward** — (#international, 2025-02-07) — info
+- **Rôles IWB + LIB : possible de jouer sans milieu (idée)** — (#general, 2025-04-25) — info
+- **Dans « Test your tactic » les joueurs de défense pressent selon leur rôle ; chaque rôle a un secteur de pressing (voir novembre 2024)** — (#quick-questions, 2024-11-15) — confirmé
+- **Formation : 4 ou 5 attaquants (overload) fonctionnent ; midfield peu important (poletz gagne avec 1-2 MC) ; passes longues vers les attaquants trop faciles (70 m reçus parfaitement)** — (#general, 2025-07-13) — constat développeur ("I think overloading attack is what works")
+- **Rôles HWG/IWB (2025-07-16) : en défense les HWG (21, 19) sont centraux et les IWB (15, 14) restent larges ; en attaque les HWG sont larges et les IWB étroits** — (#general, 2025-07-16) — confirmé (ne fonctionne pas toujours)
+- **Run with ball vs dribble (2025-06-01) : courir avec le balle fait avancer de 15 m si on réussit, sinon l'adversaire prend le ballon** — (#quick-questions, 2025-06-01) — confirmé
+- **Passes longues : au-dessus d'une distance X toute passe est une passe longue (utilise surtout passing) ; la préférence de passe change la pénalité de distance** — (#england, 2025-06-09) — confirmé
+- **Bug moteur 2025 : "a bug that made wings play much better than any other formation" corrigé** — (#quick-questions, 2025-05-20) — corrigé
+- **Formation 532 : trop défensive (conseil 2025-05-03) ; wingers fonctionnent bien** — (#france, 2025-05-03) — avis
+- **Ancien système FDW (Focus, Determination, Work rate) remplacé par set pieces, creativity et pressing** — (#france, 2025-05-21) — confirmé
+- **Décisions d'attaque : les ailiers cibles (target) ne sont pas toujours couverts** — (#england, 2025-08-06) — avis
+- **Stats d'issue de tirs sur un tour (2025-08-20) : tirs de loin (long shots) 1050 => 84 buts = 8% ; tirs de près (close shots) 600 => 107 buts = 18% ; têtes (headers) 550 => 78 buts = 14% ; exemple joueur : 15/36 tirs proches = ~42%, 8/32 têtes = 25%, 2/15 tirs lointains = 13%** : "LS: 1050 => 84 goals = 8% CS: 600 => 107 goals = 18% HS: 550 => 78 goals = 14%" — (#spain, 2025-08-20, derbymanager) — confirmé (un seul tour, non précis à 100%)
+- **Le développeur veut que les têtes soient plus nombreuses que les tirs proches (les tirs proches devraient être les plus difficiles à créer) ; objectif : augmenter les centres pour pouvoir réduire l'efficacité des têtes** — (#spain, 2025-08-20) — confirmé (intention)
+- **Problème connu (2025-08-19) : un avant-centre seul peut avoir 20 tirs par match ; "if you create enough chances, whoever you put in front of the goal will score some of them" ; le développeur regarde le positionnement des défenseurs** — (#spain, 2025-08-19) — confirmé
+- **"Careful" ne change pas ce que font les joueurs quand l'action démarre (2025-08-19)** — (#spain, 2025-08-19) — confirmé
+- **Toutes les actions passent par les milieux, certaines par les défenseurs ; les milieux tacklent plus que les défenseurs en vrai (PL : top défenseur 123 tacles, 10e 70 ; top milieu 133, 10e 85)** — (#spain, 2025-08-19) — info
+- **541 avec 2 ailiers, BTB et CM peut être offensif ; 3 défenseurs ont besoin d'aide des HM et DWG** — (#spain, 2025-08-19) — avis
+- **Pénalty : coordonnées dans la surface à 15 m de la ligne ; les lignes du terrain ne sont pas à l'échelle du pixel (image de fond)** — (#international, 2025-08-16) — info
+- **Formation de groupe CC/AC (2025-10-14) : 15 équipes des 5 ligues jouables réparties pour qu'aucun groupe n'ait deux équipes du même pays : 3 groupes de 4 équipes + 1 groupe de 3 ; les ligues non jouables sont ajoutées par ordre de "ranking" légèrement randomisé chaque année** — (#general, 2025-10-14) — confirmé
+- **Compétition internationale : tirage "la moitié supérieure joue la moitié inférieure" (2026-01-06)** — (#international, 2026-01-06) — en doute
+- **Bots utilisent occasionnellement une formation autrefois populaire chez les humains (2025-12-26)** — (#england, 2025-12-26) — info
+- **xG d'un match : un penalty change tout ; sans penalty xG adverse 1,05 (2025-12-12)** — (#spain, 2025-12-12) — exemple
+- **MOTEUR MIS À JOUR 2026-03-06/17 : têtes cassées la saison précédente ; défenseurs se positionnent mieux, attaquants moins seuls dans la surface -> moins de buts, plus de tirs de loin ; positionnement et prise de décision améliorés ; anciennes métas ne marchent plus** — (#england/#general, 2026-03-06 et 2026-03-17) — confirmé
+- **Stats 2026-03-11 (toutes ligues) : normal shots 1044 (75% cadrés, 11% buts) ; long shots 833 (57% cadrés, 12% buts) ; headers 489 (73% cadrés, 16% buts) ; penalties 24 (79% buts)** — (#general, 2026-03-11) — confirmé (échantillon d'un jour)
+- **Stats 2026-03-12 : normal 920 (12%) ; long 847 (11%) ; headers 443 (16%) ; penalties 21 (71%)** — (#general, 2026-03-12) — info
+- **Stats 2026-04-22 : normal shots 622 (72% cadrés, 18% buts) ; long shots 1016 (59% cadrés, 14%) ; headers 761 (61% cadrés, 18%) ; penalties 22 (77%) ; conversion globale 1 tir sur 6, trop haute : "Normal conversion rate should be 1 in 10 or so"** — (#quick-questions, 2026-04-22) — confirmé
+- **Environ 22% des tirs sont des têtes ; tirs de surface ~45% ; hors surface ~35% ; têtes dominées par les corners ; "headers from open play need a bit of a push"** — (#general, 2026-03-11) — confirmé
+- **Un "failed pass" compte même si le receveur récupère le ballon rebondi (stats à corriger)** — (#general, 2026-03-11) — confirmé
+- **Types de tir vus dans les stats : lbu/cbu/rbu = build up gauche/centre/droit, dbu = direct build up, fk, cor, dfk, sp (set pieces)** — (#general, 2026-03-11 et #quick-questions 2026-04-22) — info
+- **Les têtes et les tirs de loin sont plus forts qu'en vrai pour donner des options ; les tirs de loin ont le plus faible taux de conversion** — (#quick-questions, 2026-04-22) — confirmé
+- **Conseils formations (2026-03-06) : construire l'équipe pour une formation en gardant de la flexibilité avec des doubles postes** — (#england, 2026-03-06) — avis
+- **Coup de pied arrêté: set pieces taker item "on the list"** — (#england, 2025-09-20) — en doute
+- **Pressing (2026-10-05, définition exacte) : sans pressing un joueur A ne presse B que si B est à distance B1 ou B2 dans la moitié de A, et seulement B1 dans la moitié de B ; avec pressing A va jusqu'à B3 pour fermer l'adversaire sans balle, dans les deux moitiés, et sa portée d'engagement augmente ; consomme plus de condition** — (#quick-questions, 2026-10-05) — confirmé
+- **Ligne défensive (defensive line) : positionne seulement les joueurs sur le terrain ; ils suivent le pressing défini ci-dessus relativement à leur position ; low block = joueurs plus bas qui pressent plus bas** — (#quick-questions, 2026-10-05) — confirmé
+- **Test de tactique (2026-09-28) : les joueurs "snap" aux lignes de la balle ; pendant le match ils flottent entre leurs espaces car la balle change souvent de direction ; lignes affichables dans les réglages** — (#quick-questions, 2026-09-28) — confirmé
+- **Rôles : DLP reste dans les rangées DM et MC ; HM seulement DM ; CM quasi exclusivement AM ; TQ et CM restent tous deux en AM => grands trous** — (#belgium, 2026-10-10) — confirmé
+- **Formation de 6 joueurs sur la même ligne : problème connu (« 6 idiots »), tirs de loin trop efficaces mais conservés pour que la méta ne soit pas les tirs de la surface ; le développeur a fait des ajustements mineurs** — (#belgium, 2026-10-10/11) — confirmé
+- **Le moteur prend en compte qui est sur la ligne de passe/tir et si 2 défenseurs sont sur le joueur (pénalité de pression)** — (#belgium, 2026-10-11) — confirmé
+- **Sans joueur pour empêcher le build up (prevent build up = 0 point) l'équipe cède le milieu : 433 contre 415 va à 433** — (#belgium, 2026-10-11) — confirmé
+- **Idée : CM "complete midfielder" qui reste au milieu et attaque peu, pour empêcher 6 joueurs au même endroit ; mal reçue** — (#belgium, 2026-10-11) — en doute
+- **xG inclut la chance que le tir soit bloqué (2026-10-09)** — (#quick-questions, 2026-10-09) — confirmé
+- **Décision de tir : un joueur peut tirer en lob quand le gardien est loin, le calcul montre un but ouvert** — (#general, 2026-10-02) — confirmé
+- **Récupération de la maj : mise à jour du 2026-10 "cleaned a lot of bugs": matchs plus à sens unique quand les puissances sont inégales** — (#belgium, 2026-10-08) — confirmé
+- **Coups francs : la compétence set pieces ne sert que pour les coups francs proches du but ; direct ou non c'est le joueur qui décide** — (#quick-questions, 2026-08-24) — confirmé
+- **Marge d'âge : "old is my design choice to be good"** — (#belgium, 2026-10-08) — confirmé (conception : les vieux sont bons)
+- **Un 523 du développeur génère plus qu'un 433 avec 6 joueurs au même endroit ; équilibré recommandé** — (#belgium, 2026-10-08) — avis
+- **NOUVEAU MOTEUR (octobre 2026) : le build up est maintenant un seul build up (une matrice build up/pressing) ; auparavant on pouvait surcharger une zone sans pénalité ; la matrice n'est pas faite pour être comprise : on regarde si la quantité de build up et de pressing est celle visée ; ex : build up à 90%** — (#inconnu, 2026-10-22) — confirmé
+- **Points rouges sur l'écran d'effectif : chaque point rouge = un problème de couverture (zone de terrain), 1 point rouge n'est pas fatal (ex : 10% d'actions démarrées en moins = 2-3 actions de moins) ; il est impossible de jouer 3 joueurs larges ; les rôles M sont répartis entre DM et AM ; on peut cliquer les points pour voir qui contribue où** — (#inconnu, 2026-10-22) — confirmé
+- **Remplacements programmés (2026-10-22) : 4 remplaçants ; on choisit qui le joueur remplace et dans quelles conditions : quand le joueur à son poste a une mauvaise note / faible condition / si on perd ou gagne de 2 buts / toujours ; ou on laisse l'assistant décider (mix condition + note + cartons jaunes) ; on ne choisit pas le joueur exact à remplacer ; pas de remplacement planifié à la minute** — (#inconnu, 2026-10-22) — confirmé
+- **Un gardien remplaçant se règle pour entrer seulement en cas de blessure ; le développeur peut ajouter d'autres options** — (#inconnu, 2026-10-22) — confirmé
+- **Le développeur envisage de fusionner LD et CD (presque identiques) ; 3 rôles par poste pour D et F, 6 pour les milieux (3 DM + 3 AM) ; TQ passerait au milieu, CM deviendrait "complete midfielder", ajout d'un rôle défensif ; peu utilisés : inverted WB, WG, libero, HWG, AWG ; "poacher" mentionné (grande zone de déplacement sur la ligne d'attaque)** — (#belgium, 2026-10-28) — en doute (projet pour la saison suivante)
+- **Position des formations : "winger in 442 and FLR in 433 are two completely different positions" ; il refuse d'avoir 13 places pour 11 joueurs ; possible de retirer les formations libres au profit d'une liste standard** — (#belgium, 2026-10-28) — confirmé
+- **Problème TQ + CM : tous deux rangés AM => on pouvait en empiler 6 ; solution envisagée : TQ passe en M** — (#belgium, 2026-10-28) — en doute
+- **Contre-attaques gratuites : le développeur travaille sur la prise de décision et ajoutera des "tiers" pour que les passes n'interfèrent pas avec les tirs (2026-10-30)** — (#belgium, 2026-10-30) — en doute
+- **Formations 3TQ + 3CM : condition perdue plus vite ; le contre adverse trouve 6 vs 4 ; un HM aiderait** — (#belgium, 2026-10-21) — avis
+- **Octobre 2026 : 523 jouable ; AWB sont presque des milieux ; formations 433 et 343 "overflow the tactical spheres"** — (#belgium, 2026-10-19) — avis
+- **Un tir de la zone : le développeur apprend aux joueurs à gérer 5-6 TQ adverses mais effets secondaires** — (#belgium, 2026-10-13) — info
+- **Ballon long en diagonale : "long diagonal through ball?" — hypothèse sur un but encaissé (2026-10-13)** — (#belgium, 2026-10-13) — en doute
+- **Les "through balls" (passes en profondeur) mentionnées en octobre 2026 comme un événement possible** — (#belgium, 2026-10-13) — en doute
+
+## Infrastructures (facilities) : niveaux, maintenance, coût, effet, investissement du conseil
+
+- **Niveaux de facilities attendus par division (estimation du développeur, 2025-07-06) : D4 10-16, D3 16-22, D2 22-28, D1 28-34, coupes européennes 34-40** : "10-16 in d4 16-22 in d3 22-28 in d2 28-34 in d1 34-40 in euro cups" — (#quick-questions, 2025-07-06) — en doute (estimation à partir de 2 équipes)
+- **Cible du conseil : exemple niveau 16 en réalité vs 11 visé par le conseil ; on peut améliorer jusqu'à environ 4 niveaux au-dessus de la cible du conseil (3 à 5 selon la réputation)** : "You can improve ap to around 4 levels above the target set by the board." — (#england, 2025-06-15) — confirmé
+- **Limite sur les facilities introduite avant juin 2025 pour empêcher les facilities de D1 en D4 par thésaurisation ; le développeur a cédé le 2025-06-02 : on peut améliorer si on a l'argent** — (#france, 2025-06-02) — confirmé
+- **Facilities en D4 : niveau 19 = niveau d'un club promu en D1 (exemple) ; les facilities ne servent pas à tous (jeune 1 qui ne peut pas s'entraîner, intensité trop haute)** — (#france, 2025-05-22) — contexte
+- **Anciens joueurs de D1 ont des facilities en dessous de 30 ; sauter dans une équipe avec 40 évite 5-10 saisons d'investissement** — (#england, 2025-08-03) — info
+- **Hamburg : facilities "Renowned"** — (#england, 2025-08-07) — info
+- **Facilities et popularité : si la popularité monte (promotion), l'attente monte (ex 29), le conseil investit plus** — (#england, 2025-08-12) — confirmé
+- **Les mentors "boostent les facilities" : "Quite a lot. They boost your facilities."** — (#quick-questions, 2025-07-31) — confirmé
+- **Améliorations de facilities : un niveau 25 achetable avec l'argent de l'exemple (2025-09-09)** — (#england, 2025-09-09) — info
+- **Facilities régressent partiellement et au hasard (par ex. étoile sponsor perdue) : on peut racheter l'étoile en vendant un joueur** — (#france, 2025-11-11) — confirmé
+- **Plafond de downgrade/facilities : "it can get downgraded but it's random what goes when that happens" (2026-08-03)** — (#quick-questions, 2026-08-03) — confirmé
+
+## Bugs et pièges connus
+
+- **Bug : rendre renouveler les attaquants ("renew forwards" absent) corrigé le 2024-06-21 ; joueurs perdus restaurés à la main** — (#general, 2024-06-21) — confirmé
+- **Bug 2024-06-04 : libérer plusieurs joueurs sur la TL a laissé une équipe au-dessus du plafond de 2k au lieu de 40k ; le développeur a corrigé** — (#general, 2024-06-04) — confirmé
+- **Système de réputation du manager : cassé, bug trouvé le 2024-06-29 ; réputation manager et club doivent être assez élevées** — (#general, 2024-06-29) — complété
+- **Le nombre d'actions décrit dans la page "latest offers" peut ne pas correspondre ; recharger la page si un écran ne s'affiche pas** — (#general, 2024-06-21) — confirmé
+- **Calcul de la précision de tir/gardien faux (trop bas) : le développeur indique que le calcul inclut compétences joueur et gardien (2024-06-14)** — (#quick-questions, 2024-06-14) — en doute
+- **Trop de têtes dans les mains du gardien au lieu de sortir du cadre ; 75% des tirs après centre ne devraient pas être cadrés (2024-07-02, remarque développeur)** — (#england, 2024-07-02) — en doute
+- **Bug des penalties en coupe avec beaucoup de matchs de coupe simultanés (2024-07-17)** — (#general, 2024-07-17) — résolu
+- **Bug "home advantage" appliqué aux deux équipes (corrigé ~2024-09-09)** — (#spain, 2024-09-12) — confirmé
+- **Bug : l'IA remplaçait la formation d'un manager (2024-07-28)** — (#general, 2024-07-28) — en doute
+- **Bug : des bots ont prolongé/acheté des vieux joueurs qui sont restés trop longtemps (corrigé 2024-12-16)** — (#quick-questions, 2024-12-16) — corrigé
+- **Serveur indisponible / déconnexions le 2024-12-04** — (#quick-questions, 2024-12-04) — résolu
+- **Bug 2025-02-19 : un joueur acheté avec un poste déjà assigné crée 12 sélectionnés, le jeu choisit 11 à ta place ; revient et repart** — (#quick-questions, 2025-02-19) — en doute
+- **Bug 2025-01-02 : manager "désinstallé" ; remis par le développeur ; équipe de 16 joueurs** — (#general, 2025-01-02) — résolu
+- **Plusieurs matchs reportés/non lancés (2025-07-03)** — (#france, 2025-07-03) — résolu
+- **Bug UI "-40k" affiché (2025-07-31), sans coût réel** — (#quick-questions, 2025-07-31) — corrigé
+- **Compte "dans la saison 13" resté après rejoindre une équipe entre deux saisons (2025-08-08)** — (#quick-questions, 2025-08-08) — corrigé
+- **Bug humains corrigé le 2025-10-08 (non précisé)** — (#quick-questions, 2025-10-08) — corrigé
+- **Bug 2025-09-10 lié à la nouvelle mécanique (injuries/condition) corrigé** — (#quick-questions, 2025-09-10) — corrigé
+- **Gardiens exploités : un manager a promu 8 gardiens ; les bots n'achètent pas des joueurs tout juste créés (janvier 2026)** — (#england, 2026-01-21) — info
+- **Panne de la mise à jour nocturne le 2026-01-21 ; panne indéfinie jusqu'au 2026-01-30** — (#england/#general, 2026-01-21, 2026-01-30) — résolu
+- **Joueur disparaît quand le contrat passe de 1 à 0 jour (fuseaux horaires)** — (#general, 2026-02-04) — confirmé
+- **Erreurs sur les écrans de matchs (pas les tableaux) corrigées 2026-03-24 et 2026-04-02** — (#quick-questions, 2026-03-24, 2026-04-02) — corrigé
+- **Joueur retiré de l'équipe par inactivité (bug de last sign in) 2026-05-23 et 2026-06-11** — (#general / #quick-questions, 2026-05-23, 2026-06-11) — corrigé
+- **Exploit URL pour voir les jeunes non découverts (2026-08-10) corrigé** — (#england, 2026-08-10) — corrigé
+- **Joueur "Pospišil" ne peut pas prendre sa retraite car contrat récent (<70 jours requis)** — (#general, 2026-07-13) — confirmé
+- **Bouton contrat manquant corrigé le 2026-08-21 ; un oubli lors de la mise à jour** — (#quick-questions, 2026-08-21) — corrigé
+- **Pré-saison : repos activé un jour trop tôt (corrigé pour la saison suivante)** — (#quick-questions, 2026-09-25) — corrigé
+- **Solidarité ne fonctionnait pas avant le 2026-09-13** — (#quick-questions, 2026-09-13) — corrigé
+- **Bug de rejoindre la même équipe récemment quittée (2026-09-11)** — (#general, 2026-09-11) — corrigé
+- **Erreur d'arrondi (2026-09-30)** — (#quick-questions, 2026-09-30) — en cours
+- **Animation : un défenseur ne bloquait pas le tir (mauvaise animation) — à corriger** — (#belgium, 2026-10-12) — en doute
+
+## Questions encore ouvertes
+
+- Valeurs exactes de Team Spirit dans DM2 (nombre de leaders pris en compte, pourcentage par catégorie de joueur) : seul le modèle de DM1 (leaders +3 %, mécontent -3 %) est décrit ; la plage officielle est 0,75 à 1,10 (2026-09-01) et 10 leaders maximum (2026-08-20).
+- Définition chiffrée des tiers de joueurs (noms World class etc.) : seul le principe de rang relatif est connu (meilleur = tier 10, 50e = 9, 250e = 8).
+- Compétences clés par rôle (DLP, DWG, HM, BTB, CM, CAM/TQ, FB, target man...) : le développeur dit ne pas les avoir définies ; la liste est dans le wiki (autre tranche).
+- Formule exacte du prix d'un joueur et de la croissance de valeur : seulement des principes (qualité, performance, âge, potentiel).
+- Abréviations de compétences (WOR/FOC/DET/CON...) : seul « FDW = Focus, Determination, Work rate » (ancien système, remplacé par set pieces, creativity, pressing) apparaît dans cette tranche.
+- Defensive line Low-High, pass preference Short-Direct, pass focus Narrow-Wide, shooting On sight-From box, headers Avoid-Prioritise : seuls le pressing, la ligne défensive (positionnement), le focus de passe étroit (plus de points au centre) et les 4 options de tir (Shoot, Box, Cross, Mix, 2024-11-23) sont décrits ici ; les autres options sont dans d'autres tranches.
+- Amicaux : existent depuis ~avril 2026 (aléatoires, bénéfice nul à jouer chaque match) mais le nombre et le calendrier exacts ne sont pas donnés ici.
+- Hors-jeu : « no offsides » jusqu'en février 2025 ; un joueur mentionne « the entire offside trap » le 2026-10-30 (#inconnu) : à vérifier dans le wiki/updates.
+- Réputation : formule chiffrée absente ; seuls des exemples (200 de départ, +200 environ à une promotion, 21 jours avant les offres).
+- Niveaux de facilities par division (D4 10-16, D3 16-22, D2 22-28, D1 28-34, Europe 34-40) : estimation du développeur sur 2 équipes (2025-07-06), à confirmer avec nos données.
+- Coût d'entretien et effet chiffré de chaque bâtiment (stade, centre d'entraînement, école, sponsoring) : non trouvés dans cette tranche.
+- Nombre d'équipes par ligue, nombre de journées, calendrier des coupes (NC, CC, AC) : partiellement mentionnés (saison 5 semaines en 2024 ; match 18 en 2025 ; 21 jours avant d'avoir des offres) ; à recouper avec les annonces de mises à jour.
+- Questions dont la question d'origine n'a pas été relue (réponses brèves du développeur) : plusieurs entrées marquées « en doute » ; à vérifier dans les canaux complets.

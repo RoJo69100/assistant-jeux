@@ -1,0 +1,67 @@
+Basket Vibe : 
+
+Global :
+Faire un premier tour avec l'agent Veille pour comprendre les regles, pour avoir toutes les infos discord, toutes les infos du forum et toutesz les infos du chat, pour avoir une mine d'or de données 
+Avoir le calendrier et savoir quel jour on est et du coup se reperer
+Comprendre la différence des compétitions Coupe/Amical/Ligue et faire en sorte d'avoir des parametres chacun, ligue coupe avoir preset compo, amical pas de preset mais on peut tester beaucoup de choses
+Analyser les stats de la ligue pour voir les meilleurs joueurs dans les equipes
+Savoir gerer deux equipes distincte
+
+Jeunes/Academies : 
+Comprendre comment la school fonctionne, combien un talent reste dans la school, que chosiir et comment il s'améliore
+Savoir si on scout le joueur
+Savoir si le joueur apres scout est intégrable dans le club
+
+Finances : 
+Connaitre notre solde actuel
+Connaitre nos dépenses
+Connaitre nos salaires
+Connaitre notre entrée d'argents
+Savoir quels actions on peut mener, acheter joueur ? rien faire ? 
+Quoi faire dans le futur.
+
+Equipe : 
+Connaitre toutes les caracteristiques des joueurs
+Comprendre l'effet de sharpness
+Comprendre l'effet de condifition
+Comprendre l'effet de forme 
+comprndre le pot
+comprendre le fit
+comprend le skill
+comprendr le BU et PBU
+Savoir si le joueur est bon a son psote, si non a quel poste ? (savoir si on peut faire jouer a un autre poste)
+Savoir si ce joueur est a vendre
+Connaitre les statistiques des joueurs 
+Connaitre les joueurs blesses ou suspendues
+Comprendre les rapports sur un joueur pour le futur et actuellemen
+Analyse les matchs reprot, avec match report de l'année interessant 
+
+Transferts :
+Se créer une base de données, ce type de joueur vale ce prix
+Etudier le marché savoir si on peut acheter/revendre nos joueurs
+Savoir s'il faut vendre nos joueurs 
+Savori s'il faut scout ce joueur
+
+Entrainements :
+Definir les caracteristiques a entrainer
+Suivre le progres des joueurs 
+Comprendre le progres et definir quel est le talent du joueur
+Comprendre la noion de mentor
+Definir l'intensite
+Comprendre satisfaction
+Faire le lien ave le pot de l'equipe
+Definir l'entrainement pour chaque posts
+
+
+Tactique : 
+Quels tactiques mettre en place, la tactique 442 , 3-4-3 etc les postes predefinies
+Definir la defensive live Low - High, la pass preferece Short - Direct, pas focus Narrow - Wide, Shooting On sight - from box, header Avoid - Prioritise, savori si on ajotue pressing, counters,tgrough ball, run with ball
+Comprendre le set pieces, pour les remplacements sub, chosiir pour pen, fk et cor, pour def att et pour le captaine
+Avoir une composition avec un tableau des joueurs avec leur poste, le set pieces ainsiq que la tactique (Defensive line, passe preference, pass focus .....)
+Choisir la meilleur stratégie pour cette adversaire selon nos anciens matchs contre eux
+Choisir la meilleur stratégie possible selon tous les matchs qu'on a joué, selon les blesses, selon el manque de forme, selon le manque de reussit ces derneirs temps 
+
+Infrastructure :
+
+COmprendre tous les batimetns
+Savoir si on doit les augmenter ou non  
