@@ -3,6 +3,9 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-30
+53. Team Soccer, « que faire » : RÉCIDIVE règle de rendu 3 (+ 35/38/43) : composition donnée en onze seul sans consignes des 5 zones, banc ni remplacements ; et « Exports de ce soir » + « puis/après » = temporalité (règle 20). Une compo à enregistrer = fiche complète dans l'ordre de l'écran ; seulement les actions faisables maintenant. Skill `teamsoccer-aujourdhui` corrigé.
+
 ## 2026-10-29 (soir)
 52. Fin de journée / après /clear : « les N autres jeux » = je liste d'abord, en une requête (fait-AAAA-MM-JJ.md + briefs + `bronze.raw_pages`), quels jeux ont déjà eu agents/briefs aujourd'hui, au lieu de demander. Fin d'après-midi sans /compact proposé = récidive 40.
 51. Un jeu dont le Discord n'a jamais été lu en entier : première passe de veille = lecture intégrale (messages lus vs retenus annoncés), pas le delta (HN : 12 propositions, puis A-25/B-7/C-14 après « tu as retenu que ça ? »).
