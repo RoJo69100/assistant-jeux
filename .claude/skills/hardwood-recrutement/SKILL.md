@@ -74,5 +74,9 @@ Sources : **[R:Rubrique]** = manuel officiel (capturé le 2026-10-30). **[D]** =
 ## Tableau prêt
 `gold.hw_recruit_board` (prospects de la recherche + nos suivis) : verdict cible / cible hors région / secondaire / dur / futur / écarter, `rang` dans le verdict, `besoin` = poste d'un boursier qui part, plafond de SI, équipes intéressées et à High, notre intérêt et notre offre, bourses libres et points.
 
+## Recrues en deux temps (2026-10-30, `sql/gold/046_hw_recrue_fiches.sql`)
+1. `gold.hw_recrues_a_ouvrir` : prospects engageables du board (cible, cible hors région, secondaire) sans page joueur en base. Donner **au moins 15 noms** à ouvrir : beaucoup sont rejetés une fois la page lue (demande de l'utilisateur).
+2. `gold.hw_recrue_fiches` : une ligne par page ouverte. Note /5 au meilleur poste jouable (listé dans Positions, Grand ≥ 1,95 m), même barème que `gold.hw_roster_notes` : `note_now` (actuel) et `note_plafond` (potentiel + milieu des phrases du scout), `boursiers_devant` = nos boursiers qui restent et sont mieux notés, `cles_non_dites` = compétences clés sans phrase (plafond pris à l'actuel), `phrases_hors_ref` à ajouter à `silver.hw_ref_scout_phrases`. Verdict [H] : 🟥 offrir / 🟧 réserve / rejeter, risque 50/50 signalé.
+
 ## Inconnu
 Coût exact par classe (HS FR à JC), taille et durée du malus de redshirt, seuils des étoiles, heure de réouverture après le flip.
