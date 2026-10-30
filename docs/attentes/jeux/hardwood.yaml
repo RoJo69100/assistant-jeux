@@ -1,0 +1,126 @@
+# Config Hardwood (Online College Basketball, onlinecollegebasketball.org) — écrite le 2026-10-30.
+# Règles : skills hardwood-regles, hardwood-recrutement, hardwood-tactique. Valeur non vérifiée = « # à vérifier ».
+
+jeu:
+  id: hardwood
+  nom: Hardwood (Online College Basketball)
+  sport: basket
+  prefixe_sql: hw_
+  fuseau_affichage: Europe/Paris
+
+equipes:
+  - { id: 940, nom: Eureka Red Devils, niveau: "VI.26 (Division 3)", controle: [composition, tactique, entrainement, recrutement, coachs], limite_effectif: "13 boursiers + walk-ons" }
+
+ligue: { taille: 16, division: "VI.26 (D3)", montee_descente: "3 premiers montent, 6 derniers descendent (classement de conférence, saison régulière)" }
+
+unites_echelles:
+  devise: aucune (pas de finances)
+  competences: { nombre: 14, echelle: "0-20 ; SI = somme ; valeurs affichées ±20 %" }
+  forme: "aucune ; fatigue en match (-, Lght, Mod, Hvy), Overwork sur la saison"
+  conversion_base_ecran: ""
+
+jugement_joueur: [competences_cles_du_poste, si, potentiel_plafond, maitrise_du_poste, stats]
+
+sources:
+  manuel: https://onlinecollegebasketball.org/rules (capturé, bronze page_type rules)
+  devlog: aucun
+  discord: data/discord/Hardwood/
+  forum: non exporté          # à vérifier
+  chat: non exporté
+  aide: data/manual/hardwoord/Aide docs.txt (tableaux épinglés + conseils, 2026-10-30)
+  connaissance: outputs/hardwood/veille/connaissance.md
+
+exports_texte:
+  - { type: discord, canal: "#general #advice #recruiting-*", frequence: à la demande, destination: data/discord/Hardwood/, declenche: [veille] }
+
+rythme:
+  - { quand: "chaque jour", quoi: "1 match simulé à 9:00 heure du Pacifique (17:00 Paris jusqu'au 31/10, 18:00 après)", verrouillage: "depth chart et Game Plan avant 9:00 PT", fuseau_heure: Pacifique }
+  - { quand: "après chaque journée", quoi: "mise à jour du recrutement (53 par saison), +2 points", verrouillage: "", fuseau_heure: Pacifique }
+  - { quand: "jeudi et dimanche matin", quoi: "coaching (progression)", verrouillage: "", fuseau_heure: Pacifique }
+  - { quand: "un par jour réel", quoi: "recrutement d'un coach", verrouillage: "assistants : seulement avant la saison de conférence ou après la saison", fuseau_heure: Pacifique }
+
+competitions:                     # demande de l'utilisateur : ligue/coupe = compo de référence, amical = tests
+  ligue:  { saisie: oui, preset: "Game Plan par défaut (depth chart + Game Tactics + Game Management)", moteur: "1 match/jour", acces: "10 hors conférence + 30 de conférence", but: gagner (top 3 = montée) }
+  coupe:  { saisie: oui, preset: "même plan que la ligue", calendrier: "playoffs de conférence (16, élimination directe), tournoi D3 (64), Invitational", acces: "playoffs : tous ; tournoi : RPI + rang", but: gagner }
+  amical: { saisie: oui, preset: non, but: tester, note: "les 3 exhibitions de début de saison : ne comptent pas (ni pour le redshirt) ; servent aux tests et aux minutes des jeunes" }
+
+ecrans:
+  composition:
+    lignes: [titulaires, "2e rideau", "3e rideau"]
+    colonnes: [PG, SG, SF, PF, C]
+    ordre_joueurs: "le moteur remplit dans l'ordre PG, C, PF, SF, SG"
+  game_tactics:
+    colonnes: [Pace, Emphasis, "Zone %", "Pressure %", Extend, "Substitution Mode"]
+    valeurs_permises: { Pace: "-5..+5", Emphasis: "I i ~ o O", "Zone %": "0-100 pas de 5", "Pressure %": "0-100 pas de 5", Extend: "-5..+5 (NC)", "Substitution Mode": "Mass, Staggered A, B, C" }
+    ajustements: "5 au plus : déclencheur + seuil bas/haut ; seul le premier qui se déclenche s'applique"
+  consignes_joueur:               # Game Management
+    colonnes: [Green Light, Offensive Positioning, Playing Time, Foul Trouble Hook, Red Shirt]
+    valeurs_permises: { Green Light: "x -- - neutre + ++", Offensive Positioning: "I i neutre o O", Playing Time: "0-40 (titulaire ≥ 15, moyen 32)", Foul Trouble Hook: "none slow average quick", Red Shirt: case }
+
+options_a_tester: [Pace, "Foul Trouble Hook (slow pour boursiers, quick pour walk-ons, naph7777)", "Extend après la mise à jour du 2026-08-23"]
+
+exports:                          # walk-ons : jamais de page joueur (décision de l'utilisateur, 2026-10-30)
+  - { page: "Roster, Schedule, Statistics, Conference, Recruiting", quand: "chaque jour", evenement: export_roster }
+  - { page: "/game/<id> du dernier match", quand: "après chaque match", evenement: export_match }
+  - { page: "Development", quand: "après jeudi et dimanche", evenement: export_entrainement }
+  - { page: "Prospect Search (région USA Central), Rankings", quand: "tous les 3 jours", evenement: export_academie }
+  - { page: "Coaches, Coach Search", quand: "chaque semaine ou avant un recrutement de coach", evenement: export_finances }
+  - { page: "Depth Chart, Game Tactics, Game Management", quand: "après chaque changement", evenement: export_roster }
+  - { page: "/player/<id> des boursiers", quand: "nouveau boursier", evenement: export_roster }
+
+domaines:
+  equipe:          { present: oui }
+  tactique:        { present: oui }
+  entrainement:    { present: oui, dimensions: ["focus principal", "focus secondaire", "8 entraînements additionnels"], frequence: "jeudi et dimanche" }
+  jeunes:          { present: oui, depense_suivie: oui, chemins: ["HS SR → FR (4 ans)", "JC SO → JR (2 ans)", "International 17 ans → FR"] }
+  transferts:      { present: non }
+  finances:        { present: non }
+  personnel:       { present: oui, postes: [head coach, 3 assistants], facturation: "salaire affiché, pas de budget", leviers: ["un recrutement de coach par jour", "assistants : avant la conférence ou après la saison"] }
+  infrastructures: { present: non }
+indicateurs:
+  - { libelle: SI, sens: "plus haut = meilleur", comment_ameliorer: "coaching, minutes, recrutement" }
+  - { libelle: TPI, sens: "moyenne pondérée des SI des 10 meilleurs", comment_ameliorer: recrutement }
+  - { libelle: RPI, sens: "sélection du tournoi", comment_ameliorer: "victoires contre des équipes fortes" }
+
+seuils:
+  competence_acceptable: 13       # [A] note d'une compétence clé jugée acceptable pour le poste
+  points_recrutement_alerte: 40   # plafond 45
+  playing_time_titulaire_min: 15
+
+vues_gold:
+  agenda: gold.hw_today
+  alertes: gold.hw_daily_alerts
+  rapport_match: gold.hw_season_games
+  base_transferts: ""
+  resultat_champ: my_result (silver.hw_games, silver.hw_schedule)
+  autres: [gold.hw_effectif, gold.hw_player_fit, gold.hw_player_pos_scores, gold.hw_depth_suggest, gold.hw_vd_compare, gold.hw_recruit_board, gold.hw_coach_board, gold.hw_exports_state]
+
+dependances:
+  agents:
+    veille:             { lit: [discord], ecrit: [regles] }
+    match:              { lit: [export_match], ecrit: [resultats] }
+    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances-personnel: { lit: [personnel, besoins_postes], ecrit: [choix_coach] }
+    academie:           { lit: [rapport_academie, besoins_postes, choix_coach], ecrit: [recrues_retenues] }
+    entrainement:       { lit: [export_entrainement, roster], ecrit: [reglages_entrainement] }
+    tactique:           { lit: [dispo_joueurs, resultats, reglages_entrainement], ecrit: [composition] }
+  evenements:
+    export_match:        { touche: [export_match] }
+    export_roster:       { touche: [roster] }
+    export_finances:     { touche: [personnel] }
+    export_entrainement: { touche: [export_entrainement] }
+    export_academie:     { touche: [rapport_academie] }
+    engagement:          { d_abord: finances-personnel, si_engage: { touche: [personnel] } }
+    fin_de_saison:       { touche: [roster, rapport_academie] }
+    regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
+  cascade:
+    - "Lancer d_abord, puis chaque agent dont `lit` croise ce qui est touché ou écrit, dans l'ordre du graphe."
+    - "Aucun agent si ses entrées n'ont pas changé ; un tableau = une vue gold, zéro agent."
+
+specificites:
+  - { regle: "Walk-ons : ni export, ni depth chart", source: "[U]", date: 2026-10-30, statut: confirmé }
+  - { regle: "Pas de transferts ni de finances : le seul levier d'effectif est le recrutement", source: "[R] [D]", date: 2026-10-30, statut: confirmé }
+  - { regle: "Assistants remplaçables seulement avant la conférence ou après la saison", source: "[R:Assistant Coaches]", date: 2026-10-30, statut: confirmé }
+confidentialite: []
+rendu_obligatoire:
+  - "Depth chart poste par poste (PG, SG, SF, PF, C × titulaire / 2e / 3e), puis Game Tactics (6 réglages + ajustements), puis Game Management joueur par joueur."

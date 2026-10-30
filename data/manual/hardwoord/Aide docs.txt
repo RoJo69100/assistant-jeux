@@ -1,0 +1,198 @@
+Texte de la colonne de gauche (fond parchemin) :
+
+"Hello! Welcome to the game, as you're still pretty new it seems. Good for you for trying to learn it on your own. Let's try to address these questions.
+
+Redshirts basically happen AFTER the season. So keep that redshirt box on Coe checked and he'll be a RS FR next season. He can still play up to 5 games this season. And yes, you can redshirt multiple players. Although at this point, only Coe is eligible to redshirt. The only players who can redshirt are non-senior players on a scholarship who have not redshirted before, and they cannot play more than 5 games.
+
+Coe and Palmieri are decent pieces to start with. Good luck on your current battles, those are going to be tough ones. I would definitely have lots of backups in mind. You can probably wait until later in the season and find a few gems for cheap, and you should be taking more than 2 players this class anyways, probably up to 3-4. I would always try to get at least one big man too.
+
+So JC means Junior College, and in this game, a junior college player will commit during their SO JC year, and then they arrive on your team as a JR. So basically, they spent their first two years in college at another school. HS is high school, and only high school seniors (HS SR) commit and they arrive on your team as a FR. So a HS JR is at the beginning of their HS time and so won't commit until 2 seasons later when they are a HS SR.
+
+Fatigue is weird. I don't fully understand it and I think lots of people have different thoughts on it. Fatigue increases the risk of injury and also reduces the quality of the player at that time of the game. But it is assumed that they are fully rested between games, so no you don't need to play them less the next game. But be warned that if you constantly increase the risk of your player getting injured, then the chance for injury is higher. But the chance for injury is pretty random it seems anyways.
+
+No worries, you're not disturbing me. I love this game!"
+
+Texte du bas gauche (fond parchemin) :
+
+"Oh haha, yeah. I realized you asked me questions before after I sent that response lol.
+
+For tactics, it definitely can be complicated. It depends on your team and a lot of the times, they won't really matter because talent and skill of the players is the most important thing.
+
+You know your team best, so try to see how things go after a few games, and then tweak. Repeat that process. I started out at the default settings and then tweaked things; for instance, I noticed early on that my team played better when playing faster, so I slowly upped the pace and played with that. That was probably a lot because my team was better than my opponents (there's a philosophy that playing faster leads to more possessions, and more possessions means increased chances for a superior team to flex its superiority. Whereas less possessions means a higher chance for variance, or random chance to strike, and for the inferior team to win). It also depends on your preferences. I don't like my players getting any fatigue, so I don't press a lot. Others press way more and others don't care about fatigue, so they play super fast.
+
+Your team is pretty slow, so I wouldn't play fast. Your team lacks good defenders, so I wouldn't play heavy man, and it's weak in both perimeter and interior, so sinking or extending won't work either way. But it's also not big/long or smart, so zone isn't gonna go great either. The lack of speed and defense, especially on the perimeter, definitely means you should not press a lot. Offensively, who do you rely on to score? Martino and Richardson have good inside scoring ratings, and Lindberg ain't half bad. You don't have much in the way of perimeter shooting (Shaffer might be your best perimeter scorer?), so I'd try to feed the inside I guess?
+
+I guess you're trying to win now instead of prioritize development of younger players for the future? That influences who plays of course. At present, I still wouldn't really focus on tactics. You need players with better builds. None of your players really stand out to me as quality fits for their roles. Maybe it's fine in LL6, but I don't think that's a roster of a team that will promote, no matter what the tactics. In general, players with a 13 rating or above are acceptable for me in whatever skill is suitable for their positions. Lindberg for instance is small and not a good rebounder, and he's not strong, yet he is your center, the position that plays inside the most. He's decent at inside scoring and interior defense at least. Unfortunately, he probably is still your best option to start at center. But if you were to prioritize developing younger players (and accept losing games this season), I'd think about just starting Palmieri now.
+
+I know that might seem daunting, but Coe and Palmieri are steps in the right direction. Keep going after guys like them. Hope that helps and feel free to continue to ask questions."
+
+Texte de la colonne de droite (tableau blanc) :
+
+"I think the target goal for prospects differ on a few things. Right now I can think of four factors that plays into how I evaluate and recruit guys and the contacts I give someone. Note: These are general rules because each player is obviously different.
+
+Skill/Star ranking of prospect. I tend to put more contacts into the higher rated players because teams usually go after them pretty seriously.
+
+Location. Since you get a boost for the players in your region, you don't have to put in to many contacts to jump up to lead with a player. I also don't have to open as much of an "interest lead" on an in region player because I can easily put these players to open back up a lead on a guy if I lost it.
+
+Time of commitment A player who is willing to commit early means I just need to be leading the sprint. That means I to put to many contacts in on the guy to see where he commits. The guys who wait to commit usually means for me that I bigger lead, so it is harder for teams who have lost their initial prospects to catch up to me.
+
+Level of competition If a bunch of ownerless division three teams have interest in my player, I tend to spend my contacts elsewhere. The opposite is true for teams with owners especially if there division 1. Also make sure to check later on in the season to see if your competitors ends up running out of scholarships. If they are full, you don't have to worry about the team stealing the player from you. Also, when you recruit HS FR-JR and JUCO FR take now how they finish the year. A promotion can raise the prospect's interest after the season, and a demotion can lower a prospect's interest. Through a relatively small sample size, it seems that a positive effect more than demotion causes a negative effect."
+
+Image 2 (image_17d554.jpg)
+Tableau en haut à gauche :
+
+Potential | Cap Min | Cap Max
+9 | 126 | 139
+10 | 140 | 153
+11 | 154 | 167
+12 | 168 | 181
+13 | 182 | 195
+14 | 196 | 209
+15 | 210 | 223
+16 | 224 | 237
+17 | 238 | 251
+
+Tableau central (Commentaires et tranches) :
+
+Comment | Min Max
+Could be a dominating post player | 18 20
+Could be a very good post player | 15 18
+Could be a good post player | 13 17
+Above average post moves | 11 14
+Could be an excellent shooter | 15 20
+Could be a good shooter | 13 16
+Could be an above average shooter | 11 17
+Could really be a long-range shooter | 10 20
+Can be a monster on the boards | 15 20
+Can be a decent rebounder | 13 16
+Can never be a good rebounder | 0 8
+Can be a really smart player | 14 20
+Can be a smart player | 13 18
+Can be prone to a lot of mental mistakes | 0 7
+Can be a great all-around defensive player | 22 36
+Can be a good all-around defensive player | 14 31 (Sum ID + PD)
+Will never be a good perimeter defender | 0 10
+Will never be a good interior defender | 0 10
+Can be a skilled passer with exceptional court vision | 14 20
+Can be a skilled passer | 12 16
+Can be a really good ball handler | 15 20
+Can be a decent ball handler | 11 16
+Will be a below average ball handler | 0 12
+Will be quick as lightning | 19 20
+Will be very quick | 15 18
+Can be a speedy player | 12 16
+Will always be a bit sluggish | 0 9
+
+Capture d'écran Discord (en haut à droite) :
+
+Neph - St. Mary's / East Central 09/04/2022 17:51
+You are describing what condition you want your change in settings to occur.
+So in your example If you set an upper threshold of <= 10. With no lower threshold set. Then you are saying "If my opponent scores any number of points in the paint less than or equal to 10 then "
+
+Most of the instructions make more sense to set a lower threshold in my opinion.
+"If opponent points in the paint - Lower Threshold >= (some number I decide means they are dominating the paint) then - Set Extend defense to -3"
+"If opponent 3-pointers made - Lower Threshold >= 6 Then Set Extend Defense to +2"
+
+Using the lower and upper threshold would be more for things like.
+(Threshold Type = Point Differential)
+If we're down lots use this tactic (Lower Threshold = None + Upper threshold <= -20)
+If we're down a little use this tactic (Lower Threshold >= -19 + Upper threshold <= -1)
+If we're up a little use this tactic (Lower Threshold >= 0 + Upper threshold <= 10)
+If we're up a lot use this tactic (Lower Threshold >= 11 + Upper threshold = None)
+
+Bloc de texte sur fond noir (en bas à droite) :
+
+IS - Could be a dominating post player
+IS - Could be a very good post player
+IS - Could be a good post player
+IS - Above average post moves
+
+OS - Could be an excellent shooter
+OS - Could be a good shooter
+OS - Could be an above average shooter
+OS - Does not have much of a shooting touch
+
+Rng - Could really be a long-range shooter
+
+Reb - Can be a monster on the boards
+Reb - Can be a decent rebounder
+Reb - Can never be a good rebounder
+
+IQ - Can be a really smart player
+IQ - Can be a smart player
+IQ - Can be prone to a lot of mental mistakes
+
+Pass - Can be a skilled passer with exceptional court vision
+Pass - Can be a skilled passer
+
+Spd - Will be quick as lightning
+Spd - Will be very quick
+Spd - Can be a speedy player
+Spd - Will always be a bit sluggish
+
+Hnd - Can be a really good ball handler
+Hnd - Can be a decent ball handler
+Hnd - Will be a below average ball handler
+
+Other - Excellent all-around player
+Other - Good all-around player
+Other - Has no preference to play close to home
+Other - Would prefer to play close to home
+Other - Is a troubled kid and may not be college material (-50/50 of committing or never playing in college at the end of HS SR season)
+Other - Is eager to commit early (Will commit in first half of season if any contacts on them)
+Other - Isn't much of a student and may not qualify academically (~50/50 of committing or going to Junior College at end of HS SR season)
+Other - May choose to play overseas instead of going to college (International only ~50/50 chance of committing or never playing in college.)
+Other - Will flourish in a fast pace offense
+
+Image 3 (image_17d537.png)
+Coaching Comment Ranges
+
+Offense
+14+ He is good at coaching offense
+11-13 He is above average at coaching offense
+10 (No comment)
+0-9 He is below average at coaching offense
+
+Defense
+15+ He is good at coaching defense
+11-14 He is above average at coaching defense
+10 (no comment)
+0-9 He is below average at coaching defense
+
+Tactics
+15+ He is an excellent X's and O's coach (Comment does not appear on all 15's, does on all 16's I've seen. I've seen 15 tactic coaches with no tactic related comment)
+12-14 He is a good X's and O's coach. (This comment does not always appear)
+0-11 (no comment)
+
+Development
+15+ He is excellent at teaching the game.
+12-14 He is a good teacher of the game
+9-11 (no comment)
+0-8 He is a poor teacher of the game
+
+Motivation
+15+ He is a great motivator
+12-14 He is a good motivator
+0-11 (no comment)
+
+Recruiting (Comment range before age starts to effect it)
+15+ He is an excellent recruiter
+13-14 He is a good recruiter.
+11-12 He is a decent recruiter.
+5-10 (no comment, yes some go as low as 5 with no negative comment)
+0-9 He is a poor recruiter (yes some stay as high as 9 with this negative comment)
+
+Image 4 (image_17d1f1.png)
+(Il s'agit d'un tableau graphique pour des schémas de remplacements ("staggering") au basket-ball. Voici le texte structurel visible sur l'image) :
+
+En-têtes principaux : MASS | STAG A | STAG B | STAG C
+Colonnes (sous chaque en-tête) : PG | SG | SF | PF | C
+Lignes (Axes verticaux) : MINUTES LEFT de 20 jusqu'à 1
+Lignes du bas : HALF/END
+
+Image 5 (image_17d1d1.png)
+PG IQ, passing, ball handling, speed
+SG outside shooting, speed
+SF outside shooting, good all-around defense, speed, taller than SG and PG
+PF inside shooting, rebounding, tall player
+C inside shooting, rebounding, tall player

@@ -28,3 +28,4 @@
 - [Coupe BasketVibe quotidienne](project-basketvibe-coupe-quotidienne.md) — coupe tous les jours jusqu'à élimination ; vérifier un match de coupe à chaque passage (2026-10-30)
 - [Team Soccer compo complète](feedback-teamsoccer-compo-complete.md) — fiche complète empl.×5 zones+banc+remplacements, Cows et Donkey, sans temporalité (2026-10-30)
 - [HN noms d'équipes, amicaux](project-hn-noms-equipes-amicaux.md) — FRM Ben Ahmed Donkey, U21 Mjóifjörður Sheep, U17 Martigny Saint Bernard ; Bélanger et centres gérés par lui (2026-10-30)
+- [Hardwood](project-hardwood.md) — 5e jeu, conception faite le 30/10 (vues gold hw_*, résumé, checklist) ; walk-ons jamais exportés
