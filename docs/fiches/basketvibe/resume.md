@@ -19,7 +19,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 
 ## Échelles de l'écran
 - Consignes : écran 1–5 = données 0–4 (+1). Rôle 1 Passeur → 5 Scoreur ; Off. focus 1 Low → 5 Primary ; Tir 1 = 2 pts → 5 = 3 pts ; Agress. déf. 1 Soft → 5 Agressive.
-- Focus défensif : 1 Give up, 2 Light, 3 Normal, 4 Intense, 5 Lock (export `off`). Zone : Rim / Middle / Perimeter (`area_step` 5 / 3 / 1, le 1 déduit).
+- Focus défensif : 1 Give up, 2 Light, 3 Normal, 4 Intense, 5 Lock (export `off`). Zone : Rim / Middle / Perimeter (`area_step` 5 / 3 / 1, le 1 déduit) — **existe dans tous les matchs v4 : amical, coupe, ligue (confirmé le 2026-10-30)** ; toujours affichée avec le focus, une ligne par adversaire, ordre de l'export (par poste, alphabétique), jamais regroupée par valeur.
 - Ordre de l'écran : par poste PG, SG, SF, PF, C, puis alphabétique (le JSON brut est alphabétique global : faux).
 - Transferts : taxe 5 %, revente après 1 semaine, effectif minimum 8 (notre marge : 9).
 
