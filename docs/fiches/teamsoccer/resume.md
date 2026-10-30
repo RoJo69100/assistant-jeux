@@ -47,6 +47,7 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel → Ac
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`, `CLAUDE.md`)
 - **Horizon : aujourd'hui seulement.** L'utilisateur n'agit que le jour même, le soir. Jamais « demain », « le 29 », « après le prochain match » comme étape ; un match de demain se prépare aujourd'hui.
 - **Rendu** : actions « fais X » avec joueur, valeur, heure limite ; tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action ; saisie complète dans l'ordre de l'écran ; aucun « si » ; donnée manquante = « il me manque X, fais l'export Y » ; ne jamais redemander ce que `fait-…` ou la base prouvent ; une décision, le doute en une demi-ligne.
+- **Composition (R-12, 2026-10-30)** : les deux clubs, fiche complète (11 × 5 zones, banc, ligne Remplacements programmés) ; chaque « Passer » indique sa cible (défenseurs / milieux / attaquants), obligatoire dans le jeu.
 - **Finançable d'abord** : un achat n'est proposé que si `capacite_invest` le couvre (règle apprise 16) ; sinon la cible est abandonnée, pas « à surveiller ».
 - **Effectif à chaque passage** : verdict par poste (acheter / vendre / garder, joueur nommé, prix) ; une vente identifiée reste ouverte jusqu'à exécution ; jamais d'enchère ni de vente lancée sans accord.
 - **Défaite** = analyse chiffrée contre toute la saison (`gold.ts_vd_comparatif`), 3 à 5 points testables ; conseils `C-nnn` → `L-nnn` dans `outputs/teamsoccer/learnings.md`.
