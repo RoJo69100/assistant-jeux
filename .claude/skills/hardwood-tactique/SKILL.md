@@ -5,7 +5,7 @@ description: Règles Hardwood de la tactique et du match — Game Plan par match
 
 # Hardwood — tactique et match
 
-Sources : **[R:Rubrique]** = manuel officiel (capturé le 2026-10-30). **[D]** = Discord, veille du 2026-10-30 (`outputs/hardwood/veille/v-tactique.md`, statut entre parenthèses). **[E]** = nos exports (vues `silver.hw_tactics`, `hw_management`, `hw_games`, `hw_game_teams`, `hw_game_box`).
+Sources : **[R:Rubrique]** = manuel officiel (capturé le 2026-10-30). **[D]** = Discord, veille du 2026-10-30 (`outputs/hardwood/veille/v-tactique.md`, statut entre parenthèses). **[A]** = document d'aide de l'utilisateur (`data/manual/hardwoord/Aide docs.txt`, 2026-10-30). **[E]** = nos exports (vues `silver.hw_tactics`, `hw_management`, `hw_games`, `hw_game_teams`, `hw_game_box`).
 
 ## Game Plan [R:Game Strategy, Depth Chart & Game Plan]
 - **Chaque match peut avoir son propre Game Plan** (lien « (set) » du calendrier) = un depth chart + des Game Tactics avec ajustements. Sans plan spécifique, le **plan par défaut** s'applique ; il sert aussi de point de départ à chaque plan de match.
@@ -20,6 +20,7 @@ Sources : **[R:Rubrique]** = manuel officiel (capturé le 2026-10-30). **[D]** =
 | Extend | -5 à +5 (NC = inchangé à la mi-temps) | + = défense étendue vers l'arc, - = resserrée sous le panier ; elle dérive pendant le match selon les réussites adverses |
 | Substitution Mode | Mass, Staggered A, B, C | voir ci-dessous |
 - **Ajustements de mi-temps : 5 au plus**, chacun avec un déclencheur (Point differential, Points in the paint, 3-pointers made, Personal fouls, Opponent points in the paint, Opponent 3-pointers made) et un seuil bas et/ou haut (-25 à +25). **Seul le premier qui remplit son critère s'applique.**
+- Lire les seuils [A : Neph, Discord 2022-04-09] : le seuil décrit la condition ; « Lower ≥ X » = « si la valeur est au moins X », « Upper ≤ X » = « au plus X ». Exemples : Opponent points in the paint, Lower ≥ (valeur jugée dominante) → Extend −3 ; Opponent 3-pointers made, Lower ≥ 6 → Extend +2. Les deux seuils ensemble servent aux tranches de Point differential : ≤ −20 · −19 à −1 · 0 à 10 · ≥ 11.
 
 ### Repos des titulaires (minutes restantes dans la mi-temps) [R]
 | Mode | Repos |
@@ -40,6 +41,13 @@ Le repos dépend aussi du Playing Time de chaque joueur.
 | Red Shirt | case à cocher | voir `hardwood-regles` |
 - Nous, le 30/10 [E] : les 20 joueurs ont tous 32 min, average, Green Light et positionnement au neutre ; c'est le réglage par défaut, jamais personnalisé.
 
+## Méthode d'un ancien [A]
+- **Le talent des joueurs compte plus que la tactique** : partir des réglages par défaut, observer quelques matchs, puis ajuster un réglage à la fois.
+- Pace : plus de possessions favorisent l'équipe la plus forte ; moins de possessions augmentent la part de hasard, donc aident la plus faible. Plus rapide = plus de fatigue.
+- Équipe lente : pas de Pace élevé ni de pressing. Mauvais défenseurs : pas beaucoup d'individuelle. Faible dehors et dedans : ni Extend + ni −. Petite, pas longue ni intelligente : la zone ne marche pas bien. Nourrir l'intérieur si nos meilleurs marqueurs sont des IS.
+- Gagner maintenant ou développer : les minutes des jeunes boursiers les font progresser ; un jeune titulaire coûte des matchs cette saison.
+- Les 5 repos de Mass / Staggered A-B-C sont dans un tableau minute par minute (image du doc) : voir le tableau « Repos des titulaires » ci-dessous.
+
 ## Ce que dit la communauté [D]
 - Pressure fait plus de fautes que Man, et Man plus que Zone ; le consensus est de mélanger les trois (confirmé par plusieurs joueurs).
 - La zone est une seule zone (de type 3-2), sans 2-3 ni 1-3-1 (consensus 2026-01, sans réponse de Steve).
@@ -53,6 +61,10 @@ Le repos dépend aussi du Playing Time de chaque joueur.
 - Efficacité par zone : au cercle, intérieur, mi-distance, à 3 points (réussis/tentés) ; SI pondéré et TPI des deux équipes ; blessés ; joueurs en Overwork.
 - Box score → `silver.hw_game_box` : poste joué, minutes, tirs, OFG (tirs de l'adversaire direct), +/-, DIST (distance moyenne de tir), PITP, FBP, FD, **fatigue** (-, Lght, Mod, Hvy).
 - Pour préparer un adversaire : ses matchs précédents (défense mesurée, efficacité par zone) et ses SI/TPI.
+
+## Tableaux prêts
+- `gold.hw_depth_suggest` : depth chart proposé (boursiers valides, ordre de remplissage du moteur PG, C, PF, SF, SG ; colonnes `actuel`, `controle`, `walk_on_meilleur`).
+- `gold.hw_season_games` (match par match : notre tactique, efficacité par zone nous/eux, défense adverse mesurée, SI pondéré) et `gold.hw_vd_compare` (victoires contre défaites, toute la saison).
 
 ## Inconnu
 Bonus du terrain (réel d'après les joueurs, non chiffré), poids exact de la vitesse, de l'IQ et de la taille, effet des notes Game Tactics et Motivation du coach, algorithme des remplacements (« To Do » dans le manuel).

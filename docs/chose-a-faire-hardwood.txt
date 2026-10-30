@@ -1,0 +1,39 @@
+Hardwood : 
+
+Global :
+Faire un premier tour avec l'agent Veille pour comprendre les regles, pour avoir toutes les infos discord, toutes les infos du forum et toutesz les infos du chat, pour avoir une mine d'or de données 
+Avoir le calendrier et savoir quel jour on est et du coup se reperer
+Comprendre la différence des compétitions Coupe/Amical/Ligue et faire en sorte d'avoir des parametres chacun, ligue coupe avoir preset compo, amical pas de preset mais on peut tester beaucoup de choses
+Analyser les stats de la ligue pour voir les meilleurs joueurs dans les equipes
+
+Transferts/Jeunes/Academies : 
+Comprendre comment le recrutement, les jeuens fonctionnent, il n'y a pas de transferts aussi, il y a des points de recrutemets qui te permettent de faire des offres sur des joeuurs, selon leur niveau  JC SO, JC FR etc ....
+On a un nobmre de joueurs qu'on peut drafter, 4 la cete année par exemple
+Savoir si on recrute ce jeunes 
+
+Finances : 
+Aucune notion de finance
+
+Equipe : 
+Connaitre toutes les caracteristiques des joueurs
+Comprendre l'effet de fatigue
+Savoir si le joueur est bon a son poste, si non a quel poste ? (savoir si on peut faire jouer a un autre poste)
+Connaitre les statistiques des joueurs 
+Connaitre les joueurs blesses ou suspendues
+Savoir si on redshirt un jeune
+
+Entrainements :
+Definir les caracteristiques pour tous les joueurs, et choisir l'additional training qu'on peu faire
+Suivre le progres des joueurs 
+
+Tactique : 
+Quels tactiques mettre en place
+Avori une composition avec les joueurs pour chaque poste
+Remplir la partir Game tactics 
+Remplir la partie Game Management
+Choisir la meilleur stratégie pour cette adversaire selon nos anciens matchs contre eux
+Choisir la meilleur stratégie possible selon tous les matchs qu'on a joué, s selon le manque de reussite ces derneirs temps 
+
+Personnel : 
+Comprendre les coach Head et assistant coach
+Savoir si on change de coahc, lse impacts et les benefices
