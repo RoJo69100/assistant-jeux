@@ -4,6 +4,7 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-10-30
+55. Hockey Nation, marchés exportés (coachs libres, scouts candidats) : une vue silver en `DISTINCT ON` sur tous les exports garde les joueurs/coachs partis (Graf et Vrábel proposés alors qu'ils avaient disparu de l'export de 13:30 UTC). Une vue de marché ne lit que le dernier export (corrigé, `sql/silver/031`) ; avant toute offre, je vérifie que le nom est dans le dernier export. Et quand une vue gold expire, je répare la vue (conception) au lieu d'abandonner.
 54. Finances Team Soccer : une dépense « décidée non relevée » (`silver.ts_depenses_decidees`) se solde dès que le solde baisse ou que le stade/l'effectif la montre ; l'achat de places du 27/10 (1 122 500 $) est resté ouvert 3 jours, d'où une capacité d'achat fausse (−647 442 au lieu de +1 054 432). À chaque passage Finances : comparer solde N-1 / N, solder, puis recalculer. Une semaine exceptionnelle (2,7 M$ de recettes au 26/10 contre 0,9 M$ la semaine d'avant) ne se projette jamais comme revenu récurrent.
 53. Team Soccer, « que faire » : RÉCIDIVE règle de rendu 3 (+ 35/38/43) : composition donnée en onze seul sans consignes des 5 zones, banc ni remplacements ; et « Exports de ce soir » + « puis/après » = temporalité (règle 20). Une compo à enregistrer = fiche complète dans l'ordre de l'écran ; seulement les actions faisables maintenant. Skill `teamsoccer-aujourdhui` corrigé.
 
