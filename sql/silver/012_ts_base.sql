@@ -96,13 +96,17 @@ where j ? 'goalkeeper';
 -- zone = poste de l'API (GK/DEF/MID/FWD), sinon la plus haute de Gardien / Défense / Conduite / Finition
 -- (égalités fréquentes à 60 dans l'équipe féminine) ; second_skill = 2e compétence technique,
 -- indice du sous-rôle à lire avec le tableau du skill teamsoccer-joueurs (le guide ne donne pas la règle exacte).
+-- CTE « materialized » (2026-10-30) : les vues silver lisent le JSON brut et le planificateur les estime à 1 ligne ;
+-- sans elles, ts_player_snapshots était recalculé 19 fois et ts_my_teams 358 fois (4,4 s, timeouts en gold).
 create or replace view silver.ts_players with (security_invoker = true) as
-with last_day as (select team_id, max(day) as day from silver.ts_player_snapshots group by team_id)
+with snap as materialized (select * from silver.ts_player_snapshots),
+last_day as (select team_id, max(day) as day from snap group by team_id),
+mt as materialized (select team_id from silver.ts_my_teams)
 select s.*,
        z.zone, z.second_skill, s.day as as_of
-from silver.ts_player_snapshots s
+from snap s
 join last_day l on l.team_id = s.team_id and l.day = s.day
-join silver.ts_my_teams mt on mt.team_id = s.team_id
+join mt on mt.team_id = s.team_id
 cross join lateral (
   select coalesce(case s.position when 'GK' then 'GB' when 'DEF' then 'DEF' when 'MID' then 'MIL' when 'FWD' then 'ATT' end,
          (select case k when 'goalkeeper' then 'GB' when 'defense' then 'DEF' when 'dribbling' then 'MIL' else 'ATT' end

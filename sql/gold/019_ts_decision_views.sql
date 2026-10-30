@@ -50,15 +50,20 @@ where p.room_left > 0;
 
 -- Effectif actuel (dernier relevé de chaque club), compétence clé du poste, valeur au match, rang dans la zone.
 -- Titulaires par zone = formation de la dernière composition enregistrée (à défaut 1-4-4-2).
+-- CTE « materialized » (2026-10-30) : chaque vue silver (JSON brut) n'est lue qu'une fois ; avant, la jointure latérale
+-- relisait ts_transfer_listings pour chaque joueur et la vue dépassait le délai de l'API.
 create or replace view gold.ts_effectif_bilan with (security_invoker = true) as
-with last as (select team_id, max(as_of) as as_of from silver.ts_players group by team_id),
-f as (
+with pl as materialized (select * from silver.ts_players),
+mts as materialized (select team_id, name from silver.ts_my_teams),
+tls as materialized (select player_id, seller, deadline from silver.ts_transfer_listings where deadline > now() - interval '30 days'),
+last as (select team_id, max(as_of) as as_of from pl group by team_id),
+f as materialized (
   select distinct on (team_id) team_id, formation from silver.ts_match_lineups
   where formation ~ '^1-\d-\d-\d$' order by team_id, updated_at desc nulls last, day desc
 ),
 need as (
   select mt.team_id, coalesce(f.formation, '1-4-4-2') as formation, z.zone, z.n
-  from silver.ts_my_teams mt left join f on f.team_id = mt.team_id
+  from mts mt left join f on f.team_id = mt.team_id
   cross join lateral (values
     ('GB', 1), ('DEF', split_part(coalesce(f.formation, '1-4-4-2'), '-', 2)::int),
     ('MIL', split_part(coalesce(f.formation, '1-4-4-2'), '-', 3)::int), ('ATT', split_part(coalesce(f.formation, '1-4-4-2'), '-', 4)::int)
@@ -69,10 +74,10 @@ p as (
          case p.zone when 'GB' then p.goalkeeper when 'DEF' then p.defense when 'MIL' then p.dribbling else p.finishing end as key_skill,
          coalesce(p.injury_days, 0) > 0 or coalesce(p.suspended, false) or s.player_id is not null as unavailable,
          s.player_id is not null as on_sale
-  from silver.ts_players p join last l on l.team_id = p.team_id and l.as_of = p.as_of
-  join silver.ts_my_teams t on t.team_id = p.team_id
+  from pl p join last l on l.team_id = p.team_id and l.as_of = p.as_of
+  join mts t on t.team_id = p.team_id
   -- Vendu ou mis en vente par nous : il reste dans l'export d'effectif (Min-ji Mori le 2026-10-27).
-  left join lateral (select tl.player_id from silver.ts_transfer_listings tl
+  left join lateral (select tl.player_id from tls tl
                      where tl.player_id = p.player_id and tl.seller = t.name and tl.deadline > p.captured_at limit 1) s on true
 )
 select p.team_id, mt.name as team, p.zone, p.player_id, p.name, p.age, p.key_name, p.key_skill, p.ball_control as controle,
@@ -91,13 +96,15 @@ select p.team_id, mt.name as team, p.zone, p.player_id, p.name, p.age, p.key_nam
             when rank() over (partition by p.team_id, p.zone order by p.unavailable, p.key_skill desc, p.ball_control desc) <= n.n + 1 then 'remplaçant'
             else 'surplus' end as statut,
        p.value, p.wage, p.ovr, count(*) filter (where not p.on_sale) over (partition by p.team_id) as squad_size, p.as_of, p.on_sale
-from p join silver.ts_my_teams mt on mt.team_id = p.team_id
+from p join mts mt on mt.team_id = p.team_id
 join need n on n.team_id = p.team_id and n.zone = p.zone;
 
 -- Marché : annonces encore ouvertes dont la compétence clé dépasse le plus faible titulaire de la zone,
 -- avec le prix demandé comparé à la capacité. asking_price = prix de départ (une enchère peut monter).
 create or replace view gold.ts_marche_cibles with (security_invoker = true) as
-with l as (
+with eb as materialized (select team_id, zone, statut, name, key_skill, squad_size from gold.ts_effectif_bilan),
+c as materialized (select team_id, team, capacite_invest from gold.ts_capacite_invest),
+l as materialized (
   select distinct on (listing_id) * from silver.ts_transfer_listings
   where deadline > now() order by listing_id, seen_at desc
 ),
@@ -109,16 +116,16 @@ lz as (
 weak as (
   select team_id, zone, min(key_skill) as weakest_starter_key,
          (array_agg(name order by key_skill))[1] as weakest_starter
-  from gold.ts_effectif_bilan where statut = 'titulaire' group by team_id, zone
+  from eb where statut = 'titulaire' group by team_id, zone
 )
 select w.team_id, c.team, lz.zone, lz.listing_id, lz.listing_type, lz.name, lz.age, lz.key_skill, lz.ball_control as controle,
        lz.forme, w.weakest_starter, w.weakest_starter_key, lz.key_skill - w.weakest_starter_key as gain_key,
        lz.asking_price, lz.bids, lz.deadline at time zone 'Europe/Paris' as deadline_paris,
        c.capacite_invest, lz.asking_price <= c.capacite_invest as financable,
-       (select max(squad_size) from gold.ts_effectif_bilan e where e.team_id = w.team_id) as squad_size,
+       (select max(squad_size) from eb e where e.team_id = w.team_id) as squad_size,
        lz.seen_at
 from lz join weak w on w.zone = lz.zone
-join gold.ts_capacite_invest c on c.team_id = w.team_id
+join c on c.team_id = w.team_id
 where lz.key_skill > w.weakest_starter_key
   and coalesce(lz.last_bidder_team_id, -1) <> w.team_id
   -- Ben Ahmed Donkey (15858, équipe féminine) achète sur le marché féminin, Chomelix Cows sur le masculin (silver 014).
