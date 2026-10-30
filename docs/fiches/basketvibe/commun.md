@@ -75,6 +75,15 @@ Ajouts du lecteur-exports 2026-10-29 (export de 09:59-10:01 UTC) :
 | Notification `transfer_listing_bid` | `notifications` | Klein (nôtre, C) : offre 1 000 de Smart Signs. | Mise en vente en cours |
 | Réglage de club « masquer la vue terrain » | `news`, article du 28/10 | non exporté | Affichage seulement |
 
+Ajouts du lecteur-exports 2026-10-30 (export de 08:41-08:58 UTC) :
+
+| Élément | Où | Valeur actuelle | Effet |
+|---|---|---|---|
+| `heat_level` (0-4), `blind_ends_at`, `pending_settlement`, `is_viewer_leading`, `my_max_bid` | `my-transfer-offers` / `transfer-auctions`, par enchère | Burke : heat 4, 4 offres, mon max 800 000, prix 1 200 000, je ne mène pas | Règle de `heat_level` et d'une phase « blind » non documentée : mesure = prix final contre prix à heat 0-4 |
+| `scheduling_hints` (`estimated_next_season_first_match_day` 2026-12-28, `world_scheduled_fixtures_remaining` 19 536) | `next-fixture` | fin du calendrier de saison 2 : 21/12 | Calendrier annoncé par le jeu ; lecture seulement |
+| `team_context` (form, rank, home/away wins) et `estimated_chance` | `next-fixture` | Chara legends (ligue 02/11) : 50 % / 50 %, rang 2 contre 7 | Voir ligne `estimated_chance` ci-dessus |
+| Enchère de vente à 1 000 sans offre | `my-transfer-auctions` | Henry (1 000) et Lecomte (50 000), fin 31/10 22:17 UTC | Klein vendu 1 000 (net 950 après taxe 5 %) : prix plancher = mise de départ |
+
 ## Sorties
 - Briefs : `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md`.
 - Journal : `outputs/basketvibe/learnings.md` (enseignements `L-nnn`, conseils `C-nnn`).
