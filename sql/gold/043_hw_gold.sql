@@ -131,7 +131,7 @@ from gold.hw_season_games
 group by 1, 2;
 
 -- 7. Recrues : recherche de prospects + nos suivis. Région USA Central (Illinois, Indiana, Missouri, Ohio, West Virginia).
---    Verdict : cible = région, pot ≥ 12, au plus 1 équipe à High, ≤ 3 étoiles ; dur = 2 équipes ou plus à High ou 4-5 étoiles ;
+--    Verdict : cible = région, pot ≥ 12, ≤ 3 étoiles ; dur = 4-5 étoiles (le niveau « High » des concurrents n'entre plus dans le verdict) ;
 --    futur = pas encore engageable. besoin = poste d'un boursier qui part en fin de saison. rang = ordre dans le verdict.
 create or replace view gold.hw_recruit_board with (security_invoker = true) as
 with p as (
@@ -150,10 +150,10 @@ v as (
   select u.*, u.state in ('Illinois', 'Indiana', 'Missouri', 'Ohio', 'West Virginia') as region,
          case when u.class not in ('HS SR', 'JC SO') then 'futur'
               when u.stars >= 4 then 'dur (4-5 étoiles en D3)'
-              when coalesce(u.teams_high, 0) >= 2 then 'dur'
-              when u.pot >= 12 and coalesce(u.teams_high, 0) <= 1
+              -- « High » retiré du verdict (2026-10-30, demande de l'utilisateur : tous les joueurs ont un concurrent à High) ; la colonne teams_high reste, non utilisée
+              when u.pot >= 12
                    and u.state in ('Illinois', 'Indiana', 'Missouri', 'Ohio', 'West Virginia') then 'cible'
-              when u.pot >= 12 and coalesce(u.teams_high, 0) = 0 then 'cible hors région'
+              when u.pot >= 12 then 'cible hors région'
               when u.pot >= 11 then 'secondaire'
               else 'écarter (pot ≤ 10)' end as verdict
   from u
