@@ -1,0 +1,3 @@
+-- Hockey Nation 2026-10-30 : gold.hn_coach_potential ne lit que le dernier export du marché des coachs
+-- (comme silver.hn_free_coaches, 031) et appelle hn_coach_pot une seule fois par coach (la vue expirait).
+-- Définition appliquée par migration « hn_coach_potential_dernier_export ».
