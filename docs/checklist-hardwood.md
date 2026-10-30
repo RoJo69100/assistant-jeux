@@ -11,6 +11,7 @@ Périmètre tiré de `docs/chose-a-faire-hardwood.txt` (liste de l'utilisateur, 
 ## Recrutement (pas de transferts)
 - [x] R1 Fonctionnement : types HS / JC / international, points, offres, intérêt, phrases du scout → `hardwood-recrutement` (2026-10-30, tableau corrigé avec le doc d'aide).
 - [x] R2 Tableau des recrues : `gold.hw_recruit_board` (verdict, rang, besoin par poste, bourses libres) (2026-10-30).
+- [x] R2b Fiches des recrues ouvertes : `gold.hw_recrues_a_ouvrir` puis `gold.hw_recrue_fiches` (note /5 actuelle et au plafond, verdict) (2026-10-30, testé sur 5 pages).
 - [ ] R3 Décider qui recruter : première décision de recrutement rendue avec 3-4 cibles nommées et la répartition des points (critère : un brief Académie daté).
 
 ## Équipe
