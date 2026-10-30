@@ -3,7 +3,8 @@
 Tenu par l'agent Match (`.claude/agents/match.md`). Mis à jour après chaque export de match. Un club = un jeu de lignes : toujours préciser lequel.
 
 **Dernier match analysé : Chomelix Cows 2026-10-20 — Vertigo CLUB (dom., ligue) ; Ben Ahmed Donkey 2026-10-19 — bot (ext., ligue)** (passage du 2026-10-20 : Chomelix seulement, 1 match ; Ben Ahmed non repassé).
-**Dernier match analysé : Chomelix Cows 2026-10-28 — BOT (dom., coupe, 1-0) ; Ben Ahmed Donkey 2026-10-28 — Potatos y Potitas (ext., coupe, 2-4)** (passage du 2026-10-29).
+**Dernier match analysé : Chomelix Cows 2026-10-29 — BOT (dom., coupe, 4-0) ; Ben Ahmed Donkey 2026-10-29 — BOT (ext., ligue, 0-0)** (passage du 2026-10-30).
+**Précédent : Chomelix Cows 2026-10-28 — BOT (dom., coupe, 1-0) ; Ben Ahmed Donkey 2026-10-28 — Potatos y Potitas (ext., coupe, 2-4)** (passage du 2026-10-29).
 **Précédent : Chomelix Cows 2026-10-27 — BOT (ext., ligue, 1-0) ; Ben Ahmed Donkey 2026-10-26 — BOT (ext., ligue, 0-0)** (passage du 2026-10-27 : 3 matchs dont Ajax 0-4, admin).
 **Précédent : Chomelix Cows 2026-10-24 — Ballon Athletique hawaien (dom., ligue, 2-0) ; Ben Ahmed Donkey 2026-10-22 — bot (dom., ligue)** (passage du 2026-10-24 : 1 match ; passage du 2026-10-23 : 5 matchs, 2 humains ; passage précédent du 2026-10-19 : 5 matchs de ligue contre des bots).
 
@@ -46,6 +47,9 @@ Seuil de confirmation : la fiche n'en fixe pas. Choix provisoire de l'agent : **
 | L-025 | Chomelix | 2026-10-29 | 1-0 contre BOT en coupe (28/10) : 16 attaques/2, 6 tirs (3 cadrés), conversion 17 % (poteau Bonnet 7', 2 arrêts) ; pertes 56 % (9/16). Renforce L-022 : volume correct, finition aléatoire. | 6 (bots surtout) | à surveiller | `gold.ts_match_report` 2082494 |
 | L-026 | Ben Ahmed | 2026-10-29 | 1re défaite : 2-4 à l'extérieur contre l'humain Potatos y Potitas (77,65 contre 63,7) : 10 tirs/9 cadrés/4 buts adverses en 11 attaques contre 4 tirs/2 buts. Gardienne Abdel (Gardien 81) 5 arrêts sur 9. Écart de niveau, pas de trou défensif unique. | 1 (humain) | à surveiller | `gold.ts_match_report` 2082895, `gold.ts_vd_comparatif` |
 | L-027 | Les deux | 2026-10-29 | Compositions de coupe du 28/10 absentes de `ts_match_lineups` / `ts_match_ratings` : formation et notes NULL. 3e passage de suite sans composition lisible. | 2 | confirmé | `gold.ts_match_report`, `silver.ts_match_lineups` |
+
+| L-028 | Ben Ahmed | 2026-10-30 | 0-0 contre BOT (ext.) : 6 tirs, 4 cadrés tous arrêtés (E. Martínez), poteau Müller ; volume et cadrage = norme saison (6,1 / 3,6). Conversion nulle = aléa de gardienne, pas tactique. | 1 (bot) | à surveiller | `gold.ts_match_report`, `ts_match_plays`, `ts_vd_comparatif` |
+| L-029 | Chomelix | 2026-10-30 | XI 1-4-3-3 (3 attaquants Finition 100, 3 milieux Conduite 100) : 4-0, 10 tirs/7 cadrés, 0 tir encaissé, pertes 48 % contre BOT. Premier appui à C-047 ; à confirmer contre un humain (Bresse). | 1 (bot) | à surveiller | `ts_match_report`, `ts_match_lineups` 2083110 |
 
 ## Conseils
 <!-- C-nnn · date · conseil · critère vérifiable (SQL) · statut (ouvert / appliqué / partiel / non appliqué) · effet constaté -->
@@ -145,6 +149,8 @@ Contrôle du 2026-10-29 : C-038 non appliqué/non vérifiable (formation NULL 20
 Contrôle du 2026-10-27 : C-010 (Chomelix, formation NULL) non appliqué (1977456 NULL), échec 2 ; C-034 non appliqué (Ajax sans composition, défaite 0-4) ; C-011 (Kumar MC) appliqué le 26/10, effet non évaluable (0-0, notes MC non lues, trop tôt) ; C-035 non appliqué (Hassan absent de l'effectif) ; C-013 non appliqué (`new_signings` 0 à la semaine du 26/10) ; C-014 / C-011-maintenance appliqués (`maintenance_gap` = 0 le 26/10, Cows 28 920, Ben Ahmed 20 024) ; C-036 appliqué (`new_signings` Ben Ahmed = 0).
 
 ## Journal des matchs
+- 2026-10-29 · Chomelix · coupe (dom) · BOT · 4-0 · V · Moreau, Ounahi (tête), Bonnet (pen., puis but) ; 21 attaques/3, 10 tirs/7 cadrés/0 encaissé ; pertes 48 %
+- 2026-10-29 · Ben Ahmed · ligue (ext) · BOT · 0-0 · N · 17 attaques/3, 6 tirs/4 cadrés/0 but (4 arrêts E. Martínez, 1 poteau) ; 2 remplacements exécutés malgré C-041
 - 2026-10-26 · Chomelix · hors compétition (admin, ext) · Ajax Amsterdam · 0-4 · D · composition jamais enregistrée, aucune page match exportée : cause non mesurable
 - 2026-10-26 · Ben Ahmed · ligue (ext) · BOT · 0-0 · N · 13 attaques/4, 2 tirs/1 cadré ; 3 remplacements programmés (L-020), Kumar au MC (C-011)
 - 2026-10-28 · Chomelix · coupe (dom) · BOT · 1-0 · V · Moreau 65' ; 16 attaques/2, 6 tirs/3 cadrés, 1 poteau ; pertes 56 %
@@ -166,3 +172,8 @@ Contrôle du 2026-10-27 : C-010 (Chomelix, formation NULL) non appliqué (197745
 - 2026-10-22 · Ben Ahmed · ligue (dom) · BOT (6e, Ben Ahmed 1er) · 1-0 · V · Yamamoto 19' ; 24 attaques/5 mais 6 tirs ; 18 pertes (75 %)
 | C-T1027-1 | Chomelix | 2026-10-27 | Acheter Florian Schäfer (GK 20 ans, OVR 69, annonce 5423), enchère max 1 072 000 $, posée le 29/10 au matin, après l achat des 8 375 places ; vendre Romain Thomas à la banque (838 166 $) après le 02/11 si Schäfer est gagné. [skill club : limite d achat, banque] | `silver.ts_players` team 18 : Schäfer présent ; buts encaissés par match après le 31/10 < ceux de Thomas | ouvert | — |
 | C-T1027-2 | Ben Ahmed | 2026-10-27 | Aucun achat avant le relevé finances du 28/10 (plafond 150 000 $) ; ligne Nanami Rousseau (5391) à revérifier au relevé du 28/10. | `silver.ts_finances` team 15858 `balance` au 28/10 ; `total_new_signings` = 0 | ouvert | — |
+| C-050 | Ben Ahmed | 2026-10-30 | Compo du 02/11 (BOT, dom.) : supprimer les 3 remplacements programmés à 60' (4e échec de C-018/C-030/C-041/C-048, réécrit) et Lena Suzuki titulaire milieu à la place d'Ama Schmidt (GB de formation, 3 interceptions subies). Remplace C-041 et C-048 (partie remplacements). | `silver.ts_match_lineups` 2080336 : `bench.changes` vide ; Suzuki dans `player_positions` ; `ts_match_report` : pertes ≤ 55 % | ouvert | — |
+
+| C-051 | Ben Ahmed | 2026-10-30 | Zainab García (297342, DEF 16 ans, Défense 90, titulaire) : gymnase Contrôle 70 % → Défense 70 % ce soir (avant la mise à jour du 06/11). Gain attendu +3 Défense/semaine. | `silver.ts_players` 297342 au 06/11 : Défense ≥ 92 ; `silver.ts_training` : `last_trained_type` = defense | ouvert | — |
+
+Contrôle du 2026-10-30 : C-044/C-047 appliqués (XI exact, 4-0) ; C-046 levé ; C-048 partiel ; C-041 non appliqué (échec 4) ; C-045 trop tôt ; C-049 non vérifiable.
