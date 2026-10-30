@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 
-GAMES_TO_RUN = ["DerbyManager","BasketVibe","WorldAces","SixZeroLeague","KickOffBoss","VM","FinalWhistle","BuzzerBeater","RedZoneAction","Hardwood","FromThePavillon","FMP","HockeyNation","Perso"]
+GAMES_TO_RUN = ["DerbyManager"]
 
 # --- CONFIGURATION ---
 def _load_token():
@@ -68,7 +68,7 @@ GAMES_CONFIG = {
     },
     "DerbyManager": {
         "base_filename": "discord_DerbyManager",
-        "force_reset": False,
+        "force_reset": True,
         "channels": [
             "1105756654366117938",
             "1102900630080733184",

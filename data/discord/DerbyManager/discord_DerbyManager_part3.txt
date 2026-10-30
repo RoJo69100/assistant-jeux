@@ -1,3 +1,95 @@
+[2022-05-08 17:07] derbymanager : The main reason, I believe, is that you can cover all areas with your 10 players. Actually, you can do it with 8 or 9 if you have great players. Which made me add momentum, confidence and other things to introduce additional risk that you can't cover. But it's artificial and unintuitive... Simply put, the engine needed to be re-done but I never had the willpower to do it as it affects almost everything else in the game so I hacked at it...
+[2022-05-08 17:08] derbymanager : Easier to just create a new game from scratch 😅
+[2022-05-08 17:11] poletz : The ME is really good rn , it will be hard to reach this level restarting from scratch
+[2022-05-08 17:11] poletz : But i hope you prove me wrong 🙂
+[2022-05-08 17:45] questionmark4 : maybe could have something like FM have with tactical familiriaty?
+[2022-05-08 17:46] derbymanager : I'm not really happy with it. I feel it was better a year ago without momentum, confidence, and what not.
+[2022-05-08 17:47] derbymanager : It does give semi-realistic results, but gameplay-wise it's not good
+[2022-05-08 17:47] derbymanager : That would only enforce "find what works for your players and stick with it" approach
+[2022-05-08 17:48] questionmark4 : but isnt this pretty much what pep, klopp and etc do?
+[2022-05-08 17:49] derbymanager : Yeah, you have a couple of top teams that can force their playstyle on majority of teams, but look at some mid-table teams, like Manchester United, and you will see they change a lot depending on the opponent.
+[2022-05-08 17:49] derbymanager : And even pep and klopp change a lot when they play each other or Real...
+[2022-05-08 17:50] questionmark4 : yeah but there is a difference of changing a bit and changing everything
+[2022-05-08 17:51] derbymanager : Who said anything about changing everything?
+[2022-05-08 17:51] questionmark4 : no thats the point
+[2022-05-08 17:51] questionmark4 : if you change everything your screwed more then changing less
+[2022-05-08 17:52] poletz : I like the realistics results and the fact that the best teams ve more chances to lose points, expecially if they don t do their best
+[2022-05-08 17:52] derbymanager : Well, no. Real might play completely offensive tactic against Osasuna and completely defensive one against City
+[2022-05-08 17:53] derbymanager : That was a reply to this
+[2022-05-08 17:53] derbymanager : But in the end, it's more fun to play magic the gathering than to prepare cards and then auto-play it 🙂
+[2022-05-08 17:53] questionmark4 : when i think about it your probably right
+[2022-05-08 17:53] questionmark4 : in FM i only run one tactic all the time 😅 😂
+[2022-05-08 17:54] poletz : The problem with gameplay is that there are not enought explainstions about momentum and confidence so as u said above the only way is to put a lot of effort on analyzing matches and testing
+[2022-05-08 17:55] derbymanager : That's the point. I don't want you to set your team and than watch as it crushes everyone while replacing injured players... In FM you play in different tempo, 10-20 games per sitting. In DM you have 24 hours of waiting. Might as well check your opponent, set some tactic... you know, play 🙂
+[2022-05-08 17:55] poletz : But did u see anyone quitting saying i don t like the transfer market or the financial issue? No always cause they don t win. So it would be the same when they will not win in dm2
+[2022-05-08 17:55] poletz : Whatever u will build it
+[2022-05-08 17:56] questionmark4 : the majority doesnt even say they will leave before leaving
+[2022-05-08 17:56] derbymanager : The problem is that I don't know how much all of that really matters... I kind of added more and more things until the results the ME gave back were ok-ish. But it's so complicated that it's hard to say...
+[2022-05-08 17:57] derbymanager : It's like AI, but it's not that the AI is smart, I'm just dumb 😂
+[2022-05-08 17:57] questionmark4 : there is probably people who joined didnt like some things they saw and left but since they didnt play for long they arent bothered to tell us why
+[2022-05-08 17:59] derbymanager : Anyway, the next ME will be more intuitive, I hope. What this engine lacked was player's position. A MC would contribute in both attack and defence, for example, and would do so all the time. So you have a player that is omnipresent on the field. If I changed that so he contributes only to BU - then we have strikers exclusively scoring. So I need overlap but I also don't want overlap 🙂
+[2022-05-08 18:01] derbymanager : The new engine will track players' rough position so you'll see that you had FBLR against 2 FC and it should make it clear that it was an easy chance...
+[2022-05-08 18:01] derbymanager : This is what momentum represented in the old engine but it was abstracted and artificial...
+[2022-05-08 18:04] derbymanager : But as I said, I'm not doing it to get the people onboard. I just like to create something and this is fun to build. If I manage to pull it off I might port it to desktop in the future so I can play single player 🙂
+[2022-05-08 18:05] derbymanager : We'll see what will happen
+[2022-05-08 18:07] derbymanager : On an unrelated note, I played the online league or whatsthename and it has potential but I quit when in 2 weeks I didn't manage to buy a single player. You also quit <@439665894021398539>?
+[2022-05-08 18:08] questionmark4 : no but im considering doing it having the same problem 😅
+[2022-05-08 18:08] derbymanager : I think I made an offer for one of your players, checked after 10 days and it was still pending... It's stupid that there is no deadline or something. That's exactly why everything happens automatically in DM.
+[2022-05-08 18:09] questionmark4 : yeah there transfer system is shit ngl
+[2022-05-08 18:09] questionmark4 : it requires a really active playerbase
+[2022-05-08 18:09] derbymanager : Yeah...
+[2022-05-08 18:09] derbymanager : Anyway, gotta go now
+[2022-05-08 18:09] derbymanager : Bye
+[2022-05-12 11:27] questionmark4 : so tomorow i am making a comeback to this game. hard to resist DM 😅
+[2022-05-12 11:39] poletz : 😂😂😂😂
+[2022-05-12 11:41] poletz : Very long break
+[2022-05-12 11:41] questionmark4 : only 10 days
+[2022-05-12 11:41] poletz : Coffee break 👌
+[2022-05-12 11:41] questionmark4 : it did feel like it was longer then it was tought
+[2022-05-12 11:42] poletz : Yes i was joking
+[2022-05-12 11:42] poletz : It s just that u get bored of the last team after 4 days instead of 14
+[2022-05-12 13:44] marius36 : Take Naples!!!!maybe u will stay much longer
+[2022-05-16 03:29] marius36 : The game works on you guys????
+[2022-05-16 04:29] marius36 : Already they shut down the game???🧐
+[2022-05-16 04:51] alin35 : It works perfectly fine here
+[2022-05-16 05:13] marius36 : Hmmmm....i can't enter...soo i dont know
+[2022-05-16 05:44] poletz : It doesn t work for me too
+[2022-05-16 05:44] poletz : So italy is the problem maybe 😅
+[2022-05-16 05:46] marius36 : Still can't enter in game....i even shut down my phone and retried....nothing!!!
+[2022-05-16 05:47] marius36 : Soo we are dismissed☹️
+[2022-05-16 05:47] poletz : I ll try with my labtop
+[2022-05-16 05:50] poletz : <@!687554939798552596> if you try to open it in another page it works again?
+[2022-05-16 05:52] alin35 : Yeah, it works nonetheless, dont know why it fails to work in Italy
+[2022-05-16 05:56] marius36 : Maybe because the end is close
+[2022-05-16 05:58] poletz : I hope it has nothing to do with your wife <@!874916864805974018> 😂
+[2022-05-16 05:59] poletz : In that case it wouldn t work for Alin too
+[2022-05-16 05:59] marius36 : No...i think its you....they want to slow down your team🤣
+[2022-05-16 06:01] poletz : Ahah don t worry my lineup is already setted 😆
+[2022-05-16 06:13] marius36 : Today we have 2 games🤣
+[2022-05-16 06:15] poletz : Ok i m going to book a flight for Romania then 🤣
+[2022-05-16 06:20] alin35 : Give me ur passwords so I can.... transfer some money to Venice...uhhhh..i mean set ur teams 🤣 🤣
+[2022-05-16 06:34] marius36 : <@530694771900153871>  are u slipping like the game????woke up ...u need u
+[2022-05-16 07:14] poletz : It works
+[2022-05-16 07:15] derbymanager : It works on my phone
+[2022-05-16 07:18] alin35 : The sabotage attempts at Genoa title bid has failed, nothing seem to work against them, on and off the field lol 😂
+[2022-05-16 07:25] poletz : With safari on mobile it says can t find the server
+[2022-05-16 07:39] questionmark4 : Works with safari for me 😅
+[2022-05-16 07:50] derbymanager : Try clearing history or something
+[2022-05-16 07:56] poletz : Now it works
+[2022-05-16 07:59] marius36 : Works for me also
+[2022-05-16 08:00] marius36 : Soo when <@530694771900153871>  woke up also the game woke up!!!how this is works???😋
+[2022-05-23 07:56] questionmark4 : Barcelona DM edition
+[2022-05-24 12:18] juema : I may be promoting for the first time just before the game ends 🥲
+[2022-05-24 12:21] .burningrain : You'll be the only person wanting DM2 to be postponed 😄
+[2022-05-25 09:40] alin35 : Not the only one 😉
+[2022-05-26 21:49] juema : Okay, actually I just won the first title for Salford (D1 League Cup). Just in time 😂
+[2022-06-03 10:13] Deleted User : I've been absent here for a while, but I do like all I'm reading about DM2! Very exciting! Where do I apply? Will there be an in game forum post in DM1?
+[2022-06-03 10:46] questionmark4 : 🤔
+[2022-06-03 11:02] poletz : Hi Piet! Yes when it will start dm1 will be shut down so there will be some comunication in the game forum
+[2022-06-03 11:03] poletz : But here in discord u can be more updated for sure.. we are all waiting for derby to post some screenshots of the new game or some info about it 🤤
+[2022-06-03 12:43] derbymanager : Here you go, a screenshot 😄 But it's far from being playable, and even further from going live...
+[2022-06-03 12:53] questionmark4 : ROLES 🤩 😍
+[2022-06-03 12:53] questionmark4 : new font?
 [2022-06-03 12:53] questionmark4 : looks really clean
 [2022-06-03 13:29] poletz : What s FOC?
 [2022-06-03 13:33] questionmark4 : my guesses i got no clue tbh could be all wrong WOR- WORK RATE FOC- FOCUS DET - DETERMINATION CON- CONFIDENCE
@@ -4385,7 +4477,7 @@
 [2023-05-24 09:09] derbymanager : Ofc
 [2023-05-24 09:29] sunday.driver : Hello I have survived
 [2023-05-24 09:30] sunday.driver : Thank you for the tag
-[2023-05-24 11:20] poletz : <@775751454672814121> sorry to delete your message but don t write in udpate channel please
+[2023-05-24 11:20] poletz : <@456226577798135808> sorry to delete your message but don t write in udpate channel please
 [2023-05-24 11:21] poletz : btw, there are some issues with mobile derby is aware of this and will try to fix asap
 [2023-05-24 17:24] questionmark4 : <@456226577798135808> a spot should open up soon be ready
 [2023-05-24 19:04] poletz : Transfers 🔥
@@ -18867,6 +18959,113 @@
 [2026-10-22 05:51] derbymanager : If they play 30 minutes they get their training requirement reduced by 1, 60 minutes by 2, and 90 minutes back to 0. minutes also gives experience, playtime satisfaction and other things proportionally
 [2026-10-22 05:53] derbymanager : yes, it's all one build up now. I was looking at the old one and it didn't make much difference really. Not on the end result. And obviously it allowed overloading one area without penalties... Hence this matrix thing. It's not meant to be understood, you can just see if this amount of build up and pressing is what you aim for. I might need to tweak it still.
 [2026-10-22 06:04] questionmark4 : SUBS!!!!! 🤩
+[2026-10-23 13:59] gardai : Derby made the subs update specifically to make sure I can't get promoted
+[2026-10-23 14:00] gardai : Ever since update came out all my good players be getting subbed just before they score ong
+[2026-10-23 14:28] imamzade : Probably our last day at the top.
+[2026-10-23 14:30] gardai : suffering from success
+[2026-10-23 14:35] synistajay : <@267750523648737283> look at you shining, gonna win EN4 again love to see it!
+[2026-10-24 09:28] marius36 : https://youtube.com/watch?v=f3ED9Mo9CHY&feature=shared
+[2026-10-24 09:29] marius36 : Another win,another top performance
+[2026-10-24 09:50] randykeys : I got mad today when two of my defenders were subbed out for two midfielders when we were 2:1 down... only to turn it around and win 3:2 😂 I'm retiring, the assistant can take over.
+[2026-10-24 13:24] forasteiro2000 : <@874916864805974018> which one is you?
+[2026-10-24 13:25] marius36 : White....GK from white team
+[2026-10-24 13:25] marius36 : Inter
+[2026-10-24 15:54] forasteiro2000 : well played! handling 12, reaction 18, agility , 17😁
+[2026-10-24 15:54] forasteiro2000 : https://klipy.com/gifs/triangulo-isosceles-cursinho
+[2026-10-24 17:44] vrijstijler : Forward for sale. Shooting = 15 (SHO + ACC + TEC).  https://www.derbymanager.com/players/236728
+[2026-10-24 19:58] questionmark4 : This subs update is probably the best update to DM ever <@530694771900153871> 👏 I am very impressed by this version of DM in general tbh.
+[2026-10-24 20:04] questionmark4 : Sorry just wanted to make a appreciation post
+[2026-10-24 22:49] marius36 : Better than my main GK Nisbet😂
+[2026-10-25 15:14] experimental3800 : The development of the game in this season is just immense. Congrats to <@530694771900153871>  🙂
+[2026-10-25 18:23] gardai : derby manager awakens people with unc accounts
+[2026-10-25 18:23] gardai : I swear I've seen like 2 people in this server with an account younger then 5 years
+[2026-10-25 18:25] imamzade : It cost me D1 title, and honestly, I hate mid-season updates.
+[2026-10-25 18:30] marius36 : It would've cost me also if I would've stayed with 3-4-3 how I used to play but I changed
+[2026-10-25 18:32] marius36 : You still have chances....if you see that something is not clicking
+[2026-10-25 19:25] imamzade : We're not in the same situation. This is our first time fighting for the title. It's hard to compete with experienced teams like Liverpool, Newcastle, Chelsea and Manchester, and we've done it with a small squad. I'm sure we would've won D1 this season without the update. This isn't Spain. You don't have any serious rivals there.  You and Liverpool also have more options. You both have really good strikers, I only have one. The whole idea behind our title challenge was having a small squad with a high xi value. Update ruined that. Derby literally said, "If you want the title, you need a deep and strong squad" 🙂
+[2026-10-25 20:12] marius36 : Maybe you right
+[2026-10-25 20:14] marius36 : Huesca this year was actually a team very well composed so it's a bit unhealthy saying that I didn't have competion Cartagena is another good team,Barcelona always hard to beat but yeah England is another story
+[2026-10-25 20:18] marius36 : Yeah,I always had a love story for good strikers,if you could've see what awfull strikers I had in my first day at Madrid
+[2026-10-25 20:21] marius36 : Your team btw looks amazing
+[2026-10-25 20:22] marius36 : And I wanted to write at the beggining of the season that you will win the league but I just didn't want you to think that saying that I will ruin everything for you
+[2026-10-25 20:22] marius36 : Is true....believe or not
+[2026-10-25 20:23] marius36 : Good luck
+[2026-10-25 20:48] agunbiac9498 : Your tune has changed 👀
+[2026-10-25 21:07] agunbiac9498 : Adjustments not excuses. You can find in my book
+[2026-10-25 21:46] furysk : if only that book had Carrick's picture on the front
+[2026-10-25 21:46] furysk : would be truly a good meme shitpost 😄
+[2026-10-25 21:47] imamzade : Thank you, but I will rebuild the team. This is not sustainable. I had only one chance, and I used it. I will keep doing what I have been doing. I will try my luck again in 4 seasons.  I think Cartagena will win the league soon. It will be hard for you to stop them, but there is no other threat in Spain.
+[2026-10-25 21:49] imamzade : People have a lot to say when they succeed. They write newspapers, make public statements, and even write books 🙂 But when they fail, you hear nothing but dead silence.
+[2026-10-25 21:52] agunbiac9498 : I agree with you. A lot of people do hide when they fail. Not me though 😏 I love it
+[2026-10-26 08:09] marius36 : Ohhh so it's better for me to change the team...if is hard?
+[2026-10-26 09:34] imamzade : Why would you do that?
+[2026-10-26 09:44] marius36 : Cause I like the easy way
+[2026-10-26 16:34] marius36 : I'm just joking!how could I do that when I'm heading to 550 TTV?
+[2026-10-26 16:35] marius36 : My main goal is in 2 seasons to have a 350 ttv at my first 11
+[2026-10-26 16:35] marius36 : I'm very close now
+[2026-10-26 16:36] marius36 : Cartagena is a good team but we are just other level mate He still need to do more not only winning against Madrid
+[2026-10-26 16:37] marius36 : But yeah in 3/4 seasons if he stay with the actual players he has he can be a real contender
+[2026-10-26 16:37] marius36 : Now they just can't battle with us,they have a too young team
+[2026-10-26 18:38] marius36 : <@439665894021398539> Malmo is in CC semifinal.how you see them?I think you need to pressure Derby to add Sweden in game especially after they kicked Liverpool out of competition
+[2026-10-26 19:47] questionmark4 : Thats the team i support in real life very passionate about so im happy about that.  I dont think Swedish league would get added but i would love to be able to manage Malmö obviously but tbh i dont think it would happen there is only x amount of leagues that can be in due to the servers i think. But i hope if at some point he adds more leagues he considers the Swedish league but again i dont think its likely to happen i think Belgium, Netherlands, Portugal, Scotland was a stretch already tbh
+[2026-10-26 19:51] questionmark4 : Also i like managing Leyton
+[2026-10-26 20:06] marius36 : Yeah England is nice
+[2026-10-28 08:15] yasen_gg : United on the right...
+[2026-10-28 08:15] yasen_gg : Underperforming in real life and in DM
+[2026-10-28 08:15] yasen_gg : peak realism 😄
+[2026-10-28 08:21] synistajay : I can’t wait to have enough rep, he needs to LEAVE MY CLUB😂
+[2026-10-28 08:25] alin35 : Oh, we're on top of the list 😃
+[2026-10-28 08:26] yasen_gg : Trailblazer 🔥
+[2026-10-28 16:32] yasen_gg : https://x.com/Malwarebytes/status/2115206474192339322
+[2026-10-28 17:05] marius36 : Just wanted to say that this is a huge disrespect not including Madrid there,we play 3-4-3 for about 11 seasons
+[2026-10-28 17:06] marius36 : Because in last few games we couldn't play(injuries)and the game just erase 11 seasons
+[2026-10-28 17:06] marius36 : Huge disrespect,huge for the one who invented 343 with dwgs
+[2026-10-28 20:06] alin35 : That's the stats for who played 3-4-3 in the last week, thats why you aren't in it 😂
+[2026-10-28 20:07] alin35 : You play 4-3-3 now, why would you appear in a 3-4-3 chart for the last week only? 😂
+[2026-10-28 20:09] marius36 : You just can't deal with phrases where is irony+joke don't you?😁
+[2026-10-28 20:10] alin35 : I can't detect them through my Wi-Fi 😂
+[2026-10-28 20:11] marius36 : You always bite😅
+[2026-10-28 20:12] alin35 : You should be serious some time, brother.. You'll save me the trouble of thinking if you actually mean what you say or its BS 🤣 🤣
+[2026-10-28 20:14] marius36 : Serious?I will think about that in future
+[2026-10-28 20:15] marius36 : At least once you can let someone else to bite first😅
+[2026-10-29 11:47] marius36 : <@530694771900153871> why didn't you add Turkey instead of Scotland?there are some great teams in Turkey.... Scotland was always a bad league because of the fight between 2 teams only
+[2026-10-29 12:22] imamzade : <@530694771900153871> Please do it.
+[2026-10-29 20:32] derbymanager : I wanted to try a different model and scotland has an interesting one
+[2026-10-29 20:36] marius36 : Then you could've try Romania....they have a different model
+[2026-10-29 20:38] marius36 : 30 games top 6 playoff(10 games)
+[2026-10-29 20:41] derbymanager : Yeah, I wanted something relatively popular 😛
+[2026-10-29 20:44] skuld6666 : We have to have Bulgaria league also at some point and get the crazy players back.
+[2026-10-29 20:47] marius36 : No,Turkey is way better than this Scotland ish
+[2026-10-29 20:48] imamzade : If you're going to add Turkey, I'll take one of the teams.
+[2026-10-29 20:51] derbymanager : If all leagues get 50% full I can add more 😉
+[2026-10-29 20:55] marius36 : Let's make the 3rd account then😅
+[2026-10-29 20:55] marius36 : It should be fun
+[2026-10-30 07:20] .burningrain : I find the Turkish league very interesting and most football forums online are full of Turkish fans, so it also has my vote as the next league
+[2026-10-30 07:20] .burningrain : As long as you can make it as chaotic as irl
+[2026-10-30 07:20] .burningrain : have owners override transfers and arguing on the media
+[2026-10-30 08:52] skuld6666 : Need to add stadium sound FX too.
+[2026-10-30 08:58] alin35 : Add supporters with torches and mist on stadiums... Also players getting chased by supporters when they lose a derby match at home 🤣
+[2026-10-30 09:36] marius36 : Add some naked women's  invading the pitch also running
+[2026-10-30 11:37] forasteiro2000 : i´m getting some sensible soccer vibes here...
+[2026-10-30 12:22] stock_93_29331 : Anybody looking for a striker   https://www.derbymanager.com/players/116652  he will be a top buy for the lower leagues. He’s a proper player just couldn’t handle D1 unfortunately!
+[2026-10-30 14:46] forasteiro2000 : whats the best price you can make on our friend Sahnoun? lets make this easy for everyone Steve   _drops one million at the table_
+[2026-10-30 15:12] gardai : At the start of the season, Do all injuries and cards reset?
+[2026-10-30 15:13] gardai : *Drops one million and 1 euros on the table*
+[2026-10-30 15:19] gardai : if I get an offer from a good team In france I might go for it
+[2026-10-30 15:19] gardai : french league is genuinely farmers league
+[2026-10-30 15:19] stock_93_29331 : Damn you’re trying to rip me off lad 😂😂
+[2026-10-30 15:23] marius36 : <@1482699463163379796> damn man,you were close this season
+[2026-10-30 15:44] forasteiro2000 : It would be so cool if we could actually  specify the amounts of our offers😊
+[2026-10-30 15:47] forasteiro2000 : 🥲🥲 yess, i wasnt counting on it😅 but the chance appeared.. next season i assume as candidate ! I think im understanding better how to play the game now
+[2026-10-30 15:51] shaqattack293 : Have the same question
+[2026-10-30 15:52] gardai : I'd hope so
+[2026-10-30 15:52] gardai : my defenders got their legs broken by everton ultras
+[2026-10-30 15:55] marius36 : Hope so
+[2026-10-30 16:05] forasteiro2000 : I dont think injuries reset, if my memory doesnt betray me
+[2026-10-30 16:06] forasteiro2000 : At least makes sense they dont. I just wish (old wish) injury games was replaced by injury days , that way they realistically would be recovering also in this off season
+[2026-10-30 16:07] gardai : "Yo advincula you ready for the new season?" advincula:
+[2026-10-30 16:07] gardai : injured for another 5 matches (my best defender)
+[2026-10-30 18:13] alin35 : Injuries heal for +5, and 2 friendly matches in preseason - so players with injuries +7 or less will be ready for the new season
 ==========================================
 === CANAL : #❓quick-questions ===
 ==========================================
@@ -23735,178 +23934,3 @@
 [2024-12-03 22:21] balkanium : Ok one more and I'll stop, I don't see any WBs, DMs or AMs anywhere, does this mean that it's assumed fullbacks and midfielders can play those positions (depending on attributes ofc) or?
 [2024-12-03 22:25] poletz : Yes there are just D M F But each pos can cover different roles
 [2024-12-03 23:23] skuld6666 : Welcome. Yes it's a fun game. Very difficult but satisfying when you progress (I am told....) 😅   And spam away. We are all kind of learning the game still as it's early days and being updated all the time. So it's actually helpful for many people to try and work out or see these answers.  Also feedback and suggestions are great as the game is in beta etc. Fresh perspective always welcome. All voices are equal and valued here. Big part of the fun is Derby let's us all help shape the game and have input etc.
-[2024-12-03 23:38] balkanium : Thank you brother. Still have thousand questions left, esp regarding tactics even after reading wiki, but it's all theoretical atm. I like the concept and am really eager to see how it works in action from tomorrow on. This place looks cool too but I guess it'll all change once the ball is kicked in anger and stupid fixed match engine starts screwing our teams over specifically 😂
-[2024-12-03 23:40] skuld6666 : The entire game has been set up just to troll me I think. So you should be fine 😬   Where did you hear about the game by the way?
-[2024-12-03 23:41] balkanium : Bsky
-[2024-12-03 23:41] balkanium : I'm cm9798muck over there
-[2024-12-03 23:43] balkanium : And no I'm not Japanese the game was just short on options at the start so I'm Ayumu Goya now I guess 😁
-[2024-12-03 23:58] skuld6666 : Oh nice. I run the Derby Manager account over there and on X. Been trying to gently drum up a bit of publicity for the game.  We kind of don't care about that, but I just feel it's good to let people know it's around. Not for everyone but the people who enjoy it really enjoy it. And it is more fun with more real managers too.
-[2024-12-04 00:17] balkanium : Well you seem to be building nice little community here. Personally, FM lost me years ago as a player so I dived back in my youth and found some very nice corners of the internet centered around good old CMs. As I said above, I like the concept of what you guys are doing here and I hope it succeeds. Nothing like playing against other people and having a place to talk shit about it
-[2024-12-04 00:19] balkanium : I do hate these 10 am kick offs tho. My morning productivity is about to go below zero and my boss is not going to be happy about it
-[2024-12-04 00:24] yasen_gg : It's the thing that I look up to every morning and gives me the boost needed to get going
-[2024-12-04 00:24] yasen_gg : Plus there's always drama, so mornings are quite alive and active <a:kekw_gif:1108739032101429288>
-[2024-12-04 00:32] skuld6666 : Just remember to set your team more or less after each game is played and all is good usually. You don't have to watch it live so to speak. The game will be ready when you log in to watch.    Yeah the morning kickoffs are a bit early for me too. I think it's 8am UK time?  Yeah a lot of us don't have time to play FM any more. And also big fans of CM series.
-[2024-12-04 00:41] balkanium : Brother I'm enough of a liability in a forklift as it is, don't think yelling at my screen will help the matters..
-[2024-12-04 00:47] balkanium : Yeah FM got too real, when I realized I was spending more time preparing for the games and worrying about accounts, contracts, ground maintance, finances and all the other stupid shit than actually PLAYING the goddamn game I was out ✌🏻
-[2024-12-04 00:49] faro1 : ground maintainance 💀
-[2024-12-04 10:11] thug2137 : Hello everyone, I signed up yesterday and I’m loving it so far, it was exactly the type of manager game I was looking for, a simplistic yet in depth design, mobile friendly.  The only problem was finding the game, it never even showed up on google search after a week of searching for browser based football manager games, I ended up stumbling on it randomly when I checked an old Reddit post and saw it. I could have easily missed it.   Question: So I was given a few teams to select from, ended up taking a French team as I saw the financial situation of the others were in debt. In the future do you get other offers to manage a different club randomly or do you have to resign first?
-[2024-12-04 10:16] skuld6666 : Welcome Thug.  Yes glad you found us. I've been trying to spread the word a bit recently - Reddit, X and Bluesky. Any tips or help spreading the word always appreciated as I'm far from expert as this kind of thing.  The game is not for everyone, but it's nice if we can find some people who can find fun with it. I mean it's strangely hard to find a solid multiplayer, casual football game (that's not pay to win etc) which is kind of strange to me.  Yes if you look at your manager page as your repuation grows other teams will be mentioned on there that are interested in giving you a chance. Mostly a fairly similar level initially, but as your get promotions etc some bigger team might like to give you a chance.
-[2024-12-04 10:18] skuld6666 : This is my manager. Weirdly no big teams are beating down my door.....
-[2024-12-04 10:20] derbymanager : Also, just fyi, when you take a club you get no offers for the first 2-3 weeks (about half the season)
-[2024-12-04 10:21] thug2137 : So on mobile it’s a little different of course, but there is no option to quit that I can see? (I’m not going to resign, I’d like to see how my first season with this club goes haha)
-[2024-12-04 10:22] skuld6666 : I really like this game. How do I resign?  You will fit in perfectly around here 👌
-[2024-12-04 10:22] thug2137 : Haha!
-[2024-12-04 10:23] yasen_gg : Time to add the quotes back to the main page
-[2024-12-04 10:23] yasen_gg : this one's a banger
-[2024-12-04 10:23] derbymanager : Yeah, for first 2-3 weeks after joining you simply can't quit or join another team. That's to prevent malicious people from just ruining the team and jumping somewhere else...
-[2024-12-04 10:24] derbymanager : If you want to be malicious you have to dedicate yourself to it 😄
-[2024-12-04 10:24] thug2137 : Sweet, it’s just something I never saw after exploring the site
-[2024-12-04 10:25] alin35 : Welcome, <@395923828402028544> , nice to have you around, hope you will enjoy the game and its community!
-[2024-12-04 10:26] thug2137 : Thank you!
-[2024-12-04 10:29] thug2137 : Any way to select substitutes or is it automatic?
-[2024-12-04 10:38] derbymanager : There are no substitutes yet... 😬
-[2024-12-04 10:40] thug2137 : No worries just didn’t want to miss it if it was available
-[2024-12-04 10:46] yasen_gg : Just to save you some future questions: - no subs - no offsides - no corners - no penalties (only those after extra time) - no free kicks - no throw ins - cards and injuries show after the game  Have fun 😅
-[2024-12-04 10:47] skuld6666 : We didn't want to introduce VAR... so we just removed all freekicks, corners etc. The match flows way better.
-[2024-12-04 10:48] balkanium : Really? So set piece attribute is practically pointless?
-[2024-12-04 10:51] yasen_gg : Well to an extent - but these things will be added (we've had them in previous version of the match engine, so it's just a matter of time)
-[2024-12-04 10:52] yasen_gg : <@530694771900153871> is working on the game alone, the rest of us are here mostly to support 🙂
-[2024-12-04 10:52] yasen_gg : So things take time (we've been here for 7 years now, this is like the 3rd iteration of the game)
-[2024-12-04 10:58] balkanium : 7 years? And I've only just learned about it...smh
-[2024-12-04 10:58] thug2137 : I can appeticate that, it’s not a game breaker for me anyway
-[2024-12-04 11:00] yasen_gg : You won't feel these are missing when you watch your game
-[2024-12-04 11:00] yasen_gg : But I'm sure they'll be amazing to have once added 🙂
-[2024-12-04 11:04] thug2137 : I actually watched a random game yesterday, and I was not expecting it to be a moving 2D pitch which was nice!   I was expecting some simple flavour text “X makes a pass to Y”
-[2024-12-04 11:08] balkanium : Sorry what? Where can you watch games?
-[2024-12-04 11:09] thug2137 : I just clicked a random club fixture from last season
-[2024-12-04 11:10] yasen_gg : https://tenor.com/view/my-sweet-summer-child-sweet-summer-child-game-of-thrones-gif-19977020
-[2024-12-04 11:14] derbymanager : So to give a bit of context, the previous version of the game reached the limitations of how it was set up so I started from scratch about a year and a half ago and I also rewritten it all in a different programming language. It's not like there's 7 years worth of work in the game you're playing now... Just to lower your expectations a bit 😅
-[2024-12-04 11:15] yasen_gg : He's being humble - there's probably even more 🙂
-[2024-12-04 11:15] yasen_gg : Loads of us here that can prove it
-[2024-12-04 11:21] balkanium : And of course the game crashed now when I find out about it  -_-
-[2024-12-04 11:21] derbymanager : It's up again, sorry about that 😄
-[2024-12-04 11:21] derbymanager : But also, get used to it 😂
-[2024-12-04 11:23] yasen_gg : Derby saw my tactics for today so he had to make some quick adjustments <a:kekw_gif:1108739032101429288>
-[2024-12-04 11:28] alin35 : Don't worry, it's a common thing here 😂
-[2024-12-04 11:30] alin35 : After the welcome back page, it doesn't redirect to the game, it reverts to the sign in page
-[2024-12-04 11:31] derbymanager : Try again, maybe you did it between two updates or something
-[2024-12-04 11:32] alin35 : Nope, still the same
-[2024-12-04 11:33] poletz : + no loans
-[2024-12-04 11:34] balkanium : Oh no worries it actually feels even better now. Games not crashing at worst possible moments is just unnatural 😄
-[2024-12-04 11:35] derbymanager : Try to clear your cache, it's working for me
-[2024-12-04 11:37] derbymanager : Hmm, ok, something is wrong, it logs me out after I open a few pages
-[2024-12-04 11:38] alin35 : Cleared my cache, it still happens
-[2024-12-04 11:59] derbymanager : Can you try now
-[2024-12-04 12:00] poletz : For me it works now
-[2024-12-04 12:27] balkanium : Works for me too
-[2024-12-04 12:28] balkanium : Is there a cut-off time for setting up your team before the game or it's all the way to kick-off?
-[2024-12-04 12:30] balkanium : Also, nice touch with Mourinho gif on bot managers. Will make every defeat feel even worse now 👍
-[2024-12-04 12:34] alin35 : Yeah, it works now 👍
-[2024-12-04 12:35] derbymanager : All the way to kick off
-[2024-12-04 13:00] endgamenow : does the public interest buff to preference have to happen before the contract offer is made?
-[2024-12-04 13:02] faro1 : It can be done anytime. Public interest reduces wait time to 1 day
-[2024-12-04 13:02] endgamenow : Also, I noticed that the spanish leagues play at the same time as the continental leagues - couldn't this give other teams a chance to rotate their squad between games whilst spanish teams can't? Teams could want to rotate their squad so they don't all get double-y as fatigued.
-[2024-12-04 13:04] alin35 : scout 2 times, offer contract, then scout the third time and then the time required for him to take a decision is reduced by 1 day
-[2024-12-04 13:04] alin35 : If you scout 3 times and then offer contract, it won't work
-[2024-12-04 13:05] endgamenow : ok good because this is what i've been doing, i've just been hoping the buff is actually applied 😅
-[2024-12-04 13:05] endgamenow : but surely if it doesn't work after 3 times then public interest shouldn't appear until AFTER you've offered a contract?
-[2024-12-04 13:08] alin35 : Well, in the news it does appear regardless if you made an offer or not, if you scouted 3 times. But the reduction only happens in the case above.
-[2024-12-04 13:10] alin35 : I made that mistake aswell in the beggining and wondered why the reduction isn't applied so... I asked around...
-[2024-12-05 07:21] .burningrain : So do we see the real xg this season or an approximation of irl xg?
-[2024-12-05 07:27] derbymanager : still irl
-[2024-12-05 22:20] theonlysbh : I cannot buy guys to replace who is gone
-[2024-12-05 22:20] theonlysbh : cuz of this unusual thing
-[2024-12-05 22:21] theonlysbh : i'm basicly cooked
-[2024-12-05 22:23] yasen_gg : you have to sell high salary earners
-[2024-12-05 22:24] theonlysbh : if i sell themi wont have any subs
-[2024-12-05 22:24] theonlysbh : even tho i'm left with veryfew after many ones are gone
-[2024-12-05 22:27] yasen_gg : Can you link your club?
-[2024-12-05 22:27] yasen_gg : I'm sure people here would love to offer support
-[2024-12-05 23:06] poletz : This is not unusual
-[2024-12-05 23:09] poletz : U bought 2 players earning 122k combined 4 days ago, that s why
-[2024-12-05 23:10] poletz : Ur allowed wages is very similar to the past season it can be around 30/40k less than the past season due to lower expectations due to underperforming, nothing exceptional
-[2024-12-05 23:13] poletz : So.. u should try to win with that team rn, as the first two u should get rid of are exactly the last 2 youths u bought.
-[2024-12-05 23:13] randykeys : 66k salary in D4 is bonkers
-[2024-12-05 23:14] poletz : Yep
-[2024-12-05 23:14] randykeys : The first time I offered someone 66k I was in D2
-[2024-12-05 23:16] poletz : Offered 25% of his whole budget for 2 players then surprised he s cooked
-[2024-12-05 23:21] theonlysbh : i see
-[2024-12-05 23:21] theonlysbh : well
-[2024-12-05 23:21] theonlysbh : we get better with our faults
-[2024-12-05 23:22] randykeys : You'll be fine
-[2024-12-05 23:23] balkanium : Wages are insane across the board tbf, I have mf's on 50k in french 4th div...🙃
-[2024-12-05 23:23] theonlysbh : ill try to do something with the current team
-[2024-12-05 23:24] theonlysbh : even tho it will be hard as there is less subs now
-[2024-12-05 23:25] poletz : Did u signed those guys? Or the bot did just right before u joined?
-[2024-12-05 23:26] balkanium : Already there, and for stupid fees too. One of the reasons I'm still to make a move...
-[2024-12-05 23:26] poletz : U ve 21 players. Depth is ok. Team value is ok for d4, also considering u ve lot of oldies that helps.. u ve some chances
-[2024-12-05 23:29] poletz : Problem is more in 50 days when all those oldies will retire and u ll probably not ve the money to replace them. The team need a total rebuild that will require to sell all the higher value player. But there is this season to play before, hoping the youths to raise their value
-[2024-12-05 23:30] poletz : Yeah, unlucky with timing
-[2024-12-05 23:31] theonlysbh : ill rebuild it from scratch if i managed to not get sacked this season
-[2024-12-05 23:31] theonlysbh : ill try my best
-[2024-12-05 23:33] poletz : U ll not get fired
-[2024-12-05 23:34] balkanium : Yup, 7.5m for random GK and FB seems a bit excessive, lol
-[2024-12-05 23:37] poletz : Well they r good.. just not your priority maybe rn
-[2024-12-05 23:40] balkanium : It's fine fuck it, this season is about learning anyway and from what I've seen it's highly unlikely I'm getting fired no matter what, so...
-[2024-12-05 23:49] poletz : Will never happen
-[2024-12-05 23:53] poletz : The game purpose is to make you struggle, not to punish you 😀
-[2024-12-05 23:59] balkanium : Not completely on board with that tbh (fear is a great motivator 😁 ), but knowing how job market works in big cm/fm games, it's probably for the best
-[2024-12-06 06:30] derbymanager : As your team becomes better the board will expect more. Now they're quite forgiving, but top teams will fire you quickly if you underperform.
-[2024-12-06 06:31] alin35 : How does experience gathering works? Have a player who played 40 matches in his career, he is still barely experienced.
-[2024-12-06 07:22] poletz : They gain exp playing games equal or above their tier
-[2024-12-06 11:16] balkanium : Re transfers, is 'market' screen what's available to us/interested players, or I can go around teams and pester folk to sell me someone?
-[2024-12-06 11:17] balkanium : My budget is melting away by the day and I want to spend what we have atm while it's still there...
-[2024-12-06 11:19] yasen_gg : The former
-[2024-12-06 11:19] yasen_gg : You only see players that are interested in joining your club
-[2024-12-06 11:19] yasen_gg : This depends on your club popularity
-[2024-12-06 11:20] yasen_gg : The better you perform over the long term, the higher your popularity gets
-[2024-12-06 11:20] balkanium : Ah ok, thanks. I guess no transfers for me then. Players on my shortlist are somehow even worse than the ones I already have
-[2024-12-09 12:47] balkanium : What does 'promote to staff' option do?
-[2024-12-09 12:53] skuld6666 : You get rid of the oldie and get a little boost to facilities. They join coaching staff (kind of).
-[2024-12-09 12:55] skuld6666 : You will get a message like this:
-[2024-12-09 12:55] balkanium : Incredible, didn't know we even have a coaching staff 😁
-[2024-12-09 13:54] balkanium : What's the deal with midfielders generally having poor to average First Touch? It seems to be more of a focus attribute for forwards and it's kinda silly imo
-[2024-12-09 14:32] yasen_gg : So some of the skills and the way they are utilised in the Match Engine (or the ME as we call it in short) changed recently.
-[2024-12-09 14:33] yasen_gg : First Touch was preciously one of those Forward skills that got renamed and tweaked.
-[2024-12-09 14:43] balkanium : So..it is forwards' attribute? Don't matter as much for midfielders?
-[2024-12-09 16:02] faro1 : They don't contribute in any form other than the mentioned cash boost on facilities
-[2024-12-09 16:43] a_davis11 : What skills contribute to build up?
-[2024-12-09 16:50] poletz : I think it should matter also for mids as it s about the ability to control the ball (receive pass). But actually it seems more important for strikers.
-[2024-12-09 16:51] poletz : Short Creativity vs pressing  Direct(counters) Cre+agility vs pre+agility
-[2024-12-10 10:36] balkanium : Hey can you withdraw offer for player? I think I fucked up
-[2024-12-10 10:37] alin35 : It happens to the best of us lol 😂
-[2024-12-10 10:38] alin35 : You can't withdraw offer, but you can put the minimum offer on the table, he should reject it
-[2024-12-10 10:40] balkanium : Ah ok, that makes sense
-[2024-12-10 10:40] balkanium : Tnx
-[2024-12-11 20:08] balkanium : I have a player with 2 seasons left on his contract saying he'll retire when I went to offer new deal, does that mean he's retiring at the end of this season or when contract expires?
-[2024-12-11 20:44] poletz : When the contract expires
-[2024-12-11 21:12] faro1 : yeah and you'll have the option to retire him earlier (up to 35 days from contract ending)
-[2024-12-11 21:22] balkanium : Tnx, it's actually till Jan 27 so it's not two season although idk how much time is between seasons. These scattered expiry dates are throwing me off a bit, some are before, some at the end and some in the middle of the season
-[2024-12-12 10:09] randykeys : I upgraded a player to staff yesterday and now have no idea where the fuck he went. He's not boosted any of the main training areas, or the sponsors or stadium as far as I can tell. Is it just a boost to the next upgrade level? Cus that seems higher today. Can I see him anywhere in game which lets me know what he's doing, apart from apparently playing poker?
-[2024-12-12 10:39] poletz : U should ve seen it in your facilities page yesterday (it s just a boost on that day investment)
-[2024-12-12 11:53] randykeys : So it's just a single day buff?
-[2024-12-12 12:06] randykeys : Rip lmao, I still don't know what it went to
-[2024-12-12 12:17] .burningrain : It just adds the money mentioned in the dialog box to the "current value" of the facility investment
-[2024-12-12 13:14] yasen_gg : It's like saving up for a house and deciding to sell your car to boost your savings
-[2024-12-12 14:11] balkanium : On this graph thingy in player profile, for attack BU=cre pass=pass&cross move=dri (&agi?) shoot=fin&ls receive=ft&pos Am I getting that right?
-[2024-12-12 14:30] poletz : Also aer under receive And hea under shot
-[2024-12-12 14:31] poletz : Agility also under bu
-[2024-12-12 14:33] balkanium : Thanks Pol, I'm trying to figure out if any of the schoolboys are actually good that way since we can't sign anyone and I've burned out our scouts
-[2024-12-12 14:36] poletz : Pos seems just a defensive skills (according to wiki)
-[2024-12-12 14:39] poletz : So for attack: BU=cre/agi pass=pas/cros move=dri/agi shoot=fin/ls/hea receive=ft/aer
-[2024-12-12 14:39] balkanium : Yeah I just saw that, and good first touch is forwards attribute and rarity with midfielders so I'm not sure what's what there tbh
-[2024-12-12 14:52] balkanium : yup, just compared this to my players attributes and it seems about right
-[2024-12-12 14:52] balkanium : now do defence 😄
-[2024-12-12 18:43] balkanium : What are these numbers? 0/1/0/0 & 0/7/0/3
-[2024-12-12 18:47] poletz : Build up and prevent build up First 3 are left /center /right, last one is direct bu (counter)  The bu contribution multiplied for bu skills (cre for short, +agi for direct) compared to your opponent bu prevention (pre for short + agi for direct) determines your bu success (so your actions)
-[2024-12-12 18:48] poletz : And vice versa
-[2024-12-12 18:50] poletz : So if u ve a mid with super pressing is hm, if super cre is cm, a bit of both dlp or btb
-[2024-12-12 18:53] balkanium : Appreciate it brother. Certainly makes sense of some thinga and it's quite interesting look at my players through these lenses...
-[2024-12-12 18:56] balkanium : DLP's build up role is messing with my head now.  Not at all what I thought
-[2024-12-12 18:58] balkanium : Higher contribution to prevent opponent build up than role in our own...ok. But same BU value as Libero...🙃
-[2024-12-12 19:05] balkanium : Literally, and much lower than both CM and BTB. What is even the point of calling him deep lying PLAY MAKER
-[2024-12-12 19:09] poletz : Yep the name is not appropriate actually It should be cause he has 9 vision (so preference to make long passes) But i played a lot with dlp and with great pas, and rarely saw some assist from them
-[2024-12-12 19:13] balkanium : Biggest long shots threat from midfield too 😂 role is all over the place
-[2024-12-12 19:36] randykeys : Now that I understand 😂
-[2024-12-12 19:36] yasen_gg : Like and Subscribe for more <a:kekw_gif:1108739032101429288>
-[2024-12-12 20:51] derbymanager : you are interpreting long shots wrongly (I don't blame you) 😄 you have to take into account role's positioning and with low shooting he would never be close enough to the goal to actually shoot. this helps him get some shots. for example, target man has only 2 in shooting so that he wouldn't shoot if he gets a ball early in the action while he isn't in position...

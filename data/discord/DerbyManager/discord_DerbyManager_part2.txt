@@ -1,3 +1,6 @@
+[2026-08-22 20:16] furysk : They are getting 300-400k IFA subsidies down there right now, which is going to dig some of the teams that are bankrupt right out of bankruptcy, but thats not a healthy alternative to the problem they face because in the end it might slow the reduction of facilities to a meaningful level down, which would instead force them to try to brute force with some great deal of luck on landing the right prospects to get out of tier 4.
+[2026-08-22 21:16] derbymanager : No no, subsidy shows that there is an issue with the economy and that too much money is going out of the game. By all accounts that's the money that's going towards youngsters now. Making youngsters less rewarding will help with that.  There is a known issue with facilities and that is that they mainly grow. My idea from way back was to have periodical reduction in facilities (the same best training facilities 10 years ago are now only 4 stars)... But if I pulled that off now people would flip 😬 Maybe faster degradation could be introduced, I've limited it to 25% but why not 0% or even -50%... I'm just thinking aloud.  Anyway, I posted in stats how the prices and player power has been steadily growing over time and I think that's where I have to do some changes. Something self-correcting. I can't really reduce power of all players nor can I force teams (especially humans) to purchase worse players just because that's how it should be. Maybe this satisfaction helps a bit as people try to have more balanced squads but I'm not counting on it.  I could just reduce prices. But this goes in favour of those who hoard money. And as I showed earlier today, humans have 4-5x more money than bots. So I'm a bit stuck here...  Simply speaking, there's too many good players in the game... The solutions I see: - I can decouple price from skills and make it so that the average price is where I need it to be. - I could introduce a training balance variable and speed training up or down depending on the average power. - I can speed up facilities degradation and maybe some other financial adjustments and maybe that would be enough...
+[2026-08-22 22:44] furysk : I think that’s the wrong idea personally
 [2026-08-22 22:45] furysk : While I don’t think adding money into the game is great, I have to ask why it’s such a big deal at the very bottom.  If people make a few extra dollars because you reduce the costs a bit at tier 4 than other spots in the game, it is hard to take advantage of full time
 [2026-08-22 22:45] furysk : People there overall can’t make as much as they can elsewhere
 [2026-08-22 22:59] furysk : In reality they will also have to spend it just working their way out
@@ -762,6 +765,77 @@
 [2026-10-22 21:35] imamzade : It would be nice to have more control over offers when selling players, at least the option to reject offers from teams in our own league.
 [2026-10-22 21:37] imamzade : For example, I don't want to sell players to Newcastle, but that's currently possible.
 [2026-10-22 22:21] synistajay : The can of worms that opens would be nasty tbh
+[2026-10-23 11:50] .burningrain : I've stopped watching all of my games because there's just too many shots/goals, so it takes too long 😬
+[2026-10-23 11:51] .burningrain : I somehow scored 3 (and 2.95 xg) against Anderlecht today with a defensive 5-4-1
+[2026-10-23 11:52] .burningrain : (and conceded 6)
+[2026-10-23 12:30] yasen_gg : https://klipy.com/gifs/getout-28
+[2026-10-23 12:31] faro1 : you can watch my game today as it went 0-0
+[2026-10-23 13:19] synistajay : <@530694771900153871> thank you for fixing the long passes 🙂‍↕️
+[2026-10-23 13:25] skuld6666 : Thought they might have brought on the ML on bench to replace the ML not the MC. Maybe my poor instructions?
+[2026-10-23 14:38] synistajay : Was watching Como game and notice their WB positioning on the opponents Goal Kick
+[2026-10-23 14:57] yasen_gg : Maybe one is a FB and one is an AWB ?
+[2026-10-23 14:59] synistajay : Na just WB
+[2026-10-23 15:00] synistajay : 13 is WB, its an interesting role they're aggressive but get caught out, for some reason engine doesn't want to consistently exploit that space in behind
+[2026-10-23 15:07] yasen_gg : I mean, to be fair - I want this to happen
+[2026-10-23 15:07] yasen_gg : It probably has something to do with experience, positioning, fatigue, etc.
+[2026-10-23 15:07] yasen_gg : if that is the case, then we can only applaud Derby, because that's how it is in real life too
+[2026-10-23 15:08] yasen_gg : As for the Engline not exploiting it - it might be just the keeper being dumb to not exploit it... I don't think we'll be able to tell 🙂
+[2026-10-23 15:09] yasen_gg : There's a reason Harry Kane took that goal kick in the game vs Arsenal the other day - he had the experience, awareness and ability to create that play.
+[2026-10-23 15:43] synistajay : If you want games with WB again a WG or FLR they usually so open especially if the team with the WB just lost the ball
+[2026-10-23 15:43] synistajay : Anyone else experiencing players not training even though they played?
+[2026-10-23 17:20] vrijstijler : Some players did not increase a single point durong this season (defender and forwards). A freshly signed midfielder and defender increased 4 points one day after signing. All have good potential.  There is some info in the wiki about training.
+[2026-10-23 18:55] imamzade : leicester scored this
+[2026-10-23 19:20] yasen_gg : I'm doing mental gymnastics to figure out how it happened hahah
+[2026-10-23 19:33] alin35 : Conceded a goal like this too
+[2026-10-23 19:34] alin35 : But that one from leicester is more outrageous 😂
+[2026-10-23 19:35] futurexskeleton : y'all. I watch MLS. none of this is surprising. 😂
+[2026-10-23 19:45] marius36 : https://www.derbymanager.com/matches/138833?view=live-tab&min=87
+[2026-10-23 19:45] marius36 : Beautiful counter-attack
+[2026-10-23 21:03] imamzade : https://www.derbymanager.com/matches/132533?view=live-tab&min=90.01
+[2026-10-24 09:35] marius36 : Did conditions for you guys happened?i think they didn't grow +3 but I'm not sure cause I was looking at the 01:00 AM and still they are the same now,idk when is the update for them
+[2026-10-24 10:12] niksty16 : There is condition like before and condition + form.
+[2026-10-24 10:12] niksty16 : this should explain it
+[2026-10-24 18:19] synistajay : I'm guessing we need an updated test your tactics tab? <@530694771900153871>
+[2026-10-25 09:00] synistajay : Players that are retiring contract play time should automatically go to backup player imo
+[2026-10-25 11:09] alin35 : Pretty sure my players condition were higher, condition dropped even for the players that didn't play today. Did something happen?
+[2026-10-25 11:11] synistajay : https://discord.com/channels/530678438164430860/1563507260607561788
+[2026-10-25 11:19] shaqattack293 : Yeah big issues with condition in my team today post game too - some players down to 70ish percent which is way less than it should be, but i didnt track before and after
+[2026-10-25 11:20] alin35 : Maybe this is the true value, not the ones we saw yesterday? I dunno
+[2026-10-25 11:23] alin35 : I remember we had a few days of very low players conditions, then it suddenly spiked up into the 85ish, now back to very low condition... Thats why i say maybe this is the true players condition.
+[2026-10-25 11:44] synistajay : I think they might be the true numbers
+[2026-10-25 14:09] forasteiro2000 : Tactical screen is not moving😢 for everyone?
+[2026-10-25 22:50] furysk : i guess the one concern i have is the subs seem to be problematic towards training eligibility for full training
+[2026-10-25 22:51] furysk : a 63 minute player for me should be given the training reset
+[2026-10-26 08:30] alin35 : <@530694771900153871> , what does "Replaces a player in his position" mean? I gave my sub DC the instruction "RAT" and he went on and substituted my DR
+[2026-10-26 08:37] derbymanager : D for D, M for M... Otherwise you couldn't cover your whole team with only 4 subs.
+[2026-10-26 08:37] derbymanager : DC playing as DR has a tiny penalty so it's not that bad
+[2026-10-26 09:04] randykeys : New meta, everyone plays LCR
+[2026-10-26 12:31] synistajay : <@530694771900153871> so with no dots are we back to the defence + L/C/R again? I am confused
+[2026-10-26 12:43] derbymanager : L/C/R in defence should flag red
+[2026-10-26 13:17] synistajay : So is it like before or is it still build up and pressing?
+[2026-10-26 14:14] marius36 : I still want to know what is L/C/R
+[2026-10-26 14:23] derbymanager : same skills as before
+[2026-10-26 14:56] synistajay : Okay so it’s back to build up defence then LCR but we can’t chose side or central no more  I did like the dots tho. Also think that injury chances should be visible ! Maybe you can do like a medical page like FM
+[2026-10-27 08:20] synistajay : My subs have saved me twice in two days, thank you <@530694771900153871> for the feature 😭
+[2026-10-28 11:13] alin35 : <@530694771900153871> , matches weren't played.. They got stuck starting France D2 fixtures
+[2026-10-28 11:43] synistajay : I bet it's Soyaux again, can we send him to gulag now? He shouldn't even be managing them again after he'd been sacked 👀
+[2026-10-28 11:56] shaqattack293 : Multiple times? Deffo should have his DML (Derby manager license) suspended for a bit. Holding up the whole DM universe is not cool
+[2026-10-28 13:30] bewarethat : can anyone explain the build up penalty
+[2026-10-28 15:03] agunbiac9498 : I’ll tell you after our game tomorrow
+[2026-10-28 19:01] bewarethat : you have won the title, so it does not matter
+[2026-10-28 19:27] synistajay : He wants to get revenge for the last game, make sure he doesn't!
+[2026-10-29 17:08] bewarethat : He needs to wait until next season
+[2026-10-29 18:45] agunbiac9498 : Hahahaha I know <@408917114238533643> dislikes me
+[2026-10-29 18:46] agunbiac9498 : I could have smoked you if I wanted
+[2026-10-29 19:20] bewarethat : you are using my rotation methods fair enough
+[2026-10-29 19:40] imamzade : No, I like Swindon.
+[2026-10-29 20:01] agunbiac9498 : I have respect for Swindon, he knows that. We’ve been competing a long time
+[2026-10-30 08:40] alin35 : 4th injury for our goalkeeper this season. <@530694771900153871> , i really think keepers should have lower chance of injury than the rest of the players; do you consider it worthwhile or not?
+[2026-10-30 10:16] derbymanager : they already have lower condition spending and thus lower injury chance
+[2026-10-30 10:16] derbymanager : not your keeper obviously, but other ones 😅
+[2026-10-30 10:21] alin35 : Will injuries still partially heal in preseason or not the case?
+[2026-10-30 10:21] derbymanager : yes, by 5
+[2026-10-30 10:22] derbymanager : + 2 friendly matches = 7
 ==========================================
 === CANAL : #🗣general ===
 ==========================================
@@ -1941,7 +2015,7 @@
 [2019-05-04 15:52] saltylem0n_ : The assistant does not have an overview of your team to make complex decisions, so my advice is not to rely on him.
 [2019-05-04 18:40] derbymanager : Yeah, assistant is not the brightest... The worst part is that all bots use that same logic 😂
 [2019-05-04 19:36] sunday.driver : Ayy, welcome!
-[2019-05-04 20:49] saltylem0n_ : Welcome <@464524032256245780> ! Glad to have you here 💪 Which team are you managing ?
+[2019-05-04 20:49] saltylem0n_ : Welcome <@456226577798135808> ! Glad to have you here 💪 Which team are you managing ?
 [2019-05-05 02:53] dominictoblerone27 : Quick question. How does the quality of youth recruitment work? I notice that both Sunday and Derby have a higher amount of stars than everyone else. I also notice that it doesn't cost anything, unlike the quality of the training ground which costs a fuckton.   Is this just kinda a random thing that changes from club to club? Is there a way you can improve it?
 [2019-05-05 02:58] dominictoblerone27 : How come all of the clubs in Belgium League A also have terrible youth recruitment? Like the majority of them have 2 stars or less,  meanwhile pretty much every team (Other than mine that is) Has 3.5 stars or more in C1?
 [2019-05-05 03:00] dominictoblerone27 : Oh wait, is a teams youth recruitment inversely proportional to the teams popularity? I notice all the best teams in the world have 0.5 star youth recruitment.   If so, why? This makes no sense.
@@ -3548,13 +3622,13 @@
 [2019-08-25 16:30] poletz : 😦
 [2019-08-25 17:46] poletz : I can t login into the game 😦
 [2019-08-25 17:47] poletz : Now it works
-[2019-08-25 18:36] saltylem0n_ : Hey there <@200144411944943616> ! Glad to have you with us 🙂
+[2019-08-25 18:36] saltylem0n_ : Hey there <@456226577798135808> ! Glad to have you with us 🙂
 [2019-08-25 18:36] saltylem0n_ : Which team are you managing ?
 [2019-08-25 18:40] saltylem0n_ : <@456226577798135808> played against 2 teams and won 8:1 😂
 [2019-08-25 18:40] saltylem0n_ : nerf him 😛
-[2019-08-25 18:53] mimikyu1920 : Haha I just picked the team closest to the one I support
+[2019-08-25 18:53] Deleted User : Haha I just picked the team closest to the one I support
 [2019-08-25 18:54] saltylem0n_ : Which one is that 😄
-[2019-08-25 18:54] mimikyu1920 : Chelsea
+[2019-08-25 18:54] Deleted User : Chelsea
 [2019-08-25 18:55] saltylem0n_ : wait, you are the manager of Kensington and Chelsea ?
 [2019-08-25 21:57] dominictoblerone27 : So I forgot there was a friendly and played my full strength squad.
 [2019-08-25 22:00] dominictoblerone27 : Might have to drop Mas and Dieu. Aren’t playing up to the first team standard 😜
@@ -3927,10 +4001,10 @@
 [2019-09-15 10:00] dominictoblerone27 : I personally think first team training should be more effective than youth team training. The downside being that you have to play those youngsters, potentially making your team worse. I don't know though.
 [2019-09-15 10:01] dominictoblerone27 : Also the cap is really high, at least for my team. I've never had to worry about it.
 [2019-09-15 12:51] dian.grancharov : Heeey, Bruce!
-[2019-09-15 12:51] .imlifeless : Hey how's it going
+[2019-09-15 12:51] Deleted User : Hey how's it going
 [2019-09-15 12:52] derbymanager : Hi bruce almighty 😉
 [2019-09-15 12:53] derbymanager : Can you find your way around? It might be confusing, the game is still in beta and changes daily...
-[2019-09-15 12:54] .imlifeless : Yeah seems easy enough so far lol
+[2019-09-15 12:54] Deleted User : Yeah seems easy enough so far lol
 [2019-09-15 12:54] derbymanager : Great, glad to hear that 🙂
 [2019-09-15 13:01] derbymanager : <@!478208608493109251>  ``Also the cap is really high, at least for my team. I've never had to worry about it.``  You were right, it was way too high. I reduced it drastically. But I was wrong, youth and main training are exactly the same (assuming identical coaches) in terms of speed that they improve skills. The difference is that in main squad there is much less sharpness loss and player gains experience (improves mental skills) with games.
 [2019-09-15 13:03] derbymanager : This means player's price should grow faster with main squad training. I agree with you that youth training should be less effective than main training... but that would undermine youth coach and make it less effective compared to main coach...
@@ -6279,7 +6353,7 @@
 [2019-12-27 20:44] derbymanager : ``Isn't it just a user-friendly representation of the build up stat?``  Exactly. Build up + key passes (representing that the team managed to hold on to the ball for some time to create a pass in a dangerous area).
 [2019-12-27 20:46] derbymanager : Every (almost) event in the game is accounted for on the build up - key passes - shots overview after the game.
 [2019-12-27 20:47] derbymanager : The stats (shots, on target, possession, fouls) is just a quick user friendly overview of the game as a whole.
-[2019-12-28 00:57] dominictoblerone27 : Howdy <@!463046627859496964> 🙂
+[2019-12-28 00:57] dominictoblerone27 : Howdy <@456226577798135808> 🙂
 [2019-12-28 00:58] dominictoblerone27 : What team are you managing?
 [2019-12-28 01:03] sunday.driver : Welcome!
 [2019-12-28 10:33] poletz : In the last week i had a global +11/-11 for the firts team. Considering the average age is 22 yo and the oldest is 25.. and that i apply correctly rotation for training.. i thing something is wrong... to have training = 0 . No?
@@ -6311,7 +6385,7 @@
 [2019-12-28 12:27] saltylem0n_ : The rest are all quite shite
 [2019-12-28 12:27] dian.grancharov : Pff
 [2019-12-28 12:28] saltylem0n_ : Half your team are 4 stars lol
-[2019-12-28 19:13] saltylem0n_ : Welcome <@!660530132502577152> ! Glad to have you with us 💪
+[2019-12-28 19:13] saltylem0n_ : Welcome <@456226577798135808> ! Glad to have you with us 💪
 [2019-12-28 19:13] saltylem0n_ : Which club are you managing?
 [2019-12-29 15:26] poletz : 70 new managers in the last few days.. dm popularity is finally growing
 [2019-12-29 15:27] poletz : Unfortunally few of them joined on discord
@@ -6997,7 +7071,7 @@
 [2020-01-27 10:33] the.painkiller : I'm at my 8th match and still I'm struggling for the first win (6D and 2L), I think Torre del Greco fans would burn me at the stake 😄
 [2020-01-27 10:46] saltylem0n_ : What a struggle 😂
 [2020-01-27 10:59] the.painkiller : Yeah, but this morning I'd have won that match, they scored with a single shot on goal 😒 More possession, more shots, but still I lost... Well, let's see the match of this afternoon, I can still achieve the first win before new season 😄
-[2020-01-27 16:43] saltylem0n_ : Welcome aboard <@!671394607837347873> !
+[2020-01-27 16:43] saltylem0n_ : Welcome aboard <@456226577798135808> !
 [2020-01-27 19:43] the.painkiller : Another draw 🙄
 [2020-01-28 07:22] saltylem0n_ : I think this is the first season that all major trophies were won by real teams 🙂
 [2020-01-28 07:22] saltylem0n_ : Rain won the Challenger Cup, Gio got the Runners up cup and Dom - the Champions League
@@ -8232,11 +8306,11 @@
 [2020-03-06 23:52] _slavdog_ : Grigor dimitrov play football.
 [2020-03-06 23:53] Deleted User : That's interesting! That's why he can't be number one in Tennis
 [2020-03-06 23:53] _slavdog_ : Okay, this day is full of crazy things.
-[2020-03-07 02:41] housie6127 : Hi all, I am new to Discord and Derby manager 🙂 🙂 🙂  does anyone know how do I change my manager name in game? thanks again guys.
+[2020-03-07 02:41] Deleted User : Hi all, I am new to Discord and Derby manager 🙂 🙂 🙂  does anyone know how do I change my manager name in game? thanks again guys.
 [2020-03-07 02:42] sunday.driver : Yeah, you can ask the lead dev <@!530694771900153871> and he'll change it for you. Glad to have you playing 😄
-[2020-03-07 02:44] housie6127 : Thank you SundayDriver 🙂 🙂 🙂 Its gunna be cool trying to figure all this stuff out...
+[2020-03-07 02:44] Deleted User : Thank you SundayDriver 🙂 🙂 🙂 Its gunna be cool trying to figure all this stuff out...
 [2020-03-07 02:46] sunday.driver : No problem! Good luck and have fun! If you've got any questions, any of us will be glad to answer.
-[2020-03-07 02:47] housie6127 : Thanks a lot mate... I really appreciate it...
+[2020-03-07 02:47] Deleted User : Thanks a lot mate... I really appreciate it...
 [2020-03-07 09:56] saltylem0n_ : Welcome everyone! 👋
 [2020-03-07 09:57] the.painkiller : Welcome guys!
 [2020-03-07 11:06] nockeer : Really?! :/ https://www.derbymanager.com/matches/183924/end
@@ -10959,7 +11033,7 @@
 [2020-05-29 16:16] vrijstijler : > That's the multiplier the agency gives you back on the money you bet <@!656823416355029023>  The agency where you can actually place your bet is yet to be developed
 [2020-05-29 16:26] sunday.driver : I hope that gets added one day
 [2020-05-29 16:53] poletz : That would make the game self sustainable👌😂
-[2020-05-29 19:33] uvox143762 : so i've won the league unbeaten, won the league cup and beaten the 2 friendlies and the board are content!!!! miserable Sh*ts.. give me money you tight F**kers 😆
+[2020-05-29 19:33] Deleted User : so i've won the league unbeaten, won the league cup and beaten the 2 friendlies and the board are content!!!! miserable Sh*ts.. give me money you tight F**kers 😆
 [2020-05-29 20:52] skuld6666 : Ha they certainly don't throw the compliments around easily that's for sure 🙂
 [2020-05-30 07:17] the.painkiller : **Giano Bellucio** hired as a manager at **Torre del Greco**
 [2020-05-30 07:18] the.painkiller : I wish he could be here on discord
@@ -15204,7 +15278,7 @@
 [2021-01-07 12:53] dian.grancharov : The best profit they made was on Ricky Lambert, lol
 [2021-01-07 13:05] the.painkiller : I think <@!607683593686352012> focused the main problem, we lack more human managers in top tier leagues, that's the tip of the pyramid let's say, the other suggestions are good and interesting but it's like operating at lower levels of the pyramid so the effect would be weaker and could cause other exploiting mechanics
 [2021-01-07 13:06] the.painkiller : Watch the Italian A1 this season, it's beautiful! And that was just because we have more competent and challenging teams to face, not because of this or that fix
-[2021-01-07 13:07] the.painkiller : We have <@!572506927825813528> that out of nowhere has climbed to be a serious candidate for winning the title, <@!609120631883169844> that has some issues but a great squad, and the managers of Lucca and Padua (who are not in the discord, sadly) are doing pretty good
+[2021-01-07 13:07] the.painkiller : We have <@456226577798135808> that out of nowhere has climbed to be a serious candidate for winning the title, <@!609120631883169844> that has some issues but a great squad, and the managers of Lucca and Padua (who are not in the discord, sadly) are doing pretty good
 [2021-01-07 13:08] poletz : Exploiting oldies and ts
 [2021-01-07 13:09] poletz : Talking about milan
 [2021-01-07 13:11] derbymanager : They have two 35 year old players that played 7 games together. Everyone else is 31 or younger.
@@ -16355,7 +16429,7 @@
 [2021-01-27 10:29] saltylem0n_ : I am still having trouble logging in btw - on PC.
 [2021-01-27 10:30] the.painkiller : Login is off while Derby fixes the issue
 [2021-01-27 10:35] saltylem0n_ : I thought it was off on mobile only
-[2021-01-27 10:46] brentpowell4174 : Off for me on Mac
+[2021-01-27 10:46] Deleted User : Off for me on Mac
 [2021-01-27 10:48] Deleted User : I want to see if i have got my new youth player 😢
 [2021-01-27 10:48] skuld6666 : Just before my game against Derby and I can't log in. Coincidence? 😬
 [2021-01-27 10:48] Deleted User : Was at 91-92 % yesterday
@@ -16882,15 +16956,15 @@
 [2021-02-12 12:44] saltylem0n_ : Maybe. I guess sub 20m lone strikers are not good for A.
 [2021-02-12 12:46] poletz : it depends. if he is old , or underpriced, could be ok
 [2021-02-12 12:48] poletz : i tried it for the first time since time, and worked well.. but he is Nikolic (18mil 30 yo)
-[2021-02-12 12:57] danijangb8332 : Thats a beast! what else does he produce, passer, tackler?
-[2021-02-12 13:00] danijangb8332 : Yes i like the 4-4-2, classic...........
+[2021-02-12 12:57] Deleted User : Thats a beast! what else does he produce, passer, tackler?
+[2021-02-12 13:00] Deleted User : Yes i like the 4-4-2, classic...........
 [2021-02-12 13:54] skuld6666 : Good creative MC (although possible I should have switched him to AM actually). https://www.derbymanager.com/players/35721/history This season he got his first few internation caps and has been my best player in league. A late developer at 26/27.
 [2021-02-12 15:49] menhir9729 : Nope, they can be awesome when your AML and AMR are great SBU attackers
 [2021-02-12 15:50] menhir9729 : who?
-[2021-02-12 17:24] danijangb8332 : Quick question, How do you switch players positions, is it constantly playing them in a white unshaded circle?
+[2021-02-12 17:24] Deleted User : Quick question, How do you switch players positions, is it constantly playing them in a white unshaded circle?
 [2021-02-12 17:27] skuld6666 : Yeah if they have high adaptability (and it's a linked positon - which can be a bit complicated so it's worth asking) they can with a bit of luck switch positon. First a partial adaptation (clear circle), then the full white circle. But it can be painfully difficult.... and they perform less well... and their training suffers a bit if they play out of position. But the versatility it gives you is great.
 [2021-02-12 17:27] skuld6666 : A lot of people tend to try and train a versatile player or two during the pre-season.
-[2021-02-12 17:31] danijangb8332 : Great, thanks, interesting.
+[2021-02-12 17:31] Deleted User : Great, thanks, interesting.
 [2021-02-12 18:44] Deleted User : or in some league matches too (against weaker teams)
 [2021-02-12 18:46] hypnoseal : Some even 11 of them 😂
 [2021-02-12 18:46] Deleted User : jajaja yeah #my stupid friend the cheater
@@ -17082,12 +17156,12 @@
 [2021-02-15 09:19] Deleted User : <@!530694771900153871> when will you change the swedish team names?
 [2021-02-15 09:58] .burningrain : I'm sure it's on the to do list, <@456226577798135808>, but DM is a passion/spare time project :)
 [2021-02-15 10:59] derbymanager : It will probably be at the end of the season
-[2021-02-17 12:42] danijangb8332 : Some interesting threads on this forum, just picked up the stadium one, It does look really tricky for anyone to pick up a fallen giant with big maintenance costs and bring them back up the league.
-[2021-02-17 12:44] danijangb8332 : Can the stadium be increased in size for a fee and a nominal fee be returned to downgrade the stadium if the teams fall? (I know its not fully realistic but lower league teams could close a stand or lease out areas to make up income)
-[2021-02-17 12:44] danijangb8332 : Just thinking how to combat that................to make the game more competative
-[2021-02-17 12:45] danijangb8332 : On another note, not playing with multiple accounts, why? If the accounts are in different leagues then what would be the issue?
-[2021-02-17 15:39] skuld6666 : <@!775751454672814121> try and think of ways it could be exploited with two teams (or three etc) There are quite a few 😐  Just little things but they add up.... too many temptations I think, sadly! Not for 99% of people but there are enough out there that will always cheat (themselves mainly but heh).
-[2021-02-17 22:18] danijangb8332 : Yes true, its a shame and wrong, why spoil the fun!
+[2021-02-17 12:42] Deleted User : Some interesting threads on this forum, just picked up the stadium one, It does look really tricky for anyone to pick up a fallen giant with big maintenance costs and bring them back up the league.
+[2021-02-17 12:44] Deleted User : Can the stadium be increased in size for a fee and a nominal fee be returned to downgrade the stadium if the teams fall? (I know its not fully realistic but lower league teams could close a stand or lease out areas to make up income)
+[2021-02-17 12:44] Deleted User : Just thinking how to combat that................to make the game more competative
+[2021-02-17 12:45] Deleted User : On another note, not playing with multiple accounts, why? If the accounts are in different leagues then what would be the issue?
+[2021-02-17 15:39] skuld6666 : <@456226577798135808> try and think of ways it could be exploited with two teams (or three etc) There are quite a few 😐  Just little things but they add up.... too many temptations I think, sadly! Not for 99% of people but there are enough out there that will always cheat (themselves mainly but heh).
+[2021-02-17 22:18] Deleted User : Yes true, its a shame and wrong, why spoil the fun!
 [2021-02-18 10:50] derbymanager : There is already a discount on big stadiums for teams in lower divisions. Instead of paying, IDK, 600k per day for 50k stadium, they would pay something like 300k in D division.
 [2021-02-18 10:51] derbymanager : No need to reduce actual seats, it's just that the stadium isn't maintained 100%.
 [2021-02-18 17:11] philly4669 : guys wats with the invite only update?
@@ -17138,10 +17212,10 @@
 [2021-02-19 17:00] Deleted User : I Have one of 21 and he is backup and not very good
 [2021-02-19 17:51] dian.grancharov : Amazing
 [2021-02-19 17:51] dian.grancharov : Good luck
-[2021-02-19 20:17] danijangb8332 : <@456226577798135808> Welcome and good luck, I only started a couple of months ago but really enjoying the game, you need any advice, lots of people are here to help..............just not to much, as we still want to win as well!!! lol
+[2021-02-19 20:17] Deleted User : <@456226577798135808> Welcome and good luck, I only started a couple of months ago but really enjoying the game, you need any advice, lots of people are here to help..............just not to much, as we still want to win as well!!! lol
 [2021-02-19 21:33] Deleted User : I just want to be at a competitive level with everyone
-[2021-02-19 21:38] danijangb8332 : Dont expect it to be easy but you should learn some quick lessons and then refer to wiki, the rest comes with playing games and seeing what works for your team............
-[2021-02-19 21:39] danijangb8332 : Lots of info across all of the threads, ie. Questions, Leagues and discussion ect
+[2021-02-19 21:38] Deleted User : Dont expect it to be easy but you should learn some quick lessons and then refer to wiki, the rest comes with playing games and seeing what works for your team............
+[2021-02-19 21:39] Deleted User : Lots of info across all of the threads, ie. Questions, Leagues and discussion ect
 [2021-02-19 21:51] Deleted User : <@!530694771900153871> you should keep it invite only its been a huge success so far
 [2021-02-19 21:52] derbymanager : Or they are all Hiroshi's alts :P
 [2021-02-19 21:52] Deleted User : https://tenor.com/view/investigate-spy-search-time-to-investigate-spying-gif-16487547
@@ -17149,7 +17223,7 @@
 [2021-02-19 21:54] Deleted User : another <@!668635975882375191> <@!681327386159218751> <@!686576924205776920> <@!691447364942037003> <@!695433160036450345> <@!702343723127668746> <@!703420612265246790> <@!703275045002412162> story maybe 🤔
 [2021-02-19 21:54] Deleted User : <@!703275045002412162> did you forgot your password on your other accounts or what happened? 😂
 [2021-02-19 21:59] derbymanager : You jinxed it 😂
-[2021-02-19 22:08] Deleted User : <@!812439682088566794> what team did you pick?
+[2021-02-19 22:08] Deleted User : <@456226577798135808> what team did you pick?
 [2021-02-20 02:02] Deleted User : no no, im not realbokosox, i dont know who is, but it made me laugh
 [2021-02-20 11:27] Deleted User : How to change my name of manager
 [2021-02-20 11:33] the.painkiller : Write a message to <@!530694771900153871>
@@ -17571,19 +17645,19 @@
 [2021-03-07 09:03] dian.grancharov : B team power
 [2021-03-07 09:11] .burningrain : How has your B team been training, btw?
 [2021-03-07 09:11] .burningrain : I've been struggling with them these past few weeks
-[2021-03-07 11:43] danijangb8332 : <@!334262248065466370> struggling in what sense?.........that they dont improve?
+[2021-03-07 11:43] Deleted User : <@!334262248065466370> struggling in what sense?.........that they dont improve?
 [2021-03-07 12:47] .burningrain : Yeah
-[2021-03-07 12:51] danijangb8332 : Im still trying to understand how the training to reduce injuries work?
-[2021-03-07 12:52] danijangb8332 : I have had it on that for the last few games and have 6 injuries and some substantial which doesnt help a small squad
-[2021-03-07 12:52] danijangb8332 : ????
+[2021-03-07 12:51] Deleted User : Im still trying to understand how the training to reduce injuries work?
+[2021-03-07 12:52] Deleted User : I have had it on that for the last few games and have 6 injuries and some substantial which doesnt help a small squad
+[2021-03-07 12:52] Deleted User : ????
 [2021-03-07 12:53] poletz : It reduces the chance of injuries.. it s not said u would not suffer a injury crisis as well
-[2021-03-07 12:56] danijangb8332 : Man would hate to see it with the setting off.................LOL
-[2021-03-07 12:59] .burningrain : Are you rotating your squad <@!775751454672814121>? It's mostly playing a lot of games in a row (and playing nmf guys) that increases the chance of injury
+[2021-03-07 12:56] Deleted User : Man would hate to see it with the setting off.................LOL
+[2021-03-07 12:59] .burningrain : Are you rotating your squad <@456226577798135808>? It's mostly playing a lot of games in a row (and playing nmf guys) that increases the chance of injury
 [2021-03-07 13:32] poletz : With 2 lottery tickets u ve more chances to win than with 1.. but it s not a guarantee u ll win 😀
 [2021-03-07 13:35] Deleted User : 🤔 😂
 [2021-03-07 14:34] deivbarros : My First vitory!
 [2021-03-07 14:34] deivbarros : :p
-[2021-03-07 16:25] danijangb8332 : I guess its the rotation that does it with a small amount of players
+[2021-03-07 16:25] Deleted User : I guess its the rotation that does it with a small amount of players
 [2021-03-08 04:27] philly4669 : my barnet team is doing a madness
 [2021-03-08 04:27] philly4669 : and sorry for new vids, ive been sick with the flu 😦
 [2021-03-08 04:28] philly4669 : i will post one tmr
@@ -17650,8 +17724,8 @@
 [2021-03-15 07:51] dian.grancharov : 126 games / 16 ass / 26 goals
 [2021-03-15 07:51] dian.grancharov : I dont like selling young players haha, that is why I have issues with salaries.
 [2021-03-15 07:56] Deleted User : https://tenor.com/view/stonks-up-stongs-meme-stocks-gif-15715298
-[2021-03-15 19:46] danijangb8332 : Wow thats the way to make money......
-[2021-03-15 19:47] danijangb8332 : Quick question, how often do people rotate players?
+[2021-03-15 19:46] Deleted User : Wow thats the way to make money......
+[2021-03-15 19:47] Deleted User : Quick question, how often do people rotate players?
 [2021-03-15 19:49] dian.grancharov : Me all the time. For 20+ seasons now
 [2021-03-15 20:04] Deleted User : i do it very often
 [2021-03-16 10:06] Deleted User : Do you have a case like mine?  There is one team in Bulgaria that I cannot win against. No matter what I do, no matter what players I field, no matter what tactic I play.  It's almost 100m cheaper than me and if I win against them - it's super rare occasion 😄 😄 😄
@@ -17753,7 +17827,7 @@
 [2021-03-20 18:57] the.painkiller : With today's win in CC I surpassed Leon and entered the all-time top-3 high scores chart 🔥
 [2021-03-21 08:52] poletz : I just realized they retired the league topscorer too.. so sad
 [2021-03-21 08:55] .burningrain : And are selling my other striker, so they'll be left with one 1,5* guy
-[2021-03-21 12:40] danijangb8332 : These Bots are savage!!
+[2021-03-21 12:40] Deleted User : These Bots are savage!!
 [2021-03-21 17:01] daveywaveygespinozaisland : Immediately retired three players, brutal
 [2021-03-21 17:12] .burningrain : Yeah, I don't get it...
 [2021-03-21 18:18] daveywaveygespinozaisland : None of them are listed as on staff, so I assume they did it to cash out on them. <@!530694771900153871> said that the bots tend towards doing that with older players rather than let them lose value.
@@ -17762,7 +17836,7 @@
 [2021-03-21 23:25] poletz : Definitely a too strong rule about olds retirement that derby is going to fix like he already said
 [2021-03-22 03:21] jackryder2 : The thing should be bots can't retire player until the last 5 days of contract and then they should be open for bids from others too
 [2021-03-22 06:43] poletz : Or just make that bot dont consider them useless just for their age 😉
-[2021-03-23 20:44] danijangb8332 : I guess they look at the age, value, salary and look for the future investment
+[2021-03-23 20:44] Deleted User : I guess they look at the age, value, salary and look for the future investment
 [2021-03-25 15:53] skuld6666 : Interesting example of a late developer. An old player of mine from Birmingham. He seems to have became a good player around 28/29 after being average back up for a long time:
 [2021-03-26 10:21] Deleted User : Thats interessting. Was he playing in the same position in those years?
 [2021-03-26 10:22] Deleted User : Ho, he's a D C , its not that case🙂
@@ -17803,7 +17877,7 @@
 [2021-03-28 09:08] .burningrain : I wonder why's that
 [2021-03-28 09:08] poletz : The update should fix it
 [2021-03-28 09:22] skuld6666 : Yes if you look at scoring charts they are generally really down this year.
-[2021-03-28 11:57] danijangb8332 : <@456226577798135808> got a penalty on 15 mins in our Cup final, it was all downhill from there!!
+[2021-03-28 11:57] Deleted User : <@456226577798135808> got a penalty on 15 mins in our Cup final, it was all downhill from there!!
 [2021-03-28 14:38] brunoccf : Yes, I read it, but I thought it would only start operating next season.
 [2021-03-28 20:13] philly4669 : what is the internation cup and where can i find it on derby manaer
 [2021-03-28 20:13] philly4669 : i have been offered a spot at a club who is in the internation cup
@@ -17844,7 +17918,7 @@
 [2021-03-30 11:09] skuld6666 : No one cares about Italy league C I can assure you, but you don't see that stopping me forcing a wall of text on everyone 🤣
 [2021-03-30 18:22] philly4669 : im gonna do one of the press release tings
 [2021-03-30 18:22] philly4669 : for Barnet
-[2021-03-30 20:18] danijangb8332 : Great fun, why not, especially for the unknown B1 league winners Bradford.
+[2021-03-30 20:18] Deleted User : Great fun, why not, especially for the unknown B1 league winners Bradford.
 [2021-03-30 20:55] poletz : Thanks <@!530694771900153871>
 [2021-03-31 05:47] .burningrain : In case anyone was wondering just how quickly people lose their skills when out of contract: I have a guy on -3 days and 0/-9 in training
 [2021-03-31 05:48] .burningrain : (I put him on TL when he had 2 days left in his contract, but I guess 7.5M was too much to ask)
@@ -18263,7 +18337,7 @@
 [2021-04-07 18:15] youthz191073 : Who else here is tired of seeing players ask for more salary or play time
 [2021-04-07 18:48] poletz : Good luck!
 [2021-04-07 18:48] youthz191073 : Thanks <@!607683593686352012>
-[2021-04-07 19:25] danijangb8332 : Now you tell me after i took THE project at Leicester...........LOL
+[2021-04-07 19:25] Deleted User : Now you tell me after i took THE project at Leicester...........LOL
 [2021-04-07 19:42] saltylem0n_ : Sorry mate 😄
 [2021-04-07 19:43] saltylem0n_ : My offer still stands - if you want it - just message me 🙂
 [2021-04-07 19:51] youthz191073 : <@!684259923349209102>  I think I have found your team's strong point
@@ -18293,7 +18367,7 @@
 [2021-04-08 15:29] derbymanager : Yeah, it takes some time for finances to recover, clubs were in a bit of a deficit... Hopefully it will get better soon.
 [2021-04-08 17:30] youthz191073 : Yeah actually
 [2021-04-08 17:30] youthz191073 : You both played well
-[2021-04-08 18:32] danijangb8332 : I was thinking the market was moving very slowly
+[2021-04-08 18:32] Deleted User : I was thinking the market was moving very slowly
 [2021-04-09 03:09] philly4669 : ya
 [2021-04-09 15:38] youthz191073 : I am now 7th after losing to Kingston Upon Hull
 [2021-04-09 18:00] philly4669 : sad loss against london today we scored 2 and then they scored 2 and went to overtime where i lost
@@ -18434,9 +18508,9 @@
 [2021-04-13 18:08] poletz : I think he was used to easy competition in nl against almost all bots and now they are stronger then more difficult
 [2021-04-13 18:08] .burningrain : And not everyone likes starting from zero as much as I do or hiroshi does 🙂
 [2021-04-13 18:12] poletz : As i said in these days also a team like novara suffered an heavy recession in the last months. Imagine other teams. I should try to restart from 0 now to test if it s still possible to grow
-[2021-04-13 18:40] danijangb8332 : Yes i have to agree, its a balance, an art if you like and difficult to stay top forever in any real league around the world
-[2021-04-13 18:43] danijangb8332 : BOT is on a mission in the French league, unbeaten all season at the top of A1
-[2021-04-13 18:43] danijangb8332 : Then you look at the team and wonder how?????
+[2021-04-13 18:40] Deleted User : Yes i have to agree, its a balance, an art if you like and difficult to stay top forever in any real league around the world
+[2021-04-13 18:43] Deleted User : BOT is on a mission in the French league, unbeaten all season at the top of A1
+[2021-04-13 18:43] Deleted User : Then you look at the team and wonder how?????
 [2021-04-13 18:56] vrijstijler : The current financial situation of my team seems unfixable. This situation started two season ago and it is getting worse.   I had a situation where my team.got stronger step by step. From the moment I started there was progress. Of course als with setbacks but overall there was growth and improvement. I don't think this also had to do with the fact that there was hardly any competition.  Then in season 25 I had to sell players who where getting older (30+) but still requested higher salaries. Which in my opinion is weird. They are getting worse (there abilities decrease) but to keep them.I have to offer more money.   The effect was that I had to use younger players.. Therefore I tried to invest in players which where young but might have potential to grow.  Then there was another change which decreased the performance of younger players and increased the chances of bots to win.  And the younger players keep demanding higher salaries without any reason (it not that their improvements are spectacular)  This whole season my players and my team as a whole is unreliable and unpredictable. I do not understand why I loose matches which I should not have lost (based in comparison of team- and player values). Of course this can happen once but it is getting more frequent.  My financial situation is getting worse. So is TS. And MS (Manager Spirit).
 [2021-04-13 18:56] vrijstijler : And I am not willing to spend daily time in reading and analysing all posts on Discord of maintaining Excelsheet. I was promised a coffee moment game. :)  I am also not complaining. Just feeling said that I seem to be losing interest in DM.  I also feel attached to my team and my players. We have come a long way. So I do not want to detach myself.  Its justst that have no potential staff members. I will have to sell yet another first team (respected or maybe even a leader) player to renew some contracts of talented players and therefore decreasing my TS and teamvalue yet again. Then losing more money.... I just don't see a way to stop my team getting worse.....  Maybe the game was a coffee break game. And then was adjusted because some players had a lot a spare time and where dominating the game. As a result only those players can stay competitive and successful.   This response is to explain my previous message. I don't have answers. Just wanted to express my emotions. I miss the time where I was reasonable succesful without to much effort.  In the end I am just lazy I guess. :)
 [2021-04-13 19:06] poletz : I started with novara worth 50 and brought it to 500. Then it became impossible to go further . Stagnating and also decreasing in the last seasons. It s easier to go from 1 to 8 than from 8 to 10. I like this logic it avoid teams to became impossible to beat. There is a max level of power u can reach. And it s also harder to mantain it
@@ -18461,7 +18535,7 @@
 [2021-04-13 19:44] poletz : Or like when i was playing without mc and they became the most important players 😀
 [2021-04-13 19:45] poletz : I agree. Coffee break game definition is offensive for DM
 [2021-04-13 19:46] poletz : Derby adapted it to contain super users power and it made it too complex for casual users
-[2021-04-13 20:00] danijangb8332 : My feeling is lots of planning, looking at development phasing, watching finances, increasing TS, bringing on staff ,  balancing old and new players mixed with a little luck will still not give you everything as the random dice roll will always still bring a level of unpredictability. Thats the frustration and the beauty of the game.
+[2021-04-13 20:00] Deleted User : My feeling is lots of planning, looking at development phasing, watching finances, increasing TS, bringing on staff ,  balancing old and new players mixed with a little luck will still not give you everything as the random dice roll will always still bring a level of unpredictability. Thats the frustration and the beauty of the game.
 [2021-04-13 20:02] poletz : Hmm a bit of random dice roll is needed in a game , i think there is the right amount of it.
 [2021-04-13 20:03] poletz : I don t see too many strange matches but it s good that it can happen
 [2021-04-13 20:10] derbymanager : Thanks for the info Vrij and everyone else.  I can't do big changes quickly but I can do small ones and will go with what I mentioned earlier, a bit higher salary cap and lower demands from oldies.  One thing I did fix recently (I don't know which update exactly, I kind of lost track), is for bots to renew contracts of unhappy players. This made good bots actually competitive (without -30% penalty because 10 players were unhappy)... I will remove the fake boost they get, it's not necessary anymore. This reactiveness of bots is also one of the reasons server is falling apart and there were issues with finances...  There were some changes to player's power due to age and the sum of them all should be that oldies are not as useful as before (but are still useful), while youngsters are more unpredictable than before. This is what I've implemented in the last few updates. But you absolutely still need oldies and having too young squad was always punishing, this isn't due to recent changes. Your confidence might have kept them up in previous seasons while you were winning, but as soon as confidence dropped so did your team overall. Which, to be honest, I didn't plan for but it seems like a realistic situation...  To be fair, you had a really great run. Won the league 6 times out of 7 last seasons. I think you can easily turn things around for the next season by getting 2 older players...  I will also tweak some other things slightly in the match engine, things I usually don't even mention in updates... Maybe that helps. In the long run I, too, would like to make the game more accessible to coffee break people without losing too much strategy... My problem here is: to make good team feel good and win 80% of their matches - means making great teams win 100% of their matches. And it will seem really lame if top teams in the game win their leagues with 30 wins. If I make it so great teams win 80%, good ones win 60% and the results feel unpredictable...
@@ -18660,7 +18734,7 @@
 [2021-04-21 11:47] khraa_ : But at least I have the players now, just some problems with team spirit
 [2021-04-21 12:00] poletz : The first period is to fix the team. Don t care about results rn. invest the last days of the season to build a good team/ recover ts in order to do great in the next season 😉
 [2021-04-21 15:16] Deleted User : Problems with ts is often a big reason for getting alot of bad results ts is very important in this
-[2021-04-21 19:27] danijangb8332 : Yes, you can have some tough times where nothing seems to go your way and the pressure seems like it wont go away and then something clicks.
+[2021-04-21 19:27] Deleted User : Yes, you can have some tough times where nothing seems to go your way and the pressure seems like it wont go away and then something clicks.
 [2021-04-22 11:11] mvps02. : Good morning yall
 [2021-04-22 11:34] skuld6666 : Good morning. How is life in Gloucester?
 [2021-04-23 12:34] mateja2636 : Is there a guide somewhere
@@ -18689,16 +18763,16 @@
 [2021-04-25 13:44] philly4669 : <@!600386949152374824> Well done today, i find myself unlucky i conceded 2 pens
 [2021-04-25 13:44] philly4669 : but good game
 [2021-04-25 15:41] lanfy333 : Yes I was struggling today, no strikers and the penalties were God sends !! , TBF we did dominate you, but as you say good game m8 , I just hope I didn’t join a couple of matches to late like I did with Wakefield 3 seasons ago 🤦‍♂️👍⚽️
-[2021-04-25 17:00] danijangb8332 : <@!530694771900153871> i cannot believe that im going to say this but can you put me back in my previous teams please?
-[2021-04-25 17:01] danijangb8332 : <@!530694771900153871> i tried to pull off an audacious move to Manchester and retain my baby Le Mans
-[2021-04-25 17:02] danijangb8332 : Salim B went to Manchester but Elijah couldnt take Le Mans (Too successful i guess)
+[2021-04-25 17:00] Deleted User : <@!530694771900153871> i cannot believe that im going to say this but can you put me back in my previous teams please?
+[2021-04-25 17:01] Deleted User : <@!530694771900153871> i tried to pull off an audacious move to Manchester and retain my baby Le Mans
+[2021-04-25 17:02] Deleted User : Salim B went to Manchester but Elijah couldnt take Le Mans (Too successful i guess)
 [2021-04-25 17:07] Deleted User : Welcome to the club
-[2021-04-25 17:11] danijangb8332 : <@456226577798135808> what happened?
+[2021-04-25 17:11] Deleted User : <@456226577798135808> what happened?
 [2021-04-25 17:15] Deleted User : The wanting to Join old team club
 [2021-04-25 18:45] Deleted User : Having seen other posts I know why we are having the application error messages. Good luck fixing. I have taken two pills 💊💊 to give me more patience and understanding
 [2021-04-25 21:03] derbymanager : I'll see what I can do if I get some time tomorrow
-[2021-04-25 21:05] danijangb8332 : That would be great, sorry, its totally on me and the love that i have for Le Mans
-[2021-04-25 21:06] danijangb8332 : Man United is my team in real life but the project i have going at Le Mans is prime at the moment.
+[2021-04-25 21:05] Deleted User : That would be great, sorry, its totally on me and the love that i have for Le Mans
+[2021-04-25 21:06] Deleted User : Man United is my team in real life but the project i have going at Le Mans is prime at the moment.
 [2021-04-25 21:13] poletz : If i understand u wanted to switch from le mans to manchester and take le mans with your second account?
 [2021-04-25 21:14] poletz : This kind of changes should be forbidden
 [2021-04-25 21:14] poletz : Otherwise i can take a second team and then jump in novara when i ve to leave it with my first account
@@ -18734,16 +18808,16 @@
 [2021-04-27 08:26] Deleted User : It will be frustrating but realistic as well
 [2021-04-27 14:33] daveywaveygespinozaisland : Good call <@456226577798135808> , I put It to the board. Should I keep Alcobendas or Munster, or neither?
 [2021-04-27 16:06] slimjaxon : I agree with <@!508921631851282432> . Paisley has had some international success, but the league competition is so much stronger in England. We have recently lost some human managers to firings and Italy's recruiting machine so we need to rebuild our international reputation in England. Lichfield can certainly play a role in that with you leading them!
-[2021-04-27 19:00] danijangb8332 : Sorry i haven't had chance to respond to the 2 accounts debate.
-[2021-04-27 19:02] danijangb8332 : Lets start off by saying that i love playing the game, the strategy, the thinking behind everything and the luck of the dice when playing games (after so much thought)
-[2021-04-27 19:03] danijangb8332 : imo it would be a shame to only allow one account, for a few months now i have played with two accounts because lets face it, once you have a team in pretty good shape, beyond scouting for players and then setting your next formation its pretty limited what you can do in the game. So managing one team is a bit boring.
-[2021-04-27 19:04] danijangb8332 : I have always made sure they are competing in different leagues and kept everything above board.
+[2021-04-27 19:00] Deleted User : Sorry i haven't had chance to respond to the 2 accounts debate.
+[2021-04-27 19:02] Deleted User : Lets start off by saying that i love playing the game, the strategy, the thinking behind everything and the luck of the dice when playing games (after so much thought)
+[2021-04-27 19:03] Deleted User : imo it would be a shame to only allow one account, for a few months now i have played with two accounts because lets face it, once you have a team in pretty good shape, beyond scouting for players and then setting your next formation its pretty limited what you can do in the game. So managing one team is a bit boring.
+[2021-04-27 19:04] Deleted User : I have always made sure they are competing in different leagues and kept everything above board.
 [2021-04-27 19:04] Deleted User : I know the game is supposed to be a coffee break game but having more things to do would be very good
-[2021-04-27 19:09] danijangb8332 : I think if two teams are to be allowed then there has to be strict guidelines (with as you said before, zero tolerance, if things look dodgy and with the players that are in the league, i'm pretty sure someone would see fairly quickly if something looks dodgy!) Teams shouldn't be able to transfer players with each other or play each other, not be in the same league, nor allowed to change manager to an already/previously managed team i.e a swap) and as the previous rules players have to declare 2nd team. I seriously think its a little draconian to limit it to one team per person. Essentially the honest players are being punished for the cheats!
+[2021-04-27 19:09] Deleted User : I think if two teams are to be allowed then there has to be strict guidelines (with as you said before, zero tolerance, if things look dodgy and with the players that are in the league, i'm pretty sure someone would see fairly quickly if something looks dodgy!) Teams shouldn't be able to transfer players with each other or play each other, not be in the same league, nor allowed to change manager to an already/previously managed team i.e a swap) and as the previous rules players have to declare 2nd team. I seriously think its a little draconian to limit it to one team per person. Essentially the honest players are being punished for the cheats!
 [2021-04-27 19:11] dian.grancharov : Very difficult to control, though.
-[2021-04-27 19:13] danijangb8332 : Kind of, but lets face it once the team becomes pretty good (or not as the case maybe) a few minutes to look at transfers and which manager is assigned to which IP address should be fairly straightforward?
-[2021-04-27 19:14] danijangb8332 : Or if in doubt remove the manager until a conversation has been had to verify any concerns.
-[2021-04-27 19:14] danijangb8332 : You can tell i feel passionate to be allowed to play the game that i have been really enjoying! lol
+[2021-04-27 19:13] Deleted User : Kind of, but lets face it once the team becomes pretty good (or not as the case maybe) a few minutes to look at transfers and which manager is assigned to which IP address should be fairly straightforward?
+[2021-04-27 19:14] Deleted User : Or if in doubt remove the manager until a conversation has been had to verify any concerns.
+[2021-04-27 19:14] Deleted User : You can tell i feel passionate to be allowed to play the game that i have been really enjoying! lol
 [2021-04-27 19:18] philly4669 : <@!530694771900153871> u can delete my Clyde Beasley account, im focusing on Barnet
 [2021-04-28 06:38] derbymanager : You can just resign. But you can keep playing with 2 teams until a final decision is made about them.
 [2021-04-28 06:39] derbymanager : Man, I love Houthalen's away shirt <@538618377711910922> ;)
@@ -18765,7 +18839,7 @@
 [2021-05-01 06:34] Deleted User : Let me hug you
 [2021-05-01 06:57] philly4669 : gonna be the next Bruno Fernades and Kevin De Bruyne combined
 [2021-05-01 07:37] skuld6666 : That's insane improvement. Wow. He will make a great goalscoring AM in a couple of years. Are you playing him in some games already?
-[2021-05-01 09:17] danijangb8332 : Well done to <@!760539887375089686> what a season, finishing on the treble.
+[2021-05-01 09:17] Deleted User : Well done to <@456226577798135808> what a season, finishing on the treble.
 [2021-05-01 15:32] philly4669 : yes i played him in 7 games last season. Hope to get more in maybe get him to play 1/3 of the season, couldnt last season cause we were fighting relagation
 [2021-05-01 15:51] skuld6666 : That’s great going playing him 7 games. Keep is updated on his progress👍
 [2021-05-01 17:48] philly4669 : k
@@ -18784,7 +18858,7 @@
 [2021-05-03 10:31] khraa_ : my left and right MF out for 5 and 6 matches, without highest training
 [2021-05-03 11:34] .burningrain : Sometimes the game just decides to kick you in the nuts, and there's not much you can do about it...
 [2021-05-03 11:35] .burningrain : I think we need a channel #aaaargh for moments like this
-[2021-05-03 15:02] danijangb8332 : Yes managing injuries is always a big headache
+[2021-05-03 15:02] Deleted User : Yes managing injuries is always a big headache
 [2021-05-03 17:41] philly4669 : when are the games going to be played?
 [2021-05-03 17:44] skuld6666 : They seem to be delayed about an hour today.
 [2021-05-03 17:50] philly4669 : k
@@ -18794,7 +18868,7 @@
 [2021-05-05 16:57] the.painkiller : Seems more a central defender btw 😄
 [2021-05-05 16:58] the.painkiller : Unfortunately the Awful versatility makes it almost impossible to unlock 😄
 [2021-05-05 16:58] the.painkiller : So it's better to go for TAC and POS focus training, in my humble opinion
-[2021-05-05 18:11] danijangb8332 : Great looking player though, can play both sides and still very young.
+[2021-05-05 18:11] Deleted User : Great looking player though, can play both sides and still very young.
 [2021-05-05 18:16] philly4669 : i already have too many DC, and one never gets injured. SO..... did think about it though
 [2021-05-07 12:29] .burningrain : Just wanted to say that to me the game seems the most balanced/polished/stable it's ever been at the moment, the last updates seem to have worked well!
 [2021-05-07 14:08] the.painkiller : Yeah I totally agree 👏
@@ -18819,7 +18893,7 @@
 [2021-05-12 15:31] marto575 : imgine: playing fm 20
 [2021-05-12 15:33] marto575 : 2 mins to be uch league winers again yeeeeeeeeeeeees
 [2021-05-12 15:34] marto575 : https://tenor.com/view/sheesh-youngthug-gif-13409626
-[2021-05-12 18:20] danijangb8332 : <@!711246944072237097> The TS could be ok, 10 respected and 5 leaders, (28 players) but 4 newcomers which will bring it down, (its good to get the TS as high as possible) the team doesn't have any great superstars and you need to be careful how you play the youngsters as their experience is poor (which means more mistakes). then its just get a good cohesion and studying who you are playing for weakness to get the best strategy. Rotate  the team but not to much and then just a dash of luck.
+[2021-05-12 18:20] Deleted User : <@!711246944072237097> The TS could be ok, 10 respected and 5 leaders, (28 players) but 4 newcomers which will bring it down, (its good to get the TS as high as possible) the team doesn't have any great superstars and you need to be careful how you play the youngsters as their experience is poor (which means more mistakes). then its just get a good cohesion and studying who you are playing for weakness to get the best strategy. Rotate  the team but not to much and then just a dash of luck.
 [2021-05-13 17:31] philly4669 : why is there so many bots in the game, cant find a team that is not manged my a bot
 [2021-05-13 17:33] skuld6666 : All the teams are managed by bots that are not human managed (if that is what you mean) 🤨
 [2021-05-13 18:59] philly4669 : no like if u want to move to another club u cant becuase there is already managers there and they are the same mangers
@@ -18866,7 +18940,7 @@
 [2021-05-24 14:37] philly4669 : Is it my tatics or the game but i fucking go down 1 nil every game for the last 5 games. I tie it and they scored a 88 minute winner. Has happened to me at least 3 times in the span of 6 game days
 [2021-05-24 15:33] kubar99 : Yeah I also lost a lot of games 1-2 this season
 [2021-05-24 16:06] philly4669 : it pisses me off how predictable it is
-[2021-05-24 17:56] danijangb8332 : There is a lot more last minutes winners, frustrating when your watching the game
+[2021-05-24 17:56] Deleted User : There is a lot more last minutes winners, frustrating when your watching the game
 [2021-05-25 03:57] philly4669 : yea
 [2021-05-26 17:36] requiao_ : hi guys!
 [2021-05-26 17:36] requiao_ : I abandoned Porto. Things were not working out. I did a lot of hard work for several seasons and things started to go wrong. I started to lose points to teams that are much weaker than mine. So I got discouraged and decided to quit the game. I own a game similar to this one and I am focused on its development and one day I may return to playing Derby Manager with all the excitement and joy that I had. Thank you all.
@@ -18983,7 +19057,7 @@
 [2021-06-02 07:21] the.painkiller : Good luck everyone for a great S30 💪
 [2021-06-02 14:03] philly4669 : u too, great start in the Romian league with a 4 - 1 lead, while playin a quarter of my youngsters. Got a feeling its gonna be a good season
 [2021-06-02 19:59] alin35 : Good luck in your new quest, <@684259923349209102>... By the way the name of team is Ploiesti, I'm from Romania, excited to see managers depart there since I never tried it because there aren't enough active managers
-[2021-06-02 20:03] danijangb8332 : Yes i used this a few times and always worked pretty well
+[2021-06-02 20:03] Deleted User : Yes i used this a few times and always worked pretty well
 [2021-06-03 00:25] the_slojoe : can you manage in san marino
 [2021-06-03 00:25] the_slojoe : kinda grown extremely fond for the football there from my football manager save
 [2021-06-03 04:25] philly4669 : wanted a place to up my score and will return to England A1 in a couple of seasons
@@ -19108,7 +19182,7 @@
 [2021-06-07 11:21] dian.grancharov : All them bots with 5 leaders and 10 respected players..
 [2021-06-07 12:42] skuld6666 : It CAN happen at 26 if they are a top player in your team... although... look at what my leaders bring to the table 🤌
 [2021-06-07 12:43] Deleted User : Im stuck with 2 key goalies 👍
-[2021-06-08 19:13] danijangb8332 : My GK Vasas for Le Mans became a leader at 26, so it is possible, he has been with the team for a long time though!
+[2021-06-08 19:13] Deleted User : My GK Vasas for Le Mans became a leader at 26, so it is possible, he has been with the team for a long time though!
 [2021-06-08 19:34] poletz : That s why:
 [2021-06-08 19:34] poletz : Not the time with the team 🙂
 [2021-06-10 14:37] the.painkiller : **Quick Reference Sheet** updated to the latest version of the game, as usual it's in A4 format bla bla you know the rest 😁
@@ -19219,7 +19293,7 @@
 [2021-06-22 14:15] skuld6666 : Glasses wore him if I recall correctly 😆
 [2021-06-22 14:32] pingu03803 : Me too! Hopefully there's no limit to how many franchises I can run to ruin
 [2021-06-22 14:32] pingu03803 : https://c.tenor.com/gaEpIfzxzPEAAAAM/pedro-monkey-puppet.gif
-[2021-06-22 21:07] danijangb8332 : Welcome to all the new players!!
+[2021-06-22 21:07] Deleted User : Welcome to all the new players!!
 [2021-06-23 08:31] skuld6666 : 'Franchises' - wash your mouth out! These are 'clubs' 👍   But seriously I believe Franchises were created in US (North American?) sport to ensure no local rivals in a geographic area for commercial purposes.  This is the polar opposite of most football leagues around the world as there can be dozens of teams in a local area.  London is a big city but it has more than 14 'big' football stadiums for example of different rival teams. (In total there are more than 40 including the smaller teams). Imagine say New York having 14 NFL teams that could all potentially play at elite level 👀
 [2021-06-23 08:32] skuld6666 : 'Derby' is a match between local rivals so we wouldn't have a game either without those historic rivalries 😆
 [2021-06-23 09:07] pingu03803 : Oh wow thanks for the education! I was always wondering what in the world a Derby was
@@ -19235,25 +19309,25 @@
 [2021-06-25 08:26] Deleted User : one of the players who wanted to leave the club now don't want to leave it after i won and my popularity dropped lol
 [2021-06-25 08:26] Deleted User : unfortunately i dont have the money for a lockup contract
 [2021-06-26 11:24] nas5684 : What a debut! Playing with the worst team in Spain and won my first game!
-[2021-06-26 18:49] danijangb8332 : So my season at Le Mans comes down to a title decider tomorrow, if i win then its mine and hopefully a season without losing a game!!!
-[2021-06-26 18:50] danijangb8332 : Probably jinxed it now and did just lose the cup final.........what a horrible final, they scored in the last minute of extra time and then i lost on penalties!!
+[2021-06-26 18:49] Deleted User : So my season at Le Mans comes down to a title decider tomorrow, if i win then its mine and hopefully a season without losing a game!!!
+[2021-06-26 18:50] Deleted User : Probably jinxed it now and did just lose the cup final.........what a horrible final, they scored in the last minute of extra time and then i lost on penalties!!
 [2021-06-27 11:50] nas5684 : 😥
 [2021-06-27 16:02] skuld6666 : Goalkeeper shouldn't let it in from that angle 👀
 [2021-06-27 16:28] philly4669 : yea, people score crazy goals vs me
 [2021-06-27 16:28] philly4669 : like from the conrer
 [2021-06-27 16:29] skuld6666 : I was really just joking mostly. It's just a rough graphical representation of what is supposed to be happening I think 🙂
 [2021-06-27 16:46] philly4669 : oka
-[2021-06-28 17:47] danijangb8332 : Absolutely fuming, really pissed off
-[2021-06-28 17:47] danijangb8332 : Final game against the bottom team, playing a full strength team, unbeaten all season!
-[2021-06-28 17:47] danijangb8332 : And they win which means i lose the title...............WTF!
+[2021-06-28 17:47] Deleted User : Absolutely fuming, really pissed off
+[2021-06-28 17:47] Deleted User : Final game against the bottom team, playing a full strength team, unbeaten all season!
+[2021-06-28 17:47] Deleted User : And they win which means i lose the title...............WTF!
 [2021-06-28 17:48] the.painkiller : WTF 🤣
-[2021-06-28 17:48] danijangb8332 : How is that even possible, probably the worst game of the season, some how...........
+[2021-06-28 17:48] Deleted User : How is that even possible, probably the worst game of the season, some how...........
 [2021-06-28 17:49] the.painkiller : I can't believe it...
-[2021-06-28 17:52] danijangb8332 : On another note, Toulon must have the best BOT record in the whole competition as well
-[2021-06-28 17:53] danijangb8332 : W23, Draw 3, Lost 4 points 72 points
-[2021-06-28 17:53] danijangb8332 : seriously what a run!!
-[2021-06-28 17:58] danijangb8332 : Dusseldorf in Germany W20, Draw 5 and lost 5 points 65!
-[2021-06-28 18:00] danijangb8332 : Pamplona in Spain W15, Draw 9, Lost 6 points 54!
+[2021-06-28 17:52] Deleted User : On another note, Toulon must have the best BOT record in the whole competition as well
+[2021-06-28 17:53] Deleted User : W23, Draw 3, Lost 4 points 72 points
+[2021-06-28 17:53] Deleted User : seriously what a run!!
+[2021-06-28 17:58] Deleted User : Dusseldorf in Germany W20, Draw 5 and lost 5 points 65!
+[2021-06-28 18:00] Deleted User : Pamplona in Spain W15, Draw 9, Lost 6 points 54!
 [2021-06-29 09:17] skuld6666 : Hahah <@!474120449781923850>  I'm at work sorry. And I've never seen this screen sharing before. It scared and confused me 🤣
 [2021-06-29 09:17] tamnasqnka : why :DDD
 [2021-06-29 09:18] skuld6666 : Because I'm 40+ in age probably. I had no idea you could screen share via Discord 😀
@@ -19276,11 +19350,11 @@
 [2021-06-30 09:53] derbymanager : Maybe a quick one 😄
 [2021-06-30 12:19] tamnasqnka : Friendly match to watch
 [2021-06-30 12:19] tamnasqnka : if sb is free come and watch together
-[2021-06-30 20:20] danijangb8332 : <@!530694771900153871> my account for Le Mans has been banned, please can you look at this as Salim is me but i already left the Leicester side????
+[2021-06-30 20:20] Deleted User : <@!530694771900153871> my account for Le Mans has been banned, please can you look at this as Salim is me but i already left the Leicester side????
 [2021-06-30 20:21] derbymanager : Give me a sec
-[2021-06-30 20:21] danijangb8332 : Thanks
+[2021-06-30 20:21] Deleted User : Thanks
 [2021-06-30 20:22] derbymanager : Can you try now
-[2021-06-30 20:24] danijangb8332 : Ok, back in, thanks
+[2021-06-30 20:24] Deleted User : Ok, back in, thanks
 [2021-07-01 02:17] ibra878 : My Bristol account was also banned for "possible cheating"  Edit - Just read the updates. I deleted Discord because it became a shitshow.  Deleting again.
 [2021-07-01 05:56] derbymanager : <@667031779231662090> i did post on the forum about this... Basically you got banned because you manage bristol and lecce. I unbanned bristol.
 [2021-07-01 06:24] dian.grancharov : 35 stats is the most I have seen for such a short period
@@ -19364,15 +19438,15 @@
 [2021-07-10 17:46] kuddl3 : if there isnt, im taking it with 6 😅
 [2021-07-11 04:11] Deleted User : Got you 👍
 [2021-07-11 17:32] Deleted User : Whoever wants to participate in a project of creating a virtual/fictional sports universe (starting off with football) you can DM me to discuss ideas (team names, leagues, formats, associations and etc)
-[2021-07-12 21:00] danijangb8332 : Wow........lol
+[2021-07-12 21:00] Deleted User : Wow........lol
 [2021-07-13 07:20] kuddl3 : Even weirder when I had 83% posession
-[2021-07-13 19:27] danijangb8332 : That's how you kept possession......LOL
+[2021-07-13 19:27] Deleted User : That's how you kept possession......LOL
 [2021-07-13 21:00] kubar99 : When someone got ball you were just doing Giorgio's slam 😂
 [2021-07-14 10:32] kuddl3 : ye, disgustingly smart of him to do that 😅
 [2021-07-14 21:45] skuld6666 : Just something I've noticed - maybe nothing.  Quite a lot of decent level bot teams only using like 65% of their wage budget. Do they not renew contracts or something?
 [2021-07-14 22:11] hypnoseal : I've noticed that bots don't have a B team, most of them have 3 or 4 players in their B team, at least in IT D
 [2021-07-14 22:13] Deleted User : Looks like my wage cap 😂😂
-[2021-07-15 19:38] danijangb8332 : I really try and control the wages, just because its there doesn't mean you should use it!!
+[2021-07-15 19:38] Deleted User : I really try and control the wages, just because its there doesn't mean you should use it!!
 [2021-07-16 03:51] justin_dixon : ya if a team is maxxing out the wage cap then they are in some sense gambling towards growth, and if things go poorly they will somersault into a postion of unhappy fans, players, and board. to coast at your clubs current level is to be frugal
 [2021-07-16 10:09] jackryder2 : 1 more hour for the first match of the day. The battle against sleep is at a crucial stage though just the final defence are left.
 [2021-07-16 11:19] skuld6666 : Is there a league with earlier/later matches that might be better for you? Just a thought 👍
@@ -19382,9 +19456,9 @@
 [2021-07-17 05:10] jackryder2 : Tbh at the moment I want to leave Poitiers when they kick me out.
 [2021-07-17 12:43] juema : What happened to matches in Germany? My team was supposed to play a league match more than two hours ago...
 [2021-07-17 12:49] the.painkiller : There's a problem in the server <@!847036756741455892>, Derby will fix it as soon as he gets on his laptop
-[2021-07-17 15:17] danijangb8332 : Im getting nervous now as the CC is less than 45mins away
-[2021-07-17 15:17] danijangb8332 : will the games be pushed back?
-[2021-07-17 15:22] danijangb8332 : Does anyone have any update?
+[2021-07-17 15:17] Deleted User : Im getting nervous now as the CC is less than 45mins away
+[2021-07-17 15:17] Deleted User : will the games be pushed back?
+[2021-07-17 15:22] Deleted User : Does anyone have any update?
 [2021-07-17 15:25] skuld6666 : I imagine the games will be a bit late for international cups. Usually everthing is a backlogged until Derby gives it a kick.
 [2021-07-17 15:25] skuld6666 : Very bad for the nerves though!
 [2021-07-17 15:27] slimjaxon : This is like our mini covid crisis. The games keep getting pushed back until this season gets cut short and whoever is in the lead now has won. The cups will be completed early next month, lol.
@@ -19479,7 +19553,7 @@
 [2021-08-02 20:56] i.am.potato. : Playing for Manchester, but question who has the most expensive current player?
 [2021-08-02 20:58] i.am.potato. : Don't really get why the team value in the league is way lower than when you go to the team and look at the squad total price?
 [2021-08-03 03:41] kuddl3 : Maybe cause it doesn't count the b team? I think?
-[2021-08-03 19:22] danijangb8332 : Ah ok, Good call
+[2021-08-03 19:22] Deleted User : Ah ok, Good call
 [2021-08-05 19:24] the.painkiller : This season Ravenna enlist players from 15 countries: 🇮🇹 (6), 🇺🇸 (3), 🇵🇹 (2), 🇪🇸 (2), 🇳🇱 (2), 🇯🇵 (2), 🇦🇺 (2), 🇨🇳 (2), 🇩🇪 (1), 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (1), 🇵🇱 (1), 🇭🇷 (1), 🇬🇷 (1), 🇧🇬 (1), 🇭🇺 (1)
 [2021-08-05 19:24] the.painkiller : Missing a french one...
 [2021-08-05 19:27] the.painkiller : How's going with Parent? <@!670514263307190274> Contract expiring is near 👀
@@ -19538,7 +19612,7 @@
 [2021-08-11 09:40] _kettler_ : At least in Russia. I haven't checked the rest of the leagues
 [2021-08-11 09:41] poletz : same in italy
 [2021-08-11 09:41] poletz : nice catch
-[2021-08-11 20:00] danijangb8332 : wow that's interesting.........
+[2021-08-11 20:00] Deleted User : wow that's interesting.........
 [2021-08-11 20:08] poletz : It s to avoid people to buy shit oldies just to convert them into staff after some months 👍
 [2021-08-13 10:17] brunoccf : Hi guys, today in an internet search I found this game, I haven't tried it yet but I found it useful to share. It is a game similar to DM but with some interesting features. It has a different interaction in discord with bots updating transfer results... Besides the structure of the presentation of the site is interesting. When you have time take a look, I think some can be removed from here to improve the DM.
 [2021-08-13 10:18] brunoccf : https://www.theopenleague.com/
@@ -20101,12 +20175,12 @@
 [2021-10-01 06:51] skuld6666 : The only constant is change as they say. It's good training for life 🤌
 [2021-10-01 07:01] derbymanager : I definitely plan to stop working on DM one day. As soon as everyone stops complaining :)
 [2021-10-01 07:57] i.am.potato. : Not sure it's everyone, more like a select few and I guess they would say suggesting improvements not complaining! Lol
-[2021-10-01 08:44] brentpowell4174 : With some regret I am leaving the game.  I've enjoyed my time here but the constant changes have worn me down.  It doesn't feel like the game rewards careful planning (an objective, if I recall).
-[2021-10-01 08:45] brentpowell4174 : More that it rewards the ability to adapt to sudden changes.  It's Beta, I know, but I guess Beta doesn't suit me.  Have fun, all.....
+[2021-10-01 08:44] Deleted User : With some regret I am leaving the game.  I've enjoyed my time here but the constant changes have worn me down.  It doesn't feel like the game rewards careful planning (an objective, if I recall).
+[2021-10-01 08:45] Deleted User : More that it rewards the ability to adapt to sudden changes.  It's Beta, I know, but I guess Beta doesn't suit me.  Have fun, all.....
 [2021-10-01 08:48] noragarden : Is it related to last update in particular , to keep your planned squad for example , or more a general feeling ?
-[2021-10-01 08:54] brentpowell4174 : A general feeling but the last update decided things
+[2021-10-01 08:54] Deleted User : A general feeling but the last update decided things
 [2021-10-01 08:56] skuld6666 : You were doing great thinks with Plymouth. It's a shame. So I guess your TS really got hit?  Anyway you had been one of the best managers. Respect 👏
-[2021-10-01 09:10] i.am.potato. : <@760539887375089686> what a shame!
+[2021-10-01 09:10] i.am.potato. : <@456226577798135808> what a shame!
 [2021-10-01 09:14] skuld6666 : To be positive Brent has has something like one and a half years of fun with DM in real life every day more or less not many games that is true of (for free) even though I think he would have adapted great eventually and I'm sad to see him leave. Sometimes it's just time for a rest or something new 🤷‍♂️
 [2021-10-01 09:27] poletz : i m sad. great manager. adaptability is very important skills also for managers in dm.
 [2021-10-01 09:28] poletz : i understand when u see your great planning vanished by one update, is upsetting
@@ -20131,7 +20205,7 @@
 [2021-10-01 09:52] poletz : u can check your players the min total offer they would accept and compare it to the value on the brackets after their wage
 [2021-10-01 09:52] poletz : i won the league so it did 🙂
 [2021-10-01 09:53] i.am.potato. : He must be some player! Lol
-[2021-10-01 09:59] the.painkiller : <@!760539887375089686> it's been a honour to had you here, I still remember when you kicked my 🍑 in the CC final some seasons ago 😄 Really sure to not giving DM another try?
+[2021-10-01 09:59] the.painkiller : <@456226577798135808> it's been a honour to had you here, I still remember when you kicked my 🍑 in the CC final some seasons ago 😄 Really sure to not giving DM another try?
 [2021-10-01 10:08] skuld6666 : We have to accept that we don't automatically renew now. Probably we have to accept a certain number of unhappy players until near end of their contact. Then really, really, really think about who deserves a renewal. Or if TS is suffering too badly.  I think a lot of teams got a bit spoilt with easy renewals before.
 [2021-10-01 11:51] randykeys : Well, I've peaked. There's no way I can ever top this 😂 thanks for making my day <@530694771900153871>
 [2021-10-01 11:53] derbymanager : Congrats, you deserved it 😉
@@ -20374,7 +20448,7 @@
 [2021-10-19 14:47] Deleted User : We have meatballs
 [2021-10-19 14:48] Deleted User : And ikea
 [2021-10-19 14:48] the.painkiller : I wasn't saying this... Probably I need to write a complete post instead of multiple lines
-[2021-10-19 14:49] the.painkiller : Anyway, first thing <@!775751454672814121> (Dusseldorf) did in Manchester was to extend Perrigo's contract So in the end it wasn't a real and total dead-end situation He just preferred Perrigo to leave So we're again at facilitating a player transfer
+[2021-10-19 14:49] the.painkiller : Anyway, first thing <@456226577798135808> (Dusseldorf) did in Manchester was to extend Perrigo's contract So in the end it wasn't a real and total dead-end situation He just preferred Perrigo to leave So we're again at facilitating a player transfer
 [2021-10-19 14:49] noragarden : mechanically speaking , yes  realistically speaking , it is a dead end , since he left club instead
 [2021-10-19 14:51] the.painkiller : To be honest, he wrote this too: *By the way, I didn't leave Manchester specifically because of this issue, but I still found it very annoying.*
 [2021-10-19 14:51] noragarden : fair enough , still he was blocked on this situation for a long time now
@@ -22511,7 +22585,7 @@
 [2022-01-18 21:11] skuld6666 : Actually is that the dad from Topsy and Tim the CBBC kid's show? 🤣
 [2022-01-18 21:28] twotonekarma : I just found some screenshots of my old FML players from way back in the day lol
 [2022-01-19 10:47] fido4798 : what world were you all in? I was in Belanov and Whiteside
-[2022-01-19 11:28] skuld6666 : I was in Papin/Sanchez nearly the whole time with <@!208226256980934657> and a nice bunch of people. Had a second team in one of the new worlds they started towards the end for a bit - the one with no famous players. Can’t recall name of it.
+[2022-01-19 11:28] skuld6666 : I was in Papin/Sanchez nearly the whole time with <@456226577798135808> and a nice bunch of people. Had a second team in one of the new worlds they started towards the end for a bit - the one with no famous players. Can’t recall name of it.
 [2022-01-19 13:05] fido4798 : Think that was a regen world?
 [2022-01-19 13:05] fido4798 : man, there was such a void after FML finished...
 [2022-01-19 19:19] nicmo7829 : i have a prospect that wants a salary of 80k lol
@@ -23795,95 +23869,3 @@
 [2022-05-08 15:11] poletz : That s true. What i don t like is he is considering his way to play the best and despite this he is struggling. Cause, it s easy to check other teams and notice that not everyone is struggling against bots. So maybe the problem is not the game itself but you. But it s hard to admit. Definitely easier to blame the game
 [2022-05-08 15:12] poletz : Btw yeah the importance of experience and confidence is not enough clear /underlined to make casual understand that players price is not everything.
 [2022-05-08 17:05] derbymanager : I feel that formation is more "find what works for your players and stick with it" instead of "try to adapt to your opponent to win". If you don't invest time to analyse what's going on it's hard to make a smart move... Which defeats the purpose of coffee break kind of game.
-[2022-05-08 17:07] derbymanager : The main reason, I believe, is that you can cover all areas with your 10 players. Actually, you can do it with 8 or 9 if you have great players. Which made me add momentum, confidence and other things to introduce additional risk that you can't cover. But it's artificial and unintuitive... Simply put, the engine needed to be re-done but I never had the willpower to do it as it affects almost everything else in the game so I hacked at it...
-[2022-05-08 17:08] derbymanager : Easier to just create a new game from scratch 😅
-[2022-05-08 17:11] poletz : The ME is really good rn , it will be hard to reach this level restarting from scratch
-[2022-05-08 17:11] poletz : But i hope you prove me wrong 🙂
-[2022-05-08 17:45] questionmark4 : maybe could have something like FM have with tactical familiriaty?
-[2022-05-08 17:46] derbymanager : I'm not really happy with it. I feel it was better a year ago without momentum, confidence, and what not.
-[2022-05-08 17:47] derbymanager : It does give semi-realistic results, but gameplay-wise it's not good
-[2022-05-08 17:47] derbymanager : That would only enforce "find what works for your players and stick with it" approach
-[2022-05-08 17:48] questionmark4 : but isnt this pretty much what pep, klopp and etc do?
-[2022-05-08 17:49] derbymanager : Yeah, you have a couple of top teams that can force their playstyle on majority of teams, but look at some mid-table teams, like Manchester United, and you will see they change a lot depending on the opponent.
-[2022-05-08 17:49] derbymanager : And even pep and klopp change a lot when they play each other or Real...
-[2022-05-08 17:50] questionmark4 : yeah but there is a difference of changing a bit and changing everything
-[2022-05-08 17:51] derbymanager : Who said anything about changing everything?
-[2022-05-08 17:51] questionmark4 : no thats the point
-[2022-05-08 17:51] questionmark4 : if you change everything your screwed more then changing less
-[2022-05-08 17:52] poletz : I like the realistics results and the fact that the best teams ve more chances to lose points, expecially if they don t do their best
-[2022-05-08 17:52] derbymanager : Well, no. Real might play completely offensive tactic against Osasuna and completely defensive one against City
-[2022-05-08 17:53] derbymanager : That was a reply to this
-[2022-05-08 17:53] derbymanager : But in the end, it's more fun to play magic the gathering than to prepare cards and then auto-play it 🙂
-[2022-05-08 17:53] questionmark4 : when i think about it your probably right
-[2022-05-08 17:53] questionmark4 : in FM i only run one tactic all the time 😅 😂
-[2022-05-08 17:54] poletz : The problem with gameplay is that there are not enought explainstions about momentum and confidence so as u said above the only way is to put a lot of effort on analyzing matches and testing
-[2022-05-08 17:55] derbymanager : That's the point. I don't want you to set your team and than watch as it crushes everyone while replacing injured players... In FM you play in different tempo, 10-20 games per sitting. In DM you have 24 hours of waiting. Might as well check your opponent, set some tactic... you know, play 🙂
-[2022-05-08 17:55] poletz : But did u see anyone quitting saying i don t like the transfer market or the financial issue? No always cause they don t win. So it would be the same when they will not win in dm2
-[2022-05-08 17:55] poletz : Whatever u will build it
-[2022-05-08 17:56] questionmark4 : the majority doesnt even say they will leave before leaving
-[2022-05-08 17:56] derbymanager : The problem is that I don't know how much all of that really matters... I kind of added more and more things until the results the ME gave back were ok-ish. But it's so complicated that it's hard to say...
-[2022-05-08 17:57] derbymanager : It's like AI, but it's not that the AI is smart, I'm just dumb 😂
-[2022-05-08 17:57] questionmark4 : there is probably people who joined didnt like some things they saw and left but since they didnt play for long they arent bothered to tell us why
-[2022-05-08 17:59] derbymanager : Anyway, the next ME will be more intuitive, I hope. What this engine lacked was player's position. A MC would contribute in both attack and defence, for example, and would do so all the time. So you have a player that is omnipresent on the field. If I changed that so he contributes only to BU - then we have strikers exclusively scoring. So I need overlap but I also don't want overlap 🙂
-[2022-05-08 18:01] derbymanager : The new engine will track players' rough position so you'll see that you had FBLR against 2 FC and it should make it clear that it was an easy chance...
-[2022-05-08 18:01] derbymanager : This is what momentum represented in the old engine but it was abstracted and artificial...
-[2022-05-08 18:04] derbymanager : But as I said, I'm not doing it to get the people onboard. I just like to create something and this is fun to build. If I manage to pull it off I might port it to desktop in the future so I can play single player 🙂
-[2022-05-08 18:05] derbymanager : We'll see what will happen
-[2022-05-08 18:07] derbymanager : On an unrelated note, I played the online league or whatsthename and it has potential but I quit when in 2 weeks I didn't manage to buy a single player. You also quit <@439665894021398539>?
-[2022-05-08 18:08] questionmark4 : no but im considering doing it having the same problem 😅
-[2022-05-08 18:08] derbymanager : I think I made an offer for one of your players, checked after 10 days and it was still pending... It's stupid that there is no deadline or something. That's exactly why everything happens automatically in DM.
-[2022-05-08 18:09] questionmark4 : yeah there transfer system is shit ngl
-[2022-05-08 18:09] questionmark4 : it requires a really active playerbase
-[2022-05-08 18:09] derbymanager : Yeah...
-[2022-05-08 18:09] derbymanager : Anyway, gotta go now
-[2022-05-08 18:09] derbymanager : Bye
-[2022-05-12 11:27] questionmark4 : so tomorow i am making a comeback to this game. hard to resist DM 😅
-[2022-05-12 11:39] poletz : 😂😂😂😂
-[2022-05-12 11:41] poletz : Very long break
-[2022-05-12 11:41] questionmark4 : only 10 days
-[2022-05-12 11:41] poletz : Coffee break 👌
-[2022-05-12 11:41] questionmark4 : it did feel like it was longer then it was tought
-[2022-05-12 11:42] poletz : Yes i was joking
-[2022-05-12 11:42] poletz : It s just that u get bored of the last team after 4 days instead of 14
-[2022-05-12 13:44] marius36 : Take Naples!!!!maybe u will stay much longer
-[2022-05-16 03:29] marius36 : The game works on you guys????
-[2022-05-16 04:29] marius36 : Already they shut down the game???🧐
-[2022-05-16 04:51] alin35 : It works perfectly fine here
-[2022-05-16 05:13] marius36 : Hmmmm....i can't enter...soo i dont know
-[2022-05-16 05:44] poletz : It doesn t work for me too
-[2022-05-16 05:44] poletz : So italy is the problem maybe 😅
-[2022-05-16 05:46] marius36 : Still can't enter in game....i even shut down my phone and retried....nothing!!!
-[2022-05-16 05:47] marius36 : Soo we are dismissed☹️
-[2022-05-16 05:47] poletz : I ll try with my labtop
-[2022-05-16 05:50] poletz : <@!687554939798552596> if you try to open it in another page it works again?
-[2022-05-16 05:52] alin35 : Yeah, it works nonetheless, dont know why it fails to work in Italy
-[2022-05-16 05:56] marius36 : Maybe because the end is close
-[2022-05-16 05:58] poletz : I hope it has nothing to do with your wife <@!874916864805974018> 😂
-[2022-05-16 05:59] poletz : In that case it wouldn t work for Alin too
-[2022-05-16 05:59] marius36 : No...i think its you....they want to slow down your team🤣
-[2022-05-16 06:01] poletz : Ahah don t worry my lineup is already setted 😆
-[2022-05-16 06:13] marius36 : Today we have 2 games🤣
-[2022-05-16 06:15] poletz : Ok i m going to book a flight for Romania then 🤣
-[2022-05-16 06:20] alin35 : Give me ur passwords so I can.... transfer some money to Venice...uhhhh..i mean set ur teams 🤣 🤣
-[2022-05-16 06:34] marius36 : <@530694771900153871>  are u slipping like the game????woke up ...u need u
-[2022-05-16 07:14] poletz : It works
-[2022-05-16 07:15] derbymanager : It works on my phone
-[2022-05-16 07:18] alin35 : The sabotage attempts at Genoa title bid has failed, nothing seem to work against them, on and off the field lol 😂
-[2022-05-16 07:25] poletz : With safari on mobile it says can t find the server
-[2022-05-16 07:39] questionmark4 : Works with safari for me 😅
-[2022-05-16 07:50] derbymanager : Try clearing history or something
-[2022-05-16 07:56] poletz : Now it works
-[2022-05-16 07:59] marius36 : Works for me also
-[2022-05-16 08:00] marius36 : Soo when <@530694771900153871>  woke up also the game woke up!!!how this is works???😋
-[2022-05-23 07:56] questionmark4 : Barcelona DM edition
-[2022-05-24 12:18] juema : I may be promoting for the first time just before the game ends 🥲
-[2022-05-24 12:21] .burningrain : You'll be the only person wanting DM2 to be postponed 😄
-[2022-05-25 09:40] alin35 : Not the only one 😉
-[2022-05-26 21:49] juema : Okay, actually I just won the first title for Salford (D1 League Cup). Just in time 😂
-[2022-06-03 10:13] Deleted User : I've been absent here for a while, but I do like all I'm reading about DM2! Very exciting! Where do I apply? Will there be an in game forum post in DM1?
-[2022-06-03 10:46] questionmark4 : 🤔
-[2022-06-03 11:02] poletz : Hi Piet! Yes when it will start dm1 will be shut down so there will be some comunication in the game forum
-[2022-06-03 11:03] poletz : But here in discord u can be more updated for sure.. we are all waiting for derby to post some screenshots of the new game or some info about it 🤤
-[2022-06-03 12:43] derbymanager : Here you go, a screenshot 😄 But it's far from being playable, and even further from going live...
-[2022-06-03 12:53] questionmark4 : ROLES 🤩 😍
-[2022-06-03 12:53] questionmark4 : new font?

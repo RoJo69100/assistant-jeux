@@ -1,3 +1,430 @@
+[2024-11-04 08:30] poletz : But , also, now thar just 2/3 skills matter for each role.. how can values reflect skills. Look i ve a striker with 16 Fir and 17 fin. He is 5 mil.  What will make him a 70 mil striker?
+[2024-11-04 08:31] yasen_gg : https://www.derbymanager.com/players/2964
+[2024-11-04 08:31] yasen_gg : When you can check this FC/DR if you want 😄
+[2024-11-04 08:32] .burningrain : There's probably a big lag on value change. One of my players has gained 1.1M this season already without having any skill pops - and +2.1M since beginning of last season with +1/0 training total (his non-trainable skills did increase a lot last season, +12)
+[2024-11-04 08:32] yasen_gg : I think this is the closest exaple
+[2024-11-04 08:33] poletz : So between 1 mil and 5 mil there is a slightly difference
+[2024-11-04 08:33] poletz : Cause both can ve high value in the 2 main skills, just weak in the other less important areas
+[2024-11-04 08:34] yasen_gg : age plays a huge factor
+[2024-11-04 08:34] yasen_gg : then add potential to it - which we do not see
+[2024-11-04 08:34] yasen_gg : XP probably..
+[2024-11-04 08:34] .burningrain : Extra positions don't add value, right?
+[2024-11-04 08:34] yasen_gg : club fit too I guess
+[2024-11-04 08:34] poletz : Gio has just a couple of oldies
+[2024-11-04 08:34] yasen_gg : form ?
+[2024-11-04 08:34] .burningrain : Feels like it should
+[2024-11-04 08:35] yasen_gg : I don't think so
+[2024-11-04 08:35] yasen_gg : does FC/DR really sound more expensive to you ?
+[2024-11-04 08:35] poletz : My values delta is already + 6 mil this season, with very few pops
+[2024-11-04 08:36] .burningrain : D LCR should be more expensive than D C tho
+[2024-11-04 08:36] poletz : Values is calculated for the best pos he can play for
+[2024-11-04 08:36] yasen_gg : My biggest gainer is Poletz's GK - 3 skill increases and +2.2m
+[2024-11-04 08:37] yasen_gg : My biggest loser is Felici. -1.6m the moment he signed a new contract 😦
+[2024-11-04 08:37] yasen_gg : Went from 11 to 9.4m
+[2024-11-04 08:37] yasen_gg : And went from 5 stars wanting to move to a different club to 4 stars.
+[2024-11-04 08:38] .burningrain : +5.4M with +20/-10 training here
+[2024-11-04 08:40] yasen_gg : +6.9M with +18/-2
+[2024-11-04 10:04] derbymanager : PSA. A small mistake happened today and one of the tomorrow's games was run early. The manager doesn't mind so it'll stay.
+[2024-11-04 12:46] skuld6666 : <@874916864805974018>  left Latina did he? <@687554939798552596> ?
+[2024-11-04 14:58] poletz : Yeah it seems he did, but i don t ve any news about it
+[2024-11-04 15:16] skuld6666 : Yeah I guess no news if they rage quit? Just if fired? 😬  Team looks really good he built to be honest.
+[2024-11-04 15:17] alin35 : Don't know nothing, didn't talk about DM with him for a good while
+[2024-11-04 15:17] skuld6666 : Never talk about politics, religion or DM 👌
+[2024-11-04 15:28] yasen_gg : What is this - we have an HR department now ? 😄
+[2024-11-04 16:34] alin35 : Of course he doesn't mind, he's won the game. You should watch him go if he would've lost that game 😂
+[2024-11-04 16:34] alin35 : That would've been waay more entertaining lol 🤣
+[2024-11-04 17:07] poletz : He knows where Derby lives..
+[2024-11-04 18:25] alin35 : https://tenor.com/view/im-watching-you-supt-joe-donovan-hudson-and-rex-spying-on-you-eyeing-on-you-gif-24467211
+[2024-11-04 19:23] dian.grancharov : Did you consider that maybe Foggia are winning cause of a great manager?
+[2024-11-04 19:23] dian.grancharov : https://tenor.com/view/mourinho-jose-mourinho-yes-yes-yes-yes-oh-yes-gif-745895004274181051
+[2024-11-04 19:23] randykeys : https://tenor.com/view/pernalonga-meme-pernalonga-no-no-n%C3%A3o-nao-gif-27211143
+[2024-11-04 19:28] randykeys : i really wanna get an analysis as to how the fuck saltys lineups are working, i'm getting cancer of the eyes just looking at them 😂
+[2024-11-04 19:28] randykeys : playing with an entirely open right flank and barely conceding, is crowding the center of the pitch just that op right now?
+[2024-11-04 19:44] skuld6666 : It’s so hard to have depth that I think I may go wide player lite soon too.
+[2024-11-04 19:46] yasen_gg : Side players are very hard to rotate
+[2024-11-04 19:46] yasen_gg : I've been forcing all my players to train an extra side since the start of the game
+[2024-11-04 19:47] randykeys : how come?
+[2024-11-04 19:47] yasen_gg : Well I think having ML ML MR MR is a very expensive thing to do
+[2024-11-04 19:48] randykeys : ah you mean purely wing players?
+[2024-11-04 19:48] yasen_gg : Same for forwards even though I did have them like that 2 seasons ago as I played 3 every game
+[2024-11-04 19:48] yasen_gg : Yes
+[2024-11-04 19:48] yasen_gg : Same for defenders
+[2024-11-04 19:48] yasen_gg : You need bi-positional players to rotate effectively
+[2024-11-04 19:49] randykeys : yeah almost all my guys can play multiple positions, but i just feel like rotation isn't worth it anymore. the negatives are too much. rather just try and stick with one main eleven and rotate only when necessary. some will just have to rot.
+[2024-11-04 19:50] yasen_gg : I rotate to keep sharpness relatively in check
+[2024-11-04 19:50] randykeys : it's impossible to keep sharpness and training effort up on everyone
+[2024-11-04 19:51] yasen_gg : I swap 1-2 players usually and force GK rotation where possible
+[2024-11-04 19:51] yasen_gg : Because bad sharpness GK is very bad haha
+[2024-11-04 19:52] randykeys : i have 24 players, i feel like that's the low end, and i'll never have green face games with adequate rotation.
+[2024-11-04 19:52] randykeys : my gk has started to complain about too few games so that's killed any rotation lol
+[2024-11-04 19:53] randykeys : i'm at the point where i have to sacrifice development for my youngsters in order to somehow scrape together enough points to survive
+[2024-11-04 19:53] randykeys : cus blue face blue sharpness isn't enough for me rn.
+[2024-11-04 19:53] randykeys : also i feel like form is basically useless
+[2024-11-04 19:53] randykeys : a good player in bad form is still better than a bad player in good form
+[2024-11-04 19:54] randykeys : had a game with almost everyone in good sharpness, good form, played like shit. full rotation to bad sharpness, bad form, played better
+[2024-11-04 19:54] randykeys : i can't see the path to success rn
+[2024-11-04 19:54] randykeys : still trying to figure it out
+[2024-11-05 01:55] menhir9729 : I don't win wether I rotate or play the elders or the younglings... at least I like seeing Vicenza besides my name!😁
+[2024-11-05 11:06] poletz : 1 point with 0 xg. Well done vicenza 😀
+[2024-11-05 11:07] yasen_gg : https://tenor.com/view/hecarim-bus-joan-nunu-otob%C3%BCs-gif-19599899
+[2024-11-05 12:28] .burningrain : I kept Latina at 0 shots as well, but it feels hollow without Marius  🥲
+[2024-11-05 13:15] skuld6666 : Yes bring back <@874916864805974018> 👏  I was actually thinking of taking over Latina as it feels like I'm in a death spiral with RS Torino now.
+[2024-11-05 13:15] skuld6666 : Latina are atleast stable.  I guess I'll just relagate them as well though 🙈
+[2024-11-05 13:15] poletz : Better to promote from d4 than relegate from d3
+[2024-11-05 13:17] skuld6666 : Just hate all my players now. Zero personality or fight 😅
+[2024-11-05 13:17] poletz : If u don t get promoted i would be surprised. Only thing that would shock me more is novara missing promotion 😬
+[2024-11-05 13:19] skuld6666 : We are playing really bad still. Have been lucky according to the XG points too. +4 I think so far.
+[2024-11-05 13:20] poletz : It means u ve good strikers
+[2024-11-05 13:21] poletz : And gk
+[2024-11-05 13:22] poletz : Just be sure they have chances . Your 442 should be ok.. reminds me gio’s 442 😬
+[2024-11-05 13:26] skuld6666 : Seems fairly bad for me. I'll have to check out his tactics 🔥
+[2024-11-05 13:27] poletz : It s very close to how u played today 100% same settings and lineup. Just few different roles
+[2024-11-05 13:28] skuld6666 : Yeah my good GK has been out a few games so probably hasn't helped.
+[2024-11-05 13:28] poletz : I bet sharpness plays a big role? Cause he probable doesn t rotate a lot / at all?
+[2024-11-05 13:31] poletz : Sure! I m playing always my good gk cause i m so scared to field the weaker.. when he ll get injuried i ll lose for sure some game with the young one that would also be in bad sharpness  SUGGESTION: sharpness should not matter for gk ( indeeed irl they don t rotate just play when needed and are 100% ready)
+[2024-11-05 13:35] alin35 : Life in D2 is tough lol 😂
+[2024-11-05 13:36] yasen_gg : New meta - field 11 GKs
+[2024-11-05 13:37] alin35 : Last place and very deserving... I'm already getting used to the thought of D3 next season 😂
+[2024-11-05 13:37] poletz : I mean sharpess doesn t matter for who is playing as GK. 😄
+[2024-11-05 13:38] skuld6666 : Yes less important for GKs.  Considering wage budgets impossible to have two good GKs (one who won't be sharp anyway).
+[2024-11-05 13:38] yasen_gg : I rotate GKs so they are not completely out of sharpness, so all of you should do too 😛
+[2024-11-05 13:39] alin35 : Yeah, played my backup GK 1 match this season. Lost 5-0 😂
+[2024-11-05 13:39] poletz : My plan was to field a lot the weaker one in d3 as i was thinking to easily dominate 😅
+[2024-11-05 13:40] yasen_gg : And then Gio showed up <:PepeEvil:956091618874757160>
+[2024-11-05 13:41] poletz : The last time i ve been there it has been totally different. And i ve a better team now too
+[2024-11-05 13:43] poletz : If ur both gks got injuried, do u think it s fair to lose a game or more cause your third gk not only is bad but is also in terrible sharpness? Irl third gks are reliable almost like the first one
+[2024-11-05 13:43] alin35 : To be honest, seems impossible to promote in d1 right now. You'll need at least 10 seasons to do it or even more. Only 6 if ur name is Salty though
+[2024-11-05 13:43] poletz : Salty is close to achieve it
+[2024-11-05 13:43] poletz : After 4 seasons
+[2024-11-05 13:44] yasen_gg : I think it will become easier in 4 seasons
+[2024-11-05 13:44] yasen_gg : We just need the oldies to retire
+[2024-11-05 13:44] alin35 : I mean overall, i meant the whole journey
+[2024-11-05 13:44] yasen_gg : the big clubs are stacked with great players at the moment
+[2024-11-05 13:44] poletz : The first season in d2 is always very difficult
+[2024-11-05 13:45] poletz : But the relegation can be also worst if u don t manage it well
+[2024-11-05 13:46] poletz : Look at ravenna First team to get to d2 together with salty. Now it s struggling in d3. Risk demotion with their 23 mil in the bank.
+[2024-11-05 13:47] poletz : They can easily buy new oldies btw with the wages they can afford
+[2024-11-05 13:48] yasen_gg : Yes, but I feel it will be harder as the existing ones are soaking playtime everywhere
+[2024-11-05 13:48] yasen_gg : So those of us that played the long game and raised some talent should see some returns
+[2024-11-05 16:08] dian.grancharov : I wonder how I would do in D2
+[2024-11-05 16:09] dian.grancharov : If I promote
+[2024-11-05 16:11] .burningrain : Just noticed your Potter has 11 goals in 4 games 😅
+[2024-11-05 16:11] dian.grancharov : Yeah
+[2024-11-05 16:11] dian.grancharov : I rested him 2 games
+[2024-11-05 16:11] dian.grancharov : I think
+[2024-11-05 16:12] .burningrain : A shame you didn't rest him against me...
+[2024-11-05 16:12] dian.grancharov : Shame I rested him for Poletz and his keeper
+[2024-11-05 16:19] randykeys : Bout as well as the rest of us I imagine. 6 have made it so far, 3 relegated back down (one did it twice hehe), 2 are fighting for their life, and then there's salty. Granted he has been there the longest.
+[2024-11-05 16:20] poletz : Terrible
+[2024-11-05 16:23] faro1 : Salty has the right balance between those that overthink the game and those that don't read the manual
+[2024-11-05 16:35] poletz : Mmm.. u r definitely underrating his overthinking
+[2024-11-05 17:16] yasen_gg : Yes, if anything I think I am spending unhealthy amount of hours in/on the game haha
+[2024-11-05 17:16] randykeys : https://tenor.com/view/status-report-status-update-kowalski-status-report-kowalski-status-gif-23668188
+[2024-11-05 17:17] randykeys : Kosalty, what's your analysis?
+[2024-11-05 17:17] yasen_gg : Derby's fault - as always!
+[2024-11-05 21:06] dian.grancharov : I am on the other side of the spectrum.
+[2024-11-06 08:43] dian.grancharov : My reserves create xG but not G
+[2024-11-06 09:49] skuld6666 : Solid performance by us for once - although we tried out best to draw it 🙂
+[2024-11-06 10:07] poletz : Tactic is good btw 😬
+[2024-11-06 10:24] alin35 : First win in D2 with a goal in 90th min, that felt good
+[2024-11-06 11:52] dian.grancharov : I received a tactic compliment from Poletz
+[2024-11-06 11:52] dian.grancharov : https://tenor.com/view/durgesh-rai-shy-hyy-melting-melt-gif-8500373041066303513
+[2024-11-07 08:07] .burningrain : A hattrick for Castelnau as he starts chasing Potter in the cannonieri rankings 💪
+[2024-11-07 08:07] .burningrain : 6 of his 9 goals this season have been headers btw
+[2024-11-07 08:08] .burningrain : Also, my opponents had all 11 players with green face, the first time I've seen that
+[2024-11-07 08:12] poletz : So many players with more goals than games
+[2024-11-07 08:14] poletz : 442 👌
+[2024-11-07 08:17] poletz : It s an old team could be due to exp weight into the perf level
+[2024-11-07 08:21] randykeys : <@913528814414479391> I feel so fucking dirty rn
+[2024-11-07 08:22] yasen_gg : Just posted this
+[2024-11-07 08:23] yasen_gg : It turns out, the way to make the FL work is to strip him of options for passing
+[2024-11-07 08:23] yasen_gg : then he'll actually behave like an FL
+[2024-11-07 08:23] yasen_gg : I can't explain how you stopped my central buildup either
+[2024-11-07 08:25] alin35 : Still can't understand for the life of me why defenders dribble in their own half, thus leading to goals conceded
+[2024-11-07 08:26] poletz : Smart and brave 👏
+[2024-11-07 08:27] poletz : Marius ghost almost fucked me 🤪
+[2024-11-07 08:43] poletz : He has a central block of 6 players. 2 hm
+[2024-11-07 08:43] yasen_gg : Yes, perfect - and plays cautious + counters
+[2024-11-07 08:44] yasen_gg : But like getting better buildup with that is beyond me 🙂
+[2024-11-07 08:44] poletz : Careful just means he is focusig in preventing your bu
+[2024-11-07 08:44] yasen_gg : No, it shifts power from BU to PBU.
+[2024-11-07 08:45] poletz : So this makes your bu lower Counters when can t start became mixed.
+[2024-11-07 08:45] poletz : And this means what i said
+[2024-11-07 08:46] yasen_gg : What I'm saying is this is not reflected in the stats
+[2024-11-07 08:48] yasen_gg : Anyhow, <@135441758413651968> don't take this the wrong way
+[2024-11-07 08:48] yasen_gg : It was a great game
+[2024-11-07 08:48] yasen_gg : I'm pissed at my inability to read games
+[2024-11-07 08:50] poletz : so he made your bu lower,  at the same time made his own bu lower. the "weird" thing is on flannks, where probably u both ve such low preventing bu that the efficiency of bu has been high and he made more actions there with his settings than u here is the key
+[2024-11-07 08:50] poletz : counter switch to mixed if there are no counter chances so he didn t suffer it
+[2024-11-07 08:51] poletz : game was still close and could ve gone either way
+[2024-11-07 08:52] poletz : performace level seems matter very few 🙈
+[2024-11-07 08:53] poletz : did someone score on counters?
+[2024-11-07 08:53] yasen_gg : good one
+[2024-11-07 08:53] yasen_gg : Let me rewatch the game 3 more times and I'll tell you <a:kekw_gif:1108739032101429288>
+[2024-11-07 09:06] skuld6666 : Bit lucky. Sad to rob my dear Livorno like this:
+[2024-11-07 09:09] skuld6666 : I have no midfield for the next game though 😅
+[2024-11-07 09:10] yasen_gg : oofff
+[2024-11-07 09:11] poletz : 5-0-5 counters 🔥
+[2024-11-07 09:13] yasen_gg : https://tenor.com/view/forrest-gump-ping-pong-gif-27597407
+[2024-11-07 11:33] yasen_gg : To be fair, all the Livorno players performed mediocre based on the faces, while you did very well.
+[2024-11-07 11:36] skuld6666 : Wierd my TM tried so may dribbes (tried 8 and failed 7). Picked the role specifically as he's bad at dribbling and it doesn't dribble much. I guess it's because he plays up alone and not really anyone to pass to?
+[2024-11-07 11:40] yasen_gg : This is what I think affects dribbles the most.
+[2024-11-07 11:40] yasen_gg : Pass preference is much higher than the dribble one.
+[2024-11-07 11:41] yasen_gg : So if you want the players to move towards the opposition goal - you need to make sure they have no one to pass to
+[2024-11-07 11:42] yasen_gg : Just look at Randy today - IFs had trouble dribbling and shooting. He played just FL + FR and no one in the middle and all of a sudden they started dribbling and shooting on goal.
+[2024-11-07 11:43] poletz : 2x better players , 1 avg face level better. Livorno had the best chances. Values are very closed and tactics matters a lot at this stage it seems
+[2024-11-07 11:43] yasen_gg : So it sounds counter intuitive, but less forwards looks more effeicient.
+[2024-11-07 11:44] poletz : Not sure. Risk to dribble a lot (and fail) and shot from long distance. Worth just if u ve a top striker probably
+[2024-11-07 11:45] yasen_gg : Probably. But it was exactly what you were doing with Potekhin as well - isolate him, so he gets to shoot more.
+[2024-11-07 11:47] poletz : But defense was much weaker back then and players were just shooting not trying to dribble.
+[2024-11-07 12:21] randykeys : Yeah my entire game plan was to lock down the center of the pitch and prevent as many chances as possible, then hoof it long to the FL or FR and pray they do something lol. And if I do build up myself, the CM has already scored 3 long distance goals this season, so thought he might get lucky again haha. Definitely not sustainable long term, but I conceded like 12 goals in 3 games, I just wanted to not get thrashed again.
+[2024-11-07 12:22] yasen_gg : It's my fault as well - I set one of my MCs to HM instead of BTB to save some fitness becaues I have a cup game in a couple of hours.
+[2024-11-07 12:22] yasen_gg : Now I get to lose both lol
+[2024-11-07 12:23] yasen_gg : I gave away the midfield and did not play too offensively
+[2024-11-07 12:23] yasen_gg : But it's great - it makes the league very interesting
+[2024-11-07 12:23] yasen_gg : Definitely a testament on how close the margins are 💯
+[2024-11-07 12:27] randykeys : And honestly, this to me is also one of the most fun ways to play, coming up with a tactic and it paying off instead of just playing the same tactic and lineup for every game, set and forget style. That's management to me.
+[2024-11-07 12:36] poletz : I agree but it s hard to leave the 442 comfort zone 😀
+[2024-11-07 12:38] poletz : So the new meta is to play without central strikers? 😬
+[2024-11-07 12:39] derbymanager : I left 442 after getting 0 points in the first 6 games to 343 or 352 now and I got 7 points in 3 games so...
+[2024-11-07 12:41] poletz : Well done. I did the opposite. Nothing was working and i found relief on the good old 442. 4 wins in a row so far. But it depends a lot on opponents we faced. I had all good opponents at the beginning and then easier games so it s a mix of things as always.
+[2024-11-07 12:48] derbymanager : Yeah, ofc. I had two easier games and 4 tough ones, no points. And now 3 moderate ones I got points. But my switch was mainly because of the players I have and this lets me utilize more of the good ones at the same time...
+[2024-11-07 12:48] limabeans2244 : I need to play you 😄
+[2024-11-07 12:49] yasen_gg : I'd love to be able to play friendlies and test stuff
+[2024-11-07 12:50] limabeans2244 : I did suggest a special player-managed team tournament
+[2024-11-07 12:50] yasen_gg : But like really test stuff - as in - we agree what to do and what to test
+[2024-11-07 12:51] limabeans2244 : Right now the formation I used 433  is the only one that has worked for me
+[2024-11-07 12:51] limabeans2244 : and I've recently figured out the strateg yot go with it
+[2024-11-07 12:51] poletz : Like if we were Derby lol 😂
+[2024-11-07 12:52] yasen_gg : Unless you are in the same league with someone - these conclusions are very subjective.
+[2024-11-07 12:53] poletz : Winning against 16 mil bots not really an impossible mission
+[2024-11-07 12:54] yasen_gg : It's a nice achievement. But if you switch your club with Derby's for a day - you'd be like:
+[2024-11-07 12:54] yasen_gg : https://tenor.com/view/confused-parks-and-rec-what-just-happened-what-happened-wth-gif-15086498
+[2024-11-07 12:55] poletz : 😂
+[2024-11-07 12:55] yasen_gg : https://tenor.com/view/keanu-reeves-matrix-powers-gif-9315457
+[2024-11-07 12:56] poletz : I mean u won thanks to the gk here Not your masterful tactic
+[2024-11-07 12:57] poletz : Well at least i found there some familiar faces 😬
+[2024-11-07 13:14] limabeans2244 : uhh still score 4 goals and yeah other games too xD
+[2024-11-07 13:14] limabeans2244 : and not my fault I have the best player-owned GK 😛 He was a transfer xD
+[2024-11-07 13:16] poletz : Weak opponents
+[2024-11-07 13:17] limabeans2244 : they were top 😛
+[2024-11-07 13:18] limabeans2244 : they alos beat me in the cup, changed strat, complete U-Turn on results
+[2024-11-07 13:18] poletz : Well done
+[2024-11-07 13:19] poletz : Or lucky.
+[2024-11-07 13:20] poletz : Didn t played a great cup game and also deserved to win it more than the league game
+[2024-11-07 13:20] poletz : So don t run too fast to conclusions
+[2024-11-07 13:21] yasen_gg : Yes, you have to walk in circles about 2 hours prior to arriving to a conclusion
+[2024-11-07 13:21] yasen_gg : Which may or may not be luck
+[2024-11-07 13:21] yasen_gg : But most probably will be
+[2024-11-07 13:21] yasen_gg : <a:kekw_gif:1108739032101429288>
+[2024-11-07 13:22] yasen_gg : Anyhow - the game above is great
+[2024-11-07 13:22] yasen_gg : The screnshot with 31 shots saved is pure gold <:p_pepeOK:1034832922487820340>
+[2024-11-07 13:23] yasen_gg : Skuld should use it to promote the game on X haha
+[2024-11-07 13:23] poletz : 14/14 saved. 17 out of target
+[2024-11-07 13:24] yasen_gg : ok 31 shots not scored
+[2024-11-07 13:24] poletz : And 4/10 scored by the other side
+[2024-11-07 13:24] yasen_gg : https://tenor.com/view/jonas-brothers-chef-kiss-exquisite-perfect-100-gif-17343954624697132157
+[2024-11-07 13:25] yasen_gg : https://tenor.com/view/iairedher-gif-18739936
+[2024-11-07 13:25] yasen_gg : <@267750523648737283> watching the game
+[2024-11-07 13:26] poletz : Foster Lee vs Aimee Lee would be a good derby 🍿
+[2024-11-07 15:42] yasen_gg : https://tenor.com/view/jos%C3%A9mourinho-portuguais-coach-real-madrid-victoire-gif-12469557
+[2024-11-07 15:42] yasen_gg : The dream continues
+[2024-11-07 16:10] randykeys : messina better than napoli confirmed
+[2024-11-07 16:12] randykeys : also, seeing as i just now had the time to finally sit down and actually watch the game, you mentioned my FL being a lot more active than your FL. but also, you played without a DR. and my FL is my best player. he was able to do whatever he wanted, so, didn't surprise me that he played well. just an obeservation i had.
+[2024-11-07 16:15] randykeys : bruh i only just realised my CM got a 9.5 lmao. 12/12 dribbles. and he's from my academy. absolute beast. 6 games, 4 goals, 2 assists.
+[2024-11-07 16:16] yasen_gg : Which is weird because I had an HM next to him, but I guess it has to be right on top in order to work haha
+[2024-11-07 16:26] poletz : This is so bad 😬
+[2024-11-07 16:30] randykeys : i mean, the dlp on top of him still ended up with more tackles than the hm, but with orsini completing every single dribble just nullified it. also makes general sense doesn't it. your fc and fl vs my mc and mcr and my fl and mc vs your drc and mc. both matchups having the highest tackle rate alongside my fr vs your dl. yes players roam, but the main matchup is the mirror.
+[2024-11-07 16:31] randykeys : marquez was working overtime trying to keep pizarro in check lol
+[2024-11-07 16:40] yasen_gg : I do that on purpose 🙂
+[2024-11-07 16:41] yasen_gg : I put my best defender on the flank I do not protect to force counters.
+[2024-11-07 16:41] randykeys : but you play without counters?
+[2024-11-07 16:41] yasen_gg : Which as you saw - does not work all the time haha
+[2024-11-07 16:41] randykeys : yeah 😂
+[2024-11-07 16:42] yasen_gg : You can start counters even you do not play counters
+[2024-11-07 16:42] randykeys : obviously, but the chance is lower right?
+[2024-11-07 16:43] yasen_gg : I saw Gio's game against Poletz, he managed to get a decent number of counters even without using that setting
+[2024-11-07 16:43] yasen_gg : so I am trying to emulate that
+[2024-11-07 16:44] randykeys : i couldn't tell you if i got any counters in our match, idk what to look for lol. would be nice to have it reflected in the stats
+[2024-11-07 16:44] yasen_gg : <@530694771900153871> would love to read your comment and respond 😄
+[2024-11-07 16:45] randykeys : MORE STATS
+[2024-11-07 16:45] randykeys : i want passes detailed as well. long balls, crosses, through balls etc.
+[2024-11-07 16:45] yasen_gg : no no, it's because we had that same discussion recently and the only way to tell is if you watch the game
+[2024-11-07 16:46] randykeys : well boo
+[2024-11-07 16:48] faro1 : We need AI to watch the full game for us and return stats
+[2024-11-08 07:54] dian.grancharov : Why is everyone analyzing me all of a sudden
+[2024-11-08 07:54] dian.grancharov : Btw D3 top 6 is made of the three teams with biggest salary spend and the three teams with least salary spend
+[2024-11-08 07:55] dian.grancharov : To give you an idea - Poletz pays double for salaries compared to me
+[2024-11-08 07:55] dian.grancharov : He also has 11 mil in the bank from his rich saudi cousins
+[2024-11-08 08:08] alin35 : Not complaining since my opponent ruined a perfect chance but.... isn't that odd?
+[2024-11-08 08:09] alin35 : A breakaway chance just ended in.... nothing
+[2024-11-08 08:12] dian.grancharov : Why the hell Torinese have 15mil keeper and 8mil forward..
+[2024-11-08 08:19] yasen_gg : We talked about this the other day - the Engine looked at the situation and decided it's not worth a counter.
+[2024-11-08 08:19] poletz : I think it shouldn t be showed
+[2024-11-08 08:20] poletz : So weird to see
+[2024-11-08 08:20] yasen_gg : relegation troubles
+[2024-11-08 08:20] yasen_gg : I think the issue is we see the same defenders bug.
+[2024-11-08 08:20] dian.grancharov : 3 out of the 4 goals today. I so hate these.
+[2024-11-08 08:20] randykeys : I still have no idea what a counter looks like lol
+[2024-11-08 08:20] yasen_gg : I think the defenders are actually in front of the ball and not stuck in the center
+[2024-11-08 08:22] yasen_gg : It's when a ball is cleared - the game stops for 0.5 seconds - you see a flash from the animation stopping and a new one starting.  The key thing is the one starting is in the position the previous one ended.  That's a counter.
+[2024-11-08 08:23] .burningrain : I've seen a good amount of counters from opponents but never from my team
+[2024-11-08 08:23] .burningrain : But I do play short passing
+[2024-11-08 08:24] poletz : I ve been in d2 already twice .. going for the third lol
+[2024-11-08 08:24] .burningrain : Also, today in the first half extended highlights skipped 5 of my shots in a row (worth almost 1 xg)
+[2024-11-08 08:25] randykeys : So what you're saying is I play counters but have 0 counters 🙈
+[2024-11-08 08:25] dian.grancharov : You are dominating the game hehe
+[2024-11-08 08:26] poletz : <@913528814414479391> 3-0 against 1st 👀🔥 I m copying the wrong bro
+[2024-11-08 08:28] yasen_gg : Their best players were injured, so I took my chance 🙂
+[2024-11-08 08:29] yasen_gg : who is that ?
+[2024-11-08 08:29] poletz : Missed header 0.3 xg
+[2024-11-08 08:29] dian.grancharov : Found the issue.
+[2024-11-08 08:30] yasen_gg : <a:kekw_gif:1108739032101429288>
+[2024-11-08 08:31] .burningrain : Long shot from 11 metres 😅
+[2024-11-08 08:32] dian.grancharov : Aaah in the box is the small box
+[2024-11-08 08:32] alin35 : Yeah, think it would be better to not see those types of chances
+[2024-11-08 08:32] .burningrain : At least I'm first where it really matters (the xpoints table)
+[2024-11-08 08:53] skuld6666 : Brutal game for Menhir 🤌   Tempted to punch the GK in the face after this.
+[2024-11-08 08:57] poletz : More to his own strikers
+[2024-11-08 08:58] poletz : That are weak btw
+[2024-11-08 08:59] skuld6666 : I tried playing a second striker today to see if it changed how often my main TM dribbled and he tried more dribbles 🙂 Was 2 successful from 11 instead of 1 from 8 yesterday playing alone so the 'lone striker trying to dribble more' theory seems sketchy.  Although overall I really enjoyed how my tactics translated to the match engine. Was clear we were trying to play down the wings due to most MCs being injured etc and fun to watch (all our misses from crosses)
+[2024-11-08 08:59] poletz : His best players are Dl and dr 🤦‍♂️
+[2024-11-08 09:00] .burningrain : Maybe he should've played his better striker in the centre, seeing as the fc guy got all the shots
+[2024-11-08 09:14] derbymanager : this is a bug, the defenders are not animated but they followed and the action looks better than it was
+[2024-11-08 09:15] derbymanager : diagonal to the centre of the goal and it's 16 meters... But it looks stupid, I'll look into it.
+[2024-11-08 13:24] yasen_gg : <:oof:1059580267762815046> <:oof:1110752542507421806>
+[2024-11-08 13:30] poletz : sell those 4 mil side def and buy proper stirkers
+[2024-11-08 13:52] menhir9729 : No.
+[2024-11-08 14:17] skuld6666 : Buy strikers and train them up for you? 👌
+[2024-11-08 14:28] faro1 : That't the center of defense exposed thingy I bet my shorts on it
+[2024-11-08 14:31] faro1 : Yup goals come from between DCs. It's the weak point of 442
+[2024-11-08 14:34] poletz : Also the opponent played 442
+[2024-11-08 14:34] poletz : But he scored 2 with 4,3 xg
+[2024-11-08 14:41] faro1 : True.. maybe shitty Fwds (no offense) added to opponent playing GK-swk made the difference. Anyways that looks like a great match for the audience 🔥
+[2024-11-08 14:44] poletz : Yes strikers fault 💯
+[2024-11-08 14:53] skuld6666 : GK, a strong DC and a reliable striker the most important building blocks like in real football, really? Also maybe a good holding mid if you can find one?
+[2024-11-08 15:02] poletz : Yes but in defense u need more good players to cover the whole area while ahead 1 really good can be enough
+[2024-11-08 15:03] poletz : Flanks not mandatory but at same time can be very useful / dangerous, against uncovered flanks ie
+[2024-11-08 15:04] poletz : Seems well balanced
+[2024-11-08 15:04] yasen_gg : TLDR:  Mix/Max and make sure you're good at it <a:kekw_gif:1108739032101429288>
+[2024-11-08 15:20] skuld6666 : So no position is pointless at the moment? Damn is this even DM?
+[2024-11-09 08:27] .burningrain : My next opponent Alessandria have 10 outfield players available for the match: https://www.derbymanager.com/teams/171?view=squad-tab
+[2024-11-09 08:32] poletz : I play against Novi Ligure. Their only threat is the fc Ferrai 13 goals with 9.04 xg (Hard to explain as he is 1,2 mil value player with 10/12/7 in shooting skills) Btw, he is injuried. So time to give playtime to my backup gk and see how shitty he is again 😅
+[2024-11-09 10:52] dian.grancharov : So I won against Modena
+[2024-11-09 10:53] dian.grancharov : Which keeps things interesting in top4
+[2024-11-09 11:16] yasen_gg : Keep grinding
+[2024-11-10 06:42] dian.grancharov : So I make 300k a day?
+[2024-11-10 07:20] poletz : Yes. Finances are inflated by the Fa subsidy. Ur balance is actually -100k day
+[2024-11-10 08:08] poletz : 1.3 goals x game in italy ☠️
+[2024-11-10 08:26] .burningrain : I had 2 xg all by myself 😎
+[2024-11-10 08:26] .burningrain : (and didn't score)
+[2024-11-10 08:44] poletz : Keeping your goals for tomorrow? 😅
+[2024-11-10 09:09] yasen_gg : Very sad
+[2024-11-10 11:22] .burningrain : Castelnau will be back...
+[2024-11-10 11:45] skuld6666 : Derby trying to hold back my return from Div 4. Is there nothing he won't do? 🤌
+[2024-11-10 12:16] dian.grancharov : What does that mean? Isnt the subsidy daily?
+[2024-11-10 12:22] poletz : Yes. But its a flaw of the system that  gives every team the same amount no matter where they play and how they perform.  If economy is ok, subsidy is 0.  For example i m in d3 with a d2 team, way over my salary cap and ve good facilities, i should lose 500k day, not 50.
+[2024-11-10 13:18] .burningrain : My backup gk's sharpness didn't improve from bad after today's game, is that intended?
+[2024-11-10 13:51] poletz : No it should change after every game i think
+[2024-11-11 08:07] .burningrain : gg <@607683593686352012>, the game showed the difference between long and close shots very well
+[2024-11-11 08:16] alin35 : Really?? 😂😂
+[2024-11-11 08:17] alin35 : https://tenor.com/view/justin-timberlake-snl-saturday-night-gif-26491818
+[2024-11-11 08:24] derbymanager : Wow, first time I see someone scored a tap-in rebound ❤️
+[2024-11-11 08:25] yasen_gg : Same, but also quite bad from the defender
+[2024-11-11 08:25] alin35 : Don't wanna see it, especially that i wasn't the one who scored 🤪
+[2024-11-11 08:25] alin35 : Luckily, i won the match
+[2024-11-11 08:26] derbymanager : Defender should have cleared it, yeah... But then we wouldn't have this beauty 🙂
+[2024-11-11 08:26] derbymanager : Ah, that was for Alin
+[2024-11-11 08:27] derbymanager : Your players really used the free space poletz gave them 🙂 Too bad they didn't convert more.
+[2024-11-11 08:27] alin35 : Yeah, defenders tend to pass in the centre of my box when there is an oppnent there
+[2024-11-11 08:28] yasen_gg : Wooow
+[2024-11-11 08:28] yasen_gg : That's a first
+[2024-11-11 08:28] derbymanager : Yeah, because poletz played like this
+[2024-11-11 08:28] yasen_gg : I hope this is not a header though haha
+[2024-11-11 08:29] alin35 : At least Poletz didn't have 10/10 buildup on his right side 😀😅
+[2024-11-11 08:30] derbymanager : He basically won because of 20M more on the pitch. Would probably struggle much more against someone with equally good team. But I appreciate testing the engine like that 🙂
+[2024-11-11 08:33] alin35 : What amount of condition is considered low right now since it will drop faster i guess?
+[2024-11-11 08:34] .burningrain : I'd accidentally countered it quite ok with fb on the right and wb+wg on the left, but it wasn't enough
+[2024-11-11 08:36] derbymanager : I like how Fayot, who is mc-btb, also got to the side to shoot from there 😄
+[2024-11-11 08:38] derbymanager : It would only be better if you had fl there to wreak havoc...
+[2024-11-11 08:39] poletz : If 20 mil more make that difference how can salty win games with -120 mil gap?
+[2024-11-11 08:40] poletz : Making the opponent shooting more from side and far is not giving an advantage imo
+[2024-11-11 08:41] .burningrain : My only fl is 600k 19 yo already close to his full potential 😅
+[2024-11-11 08:43] poletz : Match of the day
+[2024-11-11 08:45] poletz : .
+[2024-11-11 08:46] poletz : 45 vs 104 mil. 3-1. Here u can t explain with value difference.
+[2024-11-11 08:46] poletz : I d say it s more about shots as Rain said..
+[2024-11-11 08:46] poletz : Parma played shoot as well
+[2024-11-11 08:48] derbymanager : Well, it's in relative terms. Your 55 is about 60% more than 35 and because of your tactic it was harder for you than it should have... Today salty's team had 70M value and the best one in 2nd div had 117M, which is 70% difference.
+[2024-11-11 08:50] yasen_gg : Yestertherday I drew event though I had 30m more in value
+[2024-11-11 08:50] yasen_gg : I don't look too much on prices
+[2024-11-11 08:50] derbymanager : I mean, I'm not saying value is everything
+[2024-11-11 08:50] dian.grancharov : I played against a 12mil keeper today 😛 which is like whole of my team
+[2024-11-11 08:51] derbymanager : I'm just saying that poletz would have bigger problems with his tactic if he played against you salty for example
+[2024-11-11 08:53] derbymanager : Also, Salerno has average age of 30.7, and age reduces price but not quality of players so the real value is higher than 45 mil. It's not 104 mil but, again, I'm not arguing that more expensive team should always win; just that the comparison here isn't exact.
+[2024-11-11 08:59] derbymanager : 3.06 goals per match in italy this round. 3.88 in 2nd division is on the high end 2.25 in 3rd division is on the low end
+[2024-11-11 09:04] alin35 : Fuck it, i have Salerno next and i thought i stand a chance 😂
+[2024-11-11 09:05] alin35 : Using grandpas of 37 and 38 yo, 4th in the league
+[2024-11-11 09:07] poletz : I m just saying that values didn t really matter a lot so far and now u r using it to explain a game result.  https://www.derbymanager.com/matches/31431?view=end-tab sangiuliano 63.8 mil - 23.3 yo Napoli 187.3 mil - 27.5 yo Sangiuliano also left 1 flank almost empty.
+[2024-11-11 09:08] derbymanager : I feel you have a better team than Rain considering you were in 2nd division twice and I expressed that as a difference in value. Sorry, won't happen again 😅
+[2024-11-11 09:08] poletz : Yesterday i got a draw with novi ligure 35 vs 15 mil
+[2024-11-11 09:09] derbymanager : As I said a couple of times since then, I don't think value is the only thing that matters.
+[2024-11-11 09:11] poletz : Very few goals on counters today
+[2024-11-11 09:11] poletz : In d3 zero
+[2024-11-11 09:15] derbymanager : Counters are about 10% in real life. I don't know how much we have in DM and I can't measure it right now but I've seen at least one today 😄
+[2024-11-11 09:23] yasen_gg : This is definitely my peak so far
+[2024-11-11 09:24] poletz : Peak of luck? 😆
+[2024-11-11 09:28] yasen_gg : <a:Inarius_Shy:1117214409887068190>
+[2024-11-11 09:32] endgamenow : we'll take it! 😂
+[2024-11-11 09:44] skuld6666 : We played counter attack style today and for the third goal the build up says 'from counter' (just noticed Derby asked about it above so thought I'd mention): Lovely goal too from edge of area TBH: https://www.derbymanager.com/matches/29094?view=pre-tab
+[2024-11-12 08:05] endgamenow : again, we'll take it 🤣
+[2024-11-12 08:06] yasen_gg : I should start training finishing again...
+[2024-11-12 08:10] alin35 : We missed a perfect chance to tie up some victories but i guess the oldies meta is too strong for our capabilities
+[2024-11-12 08:12] yasen_gg : Salerno are a very strong team
+[2024-11-12 08:13] alin35 : yeah, i know, 6 players over 33 years old in first 11 😂
+[2024-11-12 08:13] yasen_gg : Average age of 30.8 is crazy though <a:eyesshaking:934336406824833064>
+[2024-11-12 08:14] alin35 : definition of strong team these days 😆
+[2024-11-12 08:17] alin35 : Winger with great natural fitness dropped condition from 92 to 86. We are so fucked 😂
+[2024-11-12 08:27] poletz : Recover 3% overnight So it s just like -3 It s not different from before we just ve a wider range
+[2024-11-12 08:28] poletz : This is more than a pk
+[2024-11-12 08:28] alin35 : Yeah, but we don't really have an idea what a low condition is rn. It's below 90, below 80? What are the new chances for injuries with the new condition?
+[2024-11-12 08:28] poletz : Did u know it before? 😬
+[2024-11-12 08:30] alin35 : You had some idea of it... my rule was to never play players with condition below 90
+[2024-11-12 08:31] poletz : I had injuries at every % betweeen 90 and 96
+[2024-11-12 08:31] poletz : Now at least between a 85 and a 95 makes more difference
+[2024-11-12 08:32] alin35 : Yeah, there were chances for injuries in the high 90 aswell, you're right
+[2024-11-12 08:37] .burningrain : Mine's even lower, although it was a header
+[2024-11-12 08:38] .burningrain : I think that's just a quirk of Derby's formula that the xg of any one shot doesn't go over 0.4 or so
+[2024-11-12 09:19] derbymanager : There is still a goalkeeper there https://static01.nyt.com/athletic/uploads/wp/2021/08/04082904/xt_grid_numbers.png
+[2024-11-12 09:30] derbymanager : Are you sure he was at 92%?
+[2024-11-12 09:30] derbymanager : Because I'm looking at the formula and even if his natural fitness was 1 he would be at 87%. And his isn't 1.
+[2024-11-12 09:31] alin35 : Yeah, im quite sure it was at 92
+[2024-11-12 09:33] alin35 : Checked the condition of my main wingers this morning before the match. The one who hasn't played is at 91, the one who played today was at 92
+[2024-11-12 09:35] derbymanager : Ok, tnx
+[2024-11-12 09:35] derbymanager : I'll check the formula again
+[2024-11-12 09:36] derbymanager : I mean, effectively he lost 3% because he will recover 3% tonight
+[2024-11-12 09:37] alin35 : Yeah, i know
+[2024-11-12 09:37] derbymanager : But maybe the formula is too harsh and injury prone
+[2024-11-12 09:38] alin35 : Not complaining about injuries since i have none at the moment. But was curious if its normal, thats all
+[2024-11-12 09:39] alin35 : I do also rotate players though
+[2024-11-12 09:53] .burningrain : In my case, the cross went over the gk and the ball got to the mr somehow so the gk shouldn't be in the picture (I guess technically the goalie could've dived instead of trying to intercept the cross, but it's unlikely)
+[2024-11-12 09:55] yasen_gg : I don't think you can "beat" the keeper and exclude him from any shot - even rebounds
+[2024-11-12 10:11] skuld6666 : Had a funny stuck in the mud moment. Gave me a heart attack I think 🙂
+[2024-11-12 10:14] .burningrain : Actually no, I misremembered how close the gk was to the mr. This is the moment of the cross coming in (I'm in the blue) - I've no idea how the goalie didn't catch the ball
+[2024-11-12 11:42] faro1 : Yes you have idea, you pushed him out!
+[2024-11-13 13:40] skuld6666 : Good game <@609120631883169844> damn your defence is amazing 🔥  Did you purposely target my weak central midfield (most are out injured)? Or just a coincidence? Worked well anyway.
+[2024-11-14 08:22] alin35 : D3, here we come 😂😂
+[2024-11-14 10:06] skuld6666 : Bloody old men taking the p*ss out of my team 😅  This is them playing cautiously (23 shots) and this is nearly all my best players fit and playing for once 🤌
+[2024-11-14 10:17] .burningrain : Well, they do have a young Di Stefano in their team...
+[2024-11-14 10:28] menhir9729 : Nah I was just trying to get a good match in tbh, didn't really look into it
+[2024-11-14 10:28] menhir9729 : My defence is very good and I rely too much on it🥲
+[2024-11-14 15:00] IFA : :trophy: **Italia - Coppa nazionale Semifinal**  ||Verona|| vs ||Sabauda Torino||  ||Ambrosiana|| vs ||CS Firenze||
+[2024-11-14 15:12] yasen_gg : wait
+[2024-11-14 15:13] yasen_gg : ffs
+[2024-11-14 15:13] yasen_gg : I forgot there is a cup game today 😭
+[2024-11-14 15:13] randykeys : you forgot you had a match didn't you
+[2024-11-14 15:13] randykeys : yeah lol
+[2024-11-14 15:13] yasen_gg : This is so sad
 [2024-11-14 15:14] yasen_gg : I had a forward in midfield 😦
 [2024-11-14 15:14] randykeys : we need an extra notification for cup games. i've forgotten it so many times myself
 [2024-11-14 15:15] yasen_gg : I am so disappointed with myself
@@ -19471,6 +19898,153 @@
 [2026-10-22 08:45] alin35 : 1 was the penalty
 [2026-10-22 08:45] alin35 : who is not counted as a shot in the match report
 [2026-10-22 08:48] marius36 : I was joking
+[2026-10-25 08:00] IFA : :bar_chart: **Italia - Primo campionato** — 5 rounds to go  1. CS Firenze — 71 pts 2. Como — 66 pts 3. A.C. Chievo — 61 pts
+[2026-10-26 08:33] alin35 : Injury chance reduced - one of the few key man used in todays match down injured 6 matches 😀   🩼 🤕
+[2026-10-26 08:35] alin35 : Our job vs Barcelona just got definetely much harder
+[2026-10-26 08:38] alin35 : gg <@536159477489991682> , international competition participation almost secured 👏
+[2026-10-26 08:39] majo_lfc : gl in the ass cup and sorry about jelavič 😄
+[2026-10-26 08:47] marius36 : Firenze lost👀
+[2026-10-26 08:50] marius36 : Derby job 100% done
+[2026-10-26 08:56] alin35 : Not your fault 🙂
+[2026-10-26 08:56] derbymanager : Season is saved 😅
+[2026-10-26 08:56] alin35 : For who? 😂
+[2026-10-26 08:57] marius36 : Yeah but you think is possible to add another one for them?
+[2026-10-26 08:58] marius36 : To be more specific....I don't want them to loose in league matches
+[2026-10-26 09:18] skuld6666 : 7-8 first choice players out last games didn’t expect anything. Likely have to throw the cups to try and win league now I think 🤷
+[2026-10-26 09:21] alin35 : Yeah, all plans are out the window i guess... The amount of injuries we're having requires for big squads (24-25 players) to be able to cope with it
+[2026-10-26 09:21] randykeys : Finally
+[2026-10-26 09:21] alin35 : And when your squad is healthy they'll be unhappy about playtime
+[2026-10-26 09:22] alin35 : So, you don't really know which way to go
+[2026-10-26 09:23] alin35 : Also, why does my defender, who played 63 minutes today will not receive training at the update?
+[2026-10-26 09:46] marius36 : You can't even have 21...imagine 25
+[2026-10-26 09:46] marius36 : Or you can have 25 but if you have only 3/4 key players
+[2026-10-26 09:46] marius36 : But then you will not be a top team
+[2026-10-26 09:55] skuld6666 : Yeah resting 1-2 very low energy players and they are unhappy is tricky. With 60-70 percent can’t play them? I’ve a feeling I’ll end up with zero trophies let’s see can’t win against Como/Madrid with current players I think. No problem though good luck for run in all 🍿
+[2026-10-26 11:01] marius36 : Seems like your situation is almost the same I had last season in my last matches.But I think mine was much worse,I had like 5 mids out  my right defender was also out .There are still time for this things to happen again
+[2026-10-26 11:16] skuld6666 : Yeah I’ve been lucky generally with injuries TBH.
+[2026-10-26 11:24] marius36 : I'm not that great either
+[2026-10-26 11:30] alin35 : Did Derby gave Barcelona a secret pill? No players unavailable lol 😅
+[2026-10-26 13:18] alin35 : https://www.derbymanager.com/matches/134539?view=live-tab&min=7  i know it was my shit keeper, but think the atacker stopped for a few seconds thinking: "Is this guy serious?" 🤣
+[2026-10-26 15:17] marius36 : After seeing this is no doubt that he is an amateur....your GK.I am an amateur GK but never ever did such things
+[2026-10-27 08:48] skuld6666 : Wow all my injured players are declining pretty badly. Franco is 32 but the rest are in their prime. I guess Caci and McKeown had their knees destroyed.
+[2026-10-27 09:04] alin35 : Bennett (injured +7), 31 yo, lost 4.2 mil in 5 days
+[2026-10-27 09:05] alin35 : Como's squad seems like a battlefield, aggresive and injury prone ☹️
+[2026-10-27 09:08] marius36 : Jesus Christ
+[2026-10-27 09:09] marius36 : Having 6 mids,always playing with 3 and 5 of them injured
+[2026-10-27 09:09] marius36 : This is a warning for Derby....because this is max of players you can have playing with only 3
+[2026-10-27 09:11] marius36 : If tomorrow he play 5-2-3 witch is the only available good formation he risk to have all mids injured or suspended
+[2026-10-27 09:12] marius36 : This is a little bit too much to deal with
+[2026-10-27 09:22] skuld6666 : Yeah Cacic is probably my best midfielder. Aged 30. Has lost 6M in value this season, which seems high. 12 game injury and dropping stats must have contributed I guess.
+[2026-10-27 13:56] bokosox : They weren't injury prone at all until recently. I had gone down to five MF's b/c otherwise someone was always pissed about playing time but now I need more than 6? Or just give in and change formations since now my build-up play is shit anyways.
+[2026-10-27 14:39] marius36 : I changed a lot of formations this season....4-5-1,3-4-3,4-3-3 ,5-2-3 just to be fit for important games but now idk what to play against Skuld
+[2026-10-27 14:42] marius36 : But my forwards were always fit,I was lucky this season....until now
+[2026-10-27 15:35] skuld6666 : Want any advice? I’m here for you.
+[2026-10-27 15:36] marius36 : Probably I will try a 4-2-4🤣
+[2026-10-27 15:37] skuld6666 : I was going to say to Real Bokoosox I think formations are irrelevant now at end of season maybe? just need to fit available players onto pitch. Need flexible players with 3 perfect positions, who don’t want to play often and have superhuman fitness ✅
+[2026-10-27 15:38] skuld6666 : Simple
+[2026-10-27 15:38] skuld6666 : 5 up front come on put on a show you are Madrid!
+[2026-10-27 15:39] marius36 : Yeah simple😁
+[2026-10-28 08:08] synistajay : I’m all for injuries, I even advocate for season long ones but 3 in a game is a bit crazy 🤣
+[2026-10-28 08:09] synistajay : BUT WE DO NOT CARE!  SAMPIERDARENA ARE IN DIVISION 1 FOLLOWING BACK TO BACK PROMOTIONS!  FORZA SAMP!
+[2026-10-28 08:23] alin35 : Sorry <@703275045002412162> for the loss and the 2 other injuries, especially that Firenze lost aswell and you could've made for some interesting last 2 rounds. But the injuries buried you more than anything else. Today i used only 2 or 3 players that i wanted to avoid injuries with - of course 1 of them got injured and will miss the AssCup final 😋
+[2026-10-28 08:28] alin35 : Congratz mate! Very well deserved, can't wait to battle it out next season 🔥
+[2026-10-28 08:42] skuld6666 : Fantastic! Well done.
+[2026-10-28 08:43] skuld6666 : Needed that, I'm a lucky man 😬   With Chievo to play away in last match too would have been tense.
+[2026-10-28 08:48] alin35 : I'll be waiting a signed Connolly champion t-shirt 🙂
+[2026-10-28 12:20] inbetweenhop : congratulations <@571229278478532628>
+[2026-10-28 12:21] synistajay : Thank you pal!
+[2026-10-28 12:22] synistajay : Thank you, it's time to take your crown.. In like 5 seasons lool
+[2026-10-28 12:22] synistajay : Me too! Thank you!
+[2026-10-28 12:23] alin35 : You're optimistic lol😂
+[2026-10-28 12:25] synistajay : Lol I have to be, or else there's no point! I learned a lot in Belgium hope I can survive relegation first
+[2026-10-28 12:26] alin35 : First season in D1 is always the toughest
+[2026-10-28 12:27] synistajay : Hopefully we have a fit team at the start of the season, with no season reset it's going to be hard
+[2026-10-28 12:47] skuld6666 : Can be a good productive season I think.  Some of the bot teams are fairly bad - unfortunately in a way - but it's not unrealistic to try and finish above 3-4 teams. Using the extra reputation to get in some nice youths to grow, 1-2 key experienced players to get some wins. Seen lots of interesting ways to play it I'm sure you have your own.  Key thing IMO is not to worry about a bad start keep going can improve a lot over the season (and other teams can get worse).
+[2026-10-28 12:50] skuld6666 : If I win a couple more trophies I might have to quit before everyone hates me too much lol. Was thinking of taking on a D4 team maybe, but then I quite like to see out the story arc of this squad too and see if I can rebuild with the changes Derby has made etc. Also ideally I'd want Chievo, Como or even Bergamo (and Madrid etc I guess) to have the fun of slaying me/getting revenge etc. If that doesn't sound strange....
+[2026-10-28 12:52] agunbiac9498 : You Masochist 🤣
+[2026-10-28 12:59] skuld6666 : Traditionally in DM managers often quit after a certain run of success.  well some anyway. Not <@874916864805974018>  But I didn't win anything yet this season 🫣  jinxing myself hard as I can....
+[2026-10-28 13:01] marius36 : You don't even think to leave Firenze,I need to take my revenge
+[2026-10-28 13:02] skuld6666 : Ahhha exactly what I was thinking. But I also think it's fun for the game having teams fighting out at the top make it feel alive.
+[2026-10-28 13:02] alin35 : You shouldn't quit until you've also won AssCup... So that means that next season take a backseat and finish on 4th 🤣
+[2026-10-28 13:04] marius36 : Even if I want to finish 4th I can't and I'm sure Firenze also
+[2026-10-28 13:05] marius36 : What about winning CC with teams from every country?😁 Was in mind some time ago but then I changed my mind and stayed at Madrid
+[2026-10-28 13:06] alin35 : Seriously though, its more fun having top competitors. Bergamo is starting to look like a contender, Sampdoria will have a good team in a few seasons; you can't quit when things are amping up. So yeah, i predict Como, Firenze, Bergamo, Chievo and Sampdoria all having a go at eachother throats in a few seasons time
+[2026-10-28 13:21] skuld6666 : Yeah I can see it being quite even again (already is in many ways). Quite hard  already playing Bergamo away for example. Como this season deserves a title 9/10 let's face it. And I got really lucky with Connolly the monster who is now fading so things will get more difficult.
+[2026-10-28 15:00] IFA : :trophy: **Italia - Coppa nazionale Winner**  ||CS Firenze||
+[2026-10-28 15:03] synistajay : Yeaa I think I will take a similar approach to what I have now, I might sell some decent youth for better ones. My current key experienced idk if they have what it takes to survive D1 😂 a lot to think about but I just can’t wait for the facilities they’re gonna be key to growing my elite talent to established+
+[2026-10-28 15:49] marius36 : <@530694771900153871> all this updates to make game more dificull and still one of Madrid and Firenze win everything
+[2026-10-28 16:20] skuld6666 : Unbelievable Como super star striker injured after 22 minutes.  So lucky for me.
+[2026-10-28 16:22] alin35 : Congratz Skuld, unlcky Como once again... Treble on sight 👀
+[2026-10-28 20:37] bokosox : Congrats <@508921631851282432>. Connolly kills me once again, and no El Sayed to answer like he did last time we played.
+[2026-10-28 22:27] skuld6666 : Bad luck on that early injury felt like that was the deciding factor.  Brilliant season you deserved a trophy 100%.
+[2026-10-29 06:57] alin35 : <@508921631851282432>  Next season Connolly will become the best scorer in DM ; my Lacoste will have to settle for no 2 😀
+[2026-10-29 08:18] alin35 : Another 2 players down by injury; somehow it doesn't feel that the injuries went down as Derby said.. Don't even remember when i last had a match without any injury
+[2026-10-29 08:19] alin35 : Congratz for another title <@508921631851282432> , total domination. One more win and you've got a legendary treble to brag about 🔥
+[2026-10-29 08:21] skuld6666 : My star defender comes back and injured again first game 🙂
+[2026-10-29 08:23] alin35 : That's becoming the main theme; had this happen a few times
+[2026-10-29 08:24] alin35 : My 31 yo midfielder has now lost 11 mil value this season, came back from injury with red form and sharpness; can't even dare to use him in the cup final
+[2026-10-29 08:24] skuld6666 : Thanks Alin. Good luck also in your final.
+[2026-10-29 08:24] alin35 : And preseason is coming - he'll go to half his value in just 1 season
+[2026-10-29 08:26] alin35 : Thanks a lot, hope i do myself justice and not screw it up 🤞
+[2026-10-29 08:32] skuld6666 : Funny we still have that one game to go.  Not sure you will face the strongest team you may have guessed 😬
+[2026-10-29 08:55] alin35 : Yeah, but anything can happen... I'm also expecting injuries to screw our plans each match now so....
+[2026-10-29 10:00] skuld6666 : -10/11 million and -13 stats this season aged 30 after a long injury:
+[2026-10-29 10:05] skuld6666 : Similar for my other midfielder aged 30 who was injured for 9 games. I guess these can be career ending injuries now?
+[2026-10-29 10:27] synistajay : Interesting
+[2026-10-29 10:34] alin35 : Similar situation here; he's gonna be dead after the preseason. I'd expect these things to happen to players over 33 though
+[2026-10-29 11:12] synistajay : <@1006939510791225404> welcome to the best country in the game. Why did you leave Huesca?😮
+[2026-10-29 11:16] marius36 : Did you leave Huesca and CC for a L2 team?man ,when I thought I will have a rivalry for the next seasons
+[2026-10-29 11:17] marius36 : Good luck there
+[2026-10-29 11:17] alin35 : Oh wow 😮
+[2026-10-29 11:22] synistajay : Come to Italy bro, it’s the super league!
+[2026-10-29 11:23] marius36 : I will came one day with my second manager😁
+[2026-10-29 11:23] marius36 : Maybe...depends on opportunities
+[2026-10-29 11:28] synistajay : Come back to that Italy club you left for Madrid, it’ll be like coming back a legend that has a job to finish 😆
+[2026-10-29 11:30] marius36 : Never
+[2026-10-29 11:32] marius36 : But if you need a new player from Madrid you know where to find me
+[2026-10-29 11:32] marius36 : 😁
+[2026-10-29 11:33] marius36 : Everywhere you are you have ex youth academy Madrid players,great strategy
+[2026-10-29 11:33] marius36 : You can't fail with this strategy 😅
+[2026-10-29 11:34] synistajay : It’s the best academy in DM, tried and tested we love doing business with Madrid!
+[2026-10-29 11:34] synistajay : Porcu is next on my wish list 😉
+[2026-10-29 11:35] marius36 : You can porcuforget him already
+[2026-10-29 11:36] marius36 : I'm not selling him
+[2026-10-29 11:36] marius36 : But I will probably sell the last DL from youth academy
+[2026-10-29 11:37] agunbiac9498 : Sudreau didn’t come from Madrid 👀
+[2026-10-29 11:48] synistajay : Need a DL and DR so I’ll take that too 😂
+[2026-10-29 11:48] marius36 : 11 days still to wait before I sell him
+[2026-10-29 11:50] alin35 : You're Madrid's feeder club or what? 😂
+[2026-10-29 11:51] marius36 : He just enjoy buying from Madrid, can't blame him....without Perlazza he will be still in L2
+[2026-10-29 11:52] marius36 : Vincent,Perlazza,Luna
+[2026-10-29 11:53] marius36 : In Belgium he has Unterainner I think
+[2026-10-29 11:53] marius36 : So yeah...he love Madrid academy
+[2026-10-29 12:01] agunbiac9498 : What did they do against Leeds 👀
+[2026-10-29 12:01] synistajay : Unterainner is peak tier might be a quick flip! We do believe in the ex-Madrid profile
+[2026-10-29 12:13] alin35 : Did you actually pull off a screenshot when they were worth 3-4 mil to make yourself look good? 🤣
+[2026-10-29 12:22] agunbiac9498 : They couldn’t get through Doria then, they won’t get through him now 👀
+[2026-10-30 08:00] IFA : :trophy: **Italia - Primo campionato Winner**  ||CS Firenze||
+[2026-10-30 08:01] IFA : :trophy: **Italia - Seconda divisione Winner**  ||Novara||
+[2026-10-30 08:02] IFA : :trophy: **Italia - Terza divisione Winner**  ||Ancona||
+[2026-10-30 08:03] IFA : :trophy: **Italia - Quarta divisione Winner**  ||Venezia||
+[2026-10-30 08:53] alin35 : Congratz for another succesful league campain, <@508921631851282432> ; hope we can also beat you when it matters and with a full squad 😅 .. We also played a cautious game in order to not injure any of your players - you have a mission later today. Good luck and bring it home! 🤞
+[2026-10-30 08:58] skuld6666 : Thanks! Really amazing first 3/4 of season. Yes I have a feeling I'll be overtaken next year. Certainly it will be very close.
+[2026-10-30 09:38] marius36 : You need to tell me who was that guy who told you that you will make the treble at the beggining of the season? Just say his name....
+[2026-10-30 09:54] alin35 : True, you called it 👍
+[2026-10-30 10:30] skuld6666 : https://klipy.com/gifs/lily-james-lily-james-sweden
+[2026-10-30 10:30] skuld6666 : Actually I hadn't considered it possible - and still don't until later! - as I usually sacrice the national cup, but went for it a bit more this season. So good advice. Hopefully. You should get a ticket and come watch you can chat to some of the Swedish Malmo fans....
+[2026-10-30 11:41] marius36 : Who wins in CC against Madrid deserves the treble
+[2026-10-30 18:30] skuld6666 : Done. Brought it home for Italy 🫡
+[2026-10-30 19:45] inbetweenhop : good game <@94676029846593536>
+[2026-10-30 19:46] inbetweenhop : well, i finished top half which was my goal, but barely. not happy with the shape of the squad, too many mid purchases. going to try to pare down a bit, buy one difference maker and some quality schoolkids
+[2026-10-30 19:51] synistajay : Your squad overall quality needs a boost, take some risks
+[2026-10-30 19:51] inbetweenhop : say more about risks
+[2026-10-30 19:53] synistajay : More players like Marra and some stronger kids that can actually do something
+[2026-10-30 19:54] inbetweenhop : y i've been happy with Oliveira Dias. Percivalle has grown in value and potential but hasn't done great on the pitch. Overall my purchase of youth and schoolkids has been poor, not sure how to improve that
+[2026-10-30 19:55] synistajay : One of the big things I did was spend 11m on a GK then bought like Kelley (6m)  Raab (8m) and Leslie (9m)  all highly experienced
+[2026-10-30 19:56] synistajay : From D2 and D1 teams with good avg ratings every season
+[2026-10-30 19:58] synistajay : Then my team was hard to defeat n Leslie was super reliable
+[2026-10-30 20:16] inbetweenhop : interesting i never scout where a player comes from
+[2026-10-30 20:17] inbetweenhop : this fits my plan, sell some guys, add 1-2 difference makers, and get some better kids in school
 ==========================================
 === CANAL : #england ===
 ==========================================
@@ -23362,419 +23936,3 @@
 [2025-08-03 17:32] derbymanager : There won't be a reset
 [2025-08-03 17:32] randykeys : you say that now but wait til everyone wants one or something major breaks 😂
 [2025-08-03 17:32] randykeys : i mean i hope there isn't one but yeah, i know the past 😅
-[2025-08-03 17:33] derbymanager : No need this time, last time I listened to you lot and added transfer windows and what not... 😛
-[2025-08-03 17:33] derbymanager : This time I'm making my own mistakes 😂
-[2025-08-03 17:34] randykeys : momentum when
-[2025-08-03 17:35] derbymanager : Anyway, you want to go to bigger teams, first prove you can manage smaller ones. Everyone can jump up reputation wise, but you need to achieve something before you can take chelsea
-[2025-08-03 17:38] derbymanager : And just to be clear, I would love for people to jump into those teams and I made it much easier than before. Just prove yourself a bit 😉
-[2025-08-03 18:00] furysk : I don't mind seeing managers move a bit higher up overall
-[2025-08-03 18:02] furysk : i don't agree that one should be able to showcase good management skills in tier 4 and get a team promoted and suddenly tier 1 offers come in, but teams that have slipped in expectations in tier 3 would likely be looking to poach an up-and-coming manager who managed to build a team up to a successful promotion out of the tier below hoping to catch lightning in a bottle so to speak.
-[2025-08-03 18:04] furysk : i've not promoted yet, so i'm interested to see what opens up if and when i do.  probably don't take any jobs 😄
-[2025-08-03 19:08] niksty16 : Best team I could join was Fulham in d2. Manager's rep improves too slow imo. If a player can raise his level in 2–3 seasons, why can't we?
-[2025-08-03 19:20] derbymanager : You reached d1, no? But you left soon after. Generally speaking you need to prove yourself at each level before you start getting offers on that level.
-[2025-08-03 19:21] derbymanager : Since Fulham had a higher rep than Latium when Bubba took them, you could take them too.
-[2025-08-03 19:23] derbymanager : I mean, it would be stupid imo if one could promote to d1 and then immediately take Sabauda that won everything already just because they had a weak season and are 10th.
-[2025-08-03 19:25] furysk : I don't know that it would matter much since we are for all intents and purposes assuming this game that each team is only worth their reputation at a given point, and not the historical significances
-[2025-08-03 19:26] furysk : if the bot in tier 1 was a different difficult scale and had a higher reputation, then it would be a lot different probably
-[2025-08-03 19:33] furysk : i dunno, i am just kinda loosely thinking what would an IRL team kinda do if we went down that line of thinking.  If i were a league 1 side, and my team was kinda in the 5th-8th range, in some cases i might be content with that setup if my team had come from the lower leagues to that point at least.  If my team had some reputation in the championship though, i'd be looking at something to break me out.  So i'd be looking for someone who had fallen out of favor in a tier above me first, and if thats not in play i might be looking at an up and coming manager to steer the group in a positive direction, hoping that their talents were not a sign of knowing how to advance out of just tier 4 but instead having the ability to get a team to perform at any level
-[2025-08-03 19:36] furysk : so the question becomes do you or we want to allow managers to make slight jumps here and there, or is it a "nobody should ever move more than laterally at best"
-[2025-08-03 19:50] derbymanager : So, my team's rep is 626. My manager's rep is 596. I can take a team with rep of 740.  That's 150 points above my rep, 115 above my current team. I think that's more than a slight jump up.
-[2025-08-03 19:51] furysk : yeah i don't have much view of things
-[2025-08-03 19:52] furysk : new in, just see mostly 8th-16th offers for me, a single 6th i think involved there.  but if the other person who jumps often is trying to work his way up, just making sure that it's even a possibility or just stated as a 'nope, can't do it' kinda thing
-[2025-08-03 19:54] furysk : makes it easier to just say "nope, you've jumped too quickly and not given teams time to want you further up the ladder" to him 🙂
-[2025-08-03 19:54] derbymanager : You always get to jump above your rep but your rep only grows when you move the team up. So jumping every 2-3 weeks like some do - does nothing. You have to stay 2-3 seasons and do well.
-[2025-08-03 19:55] furysk : well, it grows when you win games to as i've seen it do 😉
-[2025-08-03 20:00] furysk : but yeah, thats kinda the point of jumping around.  make a team look good, then move on to slightly greener pastures.  and/or return their after a while like Mourinho did at chelsea because you've worn out the welcome elsewhere and they want to go back to how things were the decade before 😄
-[2025-08-03 20:11] questionmark4 : Why is this likely they have the same ttv as clubs that didn't get promoted from 2nd div last season?
-[2025-08-03 20:11] bubba_of_the_north : The way I see it is we're all just a bunch of nerds in football world, no Lampards and Rooneys here who can get their dumb asses hired by top teams on playing rep and connections only. You have to work your ass off to get there so find a way to get to D1, either with small club or fallen giant, and once you're there you'll get your choice or traditional big names to chose from if that's what tickles your fancy
-[2025-08-03 20:11] bubba_of_the_north : Me, I couldn't wait so I jumped at first opportunity. Seeing Lazio as an option was a no-brainer
-[2025-08-03 20:12] questionmark4 : Not what i mean though its not about me taking over anyone i just want Chelsea (minimum) for example to actually be a powerful team that stays in the top division at least and doesn't fall down in to irrelevancy don't think its too much to ask for…
-[2025-08-03 20:14] bubba_of_the_north : So what, you want closed shop of same teams to dominate forever? Wtf is even the point then
-[2025-08-03 20:15] questionmark4 : Dominate and staying in highest division is 2 different things
-[2025-08-03 20:18] bubba_of_the_north : You know football didn't start in 00s right? Chelsea has been relegated six times before as did most of the teams we see as top end stalwarts these days
-[2025-08-03 20:19] questionmark4 : Relegated but what happened after?
-[2025-08-03 20:20] bubba_of_the_north : What? They got back up? What's your point, they're just now dropping do D2 and you're acting like it's the end of the world
-[2025-08-03 20:20] questionmark4 : Because i know the bots are stupid
-[2025-08-03 20:20] questionmark4 : They will ruin them even more
-[2025-08-03 20:21] bubba_of_the_north : You think Chelsea and their ilk should have immunity against relegation or smn?
-[2025-08-03 20:22] niksty16 : Can you ever join a better team than your current one? If not, what's the point of changing teams?
-[2025-08-03 20:22] bubba_of_the_north : I did, like few days ago
-[2025-08-03 20:23] niksty16 : You are in d3 now. That's not better
-[2025-08-03 20:23] bubba_of_the_north : You said better club, what you meant is in higher division then
-[2025-08-03 20:23] questionmark4 : No but i think one of the biggest teams from a huge city shouldn't fall in to relevancy it does not make sense in any way
-[2025-08-03 20:24] niksty16 : I mean if your team can't stay in d2 is it really better?
-[2025-08-03 20:25] niksty16 : Ttv is lower too. Only difference is facilities that are not so important.
-[2025-08-03 20:30] bubba_of_the_north : From a bigger city wtf? Who cares about population count, should China, India and US dominate football? lol I honestly don't get your line of thinking. Elites should stay elite forever fuck everyone else. Let me guess, your Idol is Elon, you support PSG and you're pro Super League?
-[2025-08-03 20:32] bubba_of_the_north : Yeah, facilities, reputation and gigantic stadium are not what makes a club. It's one season one division apart is what really matters
-[2025-08-03 20:33] questionmark4 : Don’t agree with anything you said here lol im a simple guy i just want a few clubs to not fall in to irrelevancy because it does change the experience a lot for me sorry im probably weird for this but just what i think
-[2025-08-03 20:34] randykeys : You're weird for other reasons but we love you nonetheless ❤️
-[2025-08-03 20:36] bubba_of_the_north : I love both of you. Now someone go buy my keeper please
-[2025-08-03 20:36] randykeys : I've put a bid elsewhere sorry 😂
-[2025-08-03 20:37] questionmark4 : Im bidding dont worry 😃
-[2025-08-03 20:39] bubba_of_the_north : Holy shit man 😭
-[2025-08-03 20:40] furysk : o7
-[2025-08-03 20:41] randykeys : The Marco way
-[2025-08-03 20:43] randykeys : Just to answer this real quick: yes, obviously, Derby himself mentioned how he could jump to a club 150 points above him, most of us in D1 could jump to a "better" club if we wanted to, I wouldn't be surprised if the likes of city and Chelsea were available to you soon, if not already.
-[2025-08-03 20:45] niksty16 : Is this 150 points boost a new thing? I didn't have such an option...
-[2025-08-03 20:46] questionmark4 : I think its something you can't see
-[2025-08-03 20:47] questionmark4 : Its just added bonus in the background but in job offers based on the highest reputation team you could probably get a idea of how much that bonus would be for you
-[2025-08-03 20:48] randykeys : It got changed a couple seasons back I believe
-[2025-08-03 20:48] randykeys : Can't remember exactly when
-[2025-08-03 20:48] questionmark4 : <@135441758413651968> do you know if teams drop reputation after relegation?
-[2025-08-03 20:48] randykeys : I mean I assume so
-[2025-08-03 20:48] questionmark4 : I would to but idk
-[2025-08-03 20:49] randykeys : They definitely lose rep from finishing below expectation
-[2025-08-04 09:16] yasen_gg : Someone did not cancel their offers the other day I see
-[2025-08-04 13:18] lemmy_vicious : d2 looks brutal this season, in addition to big dogs from d1 one human team chasing promotion, two mid table wannabees and us and cardiff as cannon fodder
-[2025-08-04 15:35] poletz : This should be how it works
-[2025-08-04 15:36] poletz : Probably Derby changed a bit the formula in recent times to make it also a bit more effective tho
-[2025-08-04 15:36] marius36 : Everton is a nice team to change from Ascoli
-[2025-08-04 15:37] poletz : Scared to play in IT D1? 😋
-[2025-08-04 15:37] marius36 : No,just saying
-[2025-08-04 15:38] marius36 : I have nothing to loose...my team is definitely the worst in the league sooo.....no stress,no worries
-[2025-08-04 15:39] marius36 : Just upsets,I'm thinking now of 2-3 already😅
-[2025-08-04 15:41] marius36 : But anyway Everton is a top team with top facilities
-[2025-08-04 15:47] poletz : Yes would be a smart move long term view but it s a bit sad to leave d1 with all the efforts to reach it. And also now that u can finally play against your bro, your friend randy, and your love 😘
-[2025-08-04 16:11] randykeys : https://tenor.com/view/friends-notfriends-bye-stephen-colbert-hater-gif-4521295
-[2025-08-04 21:32] marius36 : No doubt than everyone put some efforts to reach league 1 .Even if I'm one of the last I didn't put efforts at all... actually I can say to you that I spent more time/day in toilet that I spent on DM.I still don't know how my team actually reached league 1..no clue But of course you will not believe me that i still don't watch matches😈
-[2025-08-04 22:25] shaun.frost : Hello everyone (esp <@94676029846593536> and <@135441758413651968> ) it's me, 1000 questions Shaun again. 😁   I see we're all starting with two games on the same day, how safe is it to play same players in both games?  How important are Cup games, can we expect higher matchday income then in regular league games?  Can players fitness improve over time from bad/fine etc like other attributes or no?  And last (for now😁 ) but not least, is there a guide somewhere that explains which attributes are key for which position/role? I don't fully grasp all different roles in tactics screen yet, and for example I'm noticing that midfielders, in general I think but could be just my team and the ones I scouted, have poor first touch which is basic requirement for any decent midfielder regardless of role imo.
-[2025-08-05 00:12] furysk : I don't know all of the answers, but my thoughts:  because of my time zone, i may not have time to get to the lines between the two, so just gotta hope there are no injuries.  if no recovery occurs, then its twice conditioning loss.  Cup games you'll have to wait for someone else who has won one.  the last time i won one was against Royal Engineers, and it was before me.  I believe the answer is no.   too difficult to have just a set group of 5-6 ratings that are key.  It depends on roles just as much as where they are on the pitch.
-[2025-08-05 00:17] furysk : an example of the attributes on position/role being very flexible is a holding midfield versus a creative midfield.  a holding midfield might model closer to a defender, while a creative midfield might mirror a supportive forward like a false nine, even if there is a significant difference between FN and CM or a CD and a HM
-[2025-08-05 06:41] randykeys : Seeing as it's the start of the season, it's the best time to play two in a row as everyone is at 100% condition and blue sharpness, but it's also the best time to experiment and switch things around to see what works, so, up to you.   Cup games have gotten more important than in the past yes, you'll get a good chunk of change for a win, even more the further you go, so it's always worth trying to get a win.   Natural fitness can change yes, if doesn't happen often but it's possible.   It's never been outright stated which skills are used for what if I recall, just in certain aspects like with the new build changes or for goalkeepers, but in general irl logic applies. Defenders need more tackling and marking, midfielders more passing and creativity, strikers more finishing and first touch, among other skills ofc. Then there's the difference in roles, an HM probably won't need long shots as much as a CM. A TM probably not as much agility as a WG. Good first touch has always been good to have and rare to come by, I've been training it on my midfielders and strikers for like two seasons with minimal results 😅
-[2025-08-05 06:45] furysk : Watching the clock for signs of the first game of the season.  Ready to see my team play already lol, gonna be a long day and change
-[2025-08-05 09:02] shaun.frost : Thanks <@135441758413651968> <@94676029846593536>   Yeah, defensive skills are simplest to define I was thinking more about all the different roles in midfield and attack. HM is closest to what we usually refer to as DM, BBM and CM tho are bit more murky for me. In my head for example BBM should ideally have decent skills across the board, tackling, passing, dribbling, shooting etc, DLP playmaking attributes like creativity and passing and at least decent defensive skills like tackling and positioning, while CM would need only offensive skills for his role. I was checking out some Portsmouth's matches from last season tho and there don't seem to be such clear separation except for HM and DLP.  For example, some games CM would have more tackles than almost anyone else on the team while everything with ball seemed to have been going through BBM with CM barely involved. Of course opposition setup must be taken into consideration but still, to my untrained eye at least, it looks like all-rounders are more desirable than specialists?  As for attackers, TQ and FN seem to need almost identical skillset and I can't really find any difference? 🤷‍♂️  On the other hand TM and CF are easier to define from what I've seen, TM is way more involved in build up and tends to attempt more solo actions, dribbles, through passes and assists, which would mean they require decent creative skills in addition to classic TM traits, while CF is more of a pure finisher whose majority of touches come in and around the box  Can't wait for season to kick off btw. If there was relegation danger looking around we'd be among the favorites to go down but thankfully there isn't 😁  so we can use this season to learn the ropes and get things in order for future 🤞
-[2025-08-05 14:10] furysk : To me forwards are the easiest, especially central forwards.  Your simple role of target man has very obvious 4 or 5 skills that would be important for a taller forward, the ability to receive with the head and or send it toward the net.  You could get away in tier 4 with maybe 3 skills.  Other forwards such as tq or cf also mostly require receiving and shooting, only the false nine needs a good bit of skills
-[2025-08-05 14:23] poletz : 20 fin is enough in d4 😄
-[2025-08-05 14:26] furysk : Sometimes.  Still need to get it to him 🙂
-[2025-08-06 12:32] vero00056 : I don't know how to explain to these morons what I want them to do any more, can't get any clearer with assigned roles, or at at least I thought so. Yet all four crosses targeted no heading ability BBM and TQ, with 16 heading TARGET MAN right there reduced to one long distance attempt for some reason
-[2025-08-06 12:58] derbymanager : Did you watch your game? Maybe TM is always covered so they aim for those who are free?
-[2025-08-06 13:05] shaun.frost : We actually won a game of football on my debut! D1 here we come! 😎
-[2025-08-06 13:05] shaun.frost : Just kidding of course but I really wasn't expecting it, feels nice to start on the right foot 🙂
-[2025-08-06 13:06] shaun.frost : Congrats to my senior advisor <@94676029846593536> too! 👏  😆
-[2025-08-06 13:08] poletz : Good mentors are decisive inside and outside the game 😀
-[2025-08-06 13:10] shaun.frost : Yes he's been giving me all the little nuggets since the day I arrived. My DMs are basically instructions manual at this point 😅
-[2025-08-06 13:57] furysk : Well, it’s more just answering questions these days lol
-[2025-08-06 13:59] furysk : But congrats on the win.  We had an interesting adventure today but managed to take home the win as well
-[2025-08-06 17:13] furysk : 33m lineup card for the cup game gets it done.  Can’t complain
-[2025-08-07 11:37] majo_lfc : https://tenor.com/view/weekend-party-champagne-gif-18280013
-[2025-08-07 11:37] majo_lfc : 1st win in the 3rd division 😄
-[2025-08-07 11:56] shaun.frost : Congrats! 👏  We lost but it was another encouraging performance, away from home against very good Bolton team. Hoping for another gutsy showing at Watford tomorrow 🤞
-[2025-08-07 12:03] shaun.frost : And after that we have good old South Coast derby in which the team has done well before, so no pressure Shaun..😬
-[2025-08-07 12:06] shaun.frost : We're both in same predicament scraping it out at the bottom of D4 so it should be a close one. Hope one day we move up together and if human takes them it would be even better, it's kinda sad seeing them in this state too :/
-[2025-08-07 12:14] shaun.frost : Btw thanks for BB <@536159477489991682> 🙂  I can see why you wouldn't have much use of him at higher level, but I hope he develops into good D4 striker fo us
-[2025-08-07 12:18] majo_lfc : I hope he will play well for you 🙂
-[2025-08-07 12:23] shaun.frost : Top name too, Bobby Bean has that old school legendary lower league English striker ring to it 😁
-[2025-08-07 13:06] lemmy_vicious : were so out of our depth in d2 it's kinda hilarious. from facilities and stature to style of play. key players being understandably unhappy with basically everything isnt helping either i guess
-[2025-08-07 13:08] lemmy_vicious : chelsea city and fulham coming up next. theres good chance well be relegated by mid point of the season
-[2025-08-07 17:40] vero00056 : Well, I've been thinking about it since last season, updates kicked us straight in the junk and today's capitulation is clear sign we've hit the end of the road.
-[2025-08-07 17:41] vero00056 : Kinda weird set of offers tho, is France least populated with humans or smn?
-[2025-08-07 18:07] derbymanager : You're surrounded by chelsea and manchester, you can be proud 💪
-[2025-08-07 18:08] derbymanager : I don't know, there's still plenty of time, no need to jump ship just yet. Montpellier sounds nice tho 🙂
-[2025-08-07 18:08] derbymanager : But yeah, france is the least populated I think.
-[2025-08-07 18:10] derbymanager : The early season is always tough, give it a week or two to see where you really stand 😉
-[2025-08-07 18:10] derbymanager : I bet most of you will overperform.
-[2025-08-07 18:13] vero00056 : Huh, I'll check them out. I'd prefer to go to Germany so I only briefly checked Wacker and Bielefeld
-[2025-08-07 18:34] randykeys : poletz posted the data recently, among it the current number of humans in each country:  italy: 20 england: 19 germany: 10 spain: 6 france: 6
-[2025-08-07 18:52] vero00056 : Tbh France I kinda get but I'd think Spain would be more attractive than that, jeez
-[2025-08-07 19:49] derbymanager : You're just about 30 reputation away from being able to take hamburg
-[2025-08-07 19:50] derbymanager : Renowned facilities, 2 times cup winner, struggling in d2 for 3 seasons now but probably easy to get them back on the right track... 😉
-[2025-08-07 20:09] vero00056 : That would be awesome ngl but 30 rep increase takes what, promotion to Eng D1?😂
-[2025-08-07 20:29] derbymanager : No, promotion is something like +200
-[2025-08-07 20:29] derbymanager : I'm at 606 and just got promoted
-[2025-08-07 20:30] derbymanager : I think if you hold mid table for a few weeks you could get there
-[2025-08-07 20:39] vero00056 : Is relegation also -200 then?
-[2025-08-07 20:40] vero00056 : Now you're stressing me out ahhh
-[2025-08-07 20:42] derbymanager : No, it goes faster the higher you are
-[2025-08-07 23:05] vero00056 : Yeah nothing that interesting out there rn anyway, I guess I'll just try and grind it out in this shithole for a little while longer. How long can you sleep through without getting fired, a week?
-[2025-08-07 23:38] furysk : Tried to sneak a couple of backups in and play defensive for a road draw, and got humbled by a more put together lineup from millwall.
-[2025-08-08 03:13] poletz : 2 weeks inactive
-[2025-08-08 11:18] lemmy_vicious : nah mate, at least not without me breaking all of my own rules. i mean look at this we fit like fucking conference south side in this division lol
-[2025-08-08 11:18] lemmy_vicious : besides were not improving at any front any time soon, tiny village ground, shit income, reputation lower than half of d3, unupgradable regional facilities so bad our two best players both central defenders are furious and playing like shit as a result..nah, cant wait do get back to d3 where we sorta belong. this season is not gonna be fun
-[2025-08-08 11:19] niksty16 : Same here😂
-[2025-08-08 11:19] niksty16 : 4-4-2 is not it
-[2025-08-08 11:19] lemmy_vicious : not the same, you managed a shot! lol
-[2025-08-08 11:21] lemmy_vicious : it served us well so far but yeah clearly not it at this level
-[2025-08-08 11:23] lemmy_vicious : ugh were playing those fuckers tomorrow
-[2025-08-08 11:23] lemmy_vicious : and then your lot
-[2025-08-08 13:49] furysk : 4.17 xG to 1.66 xG Barely enough to get the win at home
-[2025-08-08 14:00] majo_lfc : 2 wins in two days
-[2025-08-08 14:00] majo_lfc : https://tenor.com/view/twitter-reicartier-reaction-bloodcartier-gif-22306737
-[2025-08-08 22:33] furysk : Feels like i should just get some playing time taken care of with this cup draw, not seeing how my average game TTV of 30M is gonna contend with a top flight team
-[2025-08-08 23:28] shaun.frost : Yeah looking at how minnows have done against top teams in previous round 😬 it's probably a good idea to not risk your key players in cup tomorrow
-[2025-08-08 23:30] shaun.frost : We're having first leg of our own cup final tomorrow (if we come on top in head-to-head I'm gonna consider it a mini trophy idc 😁 )
-[2025-08-09 11:35] shaun.frost : Pompey fans rejoice as their team wins first South Coast derby under the new manager! 🥳
-[2025-08-09 11:35] shaun.frost : Our midfield ran the show but newest arrival Heinz-Günter Glaser stole the headlines with two fine assists and only real downside was seeing two thirds of the stadium empty. but I guess it's up to us to bring them back with more of the similar performances
-[2025-08-09 12:40] furysk : Took care of business in game one of the day.  Will see what the cup game has in store
-[2025-08-09 18:30] furysk : also being in the US, i need to work on my time conversions to server time, i thought my game was supposed to play by now only to realize my math is no good 🤣
-[2025-08-09 18:57] faro1 : server is on its own timezone
-[2025-08-09 18:58] randykeys : It's UTC but faro will tell you otherwise lol
-[2025-08-09 18:58] faro1 : GMT
-[2025-08-09 18:58] faro1 : after much thinking I'd settle on that
-[2025-08-09 18:59] randykeys : All I know is I can Google UTC and I'm 2 hours after it, and that fits the game, so it works for me lol
-[2025-08-09 18:59] randykeys : But we've had this chat before 😂
-[2025-08-09 19:00] randykeys : What timezone you in then? Or have you figured out the conversion yourself?
-[2025-08-09 19:01] furysk : Central US.  i assumed UTC, which would mean my 19:00 game should be soon.
-[2025-08-09 19:01] randykeys : It has indeed just run
-[2025-08-09 19:01] randykeys : You might wanna look away tho...😂
-[2025-08-09 19:02] faro1 : either is GMT or Derby lives in a trailer house. That's my final statemnt
-[2025-08-09 19:02] furysk : i don't really care what the result is of this one, just wanna see if revenue hits for L's.
-[2025-08-09 19:02] randykeys : https://tenor.com/view/alien-guy-thats-crazy-woozy-crazy-scientist-gif-8609893263374809391
-[2025-08-09 19:02] furysk : about 350k, not bad.
-[2025-08-09 19:03] faro1 : that's good money
-[2025-08-09 19:04] furysk : tier 4 27m TTV vs tier 1 158M, even if i had maxed at around 45M in my lineup i lose 3-0 or 4-0 😄
-[2025-08-09 19:06] furysk : TTV might not mean much against others in this tier because of how you can stack your TTV in places that you can't roster, but it does on that front.  anywho, just trying to get to around 20M if i can without having to buy a player to get into a promotion spot.  i want a good chunk of cash available on the move up to make my life easier.
-[2025-08-10 18:13] furysk : Solid win over luton, know their side is struggling a bit but still happy to see the lack of opportunities for the opposition and having maximized our own with one of the rare times we exceeded xG
-[2025-08-11 11:41] shaun.frost : Well we just exceeded ours and with some luck managed to defeat faltering giants of Millwall 🥳
-[2025-08-11 11:41] shaun.frost : Oh and, welcome to the division <@981566235059839066> 👋
-[2025-08-11 11:42] shaun.frost : Just what I was hoping for 🙏  human to take charge of the Saints so we can have proper derby games again 🙂
-[2025-08-11 12:25] furysk : A bit of good fortune never hurts, your team still looked the slightly better team by the metrics though
-[2025-08-11 12:31] furysk : Crewe send recent demotion side bromley’s fans home frustrated to have so few opportunities.  The last three league fixtures have been .12 .04 and .05 xG against, with only about 6 shots total allowed in that time and none of them on frame
-[2025-08-11 12:33] furysk : The players have hinted that their run of good form has been aided by a recent article claiming players of their stature (useful, fringe, unpredictable) are not worthy of playing time
-[2025-08-11 12:34] imamzade : FC will play DCR in the next match. Thank you, RNG gods.
-[2025-08-11 12:38] furysk : Oof, been there last year with injuries and cards stacking up. Good luck
-[2025-08-11 13:18] randykeys : I've got 5 defenders out and am now forced to play something I've been avoiding since season one: MLR 😂
-[2025-08-11 13:19] poletz : Or field the bruised players 😬
-[2025-08-11 13:20] randykeys : I'm not playing with fire again this time round 🙈
-[2025-08-11 15:56] inbetweenhop : good grief i wish i hadn't. total cleaning out the Augean stables job at St. Mary's it looks like, and totally skint to boot
-[2025-08-11 16:38] furysk : It’s a total roster purge and rebuild.  And the new bot strategy of signing a bunch of cheap depth means you can’t let go of it for a bit anyways
-[2025-08-11 18:16] shaun.frost : Yeah I believe we're among the weakest teams in division, both in terms of talent and finances. I don't mind it much tbh, lower leagues are a grind in every game and irl, I just wish I didn't have to wait till second part of the season to transfer list anyone 😁 and from what I'm seeing even than the chances of actually selling any of these cheap players are extremely low so....I guess we're gonna be running into each other here in D4 for a while 😁
-[2025-08-11 18:38] inbetweenhop : i had Göttingen before i let it go (on vacation for a couple weeks and couldn't check in) and that was a miles better situation. is it possible to get relegated from D4?
-[2025-08-11 18:40] inbetweenhop : i would love to hear more about the "bot teams sign cheap depth" thing
-[2025-08-11 18:41] randykeys : bots have recently been overcome with the desire to sign any and all school players for depth, no matter how shite they are
-[2025-08-11 18:42] poletz : No
-[2025-08-11 19:03] inbetweenhop : well that's good news at least
-[2025-08-11 20:49] fr1to : Just like riding a bike innit ⚽️⚽️
-[2025-08-11 20:56] fr1to : Bro has been a defender since season 4 with 7 marking 5 tackling
-[2025-08-11 20:57] poletz : Yeah bots suffered this terrible issue for a while. Great signing 👏
-[2025-08-11 21:41] lemmy_vicious : second time in six games we managed zero attempts of any sort and in cup game we had 1 lol
-[2025-08-11 21:42] lemmy_vicious : it was fun seven seasons but i think the gimmick has run its course and hit the limit in d3. its expired and gone to meet its maker, bereft of life huffled off its mortal coil run down the curtain and joined the choir invisible. this is an ex-all english 442 hoofball team
-[2025-08-11 22:16] furysk : Pretty impressive still, it got your pretty comfortably promoted last season so it is a good example of how to do it for those learning
-[2025-08-11 22:35] faro1 : I'm versed in both promoting AND demoting, unlike others here that only know to go up
-[2025-08-11 23:23] lemmy_vicious : say and shame dont hold back
-[2025-08-11 23:23] lemmy_vicious : yeah its been hell of a ride. games gone to shit since i joined tho so im not sure which way to go from here
-[2025-08-11 23:25] lemmy_vicious : good luck to all you bottom dwellers btw main dev and his crew are doing everything in they can to hold the little guy down and make sure no one repeats their feats. they made it literally impossible to grow one club the way they did so dont hesitate to jump up at first opportunity. if your clubs shit now itll be shit forever
-[2025-08-11 23:29] furysk : eh, i've solved the tier 4 i think, but not the rest and if they are viable.  the game has gotten progressively less new-player friendly since i've gotten here (maybe by design, maybe by accident).  is what it is.  training speed going to 25% of it's original speed is extremely lame.  Used to be you could get happy trainees to go to +11 to +14.  at best i'll get 1 player to that point.
-[2025-08-11 23:55] lemmy_vicious : accident? dont do that come on its not even a like a secret or anything lol
-[2025-08-11 23:56] lemmy_vicious : just look at the first clown to crylaughemoji my post
-[2025-08-11 23:56] lemmy_vicious : see
-[2025-08-11 23:56] furysk : i don't take much of what he says into consideration anymore.  his advice was pretty out of touch for tier 4 🤷
-[2025-08-11 23:57] furysk : don't think he particularly cares for what my opinion of him is
-[2025-08-11 23:58] poletz : Which one?
-[2025-08-11 23:58] furysk : as far as by design/by accident, they're trying to get the game fixed for them i guess is my stance
-[2025-08-11 23:58] furysk : and so i don't know that their end goal is to ruin the times for smaller clubs per say, they just don't give a crap
-[2025-08-11 23:58] poletz : Naa
-[2025-08-11 23:59] furysk : all of it almost.
-[2025-08-12 00:00] poletz : Just one example?
-[2025-08-12 00:00] furysk : we can start by what you and randy suggested about fringe/unpredictable being trash
-[2025-08-12 00:01] furysk : when in reality thats about all that about half of tier 4 can get
-[2025-08-12 00:01] lemmy_vicious : its different and they refuse to admit it. i was able to grow facilities and rep more in my first two seasons in d4, and i imagine it was even easier before so they got where they are, than since promotions to d3 and than d2, were still somehow closer to downgrades than upgrades. in d2. ffs come on 😂
-[2025-08-12 00:02] furysk : that was the most recent bad advice, you have to take advantage of attribute disparity, and it only has marginally to do with total talent.  you can't afford a team of 18-20 players that are fair youngster or better or comparible in terms of their skillset.  even the best teams down here can realistically afford maybe 7-8 of them.
-[2025-08-12 00:04] poletz : So u did from d4 to d2 in 6 seasons but the first season u struggle a bit, mainly due to playing fm with kids players it s someone else fault snd the dev just caring about his team and want to keep u down. Sure
-[2025-08-12 00:04] furysk : the training downgrade is what keeps the new people down the worst now.
-[2025-08-12 00:05] lemmy_vicious : and we took our sweet ass time, they usually tel people they promoted too fast or whatever the fuck, there is literally no way any of them sat in d2 challenging for promotion with threat of their regional level facilities when training shit its set up now wasnt even a thing, to get even worse. lies
-[2025-08-12 00:06] furysk : i mean, i don't really care if it's malicious intent or if it's just being out of touch, i just don't think most people should listen to advice on how to escape from tier 4 when that method does not work in the current itteration.
-[2025-08-12 00:07] furysk : and on a global scale, how do we still not have anticipation in the wiki.
-[2025-08-12 00:07] lemmy_vicious : beacuse they dont care. simples
-[2025-08-12 00:08] lemmy_vicious : its too hard to update when your at the top i guess
-[2025-08-12 00:09] lemmy_vicious : i have to give poletz props tho
-[2025-08-12 00:09] furysk : i mean, i get your stance, i'm not 100% on board with it being malicious, but i can't pretend to not be frustrated with some of the stuff
-[2025-08-12 00:09] lemmy_vicious : at least hes always there to fight for his shit
-[2025-08-12 00:09] poletz : I d like So much to restart from d4 to prove you r wrong and show that the ironman is still possible.   But sure the game is definitely more difficult now, it s not by accident. Derby wants to make it more realistic so that the way from d4 to d1 is not so fast snd guaranted. And force managers to jump to accelerate the process to reach top level
-[2025-08-12 00:10] furysk : thats a very frustrating answer for a lot of people
-[2025-08-12 00:10] poletz : But why
-[2025-08-12 00:10] furysk : "play it the way i say because i won't make it possible to do without sacrificing you first born despite the fact that i let myself do it"
-[2025-08-12 00:10] furysk : are you that dense
-[2025-08-12 00:11] furysk : "i got to do it, nobody else should" is basically how you should've just said that last bit.
-[2025-08-12 00:11] poletz : No
-[2025-08-12 00:11] furysk : thats how it comes across to me
-[2025-08-12 00:11] lemmy_vicious : and thats all fine, just dont gasslight folk by telling them you know how it is. its a different game compared to even my relatively short here, let alone when you guys were grinding it out
-[2025-08-12 00:14] poletz : Are u aware that is not a finished game and Derby is adjusting it to make it better?  Was very rough when we started  Now it s a better game Probably more difficult But hey we had 19 promotions just the past season..
-[2025-08-12 00:15] furysk : a better game for who is the question everyone not at the top is asking.
-[2025-08-12 00:15] furysk : but whatever, clearly a waste of 20 minutes of time from me.
-[2025-08-12 00:16] poletz : Like Those 19 that got promoted th past season?
-[2025-08-12 00:17] lemmy_vicious : lets keep it simple polz, i was able to do two upgrades during my time in d4 to bring our facilities to shitty regional level were at now because it naturally grew AND we were able to do some business here and there still. since then, its only been going down and were inches away from downgrading. while in d2. is that normal to you? was it lke that when you were climbing up?
-[2025-08-12 00:17] furysk : i don't feel like arguing with a brick wall, so please don't ping me anymore. thanks.
-[2025-08-12 00:18] poletz : My facilities were same if not worst than your current when i promoted never cared about them
-[2025-08-12 00:19] lemmy_vicious : did they also make players unhappy and play like shit
-[2025-08-12 00:19] poletz : Yes i had some unhappy Yes i relegated twice for your info from D2….
-[2025-08-12 00:20] lemmy_vicious : ah ok here it comes
-[2025-08-12 00:20] lemmy_vicious : some, unhappy but also...
-[2025-08-12 00:20] lemmy_vicious : please continue
-[2025-08-12 00:20] poletz : But also what I struggled in d2 as u r doing
-[2025-08-12 00:21] poletz : I relegated not once , twice
-[2025-08-12 00:21] lemmy_vicious : its not tha im strugglin its that we have no prospect how hard can you avoid my question
-[2025-08-12 00:21] poletz : Game is accept defeats and bad moments. Not just win win and complain if u don t
-[2025-08-12 00:22] lemmy_vicious : you didnt care about facilities, ok. was it downgrading at same rate
-[2025-08-12 00:22] poletz : Take the challenge. If u got there u can go to d1 too. Just takes time
-[2025-08-12 00:23] lemmy_vicious : why do you folk always go that route
-[2025-08-12 00:23] lemmy_vicious : i lost. a lot. its not he issue
-[2025-08-12 00:23] poletz : Which Downgrade? -18k day?
-[2025-08-12 00:24] poletz : It is. U didn t complain the past season
-[2025-08-12 00:24] poletz : Game was good
-[2025-08-12 00:24] lemmy_vicious : wtf are you pulling up spreadsheets now lol
-[2025-08-12 00:24] poletz : I just checked your “downgrade”
-[2025-08-12 00:25] lemmy_vicious : dont do that
-[2025-08-12 00:25] lemmy_vicious : i thought we could have serious convo here
-[2025-08-12 00:25] lemmy_vicious : youre the first to respond in any way
-[2025-08-12 00:26] lemmy_vicious : but we cant do that 'look here, it's actually fine, math says so!' when reality is completely different
-[2025-08-12 00:29] poletz : This guy started same season u did
-[2025-08-12 00:29] poletz : Reached d1
-[2025-08-12 00:29] poletz : Demoted
-[2025-08-12 00:29] poletz : Now he is going back
-[2025-08-12 00:29] lemmy_vicious : past season was abomination i was shit in d4 and it was gfine because it made sense, dont be an asshole
-[2025-08-12 00:31] lemmy_vicious : what tf does that have to do with anything?
-[2025-08-12 00:32] poletz : Aboiut derby making not possible for lower tiers team to do it
-[2025-08-12 00:32] lemmy_vicious : this is all you people do in these conversations, just throw some random shit out there to prove your point and pretend its a win
-[2025-08-12 00:34] lemmy_vicious : can you just answer me my by basic question, how was I able to do two upgrades in d4 (and only to bring it to regional level) and the value has been running in red ever since. even with us in d2. does that makes sense to you?
-[2025-08-12 00:35] poletz : Why don t u share what u think should work different and why. This would be more constructive
-[2025-08-12 00:35] lemmy_vicious : an dont tell me it dont matter when both our starting cb's are red in training and have shitty red heart
-[2025-08-12 00:36] poletz : It s about u to find the best players to suit your training capacity. Always been like that
-[2025-08-12 00:36] lemmy_vicious : here "can you just answer me my by basic question, how was I able to do two upgrades in d4 (and only to bring it to regional level) and the value has been running in red ever since. even with us in d2. does that makes sense to you?"
-[2025-08-12 00:38] poletz : Did u ever see my facilities?
-[2025-08-12 00:39] lemmy_vicious : mf why are you answering my question with a question lol
-[2025-08-12 00:39] poletz : I ve just +1,5 stars in tec. I also  ve 2 in the other 2  And i m in d1 since 5 season now.
-[2025-08-12 00:39] lemmy_vicious : are your key player also red in training and play like shit?
-[2025-08-12 00:40] poletz : No cause i ve mentors! And old players
-[2025-08-12 00:40] poletz : That s the way to fix it
-[2025-08-12 00:40] lemmy_vicious : was it always like that?
-[2025-08-12 00:40] poletz : Yes
-[2025-08-12 00:40] lemmy_vicious : lie
-[2025-08-12 00:41] poletz : U talk like u were there
-[2025-08-12 00:41] poletz : The fact i relegated twice trust me says a lot
-[2025-08-12 00:41] poletz : Easy to say, oh but in the past was easier
-[2025-08-12 00:41] lemmy_vicious : i was there in my first season. and second. and third. and it wasnt like that
-[2025-08-12 00:41] poletz : U don t know
-[2025-08-12 00:42] lemmy_vicious : i dont know what i experienced? are you even a real person or a bot wtf lol
-[2025-08-12 00:42] poletz : For a while derby reduced the penalty. But was there at the beginning. On top something wasn t there. But there was something that now has been removed. Stop this useless comparison
-[2025-08-12 00:43] lemmy_vicious : useless?
-[2025-08-12 00:43] poletz : Pointless?
-[2025-08-12 00:43] poletz : Idk
-[2025-08-12 00:43] lemmy_vicious : how
-[2025-08-12 00:44] lemmy_vicious : you mean because now its different from how it was back then or?
-[2025-08-12 00:44] poletz : Yes
-[2025-08-12 00:45] lemmy_vicious : so how tf would you know how its now?
-[2025-08-12 00:46] poletz : I know the game
-[2025-08-12 00:46] lemmy_vicious : oh ffs 😂
-[2025-08-12 00:46] poletz : I m off to sleep now
-[2025-08-12 00:46] lemmy_vicious : same
-[2025-08-12 00:46] lemmy_vicious : good talk
-[2025-08-12 00:47] lemmy_vicious : glad we had it at least
-[2025-08-12 00:47] poletz : Yeah nice
-[2025-08-12 00:47] poletz : We ll meet again 😁
-[2025-08-12 00:48] lemmy_vicious : youre a good egg i suspect. im not getting too high yet but you doo seem like one despite everything lol
-[2025-08-12 00:49] poletz : Appreciate it mate
-[2025-08-12 00:50] lemmy_vicious : cheers, and have a good night
-[2025-08-12 00:50] poletz : You too
-[2025-08-12 00:50] lemmy_vicious : well joust again tomorrow or whenever i force myself to log in again lol
-[2025-08-12 00:50] poletz : I hope u will
-[2025-08-12 00:51] poletz : Tomorrow bit busy but it s a long run to d1 so we ll ve some chances again in the future lol
-[2025-08-12 00:55] lemmy_vicious : run to d1 eh. now youre just rubbing the salt in. i kinda recpect it ngl. lol
-[2025-08-12 01:19] balkanium : Don't get fooled. If he's playing nice it just means he's about to stab you
-[2025-08-12 06:18] poletz : Advice which i didn t give .  We were talking about another team, with higher money capacity and in d3. And i just said him raise your quality and depth. I m the first one to suggest to focus on mandatory skills for each  role so u totally didn t get it the right way.  Anyway if i gave you, explicitly to you, a bad advice, feel free to repost it and say this was wrong. But don t do this. I m here since 7 years  not 2 months 😉
-[2025-08-12 06:32] poletz : This is totally, totally wrong
-[2025-08-12 07:29] randykeys : I've never seen so much BS in all my time here lmao 😂 I really can't tell if what's been said here was in jest or if anyone actually believes we're being malicious, but that's complete nonsense. We're here every day giving advice, working with Derby to make the game better, nobody is intentionally putting anyone down or making the game harder for those at the bottom. Game has always been tough, maybe it's at it's toughest point now, idk, but history has shown that there will always be folks who best it, so, I'm not too worried about that. If you do have anything specific to talk about, like training or facilities, do so, adjustments can always be made. But these accusations aren't gonna get us anywhere 😅
-[2025-08-12 07:34] majo_lfc : I agree, that "main dev and his crew are doing everything in they can to hold the little guy down and make sure no one repeats their feats" is ridiculous, but I can see why a guy can feel this way tbh 🙂
-[2025-08-12 07:39] majo_lfc : because with the training changes and with how the facilities work, it feels almost impossible to improve the teams level very much 🙂
-[2025-08-12 07:45] randykeys : We always want players to succeed. That's a fact. Poletz has a unique way of speaking, he's direct, he's smart, it's not his first language, but I've been here a good 4 years and he's always wanted nothing but success for others, so while his advice might seem harsh at times, it always comes from a good place. And most often than not he's right.   Regarding facilities: I've said it before and I'll say it again, the level doesn't matter. You can get to D1 with level 20 facilities. It doesn't matter if they're going up or down. I've fought with Derby on this enough times so we'll see what changes come in the future.   Training has now shifted to needing more oldies than before. That's something that if you didn't have any before the change takes time to adjust to, it's not something you can fix overnight. But even then in the lower leagues it's more about having players that are ready now than it is about growing them, that's something that happens on the side and shouldn't be the main focus. I also agree that it can be buffed again, we've been keeping Derby up to date on how training is going and most of us agree that the pops have become rarer, gone are the days of +15/+20  growth spurts.  In the end, the game is always moving, always in development. Best we can do is talk about it. We all want the game to be in the best state it can be, for everyone.
-[2025-08-12 07:45] questionmark4 : I dont think anyone tries to give bad advice on purpose but the problem is the game is so much different now what worked back then definetly does not work the same now back then training facilities did not work as intended at all now it does that alone makes it so you need to take a different approach
-[2025-08-12 07:49] questionmark4 : No its the mentality of growing value instead of going for results if you go for results you will probably get out of there in no time 👍
-[2025-08-12 07:49] majo_lfc : I got out of there and it is not much better tbh 😄
-[2025-08-12 07:50] majo_lfc : see my post in general
-[2025-08-12 07:51] questionmark4 : Mate you field a starting eleven with average age of 20.8
-[2025-08-12 07:52] majo_lfc : I have no problems with results, I have problem with facilities or salary cap
-[2025-08-12 07:52] questionmark4 : It will grow as you get up in divisions 👍
-[2025-08-12 07:52] majo_lfc : I got up this season
-[2025-08-12 07:52] questionmark4 : If you want better facilities it can be a good idea to look at other teams relegating from higher divisions
-[2025-08-12 07:53] majo_lfc : but why cannot I get my facilities better, when I have the money?
-[2025-08-12 07:53] questionmark4 : But regardless i strongly advice to not field such young 11's the faster you go up the more beneficial it will be
-[2025-08-12 07:53] questionmark4 : Because your facilities is the level of a league 3 team
-[2025-08-12 07:54] majo_lfc : more like league 4 I would say
-[2025-08-12 07:54] questionmark4 : League 3 and 4 isn't much difference
-[2025-08-12 07:54] majo_lfc : I had 2nd lowest salary cap in D4
-[2025-08-12 07:54] majo_lfc : lowest in D3, earning money, but cannot improve anything
-[2025-08-12 07:54] majo_lfc : it is just not fun and not a good game mechanic
-[2025-08-12 07:55] randykeys : The board wants you to prove yourself in D3 First. Survive and they'll allow more room.
-[2025-08-12 07:55] questionmark4 : Its based on reputation not how much money you have or spend
-[2025-08-12 07:55] questionmark4 : It has to work like this for the game to be balanced
-[2025-08-12 07:57] questionmark4 : Just keep getting results and everything else will come with it 👍 and if you think that process is too slow you can always enter another team 👍
-[2025-08-12 07:59] randykeys : This is however something that I've spoken to Derby about before, I'm of the opinion that facility levels are too tight, the range should be larger.
-[2025-08-12 08:04] majo_lfc : I dont see balance in a game mechanic, where a manager cannot do anything while having a lot of money in the bank, sorry
-[2025-08-12 08:17] randykeys : Facilities need an overhaul that's for sure
-[2025-08-12 09:36] yasen_gg : The solution here is to see which among the players are high earners but provide the least amount of stars.
-[2025-08-12 09:37] yasen_gg : So if you have someone who is being paid a lot, but provides a star - it's time to sell him, free up wages and spend on a new player.
-[2025-08-12 09:37] yasen_gg : You want to maximize the amount of stars you're getting based on the wages you're paying.
-[2025-08-12 09:38] majo_lfc : i have 18 players mate
-[2025-08-12 09:38] yasen_gg : Yeah, we're in the same boat
-[2025-08-12 09:38] yasen_gg : I had 40m to spend and 5k available wages 😄
-[2025-08-12 09:39] yasen_gg : and a player on my end costs upwards of 100k in wages
-[2025-08-12 09:39] yasen_gg : Another thing you can do is see which of your older players are still being paid a lot - you can renew their contracts for a lower wage.
-[2025-08-12 09:41] majo_lfc : so I think we can agree that it is not a well worked game mechanic with finances/salary cap/facilities
-[2025-08-12 09:42] majo_lfc : sadly, I have only one older player and he would want same money as he has now 😄
-[2025-08-12 10:32] yasen_gg : I'm always salty with features like that, but once you know how it works - it makes sense.
-[2025-08-12 10:33] yasen_gg : You're currently underperforming based on the owners' expectations and hence the lowering of both wage cap and facilities
-[2025-08-12 10:34] yasen_gg : If none of the "hacks" above work - then the best you can do is try to overperform on a weekly basis.
-[2025-08-12 10:34] yasen_gg : Every Monday there's a small update to popularity, which also affects the wage cap.
-[2025-08-12 10:35] yasen_gg : So if you're doing good - you'll get a tiny bit extra to work wth and if you overperform relative to your league position expectation - you'll get an even bigger boost at the end.
-[2025-08-12 10:36] majo_lfc : I am definitely not underperforming 😄
-[2025-08-12 10:36] yasen_gg : I'm on my phone, so I can't tell
-[2025-08-12 10:36] yasen_gg : But maybe you're turning a club that was on a downward spiral - back to being good again.
-[2025-08-12 10:37] yasen_gg : So it might take a bit of time to adjust, but afterwards, you should be seeing the benefits.
-[2025-08-12 10:39] yasen_gg : I just checked and you are in deed doing great so far.
-[2025-08-12 10:40] majo_lfc : I am currently 7th in a D3 with a team that never survived a season in D3
-[2025-08-12 10:40] yasen_gg : So I think if you secure your spot on D3 you'll see a turnaround in both wage cap and facilities.
-[2025-08-12 10:42] majo_lfc : yeah, but with 22m in cash it shouldnt be like that I cannot buy or promote a player or invest into facilities, that are degrading... that is my point 🙂
-[2025-08-12 10:42] majo_lfc : And pray for no injuries 😄
-[2025-08-12 10:43] yasen_gg : You'll do well, nothing to worry about
-[2025-08-12 10:43] yasen_gg : The game is a looong long marathon.
-[2025-08-12 10:44] yasen_gg : The good thing is Derby is extremely active and constantly monitoring and reading our feedback, so if something is indeed broken - it will be fixed (or adjusted at least)
-[2025-08-12 10:44] yasen_gg : So be sure to report things you feel are odd or make less sense 🙂
-[2025-08-12 10:46] majo_lfc : but that is the point the guy made yesterday, that game tries to keep you down... I could improve my team, could invest into facilities to improve money/training, but game does not allow it and I can only pray, that I will not demote... so I dont think that is good feature in a management game
-[2025-08-12 10:49] yasen_gg : Facilities are not even that important currently
-[2025-08-12 10:49] yasen_gg : Regarding training I mean
-[2025-08-12 10:49] yasen_gg : Facilities are mostly a mechanic for player happiness, not training
-[2025-08-12 10:50] yasen_gg : It's a bit counter intuitive, but at the moment their effect is felt a lot bigger on happiness (which affects performance) than training (which also requires potential for growth and club fit)
-[2025-08-12 10:50] yasen_gg : As such, your forcus should be on just not having red faces on the training page
-[2025-08-12 10:51] yasen_gg : And those can be fixed with a good mix of mentors (older, more experienced players)
-[2025-08-12 10:51] yasen_gg : But the bottom part is - you are overpeforming, so you're ahead of the curve.
-[2025-08-12 10:51] yasen_gg : So both the expectations, facilities investment and wage cap will adjust soon.
-[2025-08-12 10:52] yasen_gg : You just need to prove your current results are not a fluke.
-[2025-08-12 10:52] yasen_gg : These mechanics exist to keep clubs in check (AI or human-managed).
-[2025-08-12 10:53] yasen_gg : So it's nothing specific to your club - we've all been there and while hard - it is doable.
-[2025-08-12 10:53] yasen_gg : Which is why it feels so good when you actully end up winning a division and go up (or survive for that matter haha)
-[2025-08-12 10:59] derbymanager : You can always promote players (if you have fewer than 25). So promote two youngsters, sell two top earners, and buy 2 experienced players to lead your u21 team. It'll help with results and with training and, then, when your popularity grows, facilities will improve too...
-[2025-08-12 10:59] derbymanager : Or maybe my intentions are malicious and do the opposite of that 🙂
-[2025-08-12 11:02] majo_lfc : really? I think I had less than 25 players last season and i could not promote a player when I was over salary cap.. that is why I thought so
-[2025-08-12 11:02] furysk : I’ve said my stance on this.  Making it less fun overall is what it’s doing for me.  Can debate what people should do at the bottom all you want, but if it’s tunneling people into one style of play it’s not right.  I’m not going to make the case that it’s being done intentionally, maybe it is maybe it isn’t.  The outcome is it feels pretty trash down here to be tunneled into a single style, that’s my feedback.  It shouldn’t be easy to get to the top, but seeing methods of improving getting taken away sucks.
-[2025-08-12 11:04] questionmark4 : What methods that works in real football doesn't work here?
-[2025-08-12 11:10] furysk : I’m not sure why that matters that much, But there are a few things that happen in irl that don’t here. Irl lower league teams get their players poached, would that be a good mechanic here? Not unless the value was good enough
-[2025-08-12 11:11] furysk : Don’t have to mirror irl on everything, part of the reason people make things is to do it better in their eyes.  Can’t speak for the person here and their motives, could be that could be making a game for friends to play with them, could be like 5-6 reasons
-[2025-08-12 11:11] questionmark4 : What else matters to make a good football management game? 😂 😂
-[2025-08-12 11:12] questionmark4 : I agree but you can't make things easy just to please people either in the long run game would become very boring
-[2025-08-12 11:12] majo_lfc : the good news though is, that I still won today despite playing CD in midfield, so the game still doesnt hate me despite me speaking up 😄
-[2025-08-12 11:14] furysk : I don’t expect an easy game.  I don’t expect a game without moving hurdles as it’s been said a few times it’s forever going to be in development self admitted.  I’m just commenting on how 2-3 updates running have made the game less fun for me and why.  Take it or leave it 🤷
-[2025-08-12 11:17] furysk : It got lost in the shuffle of poletz making it about him (I guess technically spurred on by us, but it never ended thereafter even after I said not worth it to me) but my biggest gripe from yesterday was that an explanation of what anticipation does in the wiki is still not there. It’s still pressing there.
-[2025-08-12 11:18] derbymanager : The mechanics are the way they are because there needs to be a limit. People would spend 20 seasons in last place in d4 and pump up facilities to top levels. And whatever limit I put, some people will hit that limit and want more. I can increase them but that only delays the problem. The point is to go up up and away.  Also, I know that nobody wants to hear that, the game needs you to sell those good youngsters with high potential to better teams. I know everyone wants a squad full of tottis but that wouldn't be good for the game.  Finally, for anyone from lower leagues thinking that I favour top teams - you're missing out on a ton of arguments where I fight those top teams every step of the way. If you ask salty the game does absolutely nothing right 😂  So, I treat everyone equally bad, no worries 😛  Another finally, we had a discussion a few days ago about how players can't jump up (which I disagreed with) and that ironman is the only way to go so... It can't be that's the only way to play when there are people that think it's not worth it...  3rd finally, do speak up. Sometimes it takes me weeks or months to fix some things but I am the first to admit that the loud minority may skew my opinion of the game's current status. So, saying your opinions matters, even if I don't agree with you it will probably lead to some changes down the line...
-[2025-08-12 11:30] furysk : Biggest need: fix pressing in wiki so I don’t have to explain when it comes up in questions lol
-[2025-08-12 11:31] yasen_gg : Is that really the biggest need? 😅
-[2025-08-12 11:32] furysk : No thus the laugh
-[2025-08-12 11:32] yasen_gg : Missed that, my bad 😄
-[2025-08-12 11:32] furysk : Just one that probably isn’t hard to get derby to agree to if he gets poked a few times
-[2025-08-12 11:33] furysk : Gonna keep doing it until a mysterious Illness hits my team ranking their results lol
-[2025-08-12 11:33] furysk : Didn’t happen today, safe so far
-[2025-08-12 11:34] yasen_gg : Derby does not get poked - he gets penetrated... like... hard.
-[2025-08-12 11:34] yasen_gg : People don't hold feedback and opinions against some of the mechanics, it's just these are not always public.
-[2025-08-12 11:35] yasen_gg : So he's on the receiving end on a lot of _coughfeedbackcough_
-[2025-08-12 11:38] derbymanager : I offered someone else to maintain the wiki but there were no volunteers...
-[2025-08-12 11:38] imamzade : After other injuries, my striker also got injured. This game really wants me to be relegated.
-[2025-08-12 11:38] derbymanager : <@94676029846593536> you up for a task 🙂
-[2025-08-12 11:40] imamzade : If you create an mdbook on GitHub, anyone can contribute to it.
-[2025-08-12 11:41] derbymanager : I don't want to move away from discord. I don't need one more thing to maintain.
-[2025-08-12 11:42] imamzade : Discord is the worst place to do that.
-[2025-08-12 11:45] furysk : If you need someone to add to it I can put some information into it about what certain things do that aren’t listed
-[2025-08-12 11:45] furysk : Unless I can edit your words though pressing -> anticipation still a you chore
-[2025-08-12 11:47] derbymanager : Poletz asked to write it out... When the game is finished 😏 😂
-[2025-08-12 11:47] furysk : Well, that’s a cheap way out of it lol
-[2025-08-12 11:47] derbymanager : Whoever does it should write it from scratch and maintain it themselves
-[2025-08-12 11:48] derbymanager : The salary is received in the form of complaints from everyone when something is outdated 🙂
-[2025-08-12 11:51] furysk : Which is most updates.  Although I haven’t bothered on some of the other things that aren’t that important. Just the one I’ve pointed at I feel is
-[2025-08-12 11:59] furysk : My central striker needs to get off his high horse about his playing time already.  Only game he missed he was injured in the last 4-5 days, should change his last name from holy to primadonna
