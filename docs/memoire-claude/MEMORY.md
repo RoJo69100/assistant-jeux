@@ -30,3 +30,4 @@
 - [HN noms d'équipes, amicaux](project-hn-noms-equipes-amicaux.md) — FRM Ben Ahmed Donkey, U21 Mjóifjörður Sheep, U17 Martigny Saint Bernard ; Bélanger et centres gérés par lui (2026-10-30)
 - [Hardwood](project-hardwood.md) — 5e jeu, conception faite le 30/10 (vues gold hw_*, résumé, checklist) ; walk-ons jamais exportés
 - [Hardwood : notes = compétences clés + potentiel](feedback-hardwood-notes-competences-cles.md) — Pierce 4/5 à tort ; PF=C ; tout vérifier joueur par joueur (2026-10-30)
+- [Hardwood : pas de High](feedback-hardwood-pas-de-high.md) — jamais afficher le niveau High des concurrents dans les tableaux recrues (2026-10-30)
