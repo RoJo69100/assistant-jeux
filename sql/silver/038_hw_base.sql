@@ -33,6 +33,11 @@ select substring(text from '\[ID #(\d+)\]')::int as team_id,
        game_date_txt, captured_at
 from silver.hw_pages
 where page_type in ('team', 'team_id') and text ~ '\[ID #\d+\]'
+  -- une page d'une autre équipe (export d'un adversaire) ne remplace pas la nôtre : notre id = celui des pages recrutement / depth chart / développement (corrigé le 2026-10-30)
+  and substring(text from '\[ID #(\d+)\]')::int = (
+    select url_id from silver.hw_pages
+    where page_type in ('recruiting_id', 'depth_chart_id', 'development_id') and url_id is not null
+    order by captured_at desc limit 1)
 order by captured_at desc
 limit 1;
 
