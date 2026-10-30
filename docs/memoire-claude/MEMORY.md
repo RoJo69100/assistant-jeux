@@ -25,3 +25,4 @@
 - [HN plan de jeu : libellés](reference-hn-plan-de-jeu-libelles.md) — mentality/pressure/tempo/aggression/shift/pull goalie en toutes lettres, instructions en match, capitaine = caché (2026-10-29)
 - [Reprise 3 jeux 30/10](project-reprise-3-jeux-2026-10-30.md) — première chose à faire : SZL, Team Soccer, BasketVibe, agents un jeu à la fois
 - [HN = jeu modèle](feedback-hockeynation-modele-reference.md) — reproduire sa méthode (déclaré, vues gold, rendu figé, veille intégrale) avant tout nouveau jeu (2026-10-29)
+- [Coupe BasketVibe quotidienne](project-basketvibe-coupe-quotidienne.md) — coupe tous les jours jusqu'à élimination ; vérifier un match de coupe à chaque passage (2026-10-30)
