@@ -32,3 +32,4 @@
 - [Hardwood : notes = compétences clés + potentiel](feedback-hardwood-notes-competences-cles.md) — Pierce 4/5 à tort ; PF=C ; tout vérifier joueur par joueur (2026-10-30)
 - [Hardwood : pas de High](feedback-hardwood-pas-de-high.md) — jamais afficher le niveau High des concurrents dans les tableaux recrues (2026-10-30)
 - [Hardwood : 4 cibles + backups](feedback-hardwood-recrues-cibles-backups.md) — rendu recrues obligatoire : 4 cibles sans concurrence, backups à côté (2026-10-30)
+- [Hardwood : tactique format écran](feedback-hardwood-tactique-format-ecran.md) — toujours tableau Réglage/Actuel/À mettre dans l'ordre de l'écran (2026-10-30)

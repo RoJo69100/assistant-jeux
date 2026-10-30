@@ -38,7 +38,8 @@ Veille → Match → Effectif → Finances-personnel (coachs) → Académie (rec
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Horizon : aujourd'hui seulement**. Le match de demain se prépare aujourd'hui.
-- **Rendu recrues [U]** : 4 cibles sans concurrence (jamais de High) avec leurs backups à côté, au moins un grand, recrues engagées retirées.
+- **Rendu recrues [U]** : TOUJOURS 4 lignes, colonnes Priorité · Poste (qui part) · Cible · Remplaçant 1 · Remplaçant 2 ; sans High ; grand ≥ 2,02 m (vérifier height_m) ; recrues déjà prises retirées.
+- **Rendu tactique [U]** : tableau Réglage | Actuel | À mettre dans l ordre de l écran : Pace, Inside/Outside Emphasis, Zone %, Pressure %, Extend (Man % = reste).
 - **Rendu** : tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action « fais X » ; saisie complète dans l'ordre de l'écran (depth chart poste par poste, puis Game Tactics, puis Game Management joueur par joueur) ; aucun « si » ; donnée manquante = « il me manque X, fais l'export Y » ; registre `outputs/hardwood/fait-AAAA-MM-JJ.md`.
 - **Décider** : chaque rendu contient un levier (recrue nommée, coach nommé, changement de poste) ou la raison chiffrée de n'en faire aucun ; défaite = analyse chiffrée contre toute la saison (`gold.hw_vd_compare`) ; conseils `C-nnn` → `L-nnn` dans `outputs/hardwood/learnings.md`.
 - **Amical (exhibition)** : compo de test, pas le cinq de ligue.
