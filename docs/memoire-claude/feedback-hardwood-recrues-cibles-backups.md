@@ -5,7 +5,7 @@ metadata:
   type: feedback
 ---
 
-Tout rendu de recrues Hardwood = un tableau de **4 cibles** (jamais 3), colonnes : Priorité · Poste (qui part) · **Cible** · Remplaçant 1 · Remplaçant 2. Chaque cellule : nom, classe/État, taille, note actuelle → plafond, nombre d'équipes intéressées. Cibles sans concurrence ou avec une ou deux équipes seulement, **jamais de niveau High** (ni colonne ni mention). Au moins un grand, et un grand mesure **au moins 2,02 m** (la vue classe « Grand » par positions PF/C, pas par taille : contrôler `height_m`). Recrue déjà prise par l'utilisateur (ex. Fletcher) retirée. « Eager to commit early » ≠ déjà recruté.
+Tout rendu de recrues Hardwood = un tableau de **4 cibles** (jamais 3), colonnes : Priorité · Poste (qui part) · **Cible** · Remplaçant 1 · Remplaçant 2. Chaque cellule : nom, classe/État, taille, note actuelle → plafond, nombre d'équipes intéressées. Cibles sans concurrence ou avec une ou deux équipes seulement, **jamais de niveau High** (ni colonne ni mention). Au moins un grand, et un grand mesure **au moins 2,02 m** (la vue classe « Grand » par positions PF/C, pas par taille : contrôler `height_m`). Recrue déjà engagée chez nous ou partie ailleurs (Fletcher est parti dans un autre club le 2026-10-30) retirée ; offres du 2026-10-30 faites sur Sturgeon (PG), Simon (SG), Woodling (Grand), Tolliver (SF). « Eager to commit early » ≠ déjà recruté.
 
 **Why:** règle posée par l'utilisateur le 2026-10-30, perdue au /clear ; il a dû la répéter trois fois (« règle OBLIGATOIRE », « 3 joueurs pas 4, c'est infernal »). Ancien tableau retrouvé dans le journal de session.
 
