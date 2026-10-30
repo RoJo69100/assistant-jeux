@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hardwood → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.0
+// @version      0.1.1
 // @description  Hardwood (onlinecollegebasketball.org) : chaque page que tu ouvres est copiée (texte, tableaux, HTML) dans une file gardée entre les pages ; un clic sur le bouton envoie toute la file dans bronze.raw_pages. Aucune requête supplémentaire vers le site du jeu.
 // @match        *://onlinecollegebasketball.org/*
 // @match        *://*.onlinecollegebasketball.org/*
@@ -23,7 +23,7 @@
   if (window.top !== window.self) return;           // pas dans les iframes
 
   const GAME = 'hardwood';
-  const CLIENT = 'hardwood.user.js@0.1.0';
+  const CLIENT = 'hardwood.user.js@0.1.1';
   const MAX_HTML_CHARS = 1_500_000;
   const MAX_QUEUE = 150;                            // pages en attente au plus (les plus anciennes sautent)
   const MAX_BODY_CHARS = 3_000_000;
@@ -147,15 +147,21 @@
       };
     });
     // Valeurs des formulaires (écrans Game Tactics / Game Management, entraînement) : ce qui est réglé, pas seulement affiché.
+    // Le site range chaque réglage dans <span id="green_light_242667"> : on garde cet id (réglage + joueur).
+    // Le choix neutre a un libellé vide (« ») : on garde donc aussi la valeur brute de l'option.
     const fields = [...root.querySelectorAll('select, input, textarea')]
       .filter((e) => !/password|hidden|submit|button/i.test(e.type || '') && (e.name || e.id))
-      .map((e) => ({
-        name: e.name || e.id,
-        label: (e.labels && e.labels[0] && e.labels[0].innerText.trim()) || null,
-        value: e.tagName === 'SELECT' ? (e.selectedOptions[0] ? e.selectedOptions[0].innerText.trim() : e.value)
-          : (/checkbox|radio/i.test(e.type) ? (e.checked ? e.value || 'on' : null) : e.value),
-        options: e.tagName === 'SELECT' ? [...e.options].map((o) => o.innerText.trim()) : undefined,
-      }))
+      .map((e) => {
+        const span = e.closest('span[id]');
+        const sel = e.tagName === 'SELECT' ? e.selectedOptions[0] : null;
+        return {
+          name: e.name || e.id,
+          key: span ? span.id : null,
+          label: (e.labels && e.labels[0] && e.labels[0].innerText.trim()) || null,
+          value: sel ? sel.value : (/checkbox|radio/i.test(e.type) ? (e.checked ? e.value || 'on' : null) : e.value),
+          text: sel ? sel.innerText.trim() : undefined,
+        };
+      })
       .filter((f) => f.value !== null && f.value !== '');
     if (ui) ui.box.style.display = 'none';
     const text = root.innerText;
