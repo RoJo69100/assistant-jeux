@@ -3,13 +3,21 @@
 Amont lus : lecteur-exports 30/10, tactique 29/10, tactique amical 31/10. Élimination directe : cinq de coupe (pas la compo de test). Moteur v4. Plan NON sauvegardé (`saved` faux, preset Cup, export 30/10 10:13 Paris) : tout est à saisir et à SAUVEGARDER AVANT 18:00, puis exporter la page du match. Ne pas faire « Save as preset ». Coupe = aucune fatigue, blessure, expérience [News 2026-10-23] : ces minutes ne coûtent rien à l'amical de demain 08:00.
 Base : plan PSG du 29/10 réellement saisi par l'utilisateur (`gold.bv_saisie_joueurs`, fixture dc345bfb, sauvegardé : C-097, C-098, C-099 appliqués). On le reprend tel quel, on ne change que les focus défensifs (adversaire différent).
 
+## Stratégie (correction du 2026-10-30, demande de l'utilisateur : match le plus important)
+- **Principe** : les cinq meilleurs par PS jouent (Lefebvre 63, Gimenez 59,7, Richard 56, Fournier 52,3, Bonnet 51,4) ; les jeunes (Baron, Leclerc, Lecomte, Bernard) sont à 0 minute et récupèrent pour l'amical de 08:00.
+- **Q4 = le quart perdu** : contre Maccabi (28/10) la marge par quart était +6, +16, +9, −4. Après 36 min d'affilée le PS est ×0,8 [M§5.7]. On remplace donc **en Q4 trois postes** : Richard → Boyer (48,2 contre 45,3), Fournier → Ungureanu (47,9 contre 42,2), **Bonnet → Dang (50,4 contre 41,5)**. Correction : le plan initial gardait Bonnet 48 min « pour un test lisible » ; on joue pour gagner, pas pour tester. Gimenez (48,2 contre Durand 43,2) et Lefebvre (50,9 contre Legrand 48,8) restent 48 min.
+- **Attaque** : Bonnet (3PT 72, 2PT 78) est le tireur, Off. focus 5 / Rôle 5 / Tir 5, Q1 à Q3 ; Lefebvre est la finition près du panier (2PT 75, rebonds 73) ; Richard distribue (Rôle 1, Tir 2, passeur 63).
+- **Défense** : Dupont Lock (5) et Guerin Intense (4), les deux seuls dangers ; Gautier, Marchal et Meyer en Light (2) ; le reste Normal.
+- **Prolongation** : Boyer, Dang, Gimenez, Lefebvre, Ungureanu, cinq de Q4, sans changement.
+- **Pas de remplacement programmé** : le cinq change au début du quart.
+
 ## Écran 1 : composition
 | | PG | SG | SF | PF | C |
 |---|---|---|---|---|---|
 | Q1 | Richard | Bonnet | Gimenez | Lefebvre | Fournier |
 | Q2 | Richard | Bonnet | Gimenez | Lefebvre | Fournier |
 | Q3 | Richard | Bonnet | Gimenez | Lefebvre | Fournier |
-| Q4 | **Boyer** | Bonnet | Gimenez | Lefebvre | **Ungureanu** |
+| Q4 | **Boyer** | **Dang** | Gimenez | Lefebvre | **Ungureanu** |
 | Prolongation | **Boyer** | **Dang** | Gimenez | Lefebvre | **Ungureanu** |
 Pas de remplacement programmé. Depth chart inchangé (SG Bonnet > Dang > Henry ; PF Lefebvre > Albano > Legrand).
 
@@ -19,8 +27,8 @@ Pas de remplacement programmé. Depth chart inchangé (SG Bonnet > Dang > Henry 
 | Baron | PG | — | — | — | — | — | 0 | 1 | 1 | 3 | 3 |
 | Boyer | PG | — | — | — | PG | PG | 12 (+5) | 2 | 2 | 3 | 3 |
 | Richard | PG | PG | PG | PG | — | — | 36 | 1 | 1 | **2** | 3 |
-| Bonnet | SG | SG | SG | SG | SG | — | 48 | 5 | 5 | 5 | 3 |
-| Dang | SG | — | — | — | — | SG | 0 (+5) | 3 | 3 | 3 | 3 |
+| Bonnet | SG | SG | SG | SG | — | — | 36 | 5 | 5 | 5 | 3 |
+| Dang | SG | — | — | — | SG | SG | 12 (+5) | 3 | 3 | 3 | 3 |
 | Henry | SG | — | — | — | — | — | 0 | 4 | 4 | 4 | 3 |
 | Leclerc | SG | — | — | — | — | — | 0 | 4 | 4 | 5 | 3 |
 | Durand | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
