@@ -56,3 +56,8 @@ Source : `silver.sz_api` `/chat/messages`. Avant d'écrire « pas de donnée » 
 | Nous | 2026-10-27 | 7 | 6 | 6 | 9 |
 - Stoik : Youth Academy 10 = prospects aux compétences 10 à 38, moyenne d'un tirage ≈ 24 de note ; il a tiré un pivot à 26 (2026-10-21 et 2026-10-23). Il conseille le Fan Shop quand on est bien classé (2026-10-23). Notre Fournier (17) sort d'une académie niveau 5.
 - Retard mesuré : Youth Academy 5 contre 9–10 chez deux clubs ; Arena et Fan Shop au niveau des autres. Training Facilities 6 : au niveau de martin, très au-dessus de Stoik.
+
+## Options observées (lecteur-exports, 2026-10-30)
+- **`page_type` = écran où l'utilisateur se trouvait, pas le contenu.** Le script étiquette chaque appel API avec l'adresse de la page ouverte ; le critère fiable est `source_url` (`source = 'dom'` : fiche de l'écran). Correspondances observées : `app_overview` → `/seasons/current/my-competition`, `/chat/messages`, SignalR `chat/negotiate` ; `app_team` → DOM effectif + `/notifications/mine` ; `app_competitions` → `/cups/current`, `/leagues/{id}`, notifications ; `app_transfers` → marché, `/seasons/current`, effectifs adverses `/teams/{uuid}/players` (uuid ≠ 5b564d16 = nous) + `player-stats` ; `app_national-teams` → `/national-teams`, `mine`, `trophies`, `players`.
+- Sources en bronze non lues par silver, effet inconnu (mesure = comparaison ovr par poste avec notre effectif) : `/seasons/current` (étapes et dates : Off-season, Managers take office), `/teams/{uuid}/players` des deux clubs adverses f5831a4b et 57a27f7c, `/national-teams*` (France rang 2, note 23, élection ouverte).
+- Le DOM de l'écran équipe donne nom, poste, ovr, âge, salaire, statut, mais pas les compétences : pour elles, il faut `/teams/mine/players` (écran Team > Players).

@@ -71,8 +71,10 @@ options_a_tester:
   - "direction d'attaque : effet non chiffré ; relever teams.tactics dans l'export du match"
   - "agressivité Hard : exclusions et cartons contre buts encaissés"
 
+page_type_note: "page_type en bronze = écran ouvert au moment de l'appel, pas le contenu ; classer par source_url (lot du 2026-10-30, détail dans docs/fiches/sixzeroleague/commun.md § Options observées)"
+
 exports:
-  - { page: app_competitions,        quand: après chaque journée (13:00 et 21:00), evenement: export_match }
+  - { page: app_competitions,       quand: après chaque journée (13:00 et 21:00), evenement: export_match }
   - { page: app_team,                quand: après chaque journée et avant la saisie, evenement: export_roster }
   - { page: app_overview,            quand: chaque soir après le cycle,          evenement: export_entrainement }
   - { page: app_club_finances,       quand: chaque soir après le cycle,          evenement: export_finances }
