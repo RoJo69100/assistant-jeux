@@ -14,7 +14,7 @@
 // ==/UserScript==
 
 // Base : teamsoccer.user.js 0.1.1. Les sites ne sont pas devinés : c'est toi qui actives le site ouvert, une fois, en choisissant le jeu.
-// Jeux avec script dédié (ne pas activer ici) : basketvibe, hockeynation, sixzeroleague, teamsoccer.
+// Jeux avec script dédié (ne pas activer ici) : basketvibe, hardwood, hockeynation, sixzeroleague, teamsoccer.
 (function () {
   'use strict';
 
@@ -28,7 +28,7 @@
     ['cyclingsimulator', 'Cycling Simulator'], ['hattrick', 'Hattrick'], ['kickoffboss', 'Kick Off Boss'],
     ['fmp', 'Football Manager Project'], ['buzzerbeater', 'BuzzerBeater'], ['teamhb', 'TeamHB'],
     ['itsagoal', "It's a Goal"], ['vm', 'VM-Manager'], ['redzoneaction', 'RedZone Action'],
-    ['hardwood', 'Hardwood'], ['myracingcareer', 'My Racing Career'], ['rockingsoccer', 'Rocking Soccer'],
+    ['myracingcareer', 'My Racing Career'], ['rockingsoccer', 'Rocking Soccer'],
     ['icedynasty', 'Ice Dynasty'],
   ];
   const MAX_HTML_CHARS = 1_500_000;
