@@ -1,6 +1,6 @@
 # Connaissance BasketVibe (index par thème)
 
-Créé le 2026-10-27 par la veille ; complété le 2026-10-29 (Discord : delta du 29/10, 122 messages ; historique 2026-05-31 → 2026-10-09 jamais lu, 9 773 messages, dont 642 du développeur `vachacz`). Chaque entrée : fait, source, date, auteur, statut (confirmé / complété / contredit / en doute). Les entrées ne sont jamais effacées. Les entrées du 29/10 sont marquées « (29/10) ». Les skills `basketvibe-*` contenaient déjà l'essentiel de l'historique (académie, sponsors, enchères, fatigue, 36 min) : les lignes ci-dessous marquées « confirmé (skill) » ne demandent aucune proposition.
+Créé le 2026-10-27 par la veille ; complété le 2026-10-29 (Discord : delta du 29/10, 122 messages ; historique 2026-05-31 → 2026-10-09 jamais lu, 9 773 messages, dont 642 du développeur `vachacz`). Chaque entrée : fait, source, date, auteur, statut (confirmé / complété / contredit / en doute). Les entrées ne sont jamais effacées. Les entrées du 29/10 sont marquées « (29/10) ». Complété le 2026-10-30 par la lecture de l'historique Discord 2026-05-31 → 2026-10-09 (section « Lecture intégrale », propositions V-20261030-n). Les skills `basketvibe-*` contenaient déjà l'essentiel de l'historique (académie, sponsors, enchères, fatigue, 36 min) : les lignes ci-dessous marquées « confirmé (skill) » ne demandent aucune proposition.
 
 ## Tactique / moteur
 | Fait | Source | Date | Statut |
@@ -66,7 +66,7 @@ Créé le 2026-10-27 par la veille ; complété le 2026-10-29 (Discord : delta d
 | Sponsors : Fluxora Balance = 640k garanti + 15k/victoire (plafond 970k) | Export finance_sponsor (fait-2026-10-27) | 2026-10-27 | confirmé (nos données, pas une News) |
 | Sponsors : 6 contrats au choix, « Stability » par défaut ; avant : fixe 100 000 ; premier match à domicile 250-300k, jusqu'à 400k | Dev vachacz, economy / help | 2026-09-05, 2026-10-02 | confirmé (skill) |
 | Prime de victoire de ligue 200 000 « encore de l'avant-reset, à revoir en fin de saison 1 » | Dev vachacz, help | 2026-09-27 08:48 | en doute (rien annoncé depuis) |
-| Salaire = fonction des compétences entraînables ; TS recalculé une fois par jour, sur les 8 meilleurs | Dev vachacz, general | 2026-06-24, 2026-08-13, 2026-08-31, 2026-09-03 | confirmé (skill) |
+| Salaire = fonction des compétences entraînables ; TS recalculé une fois par jour, sur les 8 meilleurs | Dev vachacz, general | 2026-06-24, 2026-08-13, 2026-08-31, 2026-09-03 | confirmé (skill) ; complété le 2026-10-30 : le TS est aussi recalculé juste après un transfert réglé (News 2026-09-04), donc « une fois par jour » n'est plus exact (V-20261030-3) |
 | Effectif minimum 8 (libération bloquée sous 8, mise en vente limitée au-dessus) ; discuté 5 ou 10, maintenu à 8 | Dev vachacz, general | 2026-09-03, 2026-09-05 | confirmé (skill) |
 | Enchères : maximum auto, +3 par minute sous la minute / pas plus de 15 min, puis phase à l'aveugle ; l'enchère maximale ne peut pas dépasser le solde | Dev vachacz, help / general | 2026-07-21, 2026-07-26, 2026-09-03 | confirmé (skill ; « +3 » hérité de la mémoire du dev, « I guess ») |
 | Aucune règle de pays pour le bonus homegrown (plafond 40 000 à ~60 min) | Dev vachacz, help | 2026-09-10 13:25 | confirmé (skill) |
@@ -77,5 +77,79 @@ Créé le 2026-10-27 par la veille ; complété le 2026-10-29 (Discord : delta d
 | 29/10, premier tirage de la saison 2 : avis opposés sur un junior à 100 % d'académie (C de 17 ans, rebond faible) : « ne le promeus pas » (lucadrago5, dcarra.), « promeus et revends » (dixi2499) ; à 69 % « garde la jauge » (heldermoreno, jorgeac25) ; un joueur a dépensé 150k sur l'académie une semaine sans junior utile | Com, italia / portugal | 2026-10-29 | complété (avis seulement ; non vérifié ; décision à prendre avec `basketvibe-academie`, pas avec ces avis) |
 | Marché : un 3 étoiles de 16 ans se vend 3,5-4 M (annonces 29/10) ; un acheteur a poussé une enchère à 4 M | Com lolek5232 / dixi2499 / heldermoreno | 2026-10-29 | complété (avis ; à comparer à `gold.bv_market_price_known`, max observé 2 894 063 au 22/10) |
 
+## Lecture intégrale de l'historique Discord (passage du 2026-10-30)
+Périmètre : `discord_BasketVibe_export.txt` (9 775 messages, 2026-05-31 → 2026-10-09 ; les 642 du développeur `vachacz` lus un par un, première ligne) + `export discord basketvibe.txt` (2 953 messages, 2026-05 → 2026-10 : release-notes lues en entier, 79 messages longs du dev relus en entier, avec le texte multi-lignes). Les messages de joueurs (≈ 9 100) n'ont pas été relus un par un : balayage par mots-clés (annonces de règles, mesures) sans résultat nouveau, donc les avis de joueurs restent des hypothèses. Dev = `vachacz` (Łukasz, développeur seul).
+
+### Tactique / moteur
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| v2 : aucune pénalité de poste hors rebonds ; hauteur et emplacement PG–C comptent ; défenseur principal = même emplacement que le tireur ; v2 en amical 09/07, en ligue 22/07 | Dev, #engine / release-notes | 2026-07-09 21:47, 2026-07-18 21:08, 2026-07-22 | confirmé (skill) |
+| v1 : balle en main, athlétisme, poids/IMC sans effet ; lancers francs mal équilibrés (échec constaté par le dev) | Dev, #engine | 2026-07-06 18:49 | complété (historique, v2 corrige) |
+| Le 3P influence les lancers francs (2/3 le 2P, 1/3 le 3P) ; tactique/focus défensif relevés ; pénalité >36 min 8 → 10 % | release-notes | 2026-08-08, 2026-08-09 | confirmé (skill) |
+| Le passeur n'est plus une compétence d'équipe : « dernier passeur » choisi par poste et rôle ; hasard du tir réduit ; plafond 3P à 50 % des tirs (avant 70 %) ; rebonds redistribués (leaders > 20/match) | release-notes | 2026-08-24 | confirmé (skill communauté) |
+| v3 : plafond de tirs à 3 levé pour les meilleurs tireurs à 3 (détail non divulgué) ; bug de distance au cercle dans la répartition des rebonds corrigé | release-notes | 2026-09-14, 2026-09-16 | complété (effet : 3P% un peu plus haut en v3) |
+| Le dev ne divulgue ni formules ni équilibre des compétences ; la formule de PS « ne sert pas » au moteur, qui lit les compétences possession par possession | Dev, #engine | 2026-07-13, 2026-07-18, 2026-09-17 | confirmé (PS = indicateur, skill) |
+| Tactiques verrouillées 15 min avant le match ; lineup propre à la prolongation (OT) ; ordre des consignes : focus offensif en premier ; tactiques de ligue et d'amical séparées ; préréglage modifiable par match | release-notes | 2026-08-05, 2026-09-11, 2026-09-27, 2026-10-08 | confirmé (skill saison M§1.3) ; l'OT et l'ordre sont complétés |
+| Repos manuel : le dev a appliqué lui-même des « repos » (fatigue remise) aux joueurs : 19/08 (par jour sur les amicaux), 24/08 (erreur double), 29/08 (« daily »), avant la dernière journée du 29/08, 13/09 (« solution temporaire », par clic au back-office) | Dev, #general / release-notes | 2026-08-19, 2026-08-24, 2026-08-29, 2026-09-13 | en doute : on ignore s'il le fait encore en v4 ; l'historique de fatigue d'avant le 27/10 a pu être remis à zéro hors règles (V-20261030-6) |
+| Le repos ne dépend pas de l'endurance | Dev, #general | 2026-09-09 16:02 | en doute (« if I recall ») |
+| Défense agressive : fatigue après match (+ calibrage de l'impact) dès juin ; corrélation avec les fautes/blessures « seulement si défense agressive » | release-notes / Dev | 2026-06-21, 2026-09-14 | confirmé (cohérent v4) |
+| Débits de score : 1 000 simulations d'un match ≈ 123,6–133,0 pts ; ~10 % de matchs > 150 pts jugés trop hauts ; moteur recalibré à des scores plus proches de la NBA | Dev, #general / release-notes | 2026-07-24 14:21, 2026-07-26 | complété (historique, avant reset) |
+| Piste « équipe à 48 min » : le dev dit que jouer contre une équipe à 48 min ne garantit pas 100 % de victoire ; bots −10 en toutes compétences, expérience remise à zéro (2/08) | Dev / release-notes | 2026-08-21, 2026-08-02 | confirmé (skill) |
+| Fan-out rejeté / en attente : tactiques d'équipe (zone 3-2, 2-3, individuelle) refusées au profit de la « Defense area » ; « Driving frequency » flou | Dev, #engine | 2026-09-10 | confirmé (voir lignes du 29/10) |
+
+### Calendrier / classement / amicaux
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Points 2 victoire / 1 défaite jouée / 0 forfait ; forfait = 20–0 si le cinq ne peut pas être aligné | release-notes | 2026-08-13 | confirmé (skill saison) |
+| Départage : « h2h » (confrontation directe) ; la News du 23/09 dit « h2h is not more important than +/- » (probable faute de frappe de « now more important ») | Dev, #help ; release-notes | 2026-10-03 18:59, 2026-09-23 | confirmé (skill) ; ordre exact en doute pour la News (V-20261030-2) |
+| Promotion/relégation 4 montent, 4 descendent (pas de 2/4) ; T4 UE ajouté le 16/07 ; inactivité 30 ou 45 jours (45 retenu) | Dev, #general | 2026-07-16 20:08, 2026-08-11 | confirmé (skill) |
+| Amicaux : lancés le 29/06 ; invitation valable 2 jours ; 5 programmés au plus ; toujours à domicile (jusqu'au 29/07), puis choix domicile/extérieur ; annulation possible (11/08) ; recettes domicile = extérieur (14/07) ; « friendly finder » (22/07, déplacé dans Schedule le 04/10, 2 sections le 26/09) ; pas de blessure, 10 % d'expérience/fatigue (juin) | release-notes | 2026-06-29, 2026-07-14, 2026-07-22, 2026-07-29, 2026-08-11, 2026-09-26 | complété (V-20261030-4) ; « pas de blessure » contredit par v4 (voir 19/10) |
+| Coupe pilote : 5 manches, 1 par jour, dès 04/09 ; coupe « BV Cup » globale prévue à 10/11 manches, puis 1-2 matchs par semaine | release-notes / Dev | 2026-09-03, 2026-09-05 | contredit pour la forme actuelle (News 23/10 : un match par jour, nationale/multinationale) ; périmé |
+| Fuseau Asie-Pacifique : Asia/Tokyo (UTC+9), coup d'envoi 20:00 | Dev, #general | 2026-08-08 10:20 | complété (sans effet pour nous : Europe) |
+| Un joueur de 16 ans « vit ~3 ans réels » (56 jours ≈ 2 mois par saison) | Dev, #general | 2026-09-04 | confirmé (calcul : saison de 22 journées ≈ 8 semaines) |
+
+### Entraînement / vieillissement
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Réforme d'entraînement du 10/08 : baisse des compétences de départ des juniors, plafond d'entraînement abaissé, vieillissement de toutes les compétences, juniors de 16-17 ans, suppression de l'entraînement en cours de saison ; juniors de 17 ans +2 en bandes ; retraite à la fin de l'année des 38 ans | release-notes | 2026-08-10, 2026-08-11 | confirmé (skill) |
+| On peut entraîner jusqu'à 99, plus cher ; aucun autre plafond ; un joueur s'entraîne une fois par semaine quelles que soient ses minutes ; < 21 ans peuvent grandir ; académie/effectif de départ sans décimales | Dev, #help | 2026-09-08, 2026-09-21, 2026-09-13 | confirmé (skill) |
+| Avant la réforme, un 16 ans gagnait 15 compétences par saison et une compétence de 45 à 60 (« réduit à 45 → 60 ») | Dev, #academy | 2026-07-14 19:13 | contredit (modèle remplacé le 10/08) |
+| Multiplicateur d'entraînement du potentiel 10 = 2,20 ; le dev envisage 2,10 ou 2,00 | Dev, #reset | 2026-08-16 14:43 | en doute (aucune annonce de baisse depuis ; skill à vérifier) |
+| Forme : variation aléatoire ±1 par semaine (psychologues décalent les chances) ; remise à 6 au changement de saison ; changement de forme affiché à côté de l'entraînement (03/10) | Dev / release-notes | 2026-07-20, 2026-09-11, 2026-10-03 | confirmé (skill) |
+| Blessures : durée étendue à 3-12 jours (26/08) ; probabilités inchangées (fatigue, endurance, kinés, agressivité défensive, minutes) ; âge pas un facteur ; kinés −50 % de risque max, médecins −50 % de durée max | release-notes / Dev | 2026-08-10, 2026-08-26, 2026-09-26 | confirmé (skill économie) |
+
+### Académie
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Rapport d'éclaireur chaque semaine (depuis le 14/07), tranches 25 → 20 (11/07) puis tests à 25 000 (21/07), potentiel révélé par les tests (30/07), âge 16-18 (16/07) puis 16-17 (10/08), jeudi 09:00 « jour de l'académie » (09/08) | release-notes | 2026-07-11 … 2026-08-10 | confirmé (skill) |
+| Courbe non linéaire, baisse fixe de 5 % par semaine, signer = −50 % (le dev a envisagé 33 %, décidé « pas touché ») | Dev, #academy | 2026-07-14, 2026-07-15, 2026-07-22, 2026-07-23 | confirmé (skill) |
+| Le niveau d'académie élargit aussi les tranches de compétences, « peut-être plus important que le potentiel » | Dev, #academy | 2026-07-21 19:48 | en doute (un message, non repris dans la table) |
+| Les 3 candidats viennent de postes différents et suivent la répartition NBA (C 17 %, SG 23 %, un pivot « toutes les 2 semaines ») | Dev, #academy | 2026-07-22 18:26, 18:43 | contredit par nos données : rapport du 2026-10-15 = PG, SF, SF ; rapports du 22/10 (PF, SF, C) et 29/10 (PG, C, SG) conformes (`silver.bv_academy_candidates`) (V-20261030-5) |
+| Départ post-reset : académie à 80 % pour tous ; 2 tirages à 60 % en plus (3,5 % de potentiel 9) ; 1,7 % de potentiel 10 au premier tirage | Dev, #reset | 2026-08-12, 2026-08-16 | confirmé (historique, sans effet aujourd'hui) |
+| Visibilité du potentiel d'un joueur en vente : 4 options en sondage (masquer / montrer si révélé par le propriétaire / toujours / test par l'acheteur) | Dev, #general | 2026-09-24 22:33 | à surveiller (résultat du sondage inconnu ; 20/10 : visible sur nos joueurs) |
+
+### Finances / transferts / personnel
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Sponsor : 500 000 une fois par saison (jusqu'au 22/07) → 100 000 par semaine ; 6 contrats au choix en début de saison, « Stability » par défaut, pas de changement en cours de saison, sans conséquence autre que financière ; tout-ou-rien supprimé | Dev / release-notes | 2026-07-22, 2026-10-02, 2026-10-03 | confirmé (skill économie) |
+| Économie du 21/08 : recettes d'amical −30 %, investissement académie maximal 100 000, rapport d'éclaireur ne coûte plus plus cher que tous les salaires ; « plus facile de gonfler que de dégonfler » | Dev, #economy | 2026-08-19, 2026-08-21 | confirmé (skill : 100 000 par semaine) |
+| Personnel : kinés 4 × 5 000, médecins 2 × 10 000 (26/08) ; psychologues 2 × 10 000 (+5 % de chance de hausse de forme) et marketing (28/08, annoncé à 10 000 par le dev, 12 500 constaté dans nos données le 16/10 : 70 000/semaine) | release-notes / skill | 2026-08-26, 2026-08-27, 2026-08-28 | confirmé (skill ; les 10 000 du dev étaient une proposition) |
+| Popularité : +2 victoire, −3 défaite, à domicile seulement, remise à 70 ; bonus homegrown 200 par minute, plafond 40 000 par semaine (~66 min par match) | release-notes | 2026-08-28 | confirmé (skill) |
+| Popularité : idée du dev que les matchs à l'extérieur comptent (« une victoire à l'extérieur vaut plus ») ; remise à 70 « si en dessous de 70 » (« au-dessus, bon… », phrase inachevée) | Dev, #help | 2026-10-07 20:24, 20:45 | en doute : la remise à 70 pourrait ne s'appliquer qu'aux clubs sous 70 ; notre club : 0,65 le 25/10 → 0,70 le 29/10 (`silver.bv_finance_weekly`), non concluant (V-20261030-7) |
+| La DH (division hardiness) pourrait pondérer billetterie et sponsors ; « ajouter quelque chose pour la moitié haute » | Dev, #help | 2026-09-28 14:22 | en doute (intention, rien annoncé) |
+| Renommée des joueurs (MVP match 0,25, MVP journée 0,5) → popularité/billetterie | Dev, #economy | 2026-09-10 | en doute (proposition, 11 ✅ de joueurs, rien livré) |
+| Taxe forfaitaire de 5 % ; joueur acheté 2 semaines au club avant revente (29/07) → 7 jours (14/09) ; agents libres : naissance quotidienne, expérience plafonnée à 10 (16/07), enchère de 2 jours (30/07), TSP 360-420 (14/08) | release-notes | 2026-07-29, 2026-07-30, 2026-09-14, 2026-08-14 | confirmé (skill transferts/communauté) |
+| Enchère maximale impossible au-dessus du solde ; enchère maximale abaissable ; historique d'enchères visible | Dev / release-notes | 2026-07-26, 2026-07-30 | confirmé (skill) |
+| Transferts entre comptes de la même IP interdits (cas du 13/09 : joueur retiré du marché, pas de ban) ; solde négatif = blocage du marché | Dev, #general | 2026-09-03, 2026-09-13, 2026-09-12 | confirmé (skill pour le blocage) ; règle IP complétée |
+| Pack Supporter : fonctions furtives (records individuels, vue du temps de jeu, comparaison de joueurs, planificateur d'entraînement) ; l'analyse avancée = ce pack | release-notes | 2026-09-26, 2026-09-27, 2026-09-29, 2026-10-03 | confirmé (skill) |
+
+### Interface / stats
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| +/- et PER (07/08) ; PER remplacé par EVAL (28/09), utilisé pour MVP et meilleur cinq (anciens MVP recalculés) ; FG% et 3P% de la page Joueurs : filtre « 10 » (texte tronqué) ; le dev note que les équipes à 5 × 48 min dominent le « top 5 de la saison » | release-notes | 2026-08-07, 2026-09-28 | complété (V-20261030-1) |
+| Force : PS (joueur, visible seulement chez soi/en vente), TS (8 meilleurs), DH (11 meilleures équipes de la division) | release-notes | 2026-08-16 | confirmé (skill) |
+| Coupes, chat de ligue (25/09), sondages dans les News (20/09), observateur en direct (12/09), calendrier (11/09), carte « Promote » (30/09) | release-notes | 2026-09-11 … 2026-09-30 | complété (sans effet sur les décisions) |
+
 ## Bugs
 Tactiques mobiles sans OT (corrigé 2026-10-22) ; ordonnanceur de coupe nationale corrigé et Coupe multinationale reconstruite (2026-10-25). Bug de dates de rapport d'académie après passage à 1 semaine (Dev 2026-07-22, corrigé ensuite). Coupe : le planning révélait le score en direct (corrigé, Dev 2026-09-14). Walk-over avec effectif incomplet corrigé (Dev 2026-08-13, 2026-09-03).
+Historique (release-notes 2026-06 → 2026-10, passage du 2026-10-30) : joueur à 7 fautes revenu au quart suivant (corrigé 02/07) ; plafond de 5 amicaux/invitations (corrigé 30/06) ; enchère au prix minimum refusée (corrigé 18/07) ; rapport d'éclaireur en double le même jour (corrigé 29/07) ; walk-over et coupe : planning décalé au 17/09 (03/09, à corriger) ; notifications de coupe affichées comme amicaux (04/09) ; quatre joueurs dans le lineup (corrigé 16/09) ; lineup de quart faux dans le play-by-play (15/09) ; depth chart utilisait le poste nominal au lieu de l'emplacement (corrigé 18/09) ; sauvegarde des tactiques après transfert (19-21/09, « retest requis ») ; résultat de coupe visible dans Schedule > Cups (corrigé 27/09) ; enchère à l'aveugle sans modification possible de l'enchère maximale (corrigé 27/09).

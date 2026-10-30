@@ -71,6 +71,9 @@ Probabilités (%) selon la force au moment du rapport :
 - **Bonus sponsor homegrown** : 200 par minute de ligue jouée par les juniors signés à l'académie (icône maison), plafonné à 40 000 par semaine, versé le dimanche. Les 12 joueurs de départ ne comptent jamais [M§10.1.3].
 - Les juniors gagnent aussi de l'expérience plus vite jusqu'à 21 ans [M§5.4].
 
+## Postes des candidats (V-20261030-5)
+- ⚠️ Hypothèse (un cas contraire) : le développeur a annoncé que les 3 candidats viennent de postes différents, répartition NBA (PG/SG/SF/PF/C ; C 17 %, SG 23 %) [Dev 2026-07-22 18:26 et 18:43, academy]. Nos rapports : 2026-10-22 PF-SF-C et 2026-10-29 PG-C-SG (conformes), mais **2026-10-15 PG-SF-SF** (deux SF) (`silver.bv_academy_candidates`). Ne pas déduire le poste d'un candidat de celui des autres.
+
 ## Lecture de nos données
 - `silver.bv_academy_weekly` (score, investissement, prochain rapport) ; `silver.bv_academy_candidates` (fourchettes min/max par compétence de chaque prospect).
 - [Obs 2026-10-16] Académie à 45 %, investissement de 100 000 par semaine, rapport du 15/10 avec 3 prospects de 16 ans, prochain le 22/10. La plupart des fourchettes affichées sont 24–44, comme la ligne 40–50 % du tableau ; certaines sont plus basses (12–32, 17–37, 20–40). La barre du scout n'est donc pas toujours l'enveloppe du tableau : c'est une fenêtre de ~20 points qui contient la vraie valeur.
