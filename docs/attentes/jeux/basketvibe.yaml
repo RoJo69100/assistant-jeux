@@ -73,7 +73,7 @@ exports:
   - { page: training,          quand: dimanche après 04:00,      evenement: export_entrainement }
   - { page: finance,           quand: dimanche après 04:00,      evenement: export_finances }
   - { page: personnel,         quand: dimanche après 04:00,      evenement: export_finances }
-  - { page: academy,           quand: jeudi après 09:00,         evenement: export_academie, page_typee_reelle: "parfois la page finances (26/10)" }
+  - { page: academy,           quand: jeudi après 09:00,         evenement: export_academie, page_typee_reelle: "parfois la page finances (26/10)", apres_export: "lire gold.bv_academy_chat depuis le dernier rapport (carte academie)" }
   - { page: transfers,         quand: si plus de 24 h,           evenement: export_marche }
   - { page: transfers_global-history, quand: avec le marché,     evenement: export_marche }
 
