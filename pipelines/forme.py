@@ -210,7 +210,7 @@ def fautes_tableaux(text: str) -> list[str]:
             f += hw_recrues(cols, lignes)
         elif cols[0] == "joueur" and (idx(cols, "principale") >= 0 or (idx(cols, "actuel") >= 0 and idx(cols, "a mettre") >= 0)):
             f += entrainement(cols, lignes)
-        elif cols[0] == "reglage":
+        elif cols[0] == "reglage" and idx(cols, "actuel") >= 0 and idx(cols, "a mettre") >= 0:
             f += hw_tactique(cols, lignes)
         elif "adversaire" in cols[0]:
             f += adversaires(cols, lignes)
