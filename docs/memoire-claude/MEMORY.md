@@ -38,3 +38,4 @@
 - [Dossier complet + police](feedback-dossier-complet-police.md) — décision importante : dossier.py, grille de variables, agent police, hook anti « pas tout lu » (2026-10-31)
 - [Derby Manager récap 31/10](project-derbymanager-recap-31-10.md) — High ralentit la condition (confirmé), récap rendu, rien appliqué à sa demande
 - [Carte des variables = cœur](feedback-carte-variables-coeur.md) — on trouve une fois, on note où ; ensuite carte + nouveau seulement ; checks appris des matchs (2026-10-31)
+- [Hook forme : tous les formats](project-hook-forme-formats.md) — forme.py bloque les rendus hors format, entraînement dans l'ordre de l'export (2026-10-31)
