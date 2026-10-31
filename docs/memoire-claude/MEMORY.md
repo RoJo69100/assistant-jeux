@@ -35,3 +35,4 @@
 - [Derby Manager](project-derbymanager.md) — 6e jeu conçu le 30/10 : QoS 547 / Marmandes 307 séparés, vues dm_*, Marmandes pas encore exporté
 - [Derby Manager : reprise 31/10](project-derbymanager-reprise-31-10.md) — creuser demain : pourquoi la condition/forme ne remonte pas, exports manquants, brief complet
 - [Hardwood : tactique format écran](feedback-hardwood-tactique-format-ecran.md) — toujours tableau Réglage/Actuel/À mettre dans l'ordre de l'écran (2026-10-30)
+- [Derby Manager récap 31/10](project-derbymanager-recap-31-10.md) — High ralentit la condition (confirmé), récap rendu, rien appliqué à sa demande
