@@ -15,7 +15,7 @@ Sources : `gold.sz_agenda` et `gold.sz_daily_alerts` (`sql/gold/015_sz_agenda.sq
 5. Si `silver.sz_schedule.captured_at` a plus de 24 h, l'agenda peut être faux : demande l'export de la page League.
 
 ## Règles de l'utilisateur (2026-10-25)
-- Une seule tactique par défaut pour tous les matchs : jamais « saisir la compo de J14 / J15 » ; une saisie ne se refait que si un joueur change (blessure, suspension, brief Tactique).
+- **Compo du prochain match = première ligne du plan (correction du 2026-10-31, « s'il y a match le jour d'après, tu dois dire : tu dois faire la compo de demain »)** : si un match a lieu demain (ou si aucun n'est encore joué dans la nouvelle saison), la première ligne Composition nomme le match (journée, adversaire, domicile/extérieur, heure) et donne la saisie complète poste par poste (`gold.sz_saisie_tactique`), même si elle est identique à celle en place : l'utilisateur ne peut agir que le jour même. Jamais « rien à faire » quand un match tombe le lendemain. Une saisie unique reste valable pour plusieurs matchs d'affilée tant qu'aucun joueur ne change, mais je la rappelle et la contrôle (blessés, suspendus) chaque jour de match.
 - Aucune action « après le match » (export de match, Finances, Entraînement post-cycle) dans la liste : je la demande une fois le match joué.
 
 ## Format de réponse
