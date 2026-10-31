@@ -11,6 +11,20 @@
           { "type": "command", "command": "git pull --no-edit" }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python pipelines/police.py" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python pipelines/police.py" }
+        ]
+      }
     ]
   }
 }
