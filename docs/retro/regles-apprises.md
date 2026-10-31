@@ -3,6 +3,14 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-31 (soir, Hockey Nation : « j'ai pas trop aimé toutes tes réponses »)
+61. « Que faire » avec un match demain = je DONNE la saisie complète (`gold.hn_tactique_rendu` + `plan_rendu` + `controle`, tout dans l'ordre de l'écran), jamais « dis sors la compo » (RÉCIDIVE règle de rendu 3 et règle 27). Si le contrôle dit « 0 case différente de la cible », je le dis : la lineup est déjà saisie.
+60. Numéro de match ≠ jour de saison : « J8 » venait de `gold.hn_today.next_calendar_event` (jour de saison 8) alors que le match du 01/11 est la J1 de ligue. Le numéro d'un match se lit dans le calendrier des matchs (rang parmi les matchs de ligue), jamais dans le calendrier de saison.
+59. Pénalité −20 % = joueur HORS POSTE (colonne `poste` de `hn_tactique_rendu`), pas talent « contre-emploi » de `hn_player_fit` : j'ai annoncé 6 joueurs à −20 % alors que `poste` = ok pour tous. Avant d'écrire une pénalité chiffrée, lire la colonne qui la porte.
+58. Une réponse d'offre (coach refusé/accepté) se lit moi-même : `club_news` de la mise à jour quotidienne + diff `silver.hn_club_staff` entre deux jours, puis je le dis. Demander à l'utilisateur ce que la base montre = récidive de « ne jamais redemander » ; les entrées/sorties de coachs de chaque jour se comparent à chaque passage.
+57. Une vue de décision se teste sur le cas limite connu : `hn_scout_board` comptait 3 gardiens comme « nouveaux joueurs » alors que la limite de draft G = 0 (Koelewijn « oui » à tort). Corrigé (sql/gold/056). Toute recommandation d'embauche nomme les joueurs nouveaux couverts, pas un nombre.
+(forme) Catégories de plan fixes : Scouts → Académie/Draft, Coachs → Transferts ou Question ; le hook `forme.py` bloque le reste.
+
 ## 2026-10-30
 56. RÉCIDIVE règle coachs U17 (resume.md : note ≤ 54, xp ≤ 4, 2 talents forts de match, plus grande MARGE) : j'ai classé par somme actuelle (Grimstad, plafonné = zéro potentiel). Toujours lire `gold.hn_coach_potential` (match_max − match_sum) pour U17/U21, jamais une somme brute ; ne pas proposer un remplacement dont le gain est < 5 (Winther +4 refusé). Embauche de scout : seulement si le gain est net (≥ 3 joueurs nouveaux), sinon rien.
 55. Hockey Nation, marchés exportés (coachs libres, scouts candidats) : une vue silver en `DISTINCT ON` sur tous les exports garde les joueurs/coachs partis (Graf et Vrábel proposés alors qu'ils avaient disparu de l'export de 13:30 UTC). Une vue de marché ne lit que le dernier export (corrigé, `sql/silver/031`) ; avant toute offre, je vérifie que le nom est dans le dernier export. Et quand une vue gold expire, je répare la vue (conception) au lieu d'abandonner.
