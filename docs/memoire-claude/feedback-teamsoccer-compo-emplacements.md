@@ -1,6 +1,6 @@
 ---
 name: feedback-teamsoccer-compo-emplacements
-description: "Team Soccer compo validée le 2026-10-31 : colonnes Ultra-déf / Défensive / Milieu / Offensive / Finalisation + emplacement précis DL/DC/DR et ML/MC/MR (pas DEF/MIL)"
+description: "Team Soccer compo validée le 2026-10-31 : colonnes Ultra déf. / Défensive / Médiane / Offensive / Finition + emplacement précis DL/DC/DR et ML/MC/MR (pas DEF/MIL)"
 metadata:
   node_type: memory
   type: feedback
@@ -8,7 +8,7 @@ metadata:
   modified: 2026-10-31T18:53:50.982Z
 ---
 
-Format de composition Team Soccer validé par l'utilisateur (2026-10-31, « super pour les tableaux, tu as mis les bons ordres ») : un tableau par club, une ligne par joueur, colonnes **Ultra-déf | Défensive | Milieu | Offensive | Finalisation** (consignes + cible « → » milieux/attaquants/défenseurs/ailiers), puis banc de 6 (GB, DC, MC, AC couverts) et « aucun remplacement programmé ».
+Format de composition Team Soccer validé par l'utilisateur (2026-10-31, « super pour les tableaux, tu as mis les bons ordres ») : un tableau par club, une ligne par joueur, colonnes **Ultra déf. | Défensive | Médiane | Offensive | Finition** (consignes + cible « → » milieux/attaquants/défenseurs/ailiers), puis banc de 6 (GB, DC, MC, AC couverts) et « aucun remplacement programmé ».
 
 **Correction :** la colonne Emplacement n'est jamais « DEF » ou « MIL » : toujours le poste exact de l'écran, DC / DL / DR pour la défense et MC / ML / MR pour le milieu. Déduit de l'ordre des emplacements 1–4 (DL, DC, DC, DR) et milieu 5–7 (ML, MC, MR) ou 5–8 (ML, MC, MC, MR) de `silver.ts_match_lineups.player_positions` (cohérent avec Mansour/Martínez, ailières, aux côtés) ; à vérifier une fois sur l'écran.
 

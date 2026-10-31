@@ -4,7 +4,7 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-10-31 (soir, Hockey Nation : « j'ai pas trop aimé toutes tes réponses »)
-62. Team Soccer, compo : l'emplacement s'écrit DL/DC/DR et ML/MC/MR (poste exact de l'écran), jamais DEF/MIL ; colonnes Ultra-déf/Défensive/Milieu/Offensive/Finalisation gardées (validé 2026-10-31). Un export demandé « pour un adversaire inconnu » = je cherche d'abord en base (`silver.ts_matches`), je ne demande pas d'export.
+62. Team Soccer, compo : l'emplacement s'écrit DL/DC/DR et ML/MC/MR (poste exact de l'écran), jamais DEF/MIL ; colonnes Ultra déf./Défensive/Médiane/Offensive/Finition gardées (validé 2026-10-31). Un export demandé « pour un adversaire inconnu » = je cherche d'abord en base (`silver.ts_matches`), je ne demande pas d'export.
 61. « Que faire » avec un match demain = je DONNE la saisie complète (`gold.hn_tactique_rendu` + `plan_rendu` + `controle`, tout dans l'ordre de l'écran), jamais « dis sors la compo » (RÉCIDIVE règle de rendu 3 et règle 27). Si le contrôle dit « 0 case différente de la cible », je le dis : la lineup est déjà saisie.
 60. Numéro de match ≠ jour de saison : « J8 » venait de `gold.hn_today.next_calendar_event` (jour de saison 8) alors que le match du 01/11 est la J1 de ligue. Le numéro d'un match se lit dans le calendrier des matchs (rang parmi les matchs de ligue), jamais dans le calendrier de saison.
 59. Pénalité −20 % = joueur HORS POSTE (colonne `poste` de `hn_tactique_rendu`), pas talent « contre-emploi » de `hn_player_fit` : j'ai annoncé 6 joueurs à −20 % alors que `poste` = ok pour tous. Avant d'écrire une pénalité chiffrée, lire la colonne qui la porte.
