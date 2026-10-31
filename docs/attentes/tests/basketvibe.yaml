@@ -1,0 +1,278 @@
+# BasketVibe — tests de recette (ce que Claude doit faire et rendre, jour par jour)
+# Créé le 2026-10-31 avec l'utilisateur. Contrôle : python pipelines/recette.py basketvibe
+#   - sans option : structure présente, vues citées existantes dans sql/, chaque ligne de
+#     docs/couverture/basketvibe.md rattachée à au moins un test (champ couvre).
+#   - --reponse <fichier.md> --jour <lun|mar|mer|jeu|ven|sam|dim> : contrôle une réponse rendue.
+# Sources du rythme : docs/attentes/jeux/basketvibe.yaml (rythme, exports), skill basketvibe-saison.
+# Toute ligne ajoutée à la couverture doit être rattachée ici, sinon la recette échoue.
+# Horizon : aujourd'hui seulement (CLAUDE.md § Horizon). Le match de demain se prépare aujourd'hui.
+
+jeu: basketvibe
+
+# ---------------------------------------------------------------------------
+# 1. Nouveau jeu : tout doit exister avant la première session de jeu
+# ---------------------------------------------------------------------------
+nouveau_jeu:
+  fichiers:
+    - outputs/basketvibe/veille/connaissance.md
+    - .claude/skills/basketvibe-saison/SKILL.md
+    - .claude/skills/basketvibe-joueurs/SKILL.md
+    - .claude/skills/basketvibe-tactique/SKILL.md
+    - .claude/skills/basketvibe-entrainement/SKILL.md
+    - .claude/skills/basketvibe-academie/SKILL.md
+    - .claude/skills/basketvibe-transferts/SKILL.md
+    - .claude/skills/basketvibe-economie/SKILL.md
+    - .claude/skills/basketvibe-communaute/SKILL.md
+    - .claude/skills/basketvibe-aujourdhui/SKILL.md
+    - docs/attentes/jeux/basketvibe.yaml
+    - docs/fiches/basketvibe/resume.md
+    - docs/fiches/basketvibe/match.md
+    - docs/fiches/basketvibe/effectif.md
+    - docs/fiches/basketvibe/tactique.md
+    - docs/fiches/basketvibe/entrainement.md
+    - docs/fiches/basketvibe/academie.md
+    - docs/fiches/basketvibe/transferts.md
+    - docs/fiches/basketvibe/finances-personnel.md
+    - docs/fiches/basketvibe/veille.md
+    - userscripts/basketvibe.user.js
+    - docs/decisions/cartes/basketvibe/composition.md
+    - docs/decisions/cartes/basketvibe/defaite.md
+    - docs/decisions/cartes/basketvibe/achat.md
+    - docs/decisions/cartes/basketvibe/vente.md
+    - docs/decisions/cartes/basketvibe/entrainement.md
+    - docs/decisions/cartes/basketvibe/academie.md
+    - docs/decisions/cartes/basketvibe/finances.md
+    - docs/couverture/basketvibe.md
+    - docs/checklist-basketvibe.md
+    - outputs/basketvibe/learnings.md
+  vues:
+    - gold.bv_agenda
+    - gold.bv_daily_alerts
+    - gold.bv_exports_state
+    - gold.bv_saisie_joueurs
+    - gold.bv_saisie_adversaires
+    - gold.bv_roster_now
+    - gold.bv_finance_health
+    - gold.bv_market_bargains
+    - gold.bv_sell_candidates
+    - silver.bv_standings_weekly
+  couvre: [4, 171, 173, 174]
+
+# ---------------------------------------------------------------------------
+# 2. Nouvelle saison (rollover ; saison 2 : nuit du 26 au 27/10, J1 lundi 02/11)
+# ---------------------------------------------------------------------------
+nouvelle_saison:
+  - id: S1
+    quoi: "Exports roster + finance + classement de la nouvelle ligue réclamés le premier soir"
+    critere: "gold.bv_exports_state : roster, finance et standings datés après le rollover"
+    couvre: [5, 172]
+  - id: S2
+    quoi: "Vérifier ce que le jeu remet à zéro : forme 6, fatigue 0, +1 an, salaires recalculés, retraite à 38 ans"
+    critere: "gold.bv_roster_now : forme et fatigue relues, âge +1, aucun joueur de 38 ans en fin de saison oublié"
+    vues: [gold.bv_roster_now]
+    couvre: [25, 29, 18]
+  - id: S3
+    quoi: "Verdict effectif par poste pour la saison : améliorer, vendre, acheter (joueur, prix, finançable)"
+    critere: "un verdict par poste PG-SG-SF-PF-C, nommé et chiffré"
+    vues: [gold.bv_slot_fit, gold.bv_sell_candidates, gold.bv_market_bargains]
+    couvre: [30, 31, 37, 38]
+  - id: S4
+    quoi: "Objectif de saison : montée ou maintien, écart aux places 1 et 9, matchs restants"
+    critere: "place, points, écart chiffré, règle 4 promus / 4 relégués citée (skill basketvibe-saison)"
+    vues: [silver.bv_standings_weekly]
+    couvre: [c1]
+  - id: S5
+    quoi: "Re-sélectionner le preset sur chaque match de ligue planifié ; ne jamais mélanger v3 et v4"
+    critere: "rappel fait ; comparaisons de tendances sur v4 seulement"
+    couvre: [6, "+20", "+30"]
+  - id: S6
+    quoi: "Sponsor de la saison : choisi, signé (base encore « choosing » au 26/10)"
+    critere: "silver.bv_sponsor_weekly relu à l'export finance ; à observer, ne bloque rien"
+    couvre: [22, "+27"]
+  - id: S7
+    quoi: "Veille sur les annonces de nouvelle saison (devlog, news, Discord)"
+    critere: "connaissance.md mise à jour ; changements de règle répercutés dans les skills et les checks des cartes"
+    couvre: [174, 175, 176, "+28"]
+
+# ---------------------------------------------------------------------------
+# 3. Chaque jour (invariants : à faire à CHAQUE passage, zéro agent, vues gold)
+# ---------------------------------------------------------------------------
+chaque_jour:
+  - id: Q1
+    quoi: "État des exports : ce qui est en retard, en premier dans le tableau"
+    critere: "gold.bv_exports_state lu ; jamais redemander un export déjà en base (skill deja-fait)"
+    vues: [gold.bv_exports_state]
+    couvre: [172, 177]
+  - id: Q2
+    quoi: "Amical de demain 08:00 (verrou 07:45) : composition de TEST complète, un seul réglage testé"
+    critere: "tableau joueur × Q1-Q4 + Prol., Min, Off. focus, Rôle, Tir, Agress. ; ligne « les 12 : focus 3, zone X » ; jamais le cinq de ligue/coupe ; pas de preset"
+    vues: [gold.bv_saisie_joueurs, gold.bv_zone_jouee]
+    couvre: [6, 47, 48, 160, 170, "+5", "+29"]
+  - id: Q3
+    quoi: "Résultat de l'amical d'hier : le test a-t-il marché (mesure nommée)"
+    critere: "résultat via my_result ; effet du réglage testé chiffré ; conseil C-nnn → L-nnn"
+    vues: [gold.bv_match_report, gold.bv_zone_jouee]
+    couvre: [166, 171]
+  - id: Q4
+    quoi: "Finances : solde, capacité d'investissement moins dépenses décidées, que faire de l'argent"
+    critere: "solde cité ; capacité nette chiffrée ; une action unique (acheter X, personnel Y, ou garder N et pourquoi)"
+    vues: [gold.bv_finance_health, gold.bv_finance_s2_projection]
+    couvre: [16, 17, 19, 20, 21, 168]
+  - id: Q5
+    quoi: "Transferts : nos ventes et enchères ouvertes vérifiées (vendu, prix, retiré)"
+    critere: "chaque vente ouverte nommée avec son état"
+    vues: [gold.bv_roster_now]
+    couvre: [31]
+  - id: Q6
+    quoi: "Leviers : une cible d'achat nommée avec prix max et gain chiffré, ou la raison chiffrée de n'en faire aucune ; un candidat à la vente"
+    critere: "carte achat + carte vente ; capacite_invest vérifiée avant toute cible ; marché de plus de 24 h = « exporte le marché » en première ligne"
+    vues: [gold.bv_market_bargains, gold.bv_market_candidates, gold.bv_sell_candidates, gold.bv_market_price_ref, gold.bv_price_ref_ps, gold.bv_resale_stats]
+    couvre: [36, 37, 38, "+21", "+22", "+19"]
+  - id: Q7
+    quoi: "Effectif : forme, fatigue, blessés, poste juste"
+    critere: "gold.bv_roster_now et bv_fatigue_plan lus ; blessé = date de retour ; joueur hors poste signalé"
+    vues: [gold.bv_roster_now, gold.bv_fatigue_plan, gold.bv_slot_fit]
+    couvre: [25, 26, 27, 28, 29, 30, 32, 33, 161, "+2", "+12", "+14", "+18"]
+  - id: Q8
+    quoi: "Coupe : y a-t-il un match aujourd'hui ou demain (élimination possible) ; si oui, tactique complète"
+    critere: "gold.bv_agenda lu, jamais supposé ; tactique de coupe = format R-10 + adversaires focus 1-5 et zone"
+    vues: [gold.bv_agenda, gold.bv_saisie_adversaires]
+    couvre: [5, 6, "+3", "+6", "+30"]
+  - id: Q9
+    quoi: "Rendu : un tableau, 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI avec le mot, catégorie, action « fais X »"
+    critere: "contrôlé par --reponse (interdits, pastilles) ; aucune ligne « rien à faire »"
+    couvre: [162, 163, 164, 165, 167]
+
+# ---------------------------------------------------------------------------
+# 4. Sept jours type (en plus des invariants ci-dessus)
+#    doit_contenir : mots que la réponse du jour doit contenir (sans accents, minuscules)
+# ---------------------------------------------------------------------------
+jours:
+  sam:
+    evenements: [amical 08:00, "match de ligue 20:00 (verrou 19:45) en saison", coupe si encore qualifié]
+    exports: [match, roster, preview avant la ligue]
+    a_faire:
+      - "Tactique de ligue complète (joueur × Q + adversaires focus et zone) enregistrée avant 19:45"
+      - "Review du match : contre toute la saison, joueur par joueur, adversaire lu"
+      - "Préparer dimanche 04:00 : choix d'entraînement et personnel à régler ce soir"
+    couvre: [46, 49, 50, "+7", "+9", "+10", "+11", "+23"]
+    doit_contenir: [amical, solde, entrainement]
+  dim:
+    evenements: ["04:00 entraînement, salaires, sponsor, personnel facturé", amical 08:00]
+    exports: [training, "recent changes (training)", finance, personnel]
+    a_faire:
+      - "Gains d'entraînement de la semaine lus ; principale/secondaire de la semaine suivante décidées (carte entrainement)"
+      - "Bilan financier de la semaine : résultat, salaires, personnel (piège médical 85 000 contre 60 000)"
+      - "Personnel : en a-t-on besoin, à monter ou baisser (carte finances var. 12)"
+      - "Tactique de la ligue de lundi complète, à enregistrer aujourd'hui"
+    couvre: [41, 42, 43, 53, 54, 17, 18, "+17"]
+    doit_contenir: [entrainement, personnel, solde, amical]
+  lun:
+    evenements: ["match de ligue 20:00 (verrou 19:45)", amical 08:00]
+    exports: [preview, match, roster]
+    a_faire:
+      - "Review du match de ligue : causes chiffrées (tirs, efficacité, rebonds, pertes, fautes), joueur par joueur, toute la saison, autres clubs"
+      - "Classement : place, écart à la montée et à la relégation"
+      - "3 à 5 points d'amélioration testables, le premier en amical demain"
+    couvre: [7, 49, 50, c1, "+1", "+8", "+26"]
+    doit_contenir: [classement, amical, solde]
+  mar:
+    evenements: [amical 08:00, coupe si encore qualifié]
+    exports: [match de coupe, roster]
+    a_faire:
+      - "Tactique de la ligue de mercredi complète, à enregistrer aujourd'hui"
+      - "Lecture du test d'amical de la veille"
+    couvre: [46, 47, 48]
+    doit_contenir: [amical, solde]
+  mer:
+    evenements: ["match de ligue 20:00 (verrou 19:45)", amical 08:00]
+    exports: [preview, match, roster]
+    a_faire:
+      - "Review J vs journée précédente vs saison ; défaite = carte defaite, analyse détaillée, decideur"
+      - "Préparer jeudi 09:00 : investissement d'académie réglé ce soir"
+    couvre: [169, 13, "+24"]
+    doit_contenir: [classement, amical, academie]
+  jeu:
+    evenements: ["09:00 académie : investissement débité, jauge mise à jour, nouveau rapport du scout", amical 08:00]
+    exports: [academy, "puis lire gold.bv_academy_chat depuis le dernier rapport"]
+    a_faire:
+      - "Rapport du scout : tester (25 000), signer ou ignorer, prospect nommé (carte academie)"
+      - "Intégrable ? besoin par poste (gold.bv_position_summary)"
+      - "Bilan des conseils de la semaine : C-nnn appliqués, effet, L-nnn"
+    couvre: [10, 11, 12, 12b, "+25"]
+    doit_contenir: [academie, amical, solde]
+  ven:
+    evenements: [amical 08:00, coupe si encore qualifié]
+    exports: ["marché (transfers + transfers_global-history) si plus de 24 h", match de coupe]
+    a_faire:
+      - "Marché frais : achat ou vente nommé avec prix max et finançable, sinon raison chiffrée"
+      - "Tactique de la ligue de samedi complète, à enregistrer aujourd'hui"
+      - "Bilan de la semaine : L-nnn écrites, conseil échoué deux fois réécrit"
+    couvre: [36, 37, 166, "+15"]
+    doit_contenir: [marche, amical, solde]
+
+# ---------------------------------------------------------------------------
+# 5. Scénarios rejoués (événements que sept jours ne garantissent pas)
+#    On rejoue un jour passé de la base, ou on pose la question à Claude sur un cas réel.
+# ---------------------------------------------------------------------------
+scenarios:
+  - id: X1
+    quoi: "Défaite lourde (rejouer J12, perdue 18-28 annoncée gagnée le 24/10)"
+    critere: "résultat via my_result ; carte defaite ; analyse chiffrée joueur par joueur vs défaites précédentes ; decideur ; jamais « ne rien changer »"
+    couvre: [169, 50]
+  - id: X2
+    quoi: "Deux défaites d'affilée"
+    critere: "changement fort décidé (A-1), « ce qui prouvera que j'avais tort » + match qui le teste"
+    couvre: [169]
+  - id: X3
+    quoi: "Blessure d'un titulaire"
+    critere: "date de retour ; remplaçant nommé poste par poste ; fatigue des autres recalculée"
+    couvre: [33, "+18"]
+  - id: X4
+    quoi: "Beaucoup d'argent sur le compte"
+    critere: "carte finances var. 8-10 ; achat nommé ou personnel ; dépenses déjà décidées soustraites"
+    couvre: [168, 20]
+  - id: X5
+    quoi: "Achat que la capacité ne couvre pas"
+    critere: "cible abandonnée, dit en une ligne"
+    couvre: [20, 37]
+  - id: X6
+    quoi: "Nouvel export Discord"
+    critere: "veille lancée sur le delta ; connaissance.md complétée ; ce qui change une décision en cours signalé"
+    couvre: [4, 175, 176]
+  - id: X7
+    quoi: "Export incomplet ou mal typé (page academy qui contient les finances, 26/10)"
+    critere: "lecteur-exports le détecte ; « il me manque X, cherché dans : …, refais l'export Y »"
+    couvre: [177]
+  - id: X8
+    quoi: "Nouveauté de moteur annoncée (v5 en amicaux, 28/10)"
+    critere: "test en amical proposé avec une mesure nommée (points de Q4)"
+    couvre: [170, "+5"]
+  - id: X9
+    quoi: "Lock dans l'export"
+    critere: "lu « off » = 5 Lock, jamais « off » affiché"
+    couvre: ["+4"]
+  - id: X10
+    quoi: "Popularité début de saison"
+    critere: "écrit « en doute » avec sa source, pas affirmé"
+    couvre: ["+13"]
+  - id: X11
+    quoi: "Fin de saison (dernière journée)"
+    critere: "primes de classement citées (1er 400 000 … 5-8e 50 000), non comptées comme liquidité"
+    couvre: ["+16", "+27"]
+
+# ---------------------------------------------------------------------------
+# 6. Hors périmètre et limites connues (le test vérifie qu'on ne les invente pas)
+# ---------------------------------------------------------------------------
+hors_perimetre:
+  - "Infrastructures : absentes de BasketVibe (basketvibe.yaml : present: non) ; ne jamais en proposer"
+  - "Suspensions : aucune règle trouvée, seule l'exclusion à 6 fautes (couverture ligne 33)"
+  - "Mesures v4 de zone, focus, agressivité : à acquérir en amical (couverture ligne 171)"
+  - "Jour du renouvellement du sponsor et premier salaire recalculé : à observer à l'export du dimanche"
+
+# ---------------------------------------------------------------------------
+# 7. Interdits dans toute réponse (contrôlés par --reponse, hors citations)
+# ---------------------------------------------------------------------------
+interdits: [a faire demain, "demain, fais", apres le prochain match, plus tard, "a toi de voir", peut-etre, ne rien changer, preset inchange, non releve, pas tout lu]
+# Au moins une de ces pastilles (carré + mot) dans la réponse.
+pastilles: ["🟥 URGENT", "🟧 IMPORTANT", "🟩 SUIVI"]
