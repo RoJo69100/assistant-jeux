@@ -40,5 +40,7 @@ Sources lues : commit 58975fe (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Prix des 16 ans | 3,5-4 M (avis) → un bon 16 ans = 3 à 4 M fin octobre, 7,5 M cité sans nom le 31/10 | dixi2499, montabelas, nathanr_32176 (avis) ; à comparer à `gold.bv_market_price_known` |
+| 2026-10-31 | 2 étoiles | — → bon marché depuis que le test à 25 000 est ouvert à tous | #italia 2026-10 (avis) |
 | 2026-10-31 | Taxe | 5 % → 5 % confirmé par un virement réel (1 010,0 k → 959,5 k) | heldermoreno 2026-10-03 |
 | 2026-10-31 | Jeune « High » vendu | cible 3 étoiles à 3,5-4 M (avis) → potentiel moyen tant que 4-5 semaines d'entraînement ne l'ont pas prouvé | Dev 2026-08-13 cité par carlomtlopes 2026-10-07 (seconde main) |

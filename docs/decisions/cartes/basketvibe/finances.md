@@ -43,4 +43,6 @@ Sources lues : commit 58975fe (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Sponsor | — → lancer l'outil « Season scenario » de la page sponsor avant de choisir ; ne pas compter les primes de fin de saison comme de la liquidité | grillanza_60069 #italia 2026-10-27 |
+| 2026-10-31 | Économie | — → le Dev juge l'économie gonflée et ne veut pas l'alimenter : prévoir un durcissement possible, garder la réserve de sécurité | vachacz #economy 2026-10-24, 2026-10-29/30 |
 | 2026-10-31 | Personnel médical | facture = maximum de la semaine ; embaucher les médecins après une blessure est possible (durée recalculée) ; licencier avant le dimanche : non testé | vachacz 2026-08-31, 2026-09-03 ; chanceler paie quand même |

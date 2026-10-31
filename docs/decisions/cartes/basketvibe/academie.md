@@ -49,6 +49,8 @@ Après un nouvel export Discord : `python pipelines/import_discord.py basketvibe
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Âge des juniors | — → un junior non tiré ne vieillit pas en saison 2 : attendre le jeudi ne coûte pas d'âge | vachacz 2026-10-27 06:07 |
+| 2026-10-31 | Jauges des autres clubs | variable manquante → 75 à 100 % cités dans le chat (tirages à 69 % et 63 %) | #academy 2026-10-29 (avis) |
 | 2026-10-31 | Investissement | 100 000/sem. maintenu ; 71 000 = hypothèse non testable sur l'historique (45 → 59 → 70 à 100 000) | nhegas12 2026-09-13 (en doute) |
 | 2026-10-31 | Moment de signer | table [M§4.2] seule → table + avis du Dev : tirer vers 70-80 % (2026-07-21, avant la table du 27/07) | vachacz #academy |
 | 2026-10-31 | Décimales | bug de septembre vérifié corrigé : Bernard, Baron, Leclerc ont des décimales (30/10) | `silver.bv_player_daily` |
