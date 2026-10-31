@@ -15,7 +15,8 @@
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "python pipelines/police.py" }
+          { "type": "command", "command": "python pipelines/police.py" },
+          { "type": "command", "command": "python pipelines/forme.py" }
         ]
       }
     ],
