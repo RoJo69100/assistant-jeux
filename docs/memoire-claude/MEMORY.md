@@ -40,3 +40,4 @@
 - [Carte des variables = cœur](feedback-carte-variables-coeur.md) — on trouve une fois, on note où ; ensuite carte + nouveau seulement ; checks appris des matchs (2026-10-31)
 - [Hook forme : tous les formats](project-hook-forme-formats.md) — forme.py bloque les rendus hors format, entraînement dans l'ordre de l'export (2026-10-31)
 - [Compo du lendemain](feedback-compo-du-lendemain.md) — match demain = 1re ligne du plan « fais la compo de <adversaire> », jamais « rien à faire » (2026-10-31)
+- [Team Soccer compo : emplacements précis](feedback-teamsoccer-compo-emplacements.md) — colonnes Ultra-déf/Déf/Milieu/Offensive/Finalisation + DL/DC/DR, ML/MC/MR (pas DEF/MIL), validé 2026-10-31
