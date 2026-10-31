@@ -16,6 +16,15 @@ Sources lues : commit 58975fe (2026-10-31)
 1. `| Prospect | Poste | Âge | Taille | TSP min–max | Compétences clés du poste (fourchettes) | P(High) | Verdict (tester / signer / ignorer) |`, les 3 du rapport.
 2. Jauge et investissement : `| Jauge | Investissement/sem. | Projection | Décision |`.
 
+## Après chaque export d'académie (jeudi après 09:00) — à noter, dans cet ordre
+Consigne de l'utilisateur, 2026-10-31 : « quand on fait export d'académie, tu regardes même le chat, car on en parle ».
+1. **Arrivée en base** : `select scout_report_at, slot, name, position, age from gold.bv_academy_prospects order by scout_report_at desc, slot limit 3` ; rapport plus vieux que jeudi 09:00 = « exporte l'académie » (la page est parfois la page finances, piège du 26/10).
+2. **Noter pour chaque prospect** : poste, âge, taille, fourchettes de compétences (20 points), TSP min–max, et ce que l'on sait du potentiel (probabilités de la jauge du rapport, test 25 000 si fait). Écrire la jauge **au moment du rapport** et l'investissement de la semaine.
+3. **Chat** : `select posted_at, channel, author, is_dev, left(content, 300) from gold.bv_academy_chat where posted_at >= '<date du dernier rapport>' order by posted_at` — lire **tout** le résultat (salon #academy + mots-clés dans les salons pays) : jauges et choix des autres clubs, juniors vendus et leur prix, tirages, annonces du développeur (`is_dev`). Chaque fait utile : auteur, salon, date, statut dans `connaissance.md` § Académie.
+4. **Autres clubs** (comble la variable 11) : noter chaque jauge ou chaque junior cité par un autre manager, avec sa source, dans `connaissance.md` ; un junior de 16-17 ans vu sur le marché (`gold.bv_market_candidates`, âge 16-17) est un signe indirect.
+5. **Décider** avec la table [M§4.2] ; le chat éclaire, il ne remplace pas la règle.
+Après un nouvel export Discord : `python pipelines/import_discord.py basketvibe`, puis la vue se met à jour.
+
 ## Variables
 | # | Variable | Où la lire | Check | Source du check | Dernière valeur |
 |---|---|---|---|---|---|
@@ -29,8 +38,8 @@ Sources lues : commit 58975fe (2026-10-31)
 | 8 | Taille pour le poste | `height_cm` ; croissance jusqu'à 22 ans (+0 à +4 cm par saison) | Taille cible du poste adulte | [M§5.2] | |
 | 9 | Signer = jauge divisée par 2 | `gold.bv_academy_gauge_projection` | Remonter de 50 à 100 % : 5-6 semaines à 100 000 | [M§4.2] | |
 | 10 | Revente possible | `gold.bv_market_price_ref` (16-17 ans) | Juniors de l'académie revendables sans délai d'une semaine | [M§11.1] | |
-| 11 | Comparaison aux autres clubs | — | Il manque la jauge des autres clubs — cherché dans : bronze, silver, connaissance, Discord — on la réunit en notant les juniors signés vus sur le marché (16-17 ans) | A-8 | |
-| 12 | Avis des amis | connaissance § Académie (29/10 : avis opposés sur un junior à 100 %) | Avis seulement ; la décision suit le skill | connaissance | |
+| 11 | Comparaison aux autres clubs | `gold.bv_academy_chat` (jauges et juniors cités par les autres managers) + `gold.bv_market_candidates` (16-17 ans) | Il manque une jauge officielle des autres clubs — cherché dans : bronze, silver, connaissance, Discord/chat (lu en entier le 2026-10-31) — elle n'est pas affichée par le jeu ; on la réunit avec les messages du chat et les juniors vus sur le marché | A-8 | |
+| 12 | Avis des amis | `gold.bv_academy_chat` + connaissance § Académie (29/10 : avis opposés sur un junior à 100 %) | Avis seulement ; la décision suit le skill | connaissance | |
 | 13 | Postes des 3 candidats | `silver.bv_academy_candidates` | Ne pas déduire le poste d'un candidat de celui des autres | V-20261030-5 (hypothèse, un cas contraire) | |
 
 ## Checks appris

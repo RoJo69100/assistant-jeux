@@ -18,6 +18,7 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | 10 | Comprendre l'académie | skill `basketvibe-academie` (cycle, jauge, −50 % à la signature, fourchettes, probabilités) | ✅ |
 | 11 | Savoir si on scoute (teste) le joueur | carte `academie` variables 4-6 (test 25 000, `gold.bv_academy_potential_odds`) | ✅ |
 | 12 | Savoir si le joueur scouté est intégrable | carte `academie` variables 7-9 (besoin par poste `gold.bv_position_summary`, fit) | ✅ |
+| 12b | Chat sur l'académie à chaque export | `gold.bv_academy_chat` (créée le 2026-10-31, migration 053) ; consigne dans la carte `academie` § Après chaque export d'académie (demande de l'utilisateur du 2026-10-31) | ✅ |
 | 13 | Combien on dépense dans l'académie | `gold.bv_finance_health.weekly_academy`, `silver.bv_academy_weekly.weekly_investment` ; carte `finances` var. 3 | ✅ |
 
 ## Finances
