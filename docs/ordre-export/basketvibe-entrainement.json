@@ -1,0 +1,5 @@
+{
+  "source": "select nom from gold.bv_saisie_entrainement order by ordre",
+  "export_le": "2026-10-29 10:00:49+00",
+  "noms": ["Albano", "Baron", "Bernard", "Bonnet", "Boyer", "Dang", "Durand", "Fournier", "Gimenez", "Henry", "Klein", "Leclerc", "Lecomte", "Lefebvre", "Legrand", "Richard", "Ungureanu"]
+}
