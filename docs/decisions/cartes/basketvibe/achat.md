@@ -1,6 +1,6 @@
 # Carte basketvibe — achat (enchère, joueur libre)
 
-Sources lues : commit 0000000 (2026-10-31)
+Sources lues : commit 58975fe (2026-10-31)
 
 Écrite le 2026-10-31 (skills transferts, économie, entraînement ; vues gold du marché). Règles : A-4 (jamais d'enchère lancée sans accord), CLAUDE.md « capacité moins dépenses décidées », règle 20 (cibles nommées, marché de plus de 24 h = « exporte le marché »).
 

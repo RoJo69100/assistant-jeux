@@ -1,6 +1,6 @@
 # Carte basketvibe — academie (rapport du jeudi, test, signature, investissement)
 
-Sources lues : commit 0000000 (2026-10-31)
+Sources lues : commit 58975fe (2026-10-31)
 
 Écrite le 2026-10-31 (skill `basketvibe-academie`, vues gold d'académie). Rapport : jeudi 09:00 ; investissement à sauvegarder avant.
 

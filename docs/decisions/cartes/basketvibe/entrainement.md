@@ -1,6 +1,6 @@
 # Carte basketvibe — entrainement (choix du dimanche)
 
-Sources lues : commit 0000000 (2026-10-31)
+Sources lues : commit 58975fe (2026-10-31)
 
 Écrite le 2026-10-31 (skill `basketvibe-entrainement`, vues gold d'entraînement). Échéance : réglages sauvegardés avant le dimanche 04:00 (Paris).
 
