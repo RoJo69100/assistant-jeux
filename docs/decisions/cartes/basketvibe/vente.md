@@ -35,4 +35,5 @@ Sources lues : commit 58975fe (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Taxe | 5 % → 5 % ; taxe dégressive (semaine 2 à 20 %…) toujours non décidée | vachacz #economy 2026-10-22 |
 | 2026-10-31 | Après une vente | — → rouvrir les préréglages et les matchs planifiés (vendre un joueur du préréglage a bloqué la sauvegarde) | tankre1792, Dev 2026-09-18/19 |

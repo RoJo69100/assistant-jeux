@@ -47,5 +47,6 @@ Puis la ligne C-nnn → L-nnn à écrire dans `learnings.md`.
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Fautes | LF adverses élevés = cran d'agressivité → idem, et ne pas imputer au moteur v4 (fautes v3 ≈ v4) | mesure du Dev 2026-10-28 |
 | 2026-10-31 | Fautes tactiques | présent → inchangé | connaissance : fin de match serré (Dev 2026-09-08/09) |
 | 2026-10-31 | Agressivité | LF adverses élevés = regarder le cran d'agressivité de chaque défenseur | avis #portugal 2026-08/10 : 8/10 en agressif → 43 LF contre 15 en soft (v3) |

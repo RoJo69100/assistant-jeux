@@ -88,7 +88,7 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | 168 | Beaucoup d'argent : que faire, axes à améliorer | carte `finances` var. 8-10 + carte `achat` | ✅ |
 | 169 | Beaucoup de défaites : prendre une action | carte `defaite` + agent `decideur` (jamais « ne rien changer ») | ✅ |
 | 170 | Nouveauté : tester en amical, sinon proposer comment | carte `composition` § Amical (un test à la fois, mesure nommée) | ✅ |
-| 171 | Chaque règle parfaite, mine d'or étudiée à 100 % | voir ligne 4 | 🔧 règles lues à 100 % ; aucune mesure v4 (zone, agressivité, focus) dans le corpus : à acquérir par des amicaux de test |
+| 171 | Chaque règle parfaite, mine d'or étudiée à 100 % | voir ligne 4 | 🔧 règles lues à 100 % (corpus complet jusqu'au 31/10, export global) ; aucune mesure v4 chiffrée de la fatigue, de la zone, du focus ni de l'agressivité dans tout le corpus : à acquérir par des amicaux de test |
 | 172 | Quel export chaque jour, quoi faire après | `gold.bv_exports_state`, skill `basketvibe-aujourdhui` | ✅ |
 | 173 | Ordre logique des actions, dépendances | `docs/fiches/basketvibe/resume.md` § Ordre des agents ; `enchainement.md` ; `docs/attentes/jeux/basketvibe.yaml` | ✅ |
 | 174 | Mettre à jour agents/skills à chaque nouveauté | veille → skills ; `dossier.py` donne le nouveau depuis le dernier passage et l'agent modifie le check de la carte | ✅ |
@@ -122,4 +122,10 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | +22 | Potentiel d'un agent libre : 3 à 9 ; aucun joueur de 20-21 ans en vente | Dev 2026-09-07, 2026-10-05 | confirmé |
 | +23 | Défense agressive : fautes et lancers francs adverses en forte hausse ; défense ≥ 55-60 proposée pour les crans 4-5 | #portugal 2026-08/10 | avis (v3) |
 | +24 | Le Dev conseille de tirer l'académie vers 70-80 % ; 71 000 par semaine = même force que 100 000 (affirmé, non prouvé) | vachacz 2026-07-21 ; nhegas12 2026-09-13 | avis / en doute |
+| +25 | Les juniors non tirés ne vieillissent pas en saison 2 : attendre le jeudi ne coûte pas d'âge | vachacz 2026-10-27 | confirmé |
+| +26 | Fautes v4 ≈ fautes v3 (16,4 contre ~17 par match, 1 000 relances du Dev) | vachacz 2026-10-28 | confirmé |
+| +27 | La page sponsor a un outil « Season scenario » ; les primes de fin de saison ne sont pas de la liquidité | grillanza_60069 2026-10-27 | confirmé (écran) |
+| +28 | Le Dev juge l'économie gonflée et peut réagir d'ici la fin de saison | vachacz 2026-10-24, 2026-10-29/30 | complété |
+| +29 | Rim : +5 % dans la zone laissée, risque face à un pivot qui tire à 3 | vachacz 2026-10-23 | confirmé |
+| +30 | Coupe tour 1 du 28/10 : bug de préréglage revu, à vérifier à chaque tour | usylum 2026-10-28 | à rouvrir |
 | +19 | Potentiel 7 progresse presque comme un 8 (×1,50 contre ×1,60) mais se vend bien moins cher | [M§8.3] + Com dcarra 2026-10-14 | avis + calcul |

@@ -162,7 +162,7 @@ Périmètre : `discord_BasketVibe_export.txt` lignes 1-9835, `export discord bas
 |---|---|---|---|
 | Changer un préréglage ou la tactique générale ne met PAS à jour un match déjà planifié : rouvrir le match et re-choisir | grobarbrate, vortexraijin (help) ; nhegas12, chanceler, jorgeac25 (#portugal) | 2026-09-05, 2026-09-20/21 | confirmé (3 sources ; deux joueurs achetés n'ont pas joué faute de ça) ; déjà dans `resume.md` |
 | Vendre un joueur présent dans un préréglage bloquait la sauvegarde (« quarts non remplis ») ; contournement : éditer le préréglage ; correctif 19/09 18:20, « retest requis » 21/09 | tankre1792, heldermoreno, Dev (help) | 2026-09-18/21 | complété : après tout transfert, rouvrir le préréglage et vérifier les matchs planifiés |
-| La coupe prenait le préréglage d'amical par défaut (bug avoué) | svarog_, vachacz (#engine) | 2026-09-18 | périmé : `gold.bv_saisie_matchs` montre les presets « Cup » et « League Tactic » en coupe (2026-10-28 à 10-31) |
+| La coupe prenait le préréglage d'amical par défaut (bug avoué) | svarog_, vachacz (#engine) | 2026-09-18 | **à rouvrir (31/10)** : bug revu au tour 1 de la coupe du 28/10 (SF titulaire sur le banc, tactique différente des préréglages, le Dev soupçonne le préréglage de ligue ; usylum 2026-10-28) ; chez nous le match du 28/10 (MACCABI) porte le preset « League Tactic » dans `gold.bv_saisie_matchs`, les 29-31/10 « Cup » ; vérifier la tactique de chaque tour |
 | Mesure du développeur sur ~100 matchs : un cinq à 48 min gagne encore le Q4 de +5,12 (domicile) et +2,88 (extérieur) en moyenne, malgré la pénalité > 36 min (presque doublée le 12/09) | Dev vachacz (#engine) | 2026-09-12 | complété (v3) ; la v4 n'est pas mesurée ; L-026 : Q4 −4 au-delà de 36 min en coupe |
 | Défense agressive, 8 joueurs sur 10 : 43 lancers francs adverses contre 15 en soft, défaite de 22 ; seuils proposés : défense ≥ 55 pour le cran 4, ≥ 60 pour le cran 5 | chanceler, jorgeac25 (#portugal, chat) | 2026-08-29/30, 2026-10-04 | en doute (avis, v3 ; cohérent avec « double tranchant » et L-011/L-015) |
 | Focus défensif 1 sur le pivot adverse : 48 points concédés | tankre1792 (help) | 2026-09-09 | avis (cohérent avec L-006) |
@@ -198,3 +198,56 @@ Périmètre : `discord_BasketVibe_export.txt` lignes 1-9835, `export discord bas
 | Fatigue de coupe 25 % en pilote (09/09) | #engine | 2026-09-09 | périmé (News 2026-10-23 : aucune fatigue en coupe) |
 | Entraînement : jour de passage « samedi » (06/08, avant reset) | Dev | 2026-08-06 | périmé : dimanche 04:00 Paris observé |
 | « ×0,63 dès 80 » | kotryk (#polska) | 2026-10-06 | contredit : le skill fait foi (×0,75 à 80, ×0,63 à 85) [M§8.4] |
+
+## Lecture intégrale du 10/10 au 31/10, moteur v4 (passage du 2026-10-31, export Discord global)
+Périmètre : 4 384 messages du 10/10 au 31/10 (export `discord_BasketVibe_part1.txt`, 14 581 messages), lus en entier par 2 agents (2 265 + 2 142 lignes ; notes `lecture-joueurs-4.md` ~150 entrées, `-5.md` ~95). **Aucune mesure v4 chiffrée de la pénalité de fatigue, de la zone, du focus ni de l'agressivité dans tout le corpus** : à produire par nos amicaux de test et `gold.bv_zone_jouee`. Le « 7,5 M » cité le 31/10 (nathanr_32176) n'a pas de nom de joueur.
+
+### Tactique / moteur v4
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Zone défensive : −3 % de FG% dans la zone défendue, +5 % dans la zone laissée ; risque d'un pivot qui tire à 3 points | Dev vachacz, #polska | 2026-10-23 14:47 | confirmé (Dev) ; Rim à éviter face à un C tireur à 3 |
+| Fautes v4 : 1 000 relances d'un match de coupe du 28/10 = 16,4 fautes par match pour notre côté (22 dans le match réel) ; moyenne v3/v4 presque égale (−0,1), ~17 en amical | Dev vachacz, #general | 2026-10-28 17:54 | confirmé (mesure du Dev) ; trois joueurs criaient au « trop de fautes » sur 1 à 3 matchs |
+| Fautes selon le BMI : pivot au BMI élevé 3,5 fautes en amical soft contre 1,8 pour un pivot au BMI plus bas | montabelas, #italia | 2026-10-27 | avis (un seul joueur) |
+| Le malus du Q4 s'applique dès la 1re seconde du Q4 à tout joueur qui joue 4 quarts ; 3 quarts (36 min) sans pénalité. En coupe : arodrigues84 ne voit pas le malus, jorgeac25 pense qu'il reste | elemke. (GM), #help ; arodrigues84, jorgeac25 | 2026-10-30 09:49 | confirmé (skill) ; coupe en doute, L-026 : Q4 −4 au-delà de 36 min en coupe |
+| Le focus défensif a décidé deux matchs de coupe (Vans, Penafiel) selon les joueurs | #italia, #portugal | 2026-10 | avis |
+| Changer le poste nominal d'un joueur ne change que le PS affiché (51 → 52), pas le jeu ; seniors seulement | #general | 2026-10 | confirmé (cohérent M§4) |
+| Le +/- ne permet pas de juger un intérieur : il porte sur le cinq entier | #italia | 2026-10 | avis |
+| La zone n'était pas à l'écran en saison 2 avant l'activation par vachacz le 27/10 | #italia | 2026-10-27 | confirmé (cohérent News 2026-10-27) |
+
+### Calendrier / coupes
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Un blessé de la dernière journée de ligue ne joue pas la coupe | karolina.munde, inkamint, #lietuva | 2026-10-27/28 | confirmé (News 2026-10-23) |
+| Coupe tour 1 du 28/10 : NT cup partie sur le réglage d'amical (jorgeac25) | #general | 2026-10-28 | en doute (voir ligne « à rouvrir » plus haut) |
+
+### Académie
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Les juniors non tirés ne vieillissent pas à la saison 2 : « not implemented… next season » ; un junior tiré 3 jours avant le changement de saison est passé de 16 à 17 ans | vachacz #general 2026-10-27 06:07 ; elemke. #academy ; baldurazz0 #italia ; isr_shay | 2026-10-27 | confirmé (Dev) : attendre le jeudi ne coûte pas d'âge ; sondage sur le calendrier d'âge envisagé (28/10 21:46) |
+| La taille augmente de 1 à 4 cm au changement de saison | #general | 2026-10 | confirmé (cohérent M§5.2) |
+| Jauges des autres clubs : 75 à 100 %, tirages à 69 % et 63 % ; un « 120 % » cité (markoivica, 29/10) | #academy | 2026-10-29 | avis ; le « 120 % » est à vérifier (au-delà du maximum) |
+| Premiers tirages de la saison 2 (29/10) décevants : heldermoreno ~550-600 k dépensés en 4 semaines sans junior utile ; nhegas12 aucun 3 étoiles malgré 100 k par semaine | #portugal | 2026-10-29 | avis |
+| Les tests à 25 000 sont confirmés ; un pot 10 monte de +2,2 en compétence principale | #italia | 2026-10 | confirmé (skill) |
+| 71 000 contre 100 000 : aucune mention dans ce lot | — | — | en doute (inchangé) |
+
+### Transferts / prix
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Un bon 16 ans se paie 3 à 4 M fin octobre : enchère poussée à 4 M (dixi2499, 29/10), PF 16 ans TS 48 parti sous 4 M (montabelas, 30/10), 16 ans pot 8 à 1,3 M le 14/10, 17 ans à 2-3 M « facile » (27/10) ; « passé 7,5 M » sans nom (nathanr_32176, 31/10) | #italia, #portugal | 2026-10-14 … 2026-10-31 | avis ; à comparer à `gold.bv_market_price_known` (max 2 894 063 au 22/10) |
+| Les 2 étoiles sont bon marché depuis que n'importe quel acheteur peut tester le potentiel à 25 000 | #italia | 2026-10 | avis |
+| Taxe de revente dégressive (semaine 2 à 20 %, puis 15 %… jusqu'à 5 %) : non décidée | vachacz, #economy | 2026-10-22 15:57 | en doute (déjà noté) |
+
+### Finances / sponsor
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| La page sponsor a un outil « Season scenario » qui simule le gain de chaque contrat | grillanza_60069, #italia | 2026-10-27 13:44 | confirmé (écran du jeu) |
+| « Top half » = les 6 premiers ; le titre de champion rapporte seulement 80 000 de plus que le podium ; le choix est définitif avant le début de saison | joueurs, #economy / #italia | 2026-10-27 | avis (palier non confirmé par le Dev) |
+| Le montant affiché inclut-il les primes de fin de saison ? .doman dit oui, grillanza_60069 dit non : ne pas compter ces primes comme de la liquidité | #economy | 2026-10-27 | en doute |
+| Contrats cités : « 50 k par semaine + 30 k par victoire » (foo_13) ; svarog_ « Top 3 » ; lolek5232 « Top 6 » (écart avec le titre : 200 k) | #economy, #italia | 2026-10-27/29 | avis |
+| L'économie gonfle et il faudra « probablement réagir » ; le Dev refuse d'ajouter de l'argent et rejette les infrastructures lourdes (24/10) | vachacz, #economy | 2026-10-24, 2026-10-29/30 | complété (risque : mesures de limitation d'ici la fin de saison) |
+
+### Entraînement
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| « ×0,5 après 90 » (sans source) | grillanza_60069 | 2026-10 | confirmé : notre skill donne ×0,50 à 90 [M§8.4] |
+| Fatigue < 20 avec endurance ≥ 50 pour toute l'équipe qui gagne la coupe | axolimpiamilano | 2026-10 | avis v3 ; la v4 donne −4 % à 20 |
