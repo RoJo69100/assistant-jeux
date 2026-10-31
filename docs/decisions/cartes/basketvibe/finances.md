@@ -1,6 +1,6 @@
 # Carte basketvibe — finances (argent, sponsor, personnel)
 
-Sources lues : commit 0000000 (2026-10-31)
+Sources lues : commit 58975fe (2026-10-31)
 
 Écrite le 2026-10-31 (skill `basketvibe-economie`, vues gold de finances). Règles : A-3 (dire quoi faire de l'argent), A-8 (retard mesuré contre les autres clubs), CLAUDE.md « capacité moins dépenses décidées ».
 
