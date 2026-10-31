@@ -29,6 +29,8 @@ Sources lues : commit 58975fe (2026-10-31)
 | 7 | Règles d'enchère | skill transferts § Acheter | Enchère max automatique ; anti-snipe 3 min ; phase finale à l'aveugle ; somme des maximums ≤ solde | [M§11.3, §10.3] | |
 | 8 | Argent disponible | `select balance, transfer_available, transfer_committed from gold.bv_finance_health` + `gold.bv_finance_s2_projection.investable_now_end_s1` − dépenses déjà décidées (`outputs/basketvibe/fait-*.md`) | Prix max > capacité restante = cible abandonnée | CLAUDE.md § Horizon | |
 | 9 | Effectif après l'achat | `select count(*) from gold.bv_roster_now` | Minimum 8 disponibles ; marge actuelle à vérifier | [M§11.1] | |
+| 11 | Prix faussés | — | Ne pas caler l'enchère max sur les ventes du 27/09 au 04/10 ni sur des ventes entre comptes suspects | Transferts truqués suspectés (60 k → 850 k), 5 comptes bannis le 08/10 ; connaissance § lecture des joueurs (avis, non vérifié) | |
+| 12 | Agent libre | — | Potentiel entre 3 et 9 (jamais 1-2 ni 10) ; aucun joueur de 20-21 ans sur le marché | vachacz 2026-09-07, 2026-10-05 | |
 | 10 | Avis des amis | connaissance § Transferts / finances / académie, § Finances / transferts / personnel | — | connaissance | |
 
 ## Checks appris
@@ -38,3 +40,5 @@ Sources lues : commit 58975fe (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Taxe | 5 % → 5 % confirmé par un virement réel (1 010,0 k → 959,5 k) | heldermoreno 2026-10-03 |
+| 2026-10-31 | Jeune « High » vendu | cible 3 étoiles à 3,5-4 M (avis) → potentiel moyen tant que 4-5 semaines d'entraînement ne l'ont pas prouvé | Dev 2026-08-13 cité par carlomtlopes 2026-10-07 (seconde main) |

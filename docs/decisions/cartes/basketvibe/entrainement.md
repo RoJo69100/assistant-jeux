@@ -35,3 +35,4 @@ Limite connue : `silver.bv_training_changes` arrêtée au 18/10 ; l'export « Re
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Jour du passage | dimanche 04:00 Paris inchangé (le « samedi » du Dev, 06/08, est périmé) | connaissance § lecture des joueurs |

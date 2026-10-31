@@ -23,7 +23,7 @@ Créé le 2026-10-27 par la veille ; complété le 2026-10-29 (Discord : delta d
 | Moteur v5 de micro-améliorations ; v5 en amicaux seulement (annonce du 28/10 : pas de 20 s mortes, tirs de fin de quart) | News | 2026-10-27, 2026-10-28 | complété (effet inconnu ; mesure = points de Q4 en amical) |
 | Avis « 48 min en défense normale avec fatigue < 30 ne se remarque pas » | Com heldermoreno | 2026-10-09 | contredit (v4 : −4 % à 20, −15 % à 40) |
 | Avis « fatigue 30-40 % n'atrophie pas vraiment le jeu, c'est surtout le dernier quart des joueurs à 48 min » | Com chanceler, portugal | 2026-10-05 | contredit pour le v4 (−15 % à 40) ; vrai en v3 [Dev 2026-09-13 : « fatigue 20 : impact mineur »] |
-| Fatigue v3 : à 5-10 presque aucun impact ; plus l'endurance est basse, plus la fatigue tombe lentement | Dev vachacz, help | 2026-08-07 | confirmé (skill, table du manuel ; v3) |
+| Fatigue v3 : à 5-10 presque aucun impact ; plus l'endurance est basse, plus la fatigue tombe lentement | Dev vachacz, help | 2026-08-07 | confirmé (skill, table du manuel ; v3) ; **corrigé le 2026-10-31** : le « it » est ambigu, l'endurance joue sur le GAIN de fatigue, la récupération est identique pour tous (0,5 + 10 %) [M§5.6 ; manuel cité #portugal 2026-09-15] ; « 10-20 de fatigue n'est pas grave » (Dev 2026-08-07) est en doute pour la v4 (−4 % à 20) |
 | Orange = nouvelle zone défensive (barre de l'écran tactique/match, « I would say », la description est lisible en vue bureau) | GM elemke., general | 2026-10-29 08:39 | en doute (formulation dubitative ; un utilisateur demandait la légende des barres) (V-20261029-4) |
 
 ## Calendrier / coupes
@@ -153,3 +153,48 @@ Périmètre : `discord_BasketVibe_export.txt` (9 775 messages, 2026-05-31 → 20
 ## Bugs
 Tactiques mobiles sans OT (corrigé 2026-10-22) ; ordonnanceur de coupe nationale corrigé et Coupe multinationale reconstruite (2026-10-25). Bug de dates de rapport d'académie après passage à 1 semaine (Dev 2026-07-22, corrigé ensuite). Coupe : le planning révélait le score en direct (corrigé, Dev 2026-09-14). Walk-over avec effectif incomplet corrigé (Dev 2026-08-13, 2026-09-03).
 Historique (release-notes 2026-06 → 2026-10, passage du 2026-10-30) : joueur à 7 fautes revenu au quart suivant (corrigé 02/07) ; plafond de 5 amicaux/invitations (corrigé 30/06) ; enchère au prix minimum refusée (corrigé 18/07) ; rapport d'éclaireur en double le même jour (corrigé 29/07) ; walk-over et coupe : planning décalé au 17/09 (03/09, à corriger) ; notifications de coupe affichées comme amicaux (04/09) ; quatre joueurs dans le lineup (corrigé 16/09) ; lineup de quart faux dans le play-by-play (15/09) ; depth chart utilisait le poste nominal au lieu de l'emplacement (corrigé 18/09) ; sauvegarde des tactiques après transfert (19-21/09, « retest requis ») ; résultat de coupe visible dans Schedule > Cups (corrigé 27/09) ; enchère à l'aveugle sans modification possible de l'enchère maximale (corrigé 27/09).
+
+## Lecture intégrale des messages des joueurs (passage du 2026-10-31)
+Périmètre : `discord_BasketVibe_export.txt` lignes 1-9835, `export discord basketvibe.txt` (16 225 lignes) et `discord_BasketVibe_part1.txt` (133 lignes), lus en entier par 3 agents (notes brutes : `lecture-joueurs-1.md` 494 lignes, `-2.md` 332, `-3.md` 254 ; ~490 entrées). Le corpus s'arrête au 09/10 : aucune mesure v4 (zone, agressivité, focus) n'y figure. ~60 % des lignes du premier fichier datent d'avant le reset (11/08) : prix, économie et moteurs v1/v2 périmés. Le skill `basketvibe-communaute` contenait déjà l'essentiel ; ci-dessous seulement ce qui change une décision. Statuts : avis = jamais une règle.
+
+### Tactique / composition
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Changer un préréglage ou la tactique générale ne met PAS à jour un match déjà planifié : rouvrir le match et re-choisir | grobarbrate, vortexraijin (help) ; nhegas12, chanceler, jorgeac25 (#portugal) | 2026-09-05, 2026-09-20/21 | confirmé (3 sources ; deux joueurs achetés n'ont pas joué faute de ça) ; déjà dans `resume.md` |
+| Vendre un joueur présent dans un préréglage bloquait la sauvegarde (« quarts non remplis ») ; contournement : éditer le préréglage ; correctif 19/09 18:20, « retest requis » 21/09 | tankre1792, heldermoreno, Dev (help) | 2026-09-18/21 | complété : après tout transfert, rouvrir le préréglage et vérifier les matchs planifiés |
+| La coupe prenait le préréglage d'amical par défaut (bug avoué) | svarog_, vachacz (#engine) | 2026-09-18 | périmé : `gold.bv_saisie_matchs` montre les presets « Cup » et « League Tactic » en coupe (2026-10-28 à 10-31) |
+| Mesure du développeur sur ~100 matchs : un cinq à 48 min gagne encore le Q4 de +5,12 (domicile) et +2,88 (extérieur) en moyenne, malgré la pénalité > 36 min (presque doublée le 12/09) | Dev vachacz (#engine) | 2026-09-12 | complété (v3) ; la v4 n'est pas mesurée ; L-026 : Q4 −4 au-delà de 36 min en coupe |
+| Défense agressive, 8 joueurs sur 10 : 43 lancers francs adverses contre 15 en soft, défaite de 22 ; seuils proposés : défense ≥ 55 pour le cran 4, ≥ 60 pour le cran 5 | chanceler, jorgeac25 (#portugal, chat) | 2026-08-29/30, 2026-10-04 | en doute (avis, v3 ; cohérent avec « double tranchant » et L-011/L-015) |
+| Focus défensif 1 sur le pivot adverse : 48 points concédés | tankre1792 (help) | 2026-09-09 | avis (cohérent avec L-006) |
+| Un joueur en « passe » tire quand même (17 tirs) ; « tout à 2 » tire des 3 pts ; un passeur réglé « tir » : mauvais pourcentage | grobarbrate, cobisixer, lolek5232 | 2026-07-22, 2026-09-09/14 | avis (1 cas chacun) |
+| Pas de pénalité de poste hors rebonds, reconfirmé | vachacz | 2026-07-18, 2026-09-09 | confirmé (skill) |
+| Un joueur de retour de blessure le jour d'un match de coupe n'a pas joué (fuseau soupçonné) | b.tothe.r, vachacz (help) | 2026-10-04 | en doute |
+
+### Entraînement / académie
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Les juniors d'académie sortaient sans décimales (on repère un potentiel 10 au 1er entraînement) ; « je corrige » | aaaoooaaaa, grillanza_60069, vachacz | 2026-09-06 | **corrigé** : nos juniors (Bernard, Baron, Leclerc) ont des décimales dans `silver.bv_player_daily` au 30/10 |
+| Potentiel d'un agent libre aléatoire entre 3 et 9 ; effectif de départ 3-9 ; potentiel des juniors identique selon les pays | vachacz (help) ; lolek5232 | 2026-09-07/08/14 | confirmé (Dev) ; déjà dans le skill communauté |
+| Le développeur conseille de tirer vers 70-80 % d'académie ; l'écart 82 → 100 % « négligeable pour 5 semaines » | vachacz, lolek5232 (#academy) | 2026-07-21/23 | avis antérieur à la table du 27/07 ; ne remplace pas la table [M§4.2] |
+| 71 000 par semaine donneraient la même force d'académie que 100 000 (2 captures non lues) | nhegas12, chanceler (#portugal) | 2026-09-13 | en doute : nos données n'ont que 100 000 par semaine (45 → 59 → 70, courbe du skill) ; aucun test possible sur l'historique |
+| Équipe de départ : titulaires 24-28 ans potentiel 6-7, remplaçants 4-7, 2 juniors tirés d'une académie à 60 %, endurance plafonnée à 60 ; un jeune « d'origine » vendu High = potentiel moyen jusqu'à preuve (4-5 semaines d'historique) | Dev du 13/08, cité par carlomtlopes le 07/10 | 2026-10-07 | en doute (seconde main) |
+| Mesures de sortie d'académie : PS 41, 48, 52 (16 ans, académie 92 %), 54 (17 ans) | esmosinag, hamsterj1312, ale92c, ori1919 (#academy) | 2026-09-13, 2026-10-08 | avis chiffré (ordre de grandeur) |
+| Promouvoir un junior relancerait le délai de 7 jours du rapport (août) | faraone85, svg07 (#italia) | 2026-08-04 | périmé (jeudi 09:00 fixe depuis le 09/08) |
+
+### Transferts / prix
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Taxe de 5 % confirmée : 1 010,0 k vendu, 959,5 k reçu ; « pas de taxe » (uthred9751, 23/09) est faux | heldermoreno (#portugal) | 2026-10-03 | confirmé (skill) |
+| Prix du 27/09 au 04/10 probablement faussés : joueur banal acheté 60 k revendu 850 k à un compte japonais, 30 transactions suspectes, équipe de contrôle du développeur (05/10), 5 comptes bannis (08/10) | carlomtlopes, chanceler, sakota0 (#portugal) | 2026-10-05/08 | en doute (avis, non vérifié) : ne pas caler un plafond d'enchère sur ces ventes |
+| Prix des 16 ans : PS 40 = 150 k (sem. 1) → 300 k (11/09) ; PS 42 = 350 k → 500 k ; 3 M (26/09, 03/10) ; 3,5 M entre amis ; un PS 52 listé 5 M (28/09) | mkeffe, grillanza_60069, dcarra. (#italia) ; #portugal | 2026-09-11 … 2026-10-03 | avis ; à comparer à `gold.bv_market_price_known` (max 2 894 063 au 22/10) |
+| Aucun joueur de 20-21 ans en vente (graine de départ) ; groupes dominants 24-25 et 27-28 ans | vachacz, elemke., marekb9231 | 2026-10-05 | confirmé (Dev) |
+| Le total de toutes les enchères maximales où l'on mène compte comme argent engagé | vachacz | 2026-07-26 ; confirmé 2026-09-06 | confirmé (déjà [M§10.3]) |
+
+### Finances / personnel
+| Fait | Source | Date | Statut |
+|---|---|---|---|
+| Personnel : la facture de la semaine = le maximum de la somme des salaires présents sur la semaine ; on peut embaucher les médecins APRÈS une blessure (durée recalculée) | vachacz (help) | 2026-09-03, 2026-08-31, 2026-09-14 | complété (déjà au skill économie) ; licencier les médecins avant le dimanche : chanceler paie quand même, **non testé** |
+| Bonus homegrown : la coupe ne compte pas | vachacz | 2026-09-10 | confirmé (cohérent News 2026-10-23) |
+| Fatigue de coupe 25 % en pilote (09/09) | #engine | 2026-09-09 | périmé (News 2026-10-23 : aucune fatigue en coupe) |
+| Entraînement : jour de passage « samedi » (06/08, avant reset) | Dev | 2026-08-06 | périmé : dimanche 04:00 Paris observé |
+| « ×0,63 dès 80 » | kotryk (#polska) | 2026-10-06 | contredit : le skill fait foi (×0,75 à 80, ×0,63 à 85) [M§8.4] |

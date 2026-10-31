@@ -42,6 +42,7 @@ Interdits : « preset inchangé », « si », seuil générique, joueur non nomm
 | 11 | Ce qui sépare nos victoires et défaites (saison) | `select competition, my_result, matches, efg_pct, opp_efg_pct, oreb_pct, opp_oreb_pct, tov_pct, opp_tov_pct, fg3a_share from gold.bv_match_factors_by_result` | eFG et OREB décident (corrélations 0,91 et 0,73 avec l'écart) ; écart d'OREB ≤ −13,9 = 6 des 12 défaites | L-001, L-016 | |
 | 12 | Tendance récente (manque de réussite) | `select last_n, side, wins, fg_pct, fg3_pct, oreb, tov from gold.bv_match_trends` | Comparer les 5 derniers à la saison ; une baisse du 3P% → baisser `tir` des joueurs concernés | L-002 (moins de 3 pts = meilleure eFG) | |
 | 13 | Avis des amis | `outputs/basketvibe/veille/connaissance.md` § Tactique / moteur (deux sections) | Ligne « contredit » ou « en doute » : jamais utilisée seule | connaissance | |
+| 15 | Match déjà planifié | `gold.bv_saisie_matchs` (preset, saved, directives) pour CHAQUE match planifié | Après tout changement de préréglage, de tactique générale ou de transfert d'un joueur du préréglage : rouvrir chaque match planifié et re-choisir (sinon le match garde l'ancien plan, ou le plan ne se sauvegarde pas) | grobarbrate 2026-09-05 ; nhegas12, chanceler 2026-09-20/21 ; tankre1792, Dev 2026-09-18/19 (connaissance § lecture des joueurs) | |
 | 14 | Avantage du terrain | `gold.bv_saisie_matchs.is_home` | Petit bonus à domicile ; aucun en coupe | [M§6.1] ; News 2026-10-23 | |
 
 ## Ligue / coupe
@@ -62,3 +63,5 @@ Composition de **test**, jamais le cinq de ligue/coupe ; pas de preset ; un seul
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi (source nouvelle) |
 |---|---|---|---|
+| 2026-10-31 | Agressivité 4-5 | aucun seuil → à confirmer : défense ≥ 55 (cran 4), ≥ 60 (cran 5) avant de mettre un joueur en agressif | avis chanceler, jorgeac25 (v3, 2026-08/10) ; à tester en amical v4, un joueur à la fois |
+| 2026-10-31 | Rotation à 48 min | « ≤ 36 min » seul → ≤ 36 min, sauf cinq de coupe à fatigue nulle : Q4 mesuré (L-026) | Dev 2026-09-12 (5×48 gagne encore le Q4 de +5,12/+2,88, v3) ; v4 non mesuré |

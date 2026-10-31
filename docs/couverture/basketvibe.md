@@ -7,7 +7,7 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 ## Global
 | Ligne | Demande | Réponse | Statut |
 |---|---|---|---|
-| 4 | Premier tour de veille : règles, Discord, forum, chat, mine d'or | `outputs/basketvibe/veille/connaissance.md` (123 lignes, statut par ligne) + 9 skills `basketvibe-*`. Les 642 messages du développeur et les release-notes sont lus en entier ; les ~9 100 messages de joueurs n'ont été balayés que par mots-clés (connaissance § Lecture intégrale) | ❌ partiel — plan : veille thème par thème sur les messages de joueurs (`pipelines/dossier.py basketvibe <type> --complet` par carte, agent veille medium + Sonnet), une session |
+| 4 | Premier tour de veille : règles, Discord, forum, chat, mine d'or | `outputs/basketvibe/veille/connaissance.md` (123 lignes, statut par ligne) + 9 skills `basketvibe-*`. Les 642 messages du développeur et les release-notes sont lus en entier ; les ~9 100 messages de joueurs n'ont été balayés que par mots-clés (connaissance § Lecture intégrale) | ✅ lu en entier le 2026-10-31 : 3 agents, 26 193 lignes, ~490 entrées (`lecture-joueurs-1/2/3.md`), intégré dans `connaissance.md` (corpus jusqu'au 09/10) |
 | 5 | Calendrier, savoir quel jour on est | `gold.bv_agenda`, skill `basketvibe-aujourdhui`, `basketvibe-saison` § Rythme | ✅ |
 | 6 | Différence Coupe / Amical / Ligue, paramètres pour chacun (preset ligue/coupe, amical sans preset, tests) | `docs/fiches/basketvibe/resume.md` § Rythme ; carte `composition` § Ligue/coupe et § Amical | ✅ |
 | 7 | Stats de la ligue : meilleurs joueurs des équipes | `gold.bv_league_top_players` (créée le 2026-10-31, migration 052) : pts, éval, %, rang par compétition | 🔧 seulement les joueurs croisés dans nos matchs (chaque club 2 fois par saison) ; les autres matchs de la ligue ne sont pas exportés |
@@ -87,7 +87,7 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | 168 | Beaucoup d'argent : que faire, axes à améliorer | carte `finances` var. 8-10 + carte `achat` | ✅ |
 | 169 | Beaucoup de défaites : prendre une action | carte `defaite` + agent `decideur` (jamais « ne rien changer ») | ✅ |
 | 170 | Nouveauté : tester en amical, sinon proposer comment | carte `composition` § Amical (un test à la fois, mesure nommée) | ✅ |
-| 171 | Chaque règle parfaite, mine d'or étudiée à 100 % | voir ligne 4 | ❌ partiel (même plan que la ligne 4) |
+| 171 | Chaque règle parfaite, mine d'or étudiée à 100 % | voir ligne 4 | 🔧 règles lues à 100 % ; aucune mesure v4 (zone, agressivité, focus) dans le corpus : à acquérir par des amicaux de test |
 | 172 | Quel export chaque jour, quoi faire après | `gold.bv_exports_state`, skill `basketvibe-aujourdhui` | ✅ |
 | 173 | Ordre logique des actions, dépendances | `docs/fiches/basketvibe/resume.md` § Ordre des agents ; `enchainement.md` ; `docs/attentes/jeux/basketvibe.yaml` | ✅ |
 | 174 | Mettre à jour agents/skills à chaque nouveauté | veille → skills ; `dossier.py` donne le nouveau depuis le dernier passage et l'agent modifie le check de la carte | ✅ |
@@ -116,4 +116,9 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | +16 | Prime de fin de saison : 1er 400 000, 2e 300 000, 3e 200 000, 4e 100 000, 5-8e 50 000 | [M§10.1.4] | confirmé |
 | +17 | Bonus homegrown : 200 par minute de ligue des juniors signés, plafond 40 000 par semaine (~66 min par match) | [M§10.1.3] | confirmé |
 | +18 | Un joueur blessé ne s'entraîne pas cette semaine-là | [M§8] | confirmé |
+| +20 | Après tout transfert ou changement de préréglage, rouvrir chaque match planifié : le plan ne se met pas à jour tout seul | grobarbrate 2026-09-05 ; tankre1792, Dev 2026-09-18/19 | confirmé (3 sources) |
+| +21 | Prix du marché du 27/09 au 04/10 probablement faussés (transferts truqués, 5 comptes bannis le 08/10) | carlomtlopes, chanceler 2026-10-05/08 | en doute |
+| +22 | Potentiel d'un agent libre : 3 à 9 ; aucun joueur de 20-21 ans en vente | Dev 2026-09-07, 2026-10-05 | confirmé |
+| +23 | Défense agressive : fautes et lancers francs adverses en forte hausse ; défense ≥ 55-60 proposée pour les crans 4-5 | #portugal 2026-08/10 | avis (v3) |
+| +24 | Le Dev conseille de tirer l'académie vers 70-80 % ; 71 000 par semaine = même force que 100 000 (affirmé, non prouvé) | vachacz 2026-07-21 ; nhegas12 2026-09-13 | avis / en doute |
 | +19 | Potentiel 7 progresse presque comme un 8 (×1,50 contre ×1,60) mais se vend bien moins cher | [M§8.3] + Com dcarra 2026-10-14 | avis + calcul |
