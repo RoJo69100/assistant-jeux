@@ -20,6 +20,13 @@ L'utilisateur : « si la première fois il a trouvé l'information à un endroit
 - **Apprendre des matchs** : chaque `L-nnn` qui touche un type devient un check de sa carte ; un check contredit deux fois par les résultats est réécrit (historique daté). Ainsi la carte s'améliore à chaque match au lieu de tout relire.
 - `--complet` recompile tout : seulement si la carte est fausse ou sur demande.
 
+## Mise en route d'un jeu = le gros travail, une seule fois (2026-10-31)
+L'utilisateur : « on commence BEAUCOUP à l'ajout d'un jeu, c'est là que tout se fait ; après, consommation ». À l'ajout (ou à la remise à niveau) d'un jeu, en Opus :
+1. **Veille intégrale** : tout le Discord, le forum, le chat, le manuel, le devlog → `outputs/<jeu>/veille/connaissance.md` et les skills.
+2. **Registre de couverture** `docs/couverture/<jeu>.md` : **chaque ligne** de la liste de l'utilisateur pour ce jeu (`docs/chose-a-faire*.txt`, `docs/chose-a-DM.txt`, bloc « Tous jeux ») → `| fichier:n° | ligne | réponse (carte § variable, vue gold, skill §) | statut ✅ répondu / 🔧 mécanisme fait / ❌ manque + comment le réunir |`. Les choses nouvelles trouvées en veille (facteur caché, règle découverte) y sont **ajoutées** comme lignes `+N`.
+3. **Mécanismes** : une vue gold par tableau qui reviendra, une carte par type de décision (variables, check, rendu figé, lignes couvertes).
+4. Le jeu est « prêt » quand aucune ligne du registre n'est ❌ sans plan. Ensuite, au quotidien, seulement carte + nouveau.
+
 ## Étapes sans carte (première fois), dans l'ordre, sans en sauter
 1. **Dossier** : `python pipelines/dossier.py <jeu> <type> [--mots "nom joueur,mot clé"]` → `outputs/<jeu>/dossier/AAAA-MM-JJ-<type>.md` (+ `…-discord.txt` avec **toutes** les lignes trouvées). Il liste les skills à lire, chaque ligne de `connaissance` sur le sujet, chaque message Discord/chat trouvé, les briefs du jour, les learnings, le registre `fait-`.
 2. **Lecture intégrale** : l'agent (ou moi) lit le dossier **en entier** et le fichier Discord **en entier**, puis interroge les vues gold citées.
