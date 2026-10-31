@@ -11,12 +11,22 @@ Une **décision importante** = achat, vente, enchère ; composition de ligue, co
 | **Avis des amis** | `outputs/<jeu>/veille/connaissance*.md`, `data/discord/<Jeu>/`, `data/chat/<jeu>/`, chat en base | l'expérience des autres managers et du développeur, statut confirmé / contredit / en doute |
 | **Chiffres** | vues gold du jeu (`docs/fiches/<jeu>/resume.md` § Vues prêtes), bronze du jour, `learnings.md` | la mesure, sur **toute la saison**, et nos conseils passés (C-nnn → L-nnn) |
 
-## Étapes (dans l'ordre, sans en sauter)
+## Carte : on cherche une fois, on garde (2026-10-31)
+L'utilisateur : « si la première fois il a trouvé l'information à un endroit, il faut qu'il sache que l'information est là et qu'il la garde ; il ne faut pas relire à chaque fois tout ; s'il y a du nouveau dans la règle, il modifie ce check ». C'est **le cœur du projet** : décider mieux avec le temps, pour moins cher.
+
+- `docs/decisions/cartes/<jeu>/<type>.md` (modèle `cartes/MODELE.md`) : pour chaque variable, **où la lire** (requête SQL exacte ou fichier § section), **le check** (règle, seuil chiffré, sens), **sa source**, la dernière valeur. Plus les checks appris des matchs (`L-nnn`) et l'historique des changements de checks.
+- **Pas de carte** : `dossier.py` compile tout (étapes ci-dessous) et l'agent écrit la carte à la fin.
+- **Carte présente** : `dossier.py` rend la carte + **seulement le nouveau** depuis le commit noté (« Sources lues ») : lignes ajoutées aux skills, fiches, config, connaissance, learnings, Discord/chat, y compris non commitées. L'agent lance les requêtes de la carte, lit le nouveau en entier, modifie un check si le nouveau change une règle, ajoute une variable apprise, puis commit et `--marquer`. Un joueur absent de la carte : `--mots "<nom>"` fait une recherche ciblée dans tout l'historique.
+- **Apprendre des matchs** : chaque `L-nnn` qui touche un type devient un check de sa carte ; un check contredit deux fois par les résultats est réécrit (historique daté). Ainsi la carte s'améliore à chaque match au lieu de tout relire.
+- `--complet` recompile tout : seulement si la carte est fausse ou sur demande.
+
+## Étapes sans carte (première fois), dans l'ordre, sans en sauter
 1. **Dossier** : `python pipelines/dossier.py <jeu> <type> [--mots "nom joueur,mot clé"]` → `outputs/<jeu>/dossier/AAAA-MM-JJ-<type>.md` (+ `…-discord.txt` avec **toutes** les lignes trouvées). Il liste les skills à lire, chaque ligne de `connaissance` sur le sujet, chaque message Discord/chat trouvé, les briefs du jour, les learnings, le registre `fait-`.
 2. **Lecture intégrale** : l'agent (ou moi) lit le dossier **en entier** et le fichier Discord **en entier**, puis interroge les vues gold citées.
 3. **Grille** : chaque variable du type ci-dessous reçoit une valeur et sa source. Une variable vide se cherche (SQL, bronze brut, Discord, chat) avant d'être déclarée absente.
 4. **Tableau « Couverture »** en fin de brief : `Source | éléments trouvés | lus | retenus | écartés (pourquoi)`. Lus = trouvés, sinon le brief n'est pas fini.
 5. **Police** : l'agent `police` contrôle la grille et la couverture, complète lui-même ce qui manque, puis la décision est rendue.
+6. **Carte** : l'agent écrit `docs/decisions/cartes/<jeu>/<type>.md` (où il a trouvé chaque variable, le check), commit, `python pipelines/dossier.py <jeu> <type> --marquer`.
 
 Seule phrase admise pour un manque réel : « il me manque X — cherché dans : <liste des sources> — on le réunit comme ça : <export précis> ». Interdits : « pas tout lu », « lu à moitié », « non lu », « non relevé », « échantillon », « pas eu le temps », « à lire plus tard » (bloqués par le hook `pipelines/police.py`).
 
