@@ -30,7 +30,7 @@ def liste(texte: str, cle: str) -> list[str]:
     """Valeurs de toutes les listes « cle: [a, b, "c"] » du yaml (format plat, une ligne)."""
     vals = []
     for m in re.finditer(rf"^\s*{cle}:\s*\[(.*)\]\s*$", texte, re.M):
-        vals += [v.strip().strip('"').strip("'") for v in m.group(1).split(",") if v.strip()]
+        vals += [a or b.strip() for a, b in re.findall(r'"([^"]*)"|([^,"]+)', m.group(1)) if a or b.strip()]
     return vals
 
 
