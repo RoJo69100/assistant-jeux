@@ -24,7 +24,8 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - Transferts : taxe 5 %, revente après 1 semaine, effectif minimum 8 (notre marge : 9).
 
 ## Vues prêtes (lis-les avant de calculer toi-même)
-`gold.bv_agenda`, `gold.bv_daily_alerts`, `gold.bv_match_report`, `gold.bv_saisie_joueurs` + `gold.bv_saisie_adversaires` (tableaux de saisie R-10, `order by ordre`), `gold.bv_roster_now`, `gold.bv_slot_fit`, `gold.bv_fatigue_plan`, `gold.bv_next_opponents`. Requêtes : colonnes choisies et `LIMIT`.
+`gold.bv_agenda`, `gold.bv_daily_alerts`, `gold.bv_match_report`, `gold.bv_saisie_joueurs` + `gold.bv_saisie_adversaires` (tableaux de saisie R-10, `order by ordre`), `gold.bv_roster_now`, `gold.bv_slot_fit`, `gold.bv_fatigue_plan`, `gold.bv_next_opponents`, `gold.bv_league_top_players` (meilleurs adversaires croisés). Requêtes : colonnes choisies et `LIMIT`.
+**Décision importante** : lis d'abord la carte `docs/decisions/cartes/basketvibe/<type>.md` (où lire chaque variable, check, rendu figé) ; couverture des demandes de l'utilisateur : `docs/couverture/basketvibe.md`.
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
 Veille → Match → Effectif → Finances-personnel → Académie / Entraînement (parallèles) → Tactique (lit Match, Effectif, Entraînement) → Transferts (lit Effectif, Finances, Tactique, Académie). Un agent aval qui contredit un amont l'écrit en tête de son résumé.

@@ -5,7 +5,7 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 2a6c3e7a-9937-4c9e-bfcf-ef153e4837b3
-  modified: 2026-10-31T12:40:27.598Z
+  modified: 2026-10-31T13:47:17.007Z
 ---
 
 Chaque décision importante a une carte `docs/decisions/cartes/<jeu>/<type>.md` : variable → où la lire (requête exacte / fichier § section) → check (règle, seuil) → source → dernière valeur. `pipelines/dossier.py` rend la carte + seulement le nouveau depuis le commit « Sources lues » (git diff des skills, fiches, connaissance, learnings, Discord/chat). Fin : carte à jour, commit, `--marquer`.
@@ -13,3 +13,5 @@ Chaque décision importante a une carte `docs/decisions/cartes/<jeu>/<type>.md` 
 **Why:** l'utilisateur : « il faut pas relire à chaque fois tout… s'il y a du nouveau dans la règle, il modifie ce check » ; « tu dois apprendre des matchs, être meilleur plus le temps avance… c'est LA CHOSE PRINCIPALE ».
 
 **How to apply:** jamais `--complet` par habitude ; toute variable trouvée hors carte est ajoutée à la carte ; chaque L-nnn devient un check ; un check contredit deux fois est réécrit (historique daté). Complète [[feedback-dossier-complet-police]].
+
+Fait : BasketVibe le 2026-10-31 (registre `docs/couverture/basketvibe.md`, 7 cartes, vue `gold.bv_league_top_players`). Reste ouvert pour BasketVibe : lecture un par un des ~9 100 messages Discord des joueurs (lignes 4 et 171). Prochains jeux, un par session en Opus : Hockey Nation (jeu modèle), Six Zero League, Team Soccer, Hardwood, Derby Manager (`docs/chose-a-DM.txt`).
