@@ -43,3 +43,4 @@ Sources lues : commit 58975fe (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Personnel médical | facture = maximum de la semaine ; embaucher les médecins après une blessure est possible (durée recalculée) ; licencier avant le dimanche : non testé | vachacz 2026-08-31, 2026-09-03 ; chanceler paie quand même |

@@ -40,3 +40,6 @@ Sources lues : commit 58975fe (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-10-31 | Investissement | 100 000/sem. maintenu ; 71 000 = hypothèse non testable sur l'historique (45 → 59 → 70 à 100 000) | nhegas12 2026-09-13 (en doute) |
+| 2026-10-31 | Moment de signer | table [M§4.2] seule → table + avis du Dev : tirer vers 70-80 % (2026-07-21, avant la table du 27/07) | vachacz #academy |
+| 2026-10-31 | Décimales | bug de septembre vérifié corrigé : Bernard, Baron, Leclerc ont des décimales (30/10) | `silver.bv_player_daily` |
