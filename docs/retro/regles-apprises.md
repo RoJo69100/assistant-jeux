@@ -3,6 +3,11 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-10-31 (soir, BasketVibe : compo de l'amical du 01/11)
+65. `gold.bv_zone_jouee` lit l'export d'avant la saisie : la zone d'un match joué peut y être fausse (Calije : Middle en base, Rim saisie). Je le dis dans le brief ; vue à refaire pour lire la zone dans l'export du match terminé.
+64. Avant d'écrire « pas en base » sur un adversaire, une requête `bronze.raw_pages ... ilike '%<adversaire>%'` (Granada écrit « absent » avant toute recherche).
+63. Rendu tactique : relire le format de `pipelines/forme.py` avant d'écrire (Minutes, adversaires une ligne par joueur, plan Priorité | Catégorie | Action) ; la mémoire « une ligne les 12 » ne prime pas sur le hook.
+
 ## 2026-10-31 (soir, Hockey Nation : « j'ai pas trop aimé toutes tes réponses »)
 62. Team Soccer, compo : toutes les colonnes remplies, jamais « — » (2026-10-31) ; rendre l'état enregistré lu dans `player_orders`.  l'emplacement s'écrit DL/DC/DR et ML/MC/MR (poste exact de l'écran), jamais DEF/MIL ; colonnes Ultra déf./Défensive/Médiane/Offensive/Finition gardées (validé 2026-10-31). Un export demandé « pour un adversaire inconnu » = je cherche d'abord en base (`silver.ts_matches`), je ne demande pas d'export.
 61. « Que faire » avec un match demain = je DONNE la saisie complète (`gold.hn_tactique_rendu` + `plan_rendu` + `controle`, tout dans l'ordre de l'écran), jamais « dis sors la compo » (RÉCIDIVE règle de rendu 3 et règle 27). Si le contrôle dit « 0 case différente de la cible », je le dis : la lineup est déjà saisie.

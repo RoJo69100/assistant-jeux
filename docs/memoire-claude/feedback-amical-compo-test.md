@@ -5,10 +5,10 @@ metadata:
   node_type: memory
   type: feedback
   originSessionId: 843acf0f-3771-498a-b909-79972f0d77c2
-  modified: 2026-10-29T11:02:35.943Z
+  modified: 2026-10-31T19:12:40.716Z
 ---
 
-Pour un amical, je rends tout de suite le tableau joueur × Q (format parfait [[feedback-format-tactique-parfait]]) avec une composition de test : remplaçants qui jouent, étoiles au repos ou en prolongation, réglages par joueur repris du dernier amical (`gold.bv_saisie_joueurs`). Adversaires : une ligne « les 12 : Normal, Perimeter » (MOTS seulement ; ou chiffres seulement, jamais « focus 3 » + « zone Perimeter » mélangés). Un seul test : zone (Rim/Middle/Perimeter, suivie dans `gold.bv_zone_jouee`) ou un réglage de nos joueurs.
+Pour un amical, je rends tout de suite le tableau joueur × Q (format parfait [[feedback-format-tactique-parfait]]) avec une composition de test : remplaçants qui jouent, étoiles au repos ou en prolongation, réglages par joueur repris du dernier amical (`gold.bv_saisie_joueurs`). Adversaires : tableau Adversaire | Poste | Focus défensif (1–5) | Zone, UNE LIGNE PAR JOUEUR (exigé par le hook `pipelines/forme.py`, 2026-10-31 ; noms inconnus = chercher en base d'abord, sinon « Adversaire 1..12 » dans l'ordre de l'écran) ; colonne « Minutes » (pas « Min »). Un seul test : zone (Rim/Middle/Perimeter, suivie dans `gold.bv_zone_jouee`) ou un réglage de nos joueurs.
 
 **Why:** 2026-10-29, colère : je lui ai donné le cinq de la coupe pour l'amical, demandé l'aperçu de l'adversaire, et attendu qu'il réclame le tableau. « L'adversaire on s'en fout », « je te dis de reprendre le même format, pas les mêmes données ».
 
