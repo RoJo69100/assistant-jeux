@@ -136,6 +136,7 @@ CAS = [
     ("tactique ok", TACT_OK, True), ("tactique ko", TACT_KO, False),
     ("adversaires ok", ADV_OK, True), ("adversaires ko", ADV_KO, False),
     ("hardwood tactique ok", HW_OK, True), ("hardwood tactique ko", HW_KO, False),
+    ("tableau Réglage | Valeur (SZL) laissé passer", "| Réglage | Valeur |\n|---|---|\n| Formation d'attaque | 5-1 |\n| Direction | mixed |\n", True),
     ("hardwood recrues ok", REC_OK, True), ("hardwood recrues ko", REC_KO, False),
     ("team soccer ok", TS_OK, True), ("team soccer ko", TS_KO, False),
     ("hn effectif ok", HN_OK, True), ("hn effectif ko", HN_KO, False),
