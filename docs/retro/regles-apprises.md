@@ -4,6 +4,7 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-11-01 (Hardwood et Team Soccer)
+68. RÉCIDIVE Hockey Nation : « que faire » = j'ai listé Trade Center (offres + recherche), Classement, Training et Contract talks comme exports « à refaire » d'après `hn_exports_state` (qui ne regarde que l'âge). Consigne écrite dans `resume.md` l.7 : jamais Trade Center ; et l'utilisateur avait déjà exporté Contract talks, coachs et l'évolution des joueurs. Avant toute liste d'exports : lire `resume.md` [U], puis `bronze.raw_pages` des 3 dernières heures. Mémoire `feedback-hn-jamais-trade-center`.
 67. Une recrue ou une page « absente » de silver : regarder d'abord la dernière capture brute de l'URL (`bronze.raw_pages` par `page_url`). Une page Cloudflare « Un instant… » avait remplacé la page de Tolliver (corrigé : `sql/silver/050`, script 0.1.2).
 66. Avant d'écrire « la vue ne fait pas X », lire sa définition (`pg_get_viewdef`) : j'ai dit que `hw_depth_suggest` ne filtrait pas les redshirts, alors qu'elle exclut `red_shirt = 'oui'` (045). Team Soccer : `ts_upcoming` gardait un match absent du dernier export Matchs (ChispasFC22) ; croiser avec l'export du jour avant de dire « composition urgente ».
 
