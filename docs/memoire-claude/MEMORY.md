@@ -42,3 +42,4 @@
 - [Compo du lendemain](feedback-compo-du-lendemain.md) — match demain = 1re ligne du plan « fais la compo de <adversaire> », jamais « rien à faire » (2026-10-31)
 - [Team Soccer compo : emplacements précis](feedback-teamsoccer-compo-emplacements.md) — colonnes Ultra-déf/Déf/Milieu/Offensive/Finalisation + DL/DC/DR, ML/MC/MR (pas DEF/MIL), validé 2026-10-31
 - [Seulement ce qui est possible](feedback-seulement-ce-qui-est-possible.md) — règle d'or : actions faisables maintenant ; exception transferts (cible, enchère) (2026-11-01)
+- [Transferts toujours proposés](feedback-transferts-toujours-proposes.md) — jamais "je cherche" sans cibles chiffrées à vraie valeur ajoutée (2026-11-01)
