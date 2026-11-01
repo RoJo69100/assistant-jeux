@@ -17,7 +17,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 | Cycle (finances, entraînement, blessures, transferts) | chaque soir après 21:00 (2 journées = 1 cycle) | entraînement avant le cycle suivant |
 | Choix U18 | toutes les 8 journées (2 prospects) | signer / ignorer |
 | Fin de saison | tous les 9 à 11 jours | +1 an pour tous ; salaires fixés ; sponsor changeable une fois (re-signer = pas de prime) |
-- **Corrigé 2026-10-29 (V-20261029-4)** : les annonces de transfert en cours ne se résolvent qu'à la **prochaine intersaison**, sans annulation possible ; ne lance aucune annonce à retirer [Dev chat Gazelle 2026-10-28].
+- **Corrigé 2026-11-01** : les annonces de l'intersaison se règlent **après la manche 2 du 01/11 (21:00 Paris)**, dernier tour du premier jour de la saison 4 [Dev chat Gazelle 2026-10-29 20:57 UTC ; `settle_after_round` = 2 sur les 67 annonces]. Règlement ensuite toutes les 2 journées. Annulation toujours impossible : ne lance aucune annonce à retirer. (Remplace V-20261029-4, « intersaison ».)
 - **0.6.2 (2026-10-28)** : Coupe du monde 19:00 Paris (sélectionneurs seulement) ; la saison 3 s'est finie le 2026-10-28 (finale de coupe) ; intersaison en cours, date de la saison 4 inconnue ; l'aperçu et le rapport de match montrent les tactiques favorites des deux camps (à relever) ; aucun changement de moteur [V-20261029-1, -2, -9].
 - Revenus, coûts, entretien × division (pas les salaires) [W:Competitions].
 
