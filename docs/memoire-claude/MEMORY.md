@@ -41,3 +41,4 @@
 - [Hook forme : tous les formats](project-hook-forme-formats.md) — forme.py bloque les rendus hors format, entraînement dans l'ordre de l'export (2026-10-31)
 - [Compo du lendemain](feedback-compo-du-lendemain.md) — match demain = 1re ligne du plan « fais la compo de <adversaire> », jamais « rien à faire » (2026-10-31)
 - [Team Soccer compo : emplacements précis](feedback-teamsoccer-compo-emplacements.md) — colonnes Ultra-déf/Déf/Milieu/Offensive/Finalisation + DL/DC/DR, ML/MC/MR (pas DEF/MIL), validé 2026-10-31
+- [Seulement ce qui est possible](feedback-seulement-ce-qui-est-possible.md) — règle d'or : actions faisables maintenant ; exception transferts (cible, enchère) (2026-11-01)
