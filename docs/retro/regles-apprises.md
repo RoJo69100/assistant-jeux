@@ -3,6 +3,10 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-11-01 (Hardwood et Team Soccer)
+67. Une recrue ou une page « absente » de silver : regarder d'abord la dernière capture brute de l'URL (`bronze.raw_pages` par `page_url`). Une page Cloudflare « Un instant… » avait remplacé la page de Tolliver (corrigé : `sql/silver/050`, script 0.1.2).
+66. Avant d'écrire « la vue ne fait pas X », lire sa définition (`pg_get_viewdef`) : j'ai dit que `hw_depth_suggest` ne filtrait pas les redshirts, alors qu'elle exclut `red_shirt = 'oui'` (045). Team Soccer : `ts_upcoming` gardait un match absent du dernier export Matchs (ChispasFC22) ; croiser avec l'export du jour avant de dire « composition urgente ».
+
 ## 2026-10-31 (soir, BasketVibe : compo de l'amical du 01/11)
 65. `gold.bv_zone_jouee` lit l'export d'avant la saisie : la zone d'un match joué peut y être fausse (Calije : Middle en base, Rim saisie). Je le dis dans le brief ; vue à refaire pour lire la zone dans l'export du match terminé.
 64. Avant d'écrire « pas en base » sur un adversaire, une requête `bronze.raw_pages ... ilike '%<adversaire>%'` (Granada écrit « absent » avant toute recherche).

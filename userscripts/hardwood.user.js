@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hardwood → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      0.1.1
+// @version      0.1.2
 // @description  Hardwood (onlinecollegebasketball.org) : chaque page que tu ouvres est copiée (texte, tableaux, HTML) dans une file gardée entre les pages ; un clic sur le bouton envoie toute la file dans bronze.raw_pages. Aucune requête supplémentaire vers le site du jeu.
 // @match        *://onlinecollegebasketball.org/*
 // @match        *://*.onlinecollegebasketball.org/*
@@ -179,7 +179,9 @@
   function autoSnapshot(force) {
     if (!force && (!autoOn() || SKIP_PAGE.test(location.pathname))) return;
     const root = document.querySelector('main') || document.body;
-    if (!root || root.innerText.length < 200 || /Just a moment/i.test(document.title)) return;
+    // Page de vérification Cloudflare (anglais ou français) : jamais envoyée, elle écraserait la vraie page en silver.
+    if (!root || root.innerText.length < 200 || /Just a moment|Un instant/i.test(document.title)
+        || /Ray ID:[\s\S]*Cloudflare/i.test(root.innerText)) return;
     const key = location.href + '|' + root.innerText.length;
     if (!force && key === lastKey) return;
     lastKey = key;
