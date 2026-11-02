@@ -4,6 +4,9 @@
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
 ## 2026-11-02 (derbymanager : Queen of the South puis Marmandes)
+96. DM, école : ne pas promouvoir un jeune qui ne jouera pas (coût = salaire d'installations, aucune croissance sans match) ; comparer aux jeunes découverts des scouts (`market_regions-tab`) avant de conclure ; le seul intérêt d'une promotion est de jouer ou de garder l'effectif au-dessus du seuil de vente.
+95. DM, prolongation : toujours le salaire/jour à proposer (demande de la page contrat, borne `marge_salaire_jour`), jamais « prolonge » seul ; page contrat absente = « exporte-la ».
+94. DM, achat : le prix est fixe, seul le contrat se négocie (salaire/jour, Extra fee, durée, statut) ; « enchère maximale 110 % » était le coût total au salaire minimum ; une mise en vente est testée contre l'effectif non listé (Bodian refusé à 19 → 18) avant d'être proposée. Une montée d'installations ne se résume pas à une ligne « pas de montée » : niveau, écart, cause, décision chiffrée.
 93. RÉCIDIVE règle 79 (à monter dans CLAUDE.md) : avant tout envoi, parcourir G1-G12 et le gabarit : catégories fixes (pas « Effectif »), jamais « rien à faire », composition = banc S1-S5 + set pieces, deja-fait chargé dans le tour.
 92. Une consigne explicite de l'utilisateur (« on ne parle pas de Marmandes ») prime sur « deux clubs » : ligne `pause: <club>` dans `fait-AAAA-MM-JJ.md`, que les hooks doivent lire (conception Opus sur `pipelines/controle.py`).
 91. Un nom n'entre dans un brouillon qu'avec la ligne de la vue du jour (`dm_verdict_joueurs`) ; vente = contrat ≤ 85 j.

@@ -7,9 +7,9 @@ Base : exports 307 du 2026-11-02 21:56-22:00 UTC (`gold.dm_effectif`, `gold.dm_v
 |---|---|---|
 | 🟥 URGENT | Export | Exporte le marché 307 filtré 8-20 M (et 5,5-8 M) : l'export de 22:00 va de 0,2 à 5,3 M (235 annonces, `silver.dm_market` ; 0 annonce > 5,5 M). **Il me manque l'export marché 8-20 M, fais-le.** |
 | 🟥 URGENT | Transferts | Prolonge Desagnat (2 j), Vasilev (44 j), Lafleur (17 j), Lerch (19 j), Lévêque (29 j) |
-| 🟥 URGENT | Transferts | Mets en vente McCulloch (2 j, 8,2 M) et Bodian (30 j, 4,9 M) |
-| 🟥 URGENT | Transferts | Scoute Campos (DLCR, Santa Cruz), puis pose l'enchère maximale 2,86 M ; repli Morley, enchère max 2,64 M |
-| 🟧 IMPORTANT | Académie | Promeus Loría (FC) ; garde Beth et Puisattier à l'école |
+| 🟥 URGENT | Transferts | Mets en vente McCulloch (2 j, 8,2 M). Bodian : refusé par le jeu (effectif non listé à 18), il reste (correction 2026-11-02) |
+| 🟥 URGENT | Transferts | Scoute Campos (DLCR, Santa Cruz), ouvre « Offer contract » : le prix est fixe, on ne négocie que le contrat (salaire minimum de la liste ; coût total 2,86 M au minimum) ; repli Morley (2,64 M au minimum) (correction 2026-11-02) |
+| 🟧 IMPORTANT | Académie | Garde Loría, Beth et Puisattier à l'école : aucun ne jouera (correction 2026-11-02) |
 | 🟩 SUIVI | Finances | Pas de montée d'installations aujourd'hui |
 
 ## 1. Prolongations (base : coût = 5 % du prix, Vargas −240 000 le 2 nov = 5 % × 4,8 M, `silver.dm_money_flow` + `gold.dm_effectif` ; connaissance § 7 « prolongation = 5 % joueur » ; hypothèse pour les autres montants)
@@ -47,7 +47,7 @@ Base : `gold.dm_marche_notes` (22:00). La vue compare au plus faible défenseur 
 ## 4. École (effectif 20 : 5 places libres sur 25 ; limite 25 = promotion bloquée, connaissance § 6)
 | Jeune | Données (`silver.dm_school`) | Décision |
 |---|---|---|
-| H. Loría FC 17, high / lower division player, 102 j | tir 19, jeu de tête 15, moyenne 16 compétences 8,1 = Luzerne (8,1, 18 ans) ; tier cible = celui de McCulloch (8,2 M) | **promouvoir** : prend la place libérée par McCulloch. Salaire d'un promu = coût des installations [H] ; confiance faible |
+| H. Loría FC 17, high / lower division player, 102 j | tir 19, jeu de tête 15, moyenne 16 compétences 8,1 = Luzerne (8,1, 18 ans) ; tier cible = celui de McCulloch (8,2 M) | **garder à l'école (corrigé 2026-11-02)** : Luzerne (8,1, titulaire) le devance ; promu sans match il ne grandit pas et coûte le salaire d'installations [H] |
 | A. Beth DC 16, high / lower division player, 97 j | moyenne 6,8 contre Hardt 5,6 | **garder** à l'école : 7 défenseurs après Campos, pas de minutes (un promu sans temps de jeu ne grandit pas, connaissance § 6) |
 | G. Puisattier MC 15, low / established, 98 j | moyenne 5,3, marquage 16 | **garder** : libérer est irréversible, pas de nouveau tirage (« il faut promouvoir pour en obtenir un nouveau ») ; coût ≈ 35 k/j d'école pour 3 jeunes (`gold.dm_finances_bilan`) |
 
