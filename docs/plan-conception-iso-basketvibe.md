@@ -40,9 +40,9 @@ Principe : les agents ne garantissent ni la lecture complète ni la mémoire des
 
 | Outil | Remplace | Rôle | Statut |
 |---|---|---|---|
-| `pipelines/cartographe.py` | agent `cartographe` | Liste les L-nnn sans check dans une carte et les cartes manquantes par jeu ; je rédige les checks en session | ❌ |
-| `pipelines/recette.py` étendu | agent `testeur` | Rejoue formats, hooks et vues gold de tous les jeux avant commit | ❌ |
-| Vues gold `*_sante_collecte` | agent `sante-collecte` | Ce qui n'arrive plus ou arrive vide, une requête | ❌ |
+| `pipelines/cartographe.py` | agent `cartographe` | Liste les L-nnn sans check dans une carte et les cartes manquantes par jeu ; je rédige les checks en session | ✅ 2026-11-02 |
+| `pipelines/recette.py` étendu | agent `testeur` | Rejoue formats, hooks et vues gold de tous les jeux avant commit | ✅ 2026-11-02 |
+| Vues gold `*_sante_collecte` | agent `sante-collecte` | Ce qui n'arrive plus ou arrive vide, une requête | ✅ 2026-11-02 |
 
 ### 0c. Extensions d'agents existants
 
@@ -85,4 +85,5 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : étape 0 réécrite : hooks d'abord, scripts à la place des agents `cartographe`/`testeur`/`sante-collecte`, `recrutement` et `adversaire` absorbés par `academie` et `tactique`. Plus aucun nouvel agent.
 - 2026-11-02 : 0a : H1, H2, H4, H5 faits dans `pipelines/police.py` (tests `pipelines/test_police.py`, 13 cas) ; agent `police` écrit la trace `police-<date>.md`. Reste H3.
 - 2026-11-02 : 0a terminé : H3 dans `pipelines/forme.py` (HN 4 équipes, TS deux clubs et emplacements, SZ ordre de saisie, DM clubs + set pieces, ordre d'entraînement par jeu) ; `test_forme.py` 32 cas. Prochaine : 0b.
+- 2026-11-02 : 0b fait : `pipelines/cartographe.py [jeu] [--court]` (cartes manquantes, L-nnn sans check, type probable) ; `pipelines/recette.py --tous` (tests des hooks + par jeu : resume, learnings, tests yaml, vues citées présentes dans sql/, cartographe), à lancer avant chaque commit de conception ; vue unique `gold.sante_collecte` (tous jeux, statuts arrete / vide / rare / ok, `sql/gold/058_sante_collecte.sql`) au lieu d'une vue par jeu. Prochaine : 0c.
 - 2026-11-02 : mesure optimisation (53 sessions, semaine 29/10-01/11 = 59,3 M éq., pic 30-31/10 = 36,5 M) ; étape 0d ajoutée : retrait de 5 agents-calcul et plafond de 20 agents par semaine.

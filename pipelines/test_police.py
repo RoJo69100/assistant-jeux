@@ -66,6 +66,7 @@ def main() -> int:
             ok = ok and not police.fautes_de(texte, ents, principal, session)  # une seule fois
         erreurs += not ok
         print(("✅ " if ok else "❌ ") + nom + ("" if ok else f" — obtenu : {f}"))
+    print(f"{len(CAS) - erreurs}/{len(CAS)}")
     return 1 if erreurs else 0
 
 
