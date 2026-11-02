@@ -1,6 +1,6 @@
 # Carte teamsoccer — finances (solde, stade, entraîneur ; deux clubs, deux économies)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 81b8350 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `finances.md`, skills `teamsoccer-club`, `-entrainement` § Entraîneurs, `-saison` § Primes ; connaissance § 2, § 5). Plus d'agent `finances` depuis le 2026-11-02 : je lis ces vues moi-même. Pas de sponsor ni de personnel dans ce jeu (sauf l'entraîneur) ; prix des billets fixes.
 

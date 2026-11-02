@@ -1,6 +1,6 @@
 # Carte teamsoccer — achat (enchère banque ou manager ; deux clubs, deux marchés)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 81b8350 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `transferts.md`, skills `teamsoccer-club` § Marché, `-joueurs` ; connaissance § 5). Règles : finançable d'abord (`capacite_invest`, règle apprise 16) sinon cible abandonnée ; jamais d'enchère sans accord ; Cows = marché masculin, Ben Ahmed = marché féminin, économies séparées ; règle 20 (marché de plus de 24 h = « exporte le marché »).
 

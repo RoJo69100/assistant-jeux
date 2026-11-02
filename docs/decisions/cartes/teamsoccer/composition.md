@@ -1,6 +1,6 @@
 # Carte teamsoccer — composition (ligue, coupe, barrages, amical ; deux clubs)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 81b8350 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `tactique.md`, `resume.md`, skills `teamsoccer-match`, `-joueurs`, `-saison` ; connaissance § 1 et § 6 ; learnings). Règles : **deux clubs, un bloc chacun** (CLAUDE.md § Team Soccer) ; R-12 du 2026-10-30 (fiche complète 11 × 5 zones, banc, remplacements programmés, cible de chaque « Passer ») ; enregistrement au moins 2 h avant ; horizon aujourd'hui (un match de 13:50 se prépare la veille au soir).
 
