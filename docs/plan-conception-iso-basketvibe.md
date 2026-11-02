@@ -52,10 +52,26 @@ Principe : les agents ne garantissent ni la lecture complète ni la mémoire des
 | `tactique` | Absorbe l'étude de l'adversaire, alimentée par une vue gold par jeu | ❌ |
 | `finances-personnel` | Renommer en `finances`, mettre à jour CLAUDE.md et les fiches | ❌ |
 
+### 0d. Retirer les agents qui ne font qu'un calcul (décidé le 2026-11-02, mesure optimisation : 40 agents/semaine, ~0,45 M éq. chacun)
+
+Ne rien supprimer avant d'avoir migré les fiches par jeu (`docs/fiches/<jeu>/<agent>.md`) et mis à jour CLAUDE.md.
+
+| Agent actuel | Devient | Statut |
+|---|---|---|
+| `effectif` | Vue gold bilan par poste + moi | ❌ |
+| `lecteur-exports` | Vue gold « état des exports » + script | ❌ |
+| `verificateur` | Supprimé, remplacé par `police` et les hooks H1-H3 | ❌ |
+| `optimisation` | `pipelines/mesure_session.py` seul, sans agent | ❌ |
+| `finances-personnel` | Vue gold + moi, renommé `finances` (cf. 0c) | ❌ |
+
+Agents de jugement conservés (12 avec `finances` si avis gardé) : `match`, `tactique`, `transferts`, `entrainement`, `academie`, `veille` (delta seulement), `analyste`, `decideur`, `police`, `synthese`, `retro`.
+
+**Plafond hebdomadaire : 20 agents par semaine**, hors `analyste` et `police` (la règle des trois par passage n'a pas tenu : 16 agents le 30/10). À écrire dans CLAUDE.md avec 0d. Autres coupes de la mesure : `/compact` à 30 %, `/clear` à chaque changement de jeu, SQL avec colonnes choisies et `LIMIT 30`.
+
 Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 
 ## Ordre
-0. Étape 0 : 0a hooks, puis 0b scripts et vues, puis 0c extensions d'agents
+0. Étape 0 : 0a hooks, puis 0b scripts et vues, puis 0c extensions d'agents, puis 0d retrait des agents-calcul
 1. Hockey Nation (jeu modèle, learnings riche) : cartes échange, draft, lignes, coachs, finances, défaite
 2. Team Soccer
 3. Six Zero League
@@ -67,3 +83,4 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : étape 0 ajoutée (5 agents + renommage `finances`), à faire avant les cartes de Hockey Nation.
 - 2026-11-02 : règles d'usage des agents ajoutées à CLAUDE.md et règle 31 des règles apprises.
 - 2026-11-02 : étape 0 réécrite : hooks d'abord, scripts à la place des agents `cartographe`/`testeur`/`sante-collecte`, `recrutement` et `adversaire` absorbés par `academie` et `tactique`. Plus aucun nouvel agent.
+- 2026-11-02 : mesure optimisation (53 sessions, semaine 29/10-01/11 = 59,3 M éq., pic 30-31/10 = 36,5 M) ; étape 0d ajoutée : retrait de 5 agents-calcul et plafond de 20 agents par semaine.
