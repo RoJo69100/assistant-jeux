@@ -42,7 +42,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - `ts_saisie_composition` ne donne ni les consignes par zone ni les remplacements programmés : c'est le travail de l'agent Tactique.
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/teamsoccer/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille (si nouvelle source) → Match → Effectif → Finances-personnel → Académie → Entraînement → Tactique → Transferts. Un agent aval qui contredit un amont l'écrit en tête de son résumé.
+Veille (si nouvelle source) → Match → Effectif → Finances → Académie → Entraînement → Tactique → Transferts. Un agent aval qui contredit un amont l'écrit en tête de son résumé.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`, `CLAUDE.md`)
 - **Horizon : aujourd'hui seulement.** L'utilisateur n'agit que le jour même, le soir. Jamais « demain », « le 29 », « après le prochain match » comme étape ; un match de demain se prépare aujourd'hui.

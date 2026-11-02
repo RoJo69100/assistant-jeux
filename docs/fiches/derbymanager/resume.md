@@ -23,7 +23,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 - **Marché** : `gold.dm_marche_notes` (note au poste bas/milieu de fourchette contre notre dernier titulaire ; **ne pas lire `gold.dm_marche_postes`**, défectueuse), `gold.dm_prix_reference` (médianes par tier et âge), `silver.dm_transfers`, `silver.dm_school`.
 
 ## Ordre des agents
-Veille → Match → Effectif → Finances-personnel → Académie (school) → Entraînement → Tactique → Transferts. Trois agents d'analyse au plus par passage ; un tableau = une vue gold, zéro agent.
+Veille → Match → Effectif → Finances → Académie (school) → Entraînement → Tactique → Transferts. Trois agents d'analyse au plus par passage ; un tableau = une vue gold, zéro agent.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`, `docs/chose-a-DM.txt`)
 - **Horizon : aujourd'hui seulement.** Le match de demain se prépare aujourd'hui.

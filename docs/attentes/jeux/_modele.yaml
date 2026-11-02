@@ -81,7 +81,7 @@ dependances:
   agents:              # ce que chaque agent lit et écrit (noms = fichiers .claude/agents/)
     match:              { lit: [export_match], ecrit: [resultats] }
     effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
-    finances-personnel: { lit: [finances, personnel, besoins_postes], ecrit: [capacite_invest] }
+    finances: { lit: [finances, personnel, besoins_postes], ecrit: [capacite_invest] }
     academie:           { lit: [rapport_academie, capacite_invest], ecrit: [jeunes_retenus] }
     entrainement:       { lit: [export_entrainement, roster, niveau_entraineur], ecrit: [reglages_entrainement] }
     tactique:           { lit: [dispo_joueurs, resultats, reglages_entrainement], ecrit: [composition] }
@@ -94,9 +94,9 @@ dependances:
     export_academie:     { touche: [rapport_academie] }
     export_marche:       { touche: [marche] }
     engagement:          # personnel, entraîneur, centre de formation, infrastructure (A-5)
-      d_abord: finances-personnel        # en a-t-on besoin ?
+      d_abord: finances        # en a-t-on besoin ?
       si_engage: { touche: [personnel, capacite_invest, niveau_entraineur] }
-    achat_ou_vente:      { d_abord: finances-personnel, si_fait: { touche: [roster] } }
+    achat_ou_vente:      { d_abord: finances, si_fait: { touche: [roster] } }
     fin_de_saison:       { touche: [roster, finances, rapport_academie] }
     regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
   cascade:

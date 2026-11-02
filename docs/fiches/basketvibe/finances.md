@@ -1,6 +1,6 @@
 # BasketVibe — fiche Finances et personnel
 
-Lue par l'agent `finances-personnel` après `commun.md`. Contenu repris de l'agent BasketVibe validé (checklist BasketVibe, partie E).
+Lue par l'agent `finances` après `commun.md`. Contenu repris de l'agent BasketVibe validé (checklist BasketVibe, partie E).
 
 ## Skills à lire
 - `.claude/skills/basketvibe-economie/SKILL.md`

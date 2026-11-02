@@ -32,7 +32,7 @@ nouveau_jeu:
     - docs/fiches/basketvibe/entrainement.md
     - docs/fiches/basketvibe/academie.md
     - docs/fiches/basketvibe/transferts.md
-    - docs/fiches/basketvibe/finances-personnel.md
+    - docs/fiches/basketvibe/finances.md
     - docs/fiches/basketvibe/veille.md
     - userscripts/basketvibe.user.js
     - docs/decisions/cartes/basketvibe/composition.md

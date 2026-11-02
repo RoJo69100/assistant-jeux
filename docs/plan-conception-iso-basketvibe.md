@@ -50,7 +50,7 @@ Principe : les agents ne garantissent ni la lecture complète ni la mémoire des
 |---|---|---|
 | `academie` | Absorbe le recrutement (Hardwood : points, concurrents, 4 cibles + backups ; Hockey Nation : draft et scouting) + carte « recrutement » | ❌ |
 | `tactique` | Absorbe l'étude de l'adversaire, alimentée par une vue gold par jeu | ❌ |
-| `finances-personnel` | Renommer en `finances`, mettre à jour CLAUDE.md et les fiches | ❌ |
+| `finances-personnel` | Renommer en `finances`, mettre à jour CLAUDE.md et les fiches | ✅ 2026-11-02 |
 
 ### 0d. Retirer les agents qui ne font qu'un calcul (décidé le 2026-11-02, mesure optimisation : 40 agents/semaine, ~0,45 M éq. chacun)
 
