@@ -8,7 +8,7 @@ Contrôles (plan docs/plan-conception-iso-basketvibe.md, étape 0a) :
   H2     décision importante sans trace police : outputs/<jeu>/police-<date>.md qui cite le type.
   H4     discussion de conception (hooks, scripts, refonte) : les aveux ne bloquent plus, sauf si
          la réponse rend aussi une décision de jeu (H1/H2 restent actifs).
-  H5     plus de 5 demandes dans la session sans rétro proposée : rappel unique (rétro + optimisation).
+  H5     plus de 5 demandes dans la session sans rétro proposée : rappel unique (rétro + mesure_session.py).
 Une décision importante = une ligne 🟥 URGENT / 🟧 IMPORTANT d'un tableau de plan dans les catégories
 Composition, Tactique, Transferts, Entraînement, Académie/Draft, Finances, ou un tableau de saisie
 (tactique, entraînement, adversaires, composition Team Soccer). Le texte entre « », "", `` ou ``` est ignoré.

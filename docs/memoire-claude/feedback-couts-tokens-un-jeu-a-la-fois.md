@@ -16,5 +16,5 @@ L'utilisateur a jugé « une honte » la consommation de tokens du 2026-10-24 (c
 - Un agent seulement si un export plus récent que son brief est arrivé ; le plan du jour vient de `gold.*_agenda` + registre `fait-…`, sans agent.
 - Un jeu par session (`/clear` entre deux jeux), tableau rendu avant de passer au suivant ; jamais plusieurs jeux d'agents en parallèle sans demande.
 - Briefs d'une page, résumés d'agent de 10 lignes, delta du jour seulement.
-- `lecteur-exports` en premier (SQL, détection des nouveautés), pour qu'aucun agent ne déclare « absent » une donnée déjà exportée ([[feedback-ne-pas-redemander]]).
+- État des exports en SQL en premier (`gold.<p>_exports_state`, `gold.sante_collecte`, `gold.exports_nouvelles_cles` ; agent `lecteur-exports` retiré le 2026-11-02), pour qu'aucun agent ne déclare « absent » une donnée déjà exportée ([[feedback-ne-pas-redemander]]).
 - Règles 12 à 16 de CLAUDE.md.
