@@ -5,7 +5,7 @@ Sans chemin : la session la plus récente du projet.
 Sort, par demande de l'utilisateur : durée, tokens (lus en cache, écrits en cache, sortie),
 contexte maximal, outils appelés, agents lancés ; puis les fichiers relus plusieurs fois,
 les agents (tokens et durée de leur propre journal) et les requêtes SQL les plus lourdes.
-Le calcul est fait ici ; l'agent `optimisation` ne fait que lire ce rapport.
+Le calcul est fait ici ; je lis le rapport moi-même (agent `optimisation` retiré le 2026-11-02, étape 0d).
 """
 import json
 import sys

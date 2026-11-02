@@ -12,4 +12,4 @@ L'utilisateur veut des retours d'agents complets. Je dois comprendre les dépend
 
 **Why:** le 2026-10-22, Transferts et Finances ont été lancés en parallèle ; Transferts a rendu « salaires de Dang et Albano non relevés » et « aucun brief tactique postérieur au 18/10 », alors que Finances et Tactique les avaient. L'utilisateur n'accepte pas ces trous.
 
-**How to apply:** ordre BasketVibe : Match, Effectif, Finances-personnel, Académie, Tactique, puis Transferts (il lit rotation et finances). Ne lancer en parallèle que des agents sans dépendance. Donner à chaque agent les briefs du jour des agents précédents. Si un retour dit « non relevé » ou « non lu », relancer avant de conclure. Voir [[feedback-pas-de-temporalite]].
+**How to apply:** ordre BasketVibe : Match, Effectif, Finances, Académie, Tactique, puis Transferts (il lit rotation et finances). Ne lancer en parallèle que des agents sans dépendance. Donner à chaque agent les briefs du jour des agents précédents. Si un retour dit « non relevé » ou « non lu », relancer avant de conclure. Voir [[feedback-pas-de-temporalite]].

@@ -1,0 +1,108 @@
+# Six Zero League — tests de recette (ce que Claude doit faire et rendre)
+# Créé le 2026-11-02 (plan de conception iso BasketVibe). Contrôle : python pipelines/recette.py sixzeroleague
+#   - sans option : structure présente, vues citées existantes dans sql/, chaque ligne de
+#     docs/couverture/sixzeroleague.md rattachée à au moins un test (champ couvre).
+#   - --reponse <fichier.md> : contrôle une réponse rendue (interdits, pastilles).
+# Rythme quotidien, pas de semaine type : ligue 13:00 et 21:00, coupe 17:00, cycle chaque soir après 21:00 (Paris).
+
+jeu: sixzeroleague
+
+nouveau_jeu:
+  fichiers:
+    - outputs/sixzeroleague/veille/connaissance.md
+    - .claude/skills/sixzeroleague-joueurs/SKILL.md
+    - .claude/skills/sixzeroleague-match/SKILL.md
+    - .claude/skills/sixzeroleague-entrainement/SKILL.md
+    - .claude/skills/sixzeroleague-club/SKILL.md
+    - .claude/skills/sixzeroleague-communaute/SKILL.md
+    - .claude/skills/sixzeroleague-aujourdhui/SKILL.md
+    - docs/attentes/jeux/sixzeroleague.yaml
+    - docs/fiches/sixzeroleague/resume.md
+    - docs/fiches/sixzeroleague/tactique.md
+    - docs/fiches/sixzeroleague/transferts.md
+    - docs/fiches/sixzeroleague/academie.md
+    - docs/fiches/sixzeroleague/entrainement.md
+    - docs/fiches/sixzeroleague/finances.md
+    - docs/fiches/sixzeroleague/effectif.md
+    - userscripts/sixzeroleague.user.js
+    - docs/decisions/cartes/sixzeroleague/composition.md
+    - docs/decisions/cartes/sixzeroleague/defaite.md
+    - docs/decisions/cartes/sixzeroleague/achat.md
+    - docs/decisions/cartes/sixzeroleague/vente.md
+    - docs/decisions/cartes/sixzeroleague/entrainement.md
+    - docs/decisions/cartes/sixzeroleague/academie.md
+    - docs/decisions/cartes/sixzeroleague/finances.md
+    - docs/couverture/sixzeroleague.md
+    - docs/checklist-sixzeroleague.md
+    - outputs/sixzeroleague/learnings.md
+  vues:
+    - gold.sz_today
+    - gold.sz_agenda
+    - gold.sz_daily_alerts
+    - gold.sz_exports_state
+    - gold.sz_effectif_bilan
+    - gold.sz_vd_comparatif
+    - gold.sz_saisie_tactique
+    - gold.sz_saisie_reglages
+  couvre: [59, 60, 63, 171, 173, 174, S1]
+
+chaque_jour:
+  - id: Q1
+    quoi: "État des exports : en retard en premier"
+    critere: "gold.sz_exports_state lu ; page_type classé par source_url ; jamais redemander un export en base"
+    vues: [gold.sz_exports_state, gold.sante_collecte, gold.exports_nouvelles_cles]
+    couvre: [172, 177]
+  - id: Q2
+    quoi: "Tactique par défaut : réglages puis rôle → titulaire → remplaçant, contrôle SQL rendu"
+    critere: "carte composition : gold.sz_saisie_reglages et gold.sz_saisie_tactique dans l'ordre GK..P ; 7 joueurs différents, aucun blessé ni suspendu"
+    vues: [gold.sz_saisie_reglages, gold.sz_saisie_tactique, gold.sz_adversaires, gold.sz_slot_options, gold.sz_lineup_natural]
+    couvre: [61, 80, 83, 96, 97, 98, 99, 100, 160, "+1", "+2", "+3", "+8"]
+  - id: Q3
+    quoi: "Dernier match : résultat (result) et analyse si défaite"
+    critere: "silver.sz_matches.result ; carte defaite contre gold.sz_vd_comparatif ; L-nnn confronté"
+    vues: [gold.sz_vd_comparatif]
+    couvre: [82, 166, 169]
+  - id: Q4
+    quoi: "Entraînement avant 21:00 : intensité et focus, verdict du cycle"
+    critere: "carte entrainement ; gold.sz_training_progress par applied_at"
+    vues: [gold.sz_training_progress]
+    couvre: [91, 92, 93, "+4", "+7"]
+  - id: Q5
+    quoi: "Finances : solde réel, cycle, infrastructure ou sponsor, une décision chiffrée"
+    critere: "silver.sz_finances.balance (pas closing_balance) ; gold.sz_infrastructure_payback ; dépenses décidées soustraites"
+    vues: [gold.sz_finance_cycles, gold.sz_finance_projection, gold.sz_infrastructure_payback]
+    couvre: [70, 71, 72, 73, 74, 75, 76, 168, "+6"]
+  - id: Q6
+    quoi: "Leviers : une cible nommée finançable, ou la raison chiffrée ; un candidat à la vente"
+    critere: "cartes achat et vente ; marché de plus de 12 h = « exporte le marché » ; aucune annonce à retirer"
+    vues: [gold.sz_role_report, gold.sz_effectif_bilan]
+    couvre: [79, 81, 86, 87, 88, 161, S3]
+  - id: Q7
+    quoi: "Académie U18 : prospect à signer ou non, niveau de la Youth Academy"
+    critere: "carte academie : plage du niveau, besoin par rôle, retard sur les autres clubs"
+    couvre: [66, 67, "+5"]
+  - id: Q8
+    quoi: "Rendu : tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI avec le mot, action « fais X »"
+    critere: "contrôlé par --reponse et hook forme.py (SZ ordre de saisie)"
+    couvre: [162, 163, 164, 165, 167, S2]
+
+scenarios:
+  - id: X1
+    quoi: "Série de défaites (rejouer J10-J15 : 6 sans victoire)"
+    critere: "carte defaite ; analyste + decideur ; changement fort, jamais « ne rien changer »"
+    couvre: [169]
+  - id: X2
+    quoi: "Nouvelle option de tactique (patch)"
+    critere: "test en ligue, une option à la fois, mesure nommée (pas d'amical)"
+    couvre: [170]
+  - id: X3
+    quoi: "Nouvel export Discord ou chat"
+    critere: "veille sur le delta ; connaissance.md § Delta complété"
+    couvre: [175, 176]
+  - id: X4
+    quoi: "Demande « meilleurs joueurs de la ligue »"
+    critere: "« il me manque … — cherché dans : silver.sz_api, connaissance 6.11 — … »"
+    couvre: [62]
+
+interdits: [a faire demain, "demain, fais", apres le prochain match, plus tard, "a toi de voir", peut-etre, ne rien changer, non releve, pas tout lu, faire tourner]
+pastilles: ["🟥 URGENT", "🟧 IMPORTANT", "🟩 SUIVI"]

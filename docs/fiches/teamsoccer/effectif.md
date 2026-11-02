@@ -1,6 +1,6 @@
 # Team Soccer — fiche Effectif
 
-Lue par l'agent `effectif` après `commun.md`. Case E2 de la checklist Team Soccer. Un bilan par club.
+Lue par moi (session principale) après `resume.md` : l'agent `effectif` est retiré depuis le 2026-11-02 (étape 0d), son travail = les vues gold ci-dessous + ce livrable, sans brief d'agent. Case E2 de la checklist Team Soccer. Un bilan par club.
 
 ## Skills à lire
 - `.claude/skills/teamsoccer-joueurs/SKILL.md` (compétences, sous-rôles, OVR, Forme, talents, âge, valeur, effectif 16–24)

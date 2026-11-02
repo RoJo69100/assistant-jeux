@@ -53,9 +53,9 @@ Ce qui est propre à un jeu va dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `
 
 ## 4. Enchaînement et dépendances (le même moteur pour tous les jeux)
 1. Export reçu → une requête pour vérifier l'arrivée, ligne dans `fait-…`, compte rendu d'une à trois lignes.
-2. `lecteur-exports` d'abord quand la série d'exports est nouvelle : il dit ce qui est vraiment en base.
+2. État des exports en SQL d'abord quand la série d'exports est nouvelle (`gold.<p>_exports_state` (`gold.dm_exports_etat`), `gold.sante_collecte`, `gold.exports_nouvelles_cles`, sans agent depuis le 2026-11-02) : ce qui est vraiment en base et les nouveautés.
 3. **Pas d'ordre fixe d'agents.** La config déclare ce que chaque agent lit et écrit, et ce que touche chaque événement (`dependances`). Je lance ce qui est touché, dans l'ordre du graphe ; un agent en aval qui change une donnée déjà lue relance l'agent concerné (deux passes au plus). Aucun agent ne tourne si ses entrées n'ont pas changé.
-4. Après une grosse défaite ou deux d'affilée : `analyste` ; si les briefs hésitent : `decideur` ; `synthese` en dernier dès qu'il y a au moins deux briefs à assembler (elle vaut vérification R-9, pas de `verificateur` en plus). Trois agents d'analyse au plus par passage ; un tableau de données se rend par une vue gold, sans agent (2026-10-27).
+4. Après une grosse défaite ou deux d'affilée : `analyste` ; si les briefs hésitent : `decideur` ; `synthese` en dernier dès qu'il y a au moins deux briefs à assembler (elle vaut vérification R-9). Trois agents d'analyse au plus par passage ; un tableau de données se rend par une vue gold, sans agent (2026-10-27).
 5. Les agents lisent `docs/fiches/<jeu>/resume.md` à la place de ce fichier, de la config et de `commun.md` : toute modification ici se reporte dans les résumés concernés.
 5. Rendu : un seul tableau par jeu (R-3), de maintenant à demain au plus (R-1).
 

@@ -16,6 +16,7 @@ Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist SixZero L
 4. Défense : garder les places par défaut tant qu'aucun test ne justifie un changement (décision de l'utilisateur, 2026-10-18).
 
 ## Données
+- `gold.sz_adversaires` : 3 prochaines journées, adversaire, bot ou non, rang, bilan V-N-D, buts, forme, nos confrontations.
 - `silver.sz_tactics` : composition actuelle (`kind` titulaire / remplaçant, `slot`, `player_id`), `attack_formation`, `defense_formation`, `defense_spots`, `auto_filled`.
 - `gold.sz_lineup_natural`, `gold.sz_slot_options`, `silver.sz_players` (noms, compétences, disponibilité).
 - `silver.sz_fixtures` (`is_mine`, `status`, `round`, adversaire, bot ou non) et `silver.sz_standings` : prochain adversaire et son classement.

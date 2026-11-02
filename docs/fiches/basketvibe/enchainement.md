@@ -8,7 +8,7 @@ Règle générale : `CLAUDE.md`, section « Enchaînement automatique ». Après
 | Preview / calendrier (prochain adversaire) | Tactique | Tactique complète pour ce match |
 | Effectif (Roster) avec blessure ou forme changée | Tactique (si un match est à venir) | Tactique corrigée, plan B du blessé |
 | Entraînement (dimanche après 04:00) | Entraînement | Verdict garder/changer par joueur, réglages principal/secondaire, potentiel estimé |
-| Finances (dimanche) | Finances-personnel | Voir « Finances » ci-dessous |
+| Finances (dimanche) | Finances | Voir « Finances » ci-dessous |
 | Académie (rapport du jeudi 09:00) | Académie | Tester / signer / ignorer / attendre par prospect, investissement de la semaine |
 | Transferts (marché du jour ou joueur précis) | Transferts | Voir « Transferts » ci-dessous |
 | News / Discord | Veille | Propositions de modification de skills, **à valider par toi** |

@@ -107,10 +107,10 @@ vues_gold:
   autres: [gold.sz_lineup_natural, gold.sz_slot_options, gold.sz_role_report, gold.sz_training_progress, gold.sz_finance_cycles, gold.sz_finance_projection, gold.sz_infrastructure_payback]
 
 dependances:
-  agents:
+  agents:   # par: moi = plus d'agent depuis le 2026-11-02 (étape 0d), je calcule avec les vues citées
     match:              { lit: [export_match], ecrit: [resultats] }
-    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
-    finances-personnel: { lit: [finances, infrastructures, besoins_postes], ecrit: [capacite_invest] }   # couvre les infrastructures (pas de personnel)
+    effectif:           { par: moi, vues: [gold.sz_effectif_bilan], lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances: { par: moi, vues: [gold.sz_finance_projection, gold.sz_finance_cycles], lit: [finances, infrastructures, besoins_postes], ecrit: [capacite_invest] }   # couvre les infrastructures (pas de personnel)
     academie:           { lit: [rapport_academie, capacite_invest, besoins_postes], ecrit: [jeunes_retenus] }
     entrainement:       { lit: [export_entrainement, roster, infrastructures], ecrit: [reglages_entrainement] }
     tactique:           { lit: [dispo_joueurs, resultats, adversaire], ecrit: [composition] }
@@ -123,8 +123,8 @@ dependances:
     export_entrainement: { touche: [export_entrainement] }
     export_academie:     { touche: [rapport_academie] }
     export_marche:       { touche: [marche] }
-    engagement:          { d_abord: finances-personnel, si_engage: { touche: [infrastructures, capacite_invest] } }   # montée d'infrastructure
-    achat_ou_vente:      { d_abord: finances-personnel, si_fait: { touche: [roster] } }
+    engagement:          { d_abord: finances, si_engage: { touche: [infrastructures, capacite_invest] } }   # montée d'infrastructure
+    achat_ou_vente:      { d_abord: finances, si_fait: { touche: [roster] } }
     fin_de_saison:       { touche: [roster, finances, rapport_academie] }
     regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
   cascade:

@@ -26,7 +26,7 @@ Si la demande est faite **le matin** (avant 12:00) ou si l'utilisateur demande �
 2. **Alertes** : `gold.bv_daily_alerts`, une ligne chacune, avec l'action à faire (ex. fatigue > 20 → le sortir d'un quart-temps, voir l'agent Tactique).
 3. **Hier** : derniers matchs exportés (`gold.bv_match_report`, 24 h) en une ligne chacun.
 4. **Conseils ouverts** qui arrivent à échéance aujourd'hui ou demain (section Conseils de `outputs/basketvibe/learnings.md`).
-5. **Agents à relancer** : ceux dont l'export d'entrée est arrivé depuis leur dernier brief (match, entraînement, finances, académie, transferts, veille).
+5. **Agents à relancer** : ceux dont l'export d'entrée est arrivé depuis leur dernier brief (match, entraînement, académie, transferts, veille) ; effectif et finances : je relis leurs vues gold moi-même (plus d'agent depuis le 2026-11-02).
 Pas plus d'une page ; pas de nouvelle recommandation, seulement ce que les briefs ont validé.
 
 ## Fin de saison 1 (2026) [détail dans basketvibe-saison]

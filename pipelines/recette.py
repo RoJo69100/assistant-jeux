@@ -6,11 +6,17 @@ Sans option :
   3. chaque ligne de docs/couverture/<jeu>.md est rattachée à au moins un test (champ couvre).
 Avec --reponse <fichier> --jour <lun…dim> : contrôle une réponse rendue (interdits, pastilles,
 mots du jour). Le texte entre « », "" ou `` est ignoré (citations).
+Avec --tous (étape 0b, 2026-11-02 ; à lancer avant chaque commit de conception) :
+  1. rejoue les tests des hooks (pipelines/test_forme.py, pipelines/test_police.py) ;
+  2. pour chaque jeu : resume.md présent, learnings.md présent, tests docs/attentes/tests/<jeu>.yaml
+     (recette complète s'ils existent), chaque vue gold/silver/bronze citée dans docs/fiches/<jeu>/ et
+     docs/decisions/cartes/<jeu>/ créée dans sql/, et le résumé du cartographe (cartes, leçons sans check).
 Sortie : une grille ✅/❌ ; code 1 s'il y a au moins un ❌.
 """
 
 import argparse
 import re
+import subprocess
 import sys
 import unicodedata
 from pathlib import Path
@@ -92,16 +98,64 @@ def controle_reponse(jeu: str, fichier: str, jour: str) -> list[tuple[bool, str]
     return res
 
 
+JEUX = ["basketvibe", "hockeynation", "teamsoccer", "sixzeroleague", "derbymanager", "hardwood"]
+OBJET = re.compile(r"\b(?:gold|silver|bronze)\.[a-z0-9_]*[a-z0-9]\b")
+
+
+def lancer(script: str) -> tuple[bool, str]:
+    r = subprocess.run([sys.executable, str(RACINE / "pipelines" / script)], capture_output=True,
+                       text=True, encoding="utf-8", errors="replace")
+    der = (r.stdout.strip().splitlines() or [""])[-1]
+    ko = [l for l in r.stdout.splitlines() if l.startswith("❌")]
+    return r.returncode == 0, f"{script} : {der}" + (f" — {'; '.join(ko[:3])}" if ko else "")
+
+
+def objets_absents(jeu: str, sql: str) -> tuple[int, list[str]]:
+    dossiers = [RACINE / f"docs/fiches/{jeu}", RACINE / f"docs/decisions/cartes/{jeu}"]
+    txt = "\n".join(p.read_text(encoding="utf-8", errors="replace").lower()
+                    for d in dossiers if d.is_dir() for p in d.glob("*.md"))
+    abandon = re.compile(r"ne pas (lire|utiliser)|remplac|defectu|défectu|obsolete|obsolète|supprim|abandonn")
+    objets = sorted({o for l in txt.splitlines() for o in OBJET.findall(l)
+                     if not any(abandon.search(seg) for seg in re.split(r";|\.\s", l) if o in seg)})
+    return len(objets), [o for o in objets
+                         if not re.search(rf"(view|table|function)\s+(if not exists\s+)?{re.escape(o)}\b", sql)]
+
+
+def tous() -> list[tuple[bool, str]]:
+    sys.path.insert(0, str(RACINE / "pipelines"))
+    import cartographe
+    res = [lancer("test_forme.py"), lancer("test_police.py")]
+    sql = "\n".join(p.read_text(encoding="utf-8", errors="replace").lower() for p in (RACINE / "sql").rglob("*.sql"))
+    for jeu in JEUX:
+        res.append((True, f"— {jeu} —"))
+        res.append(((RACINE / f"docs/fiches/{jeu}/resume.md").exists(), f"{jeu} : resume.md"))
+        res.append(((RACINE / f"outputs/{jeu}/learnings.md").exists(), f"{jeu} : learnings.md"))
+        if (RACINE / f"docs/attentes/tests/{jeu}.yaml").exists():
+            res += [(ok, f"{jeu} : {txt}") for ok, txt in recette(jeu)]
+        else:
+            res.append((False, f"{jeu} : tests docs/attentes/tests/{jeu}.yaml absents"))
+        n, absents = objets_absents(jeu, sql)
+        res.append((not absents, f"{jeu} : vues citées présentes dans sql/ : {n - len(absents)}/{n}"
+                    + (f" — absentes : {', '.join(absents)}" if absents else "")))
+        a = cartographe.analyse(jeu)
+        res.append((not a["manquantes"] and not a["sans"],
+                    f"{jeu} : cartes {len(a['cartes'])}/{len(cartographe.TYPES)}, leçons sans check {len(a['sans'])}"))
+    return res
+
+
 def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser()
-    ap.add_argument("jeu")
+    ap.add_argument("jeu", nargs="?")
+    ap.add_argument("--tous", action="store_true", help="tous les jeux + tests des hooks")
     ap.add_argument("--reponse")
     ap.add_argument("--jour", choices=["lun", "mar", "mer", "jeu", "ven", "sam", "dim"])
     a = ap.parse_args()
+    if not a.tous and not a.jeu:
+        ap.error("donne un jeu ou --tous")
     if a.reponse and not a.jour:
         ap.error("--reponse demande --jour")
-    res = controle_reponse(a.jeu, a.reponse, a.jour) if a.reponse else recette(a.jeu)
+    res = tous() if a.tous else controle_reponse(a.jeu, a.reponse, a.jour) if a.reponse else recette(a.jeu)
     for ok, txt in res:
         print(("✅ " if ok else "❌ ") + txt)
     return 0 if all(ok for ok, _ in res) else 1
