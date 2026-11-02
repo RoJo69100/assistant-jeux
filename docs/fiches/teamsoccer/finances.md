@@ -1,6 +1,6 @@
 # Team Soccer — fiche Finances et Stade
 
-Lue par l'agent `finances-personnel` après `commun.md`. Cases E7 (finances) et E8 (stade) de la checklist Team Soccer. Pas de sponsor ni de personnel dans ce jeu, sauf l'entraîneur.
+Lue par l'agent `finances` après `commun.md`. Cases E7 (finances) et E8 (stade) de la checklist Team Soccer. Pas de sponsor ni de personnel dans ce jeu, sauf l'entraîneur.
 
 ## Skills à lire
 - `.claude/skills/teamsoccer-club/SKILL.md` (finances, stade, affluence, entretien)

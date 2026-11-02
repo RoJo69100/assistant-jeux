@@ -15,7 +15,7 @@ Liste donnée par l'utilisateur le 2026-10-18 : **28 jeux** (BuzzerBeater donné
 
 ## Conséquences pour le kit
 - **Socle commun à tous** : bronze, script Tampermonkey (capture passive), import Discord, méthode des agents (faits / règles / avis, delta, journal, conseils suivis), agenda « que faire aujourd'hui ».
-- **Agents par domaine globaux** pour les 24 jeux de sport d'équipe (familles 1 à 5) : effectif, match, tactique, entraînement, transferts, finances-personnel, jeunes/académie, veille. Chaque jeu a sa fiche (skills, vues gold, spécificités).
+- **Agents par domaine globaux** pour les 24 jeux de sport d'équipe (familles 1 à 5) : effectif, match, tactique, entraînement, transferts, finances, jeunes/académie, veille. Chaque jeu a sa fiche (skills, vues gold, spécificités).
 - **Une 2e famille d'agents** pour les sports individuels et les équipes de courses (familles 6 et 7) : athlète, calendrier, préparation, matériel, finances, veille.
 - **Par jeu, toujours** : lecture du manuel → skills, lecture des données → silver, règles → gold, checklist adaptée, tests avec l'utilisateur.
 

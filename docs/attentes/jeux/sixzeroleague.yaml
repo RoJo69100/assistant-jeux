@@ -110,7 +110,7 @@ dependances:
   agents:
     match:              { lit: [export_match], ecrit: [resultats] }
     effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
-    finances-personnel: { lit: [finances, infrastructures, besoins_postes], ecrit: [capacite_invest] }   # couvre les infrastructures (pas de personnel)
+    finances: { lit: [finances, infrastructures, besoins_postes], ecrit: [capacite_invest] }   # couvre les infrastructures (pas de personnel)
     academie:           { lit: [rapport_academie, capacite_invest, besoins_postes], ecrit: [jeunes_retenus] }
     entrainement:       { lit: [export_entrainement, roster, infrastructures], ecrit: [reglages_entrainement] }
     tactique:           { lit: [dispo_joueurs, resultats, adversaire], ecrit: [composition] }
@@ -123,8 +123,8 @@ dependances:
     export_entrainement: { touche: [export_entrainement] }
     export_academie:     { touche: [rapport_academie] }
     export_marche:       { touche: [marche] }
-    engagement:          { d_abord: finances-personnel, si_engage: { touche: [infrastructures, capacite_invest] } }   # montée d'infrastructure
-    achat_ou_vente:      { d_abord: finances-personnel, si_fait: { touche: [roster] } }
+    engagement:          { d_abord: finances, si_engage: { touche: [infrastructures, capacite_invest] } }   # montée d'infrastructure
+    achat_ou_vente:      { d_abord: finances, si_fait: { touche: [roster] } }
     fin_de_saison:       { touche: [roster, finances, rapport_academie] }
     regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
   cascade:

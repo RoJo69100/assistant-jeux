@@ -28,7 +28,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 **Décision importante** : lis d'abord la carte `docs/decisions/cartes/basketvibe/<type>.md` (où lire chaque variable, check, rendu figé) ; couverture des demandes de l'utilisateur : `docs/couverture/basketvibe.md`.
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille → Match → Effectif → Finances-personnel → Académie / Entraînement (parallèles) → Tactique (lit Match, Effectif, Entraînement) → Transferts (lit Effectif, Finances, Tactique, Académie). Un agent aval qui contredit un amont l'écrit en tête de son résumé.
+Veille → Match → Effectif → Finances → Académie / Entraînement (parallèles) → Tactique (lit Match, Effectif, Entraînement) → Transferts (lit Effectif, Finances, Tactique, Académie). Un agent aval qui contredit un amont l'écrit en tête de son résumé.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Rendu** : aujourd'hui seulement, le match de demain se prépare aujourd'hui (R-1, CLAUDE.md § Horizon du 2026-10-27) ; des actions « fais X » avec joueur, valeur, heure limite (R-2) ; tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action (R-3) ; saisie complète dans l'ordre de l'écran (R-4) ; aucun « si », aucun seuil générique, donnée manquante = « il me manque X, fais l'export Y » (R-5) ; court (R-6) ; ne jamais redemander ce que `outputs/basketvibe/fait-AAAA-MM-JJ.md` ou la base prouvent (R-7) ; une décision, le doute en une demi-ligne avec ce qui prouvera l'erreur (R-8) ; tout chiffre vérifié en base (R-9).

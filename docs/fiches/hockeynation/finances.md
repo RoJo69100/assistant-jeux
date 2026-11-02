@@ -1,6 +1,6 @@
 # Hockey Nation — fiche Finances et personnel
 
-Lue par l'agent `finances-personnel` après `commun.md`. Couvre contrats, plafond, coachs et scouts.
+Lue par l'agent `finances` après `commun.md`. Couvre contrats, plafond, coachs et scouts.
 
 ## Skills
 `hockeynation-contrats-finances`, `hockeynation-coachs-entrainement`, `hockeynation-draft-scouting` (§ Scouting).

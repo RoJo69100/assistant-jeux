@@ -100,7 +100,7 @@ dependances:
     veille:             { lit: [discord], ecrit: [regles] }
     match:              { lit: [export_match], ecrit: [resultats] }
     effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
-    finances-personnel: { lit: [personnel, besoins_postes], ecrit: [choix_coach] }
+    finances: { lit: [personnel, besoins_postes], ecrit: [choix_coach] }
     academie:           { lit: [rapport_academie, besoins_postes, choix_coach], ecrit: [recrues_retenues] }
     entrainement:       { lit: [export_entrainement, roster], ecrit: [reglages_entrainement] }
     tactique:           { lit: [dispo_joueurs, resultats, reglages_entrainement], ecrit: [composition] }
@@ -110,7 +110,7 @@ dependances:
     export_finances:     { touche: [personnel] }
     export_entrainement: { touche: [export_entrainement] }
     export_academie:     { touche: [rapport_academie] }
-    engagement:          { d_abord: finances-personnel, si_engage: { touche: [personnel] } }
+    engagement:          { d_abord: finances, si_engage: { touche: [personnel] } }
     fin_de_saison:       { touche: [roster, rapport_academie] }
     regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
   cascade:

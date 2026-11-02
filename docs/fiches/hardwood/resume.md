@@ -34,7 +34,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 - **Classements** : `silver.hw_standings`, `silver.hw_rankings`.
 
 ## Ordre des agents (briefs du jour `outputs/hardwood/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille → Match → Effectif → Finances-personnel (coachs) → Académie (recrutement) → Entraînement → Tactique. Pas d'agent Transferts (aucun marché). Trois agents d'analyse au plus par passage ; un tableau = une vue gold, zéro agent.
+Veille → Match → Effectif → Finances (coachs) → Académie (recrutement) → Entraînement → Tactique. Pas d'agent Transferts (aucun marché). Trois agents d'analyse au plus par passage ; un tableau = une vue gold, zéro agent.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Horizon : aujourd'hui seulement**. Le match de demain se prépare aujourd'hui.

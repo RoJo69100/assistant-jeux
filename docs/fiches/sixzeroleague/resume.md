@@ -43,7 +43,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - `page_type` en bronze = écran ouvert, pas contenu : classer par `source_url`. Sources non lues par silver et options observées : → source `commun.md` § Options observées (lecteur-exports seulement).
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/sixzeroleague/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille (si nouvelle source) → Match → Effectif → Finances-personnel (couvre les infrastructures) → Académie → Entraînement → Tactique → Transferts (dernier). Déclencheurs : → source `sixzeroleague.yaml` § dependances. Un agent aval qui contredit un amont l'écrit en tête de son résumé.
+Veille (si nouvelle source) → Match → Effectif → Finances (couvre les infrastructures) → Académie → Entraînement → Tactique → Transferts (dernier). Déclencheurs : → source `sixzeroleague.yaml` § dependances. Un agent aval qui contredit un amont l'écrit en tête de son résumé.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Rendu** : maintenant + demain seulement, sans heures (R-1) ; des actions « fais X » avec joueur et valeur (R-2) ; tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action (R-3) ; saisie complète dans l'ordre de l'écran : formations, direction, agressivité, puis rôle → titulaire → remplaçant (R-4) ; aucun « si », aucun seuil générique, donnée manquante = « il me manque X, fais l'export Y » (R-5) ; court (R-6) ; ne jamais redemander ce que `outputs/sixzeroleague/fait-AAAA-MM-JJ.md` ou la base prouvent (R-7) ; une décision, le doute en une demi-ligne avec ce qui prouvera l'erreur (R-8) ; tout chiffre vérifié en base (R-9).
