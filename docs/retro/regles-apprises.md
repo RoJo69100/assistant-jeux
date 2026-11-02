@@ -3,6 +3,11 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-11-02 (nuit, précisions de l'utilisateur)
+77. La lecture complète ne coûte pas « tous les jeux » : les cartes disent où lire, le dossier d'un jeu et d'un type pèse 330 à 540 tokens avec carte (mesuré : HN défaite 355, TS composition 329, SZ achat 537) contre 4 000 à 10 600 sans (`--complet`). Je ne pose plus ce faux dilemme : je lance `dossier.py <jeu> <type>` à chaque décision. Le reproche réel : « ça a déjà été traité, comment, je le traite pareil » = la carte ; ne pas l'ouvrir est la faute. Hook SessionStart `pipelines/rappel_debut.py` ajouté pour que ce rappel et les 12 dernières règles entrent dans le contexte sans lecture de ma part.
+78. « Je ne peux pas » est interdit : je donne soit la preuve (requête, mesure, test), soit « je ne sais pas encore, voici comment je le trouve » avec la commande. Contrôle fait le 02/11 : 195 objets SQL cités par les cartes, 195 présents en base (194 tables/vues + la fonction `gold.hn_potential`).
+76b. Règle globale de forme/horizon (CLAUDE.md) > résumé d'un jeu : quand ils se contredisent, je corrige le résumé (SZ R-1 corrigé le 02/11).
+
 ## 2026-11-02 (nuit, reproche : « comment tu peux encore avoir oublié de tout lire »)
 76. Un MCP « non authentifié » est un état de session, pas une panne : je le dis ainsi (« à autoriser dans les connecteurs claude.ai »), je réessaie une requête au début de chaque session avant d'écrire « pas de base », et je ne bâtis pas de learnings sans base sans l'écrire en tête du fichier.
 75. RÉCIDIVE règle « dossier complet » (CLAUDE.md 2026-10-31) : toute source d'une carte ou d'une décision se lit en ENTIER (pas `grep -A`, pas `sed -n` partiel) avant `--marquer` ; l'économie de tokens ne passe jamais avant l'exhaustivité. Si une lecture complète est trop lourde, je le dis et je demande, je ne marque pas. Un seul jeu par session pour que la lecture complète tienne.
@@ -72,7 +77,7 @@ Format : une ligne par règle, la plus récente en haut. Une règle déjà viol�
 
 ## 2026-10-26 (nuit) — les règles de rendu vivent désormais dans `docs/attentes/attentes.md` (R-1 à R-9, A-1 à A-9)
 30. Une consigne de l'utilisateur s'écrit là où les agents la lisent (`attentes.md` ou config du jeu), jamais seulement en mémoire (preset d'amical redemandé après avoir été noté).
-29. Une alerte sans action ne s'affiche pas ; horizon = maintenant + demain si annoncé (RÉCIDIVE de la règle 20 → R-1, R-2).
+29. Une alerte sans action ne s'affiche pas ; horizon = aujourd'hui seulement (corrigé le 2026-11-02 : l'ancien « maintenant + demain » est abrogé par CLAUDE.md § Horizon) (RÉCIDIVE de la règle 20 → R-1, R-2).
 28. L'agent économie décide de l'usage de l'argent avant Transferts ; une réserve se justifie par les sorties certaines (A-3).
 27. Une remarque sur un jeu va dans `attentes.md` par défaut ; dans la config du jeu seulement si elle nomme une mécanique propre au jeu.
 
