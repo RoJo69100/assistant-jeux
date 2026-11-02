@@ -50,7 +50,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - **Matchs** : `silver.hn_games`, `silver.hn_game_detail`, `silver.hn_standings`.
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/hockeynation/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille → Match → Effectif → Finances → Académie → Entraînement → Tactique → Transferts. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé. Trois agents d'analyse au plus par passage.
+Veille → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) → Finances (moi, vues gold, sans agent depuis le 2026-11-02) → Académie → Entraînement → Tactique → Transferts. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé. Trois agents d'analyse au plus par passage.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Horizon : aujourd'hui seulement**. Toute action se fait aujourd'hui ; un match de demain se prépare aujourd'hui ; une échéance lointaine se règle maintenant ou n'est pas mentionnée.

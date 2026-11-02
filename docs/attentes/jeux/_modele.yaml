@@ -80,8 +80,8 @@ vues_gold:
 dependances:
   agents:              # ce que chaque agent lit et écrit (noms = fichiers .claude/agents/)
     match:              { lit: [export_match], ecrit: [resultats] }
-    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
-    finances: { lit: [finances, personnel, besoins_postes], ecrit: [capacite_invest] }
+    effectif:           { par: moi, vues: [gold.<p>_effectif_bilan], lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances: { par: moi, vues: [gold.<p>_finance_*], lit: [finances, personnel, besoins_postes], ecrit: [capacite_invest] }
     academie:           { lit: [rapport_academie, capacite_invest], ecrit: [jeunes_retenus] }
     entrainement:       { lit: [export_entrainement, roster, niveau_entraineur], ecrit: [reglages_entrainement] }
     tactique:           { lit: [dispo_joueurs, resultats, reglages_entrainement], ecrit: [composition] }

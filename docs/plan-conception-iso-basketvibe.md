@@ -58,15 +58,15 @@ Ne rien supprimer avant d'avoir migré les fiches par jeu (`docs/fiches/<jeu>/<a
 
 | Agent actuel | Devient | Statut |
 |---|---|---|
-| `effectif` | Vue gold bilan par poste + moi | ❌ |
-| `lecteur-exports` | Vue gold « état des exports » + script | ❌ |
-| `verificateur` | Supprimé, remplacé par `police` et les hooks H1-H3 | ❌ |
-| `optimisation` | `pipelines/mesure_session.py` seul, sans agent | ❌ |
-| `finances-personnel` | Vue gold + moi, renommé `finances` (cf. 0c) | ❌ |
+| `effectif` | Vues gold bilan par poste (`bv_roster_now`/`bv_player_outlook`, `hn_player_fit`, `ts_effectif_bilan`, `sz_effectif_bilan`, `dm_effectif`, `hw_effectif`) + moi | ✅ 2026-11-02 |
+| `lecteur-exports` | `gold.<p>_exports_state` + `gold.sante_collecte` + nouvelle `gold.exports_nouvelles_cles` (`sql/gold/060`, détection des nouveautés) + requête d'inventaire (CLAUDE.md règle 16) | ✅ 2026-11-02 (060 à appliquer) |
+| `verificateur` | Supprimé, remplacé par `police` et les hooks H1-H3 | ✅ 2026-11-02 |
+| `optimisation` | `pipelines/mesure_session.py` seul, sans agent | ✅ 2026-11-02 |
+| `finances` | Vues gold (`bv_finance_health`/`_projection`, `hn_cap_outlook`, `ts_capacite_invest`, `sz_finance_projection`, `dm_finances_bilan`) + moi ; `capacite_invest` calculé par moi | ✅ 2026-11-02 |
 
-Agents de jugement conservés (12 avec `finances` si avis gardé) : `match`, `tactique`, `transferts`, `entrainement`, `academie`, `veille` (delta seulement), `analyste`, `decideur`, `police`, `synthese`, `retro`.
+Agents de jugement conservés (11, `finances` retiré) : `match`, `tactique`, `transferts`, `entrainement`, `academie`, `veille` (delta seulement), `analyste`, `decideur`, `police`, `synthese`, `retro`.
 
-**Plafond hebdomadaire : 20 agents par semaine**, hors `analyste` et `police` (la règle des trois par passage n'a pas tenu : 16 agents le 30/10). À écrire dans CLAUDE.md avec 0d. Autres coupes de la mesure : `/compact` à 30 %, `/clear` à chaque changement de jeu, SQL avec colonnes choisies et `LIMIT 30`.
+**Plafond hebdomadaire : 20 agents par semaine**, hors `analyste` et `police` (la règle des trois par passage n'a pas tenu : 16 agents le 30/10). Écrit dans CLAUDE.md le 2026-11-02 (✅). Autres coupes de la mesure : `/compact` à 30 %, `/clear` à chaque changement de jeu, SQL avec colonnes choisies et `LIMIT 30`.
 
 Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 
@@ -88,3 +88,4 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : 0b fait : `pipelines/cartographe.py [jeu] [--court]` (cartes manquantes, L-nnn sans check, type probable) ; `pipelines/recette.py --tous` (tests des hooks + par jeu : resume, learnings, tests yaml, vues citées présentes dans sql/, cartographe), à lancer avant chaque commit de conception ; vue unique `gold.sante_collecte` (tous jeux, statuts arrete / vide / rare / ok, `sql/gold/058_sante_collecte.sql`) au lieu d'une vue par jeu. Prochaine : 0c.
 - 2026-11-02 : 0c fait : `finances-personnel` → `finances` ; `academie` absorbe le recrutement (fiche `docs/fiches/hardwood/academie.md`, type `academie` élargi, pas de type `recrutement`) ; `tactique` absorbe l'adversaire avec `gold.{sz,ts,hn,hw,dm}_adversaires` (`sql/gold/059_adversaires.sql`, appliquées). Prochaine : 0d.
 - 2026-11-02 : mesure optimisation (53 sessions, semaine 29/10-01/11 = 59,3 M éq., pic 30-31/10 = 36,5 M) ; étape 0d ajoutée : retrait de 5 agents-calcul et plafond de 20 agents par semaine.
+- 2026-11-02 : 0d fait : agents `effectif`, `finances`, `lecteur-exports`, `verificateur`, `optimisation` supprimés ; fiches `effectif.md`/`finances.md` lues par moi, config `par: moi` + vues, CLAUDE.md (plafond 20/semaine, règles 9 et 16, plus de vérificateur), mémoire. Nouvelle vue `gold.exports_nouvelles_cles` (`sql/gold/060`) écrite, **non appliquée** (MCP Supabase non authentifié dans la session cloud). Étape 0 terminée ; prochaine : Hockey Nation.

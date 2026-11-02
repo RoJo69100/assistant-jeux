@@ -242,7 +242,7 @@ scenarios:
     couvre: [4, 175, 176]
   - id: X7
     quoi: "Export incomplet ou mal typé (page academy qui contient les finances, 26/10)"
-    critere: "lecteur-exports le détecte ; « il me manque X, cherché dans : …, refais l'export Y »"
+    critere: "l'état des exports en SQL (gold.bv_exports_state, gold.sante_collecte, gold.exports_nouvelles_cles) le détecte ; « il me manque X, cherché dans : …, refais l'export Y »"
     couvre: [177]
   - id: X8
     quoi: "Nouveauté de moteur annoncée (v5 en amicaux, 28/10)"

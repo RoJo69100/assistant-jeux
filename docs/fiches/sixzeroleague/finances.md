@@ -1,6 +1,6 @@
 # Six Zero League — fiche Finances, sponsor et infrastructures
 
-Lue par l'agent `finances` après `commun.md`. Cases E7 (finances, sponsor) et E8 (infrastructures) de la checklist SixZero League. **Pas de personnel dans ce jeu** : la partie personnel de l'agent devient « infrastructures ».
+Lue par moi (session principale) après `resume.md` : l'agent `finances` est retiré depuis le 2026-11-02 (étape 0d), son travail = les vues gold ci-dessous + ce livrable, sans brief d'agent. Cases E7 (finances, sponsor) et E8 (infrastructures) de la checklist SixZero League. **Pas de personnel dans ce jeu** : la partie personnel de l'agent devient « infrastructures ».
 
 ## Skills à lire
 - `.claude/skills/sixzeroleague-club/SKILL.md` (finances, sponsor, infrastructures)

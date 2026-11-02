@@ -1,6 +1,6 @@
 # Hockey Nation — fiche Effectif
 
-Lue par l'agent `effectif` après `commun.md`.
+Lue par moi (session principale) après `resume.md` : l'agent `effectif` est retiré depuis le 2026-11-02 (étape 0d), son travail = les vues gold ci-dessous + ce livrable, sans brief d'agent.
 
 ## Skills
 `hockeynation-joueurs` (talents, postes, âge, déclin), `hockeynation-contrats-finances` (contrats par équipe).

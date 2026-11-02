@@ -28,7 +28,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 **Décision importante** : lis d'abord la carte `docs/decisions/cartes/basketvibe/<type>.md` (où lire chaque variable, check, rendu figé) ; couverture des demandes de l'utilisateur : `docs/couverture/basketvibe.md`.
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/basketvibe/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille → Match → Effectif → Finances → Académie / Entraînement (parallèles) → Tactique (lit Match, Effectif, Entraînement) → Transferts (lit Effectif, Finances, Tactique, Académie). Un agent aval qui contredit un amont l'écrit en tête de son résumé.
+Veille → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) → Finances (moi, vues gold, sans agent depuis le 2026-11-02) → Académie / Entraînement (parallèles) → Tactique (lit Match, Effectif, Entraînement) → Transferts (lit Effectif, Finances, Tactique, Académie). Un agent aval qui contredit un amont l'écrit en tête de son résumé.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`)
 - **Rendu** : aujourd'hui seulement, le match de demain se prépare aujourd'hui (R-1, CLAUDE.md § Horizon du 2026-10-27) ; des actions « fais X » avec joueur, valeur, heure limite (R-2) ; tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action (R-3) ; saisie complète dans l'ordre de l'écran (R-4) ; aucun « si », aucun seuil générique, donnée manquante = « il me manque X, fais l'export Y » (R-5) ; court (R-6) ; ne jamais redemander ce que `outputs/basketvibe/fait-AAAA-MM-JJ.md` ou la base prouvent (R-7) ; une décision, le doute en une demi-ligne avec ce qui prouvera l'erreur (R-8) ; tout chiffre vérifié en base (R-9).
@@ -40,5 +40,5 @@ Veille → Match → Effectif → Finances → Académie / Entraînement (parall
 ## Pièges connus
 - Personnel médical : 85 000 au journal le 25/10 contre 60 000 affichés (à confirmer le 01/11).
 - Page « academy » parfois en réalité la page finances (26/10).
-- Options d'écran observées et non documentées : → source `commun.md` § Options observées (lecteur-exports seulement).
+- Options d'écran observées et non documentées : → source `commun.md` § Options observées (mises à jour par moi depuis `gold.exports_nouvelles_cles`).
   Ajouts du 29/10 : moteur **v5 en amicaux seulement** (annonce du 28/10 : pas de 20 s mortes, tirs de fin de quart ; effet inconnu, mesure = points de Q4 des amicaux) ; compétences adverses de coupe en **fourchettes de 20 points** (`skill_brackets`) ; tactique de coupe enregistrable par match (`/cup-fixtures/<id>/match-tactics`, lue par silver depuis la migration 022) ; zone réellement jouée : `gold.bv_zone_jouee`.
