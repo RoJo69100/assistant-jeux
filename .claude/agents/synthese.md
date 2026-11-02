@@ -1,7 +1,7 @@
 ---
 name: synthese
 description: Agent Synthèse (multi-jeux) — transforme les retours de tous les agents d'une session en un rendu court et précis pour l'utilisateur, un tableau par jeu, catégorisé et coloré, avec les saisies poste par poste, les analyses, les questions, et vérifie chaque nom, chiffre et date avant rendu. À lancer à la fin de chaque chaîne d'agents (et avant tout plan de plus de 5 lignes) en lui donnant la liste des briefs du jour à lire. Suit le skill `synthese-agents`.
-tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 

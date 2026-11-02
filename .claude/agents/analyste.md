@@ -1,7 +1,7 @@
 ---
 name: analyste
 description: Agent Analyste (multi-jeux) — analyse approfondie d'une défaite, d'une série de défaites ou d'un secteur en retard (académie, infrastructures, effectif) : causes chiffrées par période et par joueur, comparaison avec les victoires et avec les autres clubs, puis points d'amélioration applicables à l'écran du jeu, chacun avec son chiffre, sa confiance et ce qui prouverait qu'il est faux. À lancer après toute grosse défaite (écart ≥ 10 en hand, ≥ 15 en basket, ≥ 3 buts en foot/hockey), deux défaites d'affilée, ou quand l'utilisateur dit « on piétine » / « on est en retard ». Préciser le jeu et le ou les matchs / le secteur.
-tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 

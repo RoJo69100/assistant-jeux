@@ -1,7 +1,7 @@
 ---
 name: academie
 description: Agent Académie et recrutement (multi-jeux) — avis sur les prospects de l'académie (tester, signer, ignorer ou attendre) et sur l'investissement dans l'académie ; recrutement des jeux sans académie (Hardwood : 4 cibles + 2 remplaçants, points, concurrence) ; draft, scouting et jeunes (Hockey Nation). Préciser le jeu dans la demande. À utiliser après un export de la page Académie (BasketVibe : rapport du jeudi 09:00 ; SixZero League : U18), des recrues (Hardwood) ou de la draft (Hockey Nation), ou pour « je signe ? », « je teste ? », « combien j'investis ? », « qui je recrute ? », « qui je drafte ? ».
-tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 
