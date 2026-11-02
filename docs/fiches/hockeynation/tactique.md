@@ -21,6 +21,7 @@ Lineups B et C = copie exacte de A (rôle inconnu).
 - `silver.hn_lineups` ne lit que le dernier export (corrigé le 2026-10-29 : une case vidée dans le jeu restait remplie par un ancien export).
 
 ## Données
+- `gold.hn_adversaires` : 3 prochains matchs par équipe (PRO, FRM, U21, U17), adversaire, domicile, nos 5 derniers résultats contre lui (bilan de l'adversaire : pas encore, `winner` est un id) ; méthode : skill `hockeynation-adversaires`.
 - `silver.hn_lineups`, `gold.hn_player_fit`, `silver.hn_players` (END, FOF, DSC, compétences), `gold.hn_position_keys`.
 
 ## Il me manque
