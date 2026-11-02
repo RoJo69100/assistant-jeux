@@ -37,7 +37,7 @@ Adaptée des checklists BasketVibe et SixZero League le 2026-10-23 (4e jeu). Le 
 
 ## E. Agents (fiche `docs/fiches/hockeynation/`, 2026-10-23)
 - [x] Effectif : bilan par poste et par équipe, doubles postes, vieillissement (briefs validés par l'utilisateur le 2026-10-23)
-- [x] Finances-personnel : plafond, prolongations, coachs, scouts (validé le 2026-10-23)
+- [x] Finances : plafond, prolongations, coachs, scouts (validé le 2026-10-23)
 - [x] Académie : draft, U21 (ELC, Farm, départ), Import Draft (validé le 2026-10-23)
 - [x] Entraînement : compétence et coach par joueur PRO/FRM, ordre de choix (validé le 2026-10-23)
 - [x] Tactique : lignes, unités spéciales, Extra Attacker, ordre des coachs (validé le 2026-10-23 ; lignes B et C PRO à exporter)

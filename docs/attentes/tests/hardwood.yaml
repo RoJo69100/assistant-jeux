@@ -1,0 +1,91 @@
+# Hardwood — tests de recette (ce que Claude doit faire et rendre)
+# Créé le 2026-11-02 (plan de conception iso BasketVibe). Contrôle : python pipelines/recette.py hardwood
+#   - sans option : structure présente, vues citées existantes dans sql/, chaque ligne de
+#     docs/couverture/hardwood.md rattachée à au moins un test (champ couvre).
+#   - --reponse <fichier.md> : contrôle une réponse rendue (interdits, pastilles).
+# Un match par jour (simulé à 9:00 Pacifique), coaching jeudi et dimanche, recrutement un tour par journée.
+# Horizon : aujourd'hui seulement.
+
+jeu: hardwood
+
+nouveau_jeu:
+  fichiers:
+    - outputs/hardwood/veille/connaissance.md
+    - .claude/skills/hardwood-regles/SKILL.md
+    - .claude/skills/hardwood-recrutement/SKILL.md
+    - .claude/skills/hardwood-tactique/SKILL.md
+    - .claude/skills/hardwood-aujourdhui/SKILL.md
+    - docs/attentes/jeux/hardwood.yaml
+    - docs/fiches/hardwood/resume.md
+    - docs/fiches/hardwood/academie.md
+    - userscripts/hardwood.user.js
+    - docs/decisions/cartes/hardwood/composition.md
+    - docs/decisions/cartes/hardwood/defaite.md
+    - docs/decisions/cartes/hardwood/achat.md
+    - docs/decisions/cartes/hardwood/vente.md
+    - docs/decisions/cartes/hardwood/entrainement.md
+    - docs/decisions/cartes/hardwood/academie.md
+    - docs/decisions/cartes/hardwood/finances.md
+    - docs/couverture/hardwood.md
+    - outputs/hardwood/learnings.md
+  vues:
+    - gold.hw_today
+    - gold.hw_daily_alerts
+    - gold.hw_exports_state
+    - gold.hw_effectif
+    - gold.hw_depth_suggest
+    - gold.hw_recruit_board
+  couvre: [4, 5, 171, 173, 174]
+
+chaque_jour:
+  - id: Q1
+    quoi: "État des exports : en retard en premier"
+    critere: "gold.hw_exports_state lu ; jamais redemander un export déjà en base ; walk-ons jamais demandés"
+    vues: [gold.hw_exports_state, gold.sante_collecte, gold.exports_nouvelles_cles]
+    couvre: [172, 177, W1]
+  - id: Q2
+    quoi: "Match du jour : depth chart, puis Game Tactics (Réglage | Actuel | À mettre), puis Game Management"
+    critere: "carte composition ; gold.hw_depth_suggest controle ok ; redshirt et walk-ons absents"
+    vues: [gold.hw_depth_suggest, gold.hw_adversaires, gold.hw_player_pos_scores, gold.hw_vd_compare]
+    couvre: [6, 19, 20, 22, 30, 31, 32, 33, 34, 35, 160, 161, 170, "+1", "+5"]
+  - id: Q3
+    quoi: "Dernier match : my_result et analyse si défaite, par zone de tir"
+    critere: "gold.hw_season_games.my_result ; carte defaite contre gold.hw_vd_compare"
+    vues: [gold.hw_season_games]
+    couvre: [21, 166, 169]
+  - id: Q4
+    quoi: "Recrutement : 4 lignes Cible + 2 remplaçants, points du jour recrue par recrue"
+    critere: "carte academie ; hook forme.py hw-recrues ; jamais High ; grand ≥ 2,02 m ; engagés retirés"
+    vues: [gold.hw_recruit_board, gold.hw_recrue_fiches, gold.hw_recrues_a_ouvrir]
+    couvre: [10, 11, 12, 23, W2, "+4"]
+  - id: Q5
+    quoi: "Développement (jeudi et dimanche) : focus par joueur"
+    critere: "carte entrainement ; compétence clé du poste ; valeurs ±20 %"
+    vues: [gold.hw_effectif]
+    couvre: [18, 26, 27, "+2"]
+  - id: Q6
+    quoi: "Coachs : remplacer ou non, dans la fenêtre"
+    critere: "carte finances (coachs) ; fenêtre avant la conférence ou après la saison"
+    vues: [gold.hw_coach_board]
+    couvre: [15, 38, 39, 168, "+3", "+6"]
+  - id: Q7
+    quoi: "Rendu : tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI avec le mot, action « fais X »"
+    critere: "contrôlé par --reponse et hook forme.py"
+    couvre: [162, 163, 164, 165, 167]
+
+scenarios:
+  - id: X1
+    quoi: "Défaite (rejouer Wartburg du 02/11 si perdue)"
+    critere: "carte defaite ; C-001 contrôlé ; correction testable (Extend, Pressure) avec le match test"
+    couvre: [169]
+  - id: X2
+    quoi: "Nouvel export Discord"
+    critere: "veille sur le delta ; veille/*.md complétés"
+    couvre: [175, 176]
+  - id: X3
+    quoi: "Demande « meilleurs joueurs de la ligue »"
+    critere: "« il me manque … — cherché dans : silver.hw_player_stats — exporte /statistics/<id adverse> »"
+    couvre: [7]
+
+interdits: [a faire demain, "demain, fais", apres le prochain match, plus tard, "a toi de voir", peut-etre, ne rien changer, non releve, pas tout lu]
+pastilles: ["🟥 URGENT", "🟧 IMPORTANT", "🟩 SUIVI"]

@@ -1,6 +1,6 @@
 # BasketVibe — fiche Finances et personnel
 
-Lue par l'agent `finances-personnel` après `commun.md`. Contenu repris de l'agent BasketVibe validé (checklist BasketVibe, partie E).
+Lue par moi (session principale) après `resume.md` : l'agent `finances` est retiré depuis le 2026-11-02 (étape 0d), son travail = les vues gold ci-dessous + ce livrable, sans brief d'agent. Contenu repris de l'agent BasketVibe validé (checklist BasketVibe, partie E).
 
 ## Skills à lire
 - `.claude/skills/basketvibe-economie/SKILL.md`

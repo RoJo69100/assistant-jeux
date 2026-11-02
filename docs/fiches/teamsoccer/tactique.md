@@ -14,6 +14,7 @@ Lue par l'agent `tactique` après `commun.md`. Case E3 de la checklist Team Socc
 5. Contre un bot : il joue Neutre, compétences réduites ; profite-en pour reposer les joueurs fatigués ou suspendus à 2 jaunes.
 
 ## Données
+- `gold.ts_adversaires` : 3 prochains matchs par club, rang et bilan V-N-D de l'adversaire, buts pour/contre, nos scores contre lui cette saison (complète `gold.ts_upcoming`).
 - `gold.ts_upcoming` : prochains matchs, adversaire, `opponent_rating` / `my_rating`, rang, `lineup_saved`, `saved_formation`, `lineup_deadline_paris`.
 - `silver.ts_players` : compétences, `forme`, `zone`, `injury_days`, `suspended`, `yellow_cards`.
 - `silver.ts_match_lineups` (par match) et `silver.ts_lineups` (compositions par défaut) : `formation`, `play_style`, `player_positions` / `positions` (emplacement 0–10 → `player_id`), `player_orders` (consignes par joueur), `bench` (`subs`, `slots` avec `coverRole`, `changes` : minute, condition, entrant, sortant).

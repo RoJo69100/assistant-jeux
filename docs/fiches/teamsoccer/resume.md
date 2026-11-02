@@ -42,7 +42,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - `ts_saisie_composition` ne donne ni les consignes par zone ni les remplacements programmés : c'est le travail de l'agent Tactique.
 
 ## Ordre des agents (tu lis les briefs du jour `outputs/teamsoccer/briefs/AAAA-MM-JJ-<domaine>.md` de ceux avant toi)
-Veille (si nouvelle source) → Match → Effectif → Finances-personnel → Académie → Entraînement → Tactique → Transferts. Un agent aval qui contredit un amont l'écrit en tête de son résumé.
+Veille (si nouvelle source) → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) → Finances (moi, vues gold, sans agent depuis le 2026-11-02) → Académie → Entraînement → Tactique → Transferts. Un agent aval qui contredit un amont l'écrit en tête de son résumé.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`, `CLAUDE.md`)
 - **Horizon : aujourd'hui seulement.** L'utilisateur n'agit que le jour même, le soir. Jamais « demain », « le 29 », « après le prochain match » comme étape ; un match de demain se prépare aujourd'hui.
@@ -60,4 +60,4 @@ Veille (si nouvelle source) → Match → Effectif → Finances-personnel → Ac
 - Le relevé du stade (`silver.ts_stadiums`) date du 2026-10-19 : l'achat de places du 2026-10-27 (Cows) n'y est pas encore, il est dans `silver.ts_depenses_decidees`.
 - Matchs sans détail en base (dont Ajax–Cows 0-4, 2080875, match d'admin) : `ts_vd_comparatif.with_detail` ; il faut exporter la page du match.
 - Écart inexpliqué du solde Ben Ahmed au 2026-10-27 (506 299 $) : relevé finances à refaire.
-- Champs bruts non lus et options observées : → source `commun.md` § Options observées (lecteur-exports seulement).
+- Champs bruts non lus et options observées : → source `commun.md` § Options observées (mises à jour par moi depuis `gold.exports_nouvelles_cles`).

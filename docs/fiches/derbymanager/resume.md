@@ -17,13 +17,14 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 - **Routine** : `gold.dm_exports_etat` (manquant / en retard par club).
 - **Joueur par joueur (à lire en premier)** : `gold.dm_verdict_joueurs` — note au poste et niveau (fort/moyen/faible), cœur (Confident/Reliable/Inconsistent/Volatile), forme, condition, satisfaction de temps de jeu contre l'attente du statut, vestiaire (Leader/Regular/Outsider), `ne_s_entraine_pas` (jours sans match > exigence TR), plainte d'entraînement, mentor, retraite, trait de capitaine, verdict 541, intensité conseillée. `gold.dm_entrainement_plan` (compétence clé la plus basse par groupe). Infobulles brutes : `silver.dm_player_tips`. **Ne pas lire `gold.dm_joueurs`** (première version).
 - **Effectif** : `gold.dm_effectif` (slot enregistré, statut Key/First team/Rotation/Backup, contrat en jours, salaire, prix, 16 compétences), `gold.dm_poste_scores` (note par ligne sur les compétences clés [H]), `silver.dm_tactic`, `silver.dm_training`, `gold.dm_entrainement` (gains/pertes).
+- **Adversaires** : `gold.dm_adversaires` (par club, chaque adversaire de ligue déjà rencontré : rang, bilan, forme, nos résultats, xG concédé moyen ; pas de calendrier à venir exporté).
 - **Matchs** : `gold.dm_matchs` (résultat `my_result` de la base, xG, possession, tirs, formation, force), `gold.dm_saison_bilan` (par compétition et formation), `gold.dm_tirs_profil` (origine des tirs pour/contre), `silver.dm_shots`, `silver.dm_fixtures`, `silver.dm_standings`.
 - **Set pieces (2026-11-01)** : `gold.dm_setpieces` (preneurs PEN/FK/COR, placements DEF/ATT, capitaine, rangs par compétence).
 - **Argent** : `gold.dm_finances_bilan` (argent, flux du jour, marge salariale = plafond − engagés, installations), `silver.dm_money_flow`.
 - **Marché** : `gold.dm_marche_notes` (note au poste bas/milieu de fourchette contre notre dernier titulaire ; **ne pas lire `gold.dm_marche_postes`**, défectueuse), `gold.dm_prix_reference` (médianes par tier et âge), `silver.dm_transfers`, `silver.dm_school`.
 
 ## Ordre des agents
-Veille → Match → Effectif → Finances-personnel → Académie (school) → Entraînement → Tactique → Transferts. Trois agents d'analyse au plus par passage ; un tableau = une vue gold, zéro agent.
+Veille → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) → Finances (moi, vues gold, sans agent depuis le 2026-11-02) → Académie (school) → Entraînement → Tactique → Transferts. Trois agents d'analyse au plus par passage ; un tableau = une vue gold, zéro agent.
 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`, `docs/chose-a-DM.txt`)
 - **Horizon : aujourd'hui seulement.** Le match de demain se prépare aujourd'hui.

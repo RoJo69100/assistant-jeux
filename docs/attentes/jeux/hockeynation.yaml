@@ -118,10 +118,10 @@ vues_gold:
   autres: [gold.hn_player_fit, gold.hn_draft_board, gold.hn_cap_outlook, gold.hn_coach_board, gold.hn_depth_chart, gold.hn_special_skills, gold.hn_coach_specials, gold.hn_club_compare, gold.hn_league_player_fit, gold.hn_player_progress]
 
 dependances:
-  agents:
+  agents:   # par: moi = plus d'agent depuis le 2026-11-02 (étape 0d), je calcule avec les vues citées
     match:              { lit: [export_match, adversaire], ecrit: [resultats] }
-    effectif:           { lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
-    finances-personnel: { lit: [finances, contrats, coachs, scouts, besoins_postes], ecrit: [capacite_invest, cap_space] }
+    effectif:           { par: moi, vues: [gold.hn_player_fit, gold.hn_player_potential, gold.hn_tactique_effectif_poste], lit: [roster, resultats], ecrit: [dispo_joueurs, besoins_postes] }
+    finances: { par: moi, vues: [gold.hn_cap_outlook], lit: [finances, contrats, coachs, scouts, besoins_postes], ecrit: [capacite_invest, cap_space] }
     academie:           { lit: [rapport_academie, cap_space, besoins_postes], ecrit: [jeunes_retenus, montees] }
     entrainement:       { lit: [export_entrainement, roster, coachs], ecrit: [reglages_entrainement] }
     tactique:           { lit: [dispo_joueurs, resultats, montees, adversaire], ecrit: [composition] }
@@ -135,8 +135,8 @@ dependances:
     export_entrainement: { touche: [export_entrainement] }
     export_academie:     { touche: [rapport_academie] }
     export_marche:       { touche: [marche] }
-    engagement:          { d_abord: finances-personnel, si_engage: { touche: [coachs, scouts, cap_space] } }   # coach, scout
-    echange_ou_signature: { d_abord: finances-personnel, si_fait: { touche: [roster, contrats, cap_space] } }
+    engagement:          { d_abord: finances, si_engage: { touche: [coachs, scouts, cap_space] } }   # coach, scout
+    echange_ou_signature: { d_abord: finances, si_fait: { touche: [roster, contrats, cap_space] } }
     fin_de_saison:       { touche: [roster, contrats, rapport_academie, coachs] }
     regle_changee:       { d_abord: veille, si_fait: { touche: [tout] } }
   cascade:

@@ -28,8 +28,8 @@ Un agent ne rend jamais un retour incomplet parce qu'un autre agent n'est pas en
 |---|---|---|---|
 | 0 | Veille (si nouvelle source) | — | une règle qui change pèse sur tous |
 | 1 | Match | — | résultats et conseils contrôlés dans `learnings.md` |
-| 2 | Effectif | Match | forme, fatigue, blessures, minutes |
-| 3 | Finances-personnel | Effectif | salaires, solde, plafond d'enchères |
+| 2 | Effectif (moi, vues gold, sans agent depuis le 2026-11-02) | Match | forme, fatigue, blessures, minutes |
+| 3 | Finances (moi, vues gold, sans agent depuis le 2026-11-02) | Effectif | salaires, solde, plafond d'enchères |
 | 4 | Académie | Finances | budget d'investissement et de tests |
 | 5 | Entraînement | Effectif | choix par joueur (samedi, avant dimanche 04:00) |
 | 6 | Tactique | Match, Effectif, Entraînement | rotation, cinqs, focus défensif, depth chart |

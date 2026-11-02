@@ -128,6 +128,61 @@ HN_KO = """| Poste | Joueur | Note |
 """
 TEXTE_KO = "J'ai pas tout lu, ce sera pour plus tard."
 
+# H3 (2026-11-02) : contrôles par jeu
+HN4_OK = """Hockey Nation, effectif.
+PRO
+| Poste | Joueur | Note | Endurance | FOF |
+|---|---|---|---|---|
+| C | Carpentier | 61 | 70 | 55 |
+FRM, U21 et U17 : identiques au relevé.
+"""
+HN4_KO = """Hockey Nation, effectif PRO.
+| Poste | Joueur | Note | Endurance | FOF | Trou |
+|---|---|---|---|---|---|
+| C | Carpentier | 61 | 70 | 55 | non |
+Pour voir la liste, lance la requête.
+"""
+TS_PLAN_KO = """Team Soccer, Chomelix Cows.
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | Enregistrer la compo. |
+"""
+TS_PLAN_OK = TS_PLAN_KO.replace("Chomelix Cows.", "Chomelix Cows puis Ben Ahmed Donkey.")
+TS_EMPL_KO = """Team Soccer : Chomelix Cows et Ben Ahmed Donkey.
+| Empl. | Joueur | Ultra déf. | Défensive | Médiane | Offensive | Finition |
+|---|---|---|---|---|---|---|
+| DEF | García | Dégager | Passer → milieux | — | Passer → attaquants | Tirer |
+Remplacements programmés : aucun.
+"""
+SZ_KO = """Six Zero League, tactique.
+| Réglage | Valeur |
+|---|---|
+| Agressivité | Normal |
+| Formation attaque | 5-1 |
+| Direction | mixed |
+"""
+SZ_OK = """Six Zero League, tactique.
+| Réglage | Valeur |
+|---|---|
+| Formation attaque | 5-1 |
+| Formation défense | 6-0 |
+| Direction | mixed |
+| Agressivité | Normal |
+"""
+DM_KO = """Derby Manager.
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | Marmandes : 4-4-2. |
+| 🟧 IMPORTANT | Composition | Queen of the South : 4-3-3. |
+"""
+DM_OK = """Derby Manager, Queen of the South puis Marmandes.
+| Poste | Rôle | Joueur |
+|---|---|---|
+| DC | CD | Smith |
+Remplaçants S1-S5 : Brown (AUTO). Set pieces : PEN Smith, FK Brown, capitaine Smith.
+"""
+DM_COMPO_KO = DM_OK.replace(" Set pieces : PEN Smith, FK Brown, capitaine Smith.", "")
+
 CAS = [
     ("plan ok", PLAN_OK, True), ("plan ko", PLAN_KO, False),
     ("entraînement tous ok", ENTR_TOUS_OK, True), ("entraînement changements ok", ENTR_CHANGE_OK, True),
@@ -140,6 +195,11 @@ CAS = [
     ("hardwood recrues ok", REC_OK, True), ("hardwood recrues ko", REC_KO, False),
     ("team soccer ok", TS_OK, True), ("team soccer ko", TS_KO, False),
     ("hn effectif ok", HN_OK, True), ("hn effectif ko", HN_KO, False),
+    ("hn 4 équipes ok", HN4_OK, True), ("hn sans 4 équipes, trou, voir la liste", HN4_KO, False),
+    ("ts plan deux clubs ok", TS_PLAN_OK, True), ("ts plan un club", TS_PLAN_KO, False),
+    ("ts emplacement DEF + cellule vide", TS_EMPL_KO, False),
+    ("sz ordre ok", SZ_OK, True), ("sz ordre ko", SZ_KO, False),
+    ("dm compo ok", DM_OK, True), ("dm clubs inversés", DM_KO, False), ("dm compo sans set pieces", DM_COMPO_KO, False),
     ("texte avec interdit", TEXTE_KO, False),
     ("texte sans tableau", "Voilà, c'est fait.", True),
 ]

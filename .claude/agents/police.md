@@ -25,4 +25,6 @@ Règle de référence : `docs/decisions/variables.md` (variables obligatoires pa
 4. Ce qui change la décision (s'il y a lieu) : nouvelle décision en une ligne « fais X », et pourquoi.
 5. Récidive : si un agent a rendu un brief incomplet, une ligne pour `docs/retro/regles-apprises.md`.
 
+**Trace obligatoire (hook H2)** : ajoute à `outputs/<jeu>/police-AAAA-MM-JJ.md` (créé s'il manque) une section `## <type> — HH:MM` (type parmi achat, vente, composition, defaite, entrainement, academie, finances) avec le verdict, le dossier lu et la décision en une ligne. Sans cette trace, `pipelines/police.py` bloque ma réponse qui rend la décision.
+
 Interdit dans ta sortie : « pas tout lu », « non relevé », « échantillon », « pas eu le temps », « à lire plus tard ». Le hook `pipelines/police.py` bloque ces phrases.

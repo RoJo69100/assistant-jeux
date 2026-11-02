@@ -3,6 +3,17 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-11-02 (nuit, reproche : « comment tu peux encore avoir oublié de tout lire »)
+76. Un MCP « non authentifié » est un état de session, pas une panne : je le dis ainsi (« à autoriser dans les connecteurs claude.ai »), je réessaie une requête au début de chaque session avant d'écrire « pas de base », et je ne bâtis pas de learnings sans base sans l'écrire en tête du fichier.
+75. RÉCIDIVE règle « dossier complet » (CLAUDE.md 2026-10-31) : toute source d'une carte ou d'une décision se lit en ENTIER (pas `grep -A`, pas `sed -n` partiel) avant `--marquer` ; l'économie de tokens ne passe jamais avant l'exhaustivité. Si une lecture complète est trop lourde, je le dis et je demande, je ne marque pas. Un seul jeu par session pour que la lecture complète tienne.
+
+## 2026-11-02 (soir, conception iso BasketVibe : rétro sans reproche, mesure 29,6 M relus)
+74. Un mot interdit des tests (`docs/attentes/tests/*.yaml`) est une expression, pas un préfixe d'un mot courant (`vendre` aurait bloqué « vendredi ») : `recette.py` cherche par sous-chaîne.
+73. Après un test de `pipelines/dossier.py`, supprimer `outputs/<jeu>/dossier/<date du jour>-*` : ces fichiers débloquent le hook H1 sans vraie décision.
+72. Une requête écrite dans une carte ou une fiche se rédige APRÈS avoir extrait les colonnes de la vue (`sql/` ou `pg_get_viewdef`) : `verdict_talents` et `score_for` inventés le 02/11, corrigés avant commit.
+71. RÉCIDIVE règle 40 : 6 jeux enchaînés dans une session, contexte 146 k → 495 k, 29,6 M relus en cache. Après chaque jeu commité, première ligne de ma réponse : « /clear (ou /compact) avant le jeu suivant », même si l'utilisateur enchaîne.
+70. RÉCIDIVE règle 17 : même une session de conception commence par `docs/retro/regles-apprises.md` (non relu le 02/11).
+
 ## 2026-11-02 (Six Zero League : « je veux que ça ne se reproduise plus »)
 69. RÉCIDIVE règles 20, 24 et skill `sixzeroleague-aujourdhui` § 5 : « que faire » rendu depuis `gold.sz_agenda` / `sz_daily_alerts` sans contrôler la fraîcheur du calendrier. `silver.sz_schedule.captured_at` datait du 31/10 : l'agenda annonçait J3 et J4 « à saisir » et « J2 jouée » alors que J2 se jouait le soir même. Garde-fou obligatoire AVANT tout plan du jour, tous jeux : (1) `select max(captured_at), min(status) ... from silver.*_schedule` ; si le calendrier date de plus de 12 h ou d'avant le dernier match joué, première ligne du plan = « exporte le calendrier », et je ne rends AUCUN match ni compo avant l'arrivée de cet export ; (2) je lis `status` et `kickoff_paris` dans le calendrier lui-même, jamais un libellé d'agenda ; (3) le seul match qui se prépare est le prochain non joué dont le coup d'envoi est encore à venir AUJOURD'HUI ; J+1, J+2 ne sont jamais écrits (règle d'or) ; (4) une alerte « match joué non exporté » se recoupe avec `status = 'complete'` du calendrier frais et avec le registre `fait-…` ; une victoire sur tapis vert (forfait) n'a aucune page de match à exporter ni à analyser (déclaré le 2026-11-02, J1 FC Cete).
 

@@ -1,0 +1,115 @@
+# Hockey Nation — tests de recette (ce que Claude doit faire et rendre)
+# Créé le 2026-11-02 (plan de conception iso BasketVibe). Contrôle : python pipelines/recette.py hockeynation
+#   - sans option : structure présente, vues citées existantes dans sql/, chaque ligne de
+#     docs/couverture/hockeynation.md rattachée à au moins un test (champ couvre).
+#   - --reponse <fichier.md> : contrôle une réponse rendue (interdits, pastilles).
+# Pas de semaine type : saison de 63 jours, calendrier dans gold.hn_today / gold.hn_calendar.
+# Horizon : aujourd'hui seulement (CLAUDE.md § Horizon). Le match de demain se prépare aujourd'hui.
+
+jeu: hockeynation
+
+# ---------------------------------------------------------------------------
+# 1. Structure : tout doit exister
+# ---------------------------------------------------------------------------
+nouveau_jeu:
+  fichiers:
+    - outputs/hockeynation/veille/connaissance.md
+    - .claude/skills/hockeynation-joueurs/SKILL.md
+    - .claude/skills/hockeynation-match-calendrier/SKILL.md
+    - .claude/skills/hockeynation-coachs-entrainement/SKILL.md
+    - .claude/skills/hockeynation-contrats-finances/SKILL.md
+    - .claude/skills/hockeynation-draft-scouting/SKILL.md
+    - .claude/skills/hockeynation-adversaires/SKILL.md
+    - .claude/skills/hockeynation-compositions-trades/SKILL.md
+    - .claude/skills/hockeynation-potentiel-joueurs/SKILL.md
+    - docs/attentes/jeux/hockeynation.yaml
+    - docs/fiches/hockeynation/resume.md
+    - docs/fiches/hockeynation/tactique.md
+    - docs/fiches/hockeynation/transferts.md
+    - docs/fiches/hockeynation/academie.md
+    - docs/fiches/hockeynation/finances.md
+    - docs/decisions/cartes/hockeynation/composition.md
+    - docs/decisions/cartes/hockeynation/defaite.md
+    - docs/decisions/cartes/hockeynation/achat.md
+    - docs/decisions/cartes/hockeynation/vente.md
+    - docs/decisions/cartes/hockeynation/entrainement.md
+    - docs/decisions/cartes/hockeynation/academie.md
+    - docs/decisions/cartes/hockeynation/finances.md
+    - docs/couverture/hockeynation.md
+    - docs/checklist-hockeynation.md
+    - outputs/hockeynation/learnings.md
+  vues:
+    - gold.hn_today
+    - gold.hn_daily_alerts
+    - gold.hn_exports_state
+    - gold.hn_player_fit
+    - gold.hn_player_potential
+    - gold.hn_cap_outlook
+    - gold.hn_tactique_rendu
+    - gold.hn_adversaires
+  couvre: [171, 173, 174, H1]
+
+# ---------------------------------------------------------------------------
+# 2. Chaque passage (zéro agent, vues gold)
+# ---------------------------------------------------------------------------
+chaque_jour:
+  - id: Q1
+    quoi: "État des exports : ce qui est en retard, en premier dans le tableau"
+    critere: "gold.hn_exports_state lu ; jamais redemander un export déjà en base (skill deja-fait)"
+    vues: [gold.hn_exports_state, gold.sante_collecte, gold.exports_nouvelles_cles]
+    couvre: [172, 177]
+  - id: Q2
+    quoi: "Lineup PRO du prochain match : rendu figé, saisie au moins 1 h avant"
+    critere: "carte composition : 4 vues tactique dans l'ordre, controle tout ok, aucun hors poste, END aux seuils"
+    vues: [gold.hn_tactique_effectif_poste, gold.hn_tactique_rendu, gold.hn_tactique_plan_rendu, gold.hn_tactique_controle]
+    couvre: [160, 161, "+1", "+3", "+8"]
+  - id: Q3
+    quoi: "Dernier match : résultat via my_result, analyse si défaite"
+    critere: "silver.hn_games.my_result ; carte defaite ; L-nnn confronté"
+    couvre: [166, 169, "+7"]
+  - id: Q4
+    quoi: "Plafond : cap space actuel et saisons suivantes, effet de toute opération envisagée"
+    critere: "silver.hn_cap_now et gold.hn_cap_outlook cités ; jamais négatif"
+    vues: [gold.hn_cap_outlook, gold.hn_buyout_calc, gold.hn_trade_value]
+    couvre: [168, H4, "+5", "+6"]
+  - id: Q5
+    quoi: "Leviers : un échange nommé (cible ou départ) avec équipe résultante à 20, ou la raison chiffrée de n'en faire aucun"
+    critere: "cartes achat et vente ; partenaires interdits exclus ; Bélanger et centres non proposés"
+    vues: [gold.hn_league_player_fit, gold.hn_trade_value, gold.hn_depth_chart]
+    couvre: [161, H2, H3]
+  - id: Q6
+    quoi: "Coachs et scouts pendant les jours 1-35 : options et couverture en tableau"
+    critere: "gold.hn_coach_options, gold.hn_coach_candidats, gold.hn_scout_liste en tableau, jamais « requête X »"
+    vues: [gold.hn_coach_options, gold.hn_coach_candidats, gold.hn_scout_liste, gold.hn_scout_board]
+    couvre: [168, "+2"]
+  - id: Q7
+    quoi: "Rendu : un tableau par équipe, 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI avec le mot, action « fais X »"
+    critere: "contrôlé par --reponse (interdits, pastilles) et hook forme.py (HN 4 équipes)"
+    couvre: [162, 163, 164, 165, 167, H1]
+
+# ---------------------------------------------------------------------------
+# 3. Scénarios rejoués
+# ---------------------------------------------------------------------------
+scenarios:
+  - id: X1
+    quoi: "Défaite PRO (rejouer J8 S27, réussite 8,8 % et gardien .839)"
+    critere: "carte defaite : comparaison aux défaites et victoires S26, gardien par période, 3 à 5 corrections testables"
+    couvre: [169, 166]
+  - id: X2
+    quoi: "Nouveauté de réglage (plan de jeu) à tester"
+    critere: "test en amical, un réglage à la fois, mesure nommée"
+    couvre: [170, "+4"]
+  - id: X3
+    quoi: "Nouvel export Discord"
+    critere: "veille sur le delta ; connaissance.md complétée ; ce qui change une décision en cours signalé"
+    couvre: [175, 176]
+  - id: X4
+    quoi: "Ligne FRM ou U21 demandée"
+    critere: "« il me manque les lignes réellement alignées — cherché dans : silver.hn_lineups, silver.hn_game_detail — exporte un match FRM / U21 joué »"
+    couvre: [H5]
+
+# ---------------------------------------------------------------------------
+# 4. Interdits dans toute réponse (contrôlés par --reponse, hors citations)
+# ---------------------------------------------------------------------------
+interdits: [a faire demain, "demain, fais", apres le prochain match, plus tard, "a toi de voir", peut-etre, ne rien changer, non releve, pas tout lu]
+pastilles: ["🟥 URGENT", "🟧 IMPORTANT", "🟩 SUIVI"]

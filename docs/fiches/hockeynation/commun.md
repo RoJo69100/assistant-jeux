@@ -39,7 +39,7 @@ Lue en premier par chaque agent, avant la fiche de son domaine (`docs/fiches/hoc
 | Nouvelles vues (2026-10-25) | `silver.hn_extension_offers`, `hn_scouting_assignments`, `hn_scout_applications`, `hn_coach_applications`, `hn_league_team_ratings` | — | Coach Center : le script 0.2.0 signale les pages manquantes (bouton rouge ⚠) |
 
 ## Ordre des agents et briefs du jour
-Veille (si nouvelle source) → Match → Effectif → Finances-personnel (contrats, plafond, coachs, scouts) → Académie (draft, U17, U21) → Entraînement → Tactique → Transferts (dernier). Chaque agent lit les briefs du jour (`outputs/hockeynation/briefs/AAAA-MM-JJ-<domaine>.md`) des agents placés avant lui et le registre `outputs/hockeynation/fait-AAAA-MM-JJ.md`. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé.
+Veille (si nouvelle source) → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) → Finances (contrats, plafond, coachs, scouts ; moi, vues gold, sans agent depuis le 2026-11-02) → Académie (draft, U17, U21) → Entraînement → Tactique → Transferts (dernier). Chaque agent lit les briefs du jour (`outputs/hockeynation/briefs/AAAA-MM-JJ-<domaine>.md`) des agents placés avant lui et le registre `outputs/hockeynation/fait-AAAA-MM-JJ.md`. Un agent en aval qui contredit un agent en amont l'écrit en tête de son résumé.
 
 ## Sorties
 - Briefs : `outputs/hockeynation/briefs/AAAA-MM-JJ-<domaine>.md`. Journal : `outputs/hockeynation/learnings.md` (C-nnn, L-nnn), créé au premier match analysé. Veille : `outputs/hockeynation/veille/`.

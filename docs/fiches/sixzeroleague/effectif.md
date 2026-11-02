@@ -1,6 +1,6 @@
 # Six Zero League — fiche Effectif
 
-Lue par l'agent `effectif` après `commun.md`. Case E2 de la checklist SixZero League.
+Lue par moi (session principale) après `resume.md` : l'agent `effectif` est retiré depuis le 2026-11-02 (étape 0d), son travail = les vues gold ci-dessous + ce livrable, sans brief d'agent. Case E2 de la checklist SixZero League.
 
 ## Skills à lire
 - `.claude/skills/sixzeroleague-joueurs/SKILL.md` (rôles, compétences clés par rôle, hors-poste, blessures, retraite)

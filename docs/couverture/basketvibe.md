@@ -95,7 +95,7 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | 174 | Mettre à jour agents/skills à chaque nouveauté | veille → skills ; `dossier.py` donne le nouveau depuis le dernier passage et l'agent modifie le check de la carte | ✅ |
 | 175 | Retour des joueurs expérimentés Discord | connaissance (lignes « Com ») ; variable « avis des amis » de chaque carte | ✅ (limite : ligne 4) |
 | 176 | Facteurs cachés révélés dans les discussions | lignes `+N` ci-dessous | ✅ |
-| 177 | Export incomplet : le dire, je le refais | R-5 « il me manque X, fais l'export Y » ; agent `lecteur-exports` | ✅ |
+| 177 | Export incomplet : le dire, je le refais | R-5 « il me manque X, fais l'export Y » ; `gold.bv_exports_state`, `gold.sante_collecte`, `gold.exports_nouvelles_cles` (agent `lecteur-exports` retiré le 2026-11-02) | ✅ |
 
 ## Découvertes à connaître (ajoutées par Claude)
 | # | Fait | Source | Statut |

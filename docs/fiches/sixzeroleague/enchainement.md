@@ -10,7 +10,7 @@ Rythme : 2 journées par jour, entraînement et transferts réglés chaque soir 
 | Calendrier / classement | Tactique | Composition des 2 prochaines journées |
 | Équipe (joueurs) avec blessé ou suspendu | Tactique | Composition corrigée, remplaçant sans pénalité si possible |
 | Entraînement (cycle de 2 journées) | Entraînement | Intensité d'équipe (Light / Normal / High), focus par joueur, 2e rôle à former |
-| Finances | Finances-personnel | Voir « Finances » ci-dessous |
+| Finances | Finances | Voir « Finances » ci-dessous |
 | Académie U18 (nouveau choix toutes les 8 journées) | Académie | Prospect à prendre, scouting |
 | Marché des transferts | Transferts | Voir « Transferts » ci-dessous |
 | Chat du jeu / News | Veille | Propositions de modification de skills, **à valider par toi** |
