@@ -1,6 +1,6 @@
 # Carte teamsoccer — academie (révélations, montée des jeunes, Centre de Haute Performance ; deux clubs)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 81b8350 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `academie.md`, skills `teamsoccer-entrainement` § Académie et § HPC, `-joueurs` ; connaissance § 3). Règles : compter les jeunes complets à chaque export (règle apprise 17) ; ne jamais utiliser les compétences non révélées présentes dans l'API ; les TSC sont ceux du compte, partagés entre les deux clubs.
 

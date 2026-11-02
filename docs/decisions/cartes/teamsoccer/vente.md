@@ -1,6 +1,6 @@
 # Carte teamsoccer — vente (banque immédiate ou enchère de manager 72 h ; deux clubs)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 81b8350 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `transferts.md`, `effectif.md`, skills `teamsoccer-club` § Marché, `-joueurs` ; connaissance § 5). Règles : une vente identifiée reste ouverte jusqu'à exécution ; jamais de vente lancée sans accord ; effectif minimum 16.
 
