@@ -24,7 +24,7 @@ Sources lues : commit 3de9137 (2026-10-31)
 | 2 | Bonnes affaires (revente) | `select name, age, ps, price_now, ref_median, discount_pct, bid_ceiling_resale, resale_margin_median, ends_paris, ref_reliable from gold.bv_market_bargains where ref_reliable order by discount_pct desc limit 10` | Marge nette après taxe 5 % ; revente après 7 jours | skill transferts § Vendre [M§11.1] | |
 | 3 | Âge et progression | `age` + `gold.bv_age_factor` | ≥ 30 ans : 0 progression ; ≥ 31 : déclin chaque dimanche | [M§8.5] | |
 | 4 | Potentiel | test 25 000 (Low / Decent / High), une fois par club et par joueur | Potentiel 7 ≈ 8 en progression (×1,50 contre ×1,60) mais moins cher | [M§8.3] ; avis dcarra 2026-10-14 | |
-| 5 | Prix de référence | `select age_band, position, n, p25, median, p75 from gold.bv_market_price_ref` ; `gold.bv_price_ref_ps` ; `gold.bv_transfer_history` | Enchère max ≤ médiane de la référence sauf gain sportif chiffré ; 3 étoiles de 16 ans : 3,5-4 M (avis) | connaissance 2026-10-29 ; skill transferts § Prix constatés | |
+| 5 | Prix de référence | `select age_band, position, n, p25, median, p75 from gold.bv_market_price_ref` ; `gold.bv_price_ref_ps` ; `gold.bv_transfer_history` | Enchère max ≤ médiane de la référence sauf gain sportif chiffré, **sauf SG / SF PS 56-62 : bas des ventes des 7 derniers jours (L-028)** ; 3 étoiles de 16 ans : 3,5-4 M (avis) | connaissance 2026-10-29 ; skill transferts § Prix constatés | |
 | 6 | Salaire | `est_weekly_salary` ; `gold.bv_salary_scale` | Salaire = moyenne des 8 compétences ; recalculé en fin de saison | [M§10.2] | |
 | 7 | Règles d'enchère | skill transferts § Acheter | Enchère max automatique ; anti-snipe 3 min ; phase finale à l'aveugle ; somme des maximums ≤ solde | [M§11.3, §10.3] | |
 | 8 | Argent disponible | `select balance, transfer_available, transfer_committed from gold.bv_finance_health` + `gold.bv_finance_s2_projection.investable_now_end_s1` − dépenses déjà décidées (`outputs/basketvibe/fait-*.md`) | Prix max > capacité restante = cible abandonnée | CLAUDE.md § Horizon | |
@@ -36,6 +36,7 @@ Sources lues : commit 3de9137 (2026-10-31)
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
 |---|---|---|---|
+| L-028 | SG / SF PS 56-62 : enchère max = bas de la fourchette des ventes des 7 derniers jours (750 000 et plus, `gold.bv_transfer_history`) si finançable, sinon ne pas enchérir ; la médiane `gold.bv_market_price_ref` sous-estime le prix final | 2026-11-02 | actif (2 échecs : C-108, C-109) |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
@@ -44,3 +45,4 @@ Sources lues : commit 3de9137 (2026-10-31)
 | 2026-10-31 | 2 étoiles | — → bon marché depuis que le test à 25 000 est ouvert à tous | #italia 2026-10 (avis) |
 | 2026-10-31 | Taxe | 5 % → 5 % confirmé par un virement réel (1 010,0 k → 959,5 k) | heldermoreno 2026-10-03 |
 | 2026-10-31 | Jeune « High » vendu | cible 3 étoiles à 3,5-4 M (avis) → potentiel moyen tant que 4-5 semaines d'entraînement ne l'ont pas prouvé | Dev 2026-08-13 cité par carlomtlopes 2026-10-07 (seconde main) |
+| 2026-11-02 | Enchère max SG / SF PS 56-62 | médiane de `bv_market_price_ref` → bas de la fourchette des ventes des 7 derniers jours (750 000+) | L-028 : Fuchs fini à 1 010 000 pour un max de 300 000, Abbasi à 760 000+ pour 520 000 |
