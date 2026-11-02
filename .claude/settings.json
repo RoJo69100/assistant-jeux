@@ -8,24 +8,55 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "git pull --no-edit" }
+          {
+            "type": "command",
+            "command": "git pull --no-edit"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/rappel_debut.py"
+          }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "python pipelines/police.py" },
-          { "type": "command", "command": "python pipelines/forme.py" }
+          {
+            "type": "command",
+            "command": "python pipelines/police.py"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/forme.py"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/controle.py"
+          }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          { "type": "command", "command": "python pipelines/police.py" }
+          {
+            "type": "command",
+            "command": "python pipelines/police.py"
+          }
         ]
       }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "mcp__Supabase__execute_sql",
+      "mcp__Supabase__list_tables",
+      "mcp__Supabase__list_projects",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__list_tables",
+      "mcp__Supabase",
+      "mcp__supabase"
     ]
   }
 }

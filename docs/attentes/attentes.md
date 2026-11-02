@@ -8,7 +8,7 @@ Ce qui est propre à un jeu va dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `
 ## 1. Rendu (comment je te réponds)
 | Id | Attente |
 |---|---|
-| R-1 | **Maintenant, plus demain si tu dis pouvoir agir demain.** Rien au-delà : ni fin de semaine, ni coupe ou sponsor lointains, ni « après le match » (je l'annonce quand le match est joué). Le futur sert à mes calculs, pas au rendu. |
+| R-1 | **Aujourd'hui seulement (CLAUDE.md § Horizon, 2026-10-27, prime sur toute autre formulation).** Un match de demain se prépare aujourd'hui ; jamais « demain » comme étape ; tu me dis toi-même si tu peux agir un autre jour. Rien au-delà : ni fin de semaine, ni coupe ou sponsor lointains, ni « après le match » (je l'annonce quand le match est joué). Le futur sert à mes calculs, pas au rendu. |
 | R-2 | **Des actions, pas des alertes.** Chaque ligne = « fais X » (joueur, valeur, heure limite à Paris). Une alerte sans action n'est pas affichée. |
 | R-3 | **Tableaux.** Un tableau par jeu, et un bloc par club ou équipe quand le jeu en a plusieurs. Colonnes : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI, carré + mot), catégorie, action. Puis 1 à 3 lignes de commentaire. Aucune ligne « rien à faire ». |
 | R-4 | **Saisie complète, dans l'ordre de l'écran.** Jamais « saisis l'équipe » : chaque poste, chaque joueur, chaque réglage, dans l'ordre des colonnes et des joueurs de l'export (`ecrans` de la config). |
@@ -57,7 +57,7 @@ Ce qui est propre à un jeu va dans `docs/attentes/jeux/<jeu>.yaml` (gabarit : `
 3. **Pas d'ordre fixe d'agents.** La config déclare ce que chaque agent lit et écrit, et ce que touche chaque événement (`dependances`). Je lance ce qui est touché, dans l'ordre du graphe ; un agent en aval qui change une donnée déjà lue relance l'agent concerné (deux passes au plus). Aucun agent ne tourne si ses entrées n'ont pas changé.
 4. Après une grosse défaite ou deux d'affilée : `analyste` ; si les briefs hésitent : `decideur` ; `synthese` en dernier dès qu'il y a au moins deux briefs à assembler (elle vaut vérification R-9). Trois agents d'analyse au plus par passage ; un tableau de données se rend par une vue gold, sans agent (2026-10-27).
 5. Les agents lisent `docs/fiches/<jeu>/resume.md` à la place de ce fichier, de la config et de `commun.md` : toute modification ici se reporte dans les résumés concernés.
-5. Rendu : un seul tableau par jeu (R-3), de maintenant à demain au plus (R-1).
+5. Rendu : un seul tableau par jeu (R-3), aujourd'hui seulement (R-1).
 
 ## 5. Coût et session
 - Plan du jour en SQL (`vues_gold` de la config : agenda, alertes), sans agent ; un agent seulement pour décider ou analyser.

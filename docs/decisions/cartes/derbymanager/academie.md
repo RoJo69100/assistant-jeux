@@ -24,6 +24,7 @@ Un tableau par club : `| Jeune | Poste | Âge | Jours restants | Compétences cl
 | 5 | Intégrable | `gold.dm_verdict_joueurs` (note au poste du dernier titulaire) | Promouvoir si le jeune approche le dernier titulaire ou remplace un départ ; promotion impossible à 25 joueurs ; statut raisonnable (pas Key) | connaissance § 6, § 13 | |
 | 6 | Scouting des jeunes | — | Les 5 jeunes découverts ont déjà un scout, il en faut 2 de plus ; niveau 2 = potentiel et expérience | dev 2026-10-18 ; connaissance § 8 | |
 | 7 | Team spirit | `effet_ts_pct` | École ≈ −1 % de team spirit par jeune (fringe) | dev 2026-08-19 | |
+| 9 | Almgren (547) | `silver.dm_school` ; brief 2026-10-30-plan § 4 | MR 19 ans, passing 16, positioning 19, 55 j au 30/10, « high potential to become a lower division player » ; Minkkinen 16 ans 88 j. Promotion impossible à 25 joueurs : nombre d'effectif à relever (`count(*) from gold.dm_effectif where club = 547`) | police 2026-11-02 | Absent de l'effectif au 01/11 |
 | 8 | Avis des amis | connaissance § 6 | Dev : jamais vu de jeune « D1 worthy » issu de l'école ; « Facilities as a bet » | connaissance § 6 | |
 
 ## Checks appris
