@@ -1,7 +1,7 @@
 ---
 name: retro
 description: Agent Rétro (multi-jeux) — en fin de session ou quand l'utilisateur se plaint que Claude ne s'améliore pas, relit les reproches et les corrections, trouve les causes racines et met à jour `outputs/retro/AAAA-MM-JJ.md` et `docs/retro/regles-apprises.md`. À lancer avec le texte (ou le résumé) de la session et les briefs du jour ; suit le skill `retro-session`.
-tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 

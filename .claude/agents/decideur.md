@@ -1,7 +1,7 @@
 ---
 name: decideur
 description: Agent Décideur (multi-jeux) — lit les briefs du jour des autres agents, la base et les sources (devlog, Discord), tranche les divergences et rend UNE décision par secteur (Composition, Tactique, Entraînement, Transferts, Académie/Draft, Finances/Infrastructures), applicable tout de suite à l'écran. Interdit de répondre « ne rien changer », « attendre » ou « tester plus tard » pendant une série de défaites. À lancer après les agents d'analyse et avant `synthese`, et chaque fois que les briefs hésitent (« confiance faible », « aucun conseil », « à voir ») ou que l'utilisateur dit « tu es frileux » / « prends des décisions ». Préciser le jeu.
-tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 

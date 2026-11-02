@@ -1,7 +1,7 @@
 ---
 name: match
 description: Agent Match (multi-jeux : BasketVibe, SixZero League…) — explique chaque victoire et défaite chiffres à l'appui, tient le journal des enseignements `outputs/<jeu>/learnings.md` après chaque match, et contrôle les conseils passés (appliqués ou non, effet constaté). Préciser le jeu dans la demande. À utiliser après chaque export de match, ou pour « pourquoi on a perdu / gagné », « qu'est-ce qui marche », « mes conseils ont-ils servi ».
-tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 

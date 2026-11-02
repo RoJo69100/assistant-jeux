@@ -1,7 +1,7 @@
 ---
 name: police
 description: Agent Police (multi-jeux) — contrôle qu'une décision importante (achat, vente, enchère, composition de ligue/coupe, analyse de défaite, entraînement, académie/draft, finances) repose sur TOUTES les informations disponibles — règles, avis des amis (connaissance, Discord, chat), chiffres de toute la saison — et COMPLÈTE lui-même ce qui manque avant le rendu. À lancer après les agents d'analyse et avant `synthese` (ou avant ma réponse s'il n'y a qu'un brief), sur chaque décision importante. Préciser le jeu, le type de décision, le dossier `outputs/<jeu>/dossier/…` et le brief ou le brouillon.
-tools: Read, Grep, Glob, Write, Edit, Bash, mcp__supabase__execute_sql
+tools: Read, Grep, Glob, Write, Edit, Bash, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
 
