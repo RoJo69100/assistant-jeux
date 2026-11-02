@@ -3,6 +3,10 @@
 
 Format : une ligne par règle, la plus récente en haut. Une règle déjà violée deux fois remonte en tête et passe en `CLAUDE.md`.
 
+## 2026-11-02 (nuit, reproche : « comment tu peux encore avoir oublié de tout lire »)
+76. Un MCP « non authentifié » est un état de session, pas une panne : je le dis ainsi (« à autoriser dans les connecteurs claude.ai »), je réessaie une requête au début de chaque session avant d'écrire « pas de base », et je ne bâtis pas de learnings sans base sans l'écrire en tête du fichier.
+75. RÉCIDIVE règle « dossier complet » (CLAUDE.md 2026-10-31) : toute source d'une carte ou d'une décision se lit en ENTIER (pas `grep -A`, pas `sed -n` partiel) avant `--marquer` ; l'économie de tokens ne passe jamais avant l'exhaustivité. Si une lecture complète est trop lourde, je le dis et je demande, je ne marque pas. Un seul jeu par session pour que la lecture complète tienne.
+
 ## 2026-11-02 (soir, conception iso BasketVibe : rétro sans reproche, mesure 29,6 M relus)
 74. Un mot interdit des tests (`docs/attentes/tests/*.yaml`) est une expression, pas un préfixe d'un mot courant (`vendre` aurait bloqué « vendredi ») : `recette.py` cherche par sous-chaîne.
 73. Après un test de `pipelines/dossier.py`, supprimer `outputs/<jeu>/dossier/<date du jour>-*` : ces fichiers débloquent le hook H1 sans vraie décision.

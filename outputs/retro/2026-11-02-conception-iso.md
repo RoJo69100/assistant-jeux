@@ -1,6 +1,6 @@
 # Rétro — 2026-11-02, conception iso BasketVibe (étape 0d + 5 jeux)
 
-Session de conception (Opus) : étape 0d (retrait de 5 agents-calcul), puis cartes, couverture et tests de Hockey Nation, Team Soccer, Six Zero League, Derby Manager et Hardwood, puis les 11 leçons BasketVibe. Aucun reproche de l'utilisateur ; points relevés par moi. Mesure : `outputs/optimisation/2026-11-02-conception-iso.md`.
+Session de conception (Opus) : étape 0d (retrait de 5 agents-calcul), puis cartes, couverture et tests de Hockey Nation, Team Soccer, Six Zero League, Derby Manager et Hardwood, puis les 11 leçons BasketVibe. Rectifié le soir : reproche de l'utilisateur sur la lecture incomplète et sur « pas de base » (voir `2026-11-02-bilan-journee.md`, E1-E2) ; points relevés par moi ci-dessous. Mesure : `outputs/optimisation/2026-11-02-conception-iso.md`.
 
 ## Ce que j'ai mal fait
 | # | Ce qui s'est passé | Cause racine | Règle corrective | Où |

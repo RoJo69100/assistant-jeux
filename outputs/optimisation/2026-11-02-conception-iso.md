@@ -28,7 +28,7 @@ Durée 37.9 min · 110 requêtes · contexte max 495,531 (247 %) · relu en cach
 | Priorité | Constat chiffré | Coupe précise | Gain estimé |
 |---|---|---|---|
 | 🟥 URGENT | Contexte max 495 k ; relu en cache 3,1 M (demande 1) → 4,8 M (demandes 4-5) : chaque jeu relit les précédents | `/clear` entre deux jeux (CLAUDE.md règle 14, regles-apprises 71) | ≈ 15 M relus sur cette session (demandes 2-7 à ~2,5 M chacune au lieu de 3,7-5,3 M) |
-| 🟧 IMPORTANT | Lecture des sources de chaque jeu par `sed`/`grep` larges (connaissance DM : 32 Ko d'un coup) | Lire la connaissance par section ciblée (`grep -A` sur le thème de la carte) | ≈ 10 k tokens par jeu |
+| 🟧 IMPORTANT | Lecture des sources de chaque jeu par `sed`/`grep` larges (connaissance DM : 32 Ko d'un coup) | ~~Lire la connaissance par section ciblée~~ ANNULÉ le 2026-11-02 soir : contredit « tout lire » (règle 75). Lecture complète, un jeu par session | ≈ 10 k tokens par jeu |
 | 🟩 SUIVI | 0 agent, 0 SQL lourd : coût dominé par le contexte, pas par les outils | rien à couper côté agents | — |
 
 Comparaison avec `2026-11-02-multijeux-semaine.md` (semaine à 59,3 M éq.) : cette session fait 29,6 M relus sans agent ; le levier restant est le `/clear` entre jeux.
