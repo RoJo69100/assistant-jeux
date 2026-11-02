@@ -1,0 +1,35 @@
+# Carte derbymanager — academie (school : promouvoir / libérer, scouting des jeunes ; deux clubs)
+
+Sources lues : commit 0000000 (2026-11-02)
+
+Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-effectif-entrainement` § School, § Scouting ; connaissance § 6, § 8 ; learnings). Un bloc par club.
+
+## Lignes de la liste couvertes
+| Ligne | Texte court | Variable(s) |
+|---|---|---|
+| chose-a-DM.txt:11 | fonctionnement de la school, durée, choix, progression | var. 1-4 |
+| :12 | scouter le joueur ? | var. 6 |
+| :13 | intégrable dans le club après scout ? | var. 5 |
+
+## Rendu (figé)
+Un tableau par club : `| Jeune | Poste | Âge | Jours restants | Compétences clés | Rapport de potentiel | Notre dernier titulaire au poste | Coût (salaire = installations) | Décision (promouvoir / garder / libérer) |`.
+
+## Variables
+| # | Variable | Où la lire | Check | Source du check | Dernière valeur |
+|---|---|---|---|---|---|
+| 1 | Jeunes à l'école | `silver.dm_school` | 4 jeunes au plus ; salaire = coût des installations (hors plafond salarial, compte contre le revenu) | connaissance § 6 (S25) | Almgren, Minkkinen (30/10) |
+| 2 | Durée et redistribution | `silver.dm_school` (jours restants) | Tous les jeunes sont libérés et redistribués au début de chaque saison ; promouvoir pour garder | connaissance § 6 (2026-06-16/17) | |
+| 3 | Croissance | — | ~2-3 étoiles à l'école sans temps de jeu ; un promu sans minutes ne grandit pas | connaissance § 6 | |
+| 4 | Coût | `gold.dm_finances_bilan.youth_school` | Installations dans les 40 : 1 an d'école + 3 ans ≈ 6 M ; dans les 20 : ≈ 3 M ; en D4 seulement des « 3 M » | connaissance § 6 | |
+| 5 | Intégrable | `gold.dm_verdict_joueurs` (note au poste du dernier titulaire) | Promouvoir si le jeune approche le dernier titulaire ou remplace un départ ; promotion impossible à 25 joueurs ; statut raisonnable (pas Key) | connaissance § 6, § 13 | |
+| 6 | Scouting des jeunes | — | Les 5 jeunes découverts ont déjà un scout, il en faut 2 de plus ; niveau 2 = potentiel et expérience | dev 2026-10-18 ; connaissance § 8 | |
+| 7 | Team spirit | `effet_ts_pct` | École ≈ −1 % de team spirit par jeune (fringe) | dev 2026-08-19 | |
+| 8 | Avis des amis | connaissance § 6 | Dev : jamais vu de jeune « D1 worthy » issu de l'école ; « Facilities as a bet » | connaissance § 6 | |
+
+## Checks appris
+| L-nnn | Check | Ajouté le | Résultat depuis |
+|---|---|---|---|
+
+## Historique des changements de checks
+| Date | Check | Avant → après | Pourquoi |
+|---|---|---|---|

@@ -1,0 +1,88 @@
+# Derby Manager — tests de recette (ce que Claude doit faire et rendre, pour les DEUX clubs)
+# Créé le 2026-11-02 (plan de conception iso BasketVibe). Contrôle : python pipelines/recette.py derbymanager
+#   - sans option : structure présente, vues citées existantes dans sql/, chaque ligne de
+#     docs/couverture/derbymanager.md rattachée à au moins un test (champ couvre).
+#   - --reponse <fichier.md> : contrôle une réponse rendue (interdits, pastilles).
+# Saison ≈ 35 jours, argent par jour, pas de semaine type exportée. Horizon : aujourd'hui seulement.
+
+jeu: derbymanager
+
+nouveau_jeu:
+  fichiers:
+    - outputs/derbymanager/veille/connaissance.md
+    - .claude/skills/derbymanager-regles/SKILL.md
+    - .claude/skills/derbymanager-tactique/SKILL.md
+    - .claude/skills/derbymanager-effectif-entrainement/SKILL.md
+    - .claude/skills/derbymanager-club/SKILL.md
+    - docs/fiches/derbymanager/resume.md
+    - userscripts/derbymanager.user.js
+    - docs/decisions/cartes/derbymanager/composition.md
+    - docs/decisions/cartes/derbymanager/defaite.md
+    - docs/decisions/cartes/derbymanager/achat.md
+    - docs/decisions/cartes/derbymanager/vente.md
+    - docs/decisions/cartes/derbymanager/entrainement.md
+    - docs/decisions/cartes/derbymanager/academie.md
+    - docs/decisions/cartes/derbymanager/finances.md
+    - docs/couverture/derbymanager.md
+    - outputs/derbymanager/learnings.md
+  vues:
+    - gold.dm_exports_etat
+    - gold.dm_verdict_joueurs
+    - gold.dm_effectif
+    - gold.dm_finances_bilan
+    - gold.dm_matchs
+    - gold.dm_setpieces
+  couvre: [4, 171, 173, 174, 8]
+
+chaque_jour:
+  - id: Q1
+    quoi: "État des exports des deux clubs : en retard en premier (Marmandes surtout)"
+    critere: "gold.dm_exports_etat lu ; jamais redemander un export déjà en base"
+    vues: [gold.dm_exports_etat, gold.sante_collecte, gold.exports_nouvelles_cles]
+    couvre: [5, 172, 177]
+  - id: Q2
+    quoi: "Composition de chaque club dans l'ordre de l'écran Squad : poste, rôle, joueur, curseurs, options, banc et statuts, set pieces"
+    critere: "carte composition ; ligue/coupe = référence, amical = un test"
+    vues: [gold.dm_verdict_joueurs, gold.dm_setpieces, gold.dm_adversaires, gold.dm_saison_bilan]
+    couvre: [6, 25, 26, 27, 29, 30, 31, 32, 35, 57, 58, 59, 60, 61, 62, 160, 161, 170, "+1", "+2", "+3"]
+  - id: Q3
+    quoi: "Dernier match de chaque club : my_result et analyse si défaite"
+    critere: "gold.dm_matchs.my_result ; carte defaite contre gold.dm_saison_bilan et gold.dm_tirs_profil"
+    vues: [gold.dm_matchs, gold.dm_tirs_profil]
+    couvre: [34, 37, 166, 169]
+  - id: Q4
+    quoi: "Entraînement : un par groupe, intensité par joueur, TR"
+    critere: "carte entrainement ; gold.dm_entrainement_plan et gold.dm_entrainement"
+    vues: [gold.dm_entrainement_plan, gold.dm_entrainement]
+    couvre: [28, 46, 47, 48, 49, 50, 51, 52, 53, "+7"]
+  - id: Q5
+    quoi: "Finances par club : argent, flux par jour, marge salariale, installations ; une décision chiffrée"
+    critere: "carte finances ; capacite_invest moins dépenses décidées"
+    vues: [gold.dm_finances_bilan]
+    couvre: [16, 17, 18, 19, 20, 21, 66, 67, 168, "+6"]
+  - id: Q6
+    quoi: "Leviers : un achat nommé et finançable par club (scouté), une vente ou prolongation, un jeune à promouvoir"
+    critere: "cartes achat, vente, academie ; jamais la vue « marché par postes » défectueuse (resume.md) ; marché filtré trop bas = « exporte le marché filtré »"
+    vues: [gold.dm_marche_notes, gold.dm_prix_reference]
+    couvre: [11, 12, 13, 24, 33, 36, 40, 41, 42, 43, "+4", "+5", "+8"]
+  - id: Q7
+    quoi: "Rendu : un bloc par club, 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI avec le mot, action « fais X »"
+    critere: "contrôlé par --reponse et hook forme.py (DM clubs + set pieces)"
+    couvre: [162, 163, 164, 165, 167]
+
+scenarios:
+  - id: X1
+    quoi: "Série de défaites (saison 26 de Queen of the South : 26 D sur 32)"
+    critere: "carte defaite ; analyste + decideur ; changement fort chiffré"
+    couvre: [169]
+  - id: X2
+    quoi: "Nouvel export Discord"
+    critere: "veille sur le delta ; connaissance.md complétée"
+    couvre: [175, 176]
+  - id: X3
+    quoi: "Demande « meilleurs joueurs de la ligue »"
+    critere: "« il me manque … — cherché dans : … — on le réunit comme ça : scouter l'équipe (1 scout) »"
+    couvre: [7]
+
+interdits: [a faire demain, "demain, fais", apres le prochain match, plus tard, "a toi de voir", peut-etre, ne rien changer, non releve, pas tout lu]
+pastilles: ["🟥 URGENT", "🟧 IMPORTANT", "🟩 SUIVI"]
