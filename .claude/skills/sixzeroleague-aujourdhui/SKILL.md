@@ -7,6 +7,9 @@ description: Six Zero League — « que faire aujourd'hui / ce soir » : plan du
 
 Sources : `gold.sz_agenda` et `gold.sz_daily_alerts` (`sql/gold/015_sz_agenda.sql`), calendrier officiel `silver.sz_schedule` (endpoint `/seasons/current`), derniers briefs `outputs/sixzeroleague/briefs/`. Rythme : skill sixzeroleague-communaute § 1 (ligue 13:00 et 21:00, coupe ~17:00, cycle réglé chaque soir après 21:00, annonces closes au coup d'envoi suivant [Dev chat]).
 
+## Garde-fou obligatoire (2026-11-02, règle apprise 69 : plan faux lu d'un calendrier périmé)
+0. AVANT toute réponse : `select round, opponent, venue, kickoff_paris, status, captured_at from silver.sz_schedule where i_play and competition in ('league','cup') order by scheduled_at limit 6`, puis le registre `outputs/sixzeroleague/fait-*.md` du jour et de la veille. Si `captured_at` a plus de 12 h : première et seule ligne = « exporte le calendrier (League) », rien d'autre avant. Le match à préparer = le prochain `pending` dont `kickoff_paris` est encore à venir aujourd'hui ; jamais le lendemain. Les libellés de `gold.sz_agenda` et `sz_daily_alerts` ne se reprennent jamais tels quels. Victoire sur tapis vert (forfait) : ni export de match ni agent Match.
+
 ## Méthode (coût minimal : pas d'agent, deux requêtes)
 1. `select day_label, at_time, category, action from gold.sz_agenda` puis `select priority, category, alert from gold.sz_daily_alerts order by priority` via `mcp__supabase__execute_sql`.
 2. L'utilisateur agit **maintenant**, quand il demande : donne les actions du jour, sans « ce soir » ni liste horodatée (un match de 13:00 ou 17:00 se prépare la veille). « Après un match » seulement quand l'action en dépend vraiment.
