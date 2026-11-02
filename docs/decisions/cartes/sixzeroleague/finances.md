@@ -1,6 +1,6 @@
 # Carte sixzeroleague — finances (solde, sponsor, infrastructures)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 4bd592f (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `finances.md`, skills `sixzeroleague-club`, `-match` § multiplicateurs, `-communaute` § 4 ; connaissance § 3, § 6). Plus d'agent `finances` depuis le 2026-11-02 : je lis ces vues moi-même. Pas de personnel dans ce jeu. Hypothèses de projection en tête de `sql/gold/013_sz_gold.sql` (9 cycles par saison, ~1 match à domicile par cycle) : les rappeler.
 
