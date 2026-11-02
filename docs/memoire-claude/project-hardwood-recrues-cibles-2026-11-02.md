@@ -1,12 +1,14 @@
 ---
 name: project-hardwood-recrues-cibles-2026-11-02
-description: Hardwood recrutement — cibles décidées par l'utilisateur (Woodling, Tolliver, Bush), contact = 1 point, 2 points/jour, un joueur déjà engagé
+description: Hardwood recrutement — Sturgeon déjà chez nous ; cibles Simon, Woodling, Tolliver (Bush écarté) ; logique = remplacer les SR par poste ; contact 1 point, 2/jour
 metadata:
   type: project
 ---
 
-Cibles de recrutement Hardwood décidées par l'utilisateur le 2026-11-02 : **Donald Woodling (PF), Lyle Tolliver (SF), Latrelle Bush (C)**, offres déjà faites, concurrence faible. Un joueur est déjà engagé chez nous (nom non relevé). Un contact coûte 1 point, on en gagne 2 par jour.
+**Sturgeon (PG) est déjà dans l'équipe** (3 bourses libres sur 4). Cibles retenues le 2026-11-02 : **K.J. Simon (C, JC SO, SI 111), Donald Woodling (PF, HS SR, SI 99), Lyle Tolliver (SF, HS SR, SI 99)**. Bush écarté (SI 60, 1 étoile, C déjà rempli, plus d'offre). Contact = 1 point, 2 points par jour (points à 0 le 02/11 : 4 contacts sur Simon).
 
-**Why:** j'avais proposé 4 autres cibles (Newcomb, Wilcox, Foss, Staggs) sans connaître ce choix ; l'utilisateur s'est énervé. Voir [[feedback-hardwood-wallace-redshirt]] : même cause, décision non écrite.
+**Logique à reproduire :** remplacer par poste les seniors (SR) qui partent : Corey (PG) → Sturgeon, Barbieri (PF) → Woodling, Harkins (SF) → Tolliver ; puis meilleure note. Pas de « grand » obligatoire tant que le C est rempli (Howell, Chance, McCleary, Wallace RS). À confirmer : un SR quitte bien l'équipe en fin de saison (non trouvé dans hardwood-regles).
 
-**How to apply:** ne pas proposer d'autres cibles sans raison chiffrée ; ne pas redemander ce choix ; ne jamais afficher le niveau High des concurrents ([[feedback-hardwood-pas-de-high]]).
+**Why:** le 02/11 l'utilisateur s'est énervé (« Sturgeon est déjà dans notre équipe, c'est tout écrit ») : j'avais proposé 4 autres cibles sans lire le registre du 30/10 (`fait-2026-10-30.md`) ni [[feedback-hardwood-recrues-cibles-backups]].
+
+**How to apply:** avant tout rendu recrues, lire TOUS les registres `fait-` Hardwood, pas seulement celui du jour ; ne jamais afficher High ([[feedback-hardwood-pas-de-high]]). Voir aussi [[feedback-hardwood-wallace-redshirt]].
