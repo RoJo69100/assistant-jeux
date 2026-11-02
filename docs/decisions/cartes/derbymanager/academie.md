@@ -25,6 +25,9 @@ Un tableau par club : `| Jeune | Poste | Âge | Jours restants | Compétences cl
 | 6 | Scouting des jeunes | — | Les 5 jeunes découverts ont déjà un scout, il en faut 2 de plus ; niveau 2 = potentiel et expérience | dev 2026-10-18 ; connaissance § 8 | |
 | 7 | Team spirit | `effet_ts_pct` | École ≈ −1 % de team spirit par jeune (fringe) | dev 2026-08-19 | |
 | 9 | Almgren (547) | `silver.dm_school` ; brief 2026-10-30-plan § 4 | MR 19 ans, passing 16, positioning 19, 55 j au 30/10, « high potential to become a lower division player » ; Minkkinen 16 ans 88 j. Promotion impossible à 25 joueurs : nombre d'effectif à relever (`count(*) from gold.dm_effectif where club = 547`) | police 2026-11-02 | Absent de l'effectif au 01/11 |
+| 10 | Échelle des tiers de potentiel | `gold.dm_prix_reference` (médiane par tier) | Fringe 2,5 M < Useful 4,5 < Lower division 6,8 < Solid 11,0 < Established 15,3 : « solid player » vaut mieux que « lower division player » | police 2026-11-02 | Beth (307) high → solid ; Loría, Almgren high → lower division ; Minkkinen moderate → established |
+| 11 | Quand le jeune part | `silver.dm_school.days_left` | Données : Almgren 55 j (30/10) → 53 j (01/11), pas de remise à zéro ; contrat d'école ≈ 105 j (99-104 j pour les 16-17 ans). La redistribution « début de saison » (2026-06-17) est modifiée par les contrats d'1 an (2026-08-22/24) : la fin se lit sur `days_left`, pas sur la date de saison | connaissance § 6 ; police 2026-11-02 | |
+| 12 | Coût d'un jeune à l'école | `gold.dm_finances_bilan.youth_school` / nombre de jeunes | 547 : 22 k/j pour 2 = 11 k ; 307 : 21 k/j pour 3 = 7 k | police 2026-11-02 | |
 | 8 | Avis des amis | connaissance § 6 | Dev : jamais vu de jeune « D1 worthy » issu de l'école ; « Facilities as a bet » | connaissance § 6 | |
 
 ## Checks appris
