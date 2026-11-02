@@ -1,6 +1,6 @@
 # Carte derbymanager — entrainement (un entraînement par groupe GK / DEF / MID / FWD, intensité par joueur ; deux clubs)
 
-Sources lues : commit a0787e7 (2026-11-02)
+Sources lues : commit 7a304c3 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-effectif-entrainement` ; connaissance § 5 ; learnings). Consigne du 2026-11-01 : l'intensité est une « action très importante ». Saisie dans l'ordre de l'écran Training (`pipelines/forme.py`, ordre d'entraînement DM).
 
