@@ -46,6 +46,11 @@ Veille → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) 
 - Les plaintes « Unhappy/Furious with training facilities and mentors » et « Nearing his growth limit at this club » = installations trop basses pour l'effectif.
 - **Marmandes (307)** : exports reçus le 2026-10-31 (seul Graduates manque) ; au 2026-11-01 seul 547 a été ré-exporté.
 
+## Vues de saisie (2026-11-02, à lire avant tout agent : une requête = le tableau)
+- **Composition enregistrée** : `select ordre, poste, role, name, note_poste, condition, statut_entree, set_pieces, alternative, note_alternative from gold.dm_saisie_squad where team_id = <club> order by ordre` (ligne 0 = curseurs ; ordre de l'écran Squad ; S1-S5 avec statut ; `alternative` = meilleur joueur de la ligne hors des 16 si sa note est plus haute). Options Pressing/Counters/… : absentes de la base.
+- **Contrats** : `select name, pos, contract_days, salary, frais_prolongation, listable, echeance, effectif, ventes_possibles, marge_salaire_jour from gold.dm_contrats where team_id = <club>` (prolonger / lister / laisser partir ; `ventes_possibles` = effectif − 19 [H]).
+- **École et scouts** : `select source, region, name, pos, age, jours_ecole, scouts, moy_min, moy_max, potentiel, cible, valeur_cible, rang from gold.dm_ecole_scouts where team_id = <club> order by rang limit 15` (école + jeunes découverts `silver.dm_scout_youth` ; potentiel d'un découvert = fiche joueur exportée ; `valeur_cible` = médiane de prix du tier visé [H]).
+
 ## Règles ajoutées par l'utilisateur (2026-11-02)
 - **Achat = contrat, pas enchère** : le prix affiché est fixe, on négocie seulement le contrat (salaire/jour dans la liste de l'écran « Offer contract », Extra fee, durée, statut). Coût total = prix + 5 % + 5 %. Chaque achat donne le salaire/jour à saisir, l'Extra fee et le coût total.
 - **Prolongation = montant** : jamais « prolonge » seul ; donner le salaire/jour à proposer (demande de la page contrat, + ~10 k si l'humeur n'est pas verte), borné par `marge_salaire_jour`.
