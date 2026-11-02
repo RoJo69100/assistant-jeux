@@ -28,20 +28,23 @@ ROOT = Path(__file__).resolve().parent.parent
 
 MOTS = {
     "achat": ["transfer", "market", "auction", "bid", "buy", "free agent", "price", "transfert",
-              "marché", "enchère", "achat", "prix", "agent libre"],
+              "marché", "enchère", "achat", "prix", "agent libre",
+              "trade", "échange", "signing", "elc", "cap space"],
     "vente": ["sell", "sold", "sale", "release", "transfer", "market", "price", "vente", "vendre",
-              "libér", "transfert", "prix"],
+              "libér", "transfert", "prix", "trade", "échange", "buyout", "rachat"],
     "composition": ["tactic", "lineup", "line-up", "rotation", "minutes", "fatigue", "focus", "preset",
-                    "depth", "formation", "tactique", "composition", "consigne"],
+                    "depth", "formation", "tactique", "composition", "consigne",
+                    "lines", "goalie", "power play", "penalty kill", "gameplan", "gardien"],
     "defaite": ["engine", "fatigue", "rebound", "turnover", "foul", "lost", "loss", "focus", "moteur",
-                "défaite", "rebond", "perte", "faute"],
+                "défaite", "rebond", "perte", "faute", "save", "goalie", "shots", "gardien"],
     "entrainement": ["training", "train ", "progress", "potential", "skill gain", "intensity",
-                     "entraînement", "progression", "potentiel", "intensité"],
+                     "entraînement", "progression", "potentiel", "intensité", "maxed", "plafonn"],
     "academie": ["academy", "youth", "scout", "prospect", "draft", "junior", "u18", "u21", "u17",
                  "académie", "jeune", "recrue", "recruit", "recruiting", "commit", "scholarship",
                  "recrutement", "bourse"],
     "finances": ["finance", "money", "salary", "salaries", "sponsor", "arena", "stadium", "facility",
-                 "facilities", "staff", "ticket", "infrastructure", "salaire", "budget"],
+                 "facilities", "staff", "ticket", "infrastructure", "salaire", "budget",
+                 "salary cap", "buyout", "contract", "extension", "coach", "rachat", "contrat", "prolong"],
 }
 SEUIL = 1500
 HEADER = re.compile(r"^\[(\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2})[ T]\d{2}:\d{2}")

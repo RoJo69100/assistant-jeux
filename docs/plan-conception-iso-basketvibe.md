@@ -17,10 +17,10 @@ Règle : quand l'utilisateur dit « on fait de la conception », je mets à jour
 | resume.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | connaissance.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | learnings.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Cartes de décision | ✅ 7/7 | ❌ | ❌ | ❌ | ❌ | ❌ |
-| dossier.py testé avec cartes | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| Cartes de décision | ✅ 7/7 | ✅ 7/7 (2026-11-02) | ❌ | ❌ | ❌ | ❌ |
+| dossier.py testé avec cartes | ✅ | ✅ 2026-11-02 | ❌ | ❌ | ❌ | ❌ |
 | police testée sur une décision | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| recette / tests de format | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| recette / tests de format | ✅ | ✅ 2026-11-02 | ❌ | ❌ | ❌ | ❌ |
 
 ## Étape 0 : garanties par le code d'abord, puis outils (décidé le 2026-11-02)
 
@@ -89,3 +89,4 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : 0c fait : `finances-personnel` → `finances` ; `academie` absorbe le recrutement (fiche `docs/fiches/hardwood/academie.md`, type `academie` élargi, pas de type `recrutement`) ; `tactique` absorbe l'adversaire avec `gold.{sz,ts,hn,hw,dm}_adversaires` (`sql/gold/059_adversaires.sql`, appliquées). Prochaine : 0d.
 - 2026-11-02 : mesure optimisation (53 sessions, semaine 29/10-01/11 = 59,3 M éq., pic 30-31/10 = 36,5 M) ; étape 0d ajoutée : retrait de 5 agents-calcul et plafond de 20 agents par semaine.
 - 2026-11-02 : 0d fait : agents `effectif`, `finances`, `lecteur-exports`, `verificateur`, `optimisation` supprimés ; fiches `effectif.md`/`finances.md` lues par moi, config `par: moi` + vues, CLAUDE.md (plafond 20/semaine, règles 9 et 16, plus de vérificateur), mémoire. Nouvelle vue `gold.exports_nouvelles_cles` (`sql/gold/060`) écrite, **non appliquée** (MCP Supabase non authentifié dans la session cloud). Étape 0 terminée ; prochaine : Hockey Nation.
+- 2026-11-02 : Hockey Nation : 7 cartes (`docs/decisions/cartes/hockeynation/`, 13 leçons rattachées, 0 sans check), registre `docs/couverture/hockeynation.md` (bloc « Tous jeux » + règles HN H1-H5 + 8 découvertes), tests `docs/attentes/tests/hockeynation.yaml` (recette 25/25 fichiers, 26/26 vues, 31/31 lignes), mots-clés HN dans `dossier.py`. Reste : police testée sur une vraie décision HN (Supabase non authentifié dans la session cloud) ; H5 (lignes FRM/U21) = export d'un match FRM et U21.
