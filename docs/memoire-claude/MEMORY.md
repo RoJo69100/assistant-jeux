@@ -44,4 +44,5 @@
 - [Seulement ce qui est possible](feedback-seulement-ce-qui-est-possible.md) — règle d'or : actions faisables maintenant ; exception transferts (cible, enchère) (2026-11-01)
 - [Transferts toujours proposés](feedback-transferts-toujours-proposes.md) — jamais "je cherche" sans cibles chiffrées à vraie valeur ajoutée (2026-11-01)
 - [HN : jamais Trade Center](feedback-hn-jamais-trade-center.md) — ne demander ni Trade Center ni exports déjà faits ; lire resume.md avant la liste (2026-11-01)
+- [Calendrier frais avant tout plan](feedback-calendrier-frais-avant-plan.md) — contrôler silver.*_schedule (fraîcheur, status) avant l'agenda gold ; forfait = rien à exporter (2026-11-02)
 - [Derby Manager : priorités 01/11](feedback-derbymanager-priorites-intensite-setpieces.md) — intensité, forme, set pieces très importants ; test tactique, contrats, infrastructures, scouts
