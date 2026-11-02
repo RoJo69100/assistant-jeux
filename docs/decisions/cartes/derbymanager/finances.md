@@ -30,6 +30,8 @@ Un bloc par club : 1) `| Argent | Flux / jour | Salaires engagés / plafond | Ma
 | 6 | Installations | `facilities_level, upgrade_at, facilities_value, facilities_daily_change` ; `silver.dm_facilities` | +5 niveaux au-dessus de l'attente du conseil au plus ; −1 niveau à −5 M ; le conseil investit seul entre 20 et 50 M en caisse ; niveaux appropriés : D4 10-16, D3 16-22, D2 22-28, D1 28-34 | dev 2026-08-24 ; connaissance § 10 | niveau 16 (QoS) |
 | 7 | Plaintes d'installations | `silver.dm_player_tips` | « Unhappy with training facilities » = installations trop basses pour l'effectif | `resume.md` § Pièges | 9 plaintes |
 | 8 | Effectif d'abord | carte `achat` | « Always squad » avant installations quand les moyens manquent (avis) ; « tu peux tout faire avec ce que tu as » (dev) | connaissance § 9, § 10 | C-006 a choisi les installations |
+| 11 | Conseil investit seul entre 20 et 50 M en caisse | `capacite_invest` | Caisse 21,4 M (01/11) est dans la bande : le conseil peut dépenser à notre place ; payer soi-même choisit le bâtiment | connaissance § 9 (2025-09-08) ; police 2026-11-02 | 21 412 558 → 13 412 558 après 8 M |
+| 12 | Effet chiffré d'un niveau d'installations | — | inconnu (dev ne le donne pas) ; il manque : cherché dans connaissance §10, Discord (dossiers du 01/11), briefs ; à réunir : exporter facilities avant/après et comparer `facilities_daily_change` | police 2026-11-02 | |
 | 9 | Argent thésaurisé | — | Seuil « tier × 5 M » ; argent moyen visé 6-10 M | connaissance § 9 | |
 | 10 | Avis des amis | connaissance § 9, § 10 | < 25 M en D4 : viser D3 et la réputation | #france 2025-05-22 | |
 
