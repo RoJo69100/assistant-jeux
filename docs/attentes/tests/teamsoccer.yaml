@@ -1,0 +1,134 @@
+# Team Soccer — tests de recette (ce que Claude doit faire et rendre, pour les DEUX clubs)
+# Créé le 2026-11-02 (plan de conception iso BasketVibe). Contrôle : python pipelines/recette.py teamsoccer
+#   - sans option : structure présente, vues citées existantes dans sql/, chaque ligne de
+#     docs/couverture/teamsoccer.md rattachée à au moins un test (champ couvre).
+#   - --reponse <fichier.md> --jour <lun|mar|mer|jeu|ven|sam|dim> : contrôle une réponse rendue.
+# Rythme : docs/attentes/jeux/teamsoccer.yaml ; Cows mardi et samedi 13:50, Ben Ahmed lundi et jeudi 19:30,
+# entraînement et Forme le vendredi, finances le lundi 00:05. Horizon : aujourd'hui seulement.
+
+jeu: teamsoccer
+
+# ---------------------------------------------------------------------------
+# 1. Structure
+# ---------------------------------------------------------------------------
+nouveau_jeu:
+  fichiers:
+    - outputs/teamsoccer/veille/connaissance.md
+    - .claude/skills/teamsoccer-joueurs/SKILL.md
+    - .claude/skills/teamsoccer-match/SKILL.md
+    - .claude/skills/teamsoccer-entrainement/SKILL.md
+    - .claude/skills/teamsoccer-club/SKILL.md
+    - .claude/skills/teamsoccer-saison/SKILL.md
+    - .claude/skills/teamsoccer-communaute/SKILL.md
+    - .claude/skills/teamsoccer-aujourdhui/SKILL.md
+    - docs/attentes/jeux/teamsoccer.yaml
+    - docs/fiches/teamsoccer/resume.md
+    - docs/fiches/teamsoccer/tactique.md
+    - docs/fiches/teamsoccer/transferts.md
+    - docs/fiches/teamsoccer/academie.md
+    - docs/fiches/teamsoccer/entrainement.md
+    - docs/fiches/teamsoccer/finances.md
+    - docs/fiches/teamsoccer/effectif.md
+    - userscripts/teamsoccer.user.js
+    - docs/decisions/cartes/teamsoccer/composition.md
+    - docs/decisions/cartes/teamsoccer/defaite.md
+    - docs/decisions/cartes/teamsoccer/achat.md
+    - docs/decisions/cartes/teamsoccer/vente.md
+    - docs/decisions/cartes/teamsoccer/entrainement.md
+    - docs/decisions/cartes/teamsoccer/academie.md
+    - docs/decisions/cartes/teamsoccer/finances.md
+    - docs/couverture/teamsoccer.md
+    - docs/checklist-teamsoccer.md
+    - outputs/teamsoccer/learnings.md
+  vues:
+    - gold.ts_today
+    - gold.ts_agenda
+    - gold.ts_daily_alerts
+    - gold.ts_exports_state
+    - gold.ts_effectif_bilan
+    - gold.ts_capacite_invest
+    - gold.ts_saisie_composition
+    - silver.ts_forum_posts
+  couvre: [107, 108, 109, 111, 171, 173, 174, T1]
+
+# ---------------------------------------------------------------------------
+# 2. Chaque jour (invariants, zéro agent, vues gold, deux clubs)
+# ---------------------------------------------------------------------------
+chaque_jour:
+  - id: Q1
+    quoi: "État des exports des deux clubs : en retard en premier"
+    critere: "gold.ts_exports_state lu ; jamais redemander un export déjà en base (skill deja-fait)"
+    vues: [gold.ts_exports_state, gold.sante_collecte, gold.exports_nouvelles_cles]
+    couvre: [172, 177]
+  - id: Q2
+    quoi: "Composition du prochain match de chaque club : fiche complète, enregistrée 2 h avant"
+    critere: "carte composition : formation, style, 11 × 5 zones avec cible de chaque Passer, banc de 6, remplacements programmés, heure limite Paris"
+    vues: [gold.ts_upcoming, gold.ts_saisie_composition, gold.ts_adversaires, gold.ts_vd_comparatif]
+    couvre: [148, 149, 150, 151, 152, 153, 160, T2, "+1", "+5"]
+  - id: Q3
+    quoi: "Dernier match de chaque club : résultat (notre côté) et analyse si défaite"
+    critere: "gold.ts_match_report.result ; carte defaite ; L-nnn confronté"
+    vues: [gold.ts_match_report, gold.ts_player_match_ratings]
+    couvre: [134, 166, 169]
+  - id: Q4
+    quoi: "Effectif : blessés, suspendus, Forme < 60, joueur hors sous-rôle"
+    critere: "gold.ts_effectif_bilan lu par club ; remplaçant nommé"
+    vues: [gold.ts_effectif_bilan, gold.ts_squad_report]
+    couvre: [129, 131, 132, 135, 161, "+2", "+3"]
+  - id: Q5
+    quoi: "Académie : 3 révélations par club, jeunes complets comptés, verdict"
+    critere: "gold.ts_academy et gold.ts_academie_verdict ; règle apprise 17"
+    vues: [gold.ts_academy, gold.ts_academie_verdict, gold.ts_hpc_status]
+    couvre: [115, 116, 117, 130]
+  - id: Q6
+    quoi: "Leviers : une cible finançable nommée par club, ou la raison chiffrée ; un candidat à la vente"
+    critere: "cartes achat et vente ; capacite_invest avant toute cible ; marché de plus de 24 h = « exporte le marché »"
+    vues: [gold.ts_marche_cibles, gold.ts_capacite_invest]
+    couvre: [133, 138, 139, 140, T3, "+4", "+6"]
+  - id: Q7
+    quoi: "Rendu : un tableau par club, 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI avec le mot, action « fais X »"
+    critere: "contrôlé par --reponse et hook forme.py (TS deux clubs)"
+    couvre: [162, 163, 164, 165, 167]
+
+# ---------------------------------------------------------------------------
+# 3. Jours de la semaine (en plus des invariants)
+# ---------------------------------------------------------------------------
+jours:
+  lun:
+    evenements: ["finances 00:05 (heure du site)", "ligue Ben Ahmed 19:30", "composition des Cows pour mardi 13:50 à enregistrer aujourd'hui"]
+    a_faire:
+      - "Finances des deux clubs : solde, semaine nette, entretien (écart 0), capacité"
+      - "Stade : comparer les 4 types de places, une décision chiffrée"
+    couvre: [120, 121, 122, 123, 124, 125, 126, 168, "+7"]
+    doit_contenir: [solde, composition]
+  ven:
+    evenements: ["entraînement et Forme (mise à jour du vendredi)"]
+    a_faire:
+      - "Gains mesurés et Forme par joueur ; compétence et intensité de la semaine suivante"
+      - "Niveau d'entraîneur : utile ou non, chiffré contre un achat"
+    couvre: [143, 144, 145, 156, 157, "+8"]
+    doit_contenir: [entrainement, intensite]
+
+# ---------------------------------------------------------------------------
+# 4. Scénarios
+# ---------------------------------------------------------------------------
+scenarios:
+  - id: X1
+    quoi: "Défaite contre un humain fort (rejouer Cows 2-4 Potatos y Potitas)"
+    critere: "carte defaite : contre toute la saison, joueur par joueur, 3 à 5 corrections testables"
+    couvre: [169]
+  - id: X2
+    quoi: "Nouveauté à tester"
+    critere: "amical (un par semaine, bloqué en Coupe nationale), un réglage à la fois"
+    couvre: [170]
+  - id: X3
+    quoi: "Nouvelle annonce ou message du forum"
+    critere: "veille sur le delta ; connaissance.md complétée ; ce qui change une décision signalé"
+    couvre: [175, 176]
+  - id: X4
+    quoi: "Demande « meilleurs joueurs de la ligue » ou « badges de couleur »"
+    critere: "« il me manque … — cherché dans : … — on le réunit comme ça : … » (vue à créer / capture de l'écran)"
+    couvre: [110, 112]
+
+interdits: [a faire demain, "demain, fais", apres le prochain match, plus tard, "a toi de voir", peut-etre, ne rien changer, non releve, pas tout lu]
+pastilles: ["🟥 URGENT", "🟧 IMPORTANT", "🟩 SUIVI"]
