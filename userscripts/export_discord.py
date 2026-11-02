@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 
-GAMES_TO_RUN = ["DerbyManager"]
+GAMES_TO_RUN = ["BasketVibe"]
 
 # --- CONFIGURATION ---
 def _load_token():
@@ -34,7 +34,7 @@ MAX_FILE_SIZE_BYTES = 2.5 * 1024 * 1024
 GAMES_CONFIG = {
     "BasketVibe": {
         "base_filename": "discord_BasketVibe",
-        "force_reset": False,
+        "force_reset": True,
         "channels": [
             "1510571166857953352",
             "1539663351292887090",
@@ -68,7 +68,7 @@ GAMES_CONFIG = {
     },
     "DerbyManager": {
         "base_filename": "discord_DerbyManager",
-        "force_reset": True,
+        "force_reset": False,
         "channels": [
             "1105756654366117938",
             "1102900630080733184",
