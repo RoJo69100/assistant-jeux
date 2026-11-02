@@ -47,3 +47,4 @@
 - [Calendrier frais avant tout plan](feedback-calendrier-frais-avant-plan.md) — contrôler silver.*_schedule (fraîcheur, status) avant l'agenda gold ; forfait = rien à exporter (2026-11-02)
 - [Derby Manager : priorités 01/11](feedback-derbymanager-priorites-intensite-setpieces.md) — intensité, forme, set pieces très importants ; test tactique, contrats, infrastructures, scouts
 - [Hardwood : Wallace en RS](feedback-hardwood-wallace-redshirt.md) — jamais au depth chart, ne plus le redemander (2026-11-02)
+- [Hardwood : cibles recrues](project-hardwood-recrues-cibles-2026-11-02.md) — Woodling, Tolliver, Bush ; contact 1 point, 2/jour (2026-11-02)
