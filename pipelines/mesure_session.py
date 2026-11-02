@@ -13,7 +13,14 @@ from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 
-PROJET = Path.home() / ".claude" / "projects" / "C--dev-assistant-jeux"
+def _dossier_projet():
+    """Dossier des journaux du projet courant (nom = chemin du dépôt, non alphanumériques -> '-')."""
+    import re
+    racine = str(Path(__file__).resolve().parent.parent)
+    return Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", racine)
+
+
+PROJET = _dossier_projet()
 CONTEXTE_MAX = 200_000  # fenêtre de référence pour le % de contexte
 
 
