@@ -22,23 +22,40 @@ Règle : quand l'utilisateur dit « on fait de la conception », je mets à jour
 | police testée sur une décision | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | recette / tests de format | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
 
-## Étape 0 : nouveaux agents (à créer AVANT les cartes des jeux, décidé le 2026-11-02)
+## Étape 0 : garanties par le code d'abord, puis outils (décidé le 2026-11-02)
 
-| Agent | Rôle | Statut |
+Principe : les agents ne garantissent ni la lecture complète ni la mémoire des règles ; le code, si. Aucun nouvel agent, seulement le renommage `finances`.
+
+### 0a. Hooks (le plus important, à faire en premier)
+
+| Hook | Contrôle | Statut |
 |---|---|---|
-| `cartographe` | Relit `learnings.md` et les briefs après chaque cycle, transforme chaque L-nnn en check dans la carte du bon type de décision, signale les cartes manquantes. Rend la conception reproductible pour les 5 autres jeux. | ❌ à créer en premier |
-| `recrutement` | Recrues Hardwood (points, concurrents, 4 cibles + backups) et scouting/draft Hockey Nation ; soulage `academie`. | ❌ |
-| `adversaire` | Étude d'un adversaire (tactique lue, forces, faiblesses) en un seul endroit, au lieu de `match` + `tactique`. | ❌ |
-| `testeur` | Rejoue formats de rendu, hooks (`forme.py`, `police.py`) et vues gold de chaque jeu après une modification ; étend `recette.py` à tous les jeux. | ❌ |
-| `sante-collecte` | Repère ce qui n'arrive plus ou arrive vide (userscript cassé par un changement du site). | ❌ |
-| Renommage `finances-personnel` en `finances` | Le nom ne doit pas lier l'agent à BasketVibe ; mettre à jour CLAUDE.md et les fiches. | ❌ |
+| H1 dossier lu | Pas de rendu de décision importante sans que `dossier.py` ait été lancé dans la session | ❌ |
+| H2 trace police | Pas de décision importante sans `outputs/<jeu>/police-AAAA-MM-JJ.md` | ❌ |
+| H3 formats | Pas de rendu hors format pour tous les jeux (étendre `forme.py`, aujourd'hui partiel) | ❌ |
+| H4 faux positifs | Les mots d'aveu ne bloquent plus une discussion de conception (corriger `police.py`, cf. 2026-11-02) | ❌ |
+| H5 rappel fin de session | Rappel `retro` / `optimisation` avant `/clear` ou après plus de cinq échanges | ❌ |
 
-Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅). **Reste à coder** (❌) : contrôle `pipelines/police.py` qui refuse un rendu de décision importante sans `outputs/<jeu>/police-AAAA-MM-JJ.md` ; rappel automatique `retro`/`optimisation` avant `/clear`.
+### 0b. Scripts et vues (remplacent les agents prévus)
 
-Une fois créés, ils s'ajoutent à la liste des agents de CLAUDE.md (même commit) et au tableau ci-dessous si leur absence bloque un jeu.
+| Outil | Remplace | Rôle | Statut |
+|---|---|---|---|
+| `pipelines/cartographe.py` | agent `cartographe` | Liste les L-nnn sans check dans une carte et les cartes manquantes par jeu ; je rédige les checks en session | ❌ |
+| `pipelines/recette.py` étendu | agent `testeur` | Rejoue formats, hooks et vues gold de tous les jeux avant commit | ❌ |
+| Vues gold `*_sante_collecte` | agent `sante-collecte` | Ce qui n'arrive plus ou arrive vide, une requête | ❌ |
+
+### 0c. Extensions d'agents existants
+
+| Agent | Extension | Statut |
+|---|---|---|
+| `academie` | Absorbe le recrutement (Hardwood : points, concurrents, 4 cibles + backups ; Hockey Nation : draft et scouting) + carte « recrutement » | ❌ |
+| `tactique` | Absorbe l'étude de l'adversaire, alimentée par une vue gold par jeu | ❌ |
+| `finances-personnel` | Renommer en `finances`, mettre à jour CLAUDE.md et les fiches | ❌ |
+
+Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 
 ## Ordre
-0. Nouveaux agents (tableau ci-dessus), `cartographe` d'abord
+0. Étape 0 : 0a hooks, puis 0b scripts et vues, puis 0c extensions d'agents
 1. Hockey Nation (jeu modèle, learnings riche) : cartes échange, draft, lignes, coachs, finances, défaite
 2. Team Soccer
 3. Six Zero League
@@ -49,3 +66,4 @@ Une fois créés, ils s'ajoutent à la liste des agents de CLAUDE.md (même comm
 - 2026-11-02 : plan créé, aucun jeu commencé.
 - 2026-11-02 : étape 0 ajoutée (5 agents + renommage `finances`), à faire avant les cartes de Hockey Nation.
 - 2026-11-02 : règles d'usage des agents ajoutées à CLAUDE.md et règle 31 des règles apprises.
+- 2026-11-02 : étape 0 réécrite : hooks d'abord, scripts à la place des agents `cartographe`/`testeur`/`sante-collecte`, `recrutement` et `adversaire` absorbés par `academie` et `tactique`. Plus aucun nouvel agent.
