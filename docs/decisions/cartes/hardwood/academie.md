@@ -1,6 +1,6 @@
 # Carte hardwood — academie (recrutement : 4 cibles + 2 remplaçants, points, offres de bourse)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 90f564f (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `academie.md`, `resume.md`, skill `hardwood-recrutement` ; veille `v-recrutement.md` ; learnings). Format figé [U] contrôlé par `pipelines/forme.py` (hw-recrues) : 4 lignes exactement ; jamais de niveau High ; un grand ≥ 2,02 m ; recrues déjà engagées ou parties retirées.
 
