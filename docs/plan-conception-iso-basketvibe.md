@@ -33,6 +33,8 @@ Règle : quand l'utilisateur dit « on fait de la conception », je mets à jour
 | `sante-collecte` | Repère ce qui n'arrive plus ou arrive vide (userscript cassé par un changement du site). | ❌ |
 | Renommage `finances-personnel` en `finances` | Le nom ne doit pas lier l'agent à BasketVibe ; mettre à jour CLAUDE.md et les fiches. | ❌ |
 
+Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅). **Reste à coder** (❌) : contrôle `pipelines/police.py` qui refuse un rendu de décision importante sans `outputs/<jeu>/police-AAAA-MM-JJ.md` ; rappel automatique `retro`/`optimisation` avant `/clear`.
+
 Une fois créés, ils s'ajoutent à la liste des agents de CLAUDE.md (même commit) et au tableau ci-dessous si leur absence bloque un jeu.
 
 ## Ordre
@@ -46,3 +48,4 @@ Une fois créés, ils s'ajoutent à la liste des agents de CLAUDE.md (même comm
 ## Journal
 - 2026-11-02 : plan créé, aucun jeu commencé.
 - 2026-11-02 : étape 0 ajoutée (5 agents + renommage `finances`), à faire avant les cartes de Hockey Nation.
+- 2026-11-02 : règles d'usage des agents ajoutées à CLAUDE.md et règle 31 des règles apprises.
