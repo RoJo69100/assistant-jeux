@@ -54,7 +54,9 @@
       "mcp__Supabase__list_tables",
       "mcp__Supabase__list_projects",
       "mcp__supabase__execute_sql",
-      "mcp__supabase__list_tables"
+      "mcp__supabase__list_tables",
+      "mcp__Supabase",
+      "mcp__supabase"
     ]
   }
 }
