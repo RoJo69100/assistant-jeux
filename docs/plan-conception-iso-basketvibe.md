@@ -16,11 +16,11 @@ Règle : quand l'utilisateur dit « on fait de la conception », je mets à jour
 |---|---|---|---|---|---|---|
 | resume.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | connaissance.md | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| learnings.md | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Cartes de décision | ✅ 7/7 | ✅ 7/7 (2026-11-02) | ✅ 7/7 (2026-11-02) | ✅ 7/7 (2026-11-02) | ❌ | ❌ |
-| dossier.py testé avec cartes | ✅ | ✅ 2026-11-02 | ✅ 2026-11-02 | ✅ 2026-11-02 | ❌ | ❌ |
+| learnings.md | ✅ | ✅ | ✅ | ✅ | ✅ 2026-11-02 | ❌ |
+| Cartes de décision | ✅ 7/7 | ✅ 7/7 (2026-11-02) | ✅ 7/7 (2026-11-02) | ✅ 7/7 (2026-11-02) | ✅ 7/7 (2026-11-02) | ❌ |
+| dossier.py testé avec cartes | ✅ | ✅ 2026-11-02 | ✅ 2026-11-02 | ✅ 2026-11-02 | ✅ 2026-11-02 | ❌ |
 | police testée sur une décision | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| recette / tests de format | ✅ | ✅ 2026-11-02 | ✅ 2026-11-02 | ✅ 2026-11-02 | ❌ | ❌ |
+| recette / tests de format | ✅ | ✅ 2026-11-02 | ✅ 2026-11-02 | ✅ 2026-11-02 | ✅ 2026-11-02 | ❌ |
 
 ## Étape 0 : garanties par le code d'abord, puis outils (décidé le 2026-11-02)
 
@@ -92,3 +92,4 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : Hockey Nation : 7 cartes (`docs/decisions/cartes/hockeynation/`, 13 leçons rattachées, 0 sans check), registre `docs/couverture/hockeynation.md` (bloc « Tous jeux » + règles HN H1-H5 + 8 découvertes), tests `docs/attentes/tests/hockeynation.yaml` (recette 25/25 fichiers, 26/26 vues, 31/31 lignes), mots-clés HN dans `dossier.py`. Reste : police testée sur une vraie décision HN (Supabase non authentifié dans la session cloud) ; H5 (lignes FRM/U21) = export d'un match FRM et U21.
 - 2026-11-02 : Team Soccer : 7 cartes (deux clubs, 29 leçons rattachées, 0 sans check), registre `docs/couverture/teamsoccer.md` (lignes 107-157 + Tous jeux + T1-T3 + 8 découvertes ; ❌ 110 meilleurs joueurs de la ligue = vue `gold.ts_league_top_players` à créer, ❌ 112 badges = capture d'écran), tests `docs/attentes/tests/teamsoccer.yaml` (27/27, 20/20, 66/66). `dossier.py` ne lit pas le forum en base (`silver.ts_forum_posts`) : la connaissance (forum lu en entier le 2026-10-27) en tient lieu. Reste : police sur une vraie décision (Supabase).
 - 2026-11-02 : Six Zero League : 7 cartes (37 leçons rattachées, 0 sans check), registre `docs/couverture/sixzeroleague.md` (lignes 59-100 + Tous jeux + S1-S3 + 8 découvertes ; ❌ 62 stats de ligue = pas exposées par l'API, ❌ 86 base des prix = relever les prix finaux à chaque règlement), tests `docs/attentes/tests/sixzeroleague.yaml` (26/26, 21/21, 59/59). Écart : `resume.md` dit R-1 « maintenant + demain », CLAUDE.md (2026-10-27) dit aujourd'hui seulement : CLAUDE.md l'emporte (interdit « demain, fais » dans les tests). Reste : police sur une vraie décision (Supabase).
+- 2026-11-02 : Derby Manager : `outputs/derbymanager/learnings.md` créé (bilan S26 de Queen of the South, L-001 à L-004, conseils C-001 à C-008 des 30-31/10 à contrôler ; aucun match analysé un par un), 7 cartes (deux clubs), registre `docs/couverture/derbymanager.md` (`chose-a-DM.txt` 4-67 + Tous jeux + 8 découvertes ; ❌ 7 meilleurs joueurs de la ligue), tests `docs/attentes/tests/derbymanager.yaml` (16/16, 15/15, 74/74). Manque : config `docs/attentes/jeux/derbymanager.yaml` (dépendances) et vue « aujourd'hui » / calendrier. Reste : police sur une vraie décision (Supabase).
