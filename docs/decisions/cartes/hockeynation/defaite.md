@@ -1,6 +1,6 @@
 # Carte hockeynation — defaite (analyse d'une défaite, PRO d'abord, FRM/U21/U17 si exportées)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit bf6ecaf (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `match.md`, skills `hockeynation-match-calendrier`, `-adversaires`, `-coachs-entrainement` § match, learnings L-001 à L-016). Règles : CLAUDE.md règle 4 (défaite = analyse détaillée, joueur par joueur, contre toute la saison), règle 7 (résultat = `my_result`), `analyste` lancé d'office sur une défaite en base.
 

@@ -1,6 +1,6 @@
 # Carte hockeynation — achat (échange entrant, agent libre, signature ELC)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit bf6ecaf (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `transferts.md`, `resume.md`, skills `hockeynation-compositions-trades`, `-contrats-finances`, `-joueurs`, `-potentiel-joueurs`, `-match-calendrier` § Échanges ; connaissance § Échanges, § Contrats). Règles : dire « échanger », jamais « acheter » ni « vendre » ; transferts toujours proposés (CLAUDE.md § Règle d'or, exception) ; aucun nouveau joueur dans une lineup avant son arrivée (tableau à part) ; équipe résultante à 20 (CLAUDE.md règle 8).
 
