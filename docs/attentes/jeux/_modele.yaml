@@ -33,7 +33,7 @@ sources:               # lues à 100 % par la veille (A-9)
 exports_texte:         # chat, forum, Discord : comment ils arrivent
   - { type: , canal: , frequence: , destination: , declenche: [veille] }
 
-rythme:                # ce qui revient ; sert à « maintenant / demain » (R-1)
+rythme:                # ce qui revient ; sert à « aujourd'hui seulement » (R-1)
   - { quand: , quoi: , verrouillage: , fuseau_heure: }   # fuseau_heure : Paris, hôte, ligue ou UTC
 
 competitions:          # une entrée par compétition
