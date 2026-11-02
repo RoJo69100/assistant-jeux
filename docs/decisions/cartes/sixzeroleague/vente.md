@@ -1,6 +1,6 @@
 # Carte sixzeroleague — vente (mise en vente, libération)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 4bd592f (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `transferts.md`, `effectif.md` § Surplus par rôle, skill `sixzeroleague-club` § Marché ; connaissance § 6). Règles : jamais de vente lancée sans accord ; une vente identifiée reste ouverte jusqu'à exécution ; annulation impossible.
 

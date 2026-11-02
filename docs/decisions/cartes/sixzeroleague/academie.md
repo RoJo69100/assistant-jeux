@@ -1,6 +1,6 @@
 # Carte sixzeroleague — academie (choix U18 toutes les 8 journées, niveau de la Youth Academy)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 4bd592f (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `academie.md`, skills `sixzeroleague-entrainement` § U18, `-club` § Infrastructures, `-joueurs` ; connaissance § 3, § 4). Règles : pas de test payant, pas de jauge, pas d'investissement hebdomadaire (ne pas transposer BasketVibe) ; retard mesuré contre les autres clubs (CLAUDE.md règle 6).
 

@@ -1,6 +1,6 @@
 # Carte sixzeroleague — defaite (analyse d'une défaite ou d'un nul)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit 4bd592f (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `match.md`, skills `sixzeroleague-match`, `-joueurs`, `-communaute` § 3 et 5 ; connaissance § 2, § 7 ; learnings). Règles : CLAUDE.md règle 4, règle 7 (résultat = `silver.sz_matches.result`, notre point de vue) ; enseignement « confirmé » seulement à 3 matchs de ligue dans le même sens (alpha très aléatoire) ; `analyste` d'office.
 
