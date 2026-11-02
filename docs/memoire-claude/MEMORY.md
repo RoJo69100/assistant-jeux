@@ -48,3 +48,4 @@
 - [Derby Manager : priorités 01/11](feedback-derbymanager-priorites-intensite-setpieces.md) — intensité, forme, set pieces très importants ; test tactique, contrats, infrastructures, scouts
 - [Hardwood : Wallace en RS](feedback-hardwood-wallace-redshirt.md) — jamais au depth chart, ne plus le redemander (2026-11-02)
 - [Hardwood : cibles recrues](project-hardwood-recrues-cibles-2026-11-02.md) — Woodling, Tolliver, Bush ; contact 1 point, 2/jour (2026-11-02)
+- [Plan conception iso BasketVibe](project-plan-conception-iso-basketvibe.md) — tableau jeux × cartes/dossier/police/tests ; le mettre à jour à chaque "on fait de la conception" (2026-11-02)
