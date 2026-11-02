@@ -14,6 +14,14 @@ feedback-*) :
   ts-compo      empl. × Ultra déf./Défensive/Médiane/Offensive/Finition + « Remplacements programmés »,
                 cible obligatoire après « Passer », les deux clubs
   hn-effectif   Poste | Joueur | Note | Endurance | FOF ; hn-plan : Paramètre | Cible | Dans le jeu
+Contrôles par jeu (H3, 2026-11-02 ; jeu reconnu dans le texte, sinon dans les commandes de la session) :
+  hockeynation  rendu d'équipe = les 4 équipes PRO, FRM, U21, U17 ; pas de colonne « trou / à améliorer » ;
+                jamais « pour voir la liste »
+  teamsoccer    tout plan et toute compo = les deux clubs ; emplacement exact (DC/DL/DR, MC/ML/MR), jamais
+                DEF/MIL/ATT ; aucune cellule vide dans une compo
+  sixzeroleague saisie tactique dans l'ordre de l'écran : formation(s), direction, agressivité
+  derbymanager  un bloc par club, Queen of the South puis Marmandes ; compo = remplaçants + set pieces
+  entraînement  ordre de docs/ordre-export/<jeu>-entrainement.json du jeu reconnu (plus seulement BasketVibe)
 Dans tous les cas : aucun interdit des tests docs/attentes/tests/*.yaml. Le texte entre « », "" ou `` est ignoré.
 Une seule relance (stop_hook_active).
 """
@@ -32,6 +40,17 @@ POSTES = ["pg", "sg", "sf", "pf", "c"]
 ZONES = ["rim", "middle", "perimeter"]
 CITATION = re.compile(r"«[^»]*»|\"[^\"]*\"|“[^”]*”|`[^`]*`")
 VIDE = re.compile(r"rien a faire|rien de special|aucune action")
+JEUX = {
+    "basketvibe": ["basketvibe"],
+    "hockeynation": ["hockey nation", "hockeynation"],
+    "teamsoccer": ["team soccer", "teamsoccer", "chomelix", "ben ahmed"],
+    "sixzeroleague": ["six zero", "sixzero"],
+    "derbymanager": ["derby manager", "derbymanager", "queen of the south", "marmandes"],
+    "hardwood": ["hardwood"],
+}
+TS_CLUBS = ("chomelix cows", "ben ahmed donkey")
+DM_CLUBS = ("queen of the south", "marmandes")
+HN_EQUIPES = ("pro", "frm", "u21", "u17")
 
 
 def norm(s: str) -> str:
@@ -64,6 +83,45 @@ def last_text(path: str) -> str:
         if text.strip():
             return text
     return ""
+
+
+def entrees(path: str) -> list[dict]:
+    try:
+        lignes = Path(path).read_text(encoding="utf-8", errors="replace").splitlines()
+    except (OSError, TypeError):
+        return []
+    res = []
+    for l in lignes:
+        try:
+            res.append(json.loads(l))
+        except ValueError:
+            continue
+    return res
+
+
+def commandes(ents: list[dict]) -> str:
+    """Toutes les entrées d'outils de la session, à plat (pour retrouver le jeu ou dossier.py)."""
+    morceaux = []
+    for e in ents:
+        if e.get("type") != "assistant":
+            continue
+        for p in e.get("message", {}).get("content", []):
+            if isinstance(p, dict) and p.get("type") == "tool_use":
+                morceaux.append(json.dumps(p.get("input", {}), ensure_ascii=False))
+    return "\n".join(morceaux)
+
+
+def jeu_de(text: str, cmds: str = "") -> str | None:
+    """Le jeu nommé dans la réponse (un seul) ; sinon le dernier jeu touché par les outils de la session."""
+    n = norm(text)
+    vus = [j for j, noms in JEUX.items() if any(x in n for x in noms)]
+    if len(vus) == 1:
+        return vus[0]
+    for t in reversed(re.findall(r"outputs[/\\](\w+)[/\\]|game\s*=\s*'(\w+)'|dossier\.py\s+(\w+)", cmds)):
+        g = next(x for x in t if x)
+        if g in JEUX:
+            return g
+    return None
 
 
 def tableaux(text: str) -> list[tuple[list[str], list[list[str]]]]:
@@ -108,10 +166,10 @@ def plan(cols, lignes):
     return f
 
 
-def entrainement(cols, lignes, jeu="basketvibe"):
+def entrainement(cols, lignes, jeu=None):
     f, ref = [], []
     p = RACINE / f"docs/ordre-export/{jeu}-entrainement.json"
-    if p.exists():
+    if jeu and p.exists():
         ref = json.loads(p.read_text(encoding="utf-8"))["noms"]
     complet = idx(cols, "principale") >= 0
     if not complet and (idx(cols, "actuel") < 0 or idx(cols, "a mettre") < 0):
@@ -195,10 +253,16 @@ def hn(cols, lignes):
 
 def ts_compo(cols, lignes):
     f = [f"Team Soccer : colonne manquante {k}" for k in ["ultra", "defensive", "mediane", "offensive", "finition"] if idx(cols, k) < 0]
-    return f
+    ie = idx(cols, "empl")
+    for c in lignes:
+        if ie >= 0 and ie < len(c) and norm(c[ie]) in ("def", "mil", "defenseur", "milieu"):
+            f.append(f"Team Soccer : emplacement « {c[ie]} » — mets le poste exact (DC/DL/DR, MC/ML/MR)")
+        if any(norm(x) in ("", "-", "—", "–") for x in c[:len(cols)]):
+            f.append(f"Team Soccer : cellule vide pour {c[0][:20]} — remplis les 5 zones")
+    return list(dict.fromkeys(f))
 
 
-def fautes_tableaux(text: str) -> list[str]:
+def fautes_tableaux(text: str, jeu: str | None = None) -> list[str]:
     f = []
     for cols, lignes in tableaux(text):
         if not cols or not lignes:
@@ -209,7 +273,7 @@ def fautes_tableaux(text: str) -> list[str]:
         elif cols[0] == "priorite" and "cible" in j and "remplacant" in j:
             f += hw_recrues(cols, lignes)
         elif cols[0] == "joueur" and (idx(cols, "principale") >= 0 or (idx(cols, "actuel") >= 0 and idx(cols, "a mettre") >= 0)):
-            f += entrainement(cols, lignes)
+            f += entrainement(cols, lignes, jeu or "basketvibe")
         elif cols[0] == "reglage" and idx(cols, "actuel") >= 0 and idx(cols, "a mettre") >= 0:
             f += hw_tactique(cols, lignes)
         elif "adversaire" in cols[0]:
@@ -218,7 +282,8 @@ def fautes_tableaux(text: str) -> list[str]:
             f += tactique(cols, lignes)
         elif idx(cols, "ultra") >= 0 or ("empl" in j and idx(cols, "finition") >= 0):
             f += ts_compo(cols, lignes)
-        elif idx(cols, "parametre") >= 0 and idx(cols, "cible") >= 0 or ("joueur" in j and (cols[0] == "poste" or "fof" in j)):
+        elif jeu in (None, "hockeynation") and (idx(cols, "parametre") >= 0 and idx(cols, "cible") >= 0
+                                                or ("joueur" in j and (cols[0] == "poste" or "fof" in j))):
             f += hn(cols, lignes)
     return f
 
@@ -237,9 +302,51 @@ def fautes_texte(text: str, n: str) -> list[str]:
     return f
 
 
-def fautes_de(text: str) -> list[str]:
+def a_plan(text: str) -> bool:
+    return any(c[:2] == ["priorite", "categorie"] for c, _ in tableaux(text))
+
+
+def fautes_jeu(text: str, n: str, jeu: str | None) -> list[str]:
+    f, tabs = [], tableaux(text)
+    entetes = [" ".join(c) for c, _ in tabs]
+    if jeu == "hockeynation":
+        equipe = any(("joueur" in e and ("poste" in e or "fof" in e)) or re.search(r"\b(lw|rw|ld|rd)\b", e) for e in entetes)
+        if equipe:
+            manq = [e.upper() for e in HN_EQUIPES if not re.search(rf"\b{e}\b", n)]
+            if manq:
+                f.append("Hockey Nation : rendu d'équipe sans " + ", ".join(manq) + " (toujours les 4 équipes)")
+        if any(re.search(r"\btrou\b|a ameliorer", e) for e in entetes):
+            f.append("Hockey Nation : colonne « trou / à améliorer » interdite (VIDE, CONTRE-EMPLOI, À TRADER dans la case)")
+        if "pour voir la liste" in n:
+            f.append("Hockey Nation : « pour voir la liste » interdit — affiche le contenu de la vue")
+    if jeu == "teamsoccer" and a_plan(text):
+        f += [f"Team Soccer : club absent du plan ({c})" for c in TS_CLUBS if c not in n]
+    if jeu == "sixzeroleague":
+        for cols, lignes in tabs:
+            ordre = [k for c in lignes for k in ("formation", "direction", "agressivite") if norm(c[0]).startswith(k)]
+            vus = list(dict.fromkeys(ordre))
+            if len(vus) >= 2 and vus != [k for k in ("formation", "direction", "agressivite") if k in vus]:
+                f.append("Six Zero League : saisie hors ordre de l'écran (formations, direction, agressivité, puis rôles)")
+    if jeu == "derbymanager":
+        compo = any("role" in e and "joueur" in e for e in entetes)
+        if a_plan(text) or compo:
+            pos = [n.find(c) for c in DM_CLUBS]
+            if -1 in pos:
+                f += [f"Derby Manager : club absent ({c})" for c, p in zip(DM_CLUBS, pos) if p < 0]
+            elif pos[0] > pos[1]:
+                f.append("Derby Manager : Queen of the South d'abord, puis Marmandes")
+        if compo:
+            if "set piece" not in n:
+                f.append("Derby Manager : composition sans set pieces (PEN, FK, COR, DEF, ATT, capitaine)")
+            if "remplacant" not in n:
+                f.append("Derby Manager : composition sans remplaçants S1-S5 et statuts")
+    return f
+
+
+def fautes_de(text: str, jeu: str | None = None) -> list[str]:
     n = norm(CITATION.sub(" ", text))
-    f = fautes_tableaux(text) + fautes_texte(text, n)
+    jeu = jeu or jeu_de(text)
+    f = fautes_tableaux(text, jeu) + fautes_texte(text, n) + fautes_jeu(text, n, jeu)
     f += [f"interdit : {i}" for i in interdits() if norm(i) in n]
     return list(dict.fromkeys(f))
 
@@ -251,7 +358,7 @@ def main() -> int:
     if data.get("stop_hook_active"):
         return 0
     text = data.get("last_assistant_message") or last_text(data.get("transcript_path", ""))
-    fautes = fautes_de(text)
+    fautes = fautes_de(text, jeu_de(text, commandes(entrees(data.get("transcript_path", "")))))
     if not fautes:
         return 0
     print(json.dumps({"decision": "block", "reason": (

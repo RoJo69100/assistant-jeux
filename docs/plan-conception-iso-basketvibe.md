@@ -32,7 +32,7 @@ Principe : les agents ne garantissent ni la lecture complète ni la mémoire des
 |---|---|---|
 | H1 dossier lu | Pas de rendu de décision importante sans que `dossier.py` ait été lancé dans la session | ✅ 2026-11-02 |
 | H2 trace police | Pas de décision importante sans `outputs/<jeu>/police-AAAA-MM-JJ.md` | ✅ 2026-11-02 |
-| H3 formats | Pas de rendu hors format pour tous les jeux (étendre `forme.py`, aujourd'hui partiel) | ❌ |
+| H3 formats | Pas de rendu hors format pour tous les jeux (étendre `forme.py`, aujourd'hui partiel) | ✅ 2026-11-02 |
 | H4 faux positifs | Les mots d'aveu ne bloquent plus une discussion de conception (corriger `police.py`, cf. 2026-11-02) | ✅ 2026-11-02 |
 | H5 rappel fin de session | Rappel `retro` / `optimisation` avant `/clear` ou après plus de cinq échanges | ✅ 2026-11-02 |
 
@@ -84,4 +84,5 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : règles d'usage des agents ajoutées à CLAUDE.md et règle 31 des règles apprises.
 - 2026-11-02 : étape 0 réécrite : hooks d'abord, scripts à la place des agents `cartographe`/`testeur`/`sante-collecte`, `recrutement` et `adversaire` absorbés par `academie` et `tactique`. Plus aucun nouvel agent.
 - 2026-11-02 : 0a : H1, H2, H4, H5 faits dans `pipelines/police.py` (tests `pipelines/test_police.py`, 13 cas) ; agent `police` écrit la trace `police-<date>.md`. Reste H3.
+- 2026-11-02 : 0a terminé : H3 dans `pipelines/forme.py` (HN 4 équipes, TS deux clubs et emplacements, SZ ordre de saisie, DM clubs + set pieces, ordre d'entraînement par jeu) ; `test_forme.py` 32 cas. Prochaine : 0b.
 - 2026-11-02 : mesure optimisation (53 sessions, semaine 29/10-01/11 = 59,3 M éq., pic 30-31/10 = 36,5 M) ; étape 0d ajoutée : retrait de 5 agents-calcul et plafond de 20 agents par semaine.

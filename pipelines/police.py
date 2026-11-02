@@ -40,14 +40,7 @@ CODE = re.compile(r"```.*?```", re.S)
 CITATION = re.compile(r"«[^»]*»|\"[^\"]*\"|“[^”]*”|`[^`]*`")
 CONCEPTION = re.compile(r"\bconc(ep|oi|ev)|\bhooks?\b|\brefonte\b|plan de conception|\betape 0")
 
-JEUX = {
-    "basketvibe": ["basketvibe"],
-    "hockeynation": ["hockey nation", "hockeynation"],
-    "teamsoccer": ["team soccer", "teamsoccer", "chomelix", "ben ahmed"],
-    "sixzeroleague": ["six zero", "sixzero"],
-    "derbymanager": ["derby manager", "derbymanager"],
-    "hardwood": ["hardwood"],
-}
+JEUX = forme.JEUX
 CAT_TYPE = {"composition": "composition", "tactique": "composition", "entrainement": "entrainement",
             "academie/draft": "academie", "finances": "finances"}
 VENTE = re.compile(r"\bvend|\bvente\b|\bliber")
@@ -63,18 +56,8 @@ def nettoie(text: str) -> str:
     return norm(CITATION.sub(" ", CODE.sub(" ", text)))
 
 
-def entrees(path: str) -> list[dict]:
-    try:
-        lignes = Path(path).read_text(encoding="utf-8", errors="replace").splitlines()
-    except (OSError, TypeError):
-        return []
-    res = []
-    for l in lignes:
-        try:
-            res.append(json.loads(l))
-        except ValueError:
-            continue
-    return res
+
+entrees, commandes, jeu_de = forme.entrees, forme.commandes, forme.jeu_de
 
 
 def last_text(ents: list[dict]) -> str:
@@ -104,17 +87,6 @@ def demandes(ents: list[dict]) -> list[str]:
     return res
 
 
-def commandes(ents: list[dict]) -> str:
-    """Toutes les entrées d'outils de la session, à plat (pour retrouver dossier.py et le jeu)."""
-    morceaux = []
-    for e in ents:
-        if e.get("type") != "assistant":
-            continue
-        for p in e.get("message", {}).get("content", []):
-            if isinstance(p, dict) and p.get("type") == "tool_use":
-                morceaux.append(json.dumps(p.get("input", {}), ensure_ascii=False))
-    return "\n".join(morceaux)
-
 
 def decisions(text: str) -> set[str]:
     """Types de décision importante rendus dans la réponse."""
@@ -139,18 +111,6 @@ def decisions(text: str) -> set[str]:
             types.add("composition")
     return types
 
-
-def jeu_de(text: str, cmds: str) -> str | None:
-    n = norm(text)
-    vus = [j for j, noms in JEUX.items() if any(x in n for x in noms)]
-    if len(vus) == 1:
-        return vus[0]
-    trouves = re.findall(r"outputs[/\\](\w+)[/\\]|game\s*=\s*'(\w+)'|dossier\.py\s+(\w+)", cmds)
-    for t in reversed(trouves):
-        g = next(x for x in t if x)
-        if g in JEUX:
-            return g
-    return None
 
 
 def jours() -> list[str]:
