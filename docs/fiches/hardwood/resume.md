@@ -28,6 +28,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 - **Routine** : `gold.hw_today`, `gold.hw_daily_alerts` (rouge d'abord), `gold.hw_exports_state`.
 - **Effectif** : `gold.hw_effectif` (tout : compétences, poste, potentiel et plafond de SI, stats, blessure, redshirt, départ en fin de saison, progression, évaluation du scout, walk_on), `gold.hw_player_fit`, `gold.hw_player_pos_scores` (note par poste = 0,6 × compétences clés + 0,4 × SI/14 [H]).
 - **Composition** : `gold.hw_depth_suggest` (proposé contre enregistré, `controle`, `walk_on_meilleur`), `silver.hw_depth_chart`, `silver.hw_tactics`, `silver.hw_management`.
+- **Adversaires** : `gold.hw_adversaires` (3 prochains matchs, rang de conférence, bilans, PF/PA, série, RPI/SOS, nos résultats et écarts contre lui).
 - **Matchs** : `gold.hw_season_games` (tactique, efficacité par zone nous/eux, défense adverse mesurée, SI pondéré), `gold.hw_vd_compare`, `silver.hw_game_box` (fatigue, OFG).
 - **Recrutement** : `gold.hw_recrues_a_ouvrir` (pages à ouvrir, 15 au moins) → `gold.hw_recrue_fiches` (note /5 actuelle et au plafond, verdict) ; `gold.hw_recruit_board` (verdict, `rang`, `besoin`), `silver.hw_recruiting`, `silver.hw_prospects`, références `silver.hw_ref_scout_phrases`, `silver.hw_ref_potential_caps`.
 - **Coachs** : `gold.hw_coach_board`, `silver.hw_coaches`, `silver.hw_coach_market`.

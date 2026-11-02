@@ -48,8 +48,8 @@ Principe : les agents ne garantissent ni la lecture complète ni la mémoire des
 
 | Agent | Extension | Statut |
 |---|---|---|
-| `academie` | Absorbe le recrutement (Hardwood : points, concurrents, 4 cibles + backups ; Hockey Nation : draft et scouting) + carte « recrutement » | ❌ |
-| `tactique` | Absorbe l'étude de l'adversaire, alimentée par une vue gold par jeu | ❌ |
+| `academie` | Absorbe le recrutement (Hardwood : points, concurrents, 4 cibles + backups ; Hockey Nation : draft et scouting) + carte « recrutement » | ✅ 2026-11-02 |
+| `tactique` | Absorbe l'étude de l'adversaire, alimentée par une vue gold par jeu | ✅ 2026-11-02 |
 | `finances-personnel` | Renommer en `finances`, mettre à jour CLAUDE.md et les fiches | ✅ 2026-11-02 |
 
 ### 0d. Retirer les agents qui ne font qu'un calcul (décidé le 2026-11-02, mesure optimisation : 40 agents/semaine, ~0,45 M éq. chacun)
@@ -86,4 +86,5 @@ Règles d'usage des agents : ajoutées à CLAUDE.md le 2026-11-02 (✅).
 - 2026-11-02 : 0a : H1, H2, H4, H5 faits dans `pipelines/police.py` (tests `pipelines/test_police.py`, 13 cas) ; agent `police` écrit la trace `police-<date>.md`. Reste H3.
 - 2026-11-02 : 0a terminé : H3 dans `pipelines/forme.py` (HN 4 équipes, TS deux clubs et emplacements, SZ ordre de saisie, DM clubs + set pieces, ordre d'entraînement par jeu) ; `test_forme.py` 32 cas. Prochaine : 0b.
 - 2026-11-02 : 0b fait : `pipelines/cartographe.py [jeu] [--court]` (cartes manquantes, L-nnn sans check, type probable) ; `pipelines/recette.py --tous` (tests des hooks + par jeu : resume, learnings, tests yaml, vues citées présentes dans sql/, cartographe), à lancer avant chaque commit de conception ; vue unique `gold.sante_collecte` (tous jeux, statuts arrete / vide / rare / ok, `sql/gold/058_sante_collecte.sql`) au lieu d'une vue par jeu. Prochaine : 0c.
+- 2026-11-02 : 0c fait : `finances-personnel` → `finances` ; `academie` absorbe le recrutement (fiche `docs/fiches/hardwood/academie.md`, type `academie` élargi, pas de type `recrutement`) ; `tactique` absorbe l'adversaire avec `gold.{sz,ts,hn,hw,dm}_adversaires` (`sql/gold/059_adversaires.sql`, appliquées). Prochaine : 0d.
 - 2026-11-02 : mesure optimisation (53 sessions, semaine 29/10-01/11 = 59,3 M éq., pic 30-31/10 = 36,5 M) ; étape 0d ajoutée : retrait de 5 agents-calcul et plafond de 20 agents par semaine.
