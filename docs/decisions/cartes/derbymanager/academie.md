@@ -1,6 +1,6 @@
 # Carte derbymanager — academie (school : promouvoir / libérer, scouting des jeunes ; deux clubs)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit a0787e7 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-effectif-entrainement` § School, § Scouting ; connaissance § 6, § 8 ; learnings). Un bloc par club.
 

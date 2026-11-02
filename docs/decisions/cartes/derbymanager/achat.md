@@ -1,6 +1,6 @@
 # Carte derbymanager — achat (enchère, joueur libre, scouting avant enchère ; deux clubs)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit a0787e7 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` § Transferts, `-effectif-entrainement` § Scouting ; connaissance § 7, § 8, § 9 ; learnings). Règles : chaque rendu propose un achat nommé (prix, finançable avec `capacite_invest` et `marge_salaire_jour`) ou la raison chiffrée ; jamais d'enchère sans accord ; un bloc par club.
 

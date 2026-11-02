@@ -1,6 +1,6 @@
 # Carte derbymanager — defaite (analyse d'une défaite ; deux clubs)
 
-Sources lues : commit 0000000 (2026-11-02)
+Sources lues : commit a0787e7 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skills `derbymanager-tactique`, `-regles` ; connaissance § 12 ; learnings). Règles : résultat = `my_result` de la base ; analyse contre toute la saison (`gold.dm_saison_bilan`, `gold.dm_tirs_profil`) ; `analyste` d'office.
 
