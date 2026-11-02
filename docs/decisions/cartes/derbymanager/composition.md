@@ -41,6 +41,11 @@ Pour chaque club, dans l'ordre de l'écran Squad :
 | 12 | Temps de jeu | `temps_jeu_satisf_pct`, `temps_jeu_attendu_pct` | Key 75 %, First team 60 %, Rotation 40 %, Backup 25 % | dev 2026-08-20 | |
 | 13 | Avis des amis | connaissance § 11 (conseils de joueurs) | 442 et ligne plus haute à domicile, 541/451 ligne basse à l'extérieur (avis) | connaissance § 11 (en doute) | |
 
+## Valeurs du jour (police 2026-11-02, export 01/11)
+- 547 GK : Vigerie (Key 75 %, condition 100, forme 26, slot S3, 0 % satisfait) contre Kjer (forme 21, titulaire, 100 % satisfait pour 25 % attendus). Forme à impact réduit pour GK (connaissance § 3, 2024-11-22) et les gardiens perdent peu de condition (2026-10-30) : Vigerie titulaire.
+- 547 forme basse : Bjerg 13, Kjer 21, Vigerie 26 ; condition 83-100 %.
+- 307 Marmandes : seulement overview + régions exportés (01/11) : composition impossible. Il manque squad/training/matches de 307 — on le réunit en exportant ces pages.
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
 |---|---|---|---|
