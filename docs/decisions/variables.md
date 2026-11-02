@@ -55,8 +55,9 @@ Score via `my_result`/`is_mine` · tirs, efficacité par zone, rebonds, pertes, 
 ### `entrainement`
 Chaque joueur : âge, potentiel, compétences sous/au-dessus des seuils du poste, gains des semaines passées · règles de progression (skill entraînement) · objectifs de l'effectif (qui doit progresser pour quel poste) · risque (blessure, intensité, fatigue) · avis des amis sur les choix d'entraînement · ce qui prouvera l'erreur (gain mesuré, semaine).
 
-### `academie` (académie, draft, scouting, jeunes)
+### `academie` (académie, draft, scouting, jeunes, recrutement)
 Chaque prospect : compétences, fourchettes, potentiel estimé, âge · règles du jeu (coût, effet d'un recrutement, probabilités) · besoin de l'effectif par poste · budget · comparaison aux académies des autres clubs · avis des amis · ce qui prouvera l'erreur.
+Recrutement (Hardwood, 2026-11-02) : en plus, pour chaque cible et remplaçant : compétences clés du poste et phrases du scout · taille (grand ≥ 2,02 m) · note actuelle → plafond · nombre d'équipes intéressées (jamais High) · points disponibles et coût · offres déjà faites (registre `fait-`) · poste du boursier qui part.
 
 ### `finances` (infrastructure, personnel, sponsor, dépense)
 Solde, revenus et dépenses par semaine, salaires · capacité d'investissement moins dépenses décidées · rentabilité selon les règles du jeu · niveau des autres clubs de la ligue (retard mesuré) · rang et série de résultats · alternative avec le même argent (achat, autre infrastructure) · avis des amis · ce qui prouvera l'erreur.

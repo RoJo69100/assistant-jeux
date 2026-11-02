@@ -38,7 +38,8 @@ MOTS = {
     "entrainement": ["training", "train ", "progress", "potential", "skill gain", "intensity",
                      "entraînement", "progression", "potentiel", "intensité"],
     "academie": ["academy", "youth", "scout", "prospect", "draft", "junior", "u18", "u21", "u17",
-                 "académie", "jeune", "recrue"],
+                 "académie", "jeune", "recrue", "recruit", "recruiting", "commit", "scholarship",
+                 "recrutement", "bourse"],
     "finances": ["finance", "money", "salary", "salaries", "sponsor", "arena", "stadium", "facility",
                  "facilities", "staff", "ticket", "infrastructure", "salaire", "budget"],
 }
