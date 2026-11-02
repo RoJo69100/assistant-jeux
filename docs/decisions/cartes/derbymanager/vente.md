@@ -1,6 +1,6 @@
 # Carte derbymanager — vente (liste de transfert, libération, fin de contrat, prolongation ; deux clubs)
 
-Sources lues : commit a0787e7 (2026-11-02)
+Sources lues : commit 7a304c3 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` § Transferts, § Contrats ; connaissance § 4, § 7). Règles : jamais de vente sans accord ; une vente identifiée reste ouverte jusqu'à exécution ; un bloc par club.
 
@@ -24,6 +24,8 @@ Un tableau par club : `| Priorité | Joueur | Poste | Âge | Note au poste | Ran
 | 6 | Valeur qui baisse | `gold.dm_entrainement` (`price_change`) | Un joueur qui ne s'entraîne pas perd de la valeur, surtout les vieux | dev 2026-10-08 | |
 | 7 | Effectif minimum | `select club, count(*) from gold.dm_effectif group by 1` | Sous 18 joueurs : risque, le jeu promeut de l'école | connaissance § 13 | |
 | 8 | Avis des amis | connaissance § 7 | Un jeune ex-école vendu rend 5 % de frais à l'équipe | connaissance § 6 | |
+| 9 | Listable aujourd'hui ? | `gold.dm_effectif.contract_days` | Listable seulement si `contract_days` < 85 (strict) ; ≥ 18 joueurs non listés. Le brouillon du 02/11 listait à tort Allan (87 j, 547) et Ohara (102 j, 307) | connaissance § 7 (2025-09-08) ; police 2026-11-02 | Listables : Vidales 68, King 80, Wilmot 45 (547) ; McCulloch 4, Aponte 5, Vargas 38 (307) |
+| 10 | Mentors à ne pas vendre | `gold.dm_verdict_joueurs.mentor` | Un mentor retraité donne des points d'installations ; vendre un mentor retire son apport au groupe (voir carte entrainement var. 12) | connaissance § 5 ; police 2026-11-02 | 547 : Cooper, Tavernost, Vicomte, Hadjidj, Vidales ; 307 : Ohara, Charbonnier |
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |

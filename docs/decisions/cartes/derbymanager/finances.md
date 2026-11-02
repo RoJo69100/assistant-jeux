@@ -1,6 +1,6 @@
 # Carte derbymanager — finances (argent par jour, plafond salarial, installations ; deux clubs)
 
-Sources lues : commit a0787e7 (2026-11-02)
+Sources lues : commit 7a304c3 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` ; connaissance § 9, § 10 ; learnings). Plus d'agent `finances` depuis le 2026-11-02. Tout l'argent est **par jour**. Un bloc par club.
 
@@ -32,6 +32,9 @@ Un bloc par club : 1) `| Argent | Flux / jour | Salaires engagés / plafond | Ma
 | 8 | Effectif d'abord | carte `achat` | « Always squad » avant installations quand les moyens manquent (avis) ; « tu peux tout faire avec ce que tu as » (dev) | connaissance § 9, § 10 | C-006 a choisi les installations |
 | 11 | Conseil investit seul entre 20 et 50 M en caisse | `capacite_invest` | Caisse 21,4 M (01/11) est dans la bande : le conseil peut dépenser à notre place ; payer soi-même choisit le bâtiment | connaissance § 9 (2025-09-08) ; police 2026-11-02 | 21 412 558 → 13 412 558 après 8 M |
 | 12 | Effet chiffré d'un niveau d'installations | — | inconnu (dev ne le donne pas) ; il manque : cherché dans connaissance §10, Discord (dossiers du 01/11), briefs ; à réunir : exporter facilities avant/après et comparer `facilities_daily_change` | police 2026-11-02 | |
+| 13 | Niveau par bâtiment | `bronze.raw_pages` `teams_id_facilities` (texte après « Chairman ») : Tactic / Decisions / Movement / Sponsors / Stadium | 547 : Tactic 4, Decisions 3, Movement 3, Sponsors 5, Stadium 1 = 16 ; 307 : Tactic 1, Decisions 3, Movement 4, Sponsors 3, Stadium 3 = 14. Choix possibles à l'écran : 547 Stadium/Tactic/Decisions/Movement ; 307 Stadium/Sponsors/Tactic/Decisions/Movement | police 2026-11-02 (bronze 32887, 29634) | |
+| 14 | Maintenance et dégradation | `maintenance_pct`, `current_value`, `daily_change`, `downgrade_at` | Maintenance < 100 % = installations qui se dégradent lentement ; le conseil la réduit quand le flux est faible ; bâtiment qui baisse au hasard à −5 M (faro1 2025-05-03 ; dev 2025-06-29). 307 : 40 %, −1,83 M au 30/10, −114 k/j → baisse vers le 26/11 | Discord DerbyManager 2025-05-03, 2025-06-29 ; connaissance § 10 | 547 : 100 %, 0 ; 307 : 40 % |
+| 15 | Écran contrat (prolongation) | `bronze.raw_pages` `players_id_contract` | 3 saisons ; prime payée tout de suite 0 à ~1,9 M ; salaire proposé à partir de la demande (ex. 52 k → 72 k pour un Key) ; école : salaire hors plafond | bronze 29618, 32858, 32870 (547 seulement) | aucun écran 307 en base |
 | 9 | Argent thésaurisé | — | Seuil « tier × 5 M » ; argent moyen visé 6-10 M | connaissance § 9 | |
 | 10 | Avis des amis | connaissance § 9, § 10 | < 25 M en D4 : viser D3 et la réputation | #france 2025-05-22 | |
 

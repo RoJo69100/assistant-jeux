@@ -1,6 +1,6 @@
 # Carte derbymanager — composition (Squad : formation, rôles, curseurs, options, banc, set pieces ; deux clubs)
 
-Sources lues : commit a0787e7 (2026-11-02)
+Sources lues : commit 7a304c3 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skills `derbymanager-tactique`, `-regles` ; connaissance § 3, § 11, § 12 ; learnings). Règles : deux clubs, un bloc chacun (Queen of the South 547 puis Marmandes 307) ; poste par poste dans l'ordre de l'écran Squad ; ligue et coupe = compo de référence, amical = compo de test (jeunes, autre formation) ; horizon aujourd'hui.
 
@@ -44,7 +44,7 @@ Pour chaque club, dans l'ordre de l'écran Squad :
 ## Valeurs du jour (police 2026-11-02, export 01/11)
 - 547 GK : Vigerie (Key 75 %, condition 100, forme 26, slot S3, 0 % satisfait) contre Kjer (forme 21, titulaire, 100 % satisfait pour 25 % attendus). Forme à impact réduit pour GK (connaissance § 3, 2024-11-22) et les gardiens perdent peu de condition (2026-10-30) : Vigerie titulaire.
 - 547 forme basse : Bjerg 13, Kjer 21, Vigerie 26 ; condition 83-100 %.
-- 307 Marmandes : seulement overview + régions exportés (01/11) : composition impossible. Il manque squad/training/matches de 307 — on le réunit en exportant ces pages.
+- 307 Marmandes (corrigé par police 2026-11-02 pm) : squad, training et school exportés le 31/10 17:58-18:00 (22 joueurs dans `gold.dm_effectif`), finances/facilities/marché le 30/10 22:55 ; seul overview + régions ont été ré-exportés le 01/11. Composition faisable sur l'export du 31/10 (récupération de condition ≈ +2 à +4 %/jour selon l'intensité). Blessés 307 : Cave, Taddei (« Bruised for 1 match, can play but better not »). Intensité 307 : pill REST, valeur à relever.
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |

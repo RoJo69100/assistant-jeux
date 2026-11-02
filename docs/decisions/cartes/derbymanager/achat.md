@@ -1,6 +1,6 @@
 # Carte derbymanager — achat (enchère, joueur libre, scouting avant enchère ; deux clubs)
 
-Sources lues : commit a0787e7 (2026-11-02)
+Sources lues : commit 7a304c3 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` § Transferts, `-effectif-entrainement` § Scouting ; connaissance § 7, § 8, § 9 ; learnings). Règles : chaque rendu propose un achat nommé (prix, finançable avec `capacite_invest` et `marge_salaire_jour`) ou la raison chiffrée ; jamais d'enchère sans accord ; un bloc par club.
 
@@ -31,6 +31,8 @@ Sources lues : commit a0787e7 (2026-11-02)
 | 9 | Équilibre d'effectif | `gold.dm_effectif` (âges) | 5 vieux / 5 au pic / 5 en progression / 5 de l'école | dev 2025-05-16 | |
 | 10 | Pièges | — | Acheter un blessé sans le voir ; plafond salarial faux jusqu'au lundi après changement de saison | connaissance § 13 | |
 | 11 | Avis des amis | connaissance § 7 | 2 bons joueurs plutôt que 7 moyens | dev (connaissance § 7) | |
+| 12 | Comparer au bon titulaire | `gold.dm_marche_notes.dernier_titulaire` | La vue compare au plus faible joueur de la ligne (307 D : Labourd 8,6) ; le gain réel se calcule contre le titulaire que la cible remplace (Desagnat 12,6) | police 2026-11-02 | Mansfield 11,8 / 15,5 (−0,8 / +2,9), Alex 12,8 / 15,1 (+0,2 / +2,5) |
+| 13 | Marché exporté | `gold.dm_marche_notes` (302 lignes par club) | Prix 0,2 à 8,1 M (export 547 du 01/11 ; 307 du 30/10) ; 8-20 M absent | police 2026-11-02 | 547 : aucun gain sûr (max −0,9) ; 307 : 18 gains sûrs > 0 |
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
