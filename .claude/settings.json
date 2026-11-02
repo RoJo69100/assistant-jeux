@@ -8,23 +8,42 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "git pull --no-edit" },
-          { "type": "command", "command": "python pipelines/rappel_debut.py" }
+          {
+            "type": "command",
+            "command": "git pull --no-edit"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/rappel_debut.py"
+          }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "python pipelines/police.py" },
-          { "type": "command", "command": "python pipelines/forme.py" }
+          {
+            "type": "command",
+            "command": "python pipelines/police.py"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/forme.py"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/controle.py"
+          }
         ]
       }
     ],
     "SubagentStop": [
       {
         "hooks": [
-          { "type": "command", "command": "python pipelines/police.py" }
+          {
+            "type": "command",
+            "command": "python pipelines/police.py"
+          }
         ]
       }
     ]
