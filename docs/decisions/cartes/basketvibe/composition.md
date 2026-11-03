@@ -1,6 +1,6 @@
 # Carte basketvibe — composition (ligue, coupe, amical)
 
-Sources lues : commit 3de9137 (2026-10-31)
+Sources lues : commit fa4743a (2026-10-31)
 
 Écrite le 2026-10-31 à partir des skills `basketvibe-tactique`, `-joueurs`, `-saison`, de `connaissance.md`, de `learnings.md` (L-001 à L-026) et des vues gold. Au passage suivant : `python pipelines/dossier.py basketvibe composition --mots "<adversaire, joueurs>"` donne cette carte et seulement le nouveau.
 

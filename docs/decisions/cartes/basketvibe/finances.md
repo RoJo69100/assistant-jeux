@@ -1,6 +1,6 @@
 # Carte basketvibe — finances (argent, sponsor, personnel)
 
-Sources lues : commit 3de9137 (2026-10-31)
+Sources lues : commit fa4743a (2026-10-31)
 
 Écrite le 2026-10-31 (skill `basketvibe-economie`, vues gold de finances). Règles : A-3 (dire quoi faire de l'argent), A-8 (retard mesuré contre les autres clubs), CLAUDE.md « capacité moins dépenses décidées ».
 
@@ -26,9 +26,9 @@ Sources lues : commit 3de9137 (2026-10-31)
 | 3 | Dépenses de la semaine | `select weekly_salaries, weekly_personnel, weekly_academy, weekly_fixed_costs, weekly_result_est from gold.bv_finance_health` | Salaires et personnel le dimanche, académie le jeudi | [M§10, §1.3] | |
 | 4 | Résultats par semaine | `select week, income, expenses, result, complete from gold.bv_finance_weekly_result order by week desc limit 4` | Seules les semaines `complete` comptent | skill économie § Lecture | |
 | 5 | Saison à date | `select * from gold.bv_finance_season_rates` | — | — | |
-| 6 | Projection saison 2 | `select balance_end_s1, reward_if_rank_kept, current_rank, s2_result, safety_reserve, investable_now_end_s1 from gold.bv_finance_s2_projection` | Ne compte ni coupes, ni transferts, ni primes (projection) | skill économie § Lecture | |
+| 6 | Projection de fin de saison | `select home_left, season_end, paydays_left, ticket_per_home_game, ticket_source, tickets_left, sponsor_left, costs_left, balance_end_projected from gold.bv_finance_projection` | Saison en cours seulement ; ne compte ni amicaux, ni coupes, ni transferts, ni primes ; billet = moyenne mesurée tant qu'aucun match à domicile n'est joué (`ticket_source`) | skill économie § Lecture ; `sql/gold/067` | 796 948 au 02/11 (S2) |
 | 7 | Prime de classement | `silver.bv_standings_weekly` (rang, `is_mine`) | 1er 400 000 · 2e 300 000 · 3e 200 000 · 4e 100 000 · 5-8e 50 000 | [M§10.1.4] | |
-| 8 | Capacité d'investissement | `investable_now_end_s1` et `gold.bv_finance_health.transfer_available − transfer_committed`, moins les dépenses décidées de `outputs/basketvibe/fait-*.md` | Aucune dépense au-delà ; réserve de sécurité gardée | CLAUDE.md § Horizon | |
+| 8 | Capacité d'investissement | cœur **C1** (`gold.finance_health.capacite_invest`), puis `gold.bv_finance_health.transfer_committed` (enchères en cours) et les dépenses décidées de `outputs/basketvibe/fait-*.md` | Aucune dépense au-delà ; réserve de sécurité gardée | CLAUDE.md § Horizon ; E8 | −96 118 au 02/11 |
 | 9 | Alternative : achat | carte `achat` var. 1 | Le gain sportif par euro le plus haut gagne | A-3 | |
 | 10 | Alternative : académie | carte `academie` var. 1-4 | idem | A-3 | |
 | 11 | Sponsor | `select week, phase, choice_pending, brand, variant, weekly_base, win_bonus, offers from silver.bv_sponsor_weekly order by week desc limit 1` | Choix une fois par saison, avant 15 min avant la 1re journée, sinon Stability ; un contrat à primes vaut le coup si le nombre de victoires attendu dépasse le seuil (Fluxora : 11 victoires sur 22 = 805k contre 800k) | [M§10.1.2] ; utilisateur 2026-10-27 ; `fait-2026-10-27.md` | Fluxora Balance choisi (2026-10-27) ; base encore `choosing` au 26/10 |
@@ -43,6 +43,8 @@ Sources lues : commit 3de9137 (2026-10-31)
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
+| 2026-11-03 | Projection (var. 6) | `gold.bv_finance_s2_projection` → `gold.bv_finance_projection` | La saison 2 a commencé le 02/11 ; l'ancienne projection mélangeait les deux saisons (−1 943 053) |
+| 2026-11-03 | Capacité (var. 8) | `investable_now_end_s1` → cœur C1 | Refonte v2, 1.5 : capacité calculée une fois dans `gold.finance_health` |
 | 2026-10-31 | Sponsor | — → lancer l'outil « Season scenario » de la page sponsor avant de choisir ; ne pas compter les primes de fin de saison comme de la liquidité | grillanza_60069 #italia 2026-10-27 |
 | 2026-10-31 | Économie | — → le Dev juge l'économie gonflée et ne veut pas l'alimenter : prévoir un durcissement possible, garder la réserve de sécurité | vachacz #economy 2026-10-24, 2026-10-29/30 |
 | 2026-10-31 | Personnel médical | facture = maximum de la semaine ; embaucher les médecins après une blessure est possible (durée recalculée) ; licencier avant le dimanche : non testé | vachacz 2026-08-31, 2026-09-03 ; chanceler paie quand même |

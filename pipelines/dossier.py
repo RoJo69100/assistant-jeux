@@ -14,6 +14,10 @@ si docs/decisions/cartes/<jeu>/<type>.md existe, le dossier ne relit plus tout. 
 (git diff des skills, fiches, connaissance, learnings, Discord/chat + fichiers non commités).
   --marquer  après mise à jour de la carte : note le commit courant comme « sources lues »
   --complet  ignore la carte et recompile tout (première fois, ou sur demande)
+
+Cœur commun (refonte v2, 1.5) : docs/decisions/cartes/_core/<type>.md, variables lues dans les vues génériques
+(paramètre :game). Chaque dossier commence par ce cœur, requêtes lancées en lecture seule (sql.py) et « Dernière
+valeur » remplie ; la carte du jeu suit en delta.
 """
 
 import argparse
@@ -25,6 +29,7 @@ from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # sql.py, même avec python -I
 
 MOTS = {
     "achat": ["transfer", "market", "auction", "bid", "buy", "free agent", "price", "transfert",
@@ -80,6 +85,59 @@ def scan(path: Path, mots: list[str], forts: list[str]):
         if score:
             out.append((i, header, line.strip(), score))
     return out
+
+
+CORE = ROOT / "docs" / "decisions" / "cartes" / "_core"
+REQ = re.compile(r"`(select\b[^`]*)`", re.I)
+
+
+def valeur(cur, requete: str) -> str:
+    """Résumé d'une requête de la carte _core : 5 lignes au plus, une cellule de tableau."""
+    from sql import cellule, verifie
+    try:
+        q = verifie(requete)
+    except SystemExit as e:
+        return f"⚠ {e}"
+    try:
+        cur.execute(f"select * from ({q}) t limit 6")
+        cols, rows = [d.name for d in cur.description], cur.fetchall()
+    except Exception as e:  # requête cassée ou vue absente : on le dit, on continue
+        cur.connection.rollback()
+        return f"⚠ erreur : {str(e).splitlines()[0]}"
+    if not rows:
+        return "aucune ligne"
+    out = " ; ".join(", ".join(f"{c}={'' if v is None else v}" for c, v in zip(cols, r)) for r in rows[:5])
+    return cellule(out + (" ; …" if len(rows) > 5 else ""), 600)
+
+
+def coeur(jeu: str, type_: str, jour: str) -> list[str]:
+    """Carte _core du type, :game remplacé, « Dernière valeur » calculée maintenant (refonte v2, 1.5)."""
+    carte = CORE / f"{type_}.md"
+    if not carte.exists():
+        return []
+    lignes = carte.read_text(encoding="utf-8").replace(":game", f"'{jeu}'").splitlines()
+    L = [f"## 0. Cœur commun `{carte.relative_to(ROOT).as_posix()}` (valeurs calculées le {jour})", ""]
+    try:
+        import psycopg
+        from sql import url_ro
+        conn = psycopg.connect(url_ro(), connect_timeout=15)
+    except BaseException as e:  # pas de base : la carte reste utile sans valeurs
+        conn = None
+        L += [f"⚠ base injoignable ({str(e).splitlines()[0] if str(e) else type(e).__name__}) : valeurs à lire à la main.", ""]
+    try:
+        for l in lignes[lignes.index("## Variables") + 1:] if "## Variables" in lignes else []:
+            if l.startswith("| # "):
+                L.append(l + " Dernière valeur |")
+            elif l.startswith("|---"):
+                L.append(l + "---|")
+            elif l.startswith("| C"):
+                m = REQ.search(l)
+                v = valeur(conn.cursor(), m.group(1)) if (m and conn) else ""
+                L.append(f"{l} {v} |")
+    finally:
+        if conn:
+            conn.close()
+    return L + ["", "La carte du jeu ci-dessous est le **delta** : ses variables s'ajoutent au cœur ; une variable qui répète une variable C renvoie à son numéro.", ""]
 
 
 LUES = re.compile(r"^Sources lues : .*$", re.M)
@@ -138,6 +196,7 @@ def dossier_carte(a, jeu, carte, depuis, mots, forts, md, txt, rel) -> int:
          "ou un seuil → modifie le check de la carte (cite la source et la date) ; une variable nouvelle → ajoute une ligne.",
          "3. **Joueur ou réglage absent de la carte** : recherche ciblée sur son nom dans tout l'historique (`--mots`, fichier `-cible.txt`).",
          f"4. **Fin** : carte à jour (valeurs, checks, sources), commit, puis `python pipelines/dossier.py {jeu} {a.type} --marquer`.", ""]
+    L += coeur(jeu, a.type, a.date)
     regles, amis = [], []
     for f, lines in sorted(nouveau.items()):
         regle = f.startswith((".claude/", "docs/"))  # une règle modifiée compte en entier, même hors sujet
@@ -201,10 +260,14 @@ def main() -> int:
     m = COMMIT.search(carte.read_text(encoding="utf-8")) if carte.exists() and not a.complet else None
     if m and git("cat-file", "-t", m.group(1)).strip() == "commit":
         return dossier_carte(a, jeu, carte, m.group(1), mots, forts, md, txt, rel)
+    if m:  # commit disparu (historique réécrit en 0.2) : dossier complet, mais on le dit
+        print(f"⚠ commit {m.group(1)} de la carte {rel(carte)} introuvable : dossier complet ; "
+              f"corrige la ligne « Sources lues » (--marquer après relecture)")
     L = [f"# Dossier {jeu} — {a.type} — {a.date}", "",
          "À lire **en entier**, puis remplir la grille `docs/decisions/variables.md` § "
          f"`{a.type}` et le tableau Couverture. Mots : {', '.join(MOTS[a.type])}"
          + (f" ; précis : {a.mots}" if forts else ""), ""]
+    L += coeur(jeu, a.type, a.date)
 
     # 1. Règles
     skills = sorted((ROOT / ".claude" / "skills").glob(f"{jeu}-*/SKILL.md")

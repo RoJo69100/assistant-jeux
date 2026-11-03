@@ -1,6 +1,6 @@
 # Carte sixzeroleague — achat (enchère, joueur libre)
 
-Sources lues : commit 4bd592f (2026-11-02)
+Sources lues : commit 8791d35 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `transferts.md`, skills `sixzeroleague-club` § Marché, `-joueurs`, `-entrainement`, `-communaute` ; connaissance § 6). Règles : A-4 (jamais d'enchère sans accord) ; `capacite_invest` moins dépenses décidées couvre le prix, sinon cible abandonnée ; règle 20 (marché de plus de 12 h ici, règlement chaque soir : « exporte le marché »).
 

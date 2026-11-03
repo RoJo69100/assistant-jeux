@@ -1,6 +1,6 @@
 # Carte teamsoccer — entrainement (gymnase : compétence + intensité par joueur, vendredi ; deux clubs)
 
-Sources lues : commit 81b8350 (2026-11-02)
+Sources lues : commit 7d27385 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `entrainement.md`, skills `teamsoccer-entrainement`, `-joueurs` ; connaissance § 4). Règles : seul compte le réglage en place le vendredi soir ; saisie dans l'ordre de l'écran Entraînement (`pipelines/forme.py`).
 

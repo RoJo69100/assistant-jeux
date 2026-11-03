@@ -1,6 +1,6 @@
 # Carte hockeynation — finances (plafond, prolongations, coachs, scouts)
 
-Sources lues : commit bf6ecaf (2026-11-02)
+Sources lues : commit d1eaf11 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `finances.md`, `resume.md` § Scouts et coachs, skills `hockeynation-contrats-finances`, `-coachs-entrainement`, `-draft-scouting` § Scouting ; connaissance § Contrats, § Coachs). Plus d'agent `finances` depuis le 2026-11-02 : je lis ces vues moi-même. Seuls les contrats PRO comptent dans le plafond.
 

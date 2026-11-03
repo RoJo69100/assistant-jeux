@@ -1,6 +1,6 @@
 # Carte hardwood — finances (pas d'argent : coachs head et assistants)
 
-Sources lues : commit 90f564f (2026-11-02)
+Sources lues : commit d0cfdca (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `hardwood-regles` § Coachs ; veille `v-calendrier-competitions.md` § 5, `v-joueurs-entrainement.md`, `v-recrutement.md` § 2). **Pas de finances, de budget ni d'installations** (« there is no budgeting in the game ») : le type `finances` couvre ici les coachs (personnel), comme `hardwood.yaml` (`finances` lit `personnel`, écrit `choix_coach`).
 

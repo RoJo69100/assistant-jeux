@@ -1,6 +1,6 @@
 # Carte basketvibe — vente (mise en vente, libération)
 
-Sources lues : commit 3de9137 (2026-10-31)
+Sources lues : commit fa4743a (2026-10-31)
 
 Écrite le 2026-10-31 (skill transferts, vues gold). Règles : CLAUDE.md « Vitesse » 5 (une vente identifiée reste ouverte jusqu'à exécution), règle 11 (ventes ouvertes vérifiées à chaque passage), A-4.
 

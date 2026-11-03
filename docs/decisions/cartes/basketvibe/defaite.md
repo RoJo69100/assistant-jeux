@@ -1,6 +1,6 @@
 # Carte basketvibe — defaite (analyse d'une défaite)
 
-Sources lues : commit 3de9137 (2026-10-31)
+Sources lues : commit fa4743a (2026-10-31)
 
 Écrite le 2026-10-31 (skills tactique et joueurs, learnings L-001 à L-026, vues gold). Exigences : CLAUDE.md règle 4 (« défaite = analyse détaillée »), règle 19 (toute la saison), A-2.
 

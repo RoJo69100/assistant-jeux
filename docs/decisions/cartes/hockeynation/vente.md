@@ -1,6 +1,6 @@
 # Carte hockeynation — vente (échange sortant, rachat, libération, non-prolongation)
 
-Sources lues : commit bf6ecaf (2026-11-02)
+Sources lues : commit d1eaf11 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `transferts.md`, `finances.md`, skills `hockeynation-contrats-finances`, `-compositions-trades`, `-joueurs`). Règles : dire « échanger », jamais « vendre » ; FRM : ouvrir une négociation sans prolonger = il part ; U21 : ELC ou Farm à 21 ans, sinon départ à 22 ans ; équipe résultante à 20.
 

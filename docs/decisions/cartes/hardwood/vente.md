@@ -1,6 +1,6 @@
 # Carte hardwood — vente (pas de vente : départs de fin de saison, bourses libérées, redshirt)
 
-Sources lues : commit 90f564f (2026-11-02)
+Sources lues : commit d0cfdca (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `hardwood-regles` ; veille `v-recrutement.md` § 3-4). Pas de vente ni de coupe de joueurs : un joueur part en fin de cursus (4 ans, 5 avec redshirt). La décision qui ressemble à une vente = qui part, quelle bourse se libère, qui redshirter.
 
