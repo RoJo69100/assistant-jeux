@@ -106,6 +106,10 @@ core:   # refonte v2 phase 1 : entités branchées (adapt.hockeynation_<entité>
   fixture:       { limites: [round_no] }                                     # numéro de journée non exporté (extras.season_day)
   standing:      { limites: [draws] }                                        # règle des points et prolongations non sourcée (extras.ot)
   finance_daily: { limites: [balance, income, expenses, capacite_invest] }   # économie au plafond salarial, pas de trésorerie
+  market_listing: { limites: [ends_at, price, starting_price, bids, seller_id] }  # agents libres (salaire) et trade block : ni enchère ni prix
+  academy_prospect: { limites: [potential_min, potential_max] }              # classe de draft de ma ligue ; potentiel calculé par le skill, pas affiché
+  staff:         { limites: [] }                                             # coachs (note, pas de salaire) + scouts (salaire par jour, pas de note)
+  training_plan: { limites: [focus_secondary, intensity] }                   # une compétence par jour ; pas d'intensité
 
 vues_gold:
   agenda: "gold.hn_today (jour de saison) + gold.hn_calendar"

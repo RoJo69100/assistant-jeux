@@ -132,5 +132,115 @@ select
                      'salary_cap_projection', f.salary_cap_projection) as extras
 from silver.hn_finances f;
 
+-- Marché : agents libres et trade block vus ; un joueur = une annonce par source, au dernier relevé.
+-- Pas d'enchère ni de prix dans le jeu (signature au salaire, échanges) ; relevés datés au jour seulement.
+create or replace view adapt.hockeynation_market_listing with (security_invoker = true) as
+select distinct on (m.source, m.player_id)
+  'hockeynation'::text                                   as game,
+  pro.team_id::text                                      as team_id,
+  m.source || ':' || m.player_id                         as listing_id,
+  m.day                                                  as day,
+  (m.day::timestamp at time zone 'Europe/Paris')         as seen_at,      -- jour seulement (extras.seen_at_precision)
+  null::timestamptz                                      as ends_at,
+  m.source                                               as status,       -- free_agent | trade_block
+  m.player_id::text                                      as player_id,
+  m.name                                                 as name,
+  m.main_position                                        as position,
+  m.age                                                  as age,
+  m.rating::numeric                                      as rating,       -- OVR 0–100 (hockeynation-joueurs/08)
+  null::numeric                                          as price,
+  null::numeric                                          as starting_price,
+  null::int                                              as bids,
+  null::text                                             as seller_id,
+  m.team                                                 as seller_label,
+  exists (select 1 from silver.hn_my_teams t where t.city || ' ' || t.nickname = m.team) as is_mine,
+  m.skills                                               as skills,
+  jsonb_build_object('seen_at_precision', 'jour', 'fa_salary', m.fa_salary, 'fa_years', m.fa_years,
+                     'positions', m.positions, 'talents', m.talents, 'special_skills', m.special_skills,
+                     'contracts', m.contracts) as extras
+from silver.hn_market_players m
+cross join (select team_id from silver.hn_my_teams where level = 'PRO') pro
+order by m.source, m.player_id, m.day desc;
+
+-- Draft : classe de ma ligue seulement (ligues où une de mes équipes est classée) ; note visible = OVR,
+-- potentiel non affiché (calcul dans hockeynation-potentiel-joueurs, pas dans l'adaptateur).
+create or replace view adapt.hockeynation_academy_prospect with (security_invoker = true) as
+with mes_ligues as (
+  select distinct split_part(s.endpoint, '/', 3) as league_id
+  from silver.hn_standings s, jsonb_array_elements(s.standing -> 'entries') e
+  join silver.hn_my_teams t on t.team_id::text = e ->> 'id'
+)
+select distinct on (d.season, d.player_id)
+  'hockeynation'::text                                   as game,
+  pro.team_id::text                                      as team_id,
+  d.season || ':' || d.player_id                         as prospect_id,
+  d.day                                                  as day,
+  (d.day::timestamp at time zone 'Europe/Paris')         as seen_at,      -- jour seulement
+  d.name                                                 as name,
+  d.main_position                                        as position,
+  d.age                                                  as age,
+  d.rating::numeric                                      as rating_min,   -- OVR affiché (null si non scouté)
+  d.rating::numeric                                      as rating_max,
+  null::numeric                                          as potential_min,
+  null::numeric                                          as potential_max,
+  'candidat'::text                                       as status,
+  d.skills                                               as skills,
+  jsonb_build_object('season', d.season, 'league_id', split_part(d.endpoint, '/', 3), 'draft_rank', d.draft_rank,
+                     'skater', d.skater, 'u17_team', d.u17_team, 'from_my_u17', d.from_my_u17,
+                     'scouted_times', d.scouted_times, 'can_scout', d.can_scout, 'talents', d.talents,
+                     'special_skills', d.special_skills, 'seen_at_precision', 'jour') as extras
+from silver.hn_draft_class d
+join mes_ligues l on l.league_id = split_part(d.endpoint, '/', 3)
+cross join (select team_id from silver.hn_my_teams where level = 'PRO') pro
+order by d.season, d.player_id, d.day desc;
+
+-- Personnel : coachs de mes 4 équipes (note 0–100) et scouts du club (rattachés à l'équipe PRO).
+create or replace view adapt.hockeynation_staff with (security_invoker = true) as
+select
+  'hockeynation'::text                                   as game,
+  t.team_id::text                                        as team_id,
+  c.coach_id::text                                       as staff_id,
+  c.day                                                  as day,
+  c.name                                                 as name,
+  'coach'::text                                          as role,
+  c.rating::numeric                                      as level,
+  null::numeric                                          as salary,       -- salaire des coachs non collecté
+  jsonb_build_object('team_level', c.team_level, 'head_coach', c.head_coach, 'age', c.age, 'xp', c.xp,
+                     'match_rating', c.match_rating, 'training_rating', c.training_rating,
+                     'ofp', c.ofp, 'dfp', c.dfp, 'bat', c.bat, 'pp', c.pp, 'pk', c.pk,
+                     'skills', c.skills, 'talents', c.talents) as extras
+from silver.hn_coaches c
+join silver.hn_my_teams t on t.level = c.team_level
+union all
+select
+  'hockeynation', pro.team_id::text, s.scout_id::text, s.day, s.name, 'scout',
+  null::numeric,                                                          -- pas de note de scout
+  s.daily_salary::numeric,                                                -- par jour (extras.salary_period)
+  jsonb_build_object('salary_period', 'jour', 'age', s.age, 'preferred_position', s.preferred_position,
+                     'nation', s.nation, 'head_scout', s.head_scout)
+from silver.hn_scouts s
+cross join (select team_id from silver.hn_my_teams where level = 'PRO') pro;
+
+-- Entraînement : une compétence par joueur et par jour (PRO, FRM réglables ; U21, U17 au hasard) [coachs-entrainement/04].
+create or replace view adapt.hockeynation_training_plan with (security_invoker = true) as
+select distinct on (t.team_id, l.player_id, l.day)
+  'hockeynation'::text                                   as game,
+  t.team_id::text                                        as team_id,
+  l.player_id::text                                      as player_id,
+  l.day                                                  as day,
+  l.name                                                 as name,
+  l.team_level in ('U17', 'U21')                         as is_academy,
+  l.skill                                                as focus_primary,
+  null::text                                             as focus_secondary,  -- une seule compétence à la fois
+  null::numeric                                          as intensity,
+  jsonb_build_object('team_level', l.team_level, 'skill_level', l.skill_level, 'coach_id', l.coach_id,
+                     'coach_level', l.coach_level, 'training_rate', l.training_rate,
+                     'reglable', l.team_level in ('PRO', 'FRM'), 'captured_at', l.captured_at) as extras
+from silver.hn_training_log l
+join silver.hn_my_teams t on t.level = l.team_level
+order by t.team_id, l.player_id, l.day, l.captured_at desc;
+
 grant select on adapt.hockeynation_player_daily, adapt.hockeynation_fixture,
-                adapt.hockeynation_standing, adapt.hockeynation_finance_daily to assistant_ro;
+                adapt.hockeynation_standing, adapt.hockeynation_finance_daily,
+                adapt.hockeynation_market_listing, adapt.hockeynation_academy_prospect,
+                adapt.hockeynation_staff, adapt.hockeynation_training_plan to assistant_ro;

@@ -25,17 +25,25 @@ select game, team_id, day, balance, income, expenses, salaries, wage_cap, capaci
 grant select on core.finance_daily to assistant_ro;
 
 create or replace view core.market_listing with (security_invoker = true) as
-select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.basketvibe_market_listing;
+select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.basketvibe_market_listing
+union all
+select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.hockeynation_market_listing;
 grant select on core.market_listing to assistant_ro;
 
 create or replace view core.academy_prospect with (security_invoker = true) as
-select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.basketvibe_academy_prospect;
+select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.basketvibe_academy_prospect
+union all
+select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.hockeynation_academy_prospect;
 grant select on core.academy_prospect to assistant_ro;
 
 create or replace view core.staff with (security_invoker = true) as
-select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.basketvibe_staff;
+select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.basketvibe_staff
+union all
+select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.hockeynation_staff;
 grant select on core.staff to assistant_ro;
 
 create or replace view core.training_plan with (security_invoker = true) as
-select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.basketvibe_training_plan;
+select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.basketvibe_training_plan
+union all
+select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.hockeynation_training_plan;
 grant select on core.training_plan to assistant_ro;
