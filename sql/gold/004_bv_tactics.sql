@@ -23,6 +23,9 @@ select distinct on (w.player_id)
 from silver.bv_player_weekly w
 join silver.bv_my_team me on me.team_id::text = w.team_id
 join silver.bv_players p on p.player_id = w.player_id and p.team_id = me.team_id::text
+-- Joueurs du dernier relevé d'effectif seulement : un joueur vendu n'est plus relevé (2026-11-03 : Klein, Fontaine restaient).
+where w.player_id in (select d.player_id from silver.bv_player_daily d
+                      where d.day = (select max(day) from silver.bv_player_daily))
 order by w.player_id, w.week desc, w.day desc;
 
 -- Chaque joueur sur chacun des 5 emplacements.
