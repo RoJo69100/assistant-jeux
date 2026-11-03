@@ -101,6 +101,12 @@ seuils:
   endurance: "L1 7+, L2 6+, D1 8+, D2 6+, G1 7+, tolérés à −1 (Discord talonflame1 2026-04-04)"
   cap_space: "jamais négatif"
 
+core:   # refonte v2 phase 1 : entités branchées (adapt.hockeynation_<entité>) ; limites = colonnes nulles par construction
+  player_daily:  { limites: [form, fatigue, morale, injured, suspended, contract_end, market_value] }   # pas de forme ; condition en match seulement ; blessures non implémentées (hypothèse) ; fin de contrat en saison (extras)
+  fixture:       { limites: [round_no] }                                     # numéro de journée non exporté (extras.season_day)
+  standing:      { limites: [draws] }                                        # règle des points et prolongations non sourcée (extras.ot)
+  finance_daily: { limites: [balance, income, expenses, capacite_invest] }   # économie au plafond salarial, pas de trésorerie
+
 vues_gold:
   agenda: "gold.hn_today (jour de saison) + gold.hn_calendar"
   alertes: gold.hn_daily_alerts
