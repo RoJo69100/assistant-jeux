@@ -37,6 +37,15 @@ PLAGES = {
         ("prix ≥ 0", "price is null or price >= 0"),
         ("enchères ≥ 0", "bids is null or bids >= 0"),
     ],
+    "academy_prospect": [
+        ("rating 0–100", "rating_min is null or (rating_min between 0 and 100 and rating_max between rating_min and 100)"),
+        ("potentiel 0–100", "potential_min is null or (potential_min between 0 and 100 and potential_max between potential_min and 100)"),
+        ("status permis", "status is null or status in ('candidat','teste','signe','ecarte','autre')"),
+    ],
+    "training_plan": [
+        ("intensity 0–1", "intensity is null or intensity between 0 and 1"),
+        ("un focus au moins", "focus_primary is not null or focus_secondary is not null"),
+    ],
 }
 # Constats (pas des échecs) : signalés pour qu'on fasse l'export qui manque.
 CONSTATS = {

@@ -27,3 +27,11 @@ grant select on core.finance_daily to assistant_ro;
 create or replace view core.market_listing with (security_invoker = true) as
 select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.basketvibe_market_listing;
 grant select on core.market_listing to assistant_ro;
+
+create or replace view core.academy_prospect with (security_invoker = true) as
+select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.basketvibe_academy_prospect;
+grant select on core.academy_prospect to assistant_ro;
+
+create or replace view core.training_plan with (security_invoker = true) as
+select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.basketvibe_training_plan;
+grant select on core.training_plan to assistant_ro;

@@ -180,6 +180,65 @@ select
 from silver.bv_transfer_auctions t
 cross join silver.bv_my_team me;
 
+create or replace view adapt.basketvibe_academy_prospect with (security_invoker = true) as
+-- Rapport du scout (hebdomadaire) : 3 candidats, fourchette min–max par compétence, potentiel caché [skill basketvibe-academie].
+select
+  'basketvibe'::text                                                   as game,
+  c.team_id::text                                                      as team_id,
+  to_char(c.scout_report_at at time zone 'UTC', 'YYYYMMDD"T"HH24MI') || '-' || c.slot as prospect_id,
+  (c.scout_report_at at time zone 'Europe/Paris')::date                as day,
+  c.scout_report_at                                                    as seen_at,
+  c.name                                                               as name,
+  c.position                                                           as position,
+  c.age                                                                as age,
+  r.rmin                                                               as rating_min,  -- PS du poste sur les bornes basses [M§2.2]
+  r.rmax                                                               as rating_max,
+  null::numeric                                                        as potential_min, -- potentiel caché, non affiché
+  null::numeric                                                        as potential_max,
+  'candidat'::text                                                     as status,
+  jsonb_build_object(
+    'two_point', jsonb_build_array(c.two_point_min, c.two_point_max),
+    'three_point', jsonb_build_array(c.three_point_min, c.three_point_max),
+    'defense', jsonb_build_array(c.defense_min, c.defense_max),
+    'passing', jsonb_build_array(c.passing_min, c.passing_max),
+    'ball_handling', jsonb_build_array(c.ball_handling_min, c.ball_handling_max),
+    'rebounding', jsonb_build_array(c.rebounding_min, c.rebounding_max),
+    'stamina', jsonb_build_array(c.stamina_min, c.stamina_max),
+    'athleticism', jsonb_build_array(c.athleticism_min, c.athleticism_max)
+  )                                                                    as skills,       -- [min, max]
+  jsonb_build_object('slot', c.slot, 'height_cm', c.height_cm, 'weight_kg', c.weight_kg) as extras
+from silver.bv_academy_candidates c
+cross join lateral (
+  select round(sum(w.v * b.lo), 1) as rmin, round(sum(w.v * b.hi), 1) as rmax
+  from (select pw.skill, case c.position when 'PG' then pw.pg when 'SG' then pw.sg when 'SF' then pw.sf
+                                         when 'PF' then pw.pf else pw.c end as v
+        from gold.bv_ps_weight pw) w
+  join (values ('two_point', c.two_point_min, c.two_point_max), ('three_point', c.three_point_min, c.three_point_max),
+               ('defense', c.defense_min, c.defense_max), ('passing', c.passing_min, c.passing_max),
+               ('ball_handling', c.ball_handling_min, c.ball_handling_max), ('rebounding', c.rebounding_min, c.rebounding_max),
+               ('stamina', c.stamina_min, c.stamina_max), ('athleticism', c.athleticism_min, c.athleticism_max)
+       ) b(skill, lo, hi) on b.skill = w.skill
+) r;
+
+create or replace view adapt.basketvibe_training_plan with (security_invoker = true) as
+-- Page Entraînement : compétence principale et secondaire par joueur ; le jeu n'a pas d'intensité [skill basketvibe-entrainement].
+select
+  'basketvibe'::text                                 as game,
+  t.team_id::text                                    as team_id,
+  t.player_id::text                                  as player_id,
+  t.day                                              as day,
+  concat_ws(' ', t.p->>'first_name', t.p->>'last_name') as name,
+  coalesce((t.p->>'is_academy_junior')::boolean, false) as is_academy,
+  t.p->>'primary_skill_id'                           as focus_primary,
+  t.p->>'secondary_skill_id'                         as focus_secondary,
+  null::numeric                                      as intensity,
+  jsonb_build_object(
+    'primary_display', t.p->'primary_display', 'secondary_display', t.p->'secondary_display',
+    'position', t.p->>'position', 'age', t.p->'age', 'captured_at', t.captured_at
+  )                                                  as extras
+from silver.bv_player_training t;
+
 grant select on adapt.basketvibe_player_daily, adapt.basketvibe_fixture,
                 adapt.basketvibe_standing, adapt.basketvibe_finance_daily,
-                adapt.basketvibe_market_listing to assistant_ro;
+                adapt.basketvibe_market_listing, adapt.basketvibe_academy_prospect,
+                adapt.basketvibe_training_plan to assistant_ro;
