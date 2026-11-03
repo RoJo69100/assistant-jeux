@@ -207,7 +207,8 @@ def main() -> int:
          + (f" ; précis : {a.mots}" if forts else ""), ""]
 
     # 1. Règles
-    skills = sorted((ROOT / ".claude" / "skills").glob(f"{jeu}-*/SKILL.md"))
+    skills = sorted((ROOT / ".claude" / "skills").glob(f"{jeu}-*/SKILL.md")
+                    ) + sorted((ROOT / ".claude" / "skills").glob(f"{jeu}-*/references/*.md"))
     L += ["## 1. Règles (skills à lire en entier)"] + [f"- `{rel(s)}`" for s in skills]
     resume = ROOT / "docs" / "fiches" / jeu / "resume.md"
     fiches = sorted((ROOT / "docs" / "fiches" / jeu).glob("*.md"))

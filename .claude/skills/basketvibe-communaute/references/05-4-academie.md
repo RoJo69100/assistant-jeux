@@ -1,0 +1,11 @@
+## 4. Académie
+- Le rapport est tiré **après** la mise à jour du jeudi. Exemple : si la jauge passe de 99 à 100 %, le rapport bénéficie déjà du bonus des 100 % [Dev 2026-09-28, polska] ; conforme au manuel §4.2.
+- Stratégie répandue : **ne pas signer en fin de saison**. Monter à 100 % et faire le premier recrutement au début de la saison suivante, car tout le monde vieillit en même temps au changement de saison [Com 2026-10-08, giovannidziadzia / .doman, academy ; Com 2026-07-12, br0kh3n].
+- Ne signer qu'un 3 étoiles après test, sauf compétences exceptionnelles. Un 17 ans 3 étoiles reste derrière un 16 ans 3 étoiles [Com 2026-09-12/13, carlomtlopes, portugal].
+- Le test à 25 000 « vaut le coup » (≈ 1,5 amical de recette) [Com 2026-09-10, .doman, academy].
+- ⚠️ « Attendre 100 % ne sert à rien par rapport à 90 % » [Com 2026-10-22/23, grillanza/dixi2499, italia ; avis non retrouvé mot pour mot en base] : **contredit le manuel** [M§4.2] : probabilité d'un potentiel 8–10 = 27,3 % à 90 %, 43,9 % à 100 % (P10 : 3,5 % → 10,7 % [M§4.2]). Chiffres 27,3 et 43,9 vérifiés dans `gold.bv_academy_potential_odds` le 2026-10-23. Le manuel fait foi.
+- Fin de saison 1 : ne pas signer avant le changement de saison (27/10) ; le prochain rapport est celui du jeudi 29/10 [Com 2026-10-22/23, italia ; Dev 2026-10-18 : l'académie ne se remet pas à zéro]. Consensus d'avis (le junior de 16 ans a 17 ans au changement de saison ; signer fait perdre la moitié de la jauge) ; certains ont tiré quand même (17 ans PS 51 tiré à l'académie 100 %, « 50/50 ») [Com 2026-10-22, dcarra/grillanza/allymcinally, academy et italia].
+- Observation isolée : avec test, le PS réel est tombé en haut de la fourchette estimée (51 pour une estimation 47,6, min 42,6, max 52,6) : un cas, pas une règle [Com 2026-10-22, isr_shay, academy].
+- Les valeurs de départ maximales confirment le tableau du skill academie : au-dessus de 90 %, 55 maximum par compétence à 16 ans, 57 à 17 ans [Com 2026-10-12, grillanza, italia ; M§4.2]. La page Académie du jeu indique la jauge projetée [Com 2026-10-23, grillanza, italia].
+- ⚠️ « 71 000 investis font progresser la jauge autant que 100 000 » [Com 2026-09-13, nhegas12, portugal] : **non vérifié**, contraire aux tableaux du manuel §4.2. À tester avec `silver.bv_academy_weekly`.
+

@@ -1,6 +1,6 @@
 ---
 name: deja-fait
-description: À charger AVANT de dire à l'utilisateur ce qu'il doit faire (plan du jour, « que faire », demande d'export, de réglage, d'analyse). Vérifie ce qui est déjà fait (exports en base, briefs du jour, réglages dans silver, déclarations de l'utilisateur) pour ne jamais redemander une action accomplie.
+description: À charger AVANT tout plan ou « que faire » : vérifie ce qui est déjà fait (exports en base, briefs du jour, réglages, déclarations de l'utilisateur) pour ne jamais redemander une action accomplie.
 ---
 
 # Déjà fait — ne jamais redemander

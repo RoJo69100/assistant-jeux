@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-aujourdhui
-description: Team Soccer — « que faire aujourd'hui / ce soir » pour les deux clubs (Chomelix Cows et Ben Ahmed Donkey) : plan du soir (compositions à enregistrer 2 h avant, matchs du lendemain à préparer la veille, exports de match, révélations d'académie, amical de la semaine, Finances le lundi, Entraînement le vendredi, agents à lancer) et alertes du jour (blessés, 2 jaunes, composition manquante, solde négatif, entretien du stade, HPC, exports en retard). À utiliser pour « que faire sur Team Soccer », « le plan du soir », « le brief » de Team Soccer.
+description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. À charger pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Team Soccer — que faire aujourd'hui

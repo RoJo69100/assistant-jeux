@@ -1,6 +1,6 @@
 ---
 name: hockeynation-draft-scouting
-description: Règles Hockey Nation sur la draft et le scouting — classes de 100 joueurs par ligue PRO, rang, steals et busts, 10 choix (2 saisons), ordre inverse du classement, pré-instructions (3 cibles, repli, limites de position, 1 h avant), Import Draft ; scouts (8 au maximum, budget 300 000 $ par saison, salaires, durée des missions selon chef, poste, nationalité, rang), 3 rapports successifs. À charger pour préparer une draft, organiser le scouting ou juger un choix de draft dans un échange.
+description: Hockey Nation, draft et scouting : classes de 100, 10 choix, pré-instructions, Import Draft, scouts (8 max, budget 300 000 $), rapports. À charger pour préparer une draft ou organiser le scouting.
 ---
 
 # Hockey Nation — draft et scouting

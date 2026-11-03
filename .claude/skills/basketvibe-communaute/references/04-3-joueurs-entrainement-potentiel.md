@@ -1,0 +1,22 @@
+## 3. Joueurs, entraînement, potentiel
+- **Les compétences sont stockées avec des décimales** [Dev 2026-08-02]. Les juniors de l'académie et les effectifs de départ commencent **sans décimales** [Dev 2026-09-13, help].
+- **Expérience** : elle monte de façon linéaire, mais son effet ne l'est pas. **Les 10 premiers points comptent plus que ceux de 80 à 90** [Dev 2026-08-02, general].
+- **S'entraîner ne demande pas de jouer** : tout le monde s'entraîne chaque semaine, quelles que soient ses minutes [Dev 2026-09-21, help ; manuel §8].
+- Pas de plafond caché par compétence : on peut monter jusqu'à 99, de plus en plus lentement [Dev 2026-09-08, help].
+- Potentiel identique quel que soit le pays [Dev 2026-09-08]. Joueurs libres : potentiel tiré **au hasard entre 3 et 9** [Dev 2026-09-07, help].
+- Un junior « 3 étoiles » de 16 ans gagne **18 à 24 points de compétence par saison** selon son potentiel [Dev 2026-09-24, help] ; cohérent avec le manuel §8.3.
+- Lire le potentiel dans les progrès (méthode des joueurs) :
+  - « 3 étoiles » = potentiel 8–10 [Com 2026-09-06, help ; manuel §4.2].
+  - Un +2 sur la compétence principale en une semaine (16–18 ans) indique au moins un potentiel moyen, pas forcément 10 [Com 2026-08-16, dcarra / random_player_123].
+  - +2 principale et +1 secondaire dès la première semaine → potentiel 10 très probable [Com 2026-09-24, pilipinas].
+  - Il faut **4–5 entraînements** pour une estimation fiable [Com 2026-09-01, dcarra, italia].
+  - Les décimales cachées faussent ces lectures. Nos valeurs précises (`*_exact`) donnent une mesure bien meilleure.
+- **Potentiel de nos propres joueurs visible depuis le 2026-10-20** : il s'affiche dans la fiche et y reste [News 2026-10-20 : « Reveal your own player's potential in his profile, and it stays visible to you »]. Les fiches des nouveaux juniors d'académie restent visibles (nouveaux seulement) [News 2026-10-20] ; les anciens tests d'académie ne sont pas récupérés [Dev 2026-10-18, general].
+  - ⚠️ **Contradiction** : le manuel §11 (lu 2026-10-23, résumé) parle encore de « Unknown » avant test ; la News du 2026-10-20 dit l'inverse. La News est plus récente ; le manuel peut être en retard.
+  - **Constat dans nos données (2026-10-23)** : la page joueur de Chomelix Cow (joueur de notre effectif), capturée le 2026-10-22 13:33 UTC, affiche « Potential ★★☆ — Decent potential », soit une **tranche** (pas un nombre) ; aucun test de 25 000 pour ce joueur dans les transactions exportées. Un test a été payé pour un autre joueur (Dang, 2026-10-19), avant la News. Le champ de la fiche `potential_reveal_available: true` existe aussi dans le JSON d'une page joueur. Format confirmé pour **un seul joueur** : à confirmer sur d'autres fiches. `gold.bv_potential_estimate` n'a pas de `potential_est` au 2026-10-23 (15 lignes, 0 gain mesuré pour la semaine du 2026-10-18) : la comparaison est impossible pour l'instant.
+- Endurance sous 40 jugée « inutile » [Com 2026-08-13, grobarbrate, reset] : opinion. Selon le manuel, l'endurance ne joue que sur la fatigue et les blessures.
+- Garder tout le monde **sous 15 de fatigue** → une seule blessure sur une saison [Com 2026-08-23, random_player_123, general] : expérience individuelle, cohérente avec le manuel §9.3.
+- Pivots : monter le rebond jusqu'à 80 avec la défense, car le ralentissement devient fort au-delà [Com 2026-10-06, .doman/kotryk, polska]. Contre-avis : l'athlétisme aide à la fois le rebond, la défense et l'attaque [Com 2026-10-08, marekb9231].
+- Un grand pivot athlétique et bon rebondeur marque beaucoup même avec peu de tir à 2 [Com 2026-09-14, carlomtlopes, portugal].
+- 🕰️ « Stage de présaison » : petit bonus d'entraînement des jeunes au changement de saison [Dev 2026-07-21]. Date d'avant la refonte de l'entraînement (2026-08-10), **non confirmé aujourd'hui**.
+

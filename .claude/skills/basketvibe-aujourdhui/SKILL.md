@@ -1,6 +1,6 @@
 ---
 name: basketvibe-aujourdhui
-description: « Qu'est-ce que je fais aujourd'hui sur BasketVibe ? » et brief du matin — liste courte et horodatée des actions du jour (et de demain matin si on est le soir) : presets et focus à régler avant les verrouillages, enchères qui se terminent, entraînement à sauvegarder, exports à faire, amicaux à programmer. À charger dès que l'utilisateur demande quoi faire aujourd'hui, ce soir, demain matin, ou « mes tâches BasketVibe », ou le brief quotidien (alertes : blessés, fatigue, forme, finances, exports en retard).
+description: BasketVibe — que faire aujourd'hui : plan du jour depuis gold.bv_agenda et les alertes, avec les exports en retard. À charger pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # BasketVibe — que faire aujourd'hui

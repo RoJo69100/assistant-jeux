@@ -1,0 +1,11 @@
+## Académie des jeunes [G:Premiers pas 1] [G:Académie des Jeunes] [F:2026-10-18 Admin-Dev]
+- Créée avec **16 jeunes de 16 à 18 ans** ; toujours 16 (chaque départ est remplacé).
+- 10 compétences cachées. **3 révélations par jour, au plus 1 par jeune** (donc 3 jeunes différents). Remise à zéro **01:00 UTC** [P:Académie] (le guide dit 00:00 UTC). Un jeune complet prend 10 jours.
+- Une fois les 10 révélées : **monter en équipe première** (si l'effectif reste ≤ 24), vendre, ou libérer.
+- **Niveaux** : 6, atteints à 0, 10, 20, 35, 50 et 70 jeunes complétés. Total de compétences à la création : 250 (225–275), puis 300, 350, 400, 450, 500 (±25) ; **aucune compétence au-dessus de 75** à la création [F:2026-10-18 Admin-Dev], confirmé par PIPO68 le 2026-10-19. ⚠️ Contradiction (V-20261019-5) : l'annonce 109 (2026-09-26) donnait des totaux de 350 / 400 / 450 / 500 / 550 / 600 (±25) pour les niveaux 1 à 6, avec 1 ou 2 compétences « étoile » à 75, 80 ou 90 (plafond 100), âge 16–18, minimum 10 par compétence, nouveaux jeunes seulement. Garder la version du forum (plus récente) sans effacer l'annonce ; ne pas juger un jeune avec les anciens totaux. Noms des niveaux de l'annonce : Débutant (0 complété), Novice (10), Intermédiaire (20), Université (35), Avancé (50), Expérimenté (70).
+- Noms des niveaux vus : Débutant (1), Noble (2), Intermédiaire (3), Université (4, « encore 2 niveaux » après) [F:2026-08-22, 2026-10-19 PIPO68].
+- L'âge du jeune ne dit rien de son niveau [F:2026-09-18]. Talents : 7 %, Magique 3 % (voir teamsoccer-joueurs), visibles seulement après la montée.
+- Stratégie de révélation : commencer par les 4 compétences de poste (Gardien, Défense, Conduite, Finition) pour repérer vite un jeune intéressant (déduction, pas une règle du jeu).
+- V-20261027-9 ⚠️ EN DOUTE (2026-10-19 PIPO68) : à « on ne progressera plus qu'au HPC ? » il répond « correct » puis, dans le même message, « il vous reste 2 niveaux d'académie » ; garder « Université = niveau 4, encore 2 niveaux » et ne rien déduire sur le niveau 6. Bots : le nouveau manager reprend le meilleur club bot de D1 (45 jours d'inactivité) [F:2026-08-29 PIPO68] ; une montée/descente mal appliquée signalée le 2026-10-05 sans réponse de l'admin : un cas, hypothèse.
+- [P:Académie] Chomelix Cows : niveau Intermédiaire, effectif 23/24 au 2026-10-19 (une seule place pour monter un jeune).
+

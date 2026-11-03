@@ -1,0 +1,11 @@
+## Composition [M§6.2]
+- 5 joueurs **par quart-temps** (Q1–Q4) plus la prolongation (OT), chacun sur un emplacement fixe PG, SG, SF, PF, C. Un joueur peut jouer un quart-temps et pas le suivant.
+- Le moteur ignore le libellé de poste : seuls comptent l'**emplacement**, la **taille par rapport à l'emplacement** et le physique (table d'efficacité dans basketvibe-joueurs [M§6.2.1]).
+- L'emplacement règle aussi la portée au rebond et les duels défensifs [M§6.2].
+- Le manuel cite deux remplacements forcés pendant un quart-temps : 6 fautes ou blessure. Sinon, le cinq change au début de chaque quart-temps selon la grille [M§6.2].
+- [Obs] Nos play-by-play contiennent aussi des événements `substitution_foul_trouble` (2 dans le match du 14/10) : le moteur sort parfois un joueur chargé de fautes. Le manuel n'en parle pas ; règle non documentée.
+- Rappel : à partir de 36 minutes dans le match, −20 % sur tout (basketvibe-joueurs [M§5.7]). Les rotations par quart-temps sont le levier pour l'éviter.
+- ⚠️ **Moteur v4 (ligue en saison 2)** : fatigue plus punitive (jusqu'à −50 % à 80) et duels 1 contre 1 plus marqués, ce qui donne plus d'impact à la tactique ; les fautes suivent l'agressivité défensive [News 2026-10-11 / 16 / 17]. Détail dans basketvibe-communaute. Une tactique de saison 2 doit gérer la fatigue d'un match à l'autre, pas seulement les 36 min. Le v4 sera activé dans tous les types de match juste après la saison 1, sans autre changement prévu au moteur [News 2026-10-19].
+  - V-20261027-1/-2/-4 : v4 actif en ligue, coupe et amical depuis le 27/10 [News 2026-10-27]. Fatigue identique en attaque et défense : 0 / −4 / −15 / −30 / −50 % à fatigue 0 / 20 / 40 / 60 / 80 ; au-delà de 80, non précisé (hypothèse : −50 %). Blessures : Soft = 60 % et Medium soft = 80 % du risque neutre ; +40 % au Q4 au-delà de 36 min ; cinq meilleurs 48 min en Regular ou Aggressive coûtent des points et des joueurs. Duels : un ~80 bat nettement un ~40 (attaque et défense) ; bots un peu plus faibles. Fautes plus réalistes pour un défenseur en Lock (sens non précisé, hypothèse : mesurer les fautes en focus 5). Moteur v5 annoncé, sans date.
+- [v4, amicaux] Risque de blessure : soft ×0,60, medium soft ×0,80 ; +40 % au-delà de 36 min au dernier quart-temps (détail dans basketvibe-joueurs) [News 2026-10-19].
+

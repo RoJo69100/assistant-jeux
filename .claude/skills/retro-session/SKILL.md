@@ -1,6 +1,6 @@
 ---
 name: retro-session
-description: Rétro de fin de session (tous les jeux) — liste ce que Claude a mal fait avec l'utilisateur, la cause racine et la règle corrective, la range dans `outputs/retro/AAAA-MM-JJ.md` et dans `docs/regles/actives.md`. À charger en début de session (relire les règles apprises) et en fin de session (écrire la rétro), ou quand l'utilisateur dit « tu ne t'améliores pas », « fais une rétro », « /clear » après une longue session.
+description: Rétro de fin de session (tous les jeux) : erreurs de Claude, cause racine, règle corrective dans outputs/retro/ et docs/regles/actives.md. À charger en début de session, en fin de session ou si l'utilisateur dit « tu ne t'améliores pas ».
 ---
 
 # Rétro de session

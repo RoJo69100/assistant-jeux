@@ -1,0 +1,5 @@
+## [Obs] Nos données
+- Le 2026-10-18 : effectif de 12 joueurs (Chomelix Cow), composition 7/7, formations attaque 5-1 / défense 6-0 (page Équipe → Tactique). API : `/api/teams/mine/players`, `/api/teams/mine/tactics/default`.
+- [Obs 2026-10-18, utilisateur] Dans l'écran Tactique, un joueur placé hors de son poste apparaît **en orange** (pénalité de hors-poste visible). L'API donne une note par rôle (`roleOveralls`) non affichée à l'écran ; à son poste naturel elle est égale à la note générale. L'écran n'affiche pas de note, seulement l'alerte « out of position » (bulle orange). [Obs SQL 2026-10-18] `roleOveralls` est calculé **avant** la pénalité de hors-poste : son écart à la moyenne des compétences des groupes du rôle est le même au poste naturel (−0,4) et hors poste (−0,3), corrélation 0,92. Une composition hors poste vaut donc moins que la somme de ces notes (pénalité « légère » [W:Attributes], non chiffrée).
+- La liste affiche une note (OVR) de 7 à 13 et des salaires de 75 à 145 € : niveau « Grassroots » en début de jeu.
+

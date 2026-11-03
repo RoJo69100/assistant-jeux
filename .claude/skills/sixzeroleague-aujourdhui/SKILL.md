@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-aujourdhui
-description: Six Zero League — « que faire aujourd'hui / ce soir » : plan du soir (tactique avant les matchs, exports avant et après 21:00, matchs du lendemain à préparer la veille, agents à lancer) et alertes du jour (blessés, rôle sans remplaçant, finances, sponsor, académie, exports en retard). À utiliser pour « que faire sur SixZero », « le plan du soir », « le brief » de Six Zero League.
+description: Six Zero League — que faire aujourd'hui : plan du jour depuis gold.sz_agenda et le calendrier frais. À charger pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Six Zero League — que faire aujourd'hui

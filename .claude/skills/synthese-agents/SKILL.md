@@ -1,6 +1,6 @@
 ---
 name: synthese-agents
-description: Format obligatoire du rendu à l'utilisateur après une chaîne d'agents ou pour tout plan « que faire » (tous les jeux) — un tableau par jeu, jamais mélangés, lignes catégorisées et colorées (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI), saisies poste par poste, analyses chiffrées, tests avec preuve contraire, questions. À charger avant de rendre compte des agents, et par l'agent `synthese`.
+description: Format obligatoire du rendu après une chaîne d'agents ou un plan « que faire » : un tableau par jeu, priorités 🟥/🟧/🟩, saisies poste par poste, analyses chiffrées, tests avec preuve contraire. À charger avant de rendre compte.
 ---
 
 # Synthèse des agents — format du rendu

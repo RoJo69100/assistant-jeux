@@ -1,0 +1,5 @@
+## Barres de secteurs [G:Équilibre des secteurs]
+- 8 barres 0–100 sous le terrain : Gardien, Défense centrale, Latéral gauche, Latéral droit, Milieu, Aile gauche, Aile droite, Attaque. Calculées avec les compétences du joueur à cet emplacement et le **nombre de joueurs** dans la zone (3 centraux renforcent l'axe, 5 milieux dominent le centre). Zone vide = moitié de la moyenne des zones voisines (marquée ~).
+- Le rapport de match compare les 8 secteurs aux adversaires. **Purement informatif : ne change pas la simulation** [G].
+- V-20261027-3 (secteurs recalculés le 2026-10-14) : les rapports sont passés de 0-5 étoiles à une note décimale 0-10 ; les valeurs de secteur des matchs déjà joués ont été recalculées (exemple adversaire : 82/78/77/55/81/79/72 devenus 69/66/64/47/68/66/61) ; la formule de performance n'a pas changé, le rapport affiche une valeur « effective » (Forme, poste, consignes, Endurance). Note d'un joueur = poste joué + bonus des voisins + événements du match [F:2026-10-14 PIPO68]. **Ne pas comparer des secteurs capturés avant et après le 2026-10-14 sans recapture** (vérifier la date de capture dans `silver.ts_match_sectors`).
+
