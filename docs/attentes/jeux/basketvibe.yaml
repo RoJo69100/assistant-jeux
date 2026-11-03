@@ -94,6 +94,7 @@ core:   # refonte v2 phase 1 : entités branchées (adapt.basketvibe_<entité>) 
   finance_daily: { limites: [income, wage_cap, capacite_invest] }                # recettes non relevées ; aucun plafond dans les skills ; capacité calculée en gold
   market_listing: { limites: [] }                                                # enchères vues (marché et mes ventes) ; statut figé au dernier relevé
   academy_prospect: { limites: [potential_min, potential_max] }                  # rapport du scout ; potentiel caché non affiché ; tous « candidat » (signatures non collectées)
+  staff:         { limites: [level, salary] }                                    # API Personnel : noms par rôle ; pas de niveau ; coût par poste dans le skill [M§4.3]
   training_plan: { limites: [intensity] }                                        # pas d'intensité dans le jeu
 
 vues_gold:

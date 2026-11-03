@@ -32,6 +32,10 @@ create or replace view core.academy_prospect with (security_invoker = true) as
 select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.basketvibe_academy_prospect;
 grant select on core.academy_prospect to assistant_ro;
 
+create or replace view core.staff with (security_invoker = true) as
+select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.basketvibe_staff;
+grant select on core.staff to assistant_ro;
+
 create or replace view core.training_plan with (security_invoker = true) as
 select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.basketvibe_training_plan;
 grant select on core.training_plan to assistant_ro;

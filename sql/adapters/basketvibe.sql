@@ -238,7 +238,31 @@ select
   )                                                  as extras
 from silver.bv_player_training t;
 
+create or replace view adapt.basketvibe_staff with (security_invoker = true) as
+-- Page Personnel (API) : noms par rôle, sans identifiant ni niveau ; coût par poste dans le skill, pas dans la collecte [M§4.3].
+-- La capture DOM seule (sans appel API) n'est pas lue : texte libre.
+with cap as (
+  select distinct on (a.team_id, a.day) a.team_id, a.day, a.captured_at, a.body
+  from silver.bv_api a
+  where a.endpoint ~ '^/teams/[0-9a-f-]{36}/personnel$'
+  order by a.team_id, a.day, a.captured_at desc
+)
+select
+  'basketvibe'::text                                          as game,
+  cap.team_id::text                                           as team_id,
+  r.role || ':' || concat_ws(' ', s->>'first_name', s->>'last_name') as staff_id,  -- pas d'identifiant dans l'API
+  cap.day                                                     as day,
+  concat_ws(' ', s->>'first_name', s->>'last_name')           as name,
+  r.role                                                      as role,
+  null::numeric                                               as level,
+  null::numeric                                               as salary,
+  jsonb_build_object('role_raw', r.cle, 'captured_at', cap.captured_at) as extras
+from cap
+cross join (values ('doctor_roster', 'medecin'), ('physio_roster', 'kine'),
+                   ('psychologist_roster', 'psychologue'), ('marketer_roster', 'marketing')) r(cle, role)
+cross join lateral jsonb_array_elements(cap.body->r.cle) s;
+
 grant select on adapt.basketvibe_player_daily, adapt.basketvibe_fixture,
                 adapt.basketvibe_standing, adapt.basketvibe_finance_daily,
                 adapt.basketvibe_market_listing, adapt.basketvibe_academy_prospect,
-                adapt.basketvibe_training_plan to assistant_ro;
+                adapt.basketvibe_training_plan, adapt.basketvibe_staff to assistant_ro;

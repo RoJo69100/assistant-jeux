@@ -67,6 +67,11 @@ CONTRAT = {
         ("potential_min", "numeric", False), ("potential_max", "numeric", False),
         ("status", "text", False), ("skills", "jsonb", False), ("extras", "jsonb", False),
     ], ("game", "team_id", "prospect_id")),
+    "staff": ([
+        ("game", "text", True), ("team_id", "text", True), ("staff_id", "text", True),
+        ("day", "date", True), ("name", "text", True), ("role", "text", True),
+        ("level", "numeric", False), ("salary", "numeric", False), ("extras", "jsonb", False),
+    ], ("game", "team_id", "staff_id", "day")),
     "training_plan": ([
         ("game", "text", True), ("team_id", "text", True), ("player_id", "text", True),
         ("day", "date", True), ("name", "text", True), ("is_academy", "boolean", True),

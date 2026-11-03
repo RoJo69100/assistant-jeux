@@ -42,6 +42,11 @@ PLAGES = {
         ("potentiel 0–100", "potential_min is null or (potential_min between 0 and 100 and potential_max between potential_min and 100)"),
         ("status permis", "status is null or status in ('candidat','teste','signe','ecarte','autre')"),
     ],
+    "staff": [
+        ("role permis", "role in ('coach','medecin','kine','psychologue','marketing','scout','autre')"),
+        ("level 0–100", "level is null or level between 0 and 100"),
+        ("salaire ≥ 0", "salary is null or salary >= 0"),
+    ],
     "training_plan": [
         ("intensity 0–1", "intensity is null or intensity between 0 and 1"),
         ("un focus au moins", "focus_primary is not null or focus_secondary is not null"),
