@@ -78,6 +78,12 @@ CONTRAT = {
         ("focus_primary", "text", False), ("focus_secondary", "text", False),
         ("intensity", "numeric", False), ("extras", "jsonb", False),
     ], ("game", "team_id", "player_id", "day")),
+    "facility": ([  # bâtiments du club : stade, centre d'entraînement… (level 0–100 normalisé, brut dans extras)
+        ("game", "text", True), ("team_id", "text", True), ("facility_id", "text", True),
+        ("day", "date", True), ("name", "text", False), ("kind", "text", True),
+        ("level", "numeric", False), ("capacity", "integer", False), ("upkeep", "numeric", False),
+        ("extras", "jsonb", False),
+    ], ("game", "team_id", "facility_id", "day")),
     "season": ([  # jour 1 de la saison : jeux à calendrier en jours de saison (Hockey Nation)
         ("game", "text", True), ("season_id", "text", True), ("day1", "date", True),
         ("days_total", "integer", False), ("phase", "text", False), ("extras", "jsonb", False),

@@ -51,6 +51,12 @@ PLAGES = {
         ("intensity 0–1", "intensity is null or intensity between 0 and 1"),
         ("un focus au moins", "focus_primary is not null or focus_secondary is not null"),
     ],
+    "facility": [
+        ("kind permis", "kind in ('stade','entrainement','academie','medical','autre')"),
+        ("level 0–100", "level is null or level between 0 and 100"),
+        ("capacité ≥ 0", "capacity is null or capacity >= 0"),
+        ("entretien ≥ 0", "upkeep is null or upkeep >= 0"),
+    ],
     "season": [
         ("jour 1 passé ou proche", "day1 <= current_date + 7"),
         ("durée > 0", "days_total is null or days_total > 0"),
