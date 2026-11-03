@@ -17,10 +17,23 @@ from sql import url_ro  # noqa: E402
 
 RACINE = Path(__file__).resolve().parent.parent
 JOURNAL = RACINE / "outputs/refonte-v2/parite-agenda.log"
-ANCIENS = {"basketvibe": "gold.bv_agenda"}  # jeu -> ancienne vue au même format (day, at_time, priority, category, action)
+NOUVEAU = "select day, at_time, priority, category, action from gold.agenda where game = '{jeu}'"
+# jeu -> (ancien, nouveau) au même format (day, at_time, priority, category, action).
+# Hockey Nation : l'ancien calendrier n'a ni heure, ni priorité, ni catégorie ; on compare le jour et le texte
+# (sans le préfixe « Jn : », casse ignorée) sur la fenêtre de 7 jours.
+ANCIENS = {
+    "basketvibe": ("select day, at_time, priority, category, action from gold.bv_agenda", NOUVEAU.format(jeu="basketvibe")),
+    "hockeynation": (
+        "select t.day1 + c.day - 1 as day, null::time as at_time, 0 as priority, '' as category, lower(c.event) as action"
+        " from gold.hn_calendar c, gold.hn_today t where t.day1 + c.day - 1 between current_date and current_date + 6",
+        "select day, null::time as at_time, 0 as priority, '' as category,"
+        " lower(regexp_replace(action, '^J[0-9]+ : ', '')) as action from gold.agenda"
+        " where game = 'hockeynation' and rule_id ~ '^j[0-9]+$'",
+    ),
+}
 REQUETE = """
-with a as (select day, at_time, priority, category, action from {ancien}),
-     n as (select day, at_time, priority, category, action from gold.agenda where game = %s),
+with a as ({ancien}),
+     n as ({nouveau}),
      ao as (select * from a except select * from n),
      no as (select * from n except select * from a)
 select 'ancien seul', ao.* from ao
@@ -46,8 +59,8 @@ def main() -> int:
     aujourdhui = dt.date.today().isoformat()
     lignes, echec = [], False
     with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
-        for jeu, ancien in ANCIENS.items():
-            cur.execute(REQUETE.format(ancien=ancien), (jeu,))
+        for jeu, (ancien, nouveau) in ANCIENS.items():
+            cur.execute(REQUETE.format(ancien=ancien, nouveau=nouveau))
             ecarts = cur.fetchall()
             echec |= bool(ecarts)
             lignes.append(f"{aujourdhui}\t{jeu}\t{'ecart' if ecarts else 'ok'}\t{len(ecarts)}")

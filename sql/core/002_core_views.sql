@@ -47,3 +47,7 @@ select game, team_id, player_id, day, name, is_academy, focus_primary, focus_sec
 union all
 select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.hockeynation_training_plan;
 grant select on core.training_plan to assistant_ro;
+
+create or replace view core.season with (security_invoker = true) as
+select game, season_id, day1, days_total, phase, extras from adapt.hockeynation_season;
+grant select on core.season to assistant_ro;

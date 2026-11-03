@@ -78,6 +78,10 @@ CONTRAT = {
         ("focus_primary", "text", False), ("focus_secondary", "text", False),
         ("intensity", "numeric", False), ("extras", "jsonb", False),
     ], ("game", "team_id", "player_id", "day")),
+    "season": ([  # jour 1 de la saison : jeux à calendrier en jours de saison (Hockey Nation)
+        ("game", "text", True), ("season_id", "text", True), ("day1", "date", True),
+        ("days_total", "integer", False), ("phase", "text", False), ("extras", "jsonb", False),
+    ], ("game", "season_id")),
 }
 
 LIGNE_CORE = re.compile(r"^  ([a-z_]+):\s*\{\s*limites:\s*\[([^\]]*)\]", re.M)

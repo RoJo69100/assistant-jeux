@@ -51,6 +51,10 @@ PLAGES = {
         ("intensity 0–1", "intensity is null or intensity between 0 and 1"),
         ("un focus au moins", "focus_primary is not null or focus_secondary is not null"),
     ],
+    "season": [
+        ("jour 1 passé ou proche", "day1 <= current_date + 7"),
+        ("durée > 0", "days_total is null or days_total > 0"),
+    ],
 }
 # Constats (pas des échecs) : signalés pour qu'on fasse l'export qui manque.
 CONSTATS = {
@@ -107,11 +111,12 @@ def controle(cur, jeu: str, entite: str, limites: list[str], fraicheur: int) -> 
     if limites and not declarees_pleines:
         res.append(("⚪", "non fourni (déclaré)", ", ".join(limites)))
 
-    cur.execute(f"select max(day) from {vue} where day <= current_date")
-    dernier = cur.fetchone()[0]
-    age = (dt.date.today() - dernier).days if dernier else None
-    res.append(("❌" if age is None or age > fraicheur else "✅", "fraîcheur",
-                f"dernier jour {dernier} ({age} j)" if dernier else "aucun jour passé"))
+    if "day" in attendu:  # entité sans jour de relevé (season) : pas de fraîcheur
+        cur.execute(f"select max(day) from {vue} where day <= current_date")
+        dernier = cur.fetchone()[0]
+        age = (dt.date.today() - dernier).days if dernier else None
+        res.append(("❌" if age is None or age > fraicheur else "✅", "fraîcheur",
+                    f"dernier jour {dernier} ({age} j)" if dernier else "aucun jour passé"))
 
     if entite in CONSTATS:
         libelle, cond = CONSTATS[entite]

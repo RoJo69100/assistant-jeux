@@ -3,6 +3,7 @@
 -- Heures en Europe/Paris (fuseau_affichage) ; fenêtre aujourd'hui + 6 jours, comme gold.bv_agenda.
 -- Écart voulu avec gold.bv_agenda : une règle « avant le coup d'envoi » tombe le jour de l'heure calculée
 -- (amical de 00:00 : preset la veille à 23:45, l'ancienne vue le datait du jour du match).
+-- 2026-11-03 : déclencheur jour_saison (core.season, Hockey Nation) ; at_time nulle si la règle n'a pas d'heure.
 
 create or replace view gold.agenda with (security_invoker = true) as
 with fen as (
@@ -60,6 +61,13 @@ ev as (
          null, null, null, null, null, null, null
   from fin join r on r.game = fin.game and r.declencheur = 'fin_saison'
   where fin.last_day between current_date and current_date + 6
+  union all
+  -- jour de saison (saison en cours : jour 1 le plus récent)
+  select s.game, null, r.rule_id, r.priority, r.category, r.modele,
+         (s.day1 + r.jour_saison - 1) + coalesce(r.heure, time '00:00'),
+         null, null, null, null, null, null, null
+  from (select distinct on (game) * from core.season order by game, day1 desc) s
+  join r on r.game = s.game and r.declencheur = 'jour_saison'
 )
 select
   ev.game,
@@ -67,7 +75,8 @@ select
   ev.at_ts::date                                         as day,
   (array['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'])[extract(isodow from ev.at_ts)::int]
     || ' ' || to_char(ev.at_ts, 'DD/MM')                 as day_label,
-  ev.at_ts::time                                         as at_time,
+  case when ar.heure is null and ar.decalage is null then null
+       else ev.at_ts::time end                           as at_time,     -- nulle : événement du jour sans heure sourcée
   ev.priority,
   ev.category,
   replace(replace(replace(replace(replace(replace(replace(replace(ev.modele,
@@ -77,7 +86,8 @@ select
     '{bids}', coalesce(ev.bids, '')), '{price}', coalesce(ev.price, '')) as action,
   ev.rule_id
 from ev
+join core.agenda_rule ar on ar.game = ev.game and ar.rule_id = ev.rule_id
 where ev.at_ts::date between current_date and current_date + 6
-order by ev.game, day, at_time, ev.priority;
+order by ev.game, day, at_time nulls first, ev.priority;
 
 grant select on gold.agenda to assistant_ro;

@@ -240,7 +240,21 @@ from silver.hn_training_log l
 join silver.hn_my_teams t on t.level = l.team_level
 order by t.team_id, l.player_id, l.day, l.captured_at desc;
 
+-- Saison : jour 1 = fermeture de la fenêtre I (jour 35) − 34 [G:Calendar], même calcul que gold.hn_today ;
+-- 63 jours (hockeynation-match-calendrier/01-competitions). À revoir à l'ouverture de la fenêtre II (jour 51).
+create or replace view adapt.hockeynation_season with (security_invoker = true) as
+select
+  'hockeynation'::text                                        as game,
+  s.season::text                                              as season_id,
+  (s.trade_window_ts at time zone 'Europe/Paris')::date - 34  as day1,
+  63                                                          as days_total,
+  s.phase                                                     as phase,
+  jsonb_build_object('trade_window_ts', s.trade_window_ts, 'draft_at', s.draft_at,
+                     'last_capture', s.last_capture)          as extras
+from silver.hn_season s;
+
 grant select on adapt.hockeynation_player_daily, adapt.hockeynation_fixture,
                 adapt.hockeynation_standing, adapt.hockeynation_finance_daily,
                 adapt.hockeynation_market_listing, adapt.hockeynation_academy_prospect,
-                adapt.hockeynation_staff, adapt.hockeynation_training_plan to assistant_ro;
+                adapt.hockeynation_staff, adapt.hockeynation_training_plan,
+                adapt.hockeynation_season to assistant_ro;
