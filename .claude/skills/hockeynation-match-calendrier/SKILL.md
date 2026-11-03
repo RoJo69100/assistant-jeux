@@ -1,6 +1,6 @@
 ---
 name: hockeynation-match-calendrier
-description: Hockey Nation, matchs et saison : ligues, 30 matchs, playoffs, lignes A/B/C, pénalités, fatigue des gardiens, amicaux, calendrier de 63 jours. À charger pour composer les lignes, analyser un match ou dater une action.
+description: Hockey Nation, matchs et saison : ligues, 30 matchs, playoffs, lignes A/B/C, pénalités, fatigue des gardiens, amicaux, calendrier de 63 jours. Pour composer les lignes, analyser un match ou dater une action.
 ---
 # Hockey Nation — matchs, lignes et calendrier
 

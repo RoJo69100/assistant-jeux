@@ -1,0 +1,21 @@
+{
+ ".claude/agents/match.md": 2281,
+ ".claude/agents/tactique.md": 1523,
+ ".claude/agents/transferts.md": 1762,
+ ".claude/skills/basketvibe-aujourdhui/SKILL.md": 1006,
+ ".claude/skills/hockeynation-adversaires/SKILL.md": 1082,
+ ".claude/skills/hockeynation-compositions-trades/SKILL.md": 1428,
+ ".claude/skills/hockeynation-draft-scouting/SKILL.md": 1381,
+ ".claude/skills/sixzeroleague-aujourdhui/SKILL.md": 1058,
+ ".claude/skills/teamsoccer-aujourdhui/SKILL.md": 1174,
+ "docs/fiches/derbymanager/resume.md": 2231,
+ "docs/fiches/hardwood/resume.md": 1786,
+ "docs/fiches/hockeynation/resume.md": 3794,
+ "docs/fiches/sixzeroleague/resume.md": 2225,
+ "docs/fiches/teamsoccer/resume.md": 1917,
+ "session:derbymanager": 7283,
+ "session:hardwood": 6838,
+ "session:hockeynation": 8846,
+ "session:sixzeroleague": 7277,
+ "session:teamsoccer": 6969
+}

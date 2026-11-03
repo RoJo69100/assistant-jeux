@@ -1,6 +1,6 @@
 ---
 name: deja-fait
-description: À charger AVANT tout plan ou « que faire » : vérifie ce qui est déjà fait (exports en base, briefs du jour, réglages, déclarations de l'utilisateur) pour ne jamais redemander une action accomplie.
+description: AVANT tout plan ou « que faire » : vérifie ce qui est déjà fait (exports en base, briefs du jour, réglages, déclarations de l'utilisateur) pour ne jamais redemander une action accomplie.
 ---
 
 # Déjà fait — ne jamais redemander

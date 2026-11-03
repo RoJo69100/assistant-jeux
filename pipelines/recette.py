@@ -7,7 +7,7 @@ Sans option :
 Avec --reponse <fichier> --jour <lun…dim> : contrôle une réponse rendue (interdits, pastilles,
 mots du jour). Le texte entre « », "" ou `` est ignoré (citations).
 Avec --tous (étape 0b, 2026-11-02 ; à lancer avant chaque commit de conception) :
-  1. rejoue les tests des hooks (pipelines/test_forme.py, pipelines/test_police.py) ;
+  1. rejoue les tests (forme, police, controle, sql, contexte_budget) et le budget de contexte ;
   2. pour chaque jeu : resume.md présent, learnings.md présent, tests docs/attentes/tests/<jeu>.yaml
      (recette complète s'ils existent), chaque vue gold/silver/bronze citée dans docs/fiches/<jeu>/ et
      docs/decisions/cartes/<jeu>/ créée dans sql/, et le résumé du cartographe (cartes, leçons sans check).
@@ -124,7 +124,8 @@ def objets_absents(jeu: str, sql: str) -> tuple[int, list[str]]:
 def tous() -> list[tuple[bool, str]]:
     sys.path.insert(0, str(RACINE / "pipelines"))
     import cartographe
-    res = [lancer("test_forme.py"), lancer("test_police.py")]
+    res = [lancer(t) for t in ("test_forme.py", "test_police.py", "test_controle.py", "test_sql.py", "test_contexte_budget.py")]
+    res.append(lancer("contexte_budget.py"))
     sql = "\n".join(p.read_text(encoding="utf-8", errors="replace").lower() for p in (RACINE / "sql").rglob("*.sql"))
     for jeu in JEUX:
         res.append((True, f"— {jeu} —"))

@@ -1,6 +1,6 @@
 ---
 name: derbymanager-effectif-entrainement
-description: Derby Manager, entraînement et relève : loi de croissance, installations, intensité, TR, mentors, déclin, école S25, scouting. À charger pour régler l'entraînement, projeter un joueur ou choisir un jeune.
+description: Derby Manager, entraînement et relève : loi de croissance, installations, intensité, TR, mentors, déclin, école S25, scouting. Pour régler l'entraînement, projeter un joueur ou choisir un jeune.
 ---
 # Derby Manager — effectif, entraînement, school, scouting
 

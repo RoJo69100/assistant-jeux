@@ -1,6 +1,6 @@
 ---
 name: hardwood-recrutement
-description: Recrutement Hardwood : types de recrues, points (2 par jour, plafond 45), offres, niveaux d'intérêt, engagements, facteurs, régions, phrases du scout. À charger pour choisir, contacter ou abandonner une recrue.
+description: Recrutement Hardwood : types de recrues, points (2 par jour, plafond 45), offres, niveaux d'intérêt, engagements, facteurs, régions, phrases du scout. Pour choisir, contacter ou abandonner une recrue.
 ---
 # Hardwood — recrutement
 

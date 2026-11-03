@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-entrainement
-description: Team Soccer, entraînement et relève : gymnase, mise à jour du vendredi, âge, intensité, entraîneurs, Forme, académie des jeunes, Centre de Haute Performance. À charger pour régler l'entraînement ou choisir les jeunes.
+description: Team Soccer, entraînement et relève : gymnase, mise à jour du vendredi, âge, intensité, entraîneurs, Forme, académie des jeunes, Centre de Haute Performance. Pour régler l'entraînement ou choisir les jeunes.
 ---
 # Team Soccer — entraînement, académie, Haute Performance
 

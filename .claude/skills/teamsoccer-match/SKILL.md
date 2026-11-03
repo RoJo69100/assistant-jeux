@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-match
-description: Team Soccer, composition et match : 6 formations, modes Simple et Avancé, style, duels du moteur v3, banc, remplacements programmés, bots. À charger pour construire une composition ou expliquer un résultat.
+description: Team Soccer, composition et match : 6 formations, modes Simple et Avancé, style, duels du moteur v3, banc, remplacements programmés, bots. Pour construire une composition ou expliquer un résultat.
 ---
 # Team Soccer — composition et moteur de match
 

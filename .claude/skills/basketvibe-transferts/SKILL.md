@@ -1,6 +1,6 @@
 ---
 name: basketvibe-transferts
-description: Marché BasketVibe : mise en vente, taxe de 5 %, enchère maximale, anti-snipe, phase aveugle, joueurs libres, tests de potentiel. À charger pour acheter, vendre ou fixer une enchère.
+description: Marché BasketVibe : mise en vente, taxe de 5 %, enchère maximale, anti-snipe, phase aveugle, joueurs libres, tests de potentiel. Pour acheter, vendre ou fixer une enchère.
 ---
 # BasketVibe — transferts
 

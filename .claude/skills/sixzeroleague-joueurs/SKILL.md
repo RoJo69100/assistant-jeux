@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-joueurs
-description: Six Zero League, joueurs : 7 rôles, 20 compétences en 4 groupes, compétences clés par rôle, taille, main forte, hors-poste, blessures, retraite. À charger pour évaluer un joueur ou choisir le sept de départ.
+description: Six Zero League, joueurs : 7 rôles, 20 compétences en 4 groupes, compétences clés par rôle, taille, main forte, hors-poste, blessures, retraite. Pour évaluer un joueur ou choisir le sept de départ.
 ---
 # Six Zero League — joueurs
 

@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-match
-description: Six Zero League, jeu et match : terrain, 2 × 30 min, zones de tir, exclusions, jeu passif, ligues de 10, 5 divisions, coupe, primes. À charger pour analyser un match, composer ou toute question de classement.
+description: Six Zero League, jeu et match : terrain, 2 × 30 min, zones de tir, exclusions, jeu passif, ligues de 10, 5 divisions, coupe, primes. Pour analyser un match, composer ou toute question de classement.
 ---
 # Six Zero League — jeu, match, compétitions
 

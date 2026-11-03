@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-entrainement
-description: Six Zero League, entraînement et relève : cycle de 2 journées, intensité, focus par joueur, effet de l'âge, formation à un 2e rôle, académie U18. À charger pour régler l'entraînement ou choisir un prospect.
+description: Six Zero League, entraînement et relève : cycle de 2 journées, intensité, focus par joueur, effet de l'âge, formation à un 2e rôle, académie U18. Pour régler l'entraînement ou choisir un prospect.
 ---
 # Six Zero League — entraînement et académie U18
 

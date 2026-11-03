@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-communaute
-description: Team Soccer vu par le forum et les admins (936 messages lus le 2026-10-27) : changements de règles, contradictions, bugs, conseils. Chaque point daté et sourcé. À charger quand une règle semble avoir changé ou que le guide est muet.
+description: Team Soccer vu par le forum et les admins (936 messages lus le 2026-10-27) : changements de règles, contradictions, bugs, conseils. Chaque point daté et sourcé. Quand une règle semble avoir changé ou que le guide est muet.
 ---
 # Team Soccer — communauté et annonces
 

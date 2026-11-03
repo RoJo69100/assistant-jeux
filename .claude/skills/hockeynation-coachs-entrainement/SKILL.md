@@ -1,6 +1,6 @@
 ---
 name: hockeynation-coachs-entrainement
-description: Hockey Nation, coachs et entraînement : 3 types de coachs, compétences, head coach, plafonds U17/U21, embauche, entraînement quotidien et maxings. À charger pour recruter un coach ou régler l'entraînement PRO/FRM.
+description: Hockey Nation, coachs et entraînement : 3 types de coachs, compétences, head coach, plafonds U17/U21, embauche, entraînement quotidien et maxings. Pour recruter un coach ou régler l'entraînement PRO/FRM.
 ---
 # Hockey Nation — coachs et entraînement
 

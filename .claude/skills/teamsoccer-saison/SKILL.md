@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-saison
-description: Team Soccer, calendrier : saison de 9 semaines, ligue de 8, montée/descente, coupes et primes, amicaux, rythme hebdomadaire. À charger pour toute question « quand », « combien de matchs » ou pour planifier la routine.
+description: Team Soccer, calendrier : saison de 9 semaines, ligue de 8, montée/descente, coupes et primes, amicaux, rythme hebdomadaire. Pour toute question « quand », « combien de matchs » ou pour planifier la routine.
 ---
 # Team Soccer — saison, compétitions, calendrier
 

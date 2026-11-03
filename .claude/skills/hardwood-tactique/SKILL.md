@@ -1,6 +1,6 @@
 ---
 name: hardwood-tactique
-description: Hardwood, match : Game Plan, depth chart, Pace, Inside/Outside, Man/Zone/Pressure, substitutions, ajustements de mi-temps, Game Management, feuille de match. À charger pour régler un match ou lire un adversaire.
+description: Hardwood, match : Game Plan, depth chart, Pace, Inside/Outside, Man/Zone/Pressure, substitutions, ajustements de mi-temps, Game Management, feuille de match. Pour régler un match ou lire un adversaire.
 ---
 # Hardwood — tactique et match
 

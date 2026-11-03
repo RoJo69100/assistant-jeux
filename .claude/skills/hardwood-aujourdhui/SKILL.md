@@ -1,6 +1,6 @@
 ---
 name: hardwood-aujourdhui
-description: Hardwood — que faire aujourd'hui : plan du jour depuis l'agenda et les alertes. À charger pour tout « que faire », « reprenons » ou plan du soir.
+description: Hardwood — que faire aujourd'hui : plan du jour depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Hardwood — que faire aujourd'hui

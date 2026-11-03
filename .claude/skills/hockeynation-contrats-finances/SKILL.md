@@ -1,6 +1,6 @@
 ---
 name: hockeynation-contrats-finances
-description: Hockey Nation, argent : plafond salarial, paies, pénalités, rachats, prolongations, contrats ELC et Farm, agents libres. À charger pour juger une prolongation, un rachat, une signature ou un échange.
+description: Hockey Nation, argent : plafond salarial, paies, pénalités, rachats, prolongations, contrats ELC et Farm, agents libres. Pour juger une prolongation, un rachat, une signature ou un échange.
 ---
 # Hockey Nation — contrats et finances
 

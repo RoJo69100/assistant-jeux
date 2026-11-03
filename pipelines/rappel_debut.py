@@ -11,7 +11,7 @@ from pathlib import Path
 
 RACINE = Path(__file__).resolve().parent.parent
 ACTIVES = RACINE / "docs" / "regles" / "actives.md"
-LONGUEUR_TITRE = 70
+LONGUEUR_TITRE = 48
 
 
 def titres():
@@ -27,10 +27,9 @@ def titres():
 
 def main():
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
-    cartes = sorted(p.name for p in (RACINE / "docs" / "decisions" / "cartes").glob("*") if p.is_dir())
     print("RAPPEL DE DÉBUT DE SESSION (pipelines/rappel_debut.py)")
     print("Décision (achat, vente, enchère, composition, défaite, entraînement, académie, finances) : "
-          "`python pipelines/dossier.py <jeu> <type>` AVANT de répondre ; cartes : " + ", ".join(cartes) + ".")
+          "`python pipelines/dossier.py <jeu> <type>` AVANT de répondre.")
     print("MCP Supabase : essayer une requête avant d'écrire « pas de base » ; non authentifié = "
           "à autoriser dans les connecteurs claude.ai, pas une panne.")
     print("Règles actives (texte complet : docs/regles/actives.md) :")

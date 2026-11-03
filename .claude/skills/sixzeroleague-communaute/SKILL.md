@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-communaute
-description: Six Zero League vue par le chat et le développeur (Gazelle) : rythme réel, horaires, formation de rôle, sponsor, bots, conseils. Chaque point sourcé et daté. À charger avec les skills de règles, surtout pour le calendrier.
+description: Six Zero League vue par le chat et le développeur (Gazelle) : rythme réel, horaires, formation de rôle, sponsor, bots, conseils. Chaque point sourcé et daté. Avec les skills de règles, surtout pour le calendrier.
 ---
 # Six Zero League — communauté et développeur (chat du jeu)
 

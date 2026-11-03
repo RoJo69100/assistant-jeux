@@ -1,6 +1,6 @@
 ---
 name: basketvibe-entrainement
-description: Entraînement BasketVibe : choix principal/secondaire, gains par semaine, potentiel caché 1–10, ralentissement au-dessus de 70, courbe d'âge, déclin dès 31. À charger pour régler l'entraînement ou projeter un joueur.
+description: Entraînement BasketVibe : choix principal/secondaire, gains par semaine, potentiel caché 1–10, ralentissement au-dessus de 70, courbe d'âge, déclin dès 31. Pour régler l'entraînement ou projeter un joueur.
 ---
 # BasketVibe — entraînement, potentiel, vieillissement
 

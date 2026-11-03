@@ -1,6 +1,6 @@
 ---
 name: derbymanager-regles
-description: Derby Manager, règles : saison de 30 matchs, divisions, coupes, primes, joueurs et tiers, forme, blessures, satisfaction, réputation du manager, licenciement. À charger pour une règle, un calendrier ou l'évaluation d'un joueur.
+description: Derby Manager, règles : saison de 30 matchs, divisions, coupes, primes, joueurs et tiers, forme, blessures, satisfaction, réputation du manager, licenciement. Pour une règle, un calendrier ou l'évaluation d'un joueur.
 ---
 # Derby Manager — règles générales
 

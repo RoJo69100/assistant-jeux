@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-aujourdhui
-description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. À charger pour tout « que faire », « reprenons » ou plan du soir.
+description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Team Soccer — que faire aujourd'hui

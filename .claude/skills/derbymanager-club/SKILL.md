@@ -1,6 +1,6 @@
 ---
 name: derbymanager-club
-description: Derby Manager, club : finances, primes, plafond salarial, conseil, installations, transferts et enchères (85 jours, solidarity fee), prix des joueurs. À charger pour toute question d'argent, d'achat, de vente ou de contrat.
+description: Derby Manager, club : finances, primes, plafond salarial, conseil, installations, transferts et enchères (85 jours, solidarity fee), prix des joueurs. Pour toute question d'argent, d'achat, de vente ou de contrat.
 ---
 # Derby Manager — club (finances, transferts, installations)
 

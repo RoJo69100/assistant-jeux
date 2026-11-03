@@ -1,6 +1,6 @@
 ---
 name: hockeynation-compositions-trades
-description: Hockey Nation : construire les 4 équipes (PRO, FRM, U21, U17) avec montées, descentes et sorties, puis choisir les échanges en comptant les salaires. À charger avant tout rendu de rosters, lineups ou trades.
+description: Hockey Nation : construire les 4 équipes (PRO, FRM, U21, U17) avec montées, descentes et sorties, puis choisir les échanges en comptant les salaires. Avant tout rendu de rosters, lineups ou trades.
 ---
 
 # Hockey Nation — compositions et échanges

@@ -1,6 +1,6 @@
 ---
 name: basketvibe-saison
-description: Calendrier BasketVibe : semaine type, ligue de 12, classement, promotion/relégation, coupes, amicaux, fuseaux horaires. À charger pour toute question « quand », « combien de matchs » ou pour planifier la routine.
+description: Calendrier BasketVibe : semaine type, ligue de 12, classement, promotion/relégation, coupes, amicaux, fuseaux horaires. Pour toute question « quand », « combien de matchs » ou pour planifier la routine.
 ---
 # BasketVibe — saison, calendrier, compétitions
 

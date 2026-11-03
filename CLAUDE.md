@@ -21,12 +21,10 @@ Refonte en cours (branche `refonte-v2`) : `docs/refonte-v2/plan.md`, journal `do
 ## Rendu
 - Un tableau par jeu : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI, pastille + mot) | catégorie | action ; catégories fixes : Composition · Tactique · Entraînement · Transferts · Académie/Draft · Finances · Export · Question · Analyse. Aucune ligne « rien à faire ». Puis 1 à 3 lignes de commentaire.
 - Saisie d'équipe complète, poste par poste, dans l'ordre de l'écran du jeu. Formats contrôlés par `pipelines/forme.py` (jamais contournés).
-- Team Soccer : les deux clubs, toujours. Hockey Nation : les 4 équipes (PRO, FRM, U21, U17).
 - Détail des attentes R-1 à R-12 et A-1 à A-11 : `docs/attentes/attentes.md`. Réponse de conception : 5 lignes au plus, aucun identifiant interne.
 
 ## Agents (en attendant l'orchestrateur, phase 5 du plan)
 - Types propres dans `.claude/agents/` (match, tactique, entrainement, academie, transferts, veille, analyste, decideur, police, synthese, retro) ; jamais `general-purpose`. Donner le jeu et la règle d'horizon dans chaque demande.
-- Retirés (travail fait par moi en SQL) : `effectif`, `finances`, `lecteur-exports`, `verificateur`, `optimisation`.
 - Un agent ne tourne que si un export plus récent que son brief est arrivé. 3 agents d'analyse au plus par passage, 20 par semaine (hors `analyste` et `police`) ; j'annonce le nombre avant de lancer.
 - `police` avant le rendu de toute décision importante ; une défaite en base lance `analyste` ; `synthese` seulement pour assembler au moins deux briefs.
 - Agents d'analyse en medium + Sonnet : je demande `/effort medium` si la session n'y est pas.
@@ -41,9 +39,5 @@ Refonte en cours (branche `refonte-v2`) : `docs/refonte-v2/plan.md`, journal `do
 
 ## Commandes
 - `python pipelines/dossier.py <jeu> <type>` dossier ou carte · `python pipelines/mesure_session.py` coût de la session · `python pipelines/recette.py --tous` contrôle des jeux
-- Tests des hooks : `test_forme.py`, `test_police.py`, `test_controle.py` · `pipelines/scan_secrets.py` (pre-commit)
+- Tests : `pipelines/test_*.py` · budget de contexte : `pipelines/contexte_budget.py`
 - Requêtes SQL de lecture : `python -I pipelines/sql.py "select …" [--max-rows 30]` (tableau compact, lecture seule ; `--page-id N --payload-path a,b` pour un morceau de payload). MCP `supabase` (projet épinglé, sans `project_id`) pour les migrations et le DDL. Jamais l'historique brut entier.
-- Python 3.13, dépendances dans `requirements.txt`.
-
-## Sources BasketVibe
-Manuel https://www.basketvibe.com/guide · devlog https://www.basketvibe.com/devlog · Discord en base (`bronze.discord_messages`).

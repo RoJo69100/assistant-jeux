@@ -1,6 +1,6 @@
 ---
 name: basketvibe-communaute
-description: BasketVibe vu par le Discord et le développeur : moteur v4, tactique, joueurs, académie, économie, marché, coupes. Chaque point sourcé et daté. À charger quand une règle semble avoir changé ou que le manuel est muet.
+description: BasketVibe vu par le Discord et le développeur : moteur v4, tactique, joueurs, académie, économie, marché, coupes. Chaque point sourcé et daté. Quand une règle semble avoir changé ou que le manuel est muet.
 ---
 # BasketVibe — communauté et développeur (Discord)
 

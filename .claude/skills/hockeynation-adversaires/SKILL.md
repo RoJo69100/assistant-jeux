@@ -1,6 +1,6 @@
 ---
 name: hockeynation-adversaires
-description: Hockey Nation, adversaires : exports à faire sur une équipe adverse, lecture de sa force (talents vs poste, coachs, gardiens, plafond). À charger avant un match important ou une série de playoffs.
+description: Hockey Nation, adversaires : exports à faire sur une équipe adverse, lecture de sa force (talents vs poste, coachs, gardiens, plafond). Avant un match important ou une série de playoffs.
 ---
 
 # Hockey Nation — étude des adversaires

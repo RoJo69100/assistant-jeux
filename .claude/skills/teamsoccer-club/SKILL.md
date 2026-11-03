@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-club
-description: Team Soccer, club : finances, salaires, stade (billets, entretien), affluence, marché (banque, enchères de manager, limite d'un achat par semaine), Premium. À charger pour toute question d'argent, de stade, d'achat ou de vente.
+description: Team Soccer, club : finances, salaires, stade (billets, entretien), affluence, marché (banque, enchères de manager, limite d'un achat par semaine), Premium. Pour toute question d'argent, de stade, d'achat ou de vente.
 ---
 # Team Soccer — finances, stade, marché
 

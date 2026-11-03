@@ -1,6 +1,6 @@
 ---
 name: hardwood-regles
-description: Hardwood, règles : conférences, montée/descente, calendrier, effectif, compétences 0-20, potentiel, coaching, fatigue, blessures, redshirt, coachs, prestige. À charger pour une règle, un calendrier ou un joueur.
+description: Hardwood, règles : conférences, montée/descente, calendrier, effectif, compétences 0-20, potentiel, coaching, fatigue, blessures, redshirt, coachs, prestige. Pour une règle, un calendrier ou un joueur.
 ---
 # Hardwood — règles générales
 

@@ -1,6 +1,6 @@
 ---
 name: basketvibe-academie
-description: Académie BasketVibe : jauge de force, investissement hebdo, effet d'un recrutement, fourchettes et potentiel caché des prospects, tests à 25 000. À charger pour juger un rapport de scout (tester, signer, ignorer).
+description: Académie BasketVibe : jauge de force, investissement hebdo, effet d'un recrutement, fourchettes et potentiel caché des prospects, tests à 25 000. Pour juger un rapport de scout (tester, signer, ignorer).
 ---
 # BasketVibe — académie
 

@@ -1,6 +1,6 @@
 ---
 name: basketvibe-economie
-description: BasketVibe — économie et personnel : recettes, salaires, sponsors, coaches et staff. À charger pour toute question d'argent, d'embauche ou de rentabilité.
+description: BasketVibe — économie et personnel : recettes, salaires, sponsors, coaches et staff. Pour toute question d'argent, d'embauche ou de rentabilité.
 ---
 # BasketVibe — économie et personnel
 

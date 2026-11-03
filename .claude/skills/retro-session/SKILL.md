@@ -1,6 +1,6 @@
 ---
 name: retro-session
-description: Rétro de fin de session (tous les jeux) : erreurs de Claude, cause racine, règle corrective dans outputs/retro/ et docs/regles/actives.md. À charger en début de session, en fin de session ou si l'utilisateur dit « tu ne t'améliores pas ».
+description: Rétro de fin de session (tous les jeux) : erreurs de Claude, cause racine, règle corrective dans outputs/retro/ et docs/regles/actives.md. En début de session, en fin de session ou si l'utilisateur dit « tu ne t'améliores pas ».
 ---
 
 # Rétro de session

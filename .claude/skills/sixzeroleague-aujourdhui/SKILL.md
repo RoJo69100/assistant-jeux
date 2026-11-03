@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-aujourdhui
-description: Six Zero League — que faire aujourd'hui : plan du jour depuis gold.sz_agenda et le calendrier frais. À charger pour tout « que faire », « reprenons » ou plan du soir.
+description: Six Zero League — que faire aujourd'hui : plan du jour depuis gold.sz_agenda et le calendrier frais. Pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Six Zero League — que faire aujourd'hui

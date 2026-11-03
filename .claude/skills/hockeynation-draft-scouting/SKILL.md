@@ -1,6 +1,6 @@
 ---
 name: hockeynation-draft-scouting
-description: Hockey Nation, draft et scouting : classes de 100, 10 choix, pré-instructions, Import Draft, scouts (8 max, budget 300 000 $), rapports. À charger pour préparer une draft ou organiser le scouting.
+description: Hockey Nation, draft et scouting : classes de 100, 10 choix, pré-instructions, Import Draft, scouts (8 max, budget 300 000 $), rapports. Pour préparer une draft ou organiser le scouting.
 ---
 
 # Hockey Nation — draft et scouting

@@ -1,6 +1,6 @@
 ---
 name: sixzeroleague-club
-description: Six Zero League, club : finances, sponsor (3 offres, primes), marché des transferts, infrastructures niveaux 1–20, entretien, rentabilité. À charger pour toute question d'argent, d'achat, de vente ou d'investissement.
+description: Six Zero League, club : finances, sponsor (3 offres, primes), marché des transferts, infrastructures niveaux 1–20, entretien, rentabilité. Pour toute question d'argent, d'achat, de vente ou d'investissement.
 ---
 # Six Zero League — club : finances, sponsor, transferts, infrastructures
 

@@ -1,6 +1,6 @@
 ---
 name: hockeynation-joueurs
-description: Hockey Nation, joueurs : équipes et contrôle du GM, compétences 0-10, plafonds, talents fort/faible, double poste, expérience, âge, déclin, retraite. À charger pour évaluer un joueur, une ligne ou un échange.
+description: Hockey Nation, joueurs : équipes et contrôle du GM, compétences 0-10, plafonds, talents fort/faible, double poste, expérience, âge, déclin, retraite. Pour évaluer un joueur, une ligne ou un échange.
 ---
 # Hockey Nation — joueurs
 

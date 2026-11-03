@@ -1,6 +1,6 @@
 ---
 name: basketvibe-joueurs
-description: Joueurs BasketVibe : 8 compétences, PS/TS par poste, taille, forme, fatigue, expérience, minutes lourdes, blessures, retraite. À charger pour évaluer un joueur, la rotation ou une performance.
+description: Joueurs BasketVibe : 8 compétences, PS/TS par poste, taille, forme, fatigue, expérience, minutes lourdes, blessures, retraite. Pour évaluer un joueur, la rotation ou une performance.
 ---
 # BasketVibe — joueurs : compétences, condition, blessures
 

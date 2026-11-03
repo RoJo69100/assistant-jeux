@@ -1,6 +1,6 @@
 ---
 name: derbymanager-tactique
-description: Derby Manager, tactique : grille 5×5, formations, rôles, options, coups de pied arrêtés, remplacements, build up, conversion des tirs, gardiens. À charger pour composer, régler ou analyser un match.
+description: Derby Manager, tactique : grille 5×5, formations, rôles, options, coups de pied arrêtés, remplacements, build up, conversion des tirs, gardiens. Pour composer, régler ou analyser un match.
 ---
 # Derby Manager — tactique et moteur de match
 

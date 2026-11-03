@@ -1,6 +1,6 @@
 ---
 name: basketvibe-tactique
-description: Tactique BasketVibe : cinq par quart-temps, depth chart, consignes par joueur, focus défensif par adversaire, zones, presets, compétences par action. À charger pour construire une tactique ou analyser un match.
+description: Tactique BasketVibe : cinq par quart-temps, depth chart, consignes par joueur, focus défensif par adversaire, zones, presets, compétences par action. Pour construire une tactique ou analyser un match.
 ---
 # BasketVibe — tactique et moteur de match
 

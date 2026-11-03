@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-joueurs
-description: Team Soccer, joueurs : 10 compétences, sous-rôles, OVR pondéré, Forme, endurance, talents, blessures, cartons, âge, valeur, effectif 16–24. À charger pour évaluer un joueur, son poste, la forme ou les suspensions.
+description: Team Soccer, joueurs : 10 compétences, sous-rôles, OVR pondéré, Forme, endurance, talents, blessures, cartons, âge, valeur, effectif 16–24. Pour évaluer un joueur, son poste, la forme ou les suspensions.
 ---
 # Team Soccer — joueurs
 
