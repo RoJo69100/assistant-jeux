@@ -10,3 +10,15 @@ Cœur commun (refonte v2, 1.5) : variables lues dans les vues génériques, para
 | C3 | Capacité d'investissement | `select as_of, balance, reserve, capacite_invest, cap_space from gold.finance_health where game = :game` | Test ou signature ≤ capacité moins dépenses décidées | `docs/regles/actives.md` E8 |
 | C4 | Scouts et personnel | `select role, count(*) as n, max(day) as releve from core.staff where game = :game group by role order by role limit 15` | Relevé périmé : le dire | `pipelines/contrat_core.py` |
 | C5 | Exports à refaire | `select ecran, statut, age_h from gold.exports_state where game = :game and statut <> '🟩 à jour' order by ordre limit 15` | Rapport d'académie périmé : « exporte » | `core.export_rule` |
+
+## Couverture de `docs/decisions/variables.md` § academie
+| Variable obligatoire | Où |
+|---|---|
+| Prospect : compétences, fourchettes, âge | C1 |
+| Potentiel estimé | C1 si affiché ; sinon estimation du skill du jeu |
+| Règles du jeu (coût, effet, probabilités) | skill académie / draft du jeu |
+| Besoin de l'effectif par poste | C2 |
+| Budget | C3 |
+| Comparaison aux académies des autres clubs | carte du jeu |
+| Recrutement Hardwood (taille, intérêt, points, offres) | carte Hardwood |
+| Avis des amis, ce qui prouvera l'erreur | dossier et rendu |

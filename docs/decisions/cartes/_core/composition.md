@@ -12,3 +12,14 @@ Cœur commun (refonte v2, 1.5) : variables lues dans les vues génériques, para
 | C5 | Bilan de la saison | `select competition_kind, my_result, count(*) as n, round(avg(my_score), 1) as pour, round(avg(opp_score), 1) as contre from core.fixture where game = :game and my_result is not null group by 1, 2 order by 1, 2 limit 12` | Ce qui a marché / échoué : voir learnings du jeu | `outputs/<jeu>/learnings.md` |
 | C6 | Agenda du jour | `select at_time, priority, category, action from gold.agenda where game = :game and day = current_date order by at_time limit 10` | Heure limite du réglage | `core.agenda_rule` |
 | C7 | Exports à refaire | `select ecran, statut, age_h from gold.exports_state where game = :game and statut <> '🟩 à jour' order by ordre limit 15` | Effectif ou tactique périmé : « exporte » avant la saisie | `core.export_rule` |
+
+## Couverture de `docs/decisions/variables.md` § composition
+| Variable obligatoire | Où |
+|---|---|
+| Adversaire : forces, résultats de la saison | C1, C4 ; effectif et tactique lue : carte du jeu |
+| Forme, fatigue, blessures, suspensions | C2, C3 |
+| Minutes lourdes | carte du jeu (stats de match) |
+| Fit poste par poste, réglages dans l'ordre de l'écran | carte du jeu (rendu figé) |
+| Règles du moteur | skill tactique du jeu |
+| Ce qui a marché / échoué | C5 + learnings du jeu |
+| Avis des amis, ce qui prouvera l'erreur | dossier et rendu |

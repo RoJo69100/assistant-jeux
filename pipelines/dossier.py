@@ -124,8 +124,10 @@ def coeur(jeu: str, type_: str, jour: str) -> list[str]:
     except BaseException as e:  # pas de base : la carte reste utile sans valeurs
         conn = None
         L += [f"⚠ base injoignable ({str(e).splitlines()[0] if str(e) else type(e).__name__}) : valeurs à lire à la main.", ""]
+    suite = lignes[lignes.index("## Variables") + 1:] if "## Variables" in lignes else []
+    fin = next((i for i, l in enumerate(suite) if l.startswith("## ")), len(suite))
     try:
-        for l in lignes[lignes.index("## Variables") + 1:] if "## Variables" in lignes else []:
+        for l in suite[:fin]:
             if l.startswith("| # "):
                 L.append(l + " Dernière valeur |")
             elif l.startswith("|---"):
@@ -137,6 +139,7 @@ def coeur(jeu: str, type_: str, jour: str) -> list[str]:
     finally:
         if conn:
             conn.close()
+    L += [""] + [l.replace("## ", "### ", 1) if l.startswith("## ") else l for l in suite[fin:]]  # couverture : ce que le delta doit fournir
     return L + ["", "La carte du jeu ci-dessous est le **delta** : ses variables s'ajoutent au cœur ; une variable qui répète une variable C renvoie à son numéro.", ""]
 
 

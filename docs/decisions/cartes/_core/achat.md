@@ -12,3 +12,17 @@ Cœur commun (refonte v2, 1.5) : variables lues dans les vues génériques, para
 | C5 | Prix comparables | `select position, age, count(*) as n, round(avg(price)) as prix_moyen, max(price) as prix_max from core.market_listing where game = :game and price is not null and ends_at < now() group by 1, 2 order by 1, 2 limit 30` | Dernier prix vu, pas le prix final (statut figé au dernier relevé) | `docs/attentes/jeux/<jeu>.yaml` core.market_listing |
 | C6 | Alertes | `select prio, domaine, alerte from gold.daily_alerts where game = :game and domaine in ('transferts', 'finances', 'contrats') order by prio limit 10` | Vente ou achat impossible signalé = pas d'achat | `core.alert_rule` |
 | C7 | Exports à refaire | `select ecran, statut, age_h from gold.exports_state where game = :game and statut <> '🟩 à jour' order by ordre limit 15` | Chiffre lu dans un export périmé : le dire | `core.export_rule` |
+
+## Couverture de `docs/decisions/variables.md` § achat
+| Variable obligatoire | Où |
+|---|---|
+| Joueur, âge, poste | C4 ; fit au poste : vue fit du jeu (carte du jeu) |
+| Compétences clés vs titulaire et remplaçant | C2 (note) ; compétences du poste : carte du jeu |
+| Potentiel / plafond | carte du jeu (absent de `core.market_listing`) |
+| Forme, fatigue, blessures de la cible | carte du jeu (absent de `core.market_listing`) |
+| Salaire et durée de contrat de la cible | carte du jeu (pas de colonne salaire dans `core.market_listing`) |
+| Prix demandé, ventes comparables | C4, C5 |
+| Capacité moins dépenses décidées | C1 + registre `fait-` |
+| Taxe et règles d'enchère, revente | skill transferts du jeu (carte du jeu) |
+| Effet sur l'effectif | C3 |
+| Avis des amis, ce qui prouvera l'erreur | dossier et rendu |

@@ -10,3 +10,14 @@ Cœur commun (refonte v2, 1.5) : variables lues dans les vues génériques, para
 | C3 | Joueurs en déclin | `select name, age, rating, age_declin from gold.roster_bilan where game = :game and en_declin order by age desc limit 15` | Pas d'entraînement de progression sur un joueur en déclin sans raison | `core.game_params` age_declin |
 | C4 | Effectif au poste | `select position, rang_poste, name, age, rating from gold.roster_bilan where game = :game order by position, rang_poste limit 40` | Qui doit progresser pour quel poste | `docs/decisions/variables.md` § entrainement |
 | C5 | Exports à refaire | `select ecran, statut, age_h from gold.exports_state where game = :game and statut <> '🟩 à jour' order by ordre limit 15` | Entraînement périmé : « exporte » avant de trancher | `core.export_rule` |
+
+## Couverture de `docs/decisions/variables.md` § entrainement
+| Variable obligatoire | Où |
+|---|---|
+| Âge, gains des semaines passées | C2 (7 jours) ; plus long : carte du jeu |
+| Potentiel | carte du jeu (absent de `core.player_daily`) |
+| Compétences sous / au-dessus des seuils du poste | `skills` de `core.player_daily` + seuils du skill du jeu |
+| Règles de progression | skill entraînement du jeu |
+| Objectifs de l'effectif par poste | C4 |
+| Risque (blessure, intensité, fatigue) | C1 (intensité) ; blessure et fatigue : carte `composition` C2 |
+| Avis des amis, ce qui prouvera l'erreur | dossier et rendu |
