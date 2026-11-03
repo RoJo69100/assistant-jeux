@@ -15,6 +15,9 @@ Une case n'est cochée que quand son critère de fin est vérifié (date + mesur
 
 ## Phases suivantes
 - [ ] Phase 1 — couche `core`
+  - [x] 1.1 (début, 2026-11-03) schémas `core` + `adapt`, `core.game_params` (10 paramètres BV sourcés) — `sql/core/001_core_schema.sql`
+  - [x] 1.2 (BV, 2026-11-03) `adapt.basketvibe_player_daily` (245 lignes, 0 doublon, forme/fatigue 0–1, salaire 237/245) et `adapt.basketvibe_fixture` (70 fixtures, 0 doublon, `my_result` repris de `bv_matches`) — `sql/adapters/basketvibe.sql`. **Constats** : 2 matchs de coupe passés (29 et 31/10) et la J1 du 02/11 sans résultat (matchs non exportés) ; `scheduled_at` nul (fuseau du kickoff non sourcé).
+  - [ ] Reste : autres entités BV (standing, finance_daily…), `build_core.py`, `contrat_core.py`, HN, gold générique, cartes `_core`
 - [ ] Phase 2 — moteur de décision
 - [ ] Phase 3 — journal de décisions `learn`
 - [ ] Phase 4 — base de connaissances `kb`
