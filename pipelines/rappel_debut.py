@@ -25,8 +25,25 @@ def titres():
     return sortie
 
 
+def alerte_sauvegarde():
+    """Une ligne seulement si la sauvegarde du bronze a plus de 10 jours (ou n'existe pas)."""
+    sys.path.insert(0, str(RACINE / "pipelines"))
+    try:
+        import sauvegarde_bronze as sb
+        age = sb.jours_depuis(Path.home() / "backups" / "assistant-jeux")
+    except Exception:
+        return None
+    if age is None:
+        return "SAUVEGARDE BRONZE : jamais faite — `python -I pipelines/sauvegarde_bronze.py`."
+    if age > sb.JOURS_ALERTE:
+        return f"SAUVEGARDE BRONZE : {age:.0f} jours — `python -I pipelines/sauvegarde_bronze.py`."
+    return None
+
+
 def main():
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+    if (a := alerte_sauvegarde()):
+        print(a)
     print("RAPPEL DE DÉBUT DE SESSION (pipelines/rappel_debut.py)")
     print("Décision (achat, vente, enchère, composition, défaite, entraînement, académie, finances) : "
           "`python pipelines/dossier.py <jeu> <type>` AVANT de répondre.")
