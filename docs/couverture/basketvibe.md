@@ -84,7 +84,7 @@ Cartes : `docs/decisions/cartes/basketvibe/<type>.md` (composition, defaite, ach
 | 163 | Pas de « si », vérifications tout le temps | R-5 ; hook `pipelines/police.py` ; checks chiffrés des cartes | ✅ |
 | 164 | Réponses simples, mise en forme | rendu des cartes ; CLAUDE.md § Présentation | ✅ |
 | 165 | Des tableaux | rendu des cartes | ✅ |
-| 166 | Tout vérifier, apprendre de ses erreurs | `outputs/basketvibe/learnings.md` (C-nnn → L-nnn) ; § Checks appris de chaque carte ; `docs/retro/regles-apprises.md` | ✅ |
+| 166 | Tout vérifier, apprendre de ses erreurs | `outputs/basketvibe/learnings.md` (C-nnn → L-nnn) ; § Checks appris de chaque carte ; `docs/regles/archive/regles-apprises-2026-11-02.md` | ✅ |
 | 167 | Pas d'hypothèse sans vérifier | statut confirmé / en doute de la connaissance ; colonne Source des cartes | ✅ |
 | 168 | Beaucoup d'argent : que faire, axes à améliorer | carte `finances` var. 8-10 + carte `achat` | ✅ |
 | 169 | Beaucoup de défaites : prendre une action | carte `defaite` + agent `decideur` (jamais « ne rien changer ») | ✅ |
