@@ -2,6 +2,8 @@
 -- Effectif = dernier relevé de chaque équipe ; valeurs remises dans l'échelle du jeu (core.game_params echelle_*).
 -- Les domaines « ancienne_vue » sont repris tels quels de l'ancienne vue du jeu, en attendant leur portage.
 -- Parité : pipelines/alertes_parite.py.
+-- 2026-11-04 : Team Soccer, Six Zero League, Hardwood (anciennes vues) et Derby Manager ; colonne club en fin de vue
+-- (club_label de core.player_daily, ou équipe de l'ancienne vue : Team Soccer a deux clubs).
 
 create or replace view gold.daily_alerts with (security_invoker = true) as
 with r as (
@@ -48,7 +50,7 @@ al as (
   join r on r.game = d.game and r.declencheur = 'effectif_dispo'
   where d.n <= r.seuil_haut
   union all
-  select e.game, null, r.rule_id, r.priority, r.domaine, r.modele,
+  select e.game, e.team_id, r.rule_id, r.priority, r.domaine, r.modele,
          jsonb_build_object('ecran', e.ecran, 'statut', e.statut, 'age_h', e.age_h)
   from gold.exports_state e join r on r.game = e.game and r.declencheur = 'export_perime'
   where e.statut <> '🟩 à jour'
@@ -68,17 +70,29 @@ al as (
   join r on r.game = f.game and r.declencheur = 'dernier_match'
 ),
 anciennes as (
-  select 'basketvibe'::text as game, a.priority as prio, a.category as domaine, a.alert as alerte
+  select 'basketvibe'::text as game, a.priority as prio, a.category as domaine, a.alert as alerte, null::text as club
   from gold.bv_daily_alerts a
   union all
-  select 'hockeynation', a.prio, a.domaine, a.alerte from gold.hn_daily_alerts a
+  select 'hockeynation', a.prio, a.domaine, a.alerte, null from gold.hn_daily_alerts a
+  union all
+  select 'teamsoccer', a.priority, a.category, a.alert, a.team from gold.ts_daily_alerts a
+  union all
+  select 'sixzeroleague', a.priority, a.category, a.alert, null from gold.sz_daily_alerts a
+  union all
+  select 'hardwood', a.prio, a.categorie, a.alerte, null from gold.hw_daily_alerts a
+),
+equipes as (
+  select distinct on (game, team_id) game, team_id, club_label
+  from core.player_daily order by game, team_id, day desc
 )
 select al.game, al.team_id, al.priority as prio,
        (array['🟥 URGENT', '🟧 IMPORTANT', '🟩 SUIVI'])[al.priority] as niveau,
-       al.domaine, core.remplir(al.modele, al.v) as alerte, al.rule_id
+       al.domaine, core.remplir(al.modele, al.v) as alerte, al.rule_id,
+       q.club_label as club
 from al
+left join equipes q on q.game = al.game and q.team_id = al.team_id
 union all
-select a.game, null, a.prio, (array['🟥 URGENT', '🟧 IMPORTANT', '🟩 SUIVI'])[a.prio], a.domaine, a.alerte, r.rule_id
+select a.game, null, a.prio, (array['🟥 URGENT', '🟧 IMPORTANT', '🟩 SUIVI'])[a.prio], a.domaine, a.alerte, r.rule_id, a.club
 from anciennes a join r on r.game = a.game and r.declencheur = 'ancienne_vue' and r.domaine = a.domaine;
 
 grant select on gold.daily_alerts to assistant_ro;

@@ -15,9 +15,13 @@ from sql import url_ro  # noqa: E402
 
 RACINE = Path(__file__).resolve().parent.parent
 JOURNAL = RACINE / "outputs/refonte-v2/parite-alertes.log"
+# (priorité, domaine, texte, club) ; club = équipe de l'ancienne vue (Team Soccer), sinon nul.
 ANCIENS = {
-    "basketvibe": "select priority, category, alert from gold.bv_daily_alerts",
-    "hockeynation": "select prio, domaine, alerte from gold.hn_daily_alerts",
+    "basketvibe": "select priority, category, alert, null::text from gold.bv_daily_alerts",
+    "hockeynation": "select prio, domaine, alerte, null::text from gold.hn_daily_alerts",
+    "teamsoccer": "select priority, category, alert, team from gold.ts_daily_alerts",
+    "sixzeroleague": "select priority, category, alert, null::text from gold.sz_daily_alerts",
+    "hardwood": "select prio, categorie, alerte, null::text from gold.hw_daily_alerts",
 }
 # Domaines où la vue générique diffère exprès (sources dans core.alert_rule).
 VOULUS = {
@@ -26,10 +30,12 @@ VOULUS = {
         "match": "matchs de coupe et de ligue passés sans résultat signalés ; compétition en français",
     },
     "hockeynation": {"match": "matchs passés encore « upcoming » signalés (nouveau domaine)"},
+    "teamsoccer": {"export": "un écran par ligne et par club, lu dans gold.exports_state (exports_parite.py)"},
+    "sixzeroleague": {"export": "14 écrans au lieu de 5, même hors saison, lus dans gold.exports_state"},
 }
 REQUETE = """
-with a as (select * from ({ancien}) x(prio, domaine, alerte) where domaine <> all(%s)),
-     n as (select prio, domaine, alerte from gold.daily_alerts where game = %s and domaine <> all(%s))
+with a as (select * from ({ancien}) x(prio, domaine, alerte, club) where domaine <> all(%s)),
+     n as (select prio, domaine, alerte, club from gold.daily_alerts where game = %s and domaine <> all(%s))
 (select 'ancien seul', * from (select * from a except select * from n) x)
 union all
 (select 'nouveau seul', * from (select * from n except select * from a) y)
@@ -57,8 +63,8 @@ def main() -> int:
             ecarts = cur.fetchall()
             echec |= bool(ecarts)
             lignes.append(f"{aujourdhui}\t{jeu}\t{'ecart' if ecarts else 'ok'}\t{len(ecarts)}")
-            for sens, prio, domaine, alerte in ecarts[:5]:
-                print(f"❌ {jeu} {sens} : {prio} {domaine} — {alerte}")
+            for sens, prio, domaine, alerte, club in ecarts[:5]:
+                print(f"❌ {jeu} {sens} : {prio} {domaine} {club or ''} — {alerte}")
             for domaine, raison in VOULUS.get(jeu, {}).items():
                 print(f"⚪ {jeu} {domaine} hors parité : {raison}")
     JOURNAL.parent.mkdir(parents=True, exist_ok=True)
