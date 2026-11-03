@@ -1,0 +1,2 @@
+#!/bin/sh
+python -I pipelines/scan_secrets.py || exit 1
