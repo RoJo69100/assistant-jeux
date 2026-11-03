@@ -42,7 +42,7 @@ Refonte en cours (branche `refonte-v2`) : `docs/refonte-v2/plan.md`, journal `do
 ## Commandes
 - `python pipelines/dossier.py <jeu> <type>` dossier ou carte · `python pipelines/mesure_session.py` coût de la session · `python pipelines/recette.py --tous` contrôle des jeux
 - Tests des hooks : `test_forme.py`, `test_police.py`, `test_controle.py` · `pipelines/scan_secrets.py` (pre-commit)
-- Requêtes SQL via le MCP `supabase` (projet épinglé, sans `project_id`) : colonnes choisies et `LIMIT`, jamais l'historique brut entier.
+- Requêtes SQL de lecture : `python -I pipelines/sql.py "select …" [--max-rows 30]` (tableau compact, lecture seule ; `--page-id N --payload-path a,b` pour un morceau de payload). MCP `supabase` (projet épinglé, sans `project_id`) pour les migrations et le DDL. Jamais l'historique brut entier.
 - Python 3.13, dépendances dans `requirements.txt`.
 
 ## Sources BasketVibe

@@ -2,3 +2,4 @@
 python-dotenv
 supabase
 tzdata
+psycopg[binary]
