@@ -22,3 +22,10 @@ Une case n'est cochée que quand son critère de fin est vérifié (date + mesur
 - [ ] Phase 6 — industrialiser (jeux 7 à 23)
 - [ ] Phase 7 — qualité, CI, observabilité
 - [ ] Phase 8 — futur
+
+## Point de reprise (2026-11-03, arrêt volontaire avant 0.3)
+- Fait : 0.0, 0.2 ; 0.1 partielle (M2, M5, M6 à mesurer).
+- Prochaine étape : **0.3 Régime de contexte**, en commençant par le triage des règles (`docs/regles/triage.md`), sans rien supprimer avant.
+- Contexte : plan Supabase = Free (pas de sauvegarde automatique, donc 0.6 obligatoire) ; Discord hors Git ; zip `~/backups/assistant-jeux/discord-chat-2026-11-03.zip` et miroir `repo-avant-purge.git` hors dépôt.
+- Deuxième PC : dézipper les données à la racine, puis `git fetch origin` et `git reset --hard origin/main` (historique réécrit).
+- Reprise : `git checkout refonte-v2`, lire `docs/refonte-v2/plan.md` §0, §1 et la Phase 0 depuis 0.3 ; conception = `/model opus`.
