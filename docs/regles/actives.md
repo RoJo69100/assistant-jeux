@@ -15,14 +15,10 @@ K9. Quand j'écris une mémoire → je la copie dans `docs/memoire-claude/`, je 
 K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau levier nommé (jusqu'à `learn.lesson`, phase 3).
 
 ## E sans code encore — les plus violées (à remplacer par du code)
-E1. Quand je rends un plan → rien après aujourd'hui : ni « demain », ni une date future ; un match de demain se prépare aujourd'hui. (hook à écrire, 0.3-bis)
 E2. Quand je cite un résultat de match → `my_result` / `is_mine` de la base, jamais le score brut ; un score partiel se remet de notre point de vue. (`core.fixture`, 1.1)
-E3. Quand j'écris un fichier → outil Write, jamais un heredoc. (hook à écrire, 0.3-bis)
-E4. Quand je veux écrire « je ne peux pas » → une preuve (requête, mesure) ou « je ne sais pas encore, je le trouve ainsi : <commande> ». (hook à écrire, 0.3-bis)
-E5. Quand je lance un agent → `subagent_type` propre, jamais `general-purpose` ; 3 agents au plus par passage ; je l'annonce. (hook à écrire, 0.3-bis ; `orchestre.py`, 5.1)
 E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`kb.py`, 4.4)
 E7. Quand je prépare un plan du jour → calendrier de moins de 12 h et registre `fait-…` lus dans le même tour, sinon première ligne « exporte le calendrier ». (`gold.agenda`, 1.4)
 E8. Quand je propose un achat → `capacite_invest` moins les dépenses déjà décidées couvre le prix, sinon la cible est abandonnée. (`gold.buy_targets`, 2.4)
 
 ## Déjà bloquées par un hook (pour mémoire, pas à relire)
-Format des tableaux et pastilles (`forme.py`) · dossier et trace police avant une décision, aveux « pas tout lu » (`police.py`) · rappel `/model opus`, `deja-fait`, concision, « je tranche » (`controle.py`) · secrets (`scan_secrets.py`, pre-commit).
+Horizon (report dans un plan), « je ne peux pas » sans preuve, agent `general-purpose`, heredoc d'écriture (`controle.py` f à i, 2026-11-03) · Format des tableaux et pastilles (`forme.py`) · dossier et trace police avant une décision, aveux « pas tout lu » (`police.py`) · rappel `/model opus`, `deja-fait`, concision, « je tranche » (`controle.py`) · secrets (`scan_secrets.py`, pre-commit).

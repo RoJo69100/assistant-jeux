@@ -1,4 +1,4 @@
-"""Test du hook pipelines/controle.py : un cas valide et un cas fautif par contrôle (a à e).
+"""Test du hook pipelines/controle.py : un cas valide et un cas fautif par contrôle (a à i).
 
 Lancer : python pipelines/test_controle.py   (code 1 si un cas se trompe)
 """
@@ -24,6 +24,14 @@ def dit(t, model="claude-sonnet"):
 PLAN = """| Priorité | Catégorie | Action |
 |---|---|---|
 | 🟩 SUIVI | Export | Exporter la page du match. |
+"""
+PLAN_REPORT = """| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟧 IMPORTANT | Export | Exporter la page du match demain matin. |
+"""
+PLAN_DEMAIN = """| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | Saisir ce soir la composition du match de demain 13:00. |
 """
 CHIFFRE = """| Joueur | Points |
 |---|---|
@@ -62,6 +70,20 @@ CAS = [
     ("e conception courte", "Hook ajouté, 12 tests passent.", [demande("conçois le hook")], True),
     ("e identifiant interne", "Fait, comme le demande R-1 et la règle 75.", [demande("conçois le hook")], False),
     ("e longue hors conception", LONG, [demande("raconte le match")], True),
+    # f : horizon
+    ("f action reportée", PLAN_REPORT, [demande("que faire"), SKILL, SQL], False),
+    ("f composition d'un match de demain", PLAN_DEMAIN, [demande("que faire"), SKILL, SQL], True),
+    # g : « je ne peux pas »
+    ("g je ne peux pas sans preuve", "Je ne peux pas lire la base.", [demande("stats")], False),
+    ("g je ne peux pas avec issue", "Je ne peux pas dire, je ne sais pas encore : je le trouve avec dossier.py.", [demande("stats")], True),
+    # h : type d'agent
+    ("h general-purpose", "Lancé.", [demande("analyse"), outil("Agent", {"subagent_type": "general-purpose"})], False),
+    ("h type propre", "Lancé.", [demande("analyse"), outil("Agent", {"subagent_type": "match"})], True),
+    ("h type introuvable déclaré", "Le type veille est introuvable, j'utilise general-purpose.",
+     [demande("analyse"), outil("Agent", {"subagent_type": "general-purpose"})], True),
+    # i : heredoc
+    ("i heredoc qui écrit", "Fait.", [demande("écris"), outil("Bash", {"command": "cat > a.md <<'EOF'\nx\nEOF"})], False),
+    ("i heredoc de lecture", "Fait.", [demande("lis"), outil("Bash", {"command": "python - <<'EOF'\nprint(1)\nEOF"})], True),
 ]
 
 if __name__ == "__main__":

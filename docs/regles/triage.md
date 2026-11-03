@@ -29,9 +29,9 @@ Sources triées : `CLAUDE.md` (CM-nn), `docs/attentes/attentes.md` (R-n, A-n), `
 | CM-18 | Session et agents en Sonnet ; conception = rappel `/model opus` puis `/model sonnet` | E | hook | existant : `controle.py` contrôle a |
 | CM-19 | « Que faire » = actions maintenant par jour ; BV a un amical chaque jour | S | `gold.agenda`, `resume.md` BV | à écrire : `gold.agenda` générique (1.4) |
 | CM-20 | Règle d'or : seulement le faisable maintenant ; exception transferts | E | `gold.agenda` (champ `exception_transfert`) | à écrire : `gold.agenda` (1.4) ; annexe A |
-| CM-21 | Horizon aujourd'hui seulement ; achat contrôlé contre `capacite_invest` moins l'engagé | E | `forme.py`, `gold.buy_targets` | **aucun hook aujourd'hui** (voir arbitrage 10) ; à écrire : mots « demain », dates futures dans un plan (`forme.py`, 0.3-bis) ; `buy_targets` (2.4) |
+| CM-21 | Horizon aujourd'hui seulement ; achat contrôlé contre `capacite_invest` moins l'engagé | E | `forme.py`, `gold.buy_targets` | existant depuis 2026-11-03 : `controle.py` f (report dans un plan, cas « demain matin », « plus tard »…) ; `buy_targets` (2.4) |
 | CM-22a | Ordre de lancement selon `dependances` du YAML, briefs amont transmis | E | `orchestre.py` | à écrire : 5.1 |
-| CM-22b | Type d'agent propre, jamais `general-purpose` + « lis le fichier » ; aucune demande libre | E | hook | à écrire : contrôle sur les appels `Agent` dans `controle.py` (0.3-bis) |
+| CM-22b | Type d'agent propre, jamais `general-purpose` + « lis le fichier » ; aucune demande libre | E | hook | existant depuis 2026-11-03 : `controle.py` h |
 | CM-22c | `police` obligatoire avant achat, vente, composition, défaite, finances… | E | `police.py` | existant : H1/H2 |
 | CM-22d | Défaite en base lance `analyste` ; deux défaites lancent `decideur` | E | `orchestre.py` | à écrire : 5.1 (+ `match_objective` 2.2) |
 | CM-22e | Avant `/clear` ou après 5 échanges : `retro` + `mesure_session.py` | E | hook | existant : H5 |
@@ -75,7 +75,7 @@ Sources triées : `CLAUDE.md` (CM-nn), `docs/attentes/attentes.md` (R-n, A-n), `
 | CM-41.14 | Un jeu par session, `/clear` entre deux jeux | K | actives (K5) | existant : H5 |
 | CM-41.15 | Briefs plafonnés : une page, résumé d'agent 10 lignes | E | `contexte_budget.py` | à écrire : 0.5 (budget brief) |
 | CM-41.16 | État des exports d'abord en SQL, clés nouvelles ajoutées à `commun.md` | E | `gold.exports_state` | existant : `gold.*_exports_state`, `sante_collecte`, `exports_nouvelles_cles` ; générique 1.4 |
-| CM-42 | Écrire les fichiers avec Write, jamais par heredoc | E | hook PreToolUse | à écrire : refuser `Bash` avec heredoc d'écriture de fichier (0.3-bis) ; interim actives |
+| CM-42 | Écrire les fichiers avec Write, jamais par heredoc | E | hook PreToolUse | existant depuis 2026-11-03 : `controle.py` i |
 | CM-43 | Sources BasketVibe (manuel, devlog, Discord) | S | `resume.md` BV, `kb` | — |
 
 ## 2. `docs/attentes/attentes.md` (reste la source des exigences ; `actives.md` ne la recopie pas)
@@ -116,7 +116,7 @@ Sources triées : `CLAUDE.md` (CM-nn), `docs/attentes/attentes.md` (R-n, A-n), `
 | L9 | (80) conception : 5 lignes, zéro identifiant interne | E | hook | existant : contrôle e |
 | L12 | (79) lire les règles globales ; liste G1–G12 au démarrage | E | `rappel_debut.py` | existant ; remplacé par titres actifs + 3 exports en retard (0.3-D) |
 | L13 | (77) `dossier.py` à chaque décision, la carte d'abord | E | `police.py` H1 | existant |
-| L14 | (78) « je ne peux pas » interdit sans preuve ou commande | E | hook | à écrire : mots dans `controle.py` (0.3-bis) |
+| L14 | (78) « je ne peux pas » interdit sans preuve ou commande | E | hook | existant depuis 2026-11-03 : `controle.py` g |
 | L15 | (76b) règle globale > résumé de jeu | K | actives (K8) | — |
 | L18 | (76) MCP non authentifié = état de session à autoriser, réessayer au début | S | `rappel_debut.py` (texte gardé) | existant |
 | L19 | (75) tout lire en ENTIER, pas de grep partiel | E | `kb.py`, compteur | remplacée par P3 (annexe A) ; à écrire : 4.4 |
@@ -218,4 +218,4 @@ Sources triées : `CLAUDE.md` (CM-nn), `docs/attentes/attentes.md` (R-n, A-n), `
 ## 4. Comptage et K retenues
 
 K (10 sur 15 permis) : K1 CM-01 · K2 CM-03 · K3 A-4 (accord) · K4 CM-15 · K5 CM-17 + L25 + L73 + CM-41.14 · K6 R-5 · K7 R-11 · K8 L15 · K9 CM-13 · K10 CM-33 (interim jusqu'à 3.3).
-Les règles E sans code existant et les plus violées (CM-21 horizon, CM-39.7 `my_result`, CM-42 heredoc, L14 « je ne peux pas ») restent en tête de `actives.md` jusqu'à leur code (0.3-bis ou phases 1 à 5).
+Les règles E sans code encore (E2 `my_result`, E6 « absent », E7 calendrier frais, E8 achat finançable) restent en tête de `actives.md` jusqu'à leur code (phases 1 à 5). Horizon, heredoc, « je ne peux pas » et `general-purpose` sont bloqués par `controle.py` f à i depuis le 2026-11-03.

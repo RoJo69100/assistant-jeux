@@ -10,6 +10,10 @@ Contrôles sur la réponse finale de la session principale :
   d  tranche    phrase fermée : « veux-tu que », « oui ou non », « à toi de voir », « peut-être »…
   e  concision  réponse de conception de plus de 15 lignes hors tableaux et code, ou identifiant interne
                 (R-1, G3, « règle 75 ») dans une réponse de conception.
+  f  horizon    plan dont une cellule Action reporte (« demain matin », « la semaine prochaine », « plus tard »…).
+  g  preuve     « je ne peux pas » sans « je ne sais pas encore » ni preuve.
+  h  agent      agent lancé sans type propre (general-purpose), sauf si la réponse dit « introuvable ».
+  i  Write      fichier écrit par heredoc dans le terminal (Bash ou PowerShell).
 Le texte entre « », "", `` ou ``` est ignoré. Une seule relance (stop_hook_active). Tests : test_controle.py.
 """
 
@@ -103,6 +107,42 @@ def lignes_hors_tableau(text: str) -> int:
     return sum(1 for l in sans_code.splitlines() if l.strip() and not l.strip().startswith("|"))
 
 
+REPORT = [
+    "demain matin", "demain soir", "a faire demain", "fais demain", "apres-demain", "apres demain",
+    "la semaine prochaine", "plus tard", "apres le prochain match", "ce week-end", "le mois prochain",
+]
+NE_PEUT_PAS = ["je ne peux pas", "je n'ai pas la possibilite", "impossible pour moi"]
+ISSUE = ["je ne sais pas encore", "je le trouve", "preuve"]
+HEREDOC = re.compile(r"<<-?\s*['\"]?\w+['\"]?")
+ECRIT_FICHIER = re.compile(r"\b(cat|tee)\b[^\n|]*>|>>?\s*[\w./~\\-]+\s*<<|write_text\(|open\([^)]*['\"][wa]b?['\"]")
+
+
+def reports(text: str) -> list[str]:
+    """Phrases de report (horizon) dans les cellules « Action » des tableaux de plan (règle E1 de actives.md)."""
+    trouves = []
+    for cols, lignes in forme.tableaux(text):
+        if forme.idx(cols, "action") < 0:
+            continue
+        ia = forme.idx(cols, "action")
+        for l in lignes:
+            cellule = police.norm(l[ia]) if ia < len(l) else ""
+            trouves += [p for p in REPORT if p in cellule]
+    return sorted(set(trouves))
+
+
+def heredoc_ecrit(ops: list[tuple[str, dict]]) -> bool:
+    for nom, inp in ops:
+        cmd = str(inp.get("command", ""))
+        if nom in ("Bash", "PowerShell") and HEREDOC.search(cmd) and ECRIT_FICHIER.search(cmd):
+            return True
+    return False
+
+
+def agent_general(ops: list[tuple[str, dict]]) -> bool:
+    return any(nom in ("Agent", "Task") and inp.get("subagent_type", "general-purpose") == "general-purpose"
+               for nom, inp in ops)
+
+
 def fautes_de(text: str, ents: list[dict]) -> list[str]:
     n = police.nettoie(text)
     t = tour(ents)
@@ -121,6 +161,16 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
     if chiffre(text) and not source(ops_tour):
         f.append("c : tableau chiffré sans requête SQL, fichier lu ou `synthese` dans ce tour")
     f += [f"d : phrase fermée « {p} » — tranche (« fais X »), doute en une demi-ligne après" for p in FERMEES if p in n]
+    if forme.a_plan(text) and reports(text):
+        f.append("f : action reportée (" + ", ".join(reports(text)) + ") — horizon = aujourd'hui seulement, "
+                 "ce qui n'est pas faisable ce soir n'est pas écrit")
+    if any(p in n for p in NE_PEUT_PAS) and not any(p in n for p in ISSUE):
+        f.append("g : « je ne peux pas » sans preuve — donne la mesure ou « je ne sais pas encore, je le trouve ainsi : <commande> »")
+    if agent_general(ops_tour) and "introuvable" not in n:
+        f.append("h : agent lancé en general-purpose — utilise le type propre de .claude/agents/ "
+                 "(ou dis que le type est introuvable)")
+    if heredoc_ecrit(ops_tour):
+        f.append("i : fichier écrit par heredoc dans le terminal — utilise l'outil Write")
     if conception:
         nb = lignes_hors_tableau(text)
         if nb > SEUIL_LIGNES:
