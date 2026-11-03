@@ -9,7 +9,8 @@ mots du jour). Le texte entre « », "" ou `` est ignoré (citations).
 Avec --tous (étape 0b, 2026-11-02 ; à lancer avant chaque commit de conception) :
   1. rejoue les tests (forme, police, controle, sql, contexte_budget), le budget de contexte,
      les vues core à jour (build_core --check), le contrat core (contrat_core) et la parité de
-     gold.agenda et de gold.exports_state avec les anciennes vues (agenda_parite, exports_parite) ;
+     gold.agenda, gold.exports_state et gold.daily_alerts avec les anciennes vues
+     (agenda_parite, exports_parite, alertes_parite) ;
   2. pour chaque jeu : resume.md présent, learnings.md présent, tests docs/attentes/tests/<jeu>.yaml
      (recette complète s'ils existent), chaque vue gold/silver/bronze citée dans docs/fiches/<jeu>/ et
      docs/decisions/cartes/<jeu>/ créée dans sql/, et le résumé du cartographe (cartes, leçons sans check).
@@ -132,6 +133,7 @@ def tous() -> list[tuple[bool, str]]:
     res.append(lancer("contrat_core.py"))
     res.append(lancer("agenda_parite.py"))
     res.append(lancer("exports_parite.py"))
+    res.append(lancer("alertes_parite.py"))
     sql ="\n".join(p.read_text(encoding="utf-8", errors="replace").lower() for p in (RACINE / "sql").rglob("*.sql"))
     for jeu in JEUX:
         res.append((True, f"— {jeu} —"))

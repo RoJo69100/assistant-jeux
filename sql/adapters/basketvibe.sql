@@ -3,6 +3,9 @@
 -- Colonnes absentes du jeu ou de la collecte = null, déclarées dans docs/attentes/jeux/basketvibe.yaml (core.limites).
 
 create or replace view adapt.basketvibe_player_daily with (security_invoker = true) as
+with sal as materialized (  -- calculée une fois : la vue silver relue par ligne coûtait 7 s
+  select player_id, day, salary from silver.bv_player_salary_weekly
+)
 select
   'basketvibe'::text                          as game,
   p.team_id::text                             as team_id,
@@ -35,7 +38,7 @@ select
 from silver.bv_player_daily p
 left join lateral (
   select w.salary, w.day
-  from silver.bv_player_salary_weekly w
+  from sal w
   where w.player_id = p.player_id and w.day <= p.day
   order by w.day desc
   limit 1
