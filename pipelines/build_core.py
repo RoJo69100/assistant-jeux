@@ -49,6 +49,16 @@ CONTRAT = {
         ("salaries", "numeric", False), ("wage_cap", "numeric", False), ("capacite_invest", "numeric", False),
         ("extras", "jsonb", False),
     ], ("game", "team_id", "day")),
+    "market_listing": ([
+        ("game", "text", True), ("team_id", "text", True), ("listing_id", "text", True),
+        ("day", "date", True), ("seen_at", "timestamp with time zone", True),
+        ("ends_at", "timestamp with time zone", False), ("status", "text", False),
+        ("player_id", "text", True), ("name", "text", True), ("position", "text", False),
+        ("age", "integer", False), ("rating", "numeric", False), ("price", "numeric", False),
+        ("starting_price", "numeric", False), ("bids", "integer", False),
+        ("seller_id", "text", False), ("seller_label", "text", False), ("is_mine", "boolean", True),
+        ("skills", "jsonb", False), ("extras", "jsonb", False),
+    ], ("game", "listing_id")),
 }
 
 LIGNE_CORE = re.compile(r"^  ([a-z_]+):\s*\{\s*limites:\s*\[([^\]]*)\]", re.M)

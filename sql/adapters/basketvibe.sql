@@ -67,7 +67,7 @@ select
   p.round_number                                       as round_no,
   case when p.competition = 'league' then 22 end       as rounds_total,  -- core.game_params rounds_total
   p.match_day                                          as day,
-  null::timestamptz                                    as scheduled_at,  -- fuseau de kickoff_time non sourcé (« fuseau de l'hôte » pour les amicaux)
+  null::timestamptz                                    as scheduled_at,  -- fuseau de kickoff_time non sourcé ; connu seulement pour les amicaux programmés
   p.status = 'finished'                                as played,
   case p.my_side when 'home' then p.home_score else p.away_score end as my_score,
   case p.my_side when 'home' then p.away_score else p.home_score end as opp_score,
@@ -86,7 +86,24 @@ select
   case when s.home_team_id::text = (select team_id from mine) then s.away_team else s.home_team end,
   s.home_team_id::text = (select team_id from mine),
   jsonb_build_object('match_id', s.match_id, 'season_id', s.season_id, 'status', s.status, 'source', 'bv_fixtures')
-from scheduled s;
+from scheduled s
+union all
+-- Amicaux programmés : dernière capture de la liste des amicaux (kickoff_at en UTC dans l'API).
+select
+  'basketvibe', (select team_id from mine), x ->> 'id', 'amical', null::int, null::int,
+  ((x ->> 'kickoff_at')::timestamptz at time zone 'Europe/Paris')::date,  -- fuseau_affichage (match_day = jour de l'hôte, dans extras)
+  (x ->> 'kickoff_at')::timestamptz, false,
+  null::int, null::int, null::text,
+  case when x ->> 'home_team_id' = (select team_id from mine) then x ->> 'away_team_name' else x ->> 'home_team_name' end,
+  x ->> 'home_team_id' = (select team_id from mine),
+  jsonb_build_object('status', x ->> 'status', 'match_day', x ->> 'match_day', 'has_saved_match_tactics', (x ->> 'has_saved_match_tactics')::boolean,
+                     'source', 'bv_api friendlies')
+from (select a.body from silver.bv_api a
+      where a.endpoint ~ '^/teams/[0-9a-f-]{36}/friendlies$'
+      order by a.captured_at desc limit 1) a,
+     jsonb_array_elements(a.body -> 'friendlies') x
+where x ->> 'status' = 'scheduled'
+  and not exists (select 1 from played p where p.fixture_id::text = x ->> 'id');
 
 -- Classement : une ligne par club et par relevé de ma ligue (relevés sans mon club écartés : autre ligue).
 create or replace view adapt.basketvibe_standing with (security_invoker = true) as
@@ -133,5 +150,36 @@ select
                      'transfer_lock', f.transfer_lock) as extras
 from silver.bv_finance_weekly f;
 
+-- Marché : chaque annonce vue (marché ou mes ventes), dernier relevé ; le statut n'est pas remis à jour après la fin.
+create or replace view adapt.basketvibe_market_listing with (security_invoker = true) as
+select
+  'basketvibe'::text                           as game,
+  me.team_id::text                             as team_id,
+  t.auction_id::text                           as listing_id,
+  (t.seen_at at time zone 'Europe/Paris')::date as day,
+  t.seen_at                                    as seen_at,
+  t.ends_at                                    as ends_at,
+  t.status                                     as status,
+  t.player_id::text                            as player_id,
+  t.name                                       as name,
+  t.position                                   as position,
+  t.age                                        as age,
+  t.ps::numeric                                as rating,      -- PS 0–99 [M§2.2]
+  t.current_price::numeric                     as price,
+  t.starting_price::numeric                    as starting_price,
+  t.bid_count                                  as bids,
+  t.seller_team_id::text                       as seller_id,
+  t.seller_team                                as seller_label,
+  t.seller_team_id is not distinct from me.team_id as is_mine,
+  jsonb_build_object(
+    'two_point', t.two_point, 'three_point', t.three_point, 'defense', t.defense, 'passing', t.passing,
+    'ball_handling', t.ball_handling, 'rebounding', t.rebounding, 'stamina', t.stamina, 'athleticism', t.athleticism
+  )                                            as skills,
+  jsonb_build_object('experience', t.experience, 'height_cm', t.height_cm, 'weight_kg', t.weight_kg,
+                     'nationality', t.nationality, 'seller_is_free_agent', t.seller_is_free_agent) as extras
+from silver.bv_transfer_auctions t
+cross join silver.bv_my_team me;
+
 grant select on adapt.basketvibe_player_daily, adapt.basketvibe_fixture,
-                adapt.basketvibe_standing, adapt.basketvibe_finance_daily to assistant_ro;
+                adapt.basketvibe_standing, adapt.basketvibe_finance_daily,
+                adapt.basketvibe_market_listing to assistant_ro;

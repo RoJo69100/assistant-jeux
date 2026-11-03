@@ -89,9 +89,10 @@ domaines:
 
 core:   # refonte v2 phase 1 : entités branchées (adapt.basketvibe_<entité>) ; limites = colonnes nulles par construction
   player_daily:  { limites: [morale, suspended, contract_end, market_value] }   # absents de la collecte
-  fixture:       { limites: [scheduled_at] }                                     # fuseau de kickoff_time non sourcé
+  fixture:       { limites: [] }                                                 # scheduled_at : amicaux programmés seulement (fuseau de kickoff_time non sourcé)
   standing:      { limites: [] }
   finance_daily: { limites: [income, wage_cap, capacite_invest] }                # recettes non relevées ; aucun plafond dans les skills ; capacité calculée en gold
+  market_listing: { limites: [] }                                                # enchères vues (marché et mes ventes) ; statut figé au dernier relevé
 
 vues_gold:
   agenda: gold.bv_agenda

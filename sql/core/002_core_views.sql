@@ -23,3 +23,7 @@ select game, team_id, day, balance, income, expenses, salaries, wage_cap, capaci
 union all
 select game, team_id, day, balance, income, expenses, salaries, wage_cap, capacite_invest, extras from adapt.hockeynation_finance_daily;
 grant select on core.finance_daily to assistant_ro;
+
+create or replace view core.market_listing with (security_invoker = true) as
+select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.basketvibe_market_listing;
+grant select on core.market_listing to assistant_ro;

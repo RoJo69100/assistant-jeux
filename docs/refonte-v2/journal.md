@@ -21,7 +21,8 @@ Une case n'est cochée que quand son critère de fin est vérifié (date + mesur
   - [x] 1.2 `pipelines/build_core.py` (2026-11-03) — contrat (colonnes, types, clés) + génération de `sql/core/002_core_views.sql` ; vues `core.player_daily|fixture|standing|finance_daily` appliquées
   - [x] 1.3 `pipelines/contrat_core.py` (2026-11-03) — BV vert (0 ❌, 3 constats : matchs passés sans résultat 29/10, 31/10, 02/11) ; échoue bien avec `--fraicheur 0` ; branché sur `recette.py --tous` avec `build_core.py --check`
   - [x] 1.2 (HN, 2026-11-03) `sql/adapters/hockeynation.sql` : `player_daily` (458 lignes, 4 équipes = 4 `team_id`, salaire du contrat actif, U17/U21 = `is_academy`), `fixture` (247, `my_result` repris de `hn_games`, jour en Europe/Paris), `standing` (20, relevés sans mon équipe écartés), `finance_daily` (4, plafond salarial, pas de trésorerie) ; 6 `game_params` HN sourcés (pas de règle des points : non sourcée) ; `contrat_core` vert sur BV + HN. **Constat** : U21 contre Oklahoma Zebras U21 du 02/11 encore « upcoming » (export manquant)
-  - [ ] Reste : entités BV `market_listing`, `staff`, `academy_prospect`, `training_plan` (et HN) ; fonction `as_of` ; gold générique (1.4) ; cartes `_core` (1.5)
+  - [x] 1.2 (BV, 2026-11-03) entité `market_listing` au contrat (clé `game, listing_id`) et `adapt.basketvibe_market_listing` (952 enchères vues, mes ventes = `is_mine`) ; amicaux programmés ajoutés à `adapt.basketvibe_fixture` (7, `scheduled_at` en UTC, jour en Europe/Paris) — prérequis de `gold.agenda`
+  - [ ] Reste : entités BV `staff`, `academy_prospect`, `training_plan` (et HN, dont `market_listing`) ; fonction `as_of` ; gold générique (1.4) ; cartes `_core` (1.5)
 - [ ] Phase 2 — moteur de décision
 - [ ] Phase 3 — journal de décisions `learn`
 - [ ] Phase 4 — base de connaissances `kb`

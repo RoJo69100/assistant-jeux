@@ -32,6 +32,11 @@ PLAGES = {
     ],
     "standing": [("rank ≥ 1", "rank >= 1"), ("points ≥ 0", "points is null or points >= 0")],
     "finance_daily": [],
+    "market_listing": [
+        ("rating 0–100", "rating is null or rating between 0 and 100"),
+        ("prix ≥ 0", "price is null or price >= 0"),
+        ("enchères ≥ 0", "bids is null or bids >= 0"),
+    ],
 }
 # Constats (pas des échecs) : signalés pour qu'on fasse l'export qui manque.
 CONSTATS = {
