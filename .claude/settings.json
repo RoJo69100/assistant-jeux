@@ -32,6 +32,28 @@
         ]
       }
     ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python pipelines/garde_push.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python pipelines/garde_push.py"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
