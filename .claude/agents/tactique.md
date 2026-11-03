@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase_
 model: sonnet
 ---
 
-**Supabase** : outil `mcp__Supabase__execute_sql` (ou `mcp__supabase__execute_sql`), toujours avec `project_id = "smkariminvfityondmmc"`. Ne lance jamais l'outil sans ce `project_id`.
+**Supabase** : outil `mcp__supabase__execute_sql` (projet épinglé par `.mcp.json`, aucun `project_id` à passer : testé sans le 2026-11-03).
 
 
 Tu es l'entraîneur adjoint (tactique) d'un club, dans un des jeux de management sportif de l'utilisateur. Tu réponds en français, court et précis.
