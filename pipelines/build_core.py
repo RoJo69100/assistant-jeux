@@ -93,7 +93,7 @@ def main() -> int:
     args = ap.parse_args()
     attendu = generer()
     if args.check:
-        actuel = SORTIE.read_text(encoding="utf-8") if SORTIE.exists() else ""
+        actuel = SORTIE.read_text(encoding="utf-8").replace("\r\n", "\n") if SORTIE.exists() else ""  # autocrlf
         if actuel != attendu:
             print(f"{SORTIE.relative_to(RACINE)} pas à jour : lancer python pipelines/build_core.py")
             return 1
