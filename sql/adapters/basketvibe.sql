@@ -88,4 +88,50 @@ select
   jsonb_build_object('match_id', s.match_id, 'season_id', s.season_id, 'status', s.status, 'source', 'bv_fixtures')
 from scheduled s;
 
-grant select on adapt.basketvibe_player_daily, adapt.basketvibe_fixture to assistant_ro;
+-- Classement : une ligne par club et par relevé de ma ligue (relevés sans mon club écartés : autre ligue).
+create or replace view adapt.basketvibe_standing with (security_invoker = true) as
+with releves as (
+  select distinct s.season_id, s.day from silver.bv_standings_weekly s where s.is_mine
+)
+select
+  'basketvibe'::text           as game,
+  s.team_id::text              as team_id,
+  s.team                       as team_label,
+  s.is_mine                    as is_mine,
+  s.season_id::text            as season_id,
+  s.day                        as day,
+  max(s.wins + s.losses) over (partition by s.season_id, s.day) as round_no,
+  s.rank                       as rank,
+  s.wins + s.losses            as played,
+  s.points                     as points,
+  s.wins                       as wins,
+  0                            as draws,  -- pas de match nul [M§2]
+  s.losses                     as losses,
+  s.points_for                 as gf,
+  s.points_against             as ga,
+  jsonb_build_object('week', s.week, 'diff', s.diff, 'home_wins', s.home_wins, 'home_losses', s.home_losses,
+                     'away_wins', s.away_wins, 'away_losses', s.away_losses, 'club_strength', s.club_strength,
+                     'is_human', s.is_human, 'form', s.form) as extras
+from silver.bv_standings_weekly s
+join releves r on r.season_id = s.season_id and r.day = s.day;
+
+-- Finances : relevé hebdomadaire ; salaries et expenses sont des montants par semaine (extras.periode).
+create or replace view adapt.basketvibe_finance_daily with (security_invoker = true) as
+select
+  'basketvibe'::text           as game,
+  f.team_id::text              as team_id,
+  f.day                        as day,
+  f.balance                    as balance,
+  null::numeric                as income,       -- recettes non relevées sur la page finances
+  (f.weekly_salaries + f.weekly_academy + f.weekly_personnel) as expenses,
+  f.weekly_salaries            as salaries,
+  null::numeric                as wage_cap,     -- aucun plafond salarial dans les skills BasketVibe
+  null::numeric                as capacite_invest,  -- calculée une fois dans le gold générique (plan 1.4)
+  jsonb_build_object('periode', 'semaine', 'week', f.week, 'popularity', f.popularity,
+                     'academy', f.weekly_academy, 'personnel', f.weekly_personnel,
+                     'transfer_available', f.transfer_available, 'transfer_committed', f.transfer_committed,
+                     'transfer_lock', f.transfer_lock) as extras
+from silver.bv_finance_weekly f;
+
+grant select on adapt.basketvibe_player_daily, adapt.basketvibe_fixture,
+                adapt.basketvibe_standing, adapt.basketvibe_finance_daily to assistant_ro;

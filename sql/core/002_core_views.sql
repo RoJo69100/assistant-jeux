@@ -1,0 +1,17 @@
+-- Généré par pipelines/build_core.py depuis docs/attentes/jeux/*.yaml : ne pas modifier à la main.
+
+create or replace view core.player_daily with (security_invoker = true) as
+select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.basketvibe_player_daily;
+grant select on core.player_daily to assistant_ro;
+
+create or replace view core.fixture with (security_invoker = true) as
+select game, team_id, fixture_id, competition_kind, round_no, rounds_total, day, scheduled_at, played, my_score, opp_score, my_result, opponent, home, extras from adapt.basketvibe_fixture;
+grant select on core.fixture to assistant_ro;
+
+create or replace view core.standing with (security_invoker = true) as
+select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.basketvibe_standing;
+grant select on core.standing to assistant_ro;
+
+create or replace view core.finance_daily with (security_invoker = true) as
+select game, team_id, day, balance, income, expenses, salaries, wage_cap, capacite_invest, extras from adapt.basketvibe_finance_daily;
+grant select on core.finance_daily to assistant_ro;

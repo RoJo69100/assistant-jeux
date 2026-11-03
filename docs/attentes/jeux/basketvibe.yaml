@@ -87,6 +87,12 @@ domaines:
   personnel:       { present: oui, postes: [médecins, kinés, psychologues, marketing], facturation: "maximum atteint dans la semaine (dev 2026-09-14 ; 85 000 contre 60 000 le 25/10, à confirmer le 01/11)" }
   infrastructures: { present: non }
 
+core:   # refonte v2 phase 1 : entités branchées (adapt.basketvibe_<entité>) ; limites = colonnes nulles par construction
+  player_daily:  { limites: [morale, suspended, contract_end, market_value] }   # absents de la collecte
+  fixture:       { limites: [scheduled_at] }                                     # fuseau de kickoff_time non sourcé
+  standing:      { limites: [] }
+  finance_daily: { limites: [income, wage_cap, capacite_invest] }                # recettes non relevées ; aucun plafond dans les skills ; capacité calculée en gold
+
 vues_gold:
   agenda: gold.bv_agenda
   alertes: gold.bv_daily_alerts

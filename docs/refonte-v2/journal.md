@@ -17,7 +17,10 @@ Une case n'est cochée que quand son critère de fin est vérifié (date + mesur
 - [ ] Phase 1 — couche `core`
   - [x] 1.1 (début, 2026-11-03) schémas `core` + `adapt`, `core.game_params` (10 paramètres BV sourcés) — `sql/core/001_core_schema.sql`
   - [x] 1.2 (BV, 2026-11-03) `adapt.basketvibe_player_daily` (245 lignes, 0 doublon, forme/fatigue 0–1, salaire 237/245) et `adapt.basketvibe_fixture` (70 fixtures, 0 doublon, `my_result` repris de `bv_matches`) — `sql/adapters/basketvibe.sql`. **Constats** : 2 matchs de coupe passés (29 et 31/10) et la J1 du 02/11 sans résultat (matchs non exportés) ; `scheduled_at` nul (fuseau du kickoff non sourcé).
-  - [ ] Reste : autres entités BV (standing, finance_daily…), `build_core.py`, `contrat_core.py`, HN, gold générique, cartes `_core`
+  - [x] 1.2 suite (BV, 2026-11-03) `adapt.basketvibe_standing` (48 lignes, relevés d'une autre ligue écartés) et `adapt.basketvibe_finance_daily` (4 relevés hebdomadaires, `extras.periode = semaine`) ; section `core:` dans `basketvibe.yaml` (colonnes nulles déclarées)
+  - [x] 1.2 `pipelines/build_core.py` (2026-11-03) — contrat (colonnes, types, clés) + génération de `sql/core/002_core_views.sql` ; vues `core.player_daily|fixture|standing|finance_daily` appliquées
+  - [x] 1.3 `pipelines/contrat_core.py` (2026-11-03) — BV vert (0 ❌, 3 constats : matchs passés sans résultat 29/10, 31/10, 02/11) ; échoue bien avec `--fraicheur 0` ; branché sur `recette.py --tous` avec `build_core.py --check`
+  - [ ] Reste : entités BV `market_listing`, `staff`, `academy_prospect`, `training_plan` ; adaptateur HN ; fonction `as_of` ; gold générique (1.4) ; cartes `_core` (1.5)
 - [ ] Phase 2 — moteur de décision
 - [ ] Phase 3 — journal de décisions `learn`
 - [ ] Phase 4 — base de connaissances `kb`
