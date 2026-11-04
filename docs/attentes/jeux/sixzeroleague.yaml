@@ -98,6 +98,16 @@ indicateurs:
 
 seuils: {}
 
+core:   # refonte v2 phase 1 : entités branchées (adapt.sixzeroleague_<entité>) ; limites = colonnes nulles par construction
+  player_daily:  { limites: [form, fatigue, morale, contract_end, market_value] }  # pas de forme ni de contrat ; endurance = compétence
+  fixture:       { limites: [rounds_total] }                                  # saison en cours (calendrier) + matchs exportés
+  standing:      { limites: [] }                                              # ma ligue (/seasons/current/my-competition)
+  finance_daily: { limites: [wage_cap, capacite_invest] }                     # prévision de la semaine (2 journées) ; pas de plafond salarial
+  market_listing: { limites: [ends_at, bids, seller_id] }                     # réglé après la journée settle_after_round (extras)
+  # academy_prospect : vue adapt.sixzeroleague_academy_prospect prête mais non branchée (0 prospect capturé au 2026-11-04, clés JSON non vérifiées)
+  training_plan: { limites: [focus_secondary] }                               # intensité d'équipe + un focus par joueur
+  facility:      { limites: [capacity] }                                      # 4 installations, niveaux 1–20 -> 0–100
+
 vues_gold:
   agenda: gold.sz_agenda
   alertes: gold.sz_daily_alerts

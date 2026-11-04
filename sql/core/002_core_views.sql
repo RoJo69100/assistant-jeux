@@ -5,6 +5,8 @@ select game, team_id, club_label, player_id, day, name, position, age, rating, f
 union all
 select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.hockeynation_player_daily
 union all
+select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.sixzeroleague_player_daily
+union all
 select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.teamsoccer_player_daily;
 grant select on core.player_daily to assistant_ro;
 
@@ -12,6 +14,8 @@ create or replace view core.fixture with (security_invoker = true) as
 select game, team_id, fixture_id, competition_kind, round_no, rounds_total, day, scheduled_at, played, my_score, opp_score, my_result, opponent, home, extras from adapt.basketvibe_fixture
 union all
 select game, team_id, fixture_id, competition_kind, round_no, rounds_total, day, scheduled_at, played, my_score, opp_score, my_result, opponent, home, extras from adapt.hockeynation_fixture
+union all
+select game, team_id, fixture_id, competition_kind, round_no, rounds_total, day, scheduled_at, played, my_score, opp_score, my_result, opponent, home, extras from adapt.sixzeroleague_fixture
 union all
 select game, team_id, fixture_id, competition_kind, round_no, rounds_total, day, scheduled_at, played, my_score, opp_score, my_result, opponent, home, extras from adapt.teamsoccer_fixture;
 grant select on core.fixture to assistant_ro;
@@ -21,6 +25,8 @@ select game, team_id, team_label, is_mine, season_id, day, round_no, rank, playe
 union all
 select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.hockeynation_standing
 union all
+select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.sixzeroleague_standing
+union all
 select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.teamsoccer_standing;
 grant select on core.standing to assistant_ro;
 
@@ -29,6 +35,8 @@ select game, team_id, day, balance, income, expenses, salaries, wage_cap, capaci
 union all
 select game, team_id, day, balance, income, expenses, salaries, wage_cap, capacite_invest, extras from adapt.hockeynation_finance_daily
 union all
+select game, team_id, day, balance, income, expenses, salaries, wage_cap, capacite_invest, extras from adapt.sixzeroleague_finance_daily
+union all
 select game, team_id, day, balance, income, expenses, salaries, wage_cap, capacite_invest, extras from adapt.teamsoccer_finance_daily;
 grant select on core.finance_daily to assistant_ro;
 
@@ -36,6 +44,8 @@ create or replace view core.market_listing with (security_invoker = true) as
 select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.basketvibe_market_listing
 union all
 select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.hockeynation_market_listing
+union all
+select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.sixzeroleague_market_listing
 union all
 select game, team_id, listing_id, day, seen_at, ends_at, status, player_id, name, position, age, rating, price, starting_price, bids, seller_id, seller_label, is_mine, skills, extras from adapt.teamsoccer_market_listing;
 grant select on core.market_listing to assistant_ro;
@@ -61,10 +71,14 @@ select game, team_id, player_id, day, name, is_academy, focus_primary, focus_sec
 union all
 select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.hockeynation_training_plan
 union all
+select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.sixzeroleague_training_plan
+union all
 select game, team_id, player_id, day, name, is_academy, focus_primary, focus_secondary, intensity, extras from adapt.teamsoccer_training_plan;
 grant select on core.training_plan to assistant_ro;
 
 create or replace view core.facility with (security_invoker = true) as
+select game, team_id, facility_id, day, name, kind, level, capacity, upkeep, extras from adapt.sixzeroleague_facility
+union all
 select game, team_id, facility_id, day, name, kind, level, capacity, upkeep, extras from adapt.teamsoccer_facility;
 grant select on core.facility to assistant_ro;
 

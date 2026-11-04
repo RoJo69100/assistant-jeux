@@ -1,5 +1,5 @@
 -- Refonte v2, étape 1.2 : adaptateur Six Zero League (handball) vers le contrat core (plan §1.1).
--- Mince : renommage, échelles, competition_kind, my_result (W/D/L de silver.sz_matches -> V/N/D).
+-- Mince : renommage, échelles, competition_kind ; my_result W/D/L tel quel (silver.sz_matches).
 -- Une équipe (silver.sz_my_team, uuid) ; une semaine financière = 2 journées de ligue (sixzeroleague-club, Semaine financière).
 -- Colonnes absentes du jeu ou de la collecte = null, déclarées dans docs/attentes/jeux/sixzeroleague.yaml (core.limites).
 -- Non sourcés, donc absents de game_params : points par victoire, places de montée et de descente.
@@ -42,7 +42,7 @@ from silver.sz_player_snapshots p
 cross join silver.sz_my_team t;
 
 -- Matchs : saison en cours (silver.sz_schedule, matchs que je joue) + matchs exportés (silver.sz_matches, toutes saisons).
--- league -> ligue, cup -> coupe ; my_result W/D/L -> V/N/D ; played = statut 'complete' ou match exporté.
+-- league -> ligue, cup -> coupe ; played = match exporté (résultat connu).
 create or replace view adapt.sixzeroleague_fixture with (security_invoker = true) as
 with sc as (
   select * from silver.sz_schedule where i_play and match_id is not null
@@ -60,10 +60,10 @@ select
   null::int                                              as rounds_total,
   coalesce(mt.match_day, (sc.kickoff_paris)::date)       as day,
   sc.scheduled_at                                        as scheduled_at,
-  (mt.match_id is not null or sc.status = 'complete')    as played,
+  (mt.match_id is not null)                              as played,   -- résultat connu ; « complete » sans export = constat du contrat
   mt.goals                                               as my_score,
   mt.opp_goals                                           as opp_score,
-  case mt.result when 'W' then 'V' when 'D' then 'N' when 'L' then 'D' end as my_result,
+  mt.result                                              as my_result,
   coalesce(sc.opponent, mt.opponent)                     as opponent,
   case coalesce(sc.venue, case mt.venue when 'home' then 'domicile' when 'away' then 'extérieur' end)
        when 'domicile' then true when 'extérieur' then false end as home,
@@ -170,7 +170,7 @@ select
   false                            as is_academy,
   coalesce(tp.focus_skill, tp.focus_group) as focus_primary,
   null::text                       as focus_secondary,
-  case tp.intensity when 'light' then 33 when 'normal' then 67 when 'high' then 100 end::numeric as intensity,
+  case lower(tp.intensity) when 'light' then 0.33 when 'normal' then 0.67 when 'high' then 1 end::numeric as intensity,  -- rang sur 3 niveaux (Light · Normal · High, sixzeroleague-entrainement), pas une valeur du jeu
   jsonb_build_object('intensity_label', tp.intensity, 'focus_group', tp.focus_group, 'focus_skill', tp.focus_skill) as extras
 from silver.sz_training_plan tp
 cross join silver.sz_my_team t
@@ -185,7 +185,7 @@ select
   i.day                            as day,
   i.facility                       as name,
   case when i.facility ilike '%arena%' then 'stade' when i.facility ilike '%training%' then 'entrainement'
-       when i.facility ilike '%youth%' then 'academie' when i.facility ilike '%shop%' then 'commerce' else 'autre' end as kind,
+       when i.facility ilike '%youth%' then 'academie' else 'autre' end as kind,   -- Fan Shop : autre
   round(100.0 * i.current_level / 20, 1) as level,   -- niveaux 1–20 (sixzeroleague-club) -> 0–100
   null::int                        as capacity,
   i.weekly_maintenance::numeric    as upkeep,
@@ -195,3 +195,8 @@ from silver.sz_infrastructure_levels i
 cross join silver.sz_my_team t
 left join silver.sz_infrastructure_levels n on n.facility = i.facility and n.level = i.current_level + 1
 where i.level = i.current_level;
+
+grant select on adapt.sixzeroleague_player_daily, adapt.sixzeroleague_fixture, adapt.sixzeroleague_standing,
+                adapt.sixzeroleague_finance_daily, adapt.sixzeroleague_market_listing,
+                adapt.sixzeroleague_academy_prospect, adapt.sixzeroleague_training_plan,
+                adapt.sixzeroleague_facility to assistant_ro;
