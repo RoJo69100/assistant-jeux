@@ -92,21 +92,23 @@ Ordre 1-4 et 5-8 repris de la composition par défaut du 23/10 (`silver.ts_lineu
 **À refaire si** : l'export de ce soir montre une blessée ou suspendue parmi les onze ; le match ne se joue plus contre un BOT.
 
 ## Finances et infrastructures (relevé du 2026-11-04, `gold.ts_finance_status`, `ts_capacite_invest`, `ts_stadium_payback`, `ts_hpc_status`)
-| Club | Solde | Semaine (lundi 02/11) | Capacité d'investir | Verdict |
+*Corrigé par la police le 2026-11-04 (voir `police-2026-11-04.md`, section finances).*
+| Club | Solde | Semaine clôturée le lundi 02/11 (26/10 → 01/11) | Capacité d'investir | Verdict |
 |---|---|---|---|---|
-| Cows | 873 653 | recettes 2 102 926, dépenses 3 554 021 (salaires 159 528, entretien 47 475, **autres 3 347 018 à identifier**), net −1 451 095 | **−125 633** : 585 280 déjà décidés pour 7 316 places debout et non réglés, plus la réserve de 2 semaines (414 006) | Aucun achat de place ni de joueur ce soir |
-| Donkey | 523 786 | recettes 474 605, dépenses 826 561 (salaires 111 202, entretien 24 974), net −351 956 | **251 434** disponibles après la réserve (272 352) | Voir ci-dessous : rien à acheter tant qu'une place ne se rembourse pas |
+| Cows | 873 653 | recettes 2 102 926, dépenses 3 554 021 = construction de stade 3 369 250 + salaires 155 851 + entretien 28 920 ; net d'exploitation **+1 918 155** | **459 647** (873 653 − réserve 414 006). Les 585 280 du 02/11 sont déjà déduits du solde : ancienne valeur −125 633 = double compte | Voir ci-dessous |
+| Donkey | 523 786 | recettes 474 605, dépenses 826 561 = places 705 000 + salaires 101 537 + entretien 20 024 ; net d'exploitation **+353 044** | **251 434** (523 786 − réserve 272 352) | Voir ci-dessous |
 
-- **Rentabilité des places** : 13,3 à 14,5 matchs à domicile pour rembourser une place (Donkey), 12,5 à 13,7 (Cows) ; il reste **3 matchs de ligue à domicile** cette saison. Aucune place ne se rembourse cette saison. Le remboursement demande de 4 à 5 saisons de 3 matchs à domicile (hypothèse : 3 par saison de 9 semaines, à vérifier avec `ts_season_calendar`).
-- **Donkey** : 251 434 disponibles permettent 1 676 places basiques (meilleure rentabilité, 13,3 matchs). Décision : ne pas dépenser ce soir, la rentabilité dépasse la saison ; à reprendre au changement de saison.
-- **Cows** : entretien 47 475 payé contre 50 767 attendu (écart −3 292) : à contrôler lundi prochain (bug connu de facturation, skill club). Les « autres » dépenses de 3 347 018 sont à identifier sur la page Finances avant tout achat (cherché dans `ts_finance_status` : la vue ne détaille pas la ligne).
-- **HPC** : 50 TSC sur le compte pour chaque club, 0 investi, 5 lundis restants ; le relevé date du 2026-10-19 (export HPC ancien). Décision Premium laissée à l'utilisateur.
-- **À faire** : exporter la page Finances des Cows (ligne « autres ») et la page Haute Performance.
+- **Les « autres 3 347 018 » des Cows n'existent pas** : `other_expenses` = 0. L'écart vient de la construction de stade du 27–30/10 (3 369 250 en cumul d'export du 31/10) ; le brouillon rapprochait les dépenses de la semaine close de salaires et d'entretien de la semaine nouvelle. À noter : le registre des dépenses décidées ne couvre que 2 138 750 des 3 369 250 (écart 1 230 500, achats du 27–29/10 plus gros que déclaré).
+- **Matchs à domicile par saison** : **7 de ligue** (14 journées, `ts_season_calendar` : 7 restantes dont 3 à domicile ; skill saison § Ligue), plus amicaux à un quart du prix. Le brouillon écrivait « 3 par saison » : faux, 3 est le reste de cette saison. Rentabilité (entretien sur 9 semaines compté) : ≈ 13,8 matchs ≈ **2 saisons** pour une place basique de Donkey (13,3 dans la vue), pas 4 à 5.
+- **Donkey** : 251 434 → 1 676 places basiques (251 400 $, 13,3 matchs, seuil de la carte ≤ 14 respecté ; il reste 272 386, au-dessus de la réserve et des 200 000 du cercle jaune). Décision : **acheter 1 676 places basiques**, si l'écran Stade affiche encore 10 490 basiques. Faux si Donkey perd la 1re place (80 % → 70 % : 15,2 matchs).
+- **Cows** : 459 647 → 5 745 places debout (459 600 $, 13,4 matchs ; basiques au maximum 20 000). Option moins chère : 1 250 couvertes (375 000 $, 13,7). Entretien 47 475 contre 50 767 : **pas un bug**, facturé sur les places d'avant l'achat de 7 316 debout (791 250 × 6 % = 47 475) ; prochain lundi : 50 767 attendus.
+- **HPC** (export du 2026-10-30, `bronze.raw_pages` 27151) : 50 TSC, 0 accumulé, 5 semaines restantes, aucun paiement ; un seul paiement de 50 TSC atteint le minimum. L'écran dit **« aucun remboursement » sous 50 TSC** (le skill disait « rendus » : à corriger). Décision Premium laissée à l'utilisateur.
+- **Entraîneur** : niveau 1 (rôle coach, niveau 20 sur 100) pour les deux clubs au 2026-10-30 ; niveau 2 = 1 000 000 $, inabordable. **Limite d'achat** : 1 par semaine, remise à zéro lundi 00:00 ; aucun achat de joueur (`new_signings` = 0 les deux clubs) ; export « Mes enchères » vieux de 131 h.
 
 ## Conclusion
 1. Composition : mêmes onze qu'au dernier match parce que rien n'a changé dans les données (Forme 94 chez les Cows, 0 blessé, 0 suspendu) ; seuls changent le banc des Cows (Thomas Roux au 6e rang) et le style de Donkey (Offensif).
 2. Toutes les consignes sont remplies : Ultra déf. = Dégager, Défensive = Passer → cible, Finition = Tirer pour tous, GB Dégager partout (règle du format validé le 2026-10-31).
-3. Finances : aucun achat ce soir ; les Cows n'ont pas la capacité (−125 633), Donkey a 251 434 mais aucune place ne se rembourse cette saison.
+3. Finances (corrigé par la police) : Donkey 1 676 places basiques (251 400 $) ; Cows 5 745 places debout (459 600 $) ou 1 250 couvertes (375 000 $) ; payback ≈ 2 saisons de 7 matchs à domicile.
 
 ## Comment séparer les effets (Donkey, plusieurs changements à la fois)
 - Style Offensif : tirs adverses et buts encaissés (`ts_match_report.opp_shots`, `goals_against`), tirs de l'équipe.
