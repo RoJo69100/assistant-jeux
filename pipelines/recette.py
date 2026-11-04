@@ -127,7 +127,7 @@ def objets_absents(jeu: str, sql: str) -> tuple[int, list[str]]:
 def tous() -> list[tuple[bool, str]]:
     sys.path.insert(0, str(RACINE / "pipelines"))
     import cartographe
-    res = [lancer(t) for t in ("test_forme.py", "test_police.py", "test_controle.py", "test_sql.py", "test_contexte_budget.py")]
+    res = [lancer(t) for t in ("test_forme.py", "test_police.py", "test_controle.py", "test_sql.py", "test_contexte_budget.py", "test_decision.py")]
     res.append(lancer("contexte_budget.py"))
     res.append(lancer("build_core.py", "--check"))
     res.append(lancer("contrat_core.py"))

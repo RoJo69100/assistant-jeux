@@ -1,0 +1,151 @@
+"""Journal de décisions (refonte v2, étape 3.2) : un conseil = une ligne de learn.decision.
+
+Une décision sans prédiction mesurable est refusée (attentes A-7, R-8).
+Prédictions acceptées (JSON) :
+  {"metric": "my_result", "fenetre_matchs": 3, "attendu": "W>=2"}
+      sur les N prochains matchs de l'équipe (hors amicaux) ; attendu = W|D|L suivi de >=, <= ou = et d'un entier ≤ N
+  {"metric": "sql", "requete": "select …", "attendu": ">= 10"}
+      une requête de lecture qui rend une seule valeur numérique ; attendu = opérateur (>=, <=, >, <, =) et nombre
+La charte du club validée (core.club_strategy) est copiée dans strategy_snapshot.
+
+Usage :
+  python -I pipelines/decision.py new <jeu> <domaine> --label … --hypothese … --prediction '<json>'
+                                       --evaluer-le AAAA-MM-JJ [--equipe ID] [--preuve '<json liste>']
+  python -I pipelines/decision.py statut <id> accepted|rejected|done|expired [--note …]
+  python -I pipelines/decision.py liste [<jeu>]
+"""
+
+import argparse
+import datetime as dt
+import json
+import re
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))  # python -I n'ajoute pas le dossier du script
+from sql import DEBUT_OK, ECRITURE, url_ro  # noqa: E402
+
+DOMAINES = ("composition", "tactique", "entrainement", "academie", "achat", "vente",
+            "finances", "infrastructure", "personnel")
+STATUTS = ("accepted", "rejected", "done", "expired")
+ATTENDU_RESULTAT = re.compile(r"^([WDL])(>=|<=|=)(\d+)$")
+ATTENDU_VALEUR = re.compile(r"^(>=|<=|>|<|=)\s*(-?\d+(?:[.,]\d+)?)$")
+
+
+def valider_prediction(pred: object) -> str | None:
+    """Rend None si la prédiction est mesurable, sinon la raison du refus."""
+    if not isinstance(pred, dict):
+        return "la prédiction doit être un objet JSON"
+    metric = pred.get("metric")
+    attendu = str(pred.get("attendu", "")).replace(" ", "")
+    if metric == "my_result":
+        n = pred.get("fenetre_matchs")
+        if not isinstance(n, int) or isinstance(n, bool) or n < 1:
+            return "fenetre_matchs doit être un entier ≥ 1"
+        m = ATTENDU_RESULTAT.match(attendu)
+        if not m:
+            return "attendu doit être W, D ou L suivi de >=, <= ou = et d'un entier (ex. W>=2)"
+        if int(m.group(3)) > n:
+            return f"attendu {attendu} impossible sur {n} match(s)"
+        return None
+    if metric == "sql":
+        req = str(pred.get("requete", ""))
+        if not DEBUT_OK.match(req) or ECRITURE.search(req):
+            return "requete doit être une lecture (select / with), sans écriture"
+        if not ATTENDU_VALEUR.match(str(pred.get("attendu", "")).strip()):
+            return "attendu doit être un opérateur et un nombre (ex. >= 10)"
+        return None
+    return "metric doit être my_result ou sql"
+
+
+def valider_date(texte: str, aujourdhui: dt.date) -> str | None:
+    try:
+        d = dt.date.fromisoformat(texte)
+    except ValueError:
+        return "evaluer-le doit être une date AAAA-MM-JJ"
+    if d <= aujourdhui:
+        return "evaluer-le doit être dans le futur"
+    return None
+
+
+def _connexion():
+    import psycopg
+    return psycopg.connect(url_ro(), connect_timeout=15)
+
+
+def cmd_new(a) -> int:
+    try:
+        pred = json.loads(a.prediction)
+    except json.JSONDecodeError as e:
+        print(f"❌ prédiction illisible : {e}")
+        return 1
+    try:
+        preuve = json.loads(a.preuve)
+    except json.JSONDecodeError as e:
+        print(f"❌ preuve illisible : {e}")
+        return 1
+    erreurs = [x for x in (valider_prediction(pred), valider_date(a.evaluer_le, dt.date.today())) if x]
+    if not isinstance(preuve, list):
+        erreurs.append("preuve doit être une liste JSON")
+    if erreurs:
+        print("❌ décision refusée : " + " ; ".join(erreurs))
+        return 1
+    with _connexion() as c, c.cursor() as cur:
+        cur.execute("select to_jsonb(s) - 'game' - 'team_id' from core.club_strategy s"
+                    " where game = %s and team_id is not distinct from %s and valide_le is not null",
+                    (a.jeu, a.equipe))
+        ligne = cur.fetchone()
+        cur.execute("insert into learn.decision (game, team_id, domain, label, hypothesis, prediction, eval_after,"
+                    " evidence, strategy_snapshot) values (%s, %s, %s, %s, %s, %s, %s, %s, %s) returning id",
+                    (a.jeu, a.equipe, a.domaine, a.label, a.hypothese, json.dumps(pred),
+                     dt.datetime.combine(dt.date.fromisoformat(a.evaluer_le), dt.time(12, 0)).astimezone(),
+                     json.dumps(preuve), json.dumps(ligne[0]) if ligne else None))
+        print(f"✅ décision D-{cur.fetchone()[0]} enregistrée (proposée) ; charte : {'copiée' if ligne else 'aucune validée'}")
+    return 0
+
+
+def cmd_statut(a) -> int:
+    with _connexion() as c, c.cursor() as cur:
+        cur.execute("update learn.decision set status = %s, user_note = coalesce(%s, user_note) where id = %s",
+                    (a.statut, a.note, a.id))
+        if cur.rowcount != 1:
+            print(f"❌ décision D-{a.id} introuvable")
+            return 1
+    print(f"✅ D-{a.id} : {a.statut}")
+    return 0
+
+
+def cmd_liste(a) -> int:
+    with _connexion() as c, c.cursor() as cur:
+        cur.execute("select id, game, domain, status, eval_after::date, label from learn.decision"
+                    " where %s::text is null or game = %s order by id desc limit 30", (a.jeu, a.jeu))
+        for i, jeu, dom, st, ev, label in cur.fetchall():
+            print(f"D-{i}\t{jeu}\t{dom}\t{st}\t{ev}\t{label}")
+    return 0
+
+
+def main(argv=None) -> int:
+    sys.stdout.reconfigure(encoding="utf-8")
+    p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    sp = p.add_subparsers(dest="cmd", required=True)
+    n = sp.add_parser("new")
+    n.add_argument("jeu")
+    n.add_argument("domaine", choices=DOMAINES)
+    n.add_argument("--label", required=True)
+    n.add_argument("--hypothese", required=True)
+    n.add_argument("--prediction", required=True)
+    n.add_argument("--evaluer-le", required=True)
+    n.add_argument("--equipe")
+    n.add_argument("--preuve", default="[]")
+    s = sp.add_parser("statut")
+    s.add_argument("id", type=int)
+    s.add_argument("statut", choices=STATUTS)
+    s.add_argument("--note")
+    li = sp.add_parser("liste")
+    li.add_argument("jeu", nargs="?")
+    a = p.parse_args(argv)
+    return {"new": cmd_new, "statut": cmd_statut, "liste": cmd_liste}[a.cmd](a)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
