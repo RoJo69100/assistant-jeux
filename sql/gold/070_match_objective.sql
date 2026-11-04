@@ -2,6 +2,7 @@
 -- core.fixture (matchs à venir et série en cours) + gold.season_context + core.objective_rule (sql/core/011).
 -- La carte « composition » lit cette vue en première ligne : objectif, raison chiffrée, ce qui prouvera l'erreur (R-8).
 -- Contexte de saison absent ou incomplet → la règle par défaut s'applique et la raison le dit.
+-- 2026-11-04 : règles « former » filtrées par la charte validée (core.club_strategy, sql/core/012).
 
 create or replace view gold.match_objective with (security_invoker = true) as
 with joues as (
@@ -27,8 +28,10 @@ cand as (
   from a_venir v
   left join serie s on s.game = v.game and s.team_id = v.team_id
   left join gold.season_context c on c.game = v.game and c.team_id = v.team_id
+  left join core.club_strategy cs on cs.game = v.game and cs.team_id = v.team_id and cs.valide_le is not null
   join core.objective_rule r
     on r.actif
+   and (r.charte_horizons is null or cs.horizon = any (r.charte_horizons))
    and (r.game is null or r.game = v.game)
    and (r.competition_kind is null or r.competition_kind = v.competition_kind)
    and case r.condition
