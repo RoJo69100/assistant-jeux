@@ -11,6 +11,7 @@ La charte du club validée (core.club_strategy) est copiée dans strategy_snapsh
 Usage :
   python -I pipelines/decision.py new <jeu> <domaine> --label … --hypothese … --prediction '<json>'
                                        --evaluer-le AAAA-MM-JJ [--equipe ID] [--preuve '<json liste>']
+                                       [--lecon L-nnn] [--sujet NOM]   (refus si la leçon est retirée)
   python -I pipelines/decision.py statut <id> accepted|rejected|done|expired [--note …]
   python -I pipelines/decision.py liste [<jeu>]
 """
@@ -91,15 +92,25 @@ def cmd_new(a) -> int:
         print("❌ décision refusée : " + " ; ".join(erreurs))
         return 1
     with _connexion() as c, c.cursor() as cur:
+        if a.lecon:
+            cur.execute("select status from learn.lesson where id = %s", (a.lecon,))
+            ligne = cur.fetchone()
+            if not ligne:
+                print(f"❌ décision refusée : leçon {a.lecon} introuvable")
+                return 1
+            if ligne[0] == "retired":
+                print(f"❌ décision refusée : la leçon {a.lecon} est retirée (contredite) — conseil à réécrire (A-7)")
+                return 1
         cur.execute("select to_jsonb(s) - 'game' - 'team_id' from core.club_strategy s"
                     " where game = %s and team_id is not distinct from %s and valide_le is not null",
                     (a.jeu, a.equipe))
         ligne = cur.fetchone()
         cur.execute("insert into learn.decision (game, team_id, domain, label, hypothesis, prediction, eval_after,"
-                    " evidence, strategy_snapshot) values (%s, %s, %s, %s, %s, %s, %s, %s, %s) returning id",
+                    " evidence, strategy_snapshot, lesson_id, sujet)"
+                    " values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) returning id",
                     (a.jeu, a.equipe, a.domaine, a.label, a.hypothese, json.dumps(pred),
                      dt.datetime.combine(dt.date.fromisoformat(a.evaluer_le), dt.time(12, 0)).astimezone(),
-                     json.dumps(preuve), json.dumps(ligne[0]) if ligne else None))
+                     json.dumps(preuve), json.dumps(ligne[0]) if ligne else None, a.lecon, a.sujet))
         print(f"✅ décision D-{cur.fetchone()[0]} enregistrée (proposée) ; charte : {'copiée' if ligne else 'aucune validée'}")
     return 0
 
@@ -137,6 +148,8 @@ def main(argv=None) -> int:
     n.add_argument("--evaluer-le", required=True)
     n.add_argument("--equipe")
     n.add_argument("--preuve", default="[]")
+    n.add_argument("--lecon", help="leçon L-nnn sur laquelle repose la décision (refus si retirée)")
+    n.add_argument("--sujet", help="joueur, cible ou réglage visé (revirements : garde.py)")
     s = sp.add_parser("statut")
     s.add_argument("id", type=int)
     s.add_argument("statut", choices=STATUTS)
