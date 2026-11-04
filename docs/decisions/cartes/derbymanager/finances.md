@@ -43,6 +43,9 @@ Un bloc par club : 1) `| Argent | Flux / jour | Salaires engagés / plafond | Ma
 - 307 installations (export 04/11 21:56, `silver.dm_facilities`) : niveau 14, valeur −1,4 M, variation +380 k/j, palier supérieur à 7 M, baisse à −5 M, maintenance 300 (colonne brute ; 40 % le 30/10). Écart au palier 8,4 M, ≈ 22 j à +380 k/j : pas d'amélioration aujourd'hui, pas de dégradation proche.
 - Prolongations 307 (frais, `gold.dm_contrats`) : Desagnat 155 k, McCulloch 385 k, Lafleur 220 k, Lerch 205 k, Lévêque 85 k, Bodian 245 k. Salaire demandé inconnu : aucun écran contrat 307 en base (var. 15) ; manque à exporter : ouvrir l'écran contrat de chaque joueur.
 
+## Valeurs du jour 547 (police 2026-11-04, export 22:00)
+- Argent 20 588 217, flux +776 k/j, salaires 670 k, engagés 845 k / plafond 1,5 M, attente 6e. Installations niveau 16, palier 8,0 M, bouton d'amélioration présent (bronze 37164, `/teams/547/upgrade`, 4 choix). Échec du 02/11 : message inconnu (manque réel).
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
 |---|---|---|---|

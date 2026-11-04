@@ -32,6 +32,9 @@ Un tableau par club : `| Priorité | Joueur | Poste | Âge | Note au poste | Ran
 - Contrats : Desagnat 0 j (frais 155 k), McCulloch 0 j (385 k), Lafleur 15 j (220 k), Lerch 17 j (205 k), Lévêque 27 j (85 k), Bodian 28 j (245 k) (`gold.dm_contrats.frais_prolongation`). Contrat à 0 j : le joueur reste, transfer-listé, mécontent, 0 entraînement, prix −10-15 % (skill club 04, 2024-07-16).
 - Var. 9 listables (<85 j) : les six ci-dessus + Vasilev 42, Messimy 68, La Ferrière 72, Labourd 78 ; Comonfort 85 et Hardt 87 non.
 
+## Valeurs du jour 547 (police 2026-11-04)
+- 26 joueurs. Vidales 63 j, Wilmot 40 j, King 75 j, Allan 82 j, Cooper 19 j (`gold.dm_contrats`). Aucun joueur 547 dans `silver.dm_market` (jamais vu en base : les propres joueurs listés n'y figurent peut-être pas) : « listé » reste à lire à l'écran Transfers. Mansfield acheté (non à vendre).
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
 |---|---|---|---|

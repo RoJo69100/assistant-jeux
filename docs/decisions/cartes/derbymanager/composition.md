@@ -54,6 +54,9 @@ Pour chaque club, dans l'ordre de l'écran Squad :
 - Les 11 de l'amical Liège (forme > 0, condition 85-94) : Comonfort, Messimy, Desagnat, Schmitz, Lévêque, Taddei, Cleary, Lerch, Vasilev, Vargas, Luzerne. Reposés (forme 0, condition 100) : Lafleur, La Ferrière, Cave, McCulloch, Bodian, Labourd, Hardt.
 - Curseurs exportés : DL 2, PP 0, PF 2, SH 2, HE 2.
 
+## Valeurs du jour 547 (police 2026-11-04, export 21:59-22:02)
+- Mansfield (DC, 22 ans, 16,0) acheté le 3/11 (`silver.dm_transfers`) : CD à la place de Pilot (14,4). XI 541 stable sinon (Vigerie GK, Kjer EMR). Prochain : Nov 5 Partick Thistle (ext., 6e, xG concédé 1,07 dans `gold.dm_adversaires`). Curseurs DL 0, PP 2, PF 2, SH 2, HE 2 (`silver.dm_tactic`). Options non exposées par silver : lire l'écran. Amicaux Nov 3 L 0-2, Nov 4 D 0-0 (`silver.dm_fixtures`), pas encore dans `gold.dm_matchs`/`dm_saison_bilan`.
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
 |---|---|---|---|
