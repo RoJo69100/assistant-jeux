@@ -44,9 +44,11 @@ def main(argv=None) -> int:
         for i, st, nf, na, claim in suivre:
             print(f"  ✅ {i} ({st}, {nf} pour / {na} contre) : {claim}")
         for i, st, nf, na, claim in interdits:
-            print(f"  ⛔ {i} retirée ({na} contradictions) : ne pas reconseiller — {claim}")
+            print(f"  ⛔ {i} retirée ({f'{na} contradictions' if na else 'infirmée avant migration'}) :"
+                  f" ne pas reconseiller — {claim}")
         cur.execute("select id, description, recurrence, enforcement from learn.error"
-                    " where closed_at is null and (game = %s or game is null) order by recurrence desc, id", (a.jeu,))
+                    " where closed_at is null and (game = %s or (game is null and recurrence >= 2))"
+                    " order by recurrence desc, id", (a.jeu,))  # règles E du triage sans code (×1) : hors garde
         for i, desc, rec, enf in cur.fetchall():
             print(f"  ⚠️ erreur E-{i} ouverte (×{rec}, garde : {enf}) : {desc}")
         if a.sujet:

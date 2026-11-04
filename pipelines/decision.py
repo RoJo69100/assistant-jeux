@@ -93,6 +93,7 @@ def cmd_new(a) -> int:
         return 1
     with _connexion() as c, c.cursor() as cur:
         if a.lecon:
+            a.lecon = a.lecon if ":" in a.lecon else f"{a.jeu}:{a.lecon}"  # ids migrés : <jeu>:L-nnn
             cur.execute("select status from learn.lesson where id = %s", (a.lecon,))
             ligne = cur.fetchone()
             if not ligne:
