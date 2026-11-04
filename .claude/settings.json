@@ -25,6 +25,11 @@
           {
             "type": "command",
             "command": "python pipelines/rappel_debut.py"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/deps_cloud.py",
+            "timeout": 180
           }
         ]
       }
