@@ -8,8 +8,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
   - `18` **Chomelix Cows** (équipe première, Division I) : marché **masculin**.
   - `15858` **Ben Ahmed Donkey** (équipe féminine, Women's TS League, Division III) : marché **féminin** (`silver.ts_transfer_listings.market`).
 - Résultat d'un match = notre côté (`gold.ts_match_report.result`, `gold.ts_vd_comparatif`), jamais le score domicile–extérieur brut.
-- **Connaissance par thème** (remplace la lecture en bloc de `connaissance*.md` et du skill `-communaute`) : `select public.kb_search('teamsoccer', '<thème>', 0)` ou `python -I pipelines/kb.py teamsoccer <thème>` (thèmes : `--domaines`) ; recopier le compteur « N total / N affichées ».
-- Sources : `[G:Rubrique]` guide > `[F:date pseudo]` forum (Admin-Dev = développeur, Admin-PIPO68 = administrateur) > `[P:Page]` écran > `[Obs]`. Connaissance : `outputs/teamsoccer/veille/connaissance.md` (95 entrées, lue jusqu'au 2026-10-27). Pas de Discord. Skills `teamsoccer-joueurs|match|entrainement|club|saison|communaute`.
+- Sources : `[G:Rubrique]` guide > `[F:date pseudo]` forum (Admin-Dev = développeur, Admin-PIPO68 = administrateur) > `[P:Page]` écran > `[Obs]`. Connaissance : `kb_search('teamsoccer','<thème>',0)` (compteur). Pas de Discord. Skills `teamsoccer-joueurs|match|entrainement|club|saison|communaute`.
 
 ## Rythme (→ source : yaml `rythme`)
 | Quoi | Quand (Paris) | Saisie |

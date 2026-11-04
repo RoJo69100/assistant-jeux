@@ -6,8 +6,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - `sixzeroleague`, préfixe `sz_` (bronze `game = 'sixzeroleague'`). Handball, **alpha** : résultats très aléatoires, règles qui changent vite [Dev chat]. Un club : **Chomelix Cow**, ligue Vanadium, 5e division, 10 clubs, 18 journées. Heures affichées en Paris (`captured_at` en UTC).
 - Résultat d'un match = `silver.sz_matches.result` (W/L/D, déjà de notre point de vue), jamais le score brut.
 - Rôles : GK, CB, LB, RB, LW, RW, P. 20 compétences de 1 à 100. **Pas de forme, pas de personnel, pas de jauge d'académie, pas d'amical** : ne transpose rien de BasketVibe.
-- **Connaissance par thème** (remplace la lecture en bloc de `connaissance*.md` et du skill `-communaute`) : `select public.kb_search('sixzeroleague', '<thème>', 0)` ou `python -I pipelines/kb.py sixzeroleague <thème>` (thèmes : `--domaines`) ; recopier le compteur « N total / N affichées ».
-- Sources : `[W:Rubrique]` wiki > `[Dev chat]` Gazelle > `[Com chat, pseudo]` (avis) > `[Obs]`. Connaissance : `outputs/sixzeroleague/veille/connaissance.md` ; Discord `data/discord/SixZeroLeague/` ; chat `data/chat/sixzeroleague/` + `silver.sz_api` `/chat/messages`.
+- Sources : `[W:Rubrique]` wiki > `[Dev chat]` Gazelle > `[Com chat, pseudo]` (avis) > `[Obs]`. Connaissance `kb_search('sixzeroleague','<thème>',0)` ; Discord `data/discord/SixZeroLeague/` ; chat `data/chat/sixzeroleague/` + `silver.sz_api` `/chat/messages`.
 - Confidentialité : ne jamais afficher `ownerUsername` (e-mail des autres managers).
 
 ## Rythme et compétitions
