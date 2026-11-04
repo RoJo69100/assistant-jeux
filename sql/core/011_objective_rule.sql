@@ -22,7 +22,8 @@ create table if not exists core.objective_rule (
   primary key (rule_id)
 );
 alter table core.objective_rule enable row level security;
-drop policy if exists assistant_ro_select on core.objective_rule;
+-- Pas de « drop policy » : via le connecteur Supabase, il déclenche une confirmation qui n'arrive pas à l'utilisateur
+-- (2026-11-04, 3 essais perdus). Table neuve : la politique n'existe pas encore.
 create policy assistant_ro_select on core.objective_rule for select to assistant_ro using (true);
 grant select on core.objective_rule to assistant_ro;
 
