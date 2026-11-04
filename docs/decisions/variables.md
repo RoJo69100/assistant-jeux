@@ -42,12 +42,14 @@ Valeurs nommées (joueur, prix, date), jamais un seuil générique.
 
 ### `achat` (achat, enchère, agent libre)
 Joueur, âge, poste et fit au poste (vue fit du jeu) · compétences clés du poste vs notre titulaire et notre remplaçant · potentiel / plafond · forme, fatigue, blessures · salaire et durée de contrat · prix demandé, prix des ventes comparables (base des transferts) · `capacite_invest` moins dépenses déjà décidées · taxe et règles d'enchère (skill transferts) · revente possible (délai, valeur) · avis des amis sur ce profil ou ce poste · effet sur l'effectif minimum · ce qui prouvera l'erreur et le match qui le teste.
+Ajouts (police Derby Manager, 2026-11-04) : caisse et marge salariale **live** lues dans le bandeau de la page marché du club (pas seulement la dernière page Finances) · gain mesuré contre le **titulaire remplacé** (pas contre le dernier de la ligne) · coût total = prix + frais d'acheteur + prime (fourchette observée et pire cas) · contrats à prolonger avant l'achat (la prolongation consomme la marge) · enchère maximale en coût total · jours de contrat restants de la cible.
 
 ### `vente` (vente, libération)
 Joueur, âge, minutes jouées sur la saison, rôle dans les victoires/défaites · remplaçant interne et écart de niveau · valeur marché et ventes comparables · salaire économisé · taxe, délai, effectif minimum · déclin (âge) ou progression attendue · avis des amis · ce qui prouvera l'erreur.
 
 ### `composition` (ligue, coupe, playoffs)
 Adversaire : effectif, forces, tactique lue, résultats de la saison · nos joueurs : forme, fatigue, minutes lourdes, blessures, suspensions · fit poste par poste · réglages complets dans l'ordre de l'écran (voir fiche du jeu) · règles du moteur concernées (skill tactique) · ce qui a marché / échoué cette saison (gold V/D, learnings) · avis des amis sur ce réglage · ce qui prouvera l'erreur.
+**Tactique** (composition, Derby Manager, police 2026-11-04) : formation lue sur les slots exportés (pas sur une étiquette de vue) · rôle de chaque slot et compétences qui le font (DLP création/passes, DWG prévention) · options cochées lues dans le html brut de la page Squad · les 5 curseurs avec leur libellé · set pieces (PEN, FK, COR, DEF/ATT, capitaine) par rang gold · banc S1-S5 avec statut · résultats de la formation **contre le même adversaire** (comparaison appariée, sinon le dire) · contrats à 0 jour dans le XI.
 
 ### `defaite` (analyse d'une défaite)
 Score via `my_result`/`is_mine` · tirs, efficacité par zone, rebonds, pertes, fautes, joueur par joueur · comparaison à toutes les défaites et victoires de la saison · tactique adverse lue · nos réglages du match · fatigue et minutes · conseils C-nnn appliqués et leur effet · règles du moteur qui expliquent l'écart · avis des amis sur la même situation · 3 à 5 corrections testables nommées et chiffrées.
@@ -57,6 +59,7 @@ Chaque joueur : âge, potentiel, compétences sous/au-dessus des seuils du poste
 
 ### `academie` (académie, draft, scouting, jeunes, recrutement)
 Chaque prospect : compétences, fourchettes, potentiel estimé, âge · règles du jeu (coût, effet d'un recrutement, probabilités) · besoin de l'effectif par poste · budget · comparaison aux académies des autres clubs · avis des amis · ce qui prouvera l'erreur.
+Scouting (Derby Manager, police 2026-11-04) : stock de scouts et gratuits du jour (plafond 20 : ne pas en perdre) · cible du scout nommée (qui, pourquoi, combien de scouts déjà) · échéance des découverts (`expire`) · marge salariale avant toute promotion.
 Recrutement (Hardwood, 2026-11-02) : en plus, pour chaque cible et remplaçant : compétences clés du poste et phrases du scout · taille (grand ≥ 2,02 m) · note actuelle → plafond · nombre d'équipes intéressées (jamais High) · points disponibles et coût · offres déjà faites (registre `fait-`) · poste du boursier qui part.
 
 ### `finances` (infrastructure, personnel, sponsor, dépense)
