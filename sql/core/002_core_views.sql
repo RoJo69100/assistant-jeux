@@ -3,6 +3,8 @@
 create or replace view core.player_daily with (security_invoker = true) as
 select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.basketvibe_player_daily
 union all
+select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.hardwood_player_daily
+union all
 select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.hockeynation_player_daily
 union all
 select game, team_id, club_label, player_id, day, name, position, age, rating, form, fatigue, morale, injured, suspended, salary, contract_end, market_value, is_academy, skills, extras from adapt.sixzeroleague_player_daily
@@ -22,6 +24,8 @@ grant select on core.fixture to assistant_ro;
 
 create or replace view core.standing with (security_invoker = true) as
 select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.basketvibe_standing
+union all
+select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.hardwood_standing
 union all
 select game, team_id, team_label, is_mine, season_id, day, round_no, rank, played, points, wins, draws, losses, gf, ga, extras from adapt.hockeynation_standing
 union all
@@ -53,6 +57,8 @@ grant select on core.market_listing to assistant_ro;
 create or replace view core.academy_prospect with (security_invoker = true) as
 select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.basketvibe_academy_prospect
 union all
+select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.hardwood_academy_prospect
+union all
 select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.hockeynation_academy_prospect
 union all
 select game, team_id, prospect_id, day, seen_at, name, position, age, rating_min, rating_max, potential_min, potential_max, status, skills, extras from adapt.teamsoccer_academy_prospect;
@@ -60,6 +66,8 @@ grant select on core.academy_prospect to assistant_ro;
 
 create or replace view core.staff with (security_invoker = true) as
 select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.basketvibe_staff
+union all
+select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.hardwood_staff
 union all
 select game, team_id, staff_id, day, name, role, level, salary, extras from adapt.hockeynation_staff
 union all
