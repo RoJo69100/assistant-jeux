@@ -196,7 +196,9 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
         if not decision_faite(jeu, t, cmds):
             f.append(f"H3 : décision {t} ({jeu}) absente du journal — `python -I pipelines/decision.py new {jeu} "
                      f"{DOM_TYPE.get(t, (t,))[0]} --label … --prediction '<json>' --evaluer-le AAAA-MM-JJ`")
-    connues = lecons_du(jeu) if jeu and citees else None
+    nommes = [j for j, noms in JEUX.items() if any(x in norm(text) for x in noms)]
+    # H6 seulement si la réponse nomme au plus un jeu : sinon on ne sait pas à quel jeu la L-nnn appartient
+    connues = lecons_du(jeu) if jeu and citees and len(nommes) <= 1 else None
     if connues is not None:
         inconnues = [c for c in citees if c not in connues]
         retirees = [c for c in citees if connues.get(c) == "retired"]

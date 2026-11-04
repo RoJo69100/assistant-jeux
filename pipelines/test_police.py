@@ -57,6 +57,7 @@ CAS = [
     ("H6 leçon inconnue", "Testjeu : L-099 tient.", [u("analyse")], True, ["H6 : leçon(s) L-099 inconnue"]),
     ("H6 leçon retirée", "Testjeu : L-002 tient.", [u("analyse")], True, ["H6 : leçon(s) L-002 retirée"]),
     ("H6 agent : pas contrôlé", "Testjeu : L-099.", [u("analyse")], False, []),
+    ("H6 deux jeux nommés : pas contrôlé", "Testjeu et Hockey Nation : L-099.", [u("analyse")], True, []),
     ("vente reconnue", PLAN_VENTE, [u("que faire")], True, ["H1 : décision vente", "H2 : décision vente", "H3 : décision vente"]),
     ("export seul passe", PLAN_EXPORT, [u("que faire")], True, []),
     ("H4 conception + décision : H1 reste", PLAN_ACHAT, [u("conception des hooks")], True, ["H1", "H2", "H3"]),
