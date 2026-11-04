@@ -55,7 +55,9 @@ def cellules(ligne: str) -> list[str]:
 
 def statut_lecon(statut: str, matchs: int) -> str:
     s = statut.lower()
-    if re.search(r"infirm|contredi|\bfaux\b|retir", s):
+    retrait = re.search(r"infirm|contredi|\bfaux\b|retir", s)
+    confirme = re.search(r"(?<!non )confirm", s)
+    if retrait and not (confirme and confirme.start() < retrait.start()):  # « confirmé (lien : infirmé) » reste confirmé
         return "retired"
     if not s.lstrip("* ").startswith("à surveiller") and re.search(r"(?<!non )confirm", s) and matchs >= SEUIL_VALIDER:
         return "validated"

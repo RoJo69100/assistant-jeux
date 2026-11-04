@@ -50,6 +50,8 @@ CAS = [
     ("« à surveiller (confirmé…) » → hypothèse", statut_lecon("à surveiller (confirmé en ligue)", 6), "hypothesis"),
     ("« **infirmé** » → retirée", statut_lecon("**infirmé**", 4), "retired"),
     ("« non confirmé » → hypothèse", statut_lecon("non confirmé", 5), "hypothesis"),
+    ("« confirmé (lien : infirmé) » → validée", statut_lecon("confirmé (lien avec les résultats : infirmé)", 33),
+     "validated"),
     ("conseil « appliqué » → done", statut_conseil("appliqué (2026-10-18)"), "done"),
     ("conseil « non appliqué » → rejected", statut_conseil("non appliqué"), "rejected"),
     ("conseil « ouvert » → proposed", statut_conseil("ouvert"), "proposed"),
