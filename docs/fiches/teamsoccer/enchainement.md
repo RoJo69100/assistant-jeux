@@ -11,7 +11,7 @@ Rythme : composition enregistrée au moins 2 h avant le coup d'envoi ; Forme mis
 | Joueurs avec blessure, 2e jaune ou Forme changée | Tactique (si un match est à venir) | Composition corrigée |
 | Entraînement / gymnase (vendredi) | Entraînement | Compétence et intensité par joueur, Forme, entraîneur |
 | Finances (lundi) | Finances | Voir « Finances » ci-dessous |
-| Académie (après les 3 révélations du jour) | Académie | Jeunes à révéler ensuite, à monter, à ignorer |
+| Académie (après la révélation du jour) | Académie | Jeunes à révéler ensuite, à monter, à ignorer |
 | Marché / enchères | Transferts | Voir « Transferts » ci-dessous |
 | Forum / annonces | Veille | Propositions de modification de skills, **à valider par toi** |
 

@@ -5,7 +5,7 @@ description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux 
 
 # Team Soccer — que faire aujourd'hui
 
-Sources : `gold.ts_agenda` et `gold.ts_daily_alerts` (`sql/gold/018_ts_agenda.sql`), prochains matchs `gold.ts_upcoming`, derniers briefs `outputs/teamsoccer/briefs/`, conseils ouverts `outputs/teamsoccer/learnings.md`. Rythme : skill teamsoccer-saison (lundi 00:05 finances, vendredi entraînement, 3 révélations d'académie par jour, un amical par semaine) ; composition enregistrée au moins 2 h avant le coup d'envoi [skill teamsoccer-match].
+Sources : `gold.ts_agenda` et `gold.ts_daily_alerts` (`sql/gold/018_ts_agenda.sql`), prochains matchs `gold.ts_upcoming`, derniers briefs `outputs/teamsoccer/briefs/`, conseils ouverts `outputs/teamsoccer/learnings.md`. Rythme : skill teamsoccer-saison (lundi 00:05 finances, vendredi entraînement, 1 révélation d'académie par jour, un amical par semaine) ; composition enregistrée au moins 2 h avant le coup d'envoi [skill teamsoccer-match].
 
 ## Méthode (coût minimal : pas d'agent, deux requêtes)
 1. `select day_label, team, priority, category, action from gold.ts_agenda` puis `select priority, team, category, alert from gold.ts_daily_alerts order by priority, team` via `mcp__supabase__execute_sql`.
