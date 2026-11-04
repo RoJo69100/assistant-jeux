@@ -1,6 +1,6 @@
 ---
 name: hockeynation-potentiel-joueurs
-description: Méthode Hockey Nation pour calculer le potentiel d'un joueur (note minimum et maximum qu'il peut atteindre) à partir de ses compétences plafonnées et de ses talents fort/faible, puis le classer (Fort / Solide / Moyen / Nul). À charger pour juger un joueur à trader, un prospect, un U21 à monter, un choix de draft ou un échange.
+description: Hockey Nation : calculer le potentiel d'un joueur (note min et max) depuis ses compétences plafonnées et ses talents, puis le classer. Pour juger un trade, un prospect, un U21 ou un choix de draft.
 ---
 
 # Hockey Nation — potentiel d'un joueur

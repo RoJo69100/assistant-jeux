@@ -1,6 +1,6 @@
 # Carte hockeynation — entrainement (Training PRO et FRM : compétence + coach par joueur, ordre de choix)
 
-Sources lues : commit bf6ecaf (2026-11-02)
+Sources lues : commit d1eaf11 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `entrainement.md`, skills `hockeynation-coachs-entrainement`, `-joueurs`, `-potentiel-joueurs`). Réglable en PRO et FRM seulement ; U21 et U17 sans levier d'entraînement. Saisie dans l'ordre de l'écran Training (`pipelines/forme.py`, ordre d'entraînement HN).
 

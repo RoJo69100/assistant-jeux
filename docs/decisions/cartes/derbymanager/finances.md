@@ -1,6 +1,6 @@
 # Carte derbymanager — finances (argent par jour, plafond salarial, installations ; deux clubs)
 
-Sources lues : commit 7a304c3 (2026-11-02)
+Sources lues : commit 87dc954 (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` ; connaissance § 9, § 10 ; learnings). Plus d'agent `finances` depuis le 2026-11-02. Tout l'argent est **par jour**. Un bloc par club.
 

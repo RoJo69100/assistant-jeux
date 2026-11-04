@@ -1,6 +1,6 @@
 # Carte teamsoccer — defaite (analyse d'une défaite ou d'un nul ; deux clubs)
 
-Sources lues : commit 81b8350 (2026-11-02)
+Sources lues : commit 7d27385 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `match.md`, skills `teamsoccer-match`, `-joueurs` ; connaissance § 6 ; learnings). Règles : CLAUDE.md règle 4 (analyse détaillée, joueur par joueur, toute la saison), règle 7 (résultat = notre côté : `gold.ts_match_report.result`), `analyste` d'office sur une défaite.
 

@@ -1,0 +1,3 @@
+## Introduction et sources
+
+Sources : **[G:Rubrique]** = guide officiel (page Aide, version française, captée le 2026-10-19 ; nouvelle page Aide annoncée le 2026-09-20). **[F:date auteur]** = forum global anglais ; seuls les messages des administrateurs (Admin-Dev = développeur, Admin-PIPO68) valent règle, et le forum dit lui-même que seuls le forum global et les annonces sont fiables [F:2026-10-11 PIPO68]. **[P:Page]** = texte d'une page du jeu capté le 2026-10-19. **[Obs]** = nos données. Tout ce qui date d'avant le 2026-07-07 vient de la BETA (remise à zéro complète ce jour-là) : à manier avec prudence. Voir aussi teamsoccer-communaute.

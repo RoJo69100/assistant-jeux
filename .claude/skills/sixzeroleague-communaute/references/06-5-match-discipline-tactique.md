@@ -1,0 +1,7 @@
+## 5. Match, discipline, tactique
+- Agressivité d'équipe **disponible depuis la 0.6.1** (Light, Normal, Hard) ; son effet n'est pas documenté ; elle était annoncée comme réponse aux jaunes et aux 2 min [Dev chat, C:911baf 2026-10-16 12:18 ; D:L9 ; V-20261026-14, remplace la puce « pas encore de réglage »]
+- Pour moins de cartons et d'exclusions : travailler le **Marquage** d'abord, puis **Anticipation** et **Duels** [Com chat, Antarez] ; cohérent avec le wiki (Marquage et Duels = moins de fautes [W:Attributes]).
+- Jeu passif : les équipes faibles tirent rarement pendant l'avertissement et perdent le ballon à la 7e passe ; selon le Dev, un tir pendant cette phase a pourtant actuellement **un taux de réussite plus élevé** ; point à revoir de son côté [Dev chat].
+- Matchs joués avant la mise à jour des statistiques : seul le score est disponible [Dev chat].
+- Le 7 m est tiré par le meilleur de l'équipe, sans choix possible [Dev chat, 2026-10-20]. Fautes de 2 min loin du ballon : bug en correction ; nombre d'exclusions en révision ; jeu passif : pression pour tirer ajoutée, mais les équipes faibles tirent encore peu [Dev chat, 2026-10-20 et 2026-10-21]. Seules les formations 5-1 / 6-0 existent ; un joueur ne peut pas être limité à l'attaque ou à la défense [Dev chat, 2026-10-10]. Stats adverses non visibles ; la formation adverse viendra dans les stats de match [Dev chat, 2026-10-22].
+

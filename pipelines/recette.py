@@ -7,7 +7,10 @@ Sans option :
 Avec --reponse <fichier> --jour <lun…dim> : contrôle une réponse rendue (interdits, pastilles,
 mots du jour). Le texte entre « », "" ou `` est ignoré (citations).
 Avec --tous (étape 0b, 2026-11-02 ; à lancer avant chaque commit de conception) :
-  1. rejoue les tests des hooks (pipelines/test_forme.py, pipelines/test_police.py) ;
+  1. rejoue les tests (forme, police, controle, sql, contexte_budget), le budget de contexte,
+     les vues core à jour (build_core --check), le contrat core (contrat_core) et la parité de
+     gold.agenda, gold.exports_state, gold.daily_alerts et gold.finance_health avec les anciennes vues
+     (agenda_parite, exports_parite, alertes_parite, finances_parite) ;
   2. pour chaque jeu : resume.md présent, learnings.md présent, tests docs/attentes/tests/<jeu>.yaml
      (recette complète s'ils existent), chaque vue gold/silver/bronze citée dans docs/fiches/<jeu>/ et
      docs/decisions/cartes/<jeu>/ créée dans sql/, et le résumé du cartographe (cartes, leçons sans check).
@@ -102,8 +105,8 @@ JEUX = ["basketvibe", "hockeynation", "teamsoccer", "sixzeroleague", "derbymanag
 OBJET = re.compile(r"\b(?:gold|silver|bronze)\.[a-z0-9_]*[a-z0-9]\b")
 
 
-def lancer(script: str) -> tuple[bool, str]:
-    r = subprocess.run([sys.executable, str(RACINE / "pipelines" / script)], capture_output=True,
+def lancer(script: str, *args: str) -> tuple[bool, str]:
+    r = subprocess.run([sys.executable, str(RACINE / "pipelines" / script), *args], capture_output=True,
                        text=True, encoding="utf-8", errors="replace")
     der = (r.stdout.strip().splitlines() or [""])[-1]
     ko = [l for l in r.stdout.splitlines() if l.startswith("❌")]
@@ -124,8 +127,15 @@ def objets_absents(jeu: str, sql: str) -> tuple[int, list[str]]:
 def tous() -> list[tuple[bool, str]]:
     sys.path.insert(0, str(RACINE / "pipelines"))
     import cartographe
-    res = [lancer("test_forme.py"), lancer("test_police.py")]
-    sql = "\n".join(p.read_text(encoding="utf-8", errors="replace").lower() for p in (RACINE / "sql").rglob("*.sql"))
+    res = [lancer(t) for t in ("test_forme.py", "test_police.py", "test_controle.py", "test_sql.py", "test_contexte_budget.py")]
+    res.append(lancer("contexte_budget.py"))
+    res.append(lancer("build_core.py", "--check"))
+    res.append(lancer("contrat_core.py"))
+    res.append(lancer("agenda_parite.py"))
+    res.append(lancer("exports_parite.py"))
+    res.append(lancer("alertes_parite.py"))
+    res.append(lancer("finances_parite.py"))
+    sql ="\n".join(p.read_text(encoding="utf-8", errors="replace").lower() for p in (RACINE / "sql").rglob("*.sql"))
     for jeu in JEUX:
         res.append((True, f"— {jeu} —"))
         res.append(((RACINE / f"docs/fiches/{jeu}/resume.md").exists(), f"{jeu} : resume.md"))

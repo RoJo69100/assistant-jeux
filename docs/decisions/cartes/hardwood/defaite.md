@@ -1,6 +1,6 @@
 # Carte hardwood — defaite (analyse d'une défaite)
 
-Sources lues : commit 90f564f (2026-11-02)
+Sources lues : commit d0cfdca (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skills `hardwood-tactique`, `-regles` ; veille `v-tactique.md` § 3-4, `v-joueurs-entrainement.md` § 2-3). Règles : résultat = `my_result` ; analyse contre toute la saison (`gold.hw_vd_compare`) ; `analyste` d'office.
 

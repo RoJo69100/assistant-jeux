@@ -1,8 +1,18 @@
 {
-  "statusLine": {
-    "type": "command",
-    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/statusline.ps1",
-    "padding": 0
+  "permissions": {
+    "allow": [
+      "mcp__Supabase__execute_sql",
+      "mcp__Supabase__list_tables",
+      "mcp__Supabase__list_projects",
+      "mcp__Supabase",
+      "mcp__claude_ai_Supabase",
+      "mcp__claude_ai_Supabase__execute_sql",
+      "mcp__claude_ai_Supabase__list_tables",
+      "mcp__claude_ai_Supabase__list_projects",
+      "mcp__plugin_supabase_supabase",
+      "mcp__plugin_supabase_supabase__execute_sql",
+      "Bash(python -I pipelines/sql.py:*)"
+    ]
   },
   "hooks": {
     "SessionStart": [
@@ -15,6 +25,33 @@
           {
             "type": "command",
             "command": "python pipelines/rappel_debut.py"
+          },
+          {
+            "type": "command",
+            "command": "python pipelines/deps_cloud.py",
+            "timeout": 180
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python pipelines/garde_push.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python pipelines/garde_push.py"
           }
         ]
       }
@@ -48,21 +85,9 @@
       }
     ]
   },
-  "permissions": {
-    "allow": [
-      "mcp__Supabase__execute_sql",
-      "mcp__Supabase__list_tables",
-      "mcp__Supabase__list_projects",
-      "mcp__supabase__execute_sql",
-      "mcp__supabase__list_tables",
-      "mcp__Supabase",
-      "mcp__supabase",
-      "mcp__claude_ai_Supabase",
-      "mcp__claude_ai_Supabase__execute_sql",
-      "mcp__claude_ai_Supabase__list_tables",
-      "mcp__claude_ai_Supabase__list_projects",
-      "mcp__plugin_supabase_supabase",
-      "mcp__plugin_supabase_supabase__execute_sql"
-    ]
+  "statusLine": {
+    "type": "command",
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/statusline.ps1",
+    "padding": 0
   }
 }

@@ -1,6 +1,6 @@
 # Carte sixzeroleague — entrainement (intensité d'équipe, focus par joueur, formation de rôle ; cycle chaque soir)
 
-Sources lues : commit 4bd592f (2026-11-02)
+Sources lues : commit 8791d35 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `entrainement.md`, skills `sixzeroleague-entrainement`, `-joueurs`, `-communaute` § 1-2 ; connaissance § 5). Règles : cycle = 2 journées, réglé chaque soir après 21:00 Paris ; saisie avant 21:00 ; pas de potentiel caché à estimer.
 

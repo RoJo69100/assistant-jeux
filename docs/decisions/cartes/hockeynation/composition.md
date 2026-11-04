@@ -1,6 +1,6 @@
 # Carte hockeynation — composition (lineups PRO A/B/C, plan de jeu, postes FRM/U21/U17)
 
-Sources lues : commit bf6ecaf (2026-11-02)
+Sources lues : commit d1eaf11 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `tactique.md`, `resume.md`, skills `hockeynation-match-calendrier`, `-joueurs`, `-adversaires`, connaissance § Matchs / lignes, learnings L-003, L-004, L-009, L-010, L-016). Règles : rendu FIGÉ du 2026-10-29 (« ne change jamais le rendu », `resume.md` § Tactique PRO), 4 équipes et 20 joueurs (CLAUDE.md § Hockey Nation), horaire « aujourd'hui seulement ».
 

@@ -1,0 +1,3 @@
+#!/bin/sh
+python -I pipelines/scan_secrets.py || exit 1
+python -I pipelines/contexte_budget.py || exit 1

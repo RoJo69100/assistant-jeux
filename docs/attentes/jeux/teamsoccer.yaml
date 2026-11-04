@@ -111,6 +111,17 @@ seuils:
   cartons: "2 jaunes = suspension (skill joueurs)"
   solde: "négatif = ni achat, ni stade, ni entraîneur"
 
+core:   # refonte v2 phase 1 : entités branchées (adapt.teamsoccer_<entité>) ; limites = colonnes nulles par construction
+  player_daily:  { limites: [fatigue, morale, contract_end] }                # endurance = compétence ; moral d'équipe seulement ; pas de contrat
+  fixture:       { limites: [round_no] }                                     # numéro de journée non exporté ; tirs au but dans extras
+  standing:      { limites: [] }                                             # recalculé depuis les matchs (silver.ts_standings), 3/1/0 non sourcé
+  finance_daily: { limites: [wage_cap, capacite_invest] }                    # semaine en cours ; pas de plafond salarial
+  market_listing: { limites: [starting_price, seller_id] }                   # prix demandé ou de départ ; enchère en cours non exportée
+  academy_prospect: { limites: [rating_min, rating_max, potential_min, potential_max] }  # compétences révélées seulement
+  staff:         { limites: [salary] }                                       # entraîneur (5 niveaux × 20) ; coût dans finances
+  training_plan: { limites: [focus_secondary] }                              # une compétence et une intensité par joueur
+  facility:      { limites: [level] }                                        # stade (places, entretien hebdo) + Centre de Haute Performance
+
 vues_gold:
   agenda: gold.ts_agenda
   alertes: gold.ts_daily_alerts

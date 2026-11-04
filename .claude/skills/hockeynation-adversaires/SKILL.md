@@ -1,6 +1,6 @@
 ---
 name: hockeynation-adversaires
-description: Méthode Hockey Nation d'étude des adversaires — quels exports faire sur une équipe adverse (effectif, lignes, coachs, résultats, échanges), comment lire sa force (talents vs poste, coachs de match, head coach et ses compétences spéciales, gardiens et fatigue, plafond), et quoi en tirer pour nos lignes et nos échanges. À charger avant un match important, une série de playoffs, ou pour comprendre pourquoi une équipe gagne.
+description: Hockey Nation, adversaires : exports à faire sur une équipe adverse, lecture de sa force (talents vs poste, coachs, gardiens, plafond). Avant un match important ou une série de playoffs.
 ---
 
 # Hockey Nation — étude des adversaires

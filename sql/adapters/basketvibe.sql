@@ -1,0 +1,271 @@
+-- Refonte v2, étape 1.2 : adaptateur BasketVibe vers le contrat core (plan §1.1).
+-- Mince : renommage, échelles, competition_kind. my_result vient tel quel de silver.bv_matches (R-9).
+-- Colonnes absentes du jeu ou de la collecte = null, déclarées dans docs/attentes/jeux/basketvibe.yaml (core.limites).
+
+create or replace view adapt.basketvibe_player_daily with (security_invoker = true) as
+with sal as materialized (  -- calculée une fois : la vue silver relue par ligne coûtait 7 s
+  select player_id, day, salary from silver.bv_player_salary_weekly
+)
+select
+  'basketvibe'::text                          as game,
+  p.team_id::text                             as team_id,
+  'Chomelix Cow'::text                        as club_label,
+  p.player_id::text                           as player_id,
+  p.day                                       as day,
+  p.name                                      as name,
+  p.position                                  as position,
+  p.age                                       as age,
+  p.ps::numeric                               as rating,      -- PS, moyenne pondérée des compétences 0–99 [M§2.2]
+  round((p.form - 1) / 9.0, 4)                as form,        -- 1–10 [M§5.5] -> 0–1
+  round(p.fatigue / 100.0, 4)                 as fatigue,     -- 0–100 [M§5.6] -> 0–1
+  null::numeric                               as morale,
+  coalesce(p.injury_return_on > p.day, false) as injured,
+  null::boolean                               as suspended,
+  s.salary::numeric                           as salary,
+  null::date                                  as contract_end,
+  null::numeric                               as market_value,
+  false                                       as is_academy,  -- l'effectif seulement ; les prospects sont dans core.academy_prospect
+  jsonb_build_object(
+    'two_point', p.two_point, 'three_point', p.three_point, 'defense', p.defense, 'passing', p.passing,
+    'ball_handling', p.ball_handling, 'rebounding', p.rebounding, 'stamina', p.stamina, 'athleticism', p.athleticism
+  )                                           as skills,
+  jsonb_build_object(
+    'form_raw', p.form, 'fatigue_raw', p.fatigue, 'experience', p.experience,
+    'injury_return_on', p.injury_return_on, 'skills_visibility', p.skills_visibility,
+    'training_primary', p.training_primary, 'training_secondary', p.training_secondary,
+    'salary_day', s.day, 'capture_id', p.capture_id
+  )                                           as extras
+from silver.bv_player_daily p
+left join lateral (
+  select w.salary, w.day
+  from sal w
+  where w.player_id = p.player_id and w.day <= p.day
+  order by w.day desc
+  limit 1
+) s on true;
+
+create or replace view adapt.basketvibe_fixture with (security_invoker = true) as
+with mine as (
+  select t.team_id::text as team_id from silver.bv_my_team t
+),
+played as (
+  -- Matchs de mon club (ligue, coupe, amical) : une ligne par fixture, la capture la plus récente.
+  select distinct on (m.fixture_id) m.*
+  from silver.bv_matches m
+  where m.my_side is not null
+  order by m.fixture_id, m.captured_at desc nulls last
+),
+scheduled as (
+  -- Calendrier de ligue connu mais pas encore exporté comme match.
+  select f.*
+  from silver.bv_fixtures f
+  where f.is_mine and not exists (select 1 from played p where p.fixture_id = f.fixture_id)
+)
+select
+  'basketvibe'::text                                   as game,
+  (select team_id from mine)                           as team_id,
+  p.fixture_id::text                                   as fixture_id,
+  case p.competition when 'league' then 'ligue' when 'cup' then 'coupe'
+                     when 'friendly' then 'amical' else 'autre' end as competition_kind,
+  p.round_number                                       as round_no,
+  case when p.competition = 'league' then 22 end       as rounds_total,  -- core.game_params rounds_total
+  p.match_day                                          as day,
+  null::timestamptz                                    as scheduled_at,  -- fuseau de kickoff_time non sourcé ; connu seulement pour les amicaux programmés
+  p.status = 'finished'                                as played,
+  case p.my_side when 'home' then p.home_score else p.away_score end as my_score,
+  case p.my_side when 'home' then p.away_score else p.home_score end as opp_score,
+  p.my_result                                          as my_result,
+  case p.my_side when 'home' then p.away_team else p.home_team end   as opponent,
+  p.my_side = 'home'                                   as home,
+  jsonb_build_object('match_id', p.match_id, 'season_id', p.season_id, 'status', p.status,
+                     'kickoff_time', p.kickoff_time, 'is_walkover', p.is_walkover,
+                     'overtime_periods', p.overtime_periods, 'source', 'bv_matches') as extras
+from played p
+union all
+select
+  'basketvibe', (select team_id from mine), s.fixture_id::text, 'ligue', s.round_number, 22, s.match_day,
+  null::timestamptz, s.status = 'finished',
+  null::int, null::int, null::text,  -- score et résultat seulement depuis bv_matches (R-9)
+  case when s.home_team_id::text = (select team_id from mine) then s.away_team else s.home_team end,
+  s.home_team_id::text = (select team_id from mine),
+  jsonb_build_object('match_id', s.match_id, 'season_id', s.season_id, 'status', s.status, 'source', 'bv_fixtures')
+from scheduled s
+union all
+-- Amicaux programmés : dernière capture de la liste des amicaux (kickoff_at en UTC dans l'API).
+select
+  'basketvibe', (select team_id from mine), x ->> 'id', 'amical', null::int, null::int,
+  ((x ->> 'kickoff_at')::timestamptz at time zone 'Europe/Paris')::date,  -- fuseau_affichage (match_day = jour de l'hôte, dans extras)
+  (x ->> 'kickoff_at')::timestamptz, false,
+  null::int, null::int, null::text,
+  case when x ->> 'home_team_id' = (select team_id from mine) then x ->> 'away_team_name' else x ->> 'home_team_name' end,
+  x ->> 'home_team_id' = (select team_id from mine),
+  jsonb_build_object('status', x ->> 'status', 'match_day', x ->> 'match_day', 'has_saved_match_tactics', (x ->> 'has_saved_match_tactics')::boolean,
+                     'source', 'bv_api friendlies')
+from (select a.body from silver.bv_api a
+      where a.endpoint ~ '^/teams/[0-9a-f-]{36}/friendlies$'
+      order by a.captured_at desc limit 1) a,
+     jsonb_array_elements(a.body -> 'friendlies') x
+where x ->> 'status' = 'scheduled'
+  and not exists (select 1 from played p where p.fixture_id::text = x ->> 'id');
+
+-- Classement : une ligne par club et par relevé de ma ligue (relevés sans mon club écartés : autre ligue).
+create or replace view adapt.basketvibe_standing with (security_invoker = true) as
+with releves as (
+  select distinct s.season_id, s.day from silver.bv_standings_weekly s where s.is_mine
+)
+select
+  'basketvibe'::text           as game,
+  s.team_id::text              as team_id,
+  s.team                       as team_label,
+  s.is_mine                    as is_mine,
+  s.season_id::text            as season_id,
+  s.day                        as day,
+  max(s.wins + s.losses) over (partition by s.season_id, s.day) as round_no,
+  s.rank                       as rank,
+  s.wins + s.losses            as played,
+  s.points                     as points,
+  s.wins                       as wins,
+  0                            as draws,  -- pas de match nul [M§2]
+  s.losses                     as losses,
+  s.points_for                 as gf,
+  s.points_against             as ga,
+  jsonb_build_object('week', s.week, 'diff', s.diff, 'home_wins', s.home_wins, 'home_losses', s.home_losses,
+                     'away_wins', s.away_wins, 'away_losses', s.away_losses, 'club_strength', s.club_strength,
+                     'is_human', s.is_human, 'form', s.form) as extras
+from silver.bv_standings_weekly s
+join releves r on r.season_id = s.season_id and r.day = s.day;
+
+-- Finances : relevé hebdomadaire ; salaries et expenses sont des montants par semaine (extras.periode).
+create or replace view adapt.basketvibe_finance_daily with (security_invoker = true) as
+select
+  'basketvibe'::text           as game,
+  f.team_id::text              as team_id,
+  f.day                        as day,
+  f.balance                    as balance,
+  null::numeric                as income,       -- recettes non relevées sur la page finances
+  (f.weekly_salaries + f.weekly_academy + f.weekly_personnel) as expenses,
+  f.weekly_salaries            as salaries,
+  null::numeric                as wage_cap,     -- aucun plafond salarial dans les skills BasketVibe
+  null::numeric                as capacite_invest,  -- calculée une fois dans le gold générique (plan 1.4)
+  jsonb_build_object('periode', 'semaine', 'week', f.week, 'popularity', f.popularity,
+                     'academy', f.weekly_academy, 'personnel', f.weekly_personnel,
+                     'transfer_available', f.transfer_available, 'transfer_committed', f.transfer_committed,
+                     'transfer_lock', f.transfer_lock) as extras
+from silver.bv_finance_weekly f;
+
+-- Marché : chaque annonce vue (marché ou mes ventes), dernier relevé ; le statut n'est pas remis à jour après la fin.
+create or replace view adapt.basketvibe_market_listing with (security_invoker = true) as
+select
+  'basketvibe'::text                           as game,
+  me.team_id::text                             as team_id,
+  t.auction_id::text                           as listing_id,
+  (t.seen_at at time zone 'Europe/Paris')::date as day,
+  t.seen_at                                    as seen_at,
+  t.ends_at                                    as ends_at,
+  t.status                                     as status,
+  t.player_id::text                            as player_id,
+  t.name                                       as name,
+  t.position                                   as position,
+  t.age                                        as age,
+  t.ps::numeric                                as rating,      -- PS 0–99 [M§2.2]
+  t.current_price::numeric                     as price,
+  t.starting_price::numeric                    as starting_price,
+  t.bid_count                                  as bids,
+  t.seller_team_id::text                       as seller_id,
+  t.seller_team                                as seller_label,
+  t.seller_team_id is not distinct from me.team_id as is_mine,
+  jsonb_build_object(
+    'two_point', t.two_point, 'three_point', t.three_point, 'defense', t.defense, 'passing', t.passing,
+    'ball_handling', t.ball_handling, 'rebounding', t.rebounding, 'stamina', t.stamina, 'athleticism', t.athleticism
+  )                                            as skills,
+  jsonb_build_object('experience', t.experience, 'height_cm', t.height_cm, 'weight_kg', t.weight_kg,
+                     'nationality', t.nationality, 'seller_is_free_agent', t.seller_is_free_agent) as extras
+from silver.bv_transfer_auctions t
+cross join silver.bv_my_team me;
+
+create or replace view adapt.basketvibe_academy_prospect with (security_invoker = true) as
+-- Rapport du scout (hebdomadaire) : 3 candidats, fourchette min–max par compétence, potentiel caché [skill basketvibe-academie].
+select
+  'basketvibe'::text                                                   as game,
+  c.team_id::text                                                      as team_id,
+  to_char(c.scout_report_at at time zone 'UTC', 'YYYYMMDD"T"HH24MI') || '-' || c.slot as prospect_id,
+  (c.scout_report_at at time zone 'Europe/Paris')::date                as day,
+  c.scout_report_at                                                    as seen_at,
+  c.name                                                               as name,
+  c.position                                                           as position,
+  c.age                                                                as age,
+  r.rmin                                                               as rating_min,  -- PS du poste sur les bornes basses [M§2.2]
+  r.rmax                                                               as rating_max,
+  null::numeric                                                        as potential_min, -- potentiel caché, non affiché
+  null::numeric                                                        as potential_max,
+  'candidat'::text                                                     as status,
+  jsonb_build_object(
+    'two_point', jsonb_build_array(c.two_point_min, c.two_point_max),
+    'three_point', jsonb_build_array(c.three_point_min, c.three_point_max),
+    'defense', jsonb_build_array(c.defense_min, c.defense_max),
+    'passing', jsonb_build_array(c.passing_min, c.passing_max),
+    'ball_handling', jsonb_build_array(c.ball_handling_min, c.ball_handling_max),
+    'rebounding', jsonb_build_array(c.rebounding_min, c.rebounding_max),
+    'stamina', jsonb_build_array(c.stamina_min, c.stamina_max),
+    'athleticism', jsonb_build_array(c.athleticism_min, c.athleticism_max)
+  )                                                                    as skills,       -- [min, max]
+  jsonb_build_object('slot', c.slot, 'height_cm', c.height_cm, 'weight_kg', c.weight_kg) as extras
+from silver.bv_academy_candidates c
+cross join lateral (
+  select round(sum(w.v * b.lo), 1) as rmin, round(sum(w.v * b.hi), 1) as rmax
+  from (select pw.skill, case c.position when 'PG' then pw.pg when 'SG' then pw.sg when 'SF' then pw.sf
+                                         when 'PF' then pw.pf else pw.c end as v
+        from gold.bv_ps_weight pw) w
+  join (values ('two_point', c.two_point_min, c.two_point_max), ('three_point', c.three_point_min, c.three_point_max),
+               ('defense', c.defense_min, c.defense_max), ('passing', c.passing_min, c.passing_max),
+               ('ball_handling', c.ball_handling_min, c.ball_handling_max), ('rebounding', c.rebounding_min, c.rebounding_max),
+               ('stamina', c.stamina_min, c.stamina_max), ('athleticism', c.athleticism_min, c.athleticism_max)
+       ) b(skill, lo, hi) on b.skill = w.skill
+) r;
+
+create or replace view adapt.basketvibe_training_plan with (security_invoker = true) as
+-- Page Entraînement : compétence principale et secondaire par joueur ; le jeu n'a pas d'intensité [skill basketvibe-entrainement].
+select
+  'basketvibe'::text                                 as game,
+  t.team_id::text                                    as team_id,
+  t.player_id::text                                  as player_id,
+  t.day                                              as day,
+  concat_ws(' ', t.p->>'first_name', t.p->>'last_name') as name,
+  coalesce((t.p->>'is_academy_junior')::boolean, false) as is_academy,
+  t.p->>'primary_skill_id'                           as focus_primary,
+  t.p->>'secondary_skill_id'                         as focus_secondary,
+  null::numeric                                      as intensity,
+  jsonb_build_object(
+    'primary_display', t.p->'primary_display', 'secondary_display', t.p->'secondary_display',
+    'position', t.p->>'position', 'age', t.p->'age', 'captured_at', t.captured_at
+  )                                                  as extras
+from silver.bv_player_training t;
+
+create or replace view adapt.basketvibe_staff with (security_invoker = true) as
+-- Page Personnel (API) : noms par rôle, sans identifiant ni niveau ; coût par poste dans le skill, pas dans la collecte [M§4.3].
+-- La capture DOM seule (sans appel API) n'est pas lue : texte libre.
+with cap as (
+  select distinct on (a.team_id, a.day) a.team_id, a.day, a.captured_at, a.body
+  from silver.bv_api a
+  where a.endpoint ~ '^/teams/[0-9a-f-]{36}/personnel$'
+  order by a.team_id, a.day, a.captured_at desc
+)
+select
+  'basketvibe'::text                                          as game,
+  cap.team_id::text                                           as team_id,
+  r.role || ':' || concat_ws(' ', s->>'first_name', s->>'last_name') as staff_id,  -- pas d'identifiant dans l'API
+  cap.day                                                     as day,
+  concat_ws(' ', s->>'first_name', s->>'last_name')           as name,
+  r.role                                                      as role,
+  null::numeric                                               as level,
+  null::numeric                                               as salary,
+  jsonb_build_object('role_raw', r.cle, 'captured_at', cap.captured_at) as extras
+from cap
+cross join (values ('doctor_roster', 'medecin'), ('physio_roster', 'kine'),
+                   ('psychologist_roster', 'psychologue'), ('marketer_roster', 'marketing')) r(cle, role)
+cross join lateral jsonb_array_elements(cap.body->r.cle) s;
+
+grant select on adapt.basketvibe_player_daily, adapt.basketvibe_fixture,
+                adapt.basketvibe_standing, adapt.basketvibe_finance_daily,
+                adapt.basketvibe_market_listing, adapt.basketvibe_academy_prospect,
+                adapt.basketvibe_training_plan, adapt.basketvibe_staff to assistant_ro;

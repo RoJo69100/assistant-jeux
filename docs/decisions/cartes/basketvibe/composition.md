@@ -1,6 +1,6 @@
 # Carte basketvibe — composition (ligue, coupe, amical)
 
-Sources lues : commit 3de9137 (2026-10-31)
+Sources lues : commit fa4743a (2026-10-31)
 
 Écrite le 2026-10-31 à partir des skills `basketvibe-tactique`, `-joueurs`, `-saison`, de `connaissance.md`, de `learnings.md` (L-001 à L-026) et des vues gold. Au passage suivant : `python pipelines/dossier.py basketvibe composition --mots "<adversaire, joueurs>"` donne cette carte et seulement le nouveau.
 
@@ -18,7 +18,7 @@ Sources lues : commit 3de9137 (2026-10-31)
 | :170 | nouveauté = test en amical | § Amical |
 
 ## Rendu (figé, identique à chaque fois)
-Règles d'origine : R-10 (`resume.md`), mémoires `feedback-format-tactique-parfait`, `feedback-amical-compo-test`, `feedback-rendu-demain-seulement` ; récidive « format tactique » inscrite 3 fois dans `docs/retro/regles-apprises.md`.
+Règles d'origine : R-10 (`resume.md`), mémoires `feedback-format-tactique-parfait`, `feedback-amical-compo-test`, `feedback-rendu-demain-seulement` ; récidive « format tactique » inscrite 3 fois dans `docs/regles/archive/regles-apprises-2026-11-02.md`.
 1. Une ligne : match (type, adversaire, heure de Paris, verrou), preset à sélectionner (ligue/coupe : « League Tactic » sur **ce** match ; amical : aucun).
 2. **Tableau joueurs**, ordre de `gold.bv_saisie_joueurs order by ordre` (PG, SG, SF, PF, C, puis alphabétique), tous les joueurs de l'effectif :
    `| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Min | Off. focus | Rôle | Tir | Agress. |` — quarts : emplacement joué (PG…C) ou « — » ; consignes en chiffres d'écran 1-5.

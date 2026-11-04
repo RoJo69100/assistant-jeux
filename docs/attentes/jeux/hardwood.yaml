@@ -87,6 +87,13 @@ seuils:
   points_recrutement_alerte: 40   # plafond 45
   playing_time_titulaire_min: 15
 
+core:   # refonte v2 phase 1 : entités branchées (adapt.hardwood_<entité>) ; limites = colonnes nulles par construction
+  player_daily:  { limites: [form, fatigue, morale, salary, contract_end, market_value] }  # SI/280 ; bourses, pas de salaires ; fatigue par match
+  standing:      { limites: [round_no, points] }                             # classement aux victoires ; nom abrégé dans le tableau
+  academy_prospect: { limites: [age, skills] }                               # recrues : SI ±20 % ; potentiel = plafond de SI du niveau
+  staff:         { limites: [] }                                             # head coach + 3 assistants, moyenne des 6 compétences
+  # fixture : non branchée (date du jeu ≠ date réelle) ; finance_daily, market_listing : absents du jeu
+
 vues_gold:
   agenda: gold.hw_today
   alertes: gold.hw_daily_alerts

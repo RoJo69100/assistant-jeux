@@ -1,6 +1,6 @@
 # Carte sixzeroleague — composition (tactique par défaut : formations, direction, agressivité, 7 titulaires + remplaçants)
 
-Sources lues : commit 4bd592f (2026-11-02)
+Sources lues : commit 8791d35 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `tactique.md`, `resume.md`, skills `sixzeroleague-match`, `-joueurs`, `-communaute` ; connaissance § 1, § 2, « Ce qui change nos décisions » ; learnings). Règles : R-4 (saisie dans l'ordre de l'écran : formations, direction, agressivité, puis rôle → titulaire → remplaçant GK, CB, LB, RB, LW, RW, P) ; une seule tactique par défaut pour tous les matchs, refaite seulement si un joueur change ; pas d'amical : une nouveauté se teste en ligue, une option à la fois (A-6).
 

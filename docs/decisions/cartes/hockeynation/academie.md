@@ -1,6 +1,6 @@
 # Carte hockeynation — academie (draft, Import Draft, scouting, U17, U21)
 
-Sources lues : commit bf6ecaf (2026-11-02)
+Sources lues : commit d1eaf11 (2026-11-02)
 
 Écrite le 2026-11-02 (fiche `academie.md`, `resume.md` § Rendu scouts, skills `hockeynation-draft-scouting`, `-joueurs`, `-potentiel-joueurs`, `-contrats-finances` § Jeunes ; connaissance § Draft / scouting). Règles : tout ajout de joueur = équipe résultante à 20 (CLAUDE.md règle 8) ; scouts : couvrir le plus de joueurs possible ; rendu scouts en tableau, jamais « requête X » ([U] 2026-10-29).
 

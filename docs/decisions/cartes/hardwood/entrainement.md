@@ -1,6 +1,6 @@
 # Carte hardwood — entrainement (Development : focus principal, secondaire, entraînements additionnels)
 
-Sources lues : commit 90f564f (2026-11-02)
+Sources lues : commit d0cfdca (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `hardwood-regles` ; veille `v-joueurs-entrainement.md` ; learnings). Coaching (progression) jeudi et dimanche matin (Pacifique). Saisie dans l'ordre de l'écran Development.
 

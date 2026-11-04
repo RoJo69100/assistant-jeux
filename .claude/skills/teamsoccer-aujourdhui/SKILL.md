@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-aujourdhui
-description: Team Soccer — « que faire aujourd'hui / ce soir » pour les deux clubs (Chomelix Cows et Ben Ahmed Donkey) : plan du soir (compositions à enregistrer 2 h avant, matchs du lendemain à préparer la veille, exports de match, révélations d'académie, amical de la semaine, Finances le lundi, Entraînement le vendredi, agents à lancer) et alertes du jour (blessés, 2 jaunes, composition manquante, solde négatif, entretien du stade, HPC, exports en retard). À utiliser pour « que faire sur Team Soccer », « le plan du soir », « le brief » de Team Soccer.
+description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Team Soccer — que faire aujourd'hui
@@ -8,7 +8,7 @@ description: Team Soccer — « que faire aujourd'hui / ce soir » pour les deux
 Sources : `gold.ts_agenda` et `gold.ts_daily_alerts` (`sql/gold/018_ts_agenda.sql`), prochains matchs `gold.ts_upcoming`, derniers briefs `outputs/teamsoccer/briefs/`, conseils ouverts `outputs/teamsoccer/learnings.md`. Rythme : skill teamsoccer-saison (lundi 00:05 finances, vendredi entraînement, 3 révélations d'académie par jour, un amical par semaine) ; composition enregistrée au moins 2 h avant le coup d'envoi [skill teamsoccer-match].
 
 ## Méthode (coût minimal : pas d'agent, deux requêtes)
-1. `select day_label, team, priority, category, action from gold.ts_agenda` puis `select priority, team, category, alert from gold.ts_daily_alerts order by priority, team` via `mcp__supabase__execute_sql`.
+1. `select day_label, team, priority, category, action from gold.ts_agenda` puis `select priority, team, category, alert from gold.ts_daily_alerts order by priority, team` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`).
 2. L'utilisateur n'agit que **le soir après 19:00** : l'agenda le respecte déjà (une limite de composition avant 19:00 — par exemple un match de 13:50 — tombe la veille au soir). Ne donne jamais de liste sur la journée.
 3. Les jours de match viennent des données, pas de la règle « mardi et samedi » : Ben Ahmed Donkey joue le lundi et le jeudi à 19:30, Chomelix Cows le mardi et le samedi à 13:50 [Obs, `silver.ts_matches`, 2026-10-20].
 4. Pour chaque action, ajoute le détail concret du dernier brief concerné, sans relancer d'agent : composition (`*-tactique*.md`), enchères (`*-transferts.md`), entraînement (`*-entrainement.md`), solde, stade et HPC (`*-finances*.md`), révélations (`*-academie.md`), conseils `C-nnn` ouverts.

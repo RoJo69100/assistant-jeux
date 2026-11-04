@@ -1,6 +1,6 @@
 ---
 name: basketvibe-aujourdhui
-description: « Qu'est-ce que je fais aujourd'hui sur BasketVibe ? » et brief du matin — liste courte et horodatée des actions du jour (et de demain matin si on est le soir) : presets et focus à régler avant les verrouillages, enchères qui se terminent, entraînement à sauvegarder, exports à faire, amicaux à programmer. À charger dès que l'utilisateur demande quoi faire aujourd'hui, ce soir, demain matin, ou « mes tâches BasketVibe », ou le brief quotidien (alertes : blessés, fatigue, forme, finances, exports en retard).
+description: BasketVibe — que faire aujourd'hui : plan du jour depuis gold.bv_agenda et les alertes, avec les exports en retard. Pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # BasketVibe — que faire aujourd'hui
@@ -8,7 +8,7 @@ description: « Qu'est-ce que je fais aujourd'hui sur BasketVibe ? » et brief d
 Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des agents (`outputs/basketvibe/briefs/`). Rythme de la semaine : skill basketvibe-saison [M§1.3]. Routine d'export de l'utilisateur : mémoire (après chaque match ; dimanche après 04:00 : Entraînement + Finances + Personnel).
 
 ## Méthode (coût minimal : pas d'agent, quelques requêtes)
-1. Heure actuelle (Paris). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `mcp__supabase__execute_sql`. Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
+1. Heure actuelle (Paris). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`). Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
 2. Pour chaque action, ajoute **le détail concret** pris dans le dernier brief concerné (sans relancer d'agent) :
    - ligue : cinqs, consignes et focus défensif → dernier `*-tactique.md` (fiche de saisie, mise à jour éventuelle en bas du brief) ;
    - amical : aucune action de saisie (pas de preset d'amical, consigne du 2026-10-26) ; seulement l'export de la page du match après coup ;

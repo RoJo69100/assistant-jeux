@@ -1,6 +1,6 @@
 ---
 name: hardwood-aujourdhui
-description: Hardwood — « que faire aujourd'hui » : prochain match à l'heure de Paris, depth chart à corriger, coach à recruter (fenêtre des assistants), points de recrutement à dépenser, exports en retard. Deux requêtes sur les vues gold, sans agent. À utiliser pour « que faire sur Hardwood », « le plan du jour », « le brief » de Hardwood.
+description: Hardwood — que faire aujourd'hui : plan du jour depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du soir.
 ---
 
 # Hardwood — que faire aujourd'hui

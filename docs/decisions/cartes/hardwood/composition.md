@@ -1,6 +1,6 @@
 # Carte hardwood — composition (Depth Chart, Game Tactics, Game Management)
 
-Sources lues : commit 90f564f (2026-11-02)
+Sources lues : commit d0cfdca (2026-11-02)
 
 Écrite le 2026-11-02 (`resume.md`, skill `hardwood-tactique`, `-regles` ; veille `v-tactique.md`, `v-joueurs-entrainement.md` § 2-3 ; learnings). Règles : saisie dans l'ordre de l'écran (depth chart poste par poste, puis Game Tactics, puis Game Management joueur par joueur) ; rendu tactique [U] `| Réglage | Actuel | À mettre |` ; exhibition = compo de test, conférence et tournois = Game Plan de référence ; walk-ons jamais proposés [U] ; horizon aujourd'hui.
 

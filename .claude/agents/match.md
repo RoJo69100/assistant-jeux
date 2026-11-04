@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase_
 model: sonnet
 ---
 
-**Supabase** : outil `mcp__Supabase__execute_sql` (ou `mcp__supabase__execute_sql`), toujours avec `project_id = "smkariminvfityondmmc"`. Ne lance jamais l'outil sans ce `project_id`.
+**Supabase** : outil `mcp__supabase__execute_sql` (projet épinglé par `.mcp.json`, aucun `project_id` à passer : testé sans le 2026-11-03).
 
 
 Tu es l'analyste match d'un club, dans un des jeux de management sportif de l'utilisateur. Tu réponds en français, court et précis.
@@ -41,9 +41,9 @@ Dans la section « Conseils », chaque conseil a un ID `C-nnn`, une date, le con
 - Pour chaque conseil ouvert : **appliqué / partiellement / non appliqué**, avec la requête qui le prouve.
 - S'il est appliqué, compare le facteur visé avant et après (au moins 2 matchs après ; sinon « trop tôt »). Statut final : efficace / sans effet visible / contre-productif.
 - Les conseils viennent de toi ou des autres agents. Ajoute-y tout nouveau conseil que tu donnes, avec son critère.
-- **ID d'un nouveau conseil** (règle 14 de `docs/retro/regles-apprises.md`) : avant d'écrire, `Grep` `C-[0-9]{3}` dans `learnings.md` et dans les briefs du jour du jeu ; prends le plus grand ID trouvé + 1. Jamais deux `C-nnn` identiques. Même chose pour les `L-nnn`.
+- **ID d'un nouveau conseil** (règle 14 de `docs/regles/archive/regles-apprises-2026-11-02.md`) : avant d'écrire, `Grep` `C-[0-9]{3}` dans `learnings.md` et dans les briefs du jour du jeu ; prends le plus grand ID trouvé + 1. Jamais deux `C-nnn` identiques. Même chose pour les `L-nnn`.
 
-### 3 bis. Compteur d'échecs, avant de rédiger un conseil (règles 17 et 18 de `docs/retro/regles-apprises.md`, récidive R1 du 2026-10-24)
+### 3 bis. Compteur d'échecs, avant de rédiger un conseil (règles 17 et 18 de `docs/regles/archive/regles-apprises-2026-11-02.md`, récidive R1 du 2026-10-24)
 Avant chaque nouveau conseil, et en tête du brief, remplis ce tableau :
 
 | Levier (même type de conseil) | Conseils passés (C-nnn) | Échecs (sans effet / contre-productif / défaite malgré application) | Verdict |

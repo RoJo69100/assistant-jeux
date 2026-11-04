@@ -1,0 +1,7 @@
+## Fonctionnement du gymnase [G:Entraînements] [F:2026-04-29 Admin-Dev]
+- Chaque joueur reçoit **une compétence à entraîner** (les 10 sont possibles) et **une intensité** (0 à 100 %). Tous les joueurs s'entraînent, qu'ils jouent ou non ; les matchs n'entraînent rien [F:2026-05-31, 2026-07-16 Admin-Dev].
+- **Mise à jour une fois par semaine, le vendredi** (vers 00:00–01:00 UTC selon les messages). Seul compte le réglage en place au moment de la mise à jour ; on peut le changer toute la semaine [F:2026-07-20 PIPO68]. Les flèches de progression de la fiche montrent la dernière séance, pas la suivante (Premium).
+- Le gain dépend de **l'âge, de l'intensité et du niveau d'entraîneur** ; la formule est déterministe, sans hasard [F:2026-06-19 Admin-Dev].
+- **Saison 2 et suivantes : entraînement ×2**, car les saisons durent 10 semaines au lieu de 17 [P:Entraînement] [F:2026-07-14]. Ralenti ensuite (« Reduction of the training multiplier », 2026-09-13 ; « oui, ça a ralenti il y a quelques semaines » [F:2026-10-15 PIPO68]). V-20261019-4 : le multiplicateur saisonnier est passé de ×2 à ×1,5 le 2026-09-13 ; multiplicateur effectif depuis la saison 2 : ×4,5 (×3 de base × ×1,5) ; avec talent Performance/Magique : ×9 (avant ×12). La courbe passive de Forme et de Rythme est inchangée [annonce 100].
+- Ordre de grandeur : environ +1 point (jusqu'à 1,5) par séance dans la compétence entraînée à 100 % (BETA) [F:2026-05-08 Admin-Dev] ; un joueur à 70 % gagnait +2 en une séance en juin [F:2026-06-19].
+
