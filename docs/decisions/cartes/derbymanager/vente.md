@@ -1,6 +1,6 @@
 # Carte derbymanager — vente (liste de transfert, libération, fin de contrat, prolongation ; deux clubs)
 
-Sources lues : commit c03238b (2026-11-04)
+Sources lues : commit 5f8ecc2 (2026-11-04)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` § Transferts, § Contrats ; connaissance § 4, § 7). Règles : jamais de vente sans accord ; une vente identifiée reste ouverte jusqu'à exécution ; un bloc par club.
 
