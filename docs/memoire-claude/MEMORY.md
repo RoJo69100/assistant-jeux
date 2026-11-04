@@ -19,3 +19,4 @@
 - [Effectif, V/D, vue gold systématique](feedback-effectif-questions-vue-gold-systematique.md) — me poser seul les questions effectif (améliorer/vendre/acheter), analyse V/D poussée, vue gold dès qu'un gain de temps existe
 - [Horizon aujourd'hui/demain](feedback-horizon-aujourdhui-demain.md) — l'utilisateur n'agit que le jour même : toute action = aujourd'hui, jamais demain (2026-10-27)
 - [Vues entraînement + prix](project-conception-vues-entrainement-prix.md) — conception demandée 2026-11-04 : contrôle d'entraînement attendu/saisi et table de prix par delta, sans agent
+- [HN : matchs + scouts, pas finances](feedback-hn-matchs-scouts-pas-finances.md) — en saison : tous les matchs, scouts libres → prospects proposés seul ; jamais d'export finances/cap/staff (2026-11-04)
