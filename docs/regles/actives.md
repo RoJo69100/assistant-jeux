@@ -2,6 +2,9 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
+## Nouvelles (2026-11-04)
+N1. Quand `import psycopg` échoue (session cloud) → `pip install -r requirements.txt` d'abord ; si impossible, connecteur Supabase en lecture, et la ligne de `parite-exports.log` est marquée `(manuel, script non exécuté)`.
+
 ## K — gardées en prose
 K1. Quand je réponds → français, court ; une règle de jeu non sourcée n'est jamais affirmée : je cite le skill ou la source.
 K2. Quand je touche à la collecte → passive seulement (Tampermonkey), aucune requête ni navigation vers un jeu.
