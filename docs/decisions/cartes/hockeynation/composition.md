@@ -1,6 +1,6 @@
 # Carte hockeynation — composition (lineups PRO A/B/C, plan de jeu, postes FRM/U21/U17)
 
-Sources lues : commit d1eaf11 (2026-11-02)
+Sources lues : commit e018ac2 (2026-11-04)
 
 Écrite le 2026-11-02 (fiche `tactique.md`, `resume.md`, skills `hockeynation-match-calendrier`, `-joueurs`, `-adversaires`, connaissance § Matchs / lignes, learnings L-003, L-004, L-009, L-010, L-016). Règles : rendu FIGÉ du 2026-10-29 (« ne change jamais le rendu », `resume.md` § Tactique PRO), 4 équipes et 20 joueurs (CLAUDE.md § Hockey Nation), horaire « aujourd'hui seulement ».
 
@@ -25,7 +25,7 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 1 | Prochain match et adversaire | `select equipe, date_paris, game_type, adversaire, domicile, nos_resultats_contre_lui from gold.hn_adversaires where equipe = 'PRO' limit 3` | Lineup saisie au moins 1 h avant le match, sinon risque de −30 % | connaissance § Matchs (hnadmin 2025-07-10) | |
 | 2 | Joueur au bon poste | `poste` de `gold.hn_tactique_rendu` ; `gold.hn_player_fit` (verdict) | Hors poste = −20 % : aucune ligne « hors poste » ; contre-emploi des talents toléré (L-010 : aucun effet mesuré) mais règle utilisateur « talents d'abord » prioritaire | skill match-calendrier § Pénalités ; [U] ; L-010 | |
 | 3 | Endurance par unité | `endurance` de `gold.hn_tactique_rendu` | L1 7+, L2 6+, D1 8+, D2 6+, G1 7+, tolérance −1 | Discord talonflame1 2026-04-04 (confirmé) | |
-| 4 | Gardien titulaire | `gold.hn_tactique_rendu` bloc Gardiens ; arrêts par période dans `silver.hn_game_detail.boxscore` | G1 7+ en END ; Kovalev (END 4) recule en P3 (.868 contre .906/.911) ; 4 départs d'affilée au plus pour END 4 (saison régulière) | L-016, L-003 ; [G:Lineups] | Kovalev END 4, Lauper END 6 (2026-11-02) |
+| 4 | Gardien titulaire | `gold.hn_tactique_rendu` bloc Gardiens ; arrêts par période dans `silver.hn_game_detail.boxscore` | G1 7+ en END ; Kovalev (END 4) recule en P3 (.868 contre .906/.911) ; 4 départs d'affilée au plus pour END 4 (saison régulière) | L-016, L-003 ; [G:Lineups] | Kovalev END 4, Lauper END 6 (2026-11-02) ; 2026-11-04 : Kovalev 4 départs de ligue d'affilée, jamais 5 sur 29 apparitions (le jeu remplace le gardien fatigué, connaissance B § 3 roadiculous 2023-04-23) : ne pas saisir Lauper SG ; Lauper ligue S26 .877 (121/138, 5 matchs complets), Kovalev .893 ; `tiredness` du boxscore gardien : sens à tester |
 | 5 | Mises au jeu | `fof` ; un FOF 7+ par unité de PP | Un bon FOF par ligne suffit, pas forcément le centre ; FOF sans lien avec le résultat (55,2 % en D contre 54,6 % en V) : ne pas sacrifier un poste pour lui | L-004 ; talonflame1 2026-04-04 | |
 | 6 | Power play | bloc Power play, score SHO+PAS+SKA | PP = SHO+PAS+SKA, un FOF 7+ par unité ; un joueur une fois par type d'unité | fiche tactique § Règles de choix | PP 20,7 % S26 (L-006) |
 | 7 | Infériorité | blocs PK4 / PK3, score DEF+CHK+SKA+PWR | PK = DEF+CHK+SKA+PWR ; PK à 70 % en défaite contre 82,4 % en victoire | fiche tactique ; L-006 | |
