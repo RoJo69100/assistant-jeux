@@ -1,6 +1,6 @@
 # Carte derbymanager — composition (Squad : formation, rôles, curseurs, options, banc, set pieces ; deux clubs)
 
-Sources lues : commit 5f8ecc2 (2026-11-04)
+Sources lues : commit b154711 (2026-11-04)
 
 Écrite le 2026-11-02 (`resume.md`, skills `derbymanager-tactique`, `-regles` ; connaissance § 3, § 11, § 12 ; learnings). Règles : deux clubs, un bloc chacun (Queen of the South 547 puis Marmandes 307) ; poste par poste dans l'ordre de l'écran Squad ; ligue et coupe = compo de référence, amical = compo de test (jeunes, autre formation) ; horizon aujourd'hui.
 
