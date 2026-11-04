@@ -6,6 +6,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 - `derbymanager`, préfixe `dm_` (bronze `game = 'derbymanager'`, `source = 'dom'` + `source = 'api'` pour le JSON des matchs). Football, derbymanager.com (DM2, bêta). Userscript `userscripts/derbymanager.user.js` (chaque page ouverte est copiée, `payload.club` = 547 ou 307).
 - **Deux clubs, toujours séparés** (un bloc chacun, jamais de total) : **547 Queen of the South** (Écosse, Premier Division = D1, 8 équipes, 4 matchs contre chacune = 28 journées, **pas de relégation « for now »** #updates 2026-09-28) et **307 Marmandes** (France, D4). Référence `silver.dm_clubs`.
 - Tout l'argent est **par jour** (salaires, recettes, plafond). Saison ≈ 35 jours, une semaine de pause entre deux saisons (marché plus rapide, condition remise à zéro).
+- **Connaissance par thème** (remplace la lecture en bloc de `connaissance.md`) : `select public.kb_search('derbymanager', '<thème>', 0)` ou `python -I pipelines/kb.py dm <thème>` (thèmes : `--domaines`) ; recopier le compteur « N total / N affichées ».
 - Sources : Discord intégral lu le 2026-10-30 (125 932 messages, 2019-01-04 → 2026-10-30) → `outputs/derbymanager/veille/connaissance.md` (322 entrées) ; skills `derbymanager-regles`, `derbymanager-tactique`, `derbymanager-effectif-entrainement`, `derbymanager-club`. Le développeur (compte `derbymanager`) fait foi ; le plus récent l'emporte (moteur refait le 2026-09-28, dots de build up le 2026-10-21, remplaçants le 2026-10-25). `[H]` = hypothèse.
 
 ## Écrans (ordre de saisie)

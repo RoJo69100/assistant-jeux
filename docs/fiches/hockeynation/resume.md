@@ -7,6 +7,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 - **Noms des équipes [U, 2026-10-30]** : PRO = Chomelix Cows, FRM = **Ben Ahmed Donkey**, U21 = **Mjóifjörður Sheep**, U17 = **Martigny Saint Bernard** (les nommer ainsi dans les rendus et les offres de coachs). **Consignes [U, 2026-10-30]** : Bélanger (prolongation) et les échanges de centres sont gérés par l'utilisateur, ne pas les mentionner ni demander l'export Trade Center > recherche ; les **amicaux** sont jouables (compte premium) et l'utilisateur peut exporter leurs matchs (une page de match = analyse possible).
 - Toujours **20 joueurs par équipe : 4 C / 4 LW / 4 RW / 3 LD / 3 RD / 2 G**, un bloc par équipe dans chaque rendu. Tout ajout de joueur = équipe résultante à 20 (talents vs poste, VIDE).
 - Ligue de 20 (2 conférences, 4 niveaux), 30 matchs, playoffs au meilleur des 5. Résultat = `silver.hn_games` côté `*_is_mine`, jamais le score brut.
+- **Connaissance par thème** (remplace la lecture en bloc de `connaissance*.md`) : `select public.kb_search('hockeynation', '<thème>', 0)` ou `python -I pipelines/kb.py hockeynation <thème>` (thèmes : `--domaines`) ; recopier le compteur « N total / N affichées ».
 - Heures en Paris (`captured_at` en UTC). Sources : `[G:Rubrique]` guide > `[Discord, salon, date]` > `[Obs]` ; `[U]` règle de l'utilisateur, `[H]` hypothèse. Skills `hockeynation-*`.
 
 ## Saison 27 (calendrier : `gold.hn_today`, `gold.hn_calendar`)

@@ -5,6 +5,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 ## Jeu
 - `basketvibe`, préfixe `bv_` (bronze `game = 'basketvibe'`). Un club : **Chomelix Cow** (senior). Ligue de 12. Heures affichées en Paris (`captured_at` est en UTC).
 - Résultat d'un match = `my_result` / `is_mine`, jamais le score brut.
+- **Connaissance par thème** (remplace la lecture en bloc de `connaissance*.md` et du skill `-communaute`) : `select public.kb_search('basketvibe', '<thème>', 0)` ou `python -I pipelines/kb.py basketvibe <thème>` (thèmes : `--domaines`) ; recopier le compteur « N total / N affichées ».
 - Sources : `[M§x]` manuel > `[News date]` / `[Dev date]` > `[Com date, auteur]` (avis) > `[Obs]`. Connaissance : `outputs/basketvibe/veille/connaissance.md`, Discord `data/discord/basketvibe/`.
 
 ## Rythme et compétitions
