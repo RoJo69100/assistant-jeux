@@ -9,7 +9,7 @@ Sources du jour (requêtes du 2026-11-02, export 547 du 2026-11-01, export 307 d
 - **Vendre** (listables : contrat < 85 j) : Vidales (GK, 4,0 M, 41 k/j, 68 j), King (FC, 4,1 M, 28 k/j, 80 j), Wilmot (DR, 1,1 M, 12 k/j, 45 j, 9 défenseurs pour 5 places). **Allan (87 j) n'est pas listable aujourd'hui** : il reste au banc (RAT).
 - **Entraînement** : Defenders → Aerial ; Midfielders → First Touch ; Forwards → First Touch ; GK → Reaction. Intensités : Connelly MED → HIGH ; Pilot LOW → MED ; Arneberg HIGH → MED ; Schultze HIGH → LOW (blessé) ; vieux (Cooper, Tavernost, Vicomte, Hadjidj, Vidales, Ndiaga) LOW (ils régressent de −3 à −8 quelle que soit l'intensité) ; Kelly, Bjerg, Bock, Linden, Ludig, Wilmot, Kjer, Eliassen HIGH.
 - **Finances** : 21,4 M, flux +806 k/j, marge salariale 620 k/j. Installations 16 → 17 pour 8 M sur **Tactic** (4 → 5), reste 13,4 M.
-- **Achat** : aucun gain sûr à 0,2-8,1 M (meilleur −0,9) ; le marché 8-20 M n'est pas exporté : exporte-le avant de choisir (L-004). Cible type : « Solid player » 24-27 ans (médiane 11,0 M), finançable jusqu'à 13,4 M, salaire sans limite pratique (marge 620 k/j). Places : 24 joueurs aujourd'hui, 25 avec Almgren ; vendre Vidales, King, Wilmot libère 3 places.
+- **Achat (corrigé 21:5x, voir « Police achats 21:5x »)** : acheter **Mansfield** (DC, 3,5 M, enchère maximale 3,85 M) ; ne pas acheter Benigno ni Sheridan. Ancien constat de 21:14 (aucun gain sûr à 0,2-8,1 M, meilleur −0,9) remplacé par le scouting de 21:50. Le marché 8-20 M reste à exporter (L-004). Cible type : « Solid player » 24-27 ans (médiane 11,0 M), finançable jusqu'à 13,4 M, salaire sans limite pratique (marge 620 k/j). Places : 24 joueurs aujourd'hui, 25 avec Almgren ; vendre Vidales, King, Wilmot libère 3 places.
 - **École** : promouvoir Almgren (MR 19 ans, passing 16, positioning 19, first touch 13, high / lower division, 53 j) : effectif 24 en base, donc 25 après promotion ; garder Minkkinen à l'école (DC 17 ans, moderate / established, 86 j).
 - **Mentors** : ne pas vendre les mentors utiles (voir section Police) ; Forwards sans mentor.
 
@@ -111,3 +111,61 @@ Sources du jour (requêtes du 2026-11-02, export 547 du 2026-11-01, export 307 d
 - 307 : **ne plus vendre Ohara (non listable) ni Vargas**, lister McCulloch et Aponte, prolonger cinq joueurs (pas quatre), promouvoir Beth, Mansfield avant Alex.
 - 547 : **ne plus lister Allan**, Tactic pour les 8 M, Kjer remplaçant EMR, Pilot en MED, GK de 307 en Aerial.
 - Ce qui prouvera l'erreur : 547, forme et gains M/F/GK après 5 matchs (C-008, C-007) ; 307, note réelle de Mansfield et progression de Beth au prochain export.
+
+---
+
+## Police achats 21:5x — Queen of the South (547) seulement (Marmandes en pause)
+
+**Verdict : COMPLÉTÉ PAR LA POLICE.** Décision corrigée : **🟥 URGENT acheter Mansfield** (offre posée maintenant, premier enchérisseur préféré) ; **Benigno : ne pas acheter** (le brouillon disait 🟧) ; **Sheridan : ne pas acheter** (confirmé). Mansfield n'est plus une cible de Marmandes (en pause) : il est ici pour 547.
+
+### Tableau de décision
+| Priorité | Cible | Poste | Âge | Tier | Note au poste (bas–milieu) | Notre dernier titulaire | Gain sûr / milieu | Prix | Salaire / jour | Contrat | Finançable |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 🟥 URGENT | J. Mansfield | DC | 22 | Useful, potentiel moderate (lower division) | 14,4 – 15,9 | Schultze 14,0 (blessé, 5e défenseur) ; meilleur Kelly 14,8 | +0,4 / +1,9 | 3,5 M (+ frais ≈ 0,6 M) | 6 k | 0 jour restant (expire le 02/11 ; offres : aucune) | oui |
+| écarté | R. Benigno | GK | 33 | Useful, au pic | 11,6 – ≈14,4 | Vidales 12,4 (Vigerie 12,2) | −0,8 / +2,0 | 3,8 M (+ frais ≈ 1,6 M) | 64 k | 89 j | oui, mais sans gain sûr |
+| écarté | J. Sheridan | FC | 23 | Useful, potentiel high (solid) | 10,6 – ≈11,8 | Eliassen 12,2 (Ndiaga 12,0) | −1,6 / −0,4 | 5,8 M (+ frais ≈ 1,2 M) | 25 k | roulant (expiré le 01/11) | oui, mais sans gain |
+
+### Pourquoi (une ligne par cible)
+- **Mansfield** : seul gain sûr positif du marché 547 (+0,4 contre Schultze, +1,9 au milieu de fourchette, il serait n° 1 de la ligne D devant Kelly 14,8). Par rapport aux moyennes de groupe `dm_entrainement_plan` (547, 9 défenseurs) : Marking 18-20 contre 13,3 ; Tackling 16-19 contre 14,3 ; Positioning 16-18 contre 14,7 ; Anticipation 16-20 contre 11,2 (la plus faible des compétences de la ligne) ; Aerial 6-10 contre 10,4 (seul point faible, c'est la compétence que le groupe entraîne). Prix 3,5 M contre p25 4,05 M des Useful de 20-23 ans (`dm_prix_reference`, médiane 5,2 M) : sous le marché. Ce qui prouvera l'erreur : note réelle après 3e scout sous 14,0, ou moins de 5 matchs joués d'ici le 541 (C-008).
+- **Benigno** : gain sûr −0,8 contre Vidales (rang 1, 12,4), pas de gain net contre Vigerie (12,2) ; 33 ans (les vieux régressent de −3 à −8 par saison quelle que soit l'intensité, brouillon 547) ; salaire 64 k/j contre 41 k (Vidales) ; frais estimés 1,6 M. Points forts réels : Handling 15-16 (moyenne GK 9,7), Positioning 17-18, Agility 14-16, Reaction 11-13 (moyenne 9,0, compétence entraînée) ; faibles : Aerial 8-9 (moyenne 13,0). Il porte « tactic +3 » (mentor GK, la compétence Reaction que le groupe entraîne est de catégorie Tactic) : après perte d'un point au transfert, +2 = 0,1 étoile d'installation de groupe (10 points = demi-étoile, connaissance §5) : trop petit pour 5,4 M au total. Corrige aussi le brouillon : **Vidales est le GK n° 1 de la vue (12,4, Leader)**, pas Vigerie ; le vendre ne coûte rien seulement parce que Vigerie (12,2) est à égalité, et Kjer (10,6) reste GK2. Benigno ne règle donc aucun manque.
+- **Sheridan** : −1,6 de gain sûr contre Eliassen (12,2), −0,4 au milieu ; Shooting 16 contre moyenne attaquants 17,8 ; First touch 3-7 contre 8,6 (la compétence entraînée) ; contrat roulant expiré, « unprofessional », mécontent, « won't extend his contract » ; 5,8 M contre médiane 5,2 M. Attaque = ligne la plus faible (Eliassen 12,2) : il faut un FC > 12,2 sûr, non trouvé : marché 10-20 M à exporter (L-004).
+
+### Vérifications SQL du jour
+| Point | Résultat | Source |
+|---|---|---|
+| Budget 547 | argent 22 983 477 ; `capacite_invest` 22 983 477 ; marge salariale 703 000/jour (market : « 702k (813k / 1,5 M) ») | `gold.dm_finances_bilan` ; bronze `market` 21:50 |
+| Après décisions déjà prises | 22,98 M − Tactic 8,0 M = 14,98 M ; − Mansfield 3,5 M − frais ≈ 0,6 M = ≈ 10,9 M restants ; salaire +6 à 16 k/j sur 703 k | calcul |
+| Colonne FEES (transfers 21:50, 354 transferts payants de la semaine) | **frais moyens 22,6 % du prix, médiane 21,5 %, de 10 % à 60 %** : « ≈ 20 % » vrai en moyenne, mais lié au salaire (régression : ≈ 0,136 × prix + 16,9 × salaire/jour). Estimations : Mansfield ≈ 0,58 M (≈ 16 %), Benigno ≈ 1,6 M (≈ 43 %), Sheridan ≈ 1,2 M (≈ 21 %) | bronze `transfers` 21:50:18 |
+| Limite de 25 joueurs | effectif 547 = **25** (Almgren inclus ; Vidales 65 j, King 77 j, Allan 84 j, Wilmot 42 j y sont encore). Aucune source ne dit que l'achat est bloqué à 25 : la règle écrite est « impossible de promouvoir de l'école à 25 » ; « attendu 18 à 25 joueurs » (dev 2023-05-02). Les ventes déclarées ne sont pas exportées (squad 21:48) | `gold.dm_effectif` ; connaissance §6 ; Discord part3 2023-05-02 |
+| Contrats listables | Vidales 65, King 77, Allan 84, Wilmot 42 : tous < 85 j, donc **Allan (84 j) est listable ce soir** (le brouillon du matin disait 87 j : retirer 3 jours) ; non listés restants ≥ 18 | `gold.dm_effectif` |
+| Moyennes de groupe 547 | D : Marking 13,3, Tackling 14,3, Positioning 14,7, Anticipation 11,2, Aerial 10,4 ; GK : Handling 9,7, Reaction 9,0, Aerial 13,0 ; F : Shooting 17,8, First Touch 8,6, Agility 10,2 | `gold.dm_entrainement_plan` |
+
+### Enchère et risque de décision
+- **Pose l'offre maintenant, au maximum** : une offre maximale posée en premier ne peut plus être battue ; le joueur préfère l'équipe qui a offert plus tôt (≈ +200 k de bonus d'ancienneté pour une offre immédiate) ; Mansfield n'a reçu aucune offre. Connaissance §7 (2025-09-08, 2026-08-13 dev).
+- **Montant conseillé** : transfert **3,85 M maximum** (110 % du prix affiché, encore sous le p25 de 4,05 M) ; salaire **16 k/j** (6 k demandés + ~10 k, usage du développeur ; les exigences peuvent monter pendant la décision et faire rejeter une offre trop juste : Discord 2024-06-07 burningrain) ; prime de signature : minimum 500 k (joueur anglais, club écossais), 0,5 M maximum. Pire cas tout compris ≈ 4,5 M, couvert par 14,98 M.
+- **Décision du joueur** : jusqu'à 3 jours (≤ 2,5 j d'après le dev 2026-04-11) ; à la 4e offre reçue, la 3e meilleure peut être rejetée ; on ne peut pas annuler une offre. Risque : un bot ou un manager enchérit avant la décision et Mansfield part ; la perte est nulle (aucun argent engagé avant l'acceptation).
+- **Scouting** : `cles_vues` 5 ; fourchettes de 2 à 4 points = niveau 1-2. Scouts restants : 8 (10 avant les trois scouts). Un 3e scout donne les compétences exactes mais le niveau baisse de 1 par semaine : à faire seulement si un scout reste ce soir.
+- **Effectif à 25** : l'offre est posée ce soir, la décision tombe dans 3 jours : lister Vidales, King, Wilmot et Allan (84 j) ce soir libère 4 places d'ici là ; sans cette vente, un 26e joueur pourrait être refusé (règle non trouvée, à tester).
+
+### Manques réels
+- **Il me manque** la règle « l'achat est-il bloqué à 25 joueurs ? » — cherché dans : `connaissance.md` §6-§7, skills `derbymanager-regles`, `-club`, `-effectif-entrainement`, Discord `data/discord/DerbyManager/` (recherche « 25 players », « squad limit », « squad full ») : seule la promotion de l'école est bloquée à 25 — on le réunit comme ça : poser l'offre et lire le message du jeu (aucun argent n'est engagé), puis noter la réponse dans `connaissance.md` §7.
+- **Il me manque** l'écran d'offre (champs transfert, salaire, prime, bonus d'ancienneté) pour Mansfield — cherché dans : bronze `players_id` 21:50-21:51 (fiche joueur seulement), `players_id_contract` (4 pages, joueurs de 547) — on le réunit comme ça : ouvrir « Discuss contract » de Mansfield et exporter la page.
+- **Il me manque** un attaquant (FC) sûr au-dessus de 12,2 — cherché dans : `gold.dm_marche_notes` (0,2-8,1 M) et les scouts de ce soir — on le réunit comme ça : filtre de prix 8-20 M à l'écran Market, puis export (L-004).
+
+### Couverture
+| Source | trouvés | lus | retenus | écartés (pourquoi) |
+|---|---|---|---|---|
+| Carte achat (13 variables, + 5 ajoutées) | 18 | 18 | 18 | — |
+| Dossier du jour (« rien de nouveau ») | 2 sections | 2 | 0 | rien de nouveau |
+| Bronze `players_id` 21:50-21:51 (Mansfield 2, Sheridan 2, Benigno 1) | 5 | 5 | 3 (une page par joueur, la plus récente) | doublons de 21:50:40, 21:51:18 |
+| Bronze `transfers` 21:50:18 (colonne FEES) | 354 lignes | 354 | ratio et régression | lignes gratuites (format différent) |
+| `connaissance.md` §5, §6, §7, §8 | 4 | 4 | enchère, frais, prime, mentor, scouting, 25 joueurs | « 35 j / 70 j » anciens ; « 1 k = 100 k de prime » ne se retrouve pas dans la colonne FEES (voir carte var. 14) |
+| Discord DerbyManager (taille d'effectif, rejets de salaire) | 3 extraits | 3 | 2023-05-02 (18-25), 2024-06-07 (salaire monte) | 2024-06-30 (25 joueurs = effectif d'un joueur) |
+| Vues gold | 6 | 6 | `dm_finances_bilan`, `dm_entrainement_plan`, `dm_marche_notes`, `dm_verdict_joueurs`, `dm_effectif`, `dm_prix_reference` | `dm_marche_postes` (défectueuse) |
+
+### Ce qui change la décision
+- Benigno : de 🟧 acheter à **ne pas acheter** (gain sûr −0,8, 64 k/j, 33 ans).
+- Vidales est le GK n° 1 (12,4) : le lister n'est correct que parce que Vigerie le remplace à égalité (12,2) ; ne pas compter sur un gain de Benigno pour le remplacer.
+- Mansfield : acheter pour 547 avec offre maximale 3,85 M et salaire 16 k/j, **maintenant**.
+- Allan est listable ce soir (84 j < 85).
+- Ce qui prouvera l'erreur : note réelle de Mansfield sous 14,0 après scout, ou moins de 5 matchs joués ; test au 5e match (C-008).
