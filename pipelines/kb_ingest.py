@@ -41,8 +41,8 @@ def curseur(jeu: str) -> str | None:
     return next((e["curseur"] for e in estimer(0) if e["game"] == jeu), None)
 
 
-def lot(jeu: str, taille: int, min_len: int) -> list[dict]:
-    apres = curseur(jeu)
+def lot(jeu: str, taille: int, min_len: int, apres: str | None = None) -> list[dict]:
+    apres = apres or curseur(jeu)  # --apres : préparer les lots suivants sans attendre l'import
     return kb.appel("kb_lot", {"p_game": jeu, "p_after": apres, "p_limit": taille, "p_min_len": min_len,
                                "p_officiels": OFFICIELS},
                     "select public.kb_lot(%s, %s, %s, %s, %s)", (jeu, apres, taille, min_len, OFFICIELS))
@@ -80,7 +80,8 @@ def main(argv=None) -> int:
     lo.add_argument("jeu")
     lo.add_argument("--taille", type=int, default=50)
     lo.add_argument("--min-len", type=int, default=60)
-    ch = sp.add_parser("charger")
+    lo.add_argument("--apres")
+    ch =sp.add_parser("charger")
     ch.add_argument("jeu")
     ch.add_argument("fichier")
     ch.add_argument("--jusqua", required=True)
@@ -93,7 +94,7 @@ def main(argv=None) -> int:
         return 0
     jeu = kb.ALIAS.get(a.jeu, a.jeu)
     if a.cmd == "lot":
-        msgs = lot(jeu, a.taille, a.min_len)
+        msgs = lot(jeu, a.taille, a.min_len, a.apres)
         print(CONSIGNE)
         for m in msgs:
             print(f"[{m['id']}] {str(m['at'])[:10]} {m['channel']} {m['author']} : {' '.join(m['text'].split())}")
