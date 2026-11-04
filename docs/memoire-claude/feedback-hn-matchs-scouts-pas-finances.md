@@ -12,4 +12,5 @@ Hockey Nation, hors début de saison ou recrutement : l'utilisateur ne veut **qu
 **How to apply :**
 - À chaque « que faire » Hockey Nation : analyser tous les matchs terminés des 4 équipes depuis le dernier brief (`silver.hn_games`, `team_level`), pas un échantillon.
 - Lire l'export `office_scouting` : tout scout avec « Assign » est libre ; lui proposer seul un prospect de `gold.hn_scout_targets` (un par scout, top 6 de la classe d'abord, poste+nation d'abord, sans doublon). `silver.hn_scouting_assignments` peut contredire la page : la page l'emporte.
+- **Un scout ne reçoit qu'un prospect de SON poste** (puis sa nation) : jamais un RD américain sur un C coréen (colère 2026-11-04). Le besoin d'équipe départage entre prospects du même poste, il ne déplace pas un scout vers un autre poste. Le score maison (stats clés par poste, spéciales joueur/coach) vise **l'effectif de l'utilisateur**, pas seulement la draft.
 - Voir [[feedback-initiative-multi-jeux]] et [[project-veille-integrale-autres-jeux]].
