@@ -1,6 +1,6 @@
 # Carte derbymanager — composition (Squad : formation, rôles, curseurs, options, banc, set pieces ; deux clubs)
 
-Sources lues : commit 87dc954 (2026-11-02)
+Sources lues : commit c03238b (2026-11-04)
 
 Écrite le 2026-11-02 (`resume.md`, skills `derbymanager-tactique`, `-regles` ; connaissance § 3, § 11, § 12 ; learnings). Règles : deux clubs, un bloc chacun (Queen of the South 547 puis Marmandes 307) ; poste par poste dans l'ordre de l'écran Squad ; ligue et coupe = compo de référence, amical = compo de test (jeunes, autre formation) ; horizon aujourd'hui.
 
@@ -45,6 +45,14 @@ Pour chaque club, dans l'ordre de l'écran Squad :
 - 547 GK : Vigerie (Key 75 %, condition 100, forme 26, slot S3, 0 % satisfait) contre Kjer (forme 21, titulaire, 100 % satisfait pour 25 % attendus). Forme à impact réduit pour GK (connaissance § 3, 2024-11-22) et les gardiens perdent peu de condition (2026-10-30) : Vigerie titulaire.
 - 547 forme basse : Bjerg 13, Kjer 21, Vigerie 26 ; condition 83-100 %.
 - 307 Marmandes (corrigé par police 2026-11-02 pm) : squad, training et school exportés le 31/10 17:58-18:00 (22 joueurs dans `gold.dm_effectif`), finances/facilities/marché le 30/10 22:55 ; seul overview + régions ont été ré-exportés le 01/11. Composition faisable sur l'export du 31/10 (récupération de condition ≈ +2 à +4 %/jour selon l'intensité). Blessés 307 : Cave, Taddei (« Bruised for 1 match, can play but better not »). Intensité 307 : pill REST, valeur à relever.
+
+## Valeurs du jour (police 2026-11-04, export 307 du 04/11 21:55)
+- Effectif 307 : 20 joueurs. Partis : Charbonnier (FC, 27 ans) vendu à Almería 6,5 M le 1er nov ; Aponte (FC, 22 ans) vendu à Venezia 8,3 M le 2 nov (`silver.dm_transfers`, page transfers 37146). Ligne F réduite à Vasilev 13,5, McCulloch 12,5, Vargas 12,3, Ohara 11,8, Luzerne 10,2.
+- Prochain match : Nov 5, Quatrième ligue round 1, domicile, Raon-l'Étape 11e (`silver.dm_fixtures`, bloc 307). Amicaux joués : Nov 3 Everton L 1-2, Nov 4 Liège (1er BE1) L 2-4 ; `gold.dm_matchs` n'a pas encore ces matchs.
+- Formation 307 en ligue : 343 = 8 matchs, 3 V 4 N 1 D, xG contre 0,79 ; 352 = 22 matchs, 5 V 4 N 13 D, xG contre 1,88 (`gold.dm_saison_bilan`). Les chiffres de notre saison battent l'avis général : 343.
+- Aucun blessé (`gold.dm_saisie_squad.blessure` vide) : Cave (condition 100) et Taddei (89) sont jouables ; le brouillon du 02/11 les mettait au repos (blessure « Bruised » disparue).
+- Les 11 de l'amical Liège (forme > 0, condition 85-94) : Comonfort, Messimy, Desagnat, Schmitz, Lévêque, Taddei, Cleary, Lerch, Vasilev, Vargas, Luzerne. Reposés (forme 0, condition 100) : Lafleur, La Ferrière, Cave, McCulloch, Bodian, Labourd, Hardt.
+- Curseurs exportés : DL 2, PP 0, PF 2, SH 2, HE 2.
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |

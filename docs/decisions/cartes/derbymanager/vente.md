@@ -1,6 +1,6 @@
 # Carte derbymanager — vente (liste de transfert, libération, fin de contrat, prolongation ; deux clubs)
 
-Sources lues : commit 87dc954 (2026-11-02)
+Sources lues : commit c03238b (2026-11-04)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` § Transferts, § Contrats ; connaissance § 4, § 7). Règles : jamais de vente sans accord ; une vente identifiée reste ouverte jusqu'à exécution ; un bloc par club.
 
@@ -26,6 +26,11 @@ Un tableau par club : `| Priorité | Joueur | Poste | Âge | Note au poste | Ran
 | 8 | Avis des amis | connaissance § 7 | Un jeune ex-école vendu rend 5 % de frais à l'équipe | connaissance § 6 | |
 | 9 | Listable aujourd'hui ? | `gold.dm_effectif.contract_days` | Listable seulement si `contract_days` < 85 (strict) ; ≥ 18 joueurs non listés. Le brouillon du 02/11 listait à tort Allan (87 j, 547) et Ohara (102 j, 307) | connaissance § 7 (2025-09-08) ; police 2026-11-02 | Listables : Vidales 68, King 80, Wilmot 45 (547) ; McCulloch 4, Aponte 5, Vargas 38 (307) |
 | 10 | Mentors à ne pas vendre | `gold.dm_verdict_joueurs.mentor` | Un mentor retraité donne des points d'installations ; vendre un mentor retire son apport au groupe (voir carte entrainement var. 12) | connaissance § 5 ; police 2026-11-02 | 547 : Cooper, Tavernost, Vicomte, Hadjidj, Vidales ; 307 : Ohara, Charbonnier |
+
+## Valeurs du jour (police 2026-11-04, export 307 du 04/11 21:55)
+- 307 : 20 joueurs. Aponte (8,3 M, Venezia, 2 nov) et Charbonnier (6,5 M, Almería, 1er nov) sont vendus (`silver.dm_transfers`) ; var. 10 : Charbonnier n'est plus à protéger. Ventes déjà faites : 14,8 M, deux FC : la ligne F n'a plus de surplus à vendre côté McCulloch.
+- Contrats : Desagnat 0 j (frais 155 k), McCulloch 0 j (385 k), Lafleur 15 j (220 k), Lerch 17 j (205 k), Lévêque 27 j (85 k), Bodian 28 j (245 k) (`gold.dm_contrats.frais_prolongation`). Contrat à 0 j : le joueur reste, transfer-listé, mécontent, 0 entraînement, prix −10-15 % (skill club 04, 2024-07-16).
+- Var. 9 listables (<85 j) : les six ci-dessus + Vasilev 42, Messimy 68, La Ferrière 72, Labourd 78 ; Comonfort 85 et Hardt 87 non.
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis |
