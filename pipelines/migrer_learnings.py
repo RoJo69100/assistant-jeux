@@ -25,7 +25,7 @@ from pathlib import Path
 
 RACINE = Path(__file__).resolve().parent.parent
 JEUX = ["basketvibe", "hockeynation", "teamsoccer", "sixzeroleague", "derbymanager", "hardwood"]
-LIGNE = re.compile(r"^\|\s*([CL]-\d+)\s*\|")
+LIGNE = re.compile(r"^\|\s*([CL]-\d+[a-z]?)\s*\|")  # L-001a : variantes de Six Zero League
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 ENTIER = re.compile(r"^\s*(\d{1,3})\b(?!\d)")
 IDS_MATCH = re.compile(r"\b\d{5,}\b")

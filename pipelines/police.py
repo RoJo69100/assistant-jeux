@@ -51,7 +51,7 @@ SEUIL_H5 = 5
 DOM_TYPE = {"achat": ("achat",), "vente": ("vente",), "composition": ("composition", "tactique"),
             "entrainement": ("entrainement",), "academie": ("academie",),
             "finances": ("finances", "infrastructure", "personnel")}
-LECON = re.compile(r"\bL-\d{3}\b")
+LECON = re.compile(r"\bL-\d{3}[a-z]?\b")
 
 
 def norm(s: str) -> str:
