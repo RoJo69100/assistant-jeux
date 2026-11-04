@@ -57,6 +57,7 @@ Une case n'est cochée que quand son critère de fin est vérifié (date + mesur
   - [x] 3.6 (2026-11-04) hook `police.py` : H3 bloque une décision importante sans `decision.py new <jeu> <domaine>` dans la session (ou témoin du jour écrit par `decision.py`) ; H6 bloque une `L-nnn` citée inconnue ou retirée (lue dans `learnings.md`, export de la base). `dossier.py` inclut `garde.py`. `test_police.py` 19/19
   - [x] 3.7 (2026-11-04) `cartes_checks.py` : colonne « Statut (base) » des « Checks appris » des 42 cartes générée depuis `learn.lesson` ; `--check` et `export_learnings_md.py --check` dans la recette. Corrections de migration : statut « confirmé (… infirmé) » = confirmé (HN L-004 rétablie) ; identifiants suffixés de Six Zero League importés (7 leçons, 13 conseils)
   - [x] 3.8 (2026-11-04) carte `_core/composition` : variable C0 = `gold.match_objective` (objectif, raison, preuve d'erreur) en première ligne ; requête vérifiée sur HN (3 matchs du jour : corriger, corriger, gagner). `contrat_core.py` non rejoué (pas d'URL Postgres en cloud)
+  - [x] 3.9 (2026-11-04, `sql/learn/006` appliqué) : M7 mesurable en SQL — `learn.error_occurrence` (récidive datée, déclencheur : `recurrence` + 1 et réouverture), `gold.kpi_recidives` par semaine (récidives avec code = cible 0). Testé dans un bloc annulé (récurrence 1 → 2, vue = 1). L'agent `retro` enregistre chaque récidive. Phase 3 terminée
 - [ ] Phase 4 — base de connaissances `kb`
 - [ ] Phase 5 — orchestrateur, packs, agents
 - [ ] Phase 6 — industrialiser (jeux 7 à 23)
