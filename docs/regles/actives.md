@@ -14,6 +14,13 @@ K8. Quand une règle globale et un résumé de jeu se contredisent → la règle
 K9. Quand j'écris une mémoire → je la copie dans `docs/memoire-claude/`, je commite et je pousse.
 K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau levier nommé (jusqu'à `learn.lesson`, phase 3).
 
+## N — nouvelles (rétro 2026-11-04)
+N1. « Que faire » → je couvre Composition, Tactique, Entraînement, Transferts/scouts, Finances (sauf exclusion du yaml du jeu), Analyse ; une catégorie vide est prouvée par une requête citée.
+N2. « J'ai fait les exports » → `deja-fait` AVANT le plan, `bronze.raw_pages` des 12 dernières heures ; jamais un export déjà lisible dans les feuilles de match (récidive E7/R-7).
+N3. Défaite en base (`my_result` = D) → `analyste` dans le même tour ; hook à écrire.
+N4. `police` au-delà de 3 min ou 12 appels → brouillon « police partielle : manque X », jamais 2 passes sur un type ; hook à écrire.
+N5. « Mon équipe » pour recrues ou scouts → cible = besoin de MON effectif, jamais un classement par note.
+
 ## E sans code encore — les plus violées (à remplacer par du code)
 E2. Quand je cite un résultat de match → `my_result` / `is_mine` de la base, jamais le score brut ; un score partiel se remet de notre point de vue. (`core.fixture`, 1.1)
 E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`controle.py` j, `kb.py` 4.4)
