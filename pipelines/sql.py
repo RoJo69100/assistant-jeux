@@ -8,6 +8,7 @@ Sortie : tableau Markdown compact, `limit` ajouté, cellules tronquées, « n li
 Toute écriture est refusée ici (une seule instruction select/with/explain) et par le rôle (transaction en lecture seule).
 """
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -24,7 +25,9 @@ def url_ro() -> str:
         for ligne in env.read_text(encoding="utf-8").splitlines():
             if ligne.startswith("SUPABASE_DB_URL_RO="):
                 return ligne.split("=", 1)[1].strip()
-    sys.exit("SUPABASE_DB_URL_RO absent de .env (voir sql/silver/ops_001_role_assistant_ro.sql)")
+    if os.environ.get("SUPABASE_DB_URL_RO"):  # session cloud : variable de l'environnement, pas de .env
+        return os.environ["SUPABASE_DB_URL_RO"].strip()
+    sys.exit("SUPABASE_DB_URL_RO absent de .env et de l'environnement (voir sql/silver/ops_001_role_assistant_ro.sql)")
 
 
 def verifie(requete: str) -> str:
