@@ -35,25 +35,25 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 14 | Avis des amis | connaissance § 2 | Résultats « très aléatoires » et « affinités » ; runs adverses « comme au vrai handball » | Gazelle (2.9, 2.10) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 / L-001a | Arrêts du gardien = aléa d'abord | 2026-11-02 | confirmé |
-| L-002 | Rafale d'exclusions en 1re mi-temps | 2026-11-02 | confirmé (L-010, L-028) |
-| L-003 / L-003a | Volume sans efficacité | 2026-11-02 | à surveiller |
-| L-004a / L-007a / L-008a / L-009a | Versions J1-J3 réécrites (voir L-004, L-007, L-008, L-009) | 2026-11-02 | remplacées |
-| L-005 | Pertes = fautes techniques | 2026-11-02 | confirmé |
-| L-006a | 7 m (version J1) | 2026-11-02 | remplacée par L-006 |
-| L-008 | Pertes en baisse puis rebond | 2026-11-02 | à surveiller |
-| L-009 | Efficacité adverse > la nôtre dans les défaites | 2026-11-02 | confirmé (L-022) |
-| L-010 | Discipline J9 : 7 exclusions, 7 jets de 7 m | 2026-11-02 | confirmé |
-| L-011 | Dupont buteur n° 1 | 2026-11-02 | confirmé |
-| L-012 | 7 m adverses après nos exclusions | 2026-11-02 | confirmé (L-023) |
-| L-014 | Pertes en baisse, résultat pire | 2026-11-02 | à surveiller |
-| L-015 | Fautes techniques Lefebvre, Roger | 2026-11-02 | à surveiller |
-| L-022 | Écart W-L : efficacité et arrêts | 2026-11-02 | confirmé (15 matchs) |
-| L-023 | Holm : 7 des 8 jets de 7 m | 2026-11-02 | à surveiller |
-| L-025 | 2e rencontre plus dure | 2026-11-02 | confirmé (6/6) |
-| L-027 | Défense 10e sur 10 | 2026-11-02 | confirmé |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 / L-001a | Arrêts du gardien = aléa d'abord | 2026-11-02 | confirmé | hypothèse / ✅ validée (3 pour / 0 contre) |
+| L-002 | Rafale d'exclusions en 1re mi-temps | 2026-11-02 | confirmé (L-010, L-028) | hypothèse |
+| L-003 / L-003a | Volume sans efficacité | 2026-11-02 | à surveiller | hypothèse / hypothèse |
+| L-004a / L-007a / L-008a / L-009a | Versions J1-J3 réécrites (voir L-004, L-007, L-008, L-009) | 2026-11-02 | remplacées | ✅ validée (3 pour / 0 contre) / hypothèse / hypothèse / hypothèse |
+| L-005 | Pertes = fautes techniques | 2026-11-02 | confirmé | hypothèse |
+| L-006a | 7 m (version J1) | 2026-11-02 | remplacée par L-006 | hypothèse |
+| L-008 | Pertes en baisse puis rebond | 2026-11-02 | à surveiller | hypothèse |
+| L-009 | Efficacité adverse > la nôtre dans les défaites | 2026-11-02 | confirmé (L-022) | ✅ validée (4 pour / 0 contre) |
+| L-010 | Discipline J9 : 7 exclusions, 7 jets de 7 m | 2026-11-02 | confirmé | hypothèse |
+| L-011 | Dupont buteur n° 1 | 2026-11-02 | confirmé | hypothèse |
+| L-012 | 7 m adverses après nos exclusions | 2026-11-02 | confirmé (L-023) | hypothèse |
+| L-014 | Pertes en baisse, résultat pire | 2026-11-02 | à surveiller | hypothèse |
+| L-015 | Fautes techniques Lefebvre, Roger | 2026-11-02 | à surveiller | hypothèse |
+| L-022 | Écart W-L : efficacité et arrêts | 2026-11-02 | confirmé (15 matchs) | ✅ validée (15 pour / 0 contre) |
+| L-023 | Holm : 7 des 8 jets de 7 m | 2026-11-02 | à surveiller | hypothèse |
+| L-025 | 2e rencontre plus dure | 2026-11-02 | confirmé (6/6) | hypothèse |
+| L-027 | Défense 10e sur 10 | 2026-11-02 | confirmé | ⛔ retirée — ne plus appliquer |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

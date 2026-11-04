@@ -29,9 +29,9 @@ Sources lues : commit d0cfdca (2026-11-02)
 | 10 | Avis des amis | v-recrutement § 2 | « Would prefer to play close to home » = moins cher pour la région ; « not much of a student » = JuCo 50/50 | v-recrutement § 2 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-002 | Lire les engagés et la taille avant de proposer une cible | 2026-11-02 | confirmé (02/11) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-002 | Lire les engagés et la taille avant de proposer une cible | 2026-11-02 | confirmé (02/11) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

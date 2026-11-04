@@ -53,21 +53,21 @@ Preset « League Tactic », re-sélectionné sur chaque match planifié ; meille
 Composition de **test**, jamais le cinq de ligue/coupe ; pas de preset ; un seul test à la fois, annoncé avec sa mesure (ex. zone Rim : 2P% adverse ; v5 : points de Q4 ; focus offensif 50 % : points du Primary). Réglages repris du dernier amical (`gold.bv_saisie_joueurs`, kind amical). Aucun export d'aperçu à demander.
 
 ## Checks appris des matchs
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 / L-016 | Priorité au rebond offensif et à l'eFG dans les choix de cinq | 2026-10-31 | |
-| L-006 / L-014 / L-017 | Focus 5 sur le plus gros volume de tirs réel, pas sur la Preview | 2026-10-31 | |
-| L-020 / L-025 | Tir 4-5 interdit pour un joueur sans réussite à 3 sur la saison | 2026-10-31 | |
-| L-021 / L-026 | ≤ 36 min ; en amical, attention aux 6 fautes entre 28 et 34 min | 2026-10-31 | |
-| L-023 | Zone Rim efficace sur un adversaire intérieur à gros volume | 2026-10-31 | |
-| L-003 | Rotation à 2 unités de 24 min plutôt que 5×48 : 5 V-2 D depuis J15, +82 contre +34 face aux mêmes adversaires qu'à l'aller | 2026-11-02 | à surveiller (7 matchs) |
-| L-004 | Agressivité (`defense_tier`) : cran 0 (Soft, écran 1) = FT rate adverse plus bas (19,1 contre 28,4 au cran 2) ; eFG adverse à l'inverse du manuel ; facteurs confondus, ne pas en faire une règle | 2026-11-02 | à surveiller |
-| L-007 | Au-delà de 36 min (régime 5×48) : Q4 à −4,9 contre −3,2, pas de signal net dans le score ; la règle ≤ 36 min reste celle du manuel | 2026-11-02 | à surveiller (14 matchs) |
-| L-008 | Amical : cran 2 (écran 3) avec des jeunes à 36 min = eFG adverse 54,6 et FT rate 27,6 contre 49,8 / 22,3 au cran 0 ; confondu avec les minutes | 2026-11-02 | à surveiller (1 amical) |
-| L-010 | Comparer les deux unités de 24 min au plus/moins : J19 unité A +18, unité B −12 ; une unité B faible se corrige d'abord | 2026-11-02 | à surveiller (1 match) |
-| L-012 | Fatigue en amical (≈ 1/10) : sans effet exploitable pour la ligue ; la fatigue de ligue se lit dans `gold.bv_player_outlook` | 2026-11-02 | à surveiller |
-| L-018 | Focus défensif : `off` dans le plan exporté = Lock (5/5) à l'écran | 2026-11-02 | validé (2026-10-21) |
-| L-027 | Zone en amical v4 : Middle = pire mesure (2P% adverse 63,8 et 66,0 %) ; Perimeter 45,5 / 53,4 %, Rim 59,4 % ; ne pas rejouer Middle sans raison chiffrée | 2026-11-02 | à surveiller (adversaires biaisés) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 / L-016 | Priorité au rebond offensif et à l'eFG dans les choix de cinq | 2026-10-31 |  | ✅ validée (21 pour / 0 contre) / hypothèse |
+| L-006 / L-014 / L-017 | Focus 5 sur le plus gros volume de tirs réel, pas sur la Preview | 2026-10-31 |  | ✅ validée (3 pour / 0 contre) / hypothèse / hypothèse |
+| L-020 / L-025 | Tir 4-5 interdit pour un joueur sans réussite à 3 sur la saison | 2026-10-31 |  | hypothèse / hypothèse |
+| L-021 / L-026 | ≤ 36 min ; en amical, attention aux 6 fautes entre 28 et 34 min | 2026-10-31 |  | hypothèse / hypothèse |
+| L-023 | Zone Rim efficace sur un adversaire intérieur à gros volume | 2026-10-31 |  | hypothèse |
+| L-003 | Rotation à 2 unités de 24 min plutôt que 5×48 : 5 V-2 D depuis J15, +82 contre +34 face aux mêmes adversaires qu'à l'aller | 2026-11-02 | à surveiller (7 matchs) | hypothèse |
+| L-004 | Agressivité (`defense_tier`) : cran 0 (Soft, écran 1) = FT rate adverse plus bas (19,1 contre 28,4 au cran 2) ; eFG adverse à l'inverse du manuel ; facteurs confondus, ne pas en faire une règle | 2026-11-02 | à surveiller | ✅ validée (7 pour / 0 contre) |
+| L-007 | Au-delà de 36 min (régime 5×48) : Q4 à −4,9 contre −3,2, pas de signal net dans le score ; la règle ≤ 36 min reste celle du manuel | 2026-11-02 | à surveiller (14 matchs) | hypothèse |
+| L-008 | Amical : cran 2 (écran 3) avec des jeunes à 36 min = eFG adverse 54,6 et FT rate 27,6 contre 49,8 / 22,3 au cran 0 ; confondu avec les minutes | 2026-11-02 | à surveiller (1 amical) | hypothèse |
+| L-010 | Comparer les deux unités de 24 min au plus/moins : J19 unité A +18, unité B −12 ; une unité B faible se corrige d'abord | 2026-11-02 | à surveiller (1 match) | hypothèse |
+| L-012 | Fatigue en amical (≈ 1/10) : sans effet exploitable pour la ligue ; la fatigue de ligue se lit dans `gold.bv_player_outlook` | 2026-11-02 | à surveiller | hypothèse |
+| L-018 | Focus défensif : `off` dans le plan exporté = Lock (5/5) à l'écran | 2026-11-02 | validé (2026-10-21) | hypothèse |
+| L-027 | Zone en amical v4 : Middle = pire mesure (2P% adverse 63,8 et 66,0 %) ; Perimeter 45,5 / 53,4 %, Rim 59,4 % ; ne pas rejouer Middle sans raison chiffrée | 2026-11-02 | à surveiller (adversaires biaisés) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi (source nouvelle) |

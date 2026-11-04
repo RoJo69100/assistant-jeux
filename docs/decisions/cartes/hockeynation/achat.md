@@ -36,9 +36,9 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 14 | Exclusions [U] | `resume.md` § Noms et consignes | Bélanger (prolongation) et échanges de centres : gérés par l'utilisateur, ne pas les proposer | [U] 2026-10-30 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-016 | Priorité de poste : un gardien G1 END 7+ (ni Kovalev 4 ni Lauper 6) | 2026-11-02 | à surveiller |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-016 | Priorité de poste : un gardien G1 END 7+ (ni Kovalev 4 ni Lauper 6) | 2026-11-02 | à surveiller | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

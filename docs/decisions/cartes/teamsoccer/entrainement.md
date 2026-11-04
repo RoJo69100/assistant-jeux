@@ -30,9 +30,9 @@ Un tableau par club, dans l'ordre de l'écran : `| Joueur | Âge | Zone | Compé
 | 10 | Avis des amis | connaissance § 4 | Forme au changement de saison : contradictoire (repart / reste) | connaissance 4.6 (en doute) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-009 | Forme uniforme à 84 (équipe première) : multiplicateur 0,952, titulaires Chomelix à 98 (0,994) : l'intensité règle la Forme du match suivant | 2026-11-02 | à surveiller |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-009 | Forme uniforme à 84 (équipe première) : multiplicateur 0,952, titulaires Chomelix à 98 (0,994) : l'intensité règle la Forme du match suivant | 2026-11-02 | à surveiller | ✅ validée (5 pour / 0 contre) |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

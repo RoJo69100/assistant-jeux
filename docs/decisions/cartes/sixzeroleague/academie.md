@@ -28,8 +28,8 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 9 | Avis des amis | connaissance § 3, § 4 | Gazelle : revenus d'abord ; Stoik / Squidward : académie d'abord | connaissance 3.12, 3.13 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

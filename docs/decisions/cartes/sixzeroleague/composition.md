@@ -40,23 +40,23 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 14 | Avis des amis | connaissance § 1, § 2, § 7 | Pour moins de jaunes / 2 min : Marquage, puis Anticipation et Duels (avis) | Antarez 2026-10-16 (7.3) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-004 | Fins de match perdues (4 des 5 derniers buts) | 2026-11-02 | à surveiller (L-032) |
-| L-006 | 7 m : tireur automatique, nos 7 m décisifs dans les matchs serrés | 2026-11-02 | confirmé |
-| L-007 | Départ lent à l'extérieur | 2026-11-02 | confirmé (L-028) |
-| L-013 | Aucun remplaçant entré sans blessure ni rouge | 2026-11-02 | confirmé |
-| L-016 | Mêmes 7 titulaires, deux défaites de −10 : cause non isolée | 2026-11-02 | à surveiller |
-| L-020 | Denis CB meilleur tireur récent (58 %) | 2026-11-02 | vendu (27/10) |
-| L-021 | Lefebvre LW : exclusions et tir en baisse | 2026-11-02 | confirmé (L-033) |
-| L-024 | Mêmes réglages des deux côtés J13-J15 : la tactique ne départage pas | 2026-11-02 | à surveiller |
-| L-026 | Pivot efficace et stable, LW en baisse | 2026-11-02 | confirmé |
-| L-028 | 15 premières minutes = l'écart, lié aux exclusions | 2026-11-02 | à surveiller |
-| L-029 | Contres des formations (devlog 0.6.1, Gazelle) | 2026-11-02 | source |
-| L-030 | Fournier CB 56,8 % | 2026-11-02 | à surveiller (C-039, C-047) |
-| L-031 | right-center : plus de tirs, plus de CB + P | 2026-11-02 | à surveiller (2 matchs) |
-| L-032 | Fins de match : 29-44 en 5 matchs, aucun remplaçant | 2026-11-02 | à surveiller |
-| L-033 | Lefebvre 0/5 hors 7 m | 2026-11-02 | à surveiller (C-042, C-048) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-004 | Fins de match perdues (4 des 5 derniers buts) | 2026-11-02 | à surveiller (L-032) | ✅ validée (3 pour / 0 contre) |
+| L-006 | 7 m : tireur automatique, nos 7 m décisifs dans les matchs serrés | 2026-11-02 | confirmé | hypothèse |
+| L-007 | Départ lent à l'extérieur | 2026-11-02 | confirmé (L-028) | ✅ validée (5 pour / 0 contre) |
+| L-013 | Aucun remplaçant entré sans blessure ni rouge | 2026-11-02 | confirmé | hypothèse |
+| L-016 | Mêmes 7 titulaires, deux défaites de −10 : cause non isolée | 2026-11-02 | à surveiller | hypothèse |
+| L-020 | Denis CB meilleur tireur récent (58 %) | 2026-11-02 | vendu (27/10) | hypothèse |
+| L-021 | Lefebvre LW : exclusions et tir en baisse | 2026-11-02 | confirmé (L-033) | hypothèse |
+| L-024 | Mêmes réglages des deux côtés J13-J15 : la tactique ne départage pas | 2026-11-02 | à surveiller | hypothèse |
+| L-026 | Pivot efficace et stable, LW en baisse | 2026-11-02 | confirmé | hypothèse |
+| L-028 | 15 premières minutes = l'écart, lié aux exclusions | 2026-11-02 | à surveiller | hypothèse |
+| L-029 | Contres des formations (devlog 0.6.1, Gazelle) | 2026-11-02 | source | hypothèse |
+| L-030 | Fournier CB 56,8 % | 2026-11-02 | à surveiller (C-039, C-047) | hypothèse |
+| L-031 | right-center : plus de tirs, plus de CB + P | 2026-11-02 | à surveiller (2 matchs) | hypothèse |
+| L-032 | Fins de match : 29-44 en 5 matchs, aucun remplaçant | 2026-11-02 | à surveiller | hypothèse |
+| L-033 | Lefebvre 0/5 hors 7 m | 2026-11-02 | à surveiller (C-042, C-048) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

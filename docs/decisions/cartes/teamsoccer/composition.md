@@ -47,24 +47,24 @@ Pour chaque club (Chomelix Cows, puis Ben Ahmed Donkey), dans l'ordre de l'écra
 | 18 | Avis des amis | connaissance § 1, § 6 | Placer défenseurs et milieux en tir = dribbler, dribbler, tirer, au prix de ballons pour les attaquants | PIPO68 2026-09-15 (1.7) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 | Peu de buts en jeu ouvert : la finition des attaquants d'abord | 2026-11-02 | à surveiller |
-| L-002 | Cows dépendants d'Ounahi | 2026-11-02 | à surveiller |
-| L-006 | Ben Ahmed dépendant de Yamamoto | 2026-11-02 | à surveiller |
-| L-007 | Milieu Ben Ahmed = point faible structurel | 2026-11-02 | confirmé (L-015) |
-| L-010 | Victoires contre bots : ne prouvent presque rien | 2026-11-02 | confirmé |
-| L-011 | Poteaux et gardien adverse : ne pas casser un XI qui crée | 2026-11-02 | à surveiller |
-| L-013 | 1-4-3-3 retire le 4e milieu faible | 2026-11-02 | confirmé (L-029) |
-| L-015 | Schmidt-Suzuki à 5,5, secteur Milieu le plus faible | 2026-11-02 | confirmé |
-| L-016 | Compositions de coupe absentes de la base : exporter le match | 2026-11-02 | récurrent (L-027) |
-| L-017 | Dominance : buts de la tête | 2026-11-02 | à surveiller |
-| L-019 | XI stable = notes stables | 2026-11-02 | confirmé |
-| L-023 | Toujours enregistrer : sans composition, défaite 0-4 | 2026-11-02 | confirmé |
-| L-024 | Extérieur : moitié moins d'attaques | 2026-11-02 | à surveiller |
-| L-027 | Coupes du 28/10 sans lignes en base | 2026-11-02 | récurrent |
-| L-028 | 0-0 contre bot : volume normal, gardien adverse | 2026-11-02 | à surveiller |
-| L-029 | 1-4-3-3 Finition 100 / Conduite 100 : 4-0 | 2026-11-02 | à surveiller (1 match) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 | Peu de buts en jeu ouvert : la finition des attaquants d'abord | 2026-11-02 | à surveiller | hypothèse |
+| L-002 | Cows dépendants d'Ounahi | 2026-11-02 | à surveiller | hypothèse |
+| L-006 | Ben Ahmed dépendant de Yamamoto | 2026-11-02 | à surveiller | hypothèse |
+| L-007 | Milieu Ben Ahmed = point faible structurel | 2026-11-02 | confirmé (L-015) | hypothèse |
+| L-010 | Victoires contre bots : ne prouvent presque rien | 2026-11-02 | confirmé | hypothèse |
+| L-011 | Poteaux et gardien adverse : ne pas casser un XI qui crée | 2026-11-02 | à surveiller | hypothèse |
+| L-013 | 1-4-3-3 retire le 4e milieu faible | 2026-11-02 | confirmé (L-029) | hypothèse |
+| L-015 | Schmidt-Suzuki à 5,5, secteur Milieu le plus faible | 2026-11-02 | confirmé | hypothèse |
+| L-016 | Compositions de coupe absentes de la base : exporter le match | 2026-11-02 | récurrent (L-027) | ✅ validée (5 pour / 0 contre) |
+| L-017 | Dominance : buts de la tête | 2026-11-02 | à surveiller | hypothèse |
+| L-019 | XI stable = notes stables | 2026-11-02 | confirmé | hypothèse |
+| L-023 | Toujours enregistrer : sans composition, défaite 0-4 | 2026-11-02 | confirmé | hypothèse |
+| L-024 | Extérieur : moitié moins d'attaques | 2026-11-02 | à surveiller | hypothèse |
+| L-027 | Coupes du 28/10 sans lignes en base | 2026-11-02 | récurrent | hypothèse |
+| L-028 | 0-0 contre bot : volume normal, gardien adverse | 2026-11-02 | à surveiller | hypothèse |
+| L-029 | 1-4-3-3 Finition 100 / Conduite 100 : 4-0 | 2026-11-02 | à surveiller (1 match) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

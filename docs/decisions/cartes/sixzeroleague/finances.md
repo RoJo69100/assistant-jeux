@@ -37,8 +37,8 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 10 | Avis des amis | connaissance § 3, § 6 | Gazelle : revenus d'abord (Arena, Fan Shop) ; joueur : entraînement en dernier ; snowball des infrastructures | connaissance 3.12-3.14 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

@@ -30,8 +30,8 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 9 | Avis des amis | connaissance § 5 | Un 2e rôle permet de jouer de l'autre côté sans pénalité (avis) | Draugar (5.7) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

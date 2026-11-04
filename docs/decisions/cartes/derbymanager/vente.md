@@ -28,8 +28,8 @@ Un tableau par club : `| Priorité | Joueur | Poste | Âge | Note au poste | Ran
 | 10 | Mentors à ne pas vendre | `gold.dm_verdict_joueurs.mentor` | Un mentor retraité donne des points d'installations ; vendre un mentor retire son apport au groupe (voir carte entrainement var. 12) | connaissance § 5 ; police 2026-11-02 | 547 : Cooper, Tavernost, Vicomte, Hadjidj, Vidales ; 307 : Ohara, Charbonnier |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

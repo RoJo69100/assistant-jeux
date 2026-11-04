@@ -38,13 +38,13 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 14 | Avis des amis | connaissance § Matchs / lignes / plan de jeu ; `connaissance-B-general-2022-2025.md` | « ultra defensive » conseillé par un joueur (en doute) | heymelo27 2026-05-21 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-003 | La fatigue du gardien n'explique pas les défaites jusqu'au 3e départ ; rotation au 4e départ pour END 4 | 2026-11-02 | à surveiller |
-| L-004 | FOF : critère secondaire, jamais au prix d'un hors-poste | 2026-11-02 | confirmé S26 |
-| L-009 | Capitaine sans effet mesurable | 2026-11-02 | infirmé S26 |
-| L-010 | Contre-emploi des talents sans effet mesuré ; règle utilisateur gardée | 2026-11-02 | à surveiller |
-| L-016 | Gardien END bas : arrêts en P3 plus faibles ; G1 7+ visé (échange ou montée) | 2026-11-02 | à surveiller (J8 .714 en P3) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-003 | La fatigue du gardien n'explique pas les défaites jusqu'au 3e départ ; rotation au 4e départ pour END 4 | 2026-11-02 | à surveiller | hypothèse |
+| L-004 | FOF : critère secondaire, jamais au prix d'un hors-poste | 2026-11-02 | confirmé S26 | ✅ validée (33 pour / 0 contre) |
+| L-009 | Capitaine sans effet mesurable | 2026-11-02 | infirmé S26 | ⛔ retirée — ne plus appliquer |
+| L-010 | Contre-emploi des talents sans effet mesuré ; règle utilisateur gardée | 2026-11-02 | à surveiller | hypothèse |
+| L-016 | Gardien END bas : arrêts en P3 plus faibles ; G1 7+ visé (échange ou montée) | 2026-11-02 | à surveiller (J8 .714 en P3) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

@@ -135,6 +135,8 @@ def tous() -> list[tuple[bool, str]]:
     res.append(lancer("exports_parite.py"))
     res.append(lancer("alertes_parite.py"))
     res.append(lancer("finances_parite.py"))
+    res.append(lancer("export_learnings_md.py", "--check"))
+    res.append(lancer("cartes_checks.py", "--check"))
     sql ="\n".join(p.read_text(encoding="utf-8", errors="replace").lower() for p in (RACINE / "sql").rglob("*.sql"))
     for jeu in JEUX:
         res.append((True, f"— {jeu} —"))

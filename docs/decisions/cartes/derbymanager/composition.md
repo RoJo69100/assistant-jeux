@@ -47,10 +47,10 @@ Pour chaque club, dans l'ordre de l'écran Squad :
 - 307 Marmandes (corrigé par police 2026-11-02 pm) : squad, training et school exportés le 31/10 17:58-18:00 (22 joueurs dans `gold.dm_effectif`), finances/facilities/marché le 30/10 22:55 ; seul overview + régions ont été ré-exportés le 01/11. Composition faisable sur l'export du 31/10 (récupération de condition ≈ +2 à +4 %/jour selon l'intensité). Blessés 307 : Cave, Taddei (« Bruised for 1 match, can play but better not »). Intensité 307 : pill REST, valeur à relever.
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-002 | 352 à écarter ; 541 contre plus fort à tester | 2026-11-02 | à contrôler (C-001) |
-| L-003 | XI stable pour faire monter la forme | 2026-11-02 | à contrôler (C-008) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-002 | 352 à écarter ; 541 contre plus fort à tester | 2026-11-02 | à contrôler (C-001) | ✅ validée (28 pour / 0 contre) |
+| L-003 | XI stable pour faire monter la forme | 2026-11-02 | à contrôler (C-008) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

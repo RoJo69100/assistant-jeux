@@ -43,8 +43,8 @@ Après un nouvel export Discord : `python pipelines/import_discord.py basketvibe
 | 13 | Postes des 3 candidats | `silver.bv_academy_candidates` | Ne pas déduire le poste d'un candidat de celui des autres | V-20261030-5 (hypothèse, un cas contraire) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

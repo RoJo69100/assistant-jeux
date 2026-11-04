@@ -38,9 +38,9 @@ Sources lues : commit d0cfdca (2026-11-02)
 | 13 | Avis des amis | v-tactique § 2 | « Owner mode » : régler une fois et ne plus toucher (avis, n = 1) ; les bots s'adaptent | v-tactique § 2 (en doute) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 | Plan de référence (7 victoires déclarées) : le garder tant que les défaites ne s'expliquent pas par une zone précise | 2026-11-02 | à vérifier (C-001) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 | Plan de référence (7 victoires déclarées) : le garder tant que les défaites ne s'expliquent pas par une zone précise | 2026-11-02 | à vérifier (C-001) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

@@ -39,8 +39,8 @@ Un bloc par club : 1) `| Argent | Flux / jour | Salaires engagés / plafond | Ma
 | 10 | Avis des amis | connaissance § 9, § 10 | < 25 M en D4 : viser D3 et la réputation | #france 2025-05-22 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

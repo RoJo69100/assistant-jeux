@@ -39,8 +39,8 @@ Un bloc par club : 1) `| Solde | Semaine nette | Salaires | Entretien (écart) |
 | 13 | Avis des amis | connaissance § 2, § 5 | Fan club sans lien avec l'affluence ; Idole = affluence ×1,5 | connaissance 2.3, 2.6 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

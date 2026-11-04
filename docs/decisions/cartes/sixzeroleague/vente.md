@@ -26,8 +26,8 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 8 | Avis des amis | connaissance § 6 | — | connaissance | ventes G. Bertin et F. Denis (27/10, 90 €) |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

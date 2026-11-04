@@ -31,8 +31,8 @@ Un tableau par club : `| Jeune | Poste | Âge | Jours restants | Compétences cl
 | 8 | Avis des amis | connaissance § 6 | Dev : jamais vu de jeune « D1 worthy » issu de l'école ; « Facilities as a bet » | connaissance § 6 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

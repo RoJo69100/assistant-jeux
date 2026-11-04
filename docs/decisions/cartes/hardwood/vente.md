@@ -22,8 +22,8 @@ Sources lues : commit d0cfdca (2026-11-02)
 | 4 | Remplaçant interne | `gold.hw_roster_notes` (même groupe) | Note actuelle et avenir (potentiel) | fiche académie | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

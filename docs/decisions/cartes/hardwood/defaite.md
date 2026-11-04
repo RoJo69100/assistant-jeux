@@ -30,8 +30,8 @@ Sources lues : commit d0cfdca (2026-11-02)
 | 10 | Avis des amis | v-tactique § 2 | Erreurs fréquentes : tout-pression, Green Light à un joueur qui ne finit pas, oublier le Hook d'un grand en faute | v-tactique § 2 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

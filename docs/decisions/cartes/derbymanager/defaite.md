@@ -29,10 +29,10 @@ Un bloc par club : 1) `| Match | Compét. | Lieu | Score | xG pour / contre | Po
 | 11 | Avis des amis | connaissance § 11, § 12 | « Rien dans le moteur ne fait perdre exprès » ; élan ≈ 1 % par but d'écart, sur le build up seulement | dev (connaissance § 12) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 | Défaite par volume concédé, pas par finition | 2026-11-02 | confirmé S26 |
-| L-002 | 352 : 10 D sur 10 | 2026-11-02 | confirmé S26 |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 | Défaite par volume concédé, pas par finition | 2026-11-02 | confirmé S26 | ✅ validée (32 pour / 0 contre) |
+| L-002 | 352 : 10 D sur 10 | 2026-11-02 | confirmé S26 | ✅ validée (28 pour / 0 contre) |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

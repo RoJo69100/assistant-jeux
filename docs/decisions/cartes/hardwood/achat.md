@@ -19,8 +19,8 @@ Une ligne : « Pas de transferts dans Hardwood : voir le recrutement (carte `aca
 | 2 | Coach | carte `finances` (coachs) | Le seul « achat » possible est un coach (marché des coachs) | `resume.md` § Écrans | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

@@ -34,16 +34,16 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 13 | Autres équipes | `silver.hn_games` filtré `team_level` ('FRM','U21','U17') | Une défaite FRM/U21/U17 ne s'analyse que si le match est exporté (lignes automatiques) | `resume.md` § Pièges | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 | Défaite = réalisation et arrêts, pas volume de tirs | 2026-11-02 | confirmé (12 matchs S26) |
-| L-002 | Gardien < .870 dans 8 défaites sur 12 | 2026-11-02 | confirmé |
-| L-006 | PK faible en défaite et en playoffs | 2026-11-02 | à surveiller |
-| L-007 | Joueur clé muet = variance, pas une cause à corriger | 2026-11-02 | à surveiller |
-| L-008 | Discipline : effet faible sur les résultats | 2026-11-02 | à surveiller |
-| L-011 | Série perdue : PP adverse 60 % et coach PK adverse supérieur | 2026-11-02 | à surveiller |
-| L-015 | S27 J8 : même schéma + moins de tirs et plus de pertes | 2026-11-02 | à surveiller (1 match) |
-| L-016 | Gardien END 4 recule en P3 | 2026-11-02 | à surveiller |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 | Défaite = réalisation et arrêts, pas volume de tirs | 2026-11-02 | confirmé (12 matchs S26) | ✅ validée (12 pour / 0 contre) |
+| L-002 | Gardien < .870 dans 8 défaites sur 12 | 2026-11-02 | confirmé | ✅ validée (8 pour / 0 contre) |
+| L-006 | PK faible en défaite et en playoffs | 2026-11-02 | à surveiller | hypothèse |
+| L-007 | Joueur clé muet = variance, pas une cause à corriger | 2026-11-02 | à surveiller | hypothèse |
+| L-008 | Discipline : effet faible sur les résultats | 2026-11-02 | à surveiller | hypothèse |
+| L-011 | Série perdue : PP adverse 60 % et coach PK adverse supérieur | 2026-11-02 | à surveiller | hypothèse |
+| L-015 | S27 J8 : même schéma + moins de tirs et plus de pertes | 2026-11-02 | à surveiller (1 match) | hypothèse |
+| L-016 | Gardien END 4 recule en P3 | 2026-11-02 | à surveiller | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

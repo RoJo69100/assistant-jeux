@@ -37,9 +37,9 @@ Un bloc par club : 1) `| Groupe | Entraînement actuel | Conseillé | Compétenc
 | 13 | Intensité 307 | `gold.dm_effectif.intensity` | Export 307 du 31/10 : pill « REST » (repos entre saisons, le préréglage n'est que mémorisé) → `intensity` nul pour 22/22 ; à relever à l'écran Training de 307 | bronze `teams_id_squad-tab` 307 (17:58) ; police 2026-11-02 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-003 | La forme ne monte qu'en jouant : relier intensité, minutes et TR | 2026-11-02 | à contrôler (C-008) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-003 | La forme ne monte qu'en jouant : relier intensité, minutes et TR | 2026-11-02 | à contrôler (C-008) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

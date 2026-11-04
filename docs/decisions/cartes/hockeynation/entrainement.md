@@ -26,8 +26,8 @@ Un tableau par équipe (PRO, puis FRM) dans l'ordre de choix : `| Ordre | Joueur
 | 8 | Avis des amis | connaissance § Entraînement, § Coachs | Un coach PB 80+ : investir dans des joueurs physiques ; les notes de coach renforcent un style, ne comblent pas une faiblesse | d0ghouse 2026-08-24 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

@@ -33,8 +33,8 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 11 | Avis des amis | connaissance § 6 | « Vends ce dont tu n'as pas besoin pour rester compétitif » ; des bons joueurs apparaissent à vendre | Gazelle (6.8) ; joueur (3.13) | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

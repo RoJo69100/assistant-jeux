@@ -33,8 +33,8 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 12 | Avis des amis | connaissance § Draft / scouting ; `connaissance-B-general-2022-2025.md` | — | connaissance | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

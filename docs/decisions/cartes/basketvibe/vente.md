@@ -29,8 +29,8 @@ Sources lues : commit fa4743a (2026-10-31)
 | 8 | Avis des amis | connaissance § Transferts | — | connaissance | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

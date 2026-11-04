@@ -34,9 +34,9 @@ Sources lues : commit fa4743a (2026-10-31)
 | 10 | Avis des amis | connaissance § Transferts / finances / académie, § Finances / transferts / personnel | — | connaissance | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-028 | SG / SF PS 56-62 : enchère max = bas de la fourchette des ventes des 7 derniers jours (750 000 et plus, `gold.bv_transfer_history`) si finançable, sinon ne pas enchérir ; la médiane `gold.bv_market_price_ref` sous-estime le prix final | 2026-11-02 | actif (2 échecs : C-108, C-109) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-028 | SG / SF PS 56-62 : enchère max = bas de la fourchette des ventes des 7 derniers jours (750 000 et plus, `gold.bv_transfer_history`) si finançable, sinon ne pas enchérir ; la médiane `gold.bv_market_price_ref` sous-estime le prix final | 2026-11-02 | actif (2 échecs : C-108, C-109) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

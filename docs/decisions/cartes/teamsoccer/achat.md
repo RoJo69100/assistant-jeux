@@ -34,8 +34,8 @@ Sources lues : commit 7d27385 (2026-11-02)
 | 12 | Avis des amis | connaissance § 5 | Marché sans joueur de chaque pays (aléatoire) ; enchère « terminated » encore cliquable | connaissance 5.5, 5.6 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

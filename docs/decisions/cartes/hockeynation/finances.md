@@ -32,9 +32,9 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 11 | Avis des amis | connaissance § Contrats / plafond / rachats / agents, § Coachs ; `connaissance-A-staff.md` | Favors d'agents S27 ou S28 (désaccord) : tester avant de compter dessus | lecture Discord 2026-10-29 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-011 | Coach PK adverse supérieur (Ottawa 62 contre 59) : le score de match des coachs pèse en série | 2026-11-02 | à surveiller |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-011 | Coach PK adverse supérieur (Ottawa 62 contre 59) : le score de match des coachs pèse en série | 2026-11-02 | à surveiller | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

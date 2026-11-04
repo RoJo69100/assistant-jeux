@@ -25,8 +25,8 @@ Sources lues : commit d0cfdca (2026-11-02)
 | 6 | Avis des amis | v-joueurs, v-recrutement | — | veille | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

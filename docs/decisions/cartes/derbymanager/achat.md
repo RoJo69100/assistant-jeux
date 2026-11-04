@@ -35,9 +35,9 @@ Sources lues : commit 87dc954 (2026-11-02)
 | 13 | Marché exporté | `gold.dm_marche_notes` (302 lignes par club) | Prix 0,2 à 8,1 M (export 547 du 01/11 ; 307 du 30/10) ; 8-20 M absent | police 2026-11-02 | 547 : aucun gain sûr (max −0,9) ; 307 : 18 gains sûrs > 0 |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-004 | Exporter une fourchette de prix plus haute avant de conclure « aucune cible » | 2026-11-02 | à contrôler (C-005) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-004 | Exporter une fourchette de prix plus haute avant de conclure « aucune cible » | 2026-11-02 | à contrôler (C-005) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

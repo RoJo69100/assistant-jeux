@@ -29,8 +29,8 @@ Sources lues : commit fa4743a (2026-10-31)
 Limite connue : `silver.bv_training_changes` arrêtée au 18/10 ; l'export « Recent changes » après 04:00 le dimanche la complète.
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

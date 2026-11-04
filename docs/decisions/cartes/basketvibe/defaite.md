@@ -36,15 +36,15 @@ Puis la ligne C-nnn → L-nnn à écrire dans `learnings.md`.
 | 12 | Avis des amis | connaissance § Tactique / moteur | « défaite à 68 % de victoire = normale » (aléa) | Dev 2026-08-24 | |
 
 ## Checks appris des matchs
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-001 / L-016 | eFG et OREB d'abord ; OREB ≤ −13,9 = défaite lourde | 2026-10-31 | |
-| L-013 | Défaite aux rebonds : cinq plus grand aux emplacements PF/C | 2026-10-31 | |
-| L-015 | Lancers : FT rate adverse élevé avec l'agressivité | 2026-10-31 | |
-| L-020 / L-025 | Défaite par l'attaque à 3 pts : tir des joueurs fautifs | 2026-10-31 | |
-| L-005 | Matchs serrés perdus sur une perte de balle | 2026-10-31 | |
-| L-009 | Q4 perdu en amical : chercher d'abord les 6 fautes (Boyer sorti à 28,1 min) et les lancers francs (19/35) | 2026-11-02 | à surveiller (1 amical) |
-| L-022 | Un eFG très haut (63,4) gagne malgré les facteurs de défaite (pertes 18,5 %, OREB adverse 36) : juger une défaite sur l'eFG avant les autres facteurs | 2026-11-02 | à surveiller (1 amical) |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-001 / L-016 | eFG et OREB d'abord ; OREB ≤ −13,9 = défaite lourde | 2026-10-31 |  | ✅ validée (21 pour / 0 contre) / hypothèse |
+| L-013 | Défaite aux rebonds : cinq plus grand aux emplacements PF/C | 2026-10-31 |  | hypothèse |
+| L-015 | Lancers : FT rate adverse élevé avec l'agressivité | 2026-10-31 |  | hypothèse |
+| L-020 / L-025 | Défaite par l'attaque à 3 pts : tir des joueurs fautifs | 2026-10-31 |  | hypothèse / hypothèse |
+| L-005 | Matchs serrés perdus sur une perte de balle | 2026-10-31 |  | hypothèse |
+| L-009 | Q4 perdu en amical : chercher d'abord les 6 fautes (Boyer sorti à 28,1 min) et les lancers francs (19/35) | 2026-11-02 | à surveiller (1 amical) | hypothèse |
+| L-022 | Un eFG très haut (63,4) gagne malgré les facteurs de défaite (pertes 18,5 %, OREB adverse 36) : juger une défaite sur l'eFG avant les autres facteurs | 2026-11-02 | à surveiller (1 amical) | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

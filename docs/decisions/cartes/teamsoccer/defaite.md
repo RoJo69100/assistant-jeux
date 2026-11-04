@@ -35,18 +35,18 @@ Un bloc par club concerné :
 | 13 | Avis des amis | connaissance § 6 | Clubs inactifs à 60 / Forme 100 battent parfois un favori ; moteur v3 : but = fin / (fin + gardien + 25), aléa ±5 % | connaissance 6.1, 6.4 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
-| L-004 | Ballons perdus élevés : interceptions d'abord | 2026-11-02 | à surveiller |
-| L-005 | Peu de tirs adverses mais cadrés : gardien | 2026-11-02 | à surveiller |
-| L-008 | Domination sans efficacité | 2026-11-02 | à surveiller |
-| L-012 | Pertes selon l'adversaire, pas la composition | 2026-11-02 | confirmé |
-| L-014 | Même XI, pertes 6 contre 18 | 2026-11-02 | confirmé (L-012) |
-| L-018 | Pertes sans conséquence contre un faible | 2026-11-02 | à surveiller |
-| L-021 | Rang daté | 2026-11-02 | règle |
-| L-022 | Pertes jusqu'à 88 % | 2026-11-02 | à surveiller |
-| L-025 | 1-0 contre bot, conversion 17 % | 2026-11-02 | à surveiller |
-| L-026 | 1re défaite : humain fort à l'extérieur | 2026-11-02 | à surveiller |
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
+| L-004 | Ballons perdus élevés : interceptions d'abord | 2026-11-02 | à surveiller | hypothèse |
+| L-005 | Peu de tirs adverses mais cadrés : gardien | 2026-11-02 | à surveiller | hypothèse |
+| L-008 | Domination sans efficacité | 2026-11-02 | à surveiller | hypothèse |
+| L-012 | Pertes selon l'adversaire, pas la composition | 2026-11-02 | confirmé | hypothèse |
+| L-014 | Même XI, pertes 6 contre 18 | 2026-11-02 | confirmé (L-012) | hypothèse |
+| L-018 | Pertes sans conséquence contre un faible | 2026-11-02 | à surveiller | hypothèse |
+| L-021 | Rang daté | 2026-11-02 | règle | hypothèse |
+| L-022 | Pertes jusqu'à 88 % | 2026-11-02 | à surveiller | hypothèse |
+| L-025 | 1-0 contre bot, conversion 17 % | 2026-11-02 | à surveiller | hypothèse |
+| L-026 | 1re défaite : humain fort à l'extérieur | 2026-11-02 | à surveiller | hypothèse |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |

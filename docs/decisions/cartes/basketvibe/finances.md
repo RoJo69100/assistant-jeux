@@ -37,8 +37,8 @@ Sources lues : commit fa4743a (2026-10-31)
 | 14 | Avis des amis | connaissance § Finances / transferts / personnel | Popularité remise à 70 seulement sous 70 : en doute | connaissance V-20261030-7 | |
 
 ## Checks appris
-| L-nnn | Check | Ajouté le | Résultat depuis |
-|---|---|---|---|
+| L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
+| --- | --- | --- | --- | --- |
 
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
