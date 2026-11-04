@@ -1,4 +1,4 @@
-"""Test du hook pipelines/police.py (aveux, H1, H2, H4, H5).
+"""Test du hook pipelines/police.py (aveux, H1, H2, H3, H4, H5, H6).
 
 Lancer : python pipelines/test_police.py   (code 1 si un cas se trompe)
 Les cas H1/H2 utilisent un jeu fictif « testjeu » : aucun fichier réel n'est lu ni écrit.
@@ -11,6 +11,10 @@ sys.path.insert(0, str(__file__.rsplit("pipelines", 1)[0] + "pipelines"))
 import police  # noqa: E402
 
 police.JEUX["testjeu"] = ["testjeu"]
+LECONS = {"L-001": "validated", "L-002": "retired"}
+_lecons = police.lecons_du
+police.lecons_du = lambda jeu: LECONS if jeu == "testjeu" else _lecons(jeu)
+NEW = "python -I pipelines/decision.py new testjeu achat --label x"
 
 
 def u(texte):
@@ -44,12 +48,18 @@ CAS = [
     ("H4 conception : aveu cité passe", "Le hook bloque non lu et non relevé hors conception.",
      [u("concois l'étape 0a")], True, []),
     ("H4 citation code passe", "```\nINTERDITS = ['non lu']\n```\nFait.", [u("analyse")], True, []),
-    ("H1+H2 achat sans dossier ni police", PLAN_ACHAT, [u("que faire")], True, ["H1 : décision achat", "H2 : décision achat"]),
+    ("H1+H2 achat sans dossier ni police", PLAN_ACHAT, [u("que faire")], True, ["H1 : décision achat", "H2 : décision achat", "H3 : décision achat"]),
     ("H1 levé par dossier.py lancé", PLAN_ACHAT, [u("que faire"), outil("python pipelines/dossier.py testjeu achat")],
-     True, ["H2 : décision achat"]),
-    ("vente reconnue", PLAN_VENTE, [u("que faire")], True, ["H1 : décision vente", "H2 : décision vente"]),
+     True, ["H2 : décision achat", "H3 : décision achat"]),
+    ("H3 levé par decision.py new", PLAN_ACHAT, [u("que faire"), outil(NEW)], True, ["H1", "H2"]),
+    ("H3 domaine incompatible", PLAN_VENTE, [u("que faire"), outil(NEW)], True, ["H1", "H2", "H3"]),
+    ("H6 leçon validée passe", "Testjeu : L-001 tient.", [u("analyse")], True, []),
+    ("H6 leçon inconnue", "Testjeu : L-099 tient.", [u("analyse")], True, ["H6 : leçon(s) L-099 inconnue"]),
+    ("H6 leçon retirée", "Testjeu : L-002 tient.", [u("analyse")], True, ["H6 : leçon(s) L-002 retirée"]),
+    ("H6 agent : pas contrôlé", "Testjeu : L-099.", [u("analyse")], False, []),
+    ("vente reconnue", PLAN_VENTE, [u("que faire")], True, ["H1 : décision vente", "H2 : décision vente", "H3 : décision vente"]),
     ("export seul passe", PLAN_EXPORT, [u("que faire")], True, []),
-    ("H4 conception + décision : H1 reste", PLAN_ACHAT, [u("conception des hooks")], True, ["H1", "H2"]),
+    ("H4 conception + décision : H1 reste", PLAN_ACHAT, [u("conception des hooks")], True, ["H1", "H2", "H3"]),
     ("agent : pas de H1/H2", PLAN_ACHAT, [u("que faire")], False, []),
     ("H5 au-delà de 5 demandes", "Fait.", [u(f"demande {i}") for i in range(6)], True, ["H5"]),
     ("H5 pas si rétro proposée", "Fait. Je propose la rétro.", [u(f"demande {i}") for i in range(6)], True, []),

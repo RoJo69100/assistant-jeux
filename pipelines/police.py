@@ -6,6 +6,9 @@ Contrôles (plan docs/plan-conception-iso-basketvibe.md, étape 0a) :
   H1     décision importante rendue sans dossier du jour : outputs/<jeu>/dossier/<date>-<type>.md
          ou `pipelines/dossier.py <jeu> <type>` lancé dans la session — session seulement.
   H2     décision importante sans trace police : outputs/<jeu>/police-<date>.md qui cite le type.
+  H3     décision importante sans ligne au journal : `pipelines/decision.py new <jeu> <domaine>` lancé dans
+         la session (ou son témoin du jour), domaine compatible avec le type (étape 3.2 de la refonte).
+  H6     leçon L-nnn citée absente de outputs/<jeu>/learnings.md (export de learn.lesson) ou retirée.
   H4     discussion de conception (hooks, scripts, refonte) : les aveux ne bloquent plus, sauf si
          la réponse rend aussi une décision de jeu (H1/H2 restent actifs).
   H5     plus de 5 demandes dans la session sans rétro proposée : rappel unique (rétro + mesure_session.py).
@@ -45,6 +48,10 @@ CAT_TYPE = {"composition": "composition", "tactique": "composition", "entraineme
             "academie/draft": "academie", "finances": "finances"}
 VENTE = re.compile(r"\bvend|\bvente\b|\bliber")
 SEUIL_H5 = 5
+DOM_TYPE = {"achat": ("achat",), "vente": ("vente",), "composition": ("composition", "tactique"),
+            "entrainement": ("entrainement",), "academie": ("academie",),
+            "finances": ("finances", "infrastructure", "personnel")}
+LECON = re.compile(r"\bL-\d{3}\b")
 
 
 def norm(s: str) -> str:
@@ -131,6 +138,26 @@ def police_faite(jeu: str, type_: str) -> bool:
     return False
 
 
+def decision_faite(jeu: str, type_: str, cmds: str) -> bool:
+    doms = DOM_TYPE.get(type_, (type_,))
+    if re.search(rf"decision\.py\s+new\s+{jeu}\s+({'|'.join(doms)})\b", cmds):
+        return True
+    import decision
+    return any(decision.marque(jeu, d, date.fromisoformat(j)).exists() for d in doms for j in jours())
+
+
+def lecons_du(jeu: str) -> dict[str, str] | None:
+    """L-nnn → statut, lus dans outputs/<jeu>/learnings.md ; None si le fichier manque."""
+    if not (RACINE / f"outputs/{jeu}/learnings.md").exists():
+        return None
+    import migrer_learnings
+    res = {}
+    for l in migrer_learnings.lire_jeu(jeu)[0]:
+        ref = l["origine"]["ref"]
+        res[ref] = "retired" if l["status"] == "retired" or res.get(ref) == "retired" else l["status"]
+    return res
+
+
 def h5_du(session: str, nb: int, n: str) -> bool:
     """Rappel de fin de session, une seule fois par session."""
     if nb <= SEUIL_H5 or "retro" in n or not session:
@@ -156,7 +183,8 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
         f += [p for p in INTERDITS if p in n]
         if MANQUE.search(n) and PREUVE not in n:
             f.append("« il me manque » sans « cherché dans : <sources> »")
-    jeu = jeu_de(text, cmds) if types else None
+    citees = sorted(set(LECON.findall(text))) if principal else []
+    jeu = jeu_de(text, cmds) if types or citees else None
     for t in sorted(types):
         if not jeu:
             break
@@ -165,6 +193,18 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
         if not police_faite(jeu, t):
             f.append(f"H2 : décision {t} ({jeu}) sans trace police — agent `police`, qui écrit "
                      f"outputs/{jeu}/police-{date.today().isoformat()}.md")
+        if not decision_faite(jeu, t, cmds):
+            f.append(f"H3 : décision {t} ({jeu}) absente du journal — `python -I pipelines/decision.py new {jeu} "
+                     f"{DOM_TYPE.get(t, (t,))[0]} --label … --prediction '<json>' --evaluer-le AAAA-MM-JJ`")
+    connues = lecons_du(jeu) if jeu and citees else None
+    if connues is not None:
+        inconnues = [c for c in citees if c not in connues]
+        retirees = [c for c in citees if connues.get(c) == "retired"]
+        if inconnues:
+            f.append(f"H6 : leçon(s) {', '.join(inconnues)} inconnue(s) pour {jeu} — vérifie avec "
+                     f"`python -I pipelines/garde.py {jeu} <domaine>`")
+        if retirees:
+            f.append(f"H6 : leçon(s) {', '.join(retirees)} retirée(s) — ne pas la reconseiller (A-7)")
     if principal and h5_du(session, len(dem), n):
         f.append(f"H5 : {len(dem)} demandes dans la session — termine par une ligne qui propose la rétro "
                  "(agent `retro`) et la mesure `python pipelines/mesure_session.py` avant `/clear`")

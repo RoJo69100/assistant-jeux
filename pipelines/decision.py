@@ -113,7 +113,17 @@ def cmd_new(a) -> int:
                      dt.datetime.combine(dt.date.fromisoformat(a.evaluer_le), dt.time(12, 0)).astimezone(),
                      json.dumps(preuve), json.dumps(ligne[0]) if ligne else None, a.lecon, a.sujet))
         print(f"✅ décision D-{cur.fetchone()[0]} enregistrée (proposée) ; charte : {'copiée' if ligne else 'aucune validée'}")
+    try:  # trace lue par le hook police (H3) quand la commande n'est pas dans la session
+        marque(a.jeu, a.domaine).write_text(dt.datetime.now().isoformat(), encoding="utf-8")
+    except OSError:
+        pass
     return 0
+
+
+def marque(jeu: str, domaine: str, jour: dt.date | None = None) -> Path:
+    """Fichier témoin d'une décision enregistrée aujourd'hui (hook police, H3)."""
+    import tempfile
+    return Path(tempfile.gettempdir()) / f"claude-decision-{jeu}-{domaine}-{(jour or dt.date.today()).isoformat()}"
 
 
 def cmd_statut(a) -> int:
