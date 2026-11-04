@@ -1,0 +1,23 @@
+# Config Derby Manager (football, DM2) — créée le 2026-11-04 pour la refonte v2 (section core:).
+# Reste du gabarit (_modele.yaml) à compléter. Règles : skills derbymanager-regles, -club, -tactique, -effectif-entrainement.
+
+jeu:
+  id: derbymanager
+  nom: Derby Manager
+  sport: football
+  prefixe_sql: dm_
+  fuseau_affichage: Europe/Paris
+
+equipes:   # silver.dm_clubs (2026-11-04)
+  - { id: 547, nom: Queen of the South, niveau: "Scotland - Premier Division" }
+  - { id: 307, nom: Marmandes, niveau: "France - Quatrième ligue" }   # « Marmande » dans le classement
+
+core:   # refonte v2 phase 1 : entités branchées (adapt.derbymanager_<entité>) ; limites = colonnes nulles par construction
+  player_daily:  { limites: [rating, form, fatigue, morale, injured, suspended, contract_end] }  # forme 0 et condition 100 partout : lecture à vérifier ; satisfaction -5..1 non sourcée
+  fixture:       { limites: [round_no, rounds_total] }                       # matchs joués seulement ; à venir : fuseau de coup_envoi non vérifié
+  standing:      { limites: [] }                                             # ligues de mes clubs seulement ; nom abrégé (« Marmande »)
+  finance_daily: { limites: [income, expenses, capacite_invest] }            # flux par jour ; recettes détaillées dans extras
+  academy_prospect: { limites: [rating_min, rating_max, potential_min, potential_max, skills] }  # école : potentiel en mots
+  training_plan: { limites: [focus_secondary, intensity] }                   # entraînement de groupe ; intensité jamais collectée
+  facility:      { limites: [level, upkeep] }                                # niveau 14–16 sans maximum sourcé (extras.level_raw)
+  # market_listing, staff : non collectés
