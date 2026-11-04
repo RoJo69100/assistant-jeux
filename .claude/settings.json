@@ -24,11 +24,11 @@
           },
           {
             "type": "command",
-            "command": "python pipelines/rappel_debut.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/rappel_debut.py\""
           },
           {
             "type": "command",
-            "command": "python pipelines/deps_cloud.py",
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/deps_cloud.py\"",
             "timeout": 180
           }
         ]
@@ -40,7 +40,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python pipelines/garde_push.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/garde_push.py\""
           }
         ]
       }
@@ -51,7 +51,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python pipelines/garde_push.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/garde_push.py\""
           }
         ]
       }
@@ -61,15 +61,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python pipelines/police.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/police.py\""
           },
           {
             "type": "command",
-            "command": "python pipelines/forme.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/forme.py\""
           },
           {
             "type": "command",
-            "command": "python pipelines/controle.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/controle.py\""
           }
         ]
       }
@@ -79,7 +79,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python pipelines/police.py"
+            "command": "python \"$CLAUDE_PROJECT_DIR/pipelines/police.py\""
           }
         ]
       }
