@@ -30,6 +30,15 @@ ANCIENS = {
         " lower(regexp_replace(action, '^J[0-9]+ : ', '')) as action from gold.agenda"
         " where game = 'hockeynation' and rule_id ~ '^j[0-9]+$'",
     ),
+    # Team Soccer : l'ancien agenda couvre ce soir et demain, sans heure ; on compare (jour, club, priorité, catégorie).
+    # Le texte des compositions et exports diffère (l'ancien ajoute « bot / humain », absent de core) : hors parité.
+    # Le club est placé dans la colonne at_time (texte) pour garder le même format à 5 colonnes.
+    "teamsoccer": (
+        "select day, team as at_time, priority, category, '' as action from gold.ts_agenda",
+        "select g.day, coalesce(mt.name, 'les deux clubs') as at_time, g.priority, g.category, '' as action"
+        " from gold.agenda g left join silver.ts_my_teams mt on mt.team_id::text = g.team_id"
+        " where g.game = 'teamsoccer' and g.day between current_date and current_date + 1",
+    ),
 }
 REQUETE = """
 with a as ({ancien}),

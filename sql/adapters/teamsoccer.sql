@@ -74,8 +74,10 @@ select
                      'cup_id', m.cup_id, 'cup_round', m.cup_round, 'is_admin', m.is_admin,
                      'penalties_for', case m.venue when 'domicile' then m.home_penalties else m.away_penalties end,
                      'penalties_against', case m.venue when 'domicile' then m.away_penalties else m.home_penalties end,
-                     'last_seen', m.last_seen) as extras
+                     'last_seen', m.last_seen,
+                     'lineup_saved', ml.match_id is not null, 'saved_formation', ml.formation) as extras
 from silver.ts_matches m
+left join silver.ts_match_lineups ml on ml.team_id = m.my_team_id and ml.match_id = m.match_id  -- composition enregistrée (gold.ts_upcoming)
 where m.my_team_id is not null;
 
 -- Classement : recalculé depuis les matchs joués (silver.ts_standings, sans date) ; day = dernier match de ligue joué
