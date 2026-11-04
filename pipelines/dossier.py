@@ -53,7 +53,28 @@ MOTS = {
                  "salary cap", "buyout", "contract", "extension", "coach", "rachat", "contrat", "prolong"],
 }
 SEUIL = 1500
-HEADER = re.compile(r"^\[(\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2})[ T]\d{2}:\d{2}")
+KB_DOMAINES = {  # type de décision → thèmes de kb.claim lus en entier (pipelines/kb.py)
+    "achat": ("transferts", "finances"), "vente": ("transferts", "finances"),
+    "composition": ("tactique", "roles", "match", "forme"), "defaite": ("match", "tactique", "forme"),
+    "entrainement": ("entrainement", "forme", "joueurs"), "academie": ("academie",),
+    "finances": ("finances", "infrastructures", "personnel"),
+}
+
+
+def connaissance_kb(jeu: str, type_: str, forts: list[str]) -> list[str]:
+    """Section 2 depuis la base kb : chaque thème en entier avec son compteur ; [] si la base est injoignable."""
+    try:
+        import kb
+        L = ["## 2. Avis des amis — base de connaissances (`pipelines/kb.py`, thèmes entiers, compteur vérifié par la police)"]
+        for t in KB_DOMAINES.get(type_, ()) + tuple(forts):
+            r = kb.chercher(jeu, t, 0)
+            L += [kb.rendu(jeu, t, r, 0), ""]
+        return L
+    except (Exception, SystemExit):
+        return []
+
+
+HEADER =re.compile(r"^\[(\d{2}/\d{2}/\d{4}|\d{4}-\d{2}-\d{2})[ T]\d{2}:\d{2}")
 
 
 def norm(s: str) -> str:
@@ -300,9 +321,13 @@ def main() -> int:
     L += [f"- fiches : " + ", ".join(f"`{rel(f)}`" for f in fiches)] if fiches else ["- **aucune fiche**"]
     L.append("")
 
-    # 2. Avis des amis : connaissance (lignes complètes, par section)
-    L.append("## 2. Avis des amis — connaissance (toutes les lignes sur le sujet)")
-    for f in sorted((ROOT / "outputs" / jeu / "veille").glob("connaissance*.md")):
+    # 2. Avis des amis : base de connaissances (refonte 4.5), sinon lignes des fichiers de veille
+    kb_lignes = connaissance_kb(jeu, a.type, forts)
+    if kb_lignes:
+        L += kb_lignes
+    else:
+        L.append("## 2. Avis des amis — connaissance (toutes les lignes sur le sujet ; base kb injoignable)")
+    for f in ([] if kb_lignes else sorted((ROOT / "outputs" / jeu / "veille").glob("connaissance*.md"))):
         section, hits = "", []
         for line in f.read_text(encoding="utf-8", errors="replace").splitlines():
             if line.startswith("#"):
