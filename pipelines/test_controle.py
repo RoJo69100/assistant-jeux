@@ -84,6 +84,9 @@ CAS = [
     # i : heredoc
     ("i heredoc qui écrit", "Fait.", [demande("écris"), outil("Bash", {"command": "cat > a.md <<'EOF'\nx\nEOF"})], False),
     ("i heredoc de lecture", "Fait.", [demande("lis"), outil("Bash", {"command": "python - <<'EOF'\nprint(1)\nEOF"})], True),
+    ("j absence sans requête", "La Preview n'est pas en base.", [demande("preview ?")], False),
+    ("j absence après requête", "La Preview n'est pas en base.",
+     [demande("preview ?"), outil("Bash", {"command": "python -I pipelines/sql.py \"select page_type from bronze.raw_pages\""})], True),
 ]
 
 if __name__ == "__main__":

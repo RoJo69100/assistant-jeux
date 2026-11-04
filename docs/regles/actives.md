@@ -16,7 +16,7 @@ K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau l
 
 ## E sans code encore — les plus violées (à remplacer par du code)
 E2. Quand je cite un résultat de match → `my_result` / `is_mine` de la base, jamais le score brut ; un score partiel se remet de notre point de vue. (`core.fixture`, 1.1)
-E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`kb.py`, 4.4)
+E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`controle.py` j, `kb.py` 4.4)
 E7. Quand je prépare un plan du jour → calendrier de moins de 12 h et registre `fait-…` lus dans le même tour, sinon première ligne « exporte le calendrier ». (`gold.agenda`, 1.4)
 E8. Quand je propose un achat → `capacite_invest` moins les dépenses déjà décidées couvre le prix, sinon la cible est abandonnée. (`gold.buy_targets`, 2.4)
 
