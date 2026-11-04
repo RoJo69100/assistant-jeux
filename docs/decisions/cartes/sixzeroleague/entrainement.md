@@ -19,7 +19,7 @@ Sources lues : commit 8791d35 (2026-11-02)
 ## Variables
 | # | Variable | Où la lire | Check | Source du check | Dernière valeur |
 |---|---|---|---|---|---|
-| 1 | Réglage actuel | `silver.sz_training_plan` (`intensity`, `focus_group`, `focus_skill`) | Saisie avant 21:00 Paris | fiche entraînement § 1 | Normal + 16 focus (C-053) |
+| 1 | Réglage actuel | `silver.sz_training_plan` (`intensity`, `focus_group`, `focus_skill`) | Saisie avant 21:00 Paris. Plan réel = `bronze.raw_pages` page_type `app_team` le plus récent, HTML : aria-label « Training focus for X: Y » + select Intensity (silver.sz_training_plan périmé depuis 10-26) | fiche entraînement § 1 ; police 2026-11-04 | 2026-11-04 19:28 UTC : Normal (« Standard gains. Injury chance about 1.5 % … out for about two matches ») + 16 focus conformes, Rincón « All skills » (C-056) |
 | 2 | Focus | compétences clés du rôle (skill joueurs) | Compétences clés du rôle où il joue réellement | fiche entraînement § 3 | |
 | 3 | Intensité | — | Plus haut = plus de progrès, plus de blessures et plus longues ; 0.6.1 : risque divisé par deux ; texte de High et Light à relever au sélecteur | connaissance 2.6, 7.1 ; C-055 | |
 | 4 | Progrès mesuré | `select applied_at, week_number, name, role, points, key_points, overall_gain from gold.sz_training_progress order by applied_at desc limit 30` | Un cycle s'identifie par `applied_at` (`weekNumber` repart à 1) | `resume.md` § Pièges | |

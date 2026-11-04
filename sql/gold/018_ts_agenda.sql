@@ -2,7 +2,7 @@
 -- L'utilisateur n'agit que le soir après 19:00 (Paris) : toute action dont la limite tombe avant 19:00 se fait la veille au soir.
 -- Composition à enregistrer au moins 2 h avant le coup d'envoi (match pré-calculé) [skill teamsoccer-match].
 -- Rythme : lundi 00:05 clôture financière et remise à zéro de la limite d'achat, vendredi ~00:00–01:00 UTC entraînement,
--- 3 révélations d'académie par jour (01:00 UTC), un amical par semaine [skill teamsoccer-saison].
+-- 1 révélation d'académie par jour (01:00 UTC) [U:2026-11-04], un amical par semaine [skill teamsoccer-saison].
 -- Les jours de match viennent des données (silver.ts_matches), pas de la règle « mardi et samedi » : Ben Ahmed joue le lundi et le jeudi [Obs].
 
 -- Gold : agenda de ce soir et de demain soir, une ligne par action.
@@ -50,11 +50,11 @@ ev(day, team, priority, category, action) as (
   union all
   -- Chaque soir : révélations d'académie (ce soir, seulement les clubs qui en ont encore).
   select (select today from t), a.team, 2, 'académie',
-         'Révéler ' || max(a.team_reveals_left_today) || ' compétence(s) à l''académie, puis exporter la page Académie'
+         'Révéler ' || max(a.team_reveals_left_today) || ' compétence à l''académie, puis exporter la page Académie'
   from gold.ts_academy a group by a.team having max(a.team_reveals_left_today) > 0
   union all
   select (select today from t) + 1, 'les deux clubs', 2, 'académie',
-         'Révéler les compétences du jour à l''académie (3 par club), puis exporter la page Académie'
+         'Révéler les compétences du jour à l''académie (1 par club), puis exporter la page Académie'
   union all
   -- Amical de la semaine, si aucun n'est encore joué ni prévu (impossible tant que le club est en Coupe Nationale [skill teamsoccer-saison]).
   select d.day, mt.name, 3, 'amical',
@@ -111,7 +111,7 @@ union all
 select 2, h.team, 'HPC', 'Haute Performance : il manque ' || h.tsc_needed || ' TSC pour atteindre 50 (compte : ' || h.account_tsc || ', lundis restants : ' || coalesce(h.mondays_left::text, '?') || ')'
 from gold.ts_hpc_status h where h.tsc_needed > 0
 union all
-select 2, a.team, 'académie', 'Révélations du jour non faites : ' || max(a.team_reveals_left_today) || ' sur 3'
+select 2, a.team, 'académie', 'Révélations du jour non faites : ' || max(a.team_reveals_left_today) || ' sur 1'
 from gold.ts_academy a group by a.team having max(a.team_reveals_left_today) > 0
 union all
 select 2, mt.name, 'match', 'Match joué non exporté : ' || m.competition || ' du ' || to_char(m.match_date_paris, 'DD/MM') || ' contre ' || coalesce(case when m.venue = 'domicile' then m.away_team else m.home_team end, '?')

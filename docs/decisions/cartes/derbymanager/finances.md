@@ -1,6 +1,6 @@
 # Carte derbymanager — finances (argent par jour, plafond salarial, installations ; deux clubs)
 
-Sources lues : commit 87dc954 (2026-11-02)
+Sources lues : commit 5f8ecc2 (2026-11-04)
 
 Écrite le 2026-11-02 (`resume.md`, skill `derbymanager-club` ; connaissance § 9, § 10 ; learnings). Plus d'agent `finances` depuis le 2026-11-02. Tout l'argent est **par jour**. Un bloc par club.
 
@@ -37,6 +37,14 @@ Un bloc par club : 1) `| Argent | Flux / jour | Salaires engagés / plafond | Ma
 | 15 | Écran contrat (prolongation) | `bronze.raw_pages` `players_id_contract` | 3 saisons ; prime payée tout de suite 0 à ~1,9 M ; salaire proposé à partir de la demande (ex. 52 k → 72 k pour un Key) ; école : salaire hors plafond | bronze 29618, 32858, 32870 (547 seulement) | aucun écran 307 en base |
 | 9 | Argent thésaurisé | — | Seuil « tier × 5 M » ; argent moyen visé 6-10 M | connaissance § 9 | |
 | 10 | Avis des amis | connaissance § 9, § 10 | < 25 M en D4 : viser D3 et la réputation | #france 2025-05-22 | |
+
+## Valeurs du jour (police 2026-11-04)
+- 307 finances : dernier export 02/11 21:59 (silver.dm_finances ; la page finances du 04/11 22:00, bronze 37161, est celle de 547). Argent 25 438 469, flux −419 k/j (−478 k hors stade), salaires engagés 509 k / plafond 625 k, marge 116 k/j. Postérieur à ce relevé : ventes Aponte et Charbonnier (salaires 70 k + 62 k) non vérifiables dans l'argent.
+- 307 installations (export 04/11 21:56, `silver.dm_facilities`) : niveau 14, valeur −1,4 M, variation +380 k/j, palier supérieur à 7 M, baisse à −5 M, maintenance 300 (colonne brute ; 40 % le 30/10). Écart au palier 8,4 M, ≈ 22 j à +380 k/j : pas d'amélioration aujourd'hui, pas de dégradation proche.
+- Prolongations 307 (frais, `gold.dm_contrats`) : Desagnat 155 k, McCulloch 385 k, Lafleur 220 k, Lerch 205 k, Lévêque 85 k, Bodian 245 k. Salaire demandé inconnu : aucun écran contrat 307 en base (var. 15) ; manque à exporter : ouvrir l'écran contrat de chaque joueur.
+
+## Valeurs du jour 547 (police 2026-11-04, export 22:00)
+- Argent 20 588 217, flux +776 k/j, salaires 670 k, engagés 845 k / plafond 1,5 M, attente 6e. Installations niveau 16, palier 8,0 M, bouton d'amélioration présent (bronze 37164, `/teams/547/upgrade`, 4 choix). Échec du 02/11 : message inconnu (manque réel).
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |

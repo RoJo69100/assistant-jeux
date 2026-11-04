@@ -38,6 +38,16 @@ Un bloc par club : 1) `| Solde | Semaine nette | Salaires | Entretien (écart) |
 | 12 | Écarts non expliqués | `silver.ts_finances` | Ben Ahmed 27/10 : 506 299 $ inexpliqués ; 22/10 : `match_income` +8 375 $ | `resume.md` § Pièges ; fiche finances | |
 | 13 | Avis des amis | connaissance § 2, § 5 | Fan club sans lien avec l'affluence ; Idole = affluence ×1,5 | connaissance 2.3, 2.6 | |
 
+## Valeurs et lieux ajoutés par la police (2026-11-04)
+| Variable | Où / valeur du jour |
+|---|---|
+| 2 Dépenses | `weekly_expenses` d'une ligne `silver.ts_finances` = **semaine close** (lignes de la semaine précédente : stadium_building + wages + maintenance) ; wages et maintenance de la ligne = semaine nouvelle. Cows 3 554 021 = 3 369 250 + 155 851 + 28 920 ; `other_expenses` = 0. Entretien attendu = (recette plein stade des places d'avant l'achat) × 6 % : Cows 47 475 le 02/11, pas un bug |
+| 3 Recettes | 7 matchs de ligue à domicile par saison (14 journées) ; `gold.ts_season_calendar.home_league_left` = reste ; remplissage Cows 85–90 %, Donkey 80 % |
+| 5 Capacité | Cows 459 647, Donkey 251 434 (registre : ligne 4 soldée le 04/11, le solde 873 653 la contient déjà). Règle : une dépense décidée est soldée dès que la ligne `stadium_building` de l'export Finances la montre |
+| 6 Entraîneur | `core.staff` : niveau 20 (= niveau 1) les deux clubs, relevé 2026-10-30 |
+| HPC | `bronze.raw_pages` page_type `dashboard_high-performance` (HTML, texte) plus récent que `silver.ts_hpc` : 04/11 = relevé du 30/10, 50 TSC, 0 accumulé, 5 semaines ; sous 50 TSC aucun remboursement |
+| Limite d'achat | 1 par semaine, lundi 00:00 ; `new_signings` ; « Mes enchères » (export) pour les enchères en cours |
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
 | --- | --- | --- | --- | --- |

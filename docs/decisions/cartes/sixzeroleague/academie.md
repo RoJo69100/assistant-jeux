@@ -27,6 +27,9 @@ Sources lues : commit 8791d35 (2026-11-02)
 | 8 | Coût du niveau suivant | `silver.sz_infrastructure_levels` | Coût multi-saisons = achat + supplément d'entretien × 9 cycles × saisons ; payer seulement quand le solde réel le couvre | fiche académie § Règles de données ; C-044, C-052 | 6 → 7 : 6 200 € (C-052) |
 | 9 | Avis des amis | connaissance § 3, § 4 | Gazelle : revenus d'abord ; Stoik / Squidward : académie d'abord | connaissance 3.12, 3.13 | |
 
+| 10 | Signature faite ? | `select captured_at, source_url from bronze.raw_pages where game='sixzeroleague' and source_url ilike '%u18/pick%' order by captured_at desc limit 3` | Une capture POST u18/pick status 200 après l'export U18 = signature faite ; silver.sz_u18 garde le snapshot d'avant (available=true périmé) | police 2026-11-04 | Rincón 18:11 UTC |
+| 11 | Éthique de travail et perk du signé | payload du POST pick (`attributes.workEthic`, `perk`, `talent`) | Éthique = rendement d'entraînement (skill entraînement) ; perk « student » non documenté | police 2026-11-04 | Rincón 99, student, talent 2 |
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
 | --- | --- | --- | --- | --- |

@@ -6,6 +6,7 @@ Les 3 exports les plus en retard viendront de `gold.sante_collecte` quand `pipel
 """
 import io
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -40,16 +41,31 @@ def alerte_sauvegarde():
     return None
 
 
+def alerte_branches_cloud():
+    """Une ligne si une branche cloud `ccr-*` a des commits que ni HEAD ni origin/main ne contiennent (travail d'une autre session)."""
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=RACINE, capture_output=True, text=True, timeout=30).stdout
+    try:
+        subprocess.run(["git", "fetch", "--all", "-q"], cwd=RACINE, capture_output=True, timeout=30)
+        noms = git("for-each-ref", "--format=%(refname:short)", "refs/remotes/origin/ccr-*").split()
+        en_avance = [n for n in noms if git("rev-list", "--count", f"HEAD..{n}", "^origin/main").strip() not in ("", "0")]
+    except Exception:
+        return None
+    if en_avance:
+        return f"BRANCHES CLOUD EN AVANCE : {len(en_avance)} (`git branch -r`, `git show <branche>:chemin`)."
+    return None
+
+
 def main():
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
     if (a := alerte_sauvegarde()):
         print(a)
-    print("RAPPEL DE DÉBUT DE SESSION (pipelines/rappel_debut.py)")
+    if (b := alerte_branches_cloud()):
+        print(b)
+    print("RAPPEL DE DÉBUT DE SESSION")
     print("Décision (achat, vente, enchère, composition, défaite, entraînement, académie, finances) : "
-          "`python pipelines/dossier.py <jeu> <type>` AVANT de répondre.")
-    print("MCP Supabase : essayer une requête avant d'écrire « pas de base » ; non authentifié = "
-          "à autoriser dans les connecteurs claude.ai, pas une panne.")
-    print("Règles actives (texte complet : docs/regles/actives.md) :")
+          "`python pipelines/dossier.py <jeu> <type>` d'abord.")    print("MCP Supabase : requête d'abord avant « pas de base » ; non authentifié = à autoriser (claude.ai).")
+    print("Règles actives (docs/regles/actives.md) :")
     for t in titres():
         print("- " + t)
 

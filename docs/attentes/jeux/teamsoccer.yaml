@@ -40,7 +40,7 @@ rythme:
   - { quand: en semaine,    quoi: coupes, verrouillage: "2 h avant (gold.ts_upcoming.lineup_deadline_paris)", fuseau_heure: Paris }
   - { quand: vendredi,      quoi: "entraînement et Forme", fuseau_heure: hôte }
   - { quand: lundi 00:05,   quoi: "finances de la semaine", fuseau_heure: hôte }
-  - { quand: chaque jour,   quoi: "3 révélations d'académie par club (reset 01:00 UTC)", fuseau_heure: UTC }
+  - { quand: chaque jour,   quoi: "1 révélation d'académie par club (reset 01:00 UTC)", fuseau_heure: UTC }
   - { quand: saison,        quoi: "9 semaines : ligue sem. 1–7 (14 journées), barrages sem. 8, repos et Gala sem. 9 ; saison 3 du 2026-10-12 au 2026-11-28" }
 
 competitions:
@@ -86,7 +86,7 @@ exports:
   - { page: dashboard_training,        quand: vendredi,                            evenement: export_entrainement }
   - { page: dashboard_finances,        quand: lundi,                               evenement: export_finances }
   - { page: dashboard_stadium,         quand: avant un engagement sur le stade,    evenement: engagement }
-  - { page: dashboard_youth-scout,     quand: chaque jour après les 3 révélations, evenement: export_academie }
+  - { page: dashboard_youth-scout,     quand: chaque jour après la révélation, evenement: export_academie }
   - { page: dashboard_transfers,       quand: si plus de 24 h,                     evenement: export_marche }
   - { page: dashboard_league,          quand: après chaque journée,                evenement: export_ligue }
   - { page: dashboard_high-performance, quand: "quand des TSCredits sont disponibles", evenement: engagement }
@@ -96,7 +96,7 @@ domaines:
   equipe:          { present: oui }
   tactique:        { present: oui }
   entrainement:    { present: oui, dimensions: [compétence par joueur, intensité par joueur], frequence: "hebdomadaire (vendredi)" }
-  jeunes:          { present: oui, depense_suivie: oui, revelations_par_jour: 3, effectif_academie: 16, chemins: [révéler, monter, monter puis vendre, ignorer] }
+  jeunes:          { present: oui, depense_suivie: oui, revelations_par_jour: 1, effectif_academie: 16, chemins: [révéler, monter, monter puis vendre, ignorer] }
   transferts:      { present: oui, taxe: "10 % de commission (enchère de manager, 72 h)", delai_revente: "7 semaines", minimum_effectif: 16, achats_par_semaine: 1, autres: "vente à la banque, enchères de la banque", base_historique: null }
   finances:        { present: oui, sponsor: "à relever (skill teamsoccer-club)" }
   personnel:       { present: oui, postes: [entraîneur (5 niveaux)], leviers: ["monter le niveau d'entraîneur ? (demande utilisateur)"] }

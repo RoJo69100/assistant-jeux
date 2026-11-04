@@ -100,7 +100,7 @@ cross join lateral (values
   ('VIP', s.seats_vip, 500, 1500, 75)
 ) x(seat_type, seats, max_seats, price, revenue);
 
--- Académie : un jeune par ligne, compétences révélées, et révélations encore possibles aujourd'hui (3 par jour [G]).
+-- Académie : un jeune par ligne, compétences révélées, et révélations encore possibles aujourd'hui (1 par jour [U:2026-11-04]).
 create or replace view gold.ts_academy with (security_invoker = true) as
 select y.team_id, mt.name as team, y.youth_id, y.name, y.age, y.position, y.talent, y.revealed_count,
        (select round(avg((to_jsonb(y)->>k)::numeric), 1) from jsonb_array_elements_text(y.revealed_skills) k) as avg_revealed,
@@ -108,7 +108,7 @@ select y.team_id, mt.name as team, y.youth_id, y.name, y.age, y.position, y.tale
        (select string_agg(k, ', ') from unnest(array['goalkeeper', 'defense', 'ball_control', 'passing', 'crosses', 'dribbling',
                                                       'heading', 'finishing', 'stamina', 'pace']) k
         where not y.revealed_skills ? k) as hidden_skills,
-       case when a.daily_reveal_date = (now() at time zone 'Atlantic/Canary')::date then greatest(0, 3 - a.daily_reveal_count) else 3 end
+       case when a.daily_reveal_date = (now() at time zone 'Atlantic/Canary')::date then greatest(0, 1 - a.daily_reveal_count) else 1 end
          as team_reveals_left_today,
        y.day as as_of
 from silver.ts_youth_players y

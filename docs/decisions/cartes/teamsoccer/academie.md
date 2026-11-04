@@ -13,12 +13,12 @@ Sources lues : commit 7d27385 (2026-11-02)
 | :130 | joueur de l'académie ou non | var. 7 |
 
 ## Rendu (figé)
-Un tableau par club : 1) `| Révélation | Jeune | Compétence à révéler |` (3 par jour) ; 2) `| Jeune | Âge | Poste | Révélées /10 | Compétence clé | Titulaire le plus faible (clé) | Verdict | Blocage |` ; 3) HPC (compte) : `| TSC compte | TSC investis | Manque pour 50 | Lundis restants | Options de la semaine |`.
+Un tableau par club : 1) `| Révélation | Jeune | Compétence à révéler |` (1 par jour) ; 2) `| Jeune | Âge | Poste | Révélées /10 | Compétence clé | Titulaire le plus faible (clé) | Verdict | Blocage |` ; 3) HPC (compte) : `| TSC compte | TSC investis | Manque pour 50 | Lundis restants | Options de la semaine |`.
 
 ## Variables
 | # | Variable | Où la lire | Check | Source du check | Dernière valeur |
 |---|---|---|---|---|---|
-| 1 | Révélations du jour | `select team, name, position, revealed_count, best_revealed, hidden_skills, team_reveals_left_today from gold.ts_academy order by team, revealed_count desc limit 32` | 3 par jour et par club, une par jeune, remise à zéro 01:00 UTC ; révéler d'abord Gardien, Défense, Conduite, Finition (déduction) | fiche académie § 1-2 | |
+| 1 | Révélations du jour | `select team, name, position, revealed_count, best_revealed, hidden_skills, team_reveals_left_today from gold.ts_academy order by team, revealed_count desc limit 32` | 1 par jour et par club, remise à zéro 01:00 UTC ; révéler d'abord Gardien, Défense, Conduite, Finition (déduction) | fiche académie § 1-2 | |
 | 2 | Jeunes complets | `revealed_count = 10` | Compter par club à chaque export | règle apprise 17 | |
 | 3 | Verdict | `select team, name, age, position, revealed_count, key_col, key_skill, weakest_starter, weakest_starter_key, squad_size, verdict, blocage from gold.ts_academie_verdict order by team limit 32` | MONTER si la clé dépasse le titulaire le plus faible, effectif ≤ 24 | fiche académie § 3 | |
 | 4 | Monter pour vendre | carte `vente` var. 3 | Valeur d'un jeune monte de 4-6 % par semaine ; blocage de revente d'un jeune promu : inconnu, à lire à l'écran Vente au premier cas | fiche transferts § Historique de valeur | |

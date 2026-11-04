@@ -1,0 +1,653 @@
+# Dossier teamsoccer — composition — 2026-11-04 — carte + nouveau
+
+1. **Carte** `docs/decisions/cartes/teamsoccer/composition.md` : lis-la en entier. Chaque variable y a son endroit et son check : lance ses requêtes (groupées, colonnes choisies, `LIMIT`) et remplis les valeurs du jour. Ne relis pas les sources déjà notées.
+2. **Nouveau depuis le commit 7d27385** (ci-dessous) : à lire en entier. Une ligne qui change une règle, un avis ou un seuil → modifie le check de la carte (cite la source et la date) ; une variable nouvelle → ajoute une ligne.
+3. **Joueur ou réglage absent de la carte** : recherche ciblée sur son nom dans tout l'historique (`--mots`, fichier `-cible.txt`).
+4. **Fin** : carte à jour (valeurs, checks, sources), commit, puis `python pipelines/dossier.py teamsoccer composition --marquer`.
+
+## 0. Cœur commun `docs/decisions/cartes/_core/composition.md` (valeurs calculées le 2026-11-04)
+
+| # | Variable | Où la lire | Check | Source du check | Dernière valeur |
+|---|---|---|---|---|---|
+| C1 | Prochain match | `select day, competition_kind, round_no, opponent, home, scheduled_at at time zone 'Europe/Paris' as coup_envoi_paris from core.fixture where game = 'teamsoccer' and not played and day >= current_date order by day, scheduled_at nulls last limit 5` | Match d'aujourd'hui ou de demain : se prépare aujourd'hui | CLAUDE.md, inviolable 3 | day=2026-11-04, competition_kind=amical, round_no=, opponent=BOT, home=True, coup_envoi_paris=2026-11-04 17:00:00 ; day=2026-11-04, competition_kind=coupe, round_no=, opponent=FC Les Mureaux 🤖, home=True, coup_envoi_paris=2026-11-04 19:10:00 ; day=2026-11-05, competition_kind=coupe, round_no=, opponent=NK Kovinar Maribor, home=False, coup_envoi_paris=2026-11-05 13:00:00 ; day=2026-11-05, competition_kind=ligue, round_no=, opponent=BOT, home=False, coup_envoi_paris=2026-11-05 19:30:00 ; day=2026-11-07, competition_kind=ligue, round_no=, opponent=Olympique Paris 🤖, home=False, coup_envoi_paris=… |
+| C2 | Joueurs du dernier relevé | `select position, name, age, rating, form, fatigue, injured, suspended, day from core.player_daily where game = 'teamsoccer' and day = (select max(day) from core.player_daily where game = 'teamsoccer') order by position, rating desc limit 40` | Forme et fatigue en échelle 0–1 (échelle du jeu : `core.game_params` echelle_*) | `docs/attentes/jeux/<jeu>.yaml` core | position=DEF, name=Noussair Ounahi, age=19, rating=91, form=0.94000000000000000000, fatigue=, injured=False, suspended=False, day=2026-11-02 ; position=DEF, name=Nicolas Simon, age=21, rating=69, form=0.94000000000000000000, fatigue=, injured=False, suspended=False, day=2026-11-02 ; position=DEF, name=Théo Thomas, age=21, rating=66, form=0.94000000000000000000, fatigue=, injured=False, suspended=False, day=2026-11-02 ; position=DEF, name=Théo Dubois, age=27, rating=65, form=0.94000000000000000000, fatigue=, injured=False, suspended=False, day=2026-11-02 ; position=DEF, name=Yuki Fernández, ag… |
+| C3 | Alertes joueurs | `select prio, domaine, alerte from gold.daily_alerts where game = 'teamsoccer' and domaine in ('blessure', 'fatigue', 'forme', 'tactique', 'effectif') order by prio limit 15` | Blessé ou hors zone : jamais titulaire sans raison écrite | `core.alert_rule` | ⚠ erreur : canceling statement due to statement timeout |
+| C4 | Classement | `select rank, team_label, played, points, wins, losses, gf, ga, is_mine from core.standing where game = 'teamsoccer' and day = (select max(day) from core.standing where game = 'teamsoccer') order by rank limit 20` | Force de l'adversaire lue au classement et à ses résultats | `docs/decisions/variables.md` § composition | ⚠ erreur : canceling statement due to statement timeout |
+| C5 | Bilan de la saison | `select competition_kind, my_result, count(*) as n, round(avg(my_score), 1) as pour, round(avg(opp_score), 1) as contre from core.fixture where game = 'teamsoccer' and my_result is not null group by 1, 2 order by 1, 2 limit 12` | Ce qui a marché / échoué : voir learnings du jeu | `outputs/<jeu>/learnings.md` | competition_kind=amical, my_result=D, n=2, pour=0.5, contre=0.5 ; competition_kind=amical, my_result=L, n=3, pour=0.3, contre=2.0 ; competition_kind=amical, my_result=W, n=3, pour=2.3, contre=0.7 ; competition_kind=autre, my_result=L, n=2, pour=0.5, contre=3.0 ; competition_kind=coupe, my_result=D, n=4, pour=0.5, contre=0.5 ; … |
+| C6 | Agenda du jour | `select at_time, priority, category, action from gold.agenda where game = 'teamsoccer' and day = current_date order by at_time limit 10` | Heure limite du réglage | `core.agenda_rule` | ⚠ erreur : canceling statement due to statement timeout |
+| C7 | Exports à refaire | `select ecran, statut, age_h from gold.exports_state where game = 'teamsoccer' and statut <> '🟩 à jour' order by ordre limit 15` | Effectif ou tactique périmé : « exporte » avant la saisie | `core.export_rule` | ecran=Équipe (joueurs), statut=🟧 à refaire, age_h=54 ; ecran=Équipe (joueurs), statut=🟧 à refaire, age_h=54 ; ecran=Composition, statut=🟧 à refaire, age_h=97 ; ecran=Composition, statut=🟧 à refaire, age_h=97 ; ecran=Académie, statut=🟧 à refaire, age_h=54 ; … |
+
+### Couverture de `docs/decisions/variables.md` § composition
+| Variable obligatoire | Où |
+|---|---|
+| Adversaire : forces, résultats de la saison | C1, C4 ; effectif et tactique lue : carte du jeu |
+| Forme, fatigue, blessures, suspensions | C2, C3 |
+| Minutes lourdes | carte du jeu (stats de match) |
+| Fit poste par poste, réglages dans l'ordre de l'écran | carte du jeu (rendu figé) |
+| Règles du moteur | skill tactique du jeu |
+| Ce qui a marché / échoué | C5 + learnings du jeu |
+| Avis des amis, ce qui prouvera l'erreur | dossier et rendu |
+
+La carte du jeu ci-dessous est le **delta** : ses variables s'ajoutent au cœur ; une variable qui répète une variable C renvoie à son numéro.
+
+## Nouveau — règles, fiches, connaissance, learnings
+### `.claude/skills/teamsoccer-aujourdhui/SKILL.md` — 1 lignes ajoutées, 1 sur le sujet
+description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du soir.
+
+### `.claude/skills/teamsoccer-club/SKILL.md` — 10 lignes ajoutées, 10 sur le sujet
+description: Team Soccer, club : finances, salaires, stade (billets, entretien), affluence, marché (banque, enchères de manager, limite d'un achat par semaine), Premium. Pour toute question d'argent, de stade, d'achat ou de vente.
+Ce fichier est un index : le contenu est dans `references/`. Lis seulement la section utile à la question ; chaque fichier reprend telle quelle une section de l'ancien SKILL.md (contenu inchangé).
+| Fichier | Section |
+|---|---|
+| `references/00-introduction.md` | Introduction et sources |
+| `references/01-finances.md` | Finances [G:Finances] [P:Finances] |
+| `references/02-stade.md` | Stade [G:Stades et spectateurs] [P:Stade] |
+| `references/03-marche-des-transferts.md` | Marché des transferts |
+| `references/04-equipes-secondaires-et-premium.md` | Équipes secondaires et Premium [G:Vente de clubs] [F:2026-05-31, 2026-10-19] |
+| `references/05-nos-donnees.md` | [Obs] Nos données |
+
+### `.claude/skills/teamsoccer-club/references/00-introduction.md` — 3 lignes ajoutées, 2 sur le sujet
+## Introduction et sources
+Sources : voir teamsoccer-joueurs (**[G]** guide officiel capté le 2026-10-19, **[F]** forum global, **[P]** page du jeu, **[Obs]** nos données). Monnaie : $ (la page Stade affiche €, même monnaie).
+
+### `.claude/skills/teamsoccer-club/references/01-finances.md` — 9 lignes ajoutées, 8 sur le sujet
+## Finances [G:Finances] [P:Finances]
+- 1 000 000 $ au départ (et à chaque nouveau club). La semaine financière est **remise à zéro chaque lundi à 00:05** (heure du site).
+- **Recettes** : billetterie des matchs à domicile (et amicaux), ventes de joueurs, primes de compétitions, autres. Le guide : « on ne gagne des $ que de 2 façons : vendre des joueurs à la banque et la billetterie » (les primes s'y ajoutent depuis la saison 2). Pas de sponsor : refusé par l'admin [F:2026-05-05 Admin-Dev].
+- **Dépenses** : salaires (`Wages`), entretien du stade, achats, construction du stade, personnel (entraîneur), autres.
+- **Solde négatif** : pas de faillite ni de renvoi ; on ne peut simplement plus acheter de joueur, agrandir le stade ni améliorer l'entraîneur tant que l'argent manque [F:2026-05-05 Admin-Dev] [F:2026-10-14 PIPO68]. Mais un solde bas coûte des points de moral (cercle jaune, voir teamsoccer-match).
+- **Salaires** : environ 1 % de la valeur du joueur par semaine [Obs], ligne principale des dépenses.
+- Bugs d'entretien constatés : le traitement du lundi a facturé l'ancienne formule (capacité × 5 $) au lieu de 6 % ; remboursé et +500 000 $ à tous le 2026-10-13, réapparu et remboursé le 2026-10-19 [F:2026-10-13, 2026-10-19 PIPO68]. **Contrôler la ligne « stadium maintenance » chaque lundi.**
+- [Obs] Au 2026-10-19 : Ben Ahmed Donkey (féminine) solde −112 482 $, dépenses de la semaine 115 620 $ (salaires 95 596, entretien 20 024), bilan cumulé −852 719 $. L'autre club : −185 283 $.
+
+### `.claude/skills/teamsoccer-club/references/02-stade.md` — 29 lignes ajoutées, 27 sur le sujet
+## Stade [G:Stades et spectateurs] [P:Stade]
+| Type | Prix d'achat par place | Recette par match et par place occupée | Maximum |
+|---|---|---|---|
+| Debout (stands) | 80 $ | 7,50 $ | 50 000 |
+| Places basiques | 150 $ | 15 $ | 20 000 |
+| Places couvertes | 300 $ | 27,50 $ | 9 500 |
+| VIP | 1 500 $ | 75 $ | 500 |
+- Capacité maximale 80 000. Chaque type a son propre plafond [F:2026-07-17 PIPO68].
+- **Prix des billets** : ceux-ci depuis le 2026-09-18 (« Important change in ticket prices ») ; avant : 10 $ uniques (BETA) puis 15/30/55/150 (juin). Amicaux : un quart du prix (1,875 / 3,75 / 6,875 / 18,75 $) [G].
+- **Entretien = 6 % de la recette potentielle d'un match à guichets fermés**, prélevé chaque semaine [F:2026-10-13 PIPO68] [Obs : 6 % × 333 725 $ = 20 024 $]. Le chiffre des Finances en fin de saison est un cumul [F:2026-09-29 PIPO68].
+- **Rentabilité d'une place** (déduction) : prix ÷ (recette × taux d'affluence × 0,94) en matchs à domicile. Debout, basique, couverte : ~10,7 / 10 / 10,9 matchs à 100 % d'affluence ; VIP : 20. En division V au 5e rang (35 %), environ trois fois plus. Une saison compte 7 matchs de ligue à domicile (plus les amicaux à domicile, à un quart du prix).
+### Affluence [G:Stades et spectateurs]
+Pourcentage de la capacité rempli selon la division et le rang au classement (ligue de 8) :
+| Rang | Div I | Div II | Div III | Div IV | Div V |
+|---|---|---|---|---|---|
+| 1 | 100 | 90 | 80 | 70 | 60 |
+| 2 | 90 | 80 | 70 | 60 | 50 |
+| 3 | 85 | 75 | 65 | 55 | 45 |
+| 4 | 80 | 70 | 60 | 50 | 40 |
+| 5 | 75 | 65 | 55 | 45 | 35 |
+| 6 | 70 | 60 | 50 | 40 | 30 |
+| 7 | 65 | 55 | 45 | 35 | 25 |
+| 8 | 60 | 50 | 40 | 30 | 20 |
+- Le même pourcentage s'applique à chaque type de place [F:2026-09-01 PIPO68]. Exemple de l'admin : 2 500 places, Div I, 3e → 85 % → 2 125 spectateurs [F:2026-05-13 Admin-Dev].
+- Idole ou Magique dans l'effectif : affluence ×1,5 à domicile (voir teamsoccer-joueurs).
+- **Coupes officielles** (terrain neutre) : billetterie partagée 50/50. **Amicaux** : prix amicaux, partagés 50/50. Seuls les matchs dans son stade rapportent la recette hebdomadaire.
+- Le « fan club » est le nombre de managers qui suivent ou visitent le club : aucun lien avec l'affluence [F:2026-09-07].
+
+### `.claude/skills/teamsoccer-club/references/03-marche-des-transferts.md` — 15 lignes ajoutées, 13 sur le sujet
+## Marché des transferts
+### Vendre : deux systèmes depuis le 2026-10-18 [F:2026-10-18 Admin-Dev] [G:Valeur des joueurs]
+1. **Vente à la banque TeamSoccer** : immédiate, **au prix de la fiche**, sans commission. La banque remet ensuite le joueur aux enchères ; s'il ne trouve pas preneur, il disparaît du jeu.
+2. **Enchère du manager** (bouton « Mettre aux enchères ») : **72 heures**, prix de départ fixé par le vendeur **au plus égal à la valeur de la fiche**. Sans enchère, le joueur revient gratuitement. Vendu : l'acheteur paie l'enchère finale, le vendeur reçoit **90 %** (10 % de commission). Impossible d'annuler une fois une offre reçue ; ni le vendeur ni ses autres clubs ne peuvent enchérir.
+- Ventes illimitées pour tous [F:2026-09-11 Admin-Dev].
+- V-20261027-5 (hypothèse, deux cas) : prix de départ des enchères de manager parfois très bas : un jeune de 15 ans parti à **6 000 $** (PIPO68 : « 6 000 est le prix de départ, on ne sait pas jusqu'où monte l'enchère » [F:2026-10-19/20]) ; une joueuse valant 2 000 en enchère de manager le 2026-10-21 [F:CHARLY_GARCIA]. Une enchère maximale placée tôt peut emporter un joueur sous sa valeur ; à chercher dans `silver.ts_transfer_listings` (achat limité à 1 par semaine).
+### Acheter [G:Limites hebdomadaires de transferts] [F:2026-10-18 Admin-Dev]
+- Enchères sur la page Marché (« Your offers » regroupe les joueurs suivis). **+2 minutes de prolongation** si une offre arrive à la fin.
+- **Limite d'achat** : compte de 30 jours ou moins = illimité ; au-delà, **1 achat par semaine, les enchères en tête comptent**. Remise à zéro le lundi 00:00 (heure Atlantique/Canaries).
+- **Revente interdite pendant 7 semaines** après un achat. Effectif entre 16 et 24, enchères en cours comprises ; budget suffisant exigé (solde négatif = pas d'achat).
+- Joueurs libres : ajoutés par le site à intervalles réguliers depuis le 2026-07-18, au prix réel [F:2026-07-18, 2026-07-19 Admin-Dev].
+- En vente, les compétences du joueur sont visibles (on peut juger son OVR et sa valeur avant d'enchérir).
+- [P:Marché] Au 2026-10-19 : environ 55 annonces ; prix de départ de 50 645 $ (OVR 31, 16 ans) à 2 034 483 $ (OVR 85, 20 ans).
+
+### `.claude/skills/teamsoccer-club/references/04-equipes-secondaires-et-premium.md` — 9 lignes ajoutées, 8 sur le sujet
+## Équipes secondaires et Premium [G:Vente de clubs] [F:2026-05-31, 2026-10-19]
+- Un club de base (invendable) ; équipes secondaires achetables (pays ou ligues différents), chacune avec **sa propre économie**, revendables à la banque contre des TSCredits (1 TSC pour 20 000 $).
+- L'abonnement Premium annuel donne une équipe féminine (Women's TS League) et l'accès à la Superligue Utopia ; même date d'expiration que le Premium.
+- Premium : flèches de progression, vitrine de trophées, changement d'horaire des matchs, 5 compositions par défaut, tournois personnalisés.
+- Compte inactif 45 jours → le club devient BOT [F:2026-08-29 PIPO68].
+- V-20261019-2 : équipe supplémentaire achetée à part dans la boutique [FAQ Team Soccer, export du 2026-10-19] ; la section Premium liste les pays disponibles, avec « Renouveler +1 an » : abonnement annuel par pays [F:2026-06-29 Admin-Dev]. Tout renouvellement Premium garde la même date d'expiration sur l'équipe première et l'équipe féminine [FAQ]. Prix absents de nos sources. Annonces Premium : mode texte des compétences (101, 2026-09-14), générateur de défis amicaux avec amical contre un BOT (113, 2026-10-07).
+- V-20261027-7 (Club favori réel et Superligue Utopia-X3, annonce du 2026-10-25, saison 4) : page manager > « Real Favorite Club » ; catalogue de 556 clubs de 33 pays ; choix **définitif** une fois confirmé (nouveau choix seulement si le club est relégué, en fin de saison) ; inscription automatique à X3 des managers Premium annuels avec club favori ; prix en TSC selon 16/32/64/128 participants (barème non capté). Bug de sauvegarde corrigé le 2026-10-26 18:35 [F:2026-10-25 Admin-Dev ; 2026-10-26 PIPO68]. Aucune action tant que l'utilisateur n'est pas Premium annuel.
+- V-20261019-10 (marché) : plafond de 24 joueurs : à 24 aucune signature ; à 16 aucune vente. Refus d'achat fréquents : achat de la semaine utilisé, effectif qui atteindrait 25 avec les enchères actives, budget insuffisant. Une offre de dernière seconde prolonge l'enchère [FAQ]. ⚠️ L'annonce 99 (2026-09-10) parle de « acheter et vendre un joueur par semaine » ; la FAQ et Admin-Dev [F:2026-09-11] disent que les ventes sont illimitées : garder « ventes illimitées ».
+
+### `.claude/skills/teamsoccer-club/references/05-nos-donnees.md` — 2 lignes ajoutées, 2 sur le sujet
+## [Obs] Nos données
+- API : `team_finances` (lignes de la semaine et cumuls), `stadiums` (places par type), `transfer_listings` (prix, offres, échéance, type d'annonce), `players.value` et `players.wage`.
+
+### `.claude/skills/teamsoccer-communaute/SKILL.md` — 10 lignes ajoutées, 10 sur le sujet
+description: Team Soccer vu par le forum et les admins (936 messages lus le 2026-10-27) : changements de règles, contradictions, bugs, conseils. Chaque point daté et sourcé. Quand une règle semble avoir changé ou que le guide est muet.
+Ce fichier est un index : le contenu est dans `references/`. Lis seulement la section utile à la question ; chaque fichier reprend telle quelle une section de l'ancien SKILL.md (contenu inchangé).
+| Fichier | Section |
+|---|---|
+| `references/00-introduction.md` | Introduction et sources |
+| `references/01-chronologie-des-grandes-etapes.md` | Chronologie des grandes étapes |
+| `references/02-annonces-a-capter-v-20261019-12-253-281.md` | Annonces à capter (V-20261019-12 : 253, 281, 293, 294, 295, 296, 234, 288, 250 lues le 2026-10-19 ; numéros silver `news_id` 97–116 ≠ identifiants du forum, ne pas confondre) |
+| `references/03-contradictions-et-points-incertains.md` | Contradictions et points incertains |
+| `references/04-bugs-recurrents-a-surveiller.md` | Bugs récurrents à surveiller |
+| `references/05-conseils-pratiques-tires-du-forum.md` | Conseils pratiques tirés du forum |
+
+### `.claude/skills/teamsoccer-communaute/references/00-introduction.md` — 3 lignes ajoutées, 2 sur le sujet
+## Introduction et sources
+Source : forum global (anglais), capté le 2026-10-19 : 842 messages du sujet « Questions and Answers » (2026-05-01 → 2026-10-19), le sujet « Guide/Help » de l'admin (11 messages, guide provisoire de la BETA, édité depuis), et 7 annonces complètes. **Seuls les administrateurs font foi** : Admin-Dev (développeur, `user_id` 1) et Admin-PIPO68 (`user_id` 388). Les forums par pays ne sont pas lus par les admins [F:2026-10-09 PIPO68]. Le jeu est jeune (environ 180–200 managers actifs en août 2026, 13 Premium [F:2026-08-17 Paolo]) et change souvent, parfois sans annonce.
+
+### `.claude/skills/teamsoccer-communaute/references/01-chronologie-des-grandes-etapes.md` — 41 lignes ajoutées, 40 sur le sujet
+## Chronologie des grandes étapes
+| Date | Changement | Source |
+|---|---|---|
+| 2026-04-29 | Guide provisoire (BETA) | [F:Guide/Help] |
+| 2026-05-20 | Vitesse d'entraînement ×3 | [F:Admin-Dev] |
+| 2026-05-28 | Moteur v3 révisé en 9 points (aléa ±5 %, style ±25 %, bonus de poste, malus bots, compression du score) | [F:annonce 123] |
+| 2026-06-02 | Effets des formations (défense, finition, possession) ; modes Simple/Avancé ; académie améliorée | [F:Guide/Help] |
+| 2026-06-23 | Sous-rôles et nouvel OVR pondéré | annonce 152 (titre seul) |
+| 2026-06-27 | Attribut Forme ; entraînement physique amélioré | [F:Admin-Dev] |
+| **2026-07-07** | **Fin de la BETA : remise à zéro complète après une attaque externe** ; saison 1 | [F:PIPO68] |
+| 2026-07-12 | Fin des joueurs libres « à 500 000 » ; valeur réelle selon compétences, OVR et poste | [F:Admin-Dev] |
+| 2026-08-03 | Saison 2 (10 semaines, 2 matchs par semaine, entraînement ×2) | annonce 188 |
+| 2026-08-10 | Centre de Haute Performance | annonce 201 |
+| 2026-08-18 | Composition automatique en un clic | annonce 212 |
+| 2026-08-27 | Pénalité supplémentaire Gardien/Finition (bots) ; « Dribble » renommé « Conduite/Handling » | annonce 234, [F:Admin-Dev] |
+| 2026-09-07 | Malus des bots dans tous les matchs | [F:Admin-Dev] |
+| 2026-09-11 | Limite d'achat (1/semaine après 30 jours) ; ventes illimitées | annonce 250, [F:Admin-Dev] |
+| 2026-09-13 | Réduction du multiplicateur d'entraînement | annonce 253 (titre seul) |
+| 2026-09-17 | Blessures liées à la Forme | annonce 281 (titre seul) |
+| 2026-09-18 | Entraîneurs remis au niveau 1 (remboursés), nouveaux prix ; nouveaux prix des billets | sujets 282 et 284 (titres seuls), [F:PIPO68] |
+| 2026-09-22 | Notes par zone du terrain (barres de secteurs) | annonce 288 |
+| 2026-09-26 | Gros changements de l'entraînement physique et de l'académie ; changements tactiques en direct | annonces 293, 294, 295 (titres seuls) |
+| 2026-09-28 | Changement de saison (programme) | annonce 296 (titre seul) |
+| 2026-10-07 | Challenger d'amical automatique ; voir les matchs des autres équipes | annonces 302, 303 |
+| 2026-10-10 | HPC : un seul joueur par club, à vie | [F:annonce 307] |
+| 2026-10-13 | Bug d'entretien du stade corrigé, +500 000 $ à tous | [F:PIPO68] |
+| 2026-09-14 | Mode texte des compétences (Premium) | annonce 101 |
+| 2026-09-15 | Traduction complète des rapports de match (21 langues) | annonces |
+| 2026-09-20 | Nouvelle page d'aide (14 catégories, recherche) | annonces |
+| 2026-09-22 | Trophées de la Ligue de rue (or +50, argent +30, bronze +15 points de quartier) | annonces |
+| 2026-10-14 | Candidatures de sélectionneur (voir teamsoccer-saison) | annonce 309 |
+| 2026-10-16 | Mi-temps tactique dans tous les matchs officiels | [F:PIPO68] |
+| 2026-10-18 | Forme = plafond, fatigue toutes les 5 min ; académie : totaux par niveau, max 75 ; vente par enchère de manager | [F:annonces 314, 315, 317] |
+| 2026-10-08 | Bug de remise à zéro du HPC corrigé | V-20261027-8 |
+| 2026-10-14 | Secteurs et notes 0-10 recalculés (matchs passés compris) | [F:PIPO68] |
+| 2026-10-18 | Trois scénarios Coupe du monde (8 pays, report, parrainage) | [F:PIPO68] |
+| 2026-10-19 | Sondage Women's TS League (contenu non capté) | forum |
+| 2026-10-25 | Real Favorite Club et Utopia-X3 | [F:Admin-Dev] |
+| 2026-10-26 | Écran de fiche : gain nul d'Endurance/Vitesse masqué | [F:PIPO68] |
+| 2026-10-27 | Correction du tableau de mi-temps (formation sans remplacement) | [F:Admin-Dev] |
+
+### `.claude/skills/teamsoccer-communaute/references/02-annonces-a-capter-v-20261019-12-253-281.md` — 3 lignes ajoutées, 2 sur le sujet
+## Annonces à capter (V-20261019-12 : 253, 281, 293, 294, 295, 296, 234, 288, 250 lues le 2026-10-19 ; numéros silver `news_id` 97–116 ≠ identifiants du forum, ne pas confondre)
+Restent : 282 « Coach Reset and Price Changes », 284 « Important change in ticket prices », 253 « Reduction of the training multiplier », 281 « Injuries adjusted based on player form », 293 « Major changes to physical training », 294 « Major changes to youth academies », 295 « Live match tactical changes », 296 « New Season Reset (Schedule and Dates) », 234 « Extra penalty to Goalkeeping and… », 288 « Scoring by pitch zone », 250 « Transfer limits », 152 « Players (Field Position Role + New Ratings) », 188 « Season 2 Launch ». Les ouvrir une fois avec le script pour compléter les skills.
+
+### `.claude/skills/teamsoccer-communaute/references/03-contradictions-et-points-incertains.md` — 10 lignes ajoutées, 9 sur le sujet
+## Contradictions et points incertains
+- **Style d'équipe** : ±10 %/±5 % (guide actuel) contre ±25 %/±12,5 % (annonce moteur du 2026-05-28). Non tranché.
+- **Endurance en match** : « ce qui compte en match, c'est la Forme, pas l'Endurance » [F:2026-08-26 Admin-Dev] ; mais le moteur fait baisser le rendement toutes les 5 minutes selon l'Endurance [F:2026-10-18 Admin-Dev] et « faible Endurance = jusqu'à −15 % en fin de match » [F:2026-05-28]. Retenir la version du 2026-10-18.
+- **Forme au changement de saison** : conservée (2026-07-03, 2026-10-11) contre « elle repart » (2026-09-14). Vérifier au changement de saison.
+- **Âge des jeunes de l'académie au changement de saison** : ne vieillissent pas [F:2026-09-28 PIPO68] contre programme de changement de saison qui dit +1 an (question sans réponse le 2026-10-01).
+- **Valeur d'un joueur** : formule âge × somme des compétences du guide, mais nos données montrent une valeur indépendante de l'âge [Obs].
+- **Remise à zéro de l'académie** : 00:00 UTC (guide) contre 01:00 UTC (page Académie).
+- **Penalty** : conversion 72 % (2026-05-28) contre 85 % (2026-06-27).
+- **Simple = Avancé** selon le guide ; en pratique, les deux modes gardent des remplacements différents (2026-08-15/17).
+
+### `.claude/skills/teamsoccer-communaute/references/04-bugs-recurrents-a-surveiller.md` — 7 lignes ajoutées, 6 sur le sujet
+## Bugs récurrents à surveiller
+- Crons de changement de saison (2026-08-03, 2026-10-05 à 10-08) [V-20261027-8]. Restent à capter : sondage du 10-19, barème X3, page Communauté après l'annonce 116.
+- Facturation de l'entretien du stade le lundi (ancienne formule) : 2026-10-13 et 2026-10-19, remboursé à chaque fois.
+- Page restée sur une ancienne version après une mise à jour : l'admin conseille F5 (ex. entraîneur payé à l'ancien prix, 2026-09-18).
+- Composition modifiée moins de 2 h avant le match : non prise en compte.
+- Changement de saison : montées, âges et matchs mal générés le 2026-08-03, corrigés dans la semaine ; primes de coupe versées en retard (2026-10-07).
+
+### `.claude/skills/teamsoccer-communaute/references/05-conseils-pratiques-tires-du-forum.md` — 7 lignes ajoutées, 7 sur le sujet
+## Conseils pratiques tirés du forum
+- Ne pas monter la technique à 100 % d'intensité en continu : la Forme baisse de 10 par semaine et le physique s'effondre ; viser ~70 % et intercaler des semaines physiques [F:2026-05-09 Admin-Dev].
+- Gérer la Forme avant les gros matchs (intensité ≤ 60 % pour la remonter) ; un champion d'Espagne lui attribue son titre [F:2026-10-12 Mikizar].
+- Garder un banc complet dans la composition par défaut [F:2026-06-28 Admin-Dev].
+- Avec une Idole, il suffit qu'elle soit dans l'effectif pour l'affluence ×1,5.
+- Le hasard reste réel : un favori perd parfois contre un bot ou un club inactif ; ce n'est pas un bug [F:2026-09-10 PIPO68].
+- Ton des admins : réponses parfois sèches aux critiques ; poser des questions précises, en anglais, dans le forum global.
+
+### `.claude/skills/teamsoccer-entrainement/SKILL.md` — 12 lignes ajoutées, 12 sur le sujet
+description: Team Soccer, entraînement et relève : gymnase, mise à jour du vendredi, âge, intensité, entraîneurs, Forme, académie des jeunes, Centre de Haute Performance. Pour régler l'entraînement ou choisir les jeunes.
+Ce fichier est un index : le contenu est dans `references/`. Lis seulement la section utile à la question ; chaque fichier reprend telle quelle une section de l'ancien SKILL.md (contenu inchangé).
+| Fichier | Section |
+| `references/00-introduction.md` | Introduction et sources |
+| `references/01-fonctionnement-du-gymnase.md` | Fonctionnement du gymnase [G:Entraînements] [F:2026-04-29 Admin-Dev] |
+| `references/02-age.md` | Âge [G:Entraînements] |
+| `references/03-physique-endurance-et-vitesse.md` | Physique : Endurance et Vitesse |
+| `references/04-forme-et-intensite.md` | Forme et intensité [F:2026-06-27 Admin-Dev] |
+| `references/05-entraineurs.md` | Entraîneurs [G:Entraînements] [F:2026-09-18 PIPO68] |
+| `references/06-academie-des-jeunes.md` | Académie des jeunes [G:Premiers pas 1] [G:Académie des Jeunes] [F:2026-10-18 Admin-Dev] |
+| `references/07-centre-de-haute-performance-hpc.md` | Centre de Haute Performance (HPC) [P:Haute Performance] [F:2026-08-15, 2026-10-10] |
+| `references/08-nos-donnees.md` | [Obs] Nos données |
+
+### `.claude/skills/teamsoccer-entrainement/references/00-introduction.md` — 3 lignes ajoutées, 2 sur le sujet
+## Introduction et sources
+Sources : voir teamsoccer-joueurs (**[G]** guide officiel capté le 2026-10-19, **[F]** forum global, **[P]** page du jeu, **[Obs]** nos données). **Attention** : l'entraînement a été modifié au moins six fois (2026-05-07, 2026-05-20 ×3, 2026-06-27, 2026-09-13 réduction du multiplicateur, 2026-09-26 « gros changements » du physique, 2026-10-09). Les tableaux chiffrés du forum datent de la BETA : à recaler sur nos relevés hebdomadaires avant de s'y fier.
+
+### `.claude/skills/teamsoccer-entrainement/references/01-fonctionnement-du-gymnase.md` — 7 lignes ajoutées, 6 sur le sujet
+## Fonctionnement du gymnase [G:Entraînements] [F:2026-04-29 Admin-Dev]
+- Chaque joueur reçoit **une compétence à entraîner** (les 10 sont possibles) et **une intensité** (0 à 100 %). Tous les joueurs s'entraînent, qu'ils jouent ou non ; les matchs n'entraînent rien [F:2026-05-31, 2026-07-16 Admin-Dev].
+- **Mise à jour une fois par semaine, le vendredi** (vers 00:00–01:00 UTC selon les messages). Seul compte le réglage en place au moment de la mise à jour ; on peut le changer toute la semaine [F:2026-07-20 PIPO68]. Les flèches de progression de la fiche montrent la dernière séance, pas la suivante (Premium).
+- Le gain dépend de **l'âge, de l'intensité et du niveau d'entraîneur** ; la formule est déterministe, sans hasard [F:2026-06-19 Admin-Dev].
+- **Saison 2 et suivantes : entraînement ×2**, car les saisons durent 10 semaines au lieu de 17 [P:Entraînement] [F:2026-07-14]. Ralenti ensuite (« Reduction of the training multiplier », 2026-09-13 ; « oui, ça a ralenti il y a quelques semaines » [F:2026-10-15 PIPO68]). V-20261019-4 : le multiplicateur saisonnier est passé de ×2 à ×1,5 le 2026-09-13 ; multiplicateur effectif depuis la saison 2 : ×4,5 (×3 de base × ×1,5) ; avec talent Performance/Magique : ×9 (avant ×12). La courbe passive de Forme et de Rythme est inchangée [annonce 100].
+- Ordre de grandeur : environ +1 point (jusqu'à 1,5) par séance dans la compétence entraînée à 100 % (BETA) [F:2026-05-08 Admin-Dev] ; un joueur à 70 % gagnait +2 en une séance en juin [F:2026-06-19].
+
+### `.claude/skills/teamsoccer-entrainement/references/02-age.md` — 12 lignes ajoutées, 11 sur le sujet
+## Âge [G:Entraînements]
+| Âge | Effet hebdomadaire |
+|---|---|
+| 16–17 ans | Totalité des points |
+| 18–19 ans | Bonne dose |
+| Jusqu'à 27 ans | Un peu moins |
+| 28 ans | Aucun point, ou perte |
+| 29 ans | Aucun point, ou perte importante |
+| 30 ans | Grosse perte |
+| 31 ans et + | Perte « exagérée » |
+Barème de référence BETA (base 3 points sur 100) [F:2026-04-29 Admin-Dev] : âge 17–18 +40 %, 19–20 +35 %, 21–22 +25 %, 23–24 +20 %, 25–26 +15 %, 27–28 0, 29–30 −35 %, 31–32 −60 %, 33–34 −85 %, 35+ −150 % ; intensité 100 % +40, 90 % +35, 80 % +25, 70 % +20, 60 % +17, 50 % +12, 40 % +10, 30 % +8, 20 % +5, 10 % +3, 0 % 0 ; entraîneur niveau 5 +40, 4 +33, 3 +22, 2 +15, 1 +8.
+
+### `.claude/skills/teamsoccer-entrainement/references/03-physique-endurance-et-vitesse.md` — 6 lignes ajoutées, 5 sur le sujet
+## Physique : Endurance et Vitesse
+- Règle d'origine : entraîner une compétence technique **au-dessus de 60–70 %** fait perdre de l'Endurance et de la Vitesse ; entraîner l'une des deux au-dessus de 70 % fait baisser l'autre [F:2026-05-07, 2026-05-15 Admin-Dev]. Conseil de l'admin : rester vers 70 % sur la technique, et intercaler une ou deux semaines physiques à 100 % [F:2026-05-09 Admin-Dev] ; intensité > 70 % surtout pour les moins de 20 ans [F:2026-05-07].
+- Juin 2026 : un « rebond physique » lié à l'âge remplace la perte passive quand on entraîne la technique, l'Endurance ou la Vitesse : ≤ 18 ans 60 % du gain, 19–20 55 %, 21–22 50 %, 23–24 45 %, 25–26 40 %, 27–28 35 %, 29–30 25 %, 31–32 15 %, 33–34 10 %, ≥ 35 5 % [F:2026-04-29 Admin-Dev, texte édité].
+- **Depuis fin septembre 2026 : le physique ne monte plus tout seul, il faut l'entraîner comme les autres compétences** [F:2026-10-09 PIPO68] (annonce « Major changes to physical training » du 2026-09-26, contenu non capté).
+- **Physique critique (V-20261019-3)** : verrou à ≤ 30. Endurance ≤ 30 → seuls Endurance ou Aucun ; Vitesse ≤ 30 → seuls Vitesse ou Aucun ; les deux ≤ 30 → Endurance, Vitesse ou Aucun. Déverrouillage au-dessus de 30. Si la Forme ≤ 30, l'intensité est plafonnée à 50 % (+6 de Forme à 50 %, +10 à 40 % ou moins). Le serveur applique ces règles le vendredi. Plus aucun gain passif d'Endurance ou de Vitesse en entraînant une compétence technique [annonce 108, 2026-09-26] [P:Entraînement].
+
+### `.claude/skills/teamsoccer-entrainement/references/04-forme-et-intensite.md` — 8 lignes ajoutées, 7 sur le sujet
+## Forme et intensité [F:2026-06-27 Admin-Dev]
+Variation de la Forme à chaque mise à jour du vendredi :
+| Intensité | 100 % | 90 % | 80 % | 70 % | 60 % | 50 % | ≤ 40 % |
+|---|---|---|---|---|---|---|---|
+| Forme | −10 | −6 | −4 | −2 | 0 | +6 | +10 |
+- Joueurs de 30 ans et + : −2 de plus à 100/90/80 %. Forme entre 30 et 100. Les matchs ne changent pas la Forme.
+- C'est **l'arbitrage central du jeu** : intensité haute = progrès rapides mais Forme qui baisse (×0,88 à Forme 60) ; un manager champion d'Espagne attribue son titre à la gestion de la Forme [F:2026-10-12 Mikizar]. Faire tourner l'effectif et baisser l'intensité des joueurs fatigués avant les matchs importants [F:2026-08-25 Admin-Dev, manuel d'entraînement].
+
+### `.claude/skills/teamsoccer-entrainement/references/05-entraineurs.md` — 6 lignes ajoutées, 5 sur le sujet
+## Entraîneurs [G:Entraînements] [F:2026-09-18 PIPO68]
+- 5 niveaux : 1 Faible, 2 Moyen, 3 Bon, 4 Excellent, 5 Formidable.
+- **Prix depuis le 2026-09-18 : 1 000 000 / 4 000 000 / 10 000 000 / 25 000 000 $** pour monter aux niveaux 2 à 5 ; **un niveau à la fois**, on paie la différence entre niveaux. Descendre rembourse la différence.
+- Le 2026-09-18, tous les entraîneurs ont été remis au niveau 1, avec remboursement [F:2026-10-10 PIPO68]. Pas de remise à zéro annoncée à chaque saison.
+- [P:Entraînement] Nos entraîneurs : niveau 1 (Faible) au 2026-10-19 (au moins pour Ben Ahmed Donkey).
+
+### `.claude/skills/teamsoccer-entrainement/references/06-academie-des-jeunes.md` — 11 lignes ajoutées, 10 sur le sujet
+## Académie des jeunes [G:Premiers pas 1] [G:Académie des Jeunes] [F:2026-10-18 Admin-Dev]
+- Créée avec **16 jeunes de 16 à 18 ans** ; toujours 16 (chaque départ est remplacé).
+- 10 compétences cachées. **3 révélations par jour, au plus 1 par jeune** (donc 3 jeunes différents). Remise à zéro **01:00 UTC** [P:Académie] (le guide dit 00:00 UTC). Un jeune complet prend 10 jours.
+- Une fois les 10 révélées : **monter en équipe première** (si l'effectif reste ≤ 24), vendre, ou libérer.
+- **Niveaux** : 6, atteints à 0, 10, 20, 35, 50 et 70 jeunes complétés. Total de compétences à la création : 250 (225–275), puis 300, 350, 400, 450, 500 (±25) ; **aucune compétence au-dessus de 75** à la création [F:2026-10-18 Admin-Dev], confirmé par PIPO68 le 2026-10-19. ⚠️ Contradiction (V-20261019-5) : l'annonce 109 (2026-09-26) donnait des totaux de 350 / 400 / 450 / 500 / 550 / 600 (±25) pour les niveaux 1 à 6, avec 1 ou 2 compétences « étoile » à 75, 80 ou 90 (plafond 100), âge 16–18, minimum 10 par compétence, nouveaux jeunes seulement. Garder la version du forum (plus récente) sans effacer l'annonce ; ne pas juger un jeune avec les anciens totaux. Noms des niveaux de l'annonce : Débutant (0 complété), Novice (10), Intermédiaire (20), Université (35), Avancé (50), Expérimenté (70).
+- Noms des niveaux vus : Débutant (1), Noble (2), Intermédiaire (3), Université (4, « encore 2 niveaux » après) [F:2026-08-22, 2026-10-19 PIPO68].
+- L'âge du jeune ne dit rien de son niveau [F:2026-09-18]. Talents : 7 %, Magique 3 % (voir teamsoccer-joueurs), visibles seulement après la montée.
+- Stratégie de révélation : commencer par les 4 compétences de poste (Gardien, Défense, Conduite, Finition) pour repérer vite un jeune intéressant (déduction, pas une règle du jeu).
+- V-20261027-9 ⚠️ EN DOUTE (2026-10-19 PIPO68) : à « on ne progressera plus qu'au HPC ? » il répond « correct » puis, dans le même message, « il vous reste 2 niveaux d'académie » ; garder « Université = niveau 4, encore 2 niveaux » et ne rien déduire sur le niveau 6. Bots : le nouveau manager reprend le meilleur club bot de D1 (45 jours d'inactivité) [F:2026-08-29 PIPO68] ; une montée/descente mal appliquée signalée le 2026-10-05 sans réponse de l'admin : un cas, hypothèse.
+- [P:Académie] Chomelix Cows : niveau Intermédiaire, effectif 23/24 au 2026-10-19 (une seule place pour monter un jeune).
+
+### `.claude/skills/teamsoccer-entrainement/references/07-centre-de-haute-performance-hpc.md` — 8 lignes ajoutées, 7 sur le sujet
+## Centre de Haute Performance (HPC) [P:Haute Performance] [F:2026-08-15, 2026-10-10]
+- Un jeune spécial par saison, payé en **TSCredits** (monnaie Premium). Chaque semaine (fenêtre du lundi 00:00), un paiement de 0, 10, 25 ou 50 TSC et le choix de **3 compétences** ; plus on paie, plus ses compétences montent (base > 60, jusqu'à 70/80/90/100) et plus il a de chances d'avoir un talent. Un seul paiement par semaine, non modifiable.
+- **Il faut atteindre 50 TSC investis dans la saison**, sinon les TSC sont rendus et tout recommence. Âge du jeune aléatoire.
+- **Depuis la saison 3, un club qui a déjà obtenu son joueur HPC ne peut plus en avoir un second** [F:2026-10-10 Admin-Dev].
+- [P:Haute Performance] Au 2026-10-19 : 45 TSC disponibles, 0 investi cette saison, 6 semaines restantes, aucun paiement. **Décision Premium à laisser à l'utilisateur.**
+- V-20261019-1 : les TSCredits ne servent pas qu'au HPC : personnalisation (TS-PoPs payés en TSC) [F:2026-07-11 PIPO68], fonctions sociales [FAQ Team Soccer, export du 2026-10-19], revente d'équipe secondaire à la banque (voir teamsoccer-club). Tous les clubs ont reçu 50 TSC gratuits à l'inscription ; depuis la saison 3 un club qui a obtenu son joueur HPC n'en reçoit pas de second, et la page HPC n'est visible que pour ceux qui n'en ont pas [annonce 114, 2026-10-10]. Le HPC est la seule voie vers un jeune au-dessus de 75 [F:2026-10-19 PIPO68]. Limite par club ou par compte : non précisé (hypothèse : par club).
+- V-20261027-2 (HPC, saison 3, octobre 2026) : le HPC se redemande chaque saison tant qu'on n'a pas obtenu son joueur ; il faut d'abord **promouvoir** le jeune de la saison précédente avant de demander le suivant, on saisit d'abord le **nom**, les paiements démarrent le lundi du début de saison (12 octobre) [F:2026-10-09 PIPO68] ; sous 50 TSC investis dans la saison, les TSC sont rendus [F:2026-10-10 PIPO68] ; bug de remise à zéro corrigé le 2026-10-08 ; « bouton Promouvoir absent » (10-09) sans correction annoncée. ⚠️ « à vie » [F:2026-10-10 Admin-Dev] ne vaut que pour un club qui a **obtenu** son joueur. **Notre cas** : 45 TSC par club au 2026-10-19 (`gold.ts_hpc_status`), seuil de 50 inaccessible sans achat de TSC : ne pas conseiller de payer une semaine de HPC ; l'achat de TSC reste la décision de l'utilisateur.
+
+### `.claude/skills/teamsoccer-entrainement/references/08-nos-donnees.md` — 2 lignes ajoutées, 2 sur le sujet
+## [Obs] Nos données
+- API : `player_training_assignments` (`training_type`, `training_intensity`, `skill_progress`, `stamina_progress`, `pace_progress`, `last_change`), `youth_academy_players` (`revealed_skills`), `high_performance_scouts`.
+
+### `.claude/skills/teamsoccer-joueurs/SKILL.md` — 19 lignes ajoutées, 18 sur le sujet
+description: Team Soccer, joueurs : 10 compétences, sous-rôles, OVR pondéré, Forme, endurance, talents, blessures, cartons, âge, valeur, effectif 16–24. Pour évaluer un joueur, son poste, la forme ou les suspensions.
+Ce fichier est un index : le contenu est dans `references/`. Lis seulement la section utile à la question ; chaque fichier reprend telle quelle une section de l'ancien SKILL.md (contenu inchangé).
+| Fichier | Section |
+|---|---|
+| `references/00-introduction.md` | Introduction et sources |
+| `references/01-les-10-competences.md` | Les 10 compétences [G:Commencer à jouer] [F:2026-08-25 Admin-Dev] |
+| `references/02-poste-naturel-sous-roles.md` | Poste naturel : sous-rôles [G:Effectif — Notes et positions] |
+| `references/03-competences-cles-par-poste.md` | Compétences clés par poste [G:Commencer à jouer 2.1] |
+| `references/04-ovr.md` | OVR [G:Effectif — Notes et positions] |
+| `references/05-notes-de-match.md` | Notes de match [G:Effectif — 3] [F:2026-10-14 PIPO68] |
+| `references/06-forme-0100-la-cle-du-rendement.md` | Forme (0–100) — la clé du rendement |
+| `references/07-talents-speciaux.md` | Talents spéciaux [G:Académie des Jeunes] [F:2026-04-29 Admin-Dev] |
+| `references/08-blessures.md` | Blessures [G:Blessures] [F:2026-08-13 PIPO68] |
+| `references/09-cartons-et-suspensions.md` | Cartons et suspensions [F:2026-08-13 PIPO68] |
+| `references/10-age-et-vieillissement.md` | Âge et vieillissement |
+| `references/11-valeur-et-salaire.md` | Valeur et salaire |
+| `references/12-effectif.md` | Effectif [G:Finances] [F:2026-04-29 Admin-Dev] |
+| `references/13-nos-donnees.md` | [Obs] Nos données |
+
+### `.claude/skills/teamsoccer-joueurs/references/00-introduction.md` — 3 lignes ajoutées, 2 sur le sujet
+## Introduction et sources
+Sources : **[G:Rubrique]** = guide officiel (page Aide, version française, captée le 2026-10-19 ; nouvelle page Aide annoncée le 2026-09-20). **[F:date auteur]** = forum global anglais ; seuls les messages des administrateurs (Admin-Dev = développeur, Admin-PIPO68) valent règle, et le forum dit lui-même que seuls le forum global et les annonces sont fiables [F:2026-10-11 PIPO68]. **[P:Page]** = texte d'une page du jeu capté le 2026-10-19. **[Obs]** = nos données. Tout ce qui date d'avant le 2026-07-07 vient de la BETA (remise à zéro complète ce jour-là) : à manier avec prudence. Voir aussi teamsoccer-communaute.
+
+### `.claude/skills/teamsoccer-joueurs/references/01-les-10-competences.md` — 17 lignes ajoutées, 16 sur le sujet
+## Les 10 compétences [G:Commencer à jouer] [F:2026-08-25 Admin-Dev]
+| Nom dans le jeu (FR) | API | Rôle dans le moteur [G:Moteur de match] |
+|---|---|---|
+| Gardien de but | `goalkeeper` | Duel de tir face à la Finition |
+| Défense | `defense` | Duel contre la Conduite de l'adversaire |
+| Contrôle (du ballon) | `ball_control` | Réception d'une passe, duels au pied |
+| Passe | `passing` | Facilité de contrôle pour le receveur |
+| Centres | `crosses` | Centres devant le but |
+| Conduite (ex-« Dribble », renommée le 2026-08-27, même effet) | `dribbling` | Duel contre la Défense, avancer avec le ballon |
+| Coup de tête | `heading` | Duels aériens |
+| Définition / Finition | `finishing` | Tir face au Gardien |
+| Endurance | `stamina` | Physique : baisse de rendement au fil du match |
+| Vitesse | `pace` | Physique : arriver le premier sur un ballon, peut renverser un duel |
+- Compétences de 0 à 100 avec décimales ; on peut toutes les monter à 100 [F:2026-05-03 Admin-Dev]. L'OVR n'utilise que la **partie entière** : les décimales (+0,X / −0,X) ne comptent qu'au passage à l'entier suivant [P:Entraînement].
+- Physique (Endurance, Vitesse) requis à tous les postes de champ [G:Commencer à jouer] ; « les compétences physiques sont l'attribut le plus important » [F:2026-05-01 Admin-Dev].
+- Pas de système d'expérience : un jeune de 16 ans a la même probabilité de carton qu'un joueur de 24 ans [F:2026-10-14 PIPO68].
+
+### `.claude/skills/teamsoccer-joueurs/references/02-poste-naturel-sous-roles.md` — 7 lignes ajoutées, 6 sur le sujet
+## Poste naturel : sous-rôles [G:Effectif — Notes et positions]
+- Pas de poste fixe : le manager place qui il veut [F:2026-05-17 Admin-Dev].
+- Seules **4 compétences définissent le poste** : Gardien, Défense, Conduite, Finition. La plus haute donne la zone (GB / défenseur / milieu / attaquant) ; la **2e plus haute** des compétences pertinentes donne le sous-rôle. Tête, Passe, Centres et Contrôle ne sont jamais principales, même plus hautes.
+- 10 sous-rôles : **GB** gardien · **DC** défenseur central · **LAT** latéral · **WB** piston · **MD** milieu défensif · **MC** milieu central · **ML** milieu latéral · **MO** milieu offensif · **AC** avant-centre (spécialiste de la tête) · **DR** attaquant dribbleur. Dans l'API, `position` ne donne que GK / DEF / MID / FWD [Obs].
+- Exemple donné par l'admin : Défense 1re puis Contrôle 2e = latéral [F:2026-06-24 Admin-Dev].
+- Outil de placement conseillé par le jeu : feuille « Best Player Position Tool » (BPP/Tool) [G:Commencer à jouer] [F:2026-04-29 Admin-Dev].
+
+### `.claude/skills/teamsoccer-joueurs/references/03-competences-cles-par-poste.md` — 16 lignes ajoutées, 15 sur le sujet
+## Compétences clés par poste [G:Commencer à jouer 2.1]
+Par ordre de priorité, secondaires entre parenthèses.
+| Poste | Compétences | Mission |
+|---|---|---|
+| Gardien | Gardien, Contrôle, (Passe) | Arrêter les tirs |
+| Défenseur central | Défense, Contrôle, (Tête, Passe, Conduite) | Arrêter les attaquants, dégager |
+| Arrière latéral | Défense, Contrôle, (Passe, Conduite) | Fermer les flancs |
+| Latéral offensif (piston) | Défense, Contrôle, (Centres, Conduite) | Défendre le flanc et centrer |
+| Milieu défensif | Conduite, (Contrôle, Défense, Passe) | Aider la défense, distribuer |
+| Milieu | Conduite, (Contrôle, Passe, Défense) | Défense et attaque |
+| Ailier | Conduite, (Contrôle, Centres, Passe) | Centrer et passer depuis l'aile |
+| Milieu offensif | Conduite, (Contrôle, Passe, Finition) | Passes décisives et tirs |
+| Avant-centre (Tête) | Finition, Contrôle, (Tête) | Marquer de la tête sur centre |
+| Avant-centre (Conduite) | Finition, Contrôle, (Conduite) | Dribbler et tirer |
+- La version du forum (2026-04-29, BETA) ajoute Vitesse et parfois Endurance en secondaire : gardien (Endurance), défenseurs et milieux (Vitesse), ailier et milieu (Endurance).
+
+### `.claude/skills/teamsoccer-joueurs/references/04-ovr.md` — 6 lignes ajoutées, 5 sur le sujet
+## OVR [G:Effectif — Notes et positions]
+**OVR = (1 × Principale + 0,5 × Étoile + 0,2 × Secondaire 1 + 0,2 × Secondaire 2) / 1,9**, selon le sous-rôle **naturel** ; les 6 autres compétences n'y entrent pas.
+- Exemple : MC avec Conduite 100, Passe 92, Défense 81, Contrôle 71,4 → (100 + 46 + 14,28 + 16,2) / 1,9 = 92,9 → **93**.
+- Le guide ne détaille pas quelles compétences sont « Étoile » et « Secondaires » pour chaque sous-rôle ; l'admin renvoie au guide sans répondre [F:2026-09-23 PIPO68]. À déduire de nos données (régression sur `rating`) avant de s'en servir.
+- L'OVR est affiché seulement : il ne change pas les capacités du joueur [F:2026-05-08 Admin-Dev]. Le classement d'équipe (`team_rating`) n'est pas une moyenne simple des 18 [F:2026-06-25 Admin-Dev].
+
+### `.claude/skills/teamsoccer-joueurs/references/05-notes-de-match.md` — 5 lignes ajoutées, 4 sur le sujet
+## Notes de match [G:Effectif — 3] [F:2026-10-14 PIPO68]
+- Note de 0,5 à 10 (pas de 0,5) à la fin du match, calculée dans le **sous-rôle naturel** : jouer hors poste baisse la note. Depuis octobre 2026, échelle décimale 0–10 (avant : 0–5 étoiles), matchs passés recalculés.
+- Échelle : 8,5–10 Élite · 7–8 Professionnel · 5,5–6,5 Compétitif · 0,5–5 Amateur.
+- La note tient compte du poste joué, du soutien des coéquipiers proches (note de zone) et des événements du match.
+
+### `.claude/skills/teamsoccer-joueurs/references/06-forme-0100-la-cle-du-rendement.md` — 10 lignes ajoutées, 9 sur le sujet
+## Forme (0–100) — la clé du rendement
+**Effet en match** [F:2026-06-27 Admin-Dev] : chaque action est multipliée par **0,70 + 0,30 × Forme / 100** (duels, tirs, passes, tacles ; pas le gardien sur penalty). Forme 100 → ×1,00 · 80 → ×0,94 · 60 → ×0,88 · 40 → ×0,82 · 30 → ×0,79. Effet dès la 1re minute : un joueur à 100 avec Forme 50 joue comme 85 [F:2026-08-28 Admin-Dev].
+**Plafond et fatigue en match** (moteur v3, 2026-10-18) [F:2026-10-18 Admin-Dev] :
+- La Forme d'avant-match fixe un plafond (Forme 60 → 88 %). Le joueur entre à 100 % de ce plafond, titulaire ou remplaçant.
+- Toutes les 5 minutes jouées, son pourcentage baisse selon son **Endurance**. Sur 90 minutes : environ −9 points avec Forme 100, −16 avec Forme 60. Un remplaçant frais entre avec tout son plafond.
+- Indicateur de force en direct à côté de chaque joueur dans le rapport v3.
+**Évolution de la Forme** : seulement à l'entraînement hebdomadaire, jamais en match (officiel ou amical) [F:2026-06-30 Admin-Dev]. Table par intensité dans teamsoccer-entrainement. Minimum 30, maximum 100 ; un nouveau joueur commence à 85.
+- **Fin de saison** : réponses contradictoires (« reste telle quelle » 2026-07-03 Admin-Dev ; « elle repart » 2026-09-14 PIPO68 ; « non, pas de remise à zéro » 2026-10-11 PIPO68). Dernière réponse : **pas de remise à zéro**. À vérifier au changement de saison avec nos exports.
+- [Obs] Dans l'API `players`, `fitness` (0–100 : 98, 84, 46…) correspond vraisemblablement à la Forme, et `form` est un libellé (« Good », « 5 »). À confirmer avec la page Effectif.
+
+### `.claude/skills/teamsoccer-joueurs/references/07-talents-speciaux.md` — 11 lignes ajoutées, 10 sur le sujet
+## Talents spéciaux [G:Académie des Jeunes] [F:2026-04-29 Admin-Dev]
+7 % des jeunes de l'académie ont un talent ; Magique 3 %. Visible seulement à la montée en équipe première [F:2026-09-22 PIPO68].
+| Talent | Effet | Valeur | Météo qui le pénalise (−20 % sur toutes ses compétences) |
+|---|---|---|---|
+| 🏋️ Performance | Entraînement ×2 | ×3 | Ensoleillé ☀️ (garde le bonus d'entraînement) |
+| ⚽ Buteur | Finition ×1,3 en match | ×3 | Vent 💨 (perd aussi le ×1,3) |
+| 🛡️ Bouclier | Défense ×1,3 en match | ×3 | Pluie 🌧️ (perd aussi le ×1,3) |
+| 👸 Idole | Affluence ×1,5 à domicile — il suffit qu'il soit dans l'effectif, même sans jouer [F:2026-05-18, 2026-07-06 Admin-Dev] | ×3 | Neige ❄️ (garde le bonus d'affluence) |
+| 🪄 Magique | Les 4 talents | ×5 | Aucune |
+- **Tous les talents disparaissent à 32 ans.** Avec un talent, regarder la météo du match avant de l'aligner.
+
+### `.claude/skills/teamsoccer-joueurs/references/08-blessures.md` — 5 lignes ajoutées, 4 sur le sujet
+## Blessures [G:Blessures] [F:2026-08-13 PIPO68]
+- En match, durée de 1 à 7 jours ; badge avec jours restants dans l'Effectif et la fiche. Décompte automatique une fois par jour (vers 03:00). Un blessé ne peut pas être aligné.
+- Pas de blessure en amical [F:2026-09-07 Admin-Dev]. Depuis le 2026-09-17, les blessures dépendent de la Forme du joueur (annonce 103). V-20261019-6 : elles n'arrivent que sur un tacle dur ou un duel physique ; le joueur plaqué risque une blessure, de 1 à 7 jours, une seule par match. Avant le 2026-09-17 la chance était de 1 % fixe ; changement proposé : Forme 100 = 0 % ; 85 = 0,20 % ; 70 = 0,40 % ; 50 = 0,58 % ; 40 = 0,76 % ; ≤ 30 = 1,00 %, linéaire entre ces points. Hypothèse : le texte est écrit « proposed change », application non confirmée par un message séparé (la FAQ dit que la condition physique joue).
+- Remplacement d'un blessé : automatique poste pour poste si le banc est configuré (voir teamsoccer-match).
+
+### `.claude/skills/teamsoccer-joueurs/references/09-cartons-et-suspensions.md` — 4 lignes ajoutées, 3 sur le sujet
+## Cartons et suspensions [F:2026-08-13 PIPO68]
+- Rouge direct ou 2 jaunes = expulsion. Rouge = suspendu ; **3 jaunes cumulés = suspendu**. Suspension levée après le match de ligue suivant (compteur de jaunes remis à 0).
+- Au 2026-08-13, seuls les cartons (et blessures) des matchs de **ligue** étaient enregistrés ; correction proposée pour tous les matchs officiels, application non confirmée. Cartons en sélection nationale sans effet en club [F:2026-09-14 PIPO68]. Pas de carton reporté depuis un amical.
+
+### `.claude/skills/teamsoccer-joueurs/references/10-age-et-vieillissement.md` — 4 lignes ajoutées, 3 sur le sujet
+## Âge et vieillissement
+- +1 an par saison pour l'équipe première [F:2026-05-08 Admin-Dev]. Les jeunes encore à l'académie ne vieillissent pas [F:2026-09-28 PIPO68] (contredit par le programme de changement de saison, question restée sans réponse le 2026-10-01).
+- Progression et déclin par âge : voir teamsoccer-entrainement (gain réduit dès 23 ans, perte à partir de 29–30 ans).
+
+### `.claude/skills/teamsoccer-joueurs/references/11-valeur-et-salaire.md` — 5 lignes ajoutées, 4 sur le sujet
+## Valeur et salaire
+- **Valeur de la fiche** = prix payé par la banque TeamSoccer et prix de départ maximal d'une enchère. Changement de valeur au plus tous les 7 jours [G:Valeur des joueurs].
+- Formule du guide : valeur de base = somme des compétences × 100, puis × âge (18 ans ×10, 19 ×8, 20 ×6, 21 ×5, 22 ×4, 23 ×3, 24 ×2, 25 ×1, 26 ×0,8, 27 ×0,6, 28 ×0,5, 29 ×0,3, 30+ ×0,1). **Ne correspond pas à nos données** [Obs : un 21 ans et un 26 ans de même niveau valent tous deux 1 158 502 $]. Depuis le 2026-07-12, la valeur est « fondée sur les compétences, l'OVR et le poste » [F:2026-07-12 Admin-Dev]. Talent : valeur ×3, Magique ×5.
+- **Salaire hebdomadaire ≈ 1 % de la valeur** [Obs : 16 000 $ pour 1 600 026 $, 9 035 $ pour 903 450 $]. Le guide ne parle pas des salaires ; ils sont la ligne « Wages » des Finances.
+
+### `.claude/skills/teamsoccer-joueurs/references/12-effectif.md` — 4 lignes ajoutées, 3 sur le sujet
+## Effectif [G:Finances] [F:2026-04-29 Admin-Dev]
+- **16 minimum, 24 maximum**, enchères en cours comprises [F:2026-10-18 Admin-Dev]. À 24, impossible d'enchérir ou de monter un jeune. Le guide dit qu'on ne peut dépenser que « avec plus de 16 joueurs ».
+- Temple de la renommée : le joueur continue à jouer ; ses compétences y sont figées au moment de l'entrée, donc à faire en fin de carrière [F:2026-06-21 PIPO68].
+
+### `.claude/skills/teamsoccer-joueurs/references/13-nos-donnees.md` — 2 lignes ajoutées, 2 sur le sujet
+## [Obs] Nos données
+- API (`/rest/v1/players`) : compétences, `rating` (OVR), `position`, `form`, `fitness`, `talent`, `value`, `wage`, `injury_days_remaining`, `is_suspended`, `season_yellow_cards`, statistiques officielles.
+
+### `.claude/skills/teamsoccer-match/SKILL.md` — 14 lignes ajoutées, 14 sur le sujet
+description: Team Soccer, composition et match : 6 formations, modes Simple et Avancé, style, duels du moteur v3, banc, remplacements programmés, bots. Pour construire une composition ou expliquer un résultat.
+Ce fichier est un index : le contenu est dans `references/`. Lis seulement la section utile à la question ; chaque fichier reprend telle quelle une section de l'ancien SKILL.md (contenu inchangé).
+| Fichier | Section |
+| `references/00-introduction.md` | Introduction et sources |
+| `references/01-preparer-un-match.md` | Préparer un match [G:Composition : mode Simple et mode Avancé] |
+| `references/02-formations.md` | Formations [G:Commencer à jouer 3.1] |
+| `references/03-mode-simple-et-presets.md` | Mode Simple et presets [G:Composition] [F:2026-06-06 Admin-Dev] |
+| `references/04-mode-avance.md` | Mode Avancé [G:Composition] [G:Commencer à jouer 3.1] |
+| `references/05-moteur-de-match-v3.md` | Moteur de match v3 [G:Moteur de match] [F:2026-05-28 Admin-Dev] |
+| `references/06-bots-et-managers-recents.md` | Bots et managers récents |
+| `references/07-banc-et-remplacements.md` | Banc et remplacements [G:Composition 5] [F:2026-06-27 Admin-Dev] |
+| `references/08-barres-de-secteurs.md` | Barres de secteurs [G:Équilibre des secteurs] |
+| `references/09-constance-du-manager-mc-et-moral.md` | Constance du manager (MC) et moral [G:MC] [F:2026-09-08 PIPO68] |
+| `references/10-nos-donnees.md` | [Obs] Nos données |
+
+### `.claude/skills/teamsoccer-match/references/00-introduction.md` — 3 lignes ajoutées, 2 sur le sujet
+## Introduction et sources
+Sources : voir teamsoccer-joueurs (**[G]** guide officiel capté le 2026-10-19, **[F]** forum global, **[P]** page du jeu, **[Obs]** nos données). Le moteur v3 a changé plusieurs fois (2026-05-28, 2026-06-02, 2026-08-27, 2026-09-22, 2026-10-18) : en cas de doute, la date la plus récente l'emporte.
+
+### `.claude/skills/teamsoccer-match/references/01-preparer-un-match.md` — 7 lignes ajoutées, 6 sur le sujet
+## Préparer un match [G:Composition : mode Simple et mode Avancé]
+- Matchs → le match → Configurer. **Enregistrer** sinon rien n'est appliqué ; on peut nommer une composition et la cocher « par défaut » pour les matchs suivants (3 emplacements, 5 en Premium) [G:Commencer à jouer 3.1].
+- **Le match est pré-calculé environ 2 heures avant le coup d'envoi** : une composition ou des remplacements enregistrés après ne comptent pas, la version précédente s'applique [F:2026-06-28 Admin-Dev] [F:2026-08-15 PIPO68]. Depuis fin juin, une composition modifiée avant le coup d'envoi déclenche un nouveau calcul (cron toutes les 5 min) [F:2026-06-28 Admin-Dev] ; règle prudente : **tout enregistrer au moins 2 h avant**. ⚠️ La FAQ dit qu'on peut changer la composition « jusqu'au coup d'envoi » [FAQ Team Soccer, export du 2026-10-19] : contradiction, garder 2 h (V-20261019-8). Sans composition enregistrée, le système remplit les 11 postes avec les joueurs disponibles : moins bon qu'une composition à soi, mais jamais de forfait [FAQ].
+- Sans composition enregistrée, la composition par défaut est utilisée [F:2026-07-18 Paolo, tournois].
+- « Composition automatique » place les 11 meilleurs et remplit le banc [G].
+- Garder un **banc configuré en permanence dans la composition par défaut** (recommandation de l'admin) [F:2026-06-28 Admin-Dev].
+
+### `.claude/skills/teamsoccer-match/references/02-formations.md` — 14 lignes ajoutées, 10 sur le sujet
+## Formations [G:Commencer à jouer 3.1]
+1-4-4-2 · 1-3-5-2 · 1-3-4-3 · 1-4-3-3 · 1-4-5-1 · 1-5-4-1 (1er chiffre = gardien). Changer de formation replace automatiquement les joueurs par ligne.
+### Effets des formations sur le match [F:2026-06-02 Admin-Dev]
+| Ligne | 3 joueurs | 4 joueurs | 5 joueurs |
+|---|---|---|---|
+| Défense | Défense −10 % | 0 | Défense +10 % |
+| Attaque | 1 joueur | 2 joueurs | 3 joueurs |
+|---|---|---|---|
+| Finition | −10 % | 0 | +10 % |
+**Possession** (sur environ 30 actions par match) : à milieu égal, l'équipe à domicile a **+4 actions**. Domicile 3 milieux vs extérieur 4 → égalité ; 3 vs 5 → +4 pour l'extérieur ; 4 vs 3 → +6 pour le domicile ; 5 vs 3 → +8 pour le domicile. Plus de milieux = plus de ballons.
+
+### `.claude/skills/teamsoccer-match/references/03-mode-simple-et-presets.md` — 4 lignes ajoutées, 3 sur le sujet
+## Mode Simple et presets [G:Composition] [F:2026-06-06 Admin-Dev]
+- 4 presets : **Ultra défensif** (repli, dégagements, longs ballons) · **Équilibré** (passes et dribbles ; le guide conseille de commencer par lui) · **Offensif** (latéraux hauts, dribbles, centres) · **Pressing haut** (ligne haute, récupération haute). Le preset remplit les consignes des 11 selon le poste occupé.
+- Le guide affirme que Simple et Avancé donnent exactement le même rendement. Mais les deux modes sont **indépendants** : passer de l'un à l'autre repart de zéro, et des remplacements d'un mode peuvent rester actifs dans l'autre [F:2026-08-15 Paolo] [F:2026-08-17 PIPO68]. L'admin conseille d'apprendre le mode Avancé [F:2026-08-15 PIPO68]. **Après enregistrement, vérifier l'onglet Avancé.**
+
+### `.claude/skills/teamsoccer-match/references/04-mode-avance.md` — 7 lignes ajoutées, 6 sur le sujet
+## Mode Avancé [G:Composition] [G:Commencer à jouer 3.1]
+3 étapes : Positionnement (11 + banc) → Consignes tactiques → Consignes de jeu.
+- **Consignes par joueur dans 5 zones** : Ultra défensive, Défensive, Médiane, Offensive, Finition. Actions : dégager, passer (choisir le destinataire), dribbler (conduire), centrer (choisir le destinataire), tirer.
+- **Style de l'équipe** : Très défensif, Défensif, Neutre (défaut), Offensif, Très offensif. **Ampleur contradictoire** : le guide (actuel) dit ±10 % / ±5 % sur Défense et Finition ; l'annonce moteur v3 du 2026-05-28 dit ±25 % / ±12,5 % (Très défensif : Défense ×1,25, Finition ×0,75). Les bots jouent Neutre [F:2026-05-28 Admin-Dev].
+- Conseil du guide : partir d'un preset Simple et ne retoucher que 2 ou 3 joueurs.
+- Pour qu'un défenseur ou un milieu marque, lui donner « dribbler… puis tirer » dans les zones ; mais les attaquants reçoivent alors moins de ballons [F:2026-09-15 PIPO68].
+
+### `.claude/skills/teamsoccer-match/references/05-moteur-de-match-v3.md` — 18 lignes ajoutées, 17 sur le sujet
+## Moteur de match v3 [G:Moteur de match] [F:2026-05-28 Admin-Dev]
+Match pré-calculé ; le visionneur rejoue seulement. Le jeu avance par zone selon la consigne du porteur.
+| Action | Compétences comparées |
+|---|---|
+| Duel avec ballon | Conduite (porteur) contre Défense (défenseur le plus proche) |
+| Réception d'une passe ou d'un ballon disputé | Contrôle des deux joueurs ; la Passe du passeur augmente la chance de son coéquipier |
+| Ballon aérien | Tête |
+| Tir | Finition contre Gardien |
+| Ballon perdu dans le vide (mauvaise passe en profondeur) | Vitesse : le plus rapide et le plus proche l'emporte |
+| Dégagement | Éloigne le danger, ballon sans destinataire |
+- **Probabilité d'un duel = attaque / (attaque + défense)**, aléa ±5 % (±10 % avant le 2026-05-28).
+- **Tir** : but = Finition / (Finition + Gardien + 25), avec plafond (constante +60 au dénominateur, ~30 % au maximum, 55 % absolu).
+- **Compression du score** : quand l'équipe dominante mène, son efficacité baisse : +2 buts ×0,80, +3 ×0,55, +4 ×0,35, +5 ×0,20. Penalties : fréquence 4 %, conversion 72 % (annonce du 2026-05-28 ; l'admin citait 85 % le 2026-06-27).
+- **Bonus de poste** (zone naturelle) : DC en zone défensive et latéral sur son flanc : Défense ×1,15 ; milieu au milieu ×1,10 ; ailier qui défend son flanc ×1,05 ; attaquant en zone de finition : Finition et Tête ×1,15 ; ailier qui centre depuis l'aile : Centres ×1,20 ; milieu qui tire : Finition ×1,05. Hors zone naturelle : pas de bonus.
+- **Consigne cohérente** avec la meilleure compétence du joueur (dribble pour un bon dribbleur, tir pour un buteur…) : ×1,10 ; incohérente (ex. DC qui dribble) : ×0,90. Sans consigne : pas de multiplicateur.
+- Forme et fatigue : voir teamsoccer-joueurs (Forme = plafond, Endurance = baisse toutes les 5 min).
+- Le guide conclut : des joueurs complets (beaucoup de compétences) réussissent plus d'actions.
+
+### `.claude/skills/teamsoccer-match/references/06-bots-et-managers-recents.md` — 5 lignes ajoutées, 4 sur le sujet
+## Bots et managers récents
+- Club BOT : toutes ses compétences ×0,90 [F:2026-05-28 Admin-Dev] ; en plus, Gardien et Finition du bot −10 %, −18 % ou −25 % selon l'écart de niveau, dans tous les matchs depuis le 2026-09-07 [F:2026-09-07 Admin-Dev]. Les bots perdent plus de 90 % de leurs matchs. ⚠️ V-20261019-7 : l'annonce 98 (2026-08-27) donnait un autre barème pour le malus Gardien/Finition en plus du −10 % : écart de niveau moyen (humain − bot) ≤ 3 = 0 %, 3 à 8 = −5 %, 8 à 15 = −10 %, > 15 = −15 % ; officiel seulement, bot contre humain seulement, banc compris, jamais sous 1. Version du 2026-09-07 plus récente (tous les matchs) ; à confirmer.
+- Manager humain inscrit depuis moins de 14 jours : compétences de champ ×1,05 [F:2026-05-28 Admin-Dev].
+- Un club inactif depuis 45 jours devient BOT ; un nouveau manager reprend un club bot [F:2026-08-29 PIPO68].
+
+### `.claude/skills/teamsoccer-match/references/07-banc-et-remplacements.md` — 8 lignes ajoutées, 7 sur le sujet
+## Banc et remplacements [G:Composition 5] [F:2026-06-27 Admin-Dev]
+- Choisir les remplaçants **et le poste que chacun couvre**. Un bon banc couvre gardien, défenseur, milieu, attaquant.
+- **Blessure** : remplacement automatique (poste couvert exact → même ligne → n'importe quel remplaçant). Banc vide → l'équipe joue à 10.
+- **Remplacements programmés** (minute, sortant, entrant) : à configurer à part ; mettre des joueurs sur le banc ne suffit pas. Utile avec la fatigue : un remplaçant entre avec tout son plafond de Forme.
+- **Mi-temps** : pause de 5 minutes avec changements tactiques et remplacements, dans tous les matchs officiels, sélections comprises, depuis le 2026-10-16 [F:2026-10-16 PIPO68]. Il faut regarder le match en direct pour s'en servir.
+- V-20261019-9 : maximum 3 changements au total (première mi-temps comprise) ; aucun si l'équipe joue à 10 ; seul un gardien peut aller au but ; une formation invalide n'est pas appliquée ; changements enregistrés et visibles dans le rapport (sélecteur 1re/2e mi-temps, tableau final avec minutes, poste, niveau moyen, note sur 10) [annonces 110 et 116]. Notes par zone visibles aussi pour le prochain adversaire d'après ses derniers matchs [annonce 105, 2026-09-22]. Composition automatique : exclut blessés et suspendus, remplit le banc de 6 [annonce 97]. Historique des 5 derniers matchs en un clic [annonce 107].
+- V-20261027-1 (Tableau de mi-temps, correction du 2026-10-27) : avant, changer la formation par le menu envoyait un joueur de trop au banc (attaquant), laissait un trou « + » et forçait à utiliser un remplacement. Depuis le 2026-10-27 18:35, les 11 joueurs restent sur le terrain : changer la formation (ex. 3-4-3 → 4-4-2) fait reculer un milieu en défense et avancer un attaquant en milieu, **sans consommer de remplacement** (compteur 3/3) ; on échange deux joueurs en les touchant l'un après l'autre ; le banc ne sert que pour un vrai remplacement [F:2026-10-27 Admin-Dev 18:28/18:35/18:49 ; PIPO68 18:14]. Hypothèse : une seule source (tests de l'admin lui-même), à confirmer au prochain amical.
+
+### `.claude/skills/teamsoccer-match/references/08-barres-de-secteurs.md` — 5 lignes ajoutées, 4 sur le sujet
+## Barres de secteurs [G:Équilibre des secteurs]
+- 8 barres 0–100 sous le terrain : Gardien, Défense centrale, Latéral gauche, Latéral droit, Milieu, Aile gauche, Aile droite, Attaque. Calculées avec les compétences du joueur à cet emplacement et le **nombre de joueurs** dans la zone (3 centraux renforcent l'axe, 5 milieux dominent le centre). Zone vide = moitié de la moyenne des zones voisines (marquée ~).
+- Le rapport de match compare les 8 secteurs aux adversaires. **Purement informatif : ne change pas la simulation** [G].
+- V-20261027-3 (secteurs recalculés le 2026-10-14) : les rapports sont passés de 0-5 étoiles à une note décimale 0-10 ; les valeurs de secteur des matchs déjà joués ont été recalculées (exemple adversaire : 82/78/77/55/81/79/72 devenus 69/66/64/47/68/66/61) ; la formule de performance n'a pas changé, le rapport affiche une valeur « effective » (Forme, poste, consignes, Endurance). Note d'un joueur = poste joué + bonus des voisins + événements du match [F:2026-10-14 PIPO68]. **Ne pas comparer des secteurs capturés avant et après le 2026-10-14 sans recapture** (vérifier la date de capture dans `silver.ts_match_sectors`).
+
+### `.claude/skills/teamsoccer-match/references/09-constance-du-manager-mc-et-moral.md` — 13 lignes ajoutées, 12 sur le sujet
+## Constance du manager (MC) et moral [G:MC] [F:2026-09-08 PIPO68]
+- V-20261027-4 : une victoire n'a **jamais** compté dans le moral [F:2026-10-20 PIPO68]. Le moral baisse après la vente de joueurs, une perte d'argent ou l'achat d'un stade et repart chaque lundi. Hypothèse (un seul cas, Paolo, 10-20) : lundi 60, monté à 74 par des actions du manager, retombé à 60 après un match de ligue gagné 4-1 ; cause non expliquée. Ne pas promettre de gain de moral par les victoires.
+5 cercles de 3 points (15 au total), page Statistiques du club. Le niveau au moment du match augmente les compétences des joueurs **jusqu'à +10 points**.
+| Cercle | Points |
+|---|---|
+| 🔴 Régularité | Connexions consécutives : 5 jours+ = 3, 3–4 = 2, 1–2 = 1 |
+| 🟠 Participation | 1 par match joué dans la semaine par le premier club, max 3 (ligue, coupes, amicaux, tournois, Room Madness) |
+| 🟡 Économie | Trésorerie : > 2 500 000 $ = 3, > 1 500 000 $ = 2, > 200 000 $ = 1 |
+| 🔵 Gestion | 1 composition enregistrée + 1 entraînements assignés + 1 activité de la semaine (marché, enchère ou académie) |
+| 🟢 Classement dans le pays | Top 9 = 3, 10e–20e = 2, 21e–40e = 1 |
+- Le moral repart chaque lundi [F:2026-09-14 PIPO68]. Selon une étude de la communauté, vendre des joueurs baisserait l'esprit d'équipe [F:2026-07-01 PIPO68] (non confirmé).
+- Conséquence pratique : se connecter chaque jour, jouer l'amical de la semaine, enregistrer la composition et l'entraînement, faire une action de marché ou d'académie. **Une trésorerie négative donne 0 au cercle jaune** [Obs : nos deux clubs sont négatifs au 2026-10-19].
+
+### `.claude/skills/teamsoccer-match/references/10-nos-donnees.md` — 2 lignes ajoutées, 2 sur le sujet
+## [Obs] Nos données
+- API : `lineups` (formation, style, positions, banc, remplaçants), `match_lineups` (consignes tactiques par match), `matches` (scores, tirs au but, coupe, amical).
+
+### `.claude/skills/teamsoccer-saison/SKILL.md` — 13 lignes ajoutées, 12 sur le sujet
+description: Team Soccer, calendrier : saison de 9 semaines, ligue de 8, montée/descente, coupes et primes, amicaux, rythme hebdomadaire. Pour toute question « quand », « combien de matchs » ou pour planifier la routine.
+Ce fichier est un index : le contenu est dans `references/`. Lis seulement la section utile à la question ; chaque fichier reprend telle quelle une section de l'ancien SKILL.md (contenu inchangé).
+| Fichier | Section |
+|---|---|
+| `references/00-introduction.md` | Introduction et sources |
+| `references/01-rythme-de-la-semaine-synthese-des-source.md` | Rythme de la semaine (synthèse des sources) |
+| `references/02-ligue.md` | Ligue [G:Compétitions 1] |
+| `references/03-coupes.md` | Coupes [G:Compétitions 2–5] |
+| `references/04-amicaux.md` | Amicaux [F:2026-06-14, 2026-09-08, 2026-10-07] |
+| `references/05-selections-nationales.md` | Sélections nationales [G:Équipes nationales] [F:2026-10-14 Admin-Dev] |
+| `references/06-autres-competitions-hors-objectif-sporti.md` | Autres compétitions (hors objectif sportif du club) |
+| `references/07-nos-donnees.md` | [Obs] Nos données |
+
+### `.claude/skills/teamsoccer-saison/references/00-introduction.md` — 3 lignes ajoutées, 2 sur le sujet
+## Introduction et sources
+Sources : voir teamsoccer-joueurs (**[G]** guide officiel capté le 2026-10-19, **[F]** forum global, **[P]** page du jeu, **[Obs]** nos données). Le calendrier BETA (17 semaines, matchs samedi et dimanche) ne vaut plus depuis la saison 2.
+
+### `.claude/skills/teamsoccer-saison/references/01-rythme-de-la-semaine-synthese-des-source.md` — 14 lignes ajoutées, 13 sur le sujet
+## Rythme de la semaine (synthèse des sources)
+| Moment | Événement | Source |
+|---|---|---|
+| Lundi 00:00 (heure Atlantique/Canaries) | Limite d'achat remise à zéro | [G:Limites de transferts] |
+| Lundi 00:05 | Clôture de la semaine financière (salaires, entretien) | [P:Finances] |
+| Lundi | Moral (MC) remis à zéro ; fenêtre de paiement HPC | [F:2026-09-14, 2026-08-15 PIPO68] |
+| Mardi | Match de ligue (+ Coupe Nationale mardi ou mercredi) | [G:Compétitions] |
+| Mercredi | Coupe Nationale ; amicaux bloqués ce jour | [G] [F:2026-09-08 PIPO68] |
+| Jeudi | Coupe de consolation, Coupe Masters, Coupe des champions | [G] |
+| Vendredi ~00:00–01:00 UTC | Entraînement hebdomadaire et variation de la Forme | [F:2026-06-19 Admin-Dev] |
+| Samedi | Match de ligue | [G] |
+| Tous les jours 01:00 UTC | 3 révélations d'académie ; blessures −1 jour (~03:00) | [P:Académie] [F:2026-08-13] |
+- Les horaires exacts des matchs sont dans la page Matchs (un Premium peut changer les horaires de ses matchs à domicile). **Tout enregistrer au moins 2 h avant le coup d'envoi** (voir teamsoccer-match).
+
+### `.claude/skills/teamsoccer-saison/references/02-ligue.md` — 16 lignes ajoutées, 14 sur le sujet
+## Ligue [G:Compétitions 1]
+- Ligues nationales de **8 équipes**, divisions I à V (I.1, II.1, II.2…). Depuis la saison 2 : **9 semaines** — 14 journées (2 par semaine, mardi et samedi) en semaines 1 à 7, **barrages de montée/descente aller-retour en semaine 8** (ne comptent pas au classement), **semaine 9 de repos** avec le Gala des récompenses (lundi).
+- Montée/descente : le 1er d'une division inférieure monte ; les 2es jouent des barrages contre les 5e–6e de la division au-dessus [F:2026-08-03 demolator74, joueur ; non confirmé par un admin]. Les derniers descendent [F:2026-10-04 PIPO68]. Détail exact non écrit dans le guide.
+- Départage à égalité de points : « buts pour / buts contre / confrontations directes » [F:2026-07-06 PIPO68, réponse rapide, à vérifier].
+- Un club BOT occupe les places vides ; un nouveau manager reprend souvent un bot de 1re division [F:2026-08-29 PIPO68].
+- Saison 3 en cours au 2026-10-19 (début vers le 2026-10-12) ; Coupe du monde des sélections en saison 4.
+### Primes de championnat (fin de saison) [G:Compétitions 1]
+| Division | Champion | 2e | 3e |
+|---|---|---|---|
+| I | 800 000 $ | 500 000 $ | 250 000 $ |
+| II | 500 000 $ | 250 000 $ | 125 000 $ |
+| III | 250 000 $ | 125 000 $ | 60 000 $ |
+| IV | 125 000 $ | 60 000 $ | 30 000 $ |
+| V | 60 000 $ | 30 000 $ | 15 000 $ |
+
+### `.claude/skills/teamsoccer-saison/references/03-coupes.md` — 14 lignes ajoutées, 13 sur le sujet
+## Coupes [G:Compétitions 2–5]
+| Coupe | Qui | Quand | Format |
+|---|---|---|---|
+| **Coupe Nationale** | Les 64 meilleures équipes du pays | Semaines 2 à 7, mardi et mercredi | Match unique, terrain neutre, tirs au but si égalité |
+| **Coupe de consolation** (TSEA) | Les 128 équipes actives les moins bien classées du monde la saison précédente (complétées par des bots) | Jeudis, semaines 2 à 8 | Élimination directe, tirage aléatoire, terrain neutre |
+| **Coupe Masters** | Les 128 meilleurs clubs non qualifiés pour la Coupe des champions (champions I.1 restants, puis meilleurs 2es de I.1) | Semaines 2 à 8 | Élimination directe, terrain neutre |
+| **Coupe des champions** | Les 64 champions de I.1 du monde, classés aux points | Jeudis, semaines 4 à 9 | Élimination directe |
+Primes (versées sur la ligne « Primes » des Finances) :
+- **Coupe Nationale**, par tour franchi : 32es 25 000 $, 16es 50 000 $, 8es 100 000 $, quarts 150 000 $, demies 250 000 $ (le forum disait 200 000 $), finaliste 300 000 $, champion 500 000 $.
+- **Consolation et Masters** : 8es 50 000 $, quarts 100 000 $, demies 200 000 $, finaliste 400 000 $, champion 800 000 $.
+- **Coupe des champions** : quarts 250 000 $, demies 500 000 $, finaliste 800 000 $, champion 1 200 000 $.
+- En Coupe de consolation, les cartons ne suivent pas le joueur (sauf le rouge pendant le match) ; les blessures si [G].
+- Les petits clubs ont donc une vraie source d'argent avec la Consolation (jusqu'à 800 000 $).
+
+### `.claude/skills/teamsoccer-saison/references/04-amicaux.md` — 7 lignes ajoutées, 6 sur le sujet
+## Amicaux [F:2026-06-14, 2026-09-08, 2026-10-07]
+- **Un amical par club et par semaine** ; impossible tant que le club est encore en Coupe Nationale (les autres coupes ne bloquent plus depuis le 2026-09-08), et jamais le mercredi.
+- Défi depuis la page du club adverse ; un **challenger automatique** existe depuis le 2026-10-07.
+- Pas de blessure ni de carton qui compte ; billetterie à un quart du prix, partagée 50/50. Utilité selon l'admin : tester postes et tactiques, combler le mercredi, gagner un peu d'argent, collecter des drapeaux (victoire à l'extérieur), et le cercle orange du moral.
+- V-20261019-11 : égalité en élimination directe : tirs au but calculés une fois, identiques pour tous ; horaires du jeu à l'heure des Canaries ; un club abandonné peut devenir BOT et le compte perd l'accès (45 jours [F:2026-08-29 PIPO68]) [FAQ Team Soccer, export du 2026-10-19].
+- Tournois personnalisés (Premium) : pour le plaisir, sans argent, entraînement ni blessure [F:2026-07-21 PIPO68].
+
+### `.claude/skills/teamsoccer-saison/references/05-selections-nationales.md` — 5 lignes ajoutées, 4 sur le sujet
+## Sélections nationales [G:Équipes nationales] [F:2026-10-14 Admin-Dev]
+- Sélectionneur élu par la communauté ; groupe de 18 joueurs à valider ; amicaux le vendredi hors compétition. Joueurs de clubs bots exclus.
+- V-20261027-6 : vote **26 oct. - 8 nov.** (ouvert dès 7 jours d'ancienneté), prise de fonction le 9 nov. ; 8 pays au départ : Tchéquie, Espagne, Italie, Argentine, Chine, France, Portugal, Bulgarie ; un seul candidat = nommé sans vote [F:2026-09-01]. ⚠️ Le 2026-10-18, PIPO68 écrit que l'objectif de 16 pays à 6 managers actifs n'est atteint que par les Pays-Bas et la Roumanie et propose 3 scénarios (8 pays, report, parrainage) : la liste des 8 pays n'est pas assurée. Si le compte est français, le vote est ouvert maintenant.
+- Saison 4 : Coupe du monde (8 pays au départ). Candidatures du 14 au 25 octobre 2026, vote du 26 octobre au 8 novembre, prise de fonctions le 9 novembre.
+
+### `.claude/skills/teamsoccer-saison/references/06-autres-competitions-hors-objectif-sporti.md` — 3 lignes ajoutées, 2 sur le sujet
+## Autres compétitions (hors objectif sportif du club)
+Ligue de rue (5 contre 5, dimanche), salons et Room Madness (9 managers + capitaine), paris, Superligue Utopia et Coupe des championnes (féminines, Premium annuel). Sans effet connu sur l'équipe première.
+
+### `.claude/skills/teamsoccer-saison/references/07-nos-donnees.md` — 2 lignes ajoutées, 2 sur le sujet
+## [Obs] Nos données
+- API : `matches` (date, `cup_id`, `cup_round`, `is_friendly`, `is_promotion`, scores et tirs au but), `series` (division, groupe), `cup_participants`, `cup_tournaments`.
+
+### `docs/attentes/jeux/teamsoccer.yaml` — 11 lignes ajoutées, 10 sur le sujet
+core:   # refonte v2 phase 1 : entités branchées (adapt.teamsoccer_<entité>) ; limites = colonnes nulles par construction
+player_daily:  { limites: [fatigue, morale, contract_end] }                # endurance = compétence ; moral d'équipe seulement ; pas de contrat
+fixture:       { limites: [round_no] }                                     # numéro de journée non exporté ; tirs au but dans extras
+standing:      { limites: [] }                                             # recalculé depuis les matchs (silver.ts_standings), 3/1/0 non sourcé
+finance_daily: { limites: [wage_cap, capacite_invest] }                    # semaine en cours ; pas de plafond salarial
+market_listing: { limites: [starting_price, seller_id] }                   # prix demandé ou de départ ; enchère en cours non exportée
+academy_prospect: { limites: [rating_min, rating_max, potential_min, potential_max] }  # compétences révélées seulement
+staff:         { limites: [salary] }                                       # entraîneur (5 niveaux × 20) ; coût dans finances
+training_plan: { limites: [focus_secondary] }                              # une compétence et une intensité par joueur
+facility:      { limites: [level] }                                        # stade (places, entretien hebdo) + Centre de Haute Performance
+
+## Nouveau — Discord / chat
+- rien de nouveau.
+
+## Du jour
+- registre `fait-` : absent
+- exports : `bronze.raw_pages` where game = 'teamsoccer' and captured_at >= '2026-11-04'
+
+## Couverture (à remplir)
+| Source | trouvés | lus | retenus | écartés (pourquoi) |
+|---|---|---|---|---|
+| carte (variables) | | | | |
+| nouveau règles | | | | |
+| nouveau Discord/chat | | | | |

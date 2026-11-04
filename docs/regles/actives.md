@@ -3,9 +3,8 @@
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
 ## Nouvelles (2026-11-04)
-N1. Quand `import psycopg` échoue (session cloud) → `pip install -r requirements.txt` d'abord ; si impossible, connecteur Supabase en lecture, et la ligne de `parite-exports.log` est marquée `(manuel, script non exécuté)`.
-
-N3. Quand j'applique du DDL par le connecteur Supabase → jamais de `drop policy` (confirmation invisible pour l'utilisateur, délai de 60 s) ; sur une table neuve, `create policy` seul, sinon faire appliquer à l'utilisateur.
+N1. `import psycopg` échoue (session cloud) → `pip install -r requirements.txt`, sinon connecteur Supabase en lecture et `(manuel, script non exécuté)` dans `parite-exports.log`.
+N3. DDL par le connecteur Supabase → jamais de `drop policy` (confirmation invisible) ; table neuve : `create policy` seul, sinon l'utilisateur applique.
 
 ## K — gardées en prose
 K1. Quand je réponds → français, court ; une règle de jeu non sourcée n'est jamais affirmée : je cite le skill ou la source.
@@ -19,9 +18,16 @@ K8. Quand une règle globale et un résumé de jeu se contredisent → la règle
 K9. Quand j'écris une mémoire → je la copie dans `docs/memoire-claude/`, je commite et je pousse.
 K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau levier nommé (jusqu'à `learn.lesson`, phase 3).
 
+## S — soir du 04/11 (rétro)
+S1. « Que faire » → toutes les catégories (Composition, Tactique, Entraînement, Transferts, Finances, Analyse) ; une catégorie vide est prouvée par une requête.
+S2. Exports → `deja-fait` AVANT le plan ; jamais un export déjà lisible en base (E7/R-7).
+S3. Défaite en base → `analyste` dans le même tour (hook à écrire).
+S4. `police` > 3 min ou 12 appels → brouillon « police partielle » ; pas de 2e passe (hook à écrire).
+S5. « Mon équipe » pour recrues ou scouts → cible = besoin de MON effectif.
+
 ## E sans code encore — les plus violées (à remplacer par du code)
 E2. Quand je cite un résultat de match → `my_result` / `is_mine` de la base, jamais le score brut ; un score partiel se remet de notre point de vue. (`core.fixture`, 1.1)
-E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`kb.py`, 4.4)
+E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`controle.py` j, `kb.py` 4.4)
 E7. Quand je prépare un plan du jour → calendrier de moins de 12 h et registre `fait-…` lus dans le même tour, sinon première ligne « exporte le calendrier ». (`gold.agenda`, 1.4)
 E8. Quand je propose un achat → `capacite_invest` moins les dépenses déjà décidées couvre le prix, sinon la cible est abandonnée. (`gold.buy_targets`, 2.4)
 

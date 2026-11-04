@@ -138,6 +138,19 @@ def heredoc_ecrit(ops: list[tuple[str, dict]]) -> bool:
     return False
 
 
+ABSENCE = ["pas en base", "absente de la base", "absent de la base", "pas dans la base", "aucune source", "il me manque"]
+BASE = re.compile(r"raw_pages|exports_state|\bgold\.|\bsilver\.|\bcore\.|sql\.py")
+
+
+def requete_base(ops: list[tuple[str, dict]]) -> bool:
+    for nom, inp in ops:
+        if "execute_sql" in nom and BASE.search(str(inp.get("query", ""))):
+            return True
+        if nom in ("Bash", "PowerShell") and BASE.search(str(inp.get("command", ""))):
+            return True
+    return False
+
+
 def agent_general(ops: list[tuple[str, dict]]) -> bool:
     return any(nom in ("Agent", "Task") and inp.get("subagent_type", "general-purpose") == "general-purpose"
                for nom, inp in ops)
@@ -166,6 +179,9 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
                  "ce qui n'est pas faisable ce soir n'est pas écrit")
     if any(p in n for p in NE_PEUT_PAS) and not any(p in n for p in ISSUE):
         f.append("g : « je ne peux pas » sans preuve — donne la mesure ou « je ne sais pas encore, je le trouve ainsi : <commande> »")
+    if any(p in n for p in ABSENCE) and not requete_base(ops_tour):
+        f.append("j : donnée dite absente sans requête sur la base dans ce tour — interroge `bronze.raw_pages` "
+                 "(tous les page_type) ou la vue gold avant de demander un export (règle E6)")
     if agent_general(ops_tour) and "introuvable" not in n:
         f.append("h : agent lancé en general-purpose — utilise le type propre de .claude/agents/ "
                  "(ou dis que le type est introuvable)")

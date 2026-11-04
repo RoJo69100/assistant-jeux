@@ -1,6 +1,6 @@
 # Carte hockeynation — academie (draft, Import Draft, scouting, U17, U21)
 
-Sources lues : commit d1eaf11 (2026-11-02)
+Sources lues : commit a2f40d2 (2026-11-04)
 
 Écrite le 2026-11-02 (fiche `academie.md`, `resume.md` § Rendu scouts, skills `hockeynation-draft-scouting`, `-joueurs`, `-potentiel-joueurs`, `-contrats-finances` § Jeunes ; connaissance § Draft / scouting). Règles : tout ajout de joueur = équipe résultante à 20 (CLAUDE.md règle 8) ; scouts : couvrir le plus de joueurs possible ; rendu scouts en tableau, jamais « requête X » ([U] 2026-10-29).
 
@@ -23,14 +23,16 @@ Sources lues : commit d1eaf11 (2026-11-02)
 | 2 | Nos choix | `silver.hn_draft_picks` | 10 choix sur 2 saisons ; ordre inverse du classement ; sans cible principale, la sim suit le classement pré-draft + besoins de poste | skill draft-scouting ; d0ghouse 2026-10-24 | |
 | 3 | Potentiel | `select team_level, name, poste, age, rating, pot_min, pot_max, classe, futur from gold.hn_player_potential where team_level in ('U17','U21') order by team_level, pot_max desc limit 40` | Classe Fort / Solide gardée ; futur PRO / FRM / VIRER | skill potentiel-joueurs | |
 | 4 | Scouts : couverture | `select scout, nb_top, nb_poste, nb_nation, nb_total from gold.hn_scout_liste limit 10` ; `gold.hn_scout_board` ; `gold.hn_scout_priority` | Embaucher le candidat qui couvre le plus de joueurs NOUVEAUX ; 8 scouts au plus, budget 300 000 $ / saison ; G exclus | skill draft-scouting § Scouts ; `resume.md` § Rendu | |
-| 5 | Missions | `gold.hn_scout_targets` ; `silver.hn_scouting_assignments` | Mission plus courte si poste et nation du scout = ceux du joueur ; 3 rapports successifs | skill draft-scouting | |
+| 5 | Missions | `gold.hn_scout_targets` ; `silver.hn_scouting_assignments` | Mission plus courte si poste et nation du scout = ceux du joueur ; 3 rapports successifs. **Un scout est libre seulement si son champ joueur est vide** (page office_scouting : colonne Player ; API `/club/:id/scouting-assignments` : pas de clé `player`) ; le bouton « Assign » est sur toutes les lignes. Durée = base (chef 1, assistant 2) +1 poste +1 nation, joueur nommé sans pénalité de rang (5 cas vérifiés le 2026-11-04). `rang` de `hn_scout_targets` = draft_rank dans la classe, pas notre numéro de choix | skill draft-scouting ; police 2026-11-04 | 2026-11-04 : 4 missions nommées (Ulrich 89, Dunlop 20, Rosenbaum 46, Uden 93), McDonald et Löffler libres -> Ma C KOR 6 et Brassard LD CAN 2 |
 | 6 | Fraîcheur scouting | `silver.hn_scouts`, `silver.hn_scouting_budget` (date du relevé) | Ne bougent qu'à l'export Scouting : dater avant d'écrire un nombre de scouts | `resume.md` § Pièges | |
 | 7 | U21 de 21 ans | `gold.hn_daily_alerts` | ELC PRO ou Farm, sinon départ à 22 ans | `resume.md` § Règles | |
 | 8 | U17 entrants | connaissance § Draft | 7 jeunes de 15 ans par saison : on en choisit un, les 6 autres reçoivent un poste manquant ; 5 draftables dans 3 saisons, 2 vont en U21 | hnadmin 2026-09-19 | |
 | 9 | Valeur des tours | connaissance § Draft | 2e tour scouté = 70+ possible ; tour tardif = min 64 possible (avis) | trunkxolotl, c0ntrail 2026-10 | |
 | 10 | Import Draft | `gold.hn_today` (jours 49-55) | Le meilleur des 6 révélés, talents vs poste | fiche académie § Livrable 4 | |
 | 11 | Équipes inactives | connaissance § Draft | Elles draftent aussi ; un draftee d'une équipe sans GM peut être libéré | hnadmin 2026-10-24 | |
-| 12 | Avis des amis | connaissance § Draft / scouting ; `connaissance-B-general-2022-2025.md` | — | connaissance | |
+| 12 | Avis des amis | connaissance § Draft / scouting ; `connaissance-B-general-2022-2025.md` | — | connaissance | 2026-11-04 : « ne pas scouter les 10-12 premiers si on finit top 6 » (diamond_ace, furysk 2024, en doute) ne s'applique pas à un choix 4-9 ; bots top 20 restants (en doute) = plusieurs cibles |
+| 13 | Rang réel de nos choix | page `office_scouting` (tableau Current Season Draft Picks, colonne Rank) ; `silver.hn_draft_picks.overall_rank` | Instantané qui bouge avec le classement : relire la page avant de choisir le haut ou le milieu de classe | police 2026-11-04 | page 04/11 : 4 / 24 / 44 / 64 / 84 ; silver 01/11 : 9 / 29 / 49 / 69 / 89 |
+| 14 | Fraîcheur de la classe | `gold.exports_state` ligne Draft class | Rapports en base = relevé Draft Center ; plus de 24 h pendant les missions = « exporte Draft Center » (le statut « à jour » à 84 h est trop large) | police 2026-11-04 | 84 h le 04/11 (relevé 01/11) |
 
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |

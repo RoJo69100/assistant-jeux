@@ -18,7 +18,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 | Coupes | en semaine (`gold.ts_upcoming.lineup_deadline_paris`) | idem |
 | Entraînement et Forme | vendredi | réglage par joueur |
 | Finances | lundi 00:05 (heure du site) | — |
-| Académie | chaque jour, 3 révélations par club (reset 01:00 UTC) | — |
+| Académie | chaque jour, 1 révélation par club (reset 01:00 UTC) | — |
 - Saison 3 : ligue du 2026-10-12 au 2026-11-28 (9 semaines : ligue 1–7, barrages 8, repos 9).
 - Sans composition enregistrée, le jeu remplit les 11 postes tout seul (jamais de forfait, mais moins bon).
 

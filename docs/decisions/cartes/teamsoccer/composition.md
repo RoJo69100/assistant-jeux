@@ -46,6 +46,12 @@ Pour chaque club (Chomelix Cows, puis Ben Ahmed Donkey), dans l'ordre de l'écra
 | 17 | Réussite récente | `my_posts`, `opp_gk_sector`, `my_conversion_pct` | Poteaux et gardien adverse expliquent un déficit de buts : ne pas changer un XI qui crée | L-011, L-028 | |
 | 18 | Avis des amis | connaissance § 1, § 6 | Placer défenseurs et milieux en tir = dribbler, dribbler, tirer, au prix de ballons pour les attaquants | PIPO68 2026-09-15 (1.7) | |
 
+| 19 | Adversaire humain ou bot (nom absent de `ts_teams`) | `silver.ts_teams` (manager_id), `bronze.raw_pages` page 22416 `dashboard_challenges` (134 clubs humains, 0 « BOT »), 26813 `consolation-cup`, `silver.ts_matches` du club | Nom sans 🤖/« BOT » et présent dans les défis = humain ; sa note n'est connue qu'après export de `/dashboard/team?id=<id>`. Kovinar (529, manager 1081) : humain, 0-0 contre bots 22 et 29/10 | police 2026-11-04 | 2026-11-04 : humain, note ? |
+| 20 | Style d'équipe : ampleur | `silver.ts_forum_posts` 372 (Guide/Help) et 751 (annonce moteur 2026-05-28) | Offensif = Finition +5 %/Défense −5 % (guide) ou ×1,125/×0,875 (annonce, plus récente) ; Très offensif = ±10 % / ±25 % ; l'effet contre un bot est quasi nul des deux côtés | police 2026-11-04 | Offensif joué le 29/10 (2080331) : 0-0, 6 tirs, 0 adverse |
+| 21 | `play_style` réellement joué | `select match_id, play_style from silver.ts_match_lineups where team_id = 15858` | Lire avant de classer un match « Neutre » | police 2026-11-04 | 2080331 = offensive |
+| 22 | Paires de milieu et ballons perdus | `silver.ts_match_lineups.player_positions->>'6'/'7'` joint à `gold.ts_match_report.my_lost, my_attacks` | Schmidt+Suzuki : 4/4 contre bots, 6 à 10 tirs, mais 75 % de pertes le 22/10 ; critère de retour à Kumar = notes < 5,5 deux matchs de suite | police 2026-11-04 | notes 5,43 |
+| 23 | Banc : couverture par rôle | `silver.ts_match_lineups.bench` (`slots.coverRole`) | Un 6e banc sans attaquant (03/11) laisse AC sans couverture ; Enzo Roux avant P. Leroy (80,1 contre 59) | police 2026-11-04 | |
+
 ## Checks appris
 | L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |
 | --- | --- | --- | --- | --- |
