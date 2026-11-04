@@ -4,6 +4,8 @@ Imprime, pour un jeu et un domaine : les leçons validées et règles dures (à 
 (conseils interdits), les erreurs ouvertes, et — avec --sujet — les décisions passées sur le même sujet,
 en signalant un revirement (achat puis vente, ou l'inverse) à déclarer comme correction avec plan de sortie (R-8).
 Code 2 si un revirement est détecté (le rendu doit le déclarer).
+Données : public.learn_export (psycopg si SUPABASE_DB_URL_RO, sinon REST avec SUPABASE_SECRET_KEY).
+Les règles E du triage encore sans code (game nul, ×1) ne sont pas listées ici.
 Usage : python -I pipelines/garde.py <jeu> <domaine> [--sujet NOM]
 """
 
@@ -12,7 +14,6 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from sql import url_ro  # noqa: E402
 
 OPPOSES = {"achat": "vente", "vente": "achat"}
 
@@ -23,6 +24,27 @@ def revirement(domaine: str, passees: list[tuple[str, str]]) -> bool:
     return bool(oppose) and any(d == oppose and s in ("accepted", "done") for d, s in passees)
 
 
+def rapport(jeu: str, domaine: str, sujet: str | None, base: dict) -> tuple[list[str], int]:
+    lecons = [l for l in base["lessons"] if l.get("domain") == domaine]
+    suivre = [l for l in lecons if l["status"] in ("validated", "hard_rule")]
+    interdits = [l for l in lecons if l["status"] == "retired"]
+    L = [f"Leçons {jeu}/{domaine} : {len(suivre)} à suivre, {len(interdits)} retirées, "
+         f"{len(lecons) - len(suivre) - len(interdits)} hypothèses (sur {len(lecons)})"]
+    L += [f"  ✅ {l['id']} ({l['status']}, {l['n_for']} pour / {l['n_against']} contre) : {l['claim'][:300]}" for l in suivre]
+    L += [f"  ⛔ {l['id']} retirée ({str(l['n_against']) + ' contradictions' if l['n_against'] else 'infirmée avant migration'}) :"
+          f" ne pas reconseiller — {l['claim'][:300]}" for l in interdits]
+    L += [f"  ⚠️ erreur E-{e['id']} ouverte (×{e['recurrence']}, garde : {e['enforcement']}) : {e['description']}"
+          for e in base.get("errors", [])]
+    code = 0
+    if sujet:
+        passees = [d for d in base["decisions"] if (d.get("sujet") or "").lower() == sujet.lower()]
+        L += [f"  · D-{d['id']} {d['decided_at'][:10]} {d['domain']} ({d['status']}) : {d['label']}" for d in passees]
+        if revirement(domaine, [(d["domain"], d["status"]) for d in passees]):
+            L.append(f"  🔁 REVIREMENT sur {sujet} : le déclarer comme correction, avec le plan de sortie chiffré (R-8)")
+            code = 2
+    return L, code
+
+
 def main(argv=None) -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
@@ -30,36 +52,9 @@ def main(argv=None) -> int:
     p.add_argument("domaine")
     p.add_argument("--sujet")
     a = p.parse_args(argv)
-    import psycopg
-
-    code = 0
-    with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
-        cur.execute("select id, status, n_for, n_against, claim from learn.lesson"
-                    " where game = %s and domain = %s order by status, id", (a.jeu, a.domaine))
-        lecons = cur.fetchall()
-        suivre = [l for l in lecons if l[1] in ("validated", "hard_rule")]
-        interdits = [l for l in lecons if l[1] == "retired"]
-        print(f"Leçons {a.jeu}/{a.domaine} : {len(suivre)} à suivre, {len(interdits)} retirées, "
-              f"{len(lecons) - len(suivre) - len(interdits)} hypothèses (sur {len(lecons)})")
-        for i, st, nf, na, claim in suivre:
-            print(f"  ✅ {i} ({st}, {nf} pour / {na} contre) : {claim}")
-        for i, st, nf, na, claim in interdits:
-            print(f"  ⛔ {i} retirée ({f'{na} contradictions' if na else 'infirmée avant migration'}) :"
-                  f" ne pas reconseiller — {claim}")
-        cur.execute("select id, description, recurrence, enforcement from learn.error"
-                    " where closed_at is null and (game = %s or (game is null and recurrence >= 2))"
-                    " order by recurrence desc, id", (a.jeu,))  # règles E du triage sans code (×1) : hors garde
-        for i, desc, rec, enf in cur.fetchall():
-            print(f"  ⚠️ erreur E-{i} ouverte (×{rec}, garde : {enf}) : {desc}")
-        if a.sujet:
-            cur.execute("select id, domain, status, decided_at::date, label from learn.decision"
-                        " where game = %s and lower(sujet) = lower(%s) order by decided_at", (a.jeu, a.sujet))
-            passees = cur.fetchall()
-            for i, dom, st, quand, label in passees:
-                print(f"  · D-{i} {quand} {dom} ({st}) : {label}")
-            if revirement(a.domaine, [(d, s) for _, d, s, _, _ in passees]):
-                print(f"  🔁 REVIREMENT sur {a.sujet} : le déclarer comme correction, avec le plan de sortie chiffré (R-8)")
-                code = 2
+    from export_learnings_md import lire_base
+    L, code = rapport(a.jeu, a.domaine, a.sujet, lire_base(a.jeu))
+    print("\n".join(L))
     return code
 
 

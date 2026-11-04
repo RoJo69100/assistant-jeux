@@ -189,6 +189,23 @@ def marquer(carte: Path, jeu: str, jour: str) -> int:
     return 0
 
 
+DOMAINE_LEARN = {"defaite": "tactique"}  # type de dossier → domaine de learn.* (les autres ont le même nom)
+
+
+def garde_bloc(jeu: str, type_: str, mots: str) -> list[str]:
+    """Sortie de garde.py (leçons à suivre, retirées, erreurs, revirement sur le premier mot précis) — étape 3.5."""
+    sujet = next((m.strip() for m in mots.split(",") if m.strip()), None)
+    try:
+        from export_learnings_md import lire_base
+        from garde import rapport
+        lignes, code = rapport(jeu, DOMAINE_LEARN.get(type_, type_), sujet, lire_base(jeu))
+    except (Exception, SystemExit) as e:  # base injoignable : le dire, sans bloquer le dossier
+        return ["## Garde-fou (learn)", f"- ❌ garde.py non exécuté : {e}", ""]
+    return (["## Garde-fou (learn) — à respecter dans le rendu", *[f"- {l.strip()}" for l in lignes]]
+            + (["- **Revirement : le rendu le déclare comme correction, avec le plan de sortie (R-8).**"] if code == 2 else [])
+            + [f"- Le conseil rendu s'enregistre : `python -I pipelines/decision.py new {jeu} <domaine> …` (prédiction mesurable).", ""])
+
+
 def dossier_carte(a, jeu, carte, depuis, mots, forts, md, txt, rel) -> int:
     """Mode carte : la carte dit où lire chaque variable ; on ne lit que le nouveau."""
     nouveau = delta(jeu, depuis)
@@ -200,6 +217,7 @@ def dossier_carte(a, jeu, carte, depuis, mots, forts, md, txt, rel) -> int:
          "3. **Joueur ou réglage absent de la carte** : recherche ciblée sur son nom dans tout l'historique (`--mots`, fichier `-cible.txt`).",
          f"4. **Fin** : carte à jour (valeurs, checks, sources), commit, puis `python pipelines/dossier.py {jeu} {a.type} --marquer`.", ""]
     L += coeur(jeu, a.type, a.date)
+    L += garde_bloc(jeu, a.type, a.mots)
     regles, amis = [], []
     for f, lines in sorted(nouveau.items()):
         regle = f.startswith((".claude/", "docs/"))  # une règle modifiée compte en entier, même hors sujet
@@ -271,6 +289,7 @@ def main() -> int:
          f"`{a.type}` et le tableau Couverture. Mots : {', '.join(MOTS[a.type])}"
          + (f" ; précis : {a.mots}" if forts else ""), ""]
     L += coeur(jeu, a.type, a.date)
+    L += garde_bloc(jeu, a.type, a.mots)
 
     # 1. Règles
     skills = sorted((ROOT / ".claude" / "skills").glob(f"{jeu}-*/SKILL.md")
