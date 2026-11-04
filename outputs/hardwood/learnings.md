@@ -17,6 +17,8 @@ Tenu par l'agent Match (`.claude/agents/match.md`). Créé le 2026-11-02 (plan d
 | L-002 | 2026-11-02 | Recrutement : lire `height_m` avant de proposer (K.J. Simon, 1,91 m, est étiqueté C). Sturgeon (PG) : cible, offre non faite ; « déjà engagé » non confirmé en base. | — | partiel | `gold.hw_recruit_board` ; `fait-2026-11-02.md` |
 | L-003 | 2026-11-02 | Après changement du plan (Pressure 20 / Extend −2, puis Zone 35 / Extend −2) : 0 W – 3 L (−12, −9, −13). Contre le plan d'origine : 7 W – 4 L. Adversaires plus forts à Austin (WSI 139,1 contre 125,9). | 3 | à surveiller [H] (seuil 3 matchs atteint, mais adversaires non appariés) | `gold.hw_season_games` |
 
+| L-004 | 2026-11-04 | Retour au plan d'origine (Extend 0, Pressure 15, Zone 65) après les 3 L : **3 W** (Wartburg +17, Lehigh +7, Wisconsin-Parkside +4). Wartburg est une victoire en base, pas une défaite. Bilan : 10 W – 7 L au total ; les 7 L = 3 exhibitions, Academy of Art, et les 3 matchs à Extend −2. | 17 | à surveiller (marges serrées : +7, +4) | `gold.hw_season_games` |
+
 ## Conseils
 <!-- C-nnn · date · conseil · critère vérifiable (SQL) · statut · effet -->
 | ID | Date | Conseil | Critère vérifiable | Statut | Effet constaté |
