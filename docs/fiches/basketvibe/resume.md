@@ -15,6 +15,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 | Amical | chaque jour 08:00, verrou 07:45, moteur v4 | composition de TEST complète (jamais le cinq de la coupe/ligue), réglages repris du dernier amical, **pas de preset**, adversaire sans importance (aucun aperçu à demander) ; un seul test à la fois (zone Rim/Middle/Perimeter ou un réglage de nos joueurs). Zone jouée : `gold.bv_zone_jouee` |
 | Entraînement, salaires, personnel | dimanche 04:00 | réglages avant 04:00 |
 | Rapport d'académie | jeudi 09:00 | — |
+- Amical perdu = test, pas défaite à analyser : pas d'`analyste` ; le test est jugé par requête à sa date d'évaluation, `analyste` seulement s'il est réfuté (arbitrage 15, 2026-11-05).
 - Ligue ≠ amical : fatigue et expérience ≈ 1/10 en amical, pas de blessure [M§1.2]. Ne mélange pas v3 (ligue ≤ 26/10) et v4.
 
 ## Échelles de l'écran
