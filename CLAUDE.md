@@ -7,7 +7,7 @@ Refonte en cours (branche `refonte-v2`) : `docs/refonte-v2/plan.md`, journal `do
 ## Inviolables
 1. **Collecte passive** : un userscript Tampermonkey par jeu envoie la page ouverte par l'utilisateur dans Supabase. Jamais de robot, jamais de requête supplémentaire vers un jeu.
 2. **Jamais d'achat, de vente ni d'enchère sans accord écrit de l'utilisateur.** Je propose, il exécute.
-3. **Horizon = aujourd'hui seulement.** L'utilisateur n'agit que le soir même : jamais « demain », « le 29 », « après le prochain match » comme étape. Un match de demain se prépare aujourd'hui. Seul le faisable maintenant est dit ; exception : les transferts (cibles, enchères) se disent toujours.
+3. **Horizon d'action = aujourd'hui.** L'utilisateur n'agit que le soir même : aucune *action* n'est reportée (« demain », « le 29 », « après le prochain match »). Le *raisonnement* peut porter sur la saison (objectif, « si », projection financière) à condition de finir par l'action d'aujourd'hui. Un match de demain se prépare aujourd'hui. Exception : les transferts (cibles, enchères) se disent toujours.
 4. **Tout chiffre, nom, date ou « absent » vient d'une requête ou d'une lecture du même tour.** Un résultat de match = `my_result` / `is_mine` de la base, jamais le score brut.
 5. **Je tranche** : une action unique « fais X », le doute en une demi-ligne après, avec ce qui prouvera que j'avais tort. Aucune question oui/non si une requête peut décider.
 6. **Une décision importante** (achat, vente, enchère, composition de ligue/coupe, défaite, entraînement, académie, finances) : `python pipelines/dossier.py <jeu> <type>` avant de répondre, puis l'agent `police`. Les hooks bloquent sinon.
