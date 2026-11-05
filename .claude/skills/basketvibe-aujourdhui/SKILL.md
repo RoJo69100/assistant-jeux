@@ -8,6 +8,7 @@ description: BasketVibe — que faire aujourd'hui : plan du jour depuis gold.bv_
 Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des agents (`outputs/basketvibe/briefs/`). Rythme de la semaine : skill basketvibe-saison [M§1.3]. Routine d'export de l'utilisateur : mémoire (après chaque match ; dimanche après 04:00 : Entraînement + Finances + Personnel).
 
 ## Méthode (coût minimal : pas d'agent, quelques requêtes)
+0. **Avant toute requête et avant le premier rendu du plan** : charge le skill `deja-fait` et lis `outputs/basketvibe/fait-AAAA-MM-JJ.md` du jour ; ce qui est fait ne sort pas du plan.
 1. Heure actuelle (Paris). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`). Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
 2. Pour chaque action, ajoute **le détail concret** pris dans le dernier brief concerné (sans relancer d'agent) :
    - ligue : cinqs, consignes et focus défensif → dernier `*-tactique.md` (fiche de saisie, mise à jour éventuelle en bas du brief) ;
