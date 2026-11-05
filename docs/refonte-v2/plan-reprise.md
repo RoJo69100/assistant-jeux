@@ -1,3 +1,5 @@
+> Remplacé par docs/refonte-v3/plan.md (2026-11-05)
+
 # Plan de reprise — redevenir opérationnel (rédigé le 2026-11-04 soir)
 
 Cause (retro `outputs/retro/2026-11-04.md`, analyse `outputs/analyse-v2-2026-11-04.md`) : la v2 a livré les contrôles (hooks, police, dossiers) avant les moteurs qui produisent le travail. Résultat : seule la composition est rendue ; pas de calendrier fiable pour tous les jeux ; pas de « si » ; police lente.
