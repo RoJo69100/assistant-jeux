@@ -28,4 +28,4 @@ Limite : seuil de gros montant non défini avant S2 (`SEUIL_GROS_MONTANT` vide) 
 ### Journal de durée (manuel, une ligne par tour)
 | Date | Jeu | Durée (min) | Retours de hooks Stop | Police hors transfert |
 |---|---|---|---|---|
-| 2026-11-05 13:47 Paris | basketvibe | 2,4 (12:47:58 → 12:50:21 UTC, mesuré par `date -u`, jusqu'au rendu) | 0 au moment du rendu (un retour éventuel sera ajouté ici) | 0 (aucun agent lancé) |
+| 2026-11-05 13:47 Paris | basketvibe | 2,4 (12:47:58 → 12:50:21 UTC, mesuré par `date -u`, jusqu'au rendu) | 1 (`police.py` : formule d'aveu dans une phrase + export Académie classé en catégorie Académie/Draft, donc pris pour une décision ; corrigé en catégorie Export, sans police) | 0 (aucun agent lancé) |
