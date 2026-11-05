@@ -45,6 +45,8 @@ def transport() -> str:
     choix = os.environ.get("SQL_TRANSPORT", "auto")
     if choix in ("pg", "https"):
         return choix
+    if os.environ.get("CLAUDE_CODE_REMOTE") == "true":  # session cloud : le port 5432 est bloqué, la sonde coûtait ~6,5 s par appel
+        return "https"
     url = lire_env("SUPABASE_DB_URL_RO")
     if url:
         p = urllib.parse.urlparse(url)
@@ -82,6 +84,31 @@ def via_https(sql: str):
     cols = list(lignes[0].keys()) if lignes else []
     return cols, [tuple(json.dumps(v, ensure_ascii=False) if isinstance(v, (dict, list)) else v
                         for v in l.values()) for l in lignes]
+
+
+def rpc_post(nom: str, corps: dict):
+    """Appelle une fonction d'écriture de la base en POST (HTTPS, clé de service) ; renvoie le JSON de la réponse."""
+    base, cle = lire_env("SUPABASE_URL"), lire_env("SUPABASE_SECRET_KEY")
+    if not base or not cle:
+        sys.exit("SUPABASE_URL / SUPABASE_SECRET_KEY absents de .env et de l'environnement")
+    req = urllib.request.Request(base.rstrip("/") + f"/rest/v1/rpc/{nom}", data=json.dumps(corps).encode("utf-8"),
+                                 method="POST", headers={"apikey": cle, "Authorization": f"Bearer {cle}",
+                                                         "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        sys.exit(f"erreur (https {e.code}) : {e.read().decode('utf-8', 'replace')[:300]}")
+
+
+def executer(sql: str, params=None):
+    """Lecture sur le transport de sql.py (HTTPS en cloud, Postgres direct sinon) : (colonnes, lignes).
+    `params` (%s) n'est pris en charge qu'en Postgres direct ; en HTTPS, la requête doit être littérale (voir litteral())."""
+    if transport() == "https":
+        if params:
+            sql = sql % tuple(litteral(str(p)) if p is not None else "null" for p in params)
+        return via_https(sql)
+    return via_pg(sql, params)
 
 
 def litteral(s: str) -> str:
