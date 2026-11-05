@@ -2,7 +2,7 @@
 
 Réponds en français, court et précis. Si tu ne sais pas, dis-le. Ne devine jamais une règle de jeu : cite le skill ou la source.
 Pilote : **BasketVibe**. Objectif : plusieurs jeux, une décision quotidienne fondée sur les données et la connaissance sourcée, qui apprend de ses erreurs.
-Refonte en cours (branche `refonte-v2`) : `docs/refonte-v2/plan.md`, journal `docs/refonte-v2/journal.md`. Ancien CLAUDE.md : `docs/regles/archive/CLAUDE-2026-11-02.md` (chaque règle est classée dans `docs/regles/triage.md`).
+Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/journal.md`. Ancien CLAUDE.md : `docs/regles/archive/CLAUDE-2026-11-02.md` (chaque règle est classée dans `docs/regles/triage.md`).
 
 ## Inviolables
 1. **Collecte passive** : un userscript Tampermonkey par jeu envoie la page ouverte par l'utilisateur dans Supabase. Jamais de robot, jamais de requête supplémentaire vers un jeu.
