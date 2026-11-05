@@ -17,7 +17,9 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
    - entraînement (samedi soir) : fiche de saisie du dernier `*-entrainement.md` ;
    - personnel ou finances : actions datées du dernier `*-finances.md`.
 3. Vérifie la fraîcheur : si un brief a plus de 3 jours pour un sujet du jour (ex. tactique avant un match de ligue), dis-le et propose de relancer l'agent concerné.
-4. Signale les exports attendus que je n'ai pas reçus (ex. page du dernier match joué absente de `silver.bv_matches`).
+4. Signale les exports attendus que je n'ai pas reçus (ex. page du dernier match joué absente de `silver.bv_matches`). **Toujours** lire `select ecran, dernier_paris, age_h, statut from gold.bv_exports_state` dans le même tour que l'agenda : chaque ligne « à refaire » devient une ligne Export du plan. En plus, à chaque tour (2026-11-05) :
+   - **Aperçu du prochain match de ligue ou de coupe** si `gold.bv_saisie_adversaires` n'a aucune ligne pour lui (visible dès J-2 ; jamais pour un amical) ;
+   - **Historique global des transferts** si `select max(sold_on) from gold.bv_transfer_history` date d'avant hier : demander les ventes depuis cette date, pour mettre à jour la référence de prix `gold.bv_market_price_ref` par delta ; puis Marché et Mes enchères, lus par `gold.bv_market_bargains` (sans agent).
 
 5. Lis `select * from gold.bv_daily_alerts order by priority` : blessés, fatigue hors zone verte, forme ≤ 2, finances, joueurs disponibles, exports en retard, dernier match exporté, match joué non exporté.
 
