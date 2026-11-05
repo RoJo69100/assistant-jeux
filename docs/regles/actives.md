@@ -22,7 +22,7 @@ K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau l
 S1. « Que faire » → toutes les catégories (Composition, Tactique, Entraînement, Transferts, Finances, Analyse) ; une catégorie vide est prouvée par une requête.
 S2. Exports → `deja-fait` AVANT le plan ; jamais un export déjà lisible en base (E7/R-7).
 S3. Défaite en base → `analyste` dans le même tour (hook à écrire).
-S4. `police` > 3 min ou 12 appels → brouillon « police partielle » ; pas de 2e passe (hook à écrire).
+S4. `police` > 3 min ou 12 appels → brouillon « police partielle » ; pas de 2e passe (`.claude/agents/police.md`, S1 du 2026-11-05 ; aucun hook).
 S5. « Mon équipe » pour recrues ou scouts → cible = besoin de MON effectif.
 
 ## E sans code encore — les plus violées (à remplacer par du code)
@@ -32,4 +32,4 @@ E7. Quand je prépare un plan du jour → calendrier de moins de 12 h et registr
 E8. Quand je propose un achat → `capacite_invest` moins les dépenses déjà décidées couvre le prix, sinon la cible est abandonnée. (`gold.buy_targets`, 2.4)
 
 ## Déjà bloquées par un hook (pour mémoire, pas à relire)
-Horizon (report dans un plan), « je ne peux pas » sans preuve, agent `general-purpose`, heredoc d'écriture (`controle.py` f à i, 2026-11-03) · Format des tableaux et pastilles (`forme.py`) · dossier et trace police avant une décision, aveux « pas tout lu » (`police.py`) · rappel `/model opus`, `deja-fait`, concision, « je tranche » (`controle.py`) · secrets (`scan_secrets.py`, pre-commit).
+Horizon (report dans un plan), « je ne peux pas » sans preuve, agent `general-purpose`, heredoc d'écriture (`controle.py` f à i, 2026-11-03) · Format des tableaux et pastilles (`forme.py`) · dossier et trace police avant un achat, une vente ou une enchère au-dessus du seuil, aveux « pas tout lu » (`police.py`, S1 2026-11-05) · rappel `/model opus`, concision, « je tranche » (`controle.py`) ; `deja-fait` chargé avant le plan (skills aujourdhui), plus bloqué après · secrets (`scan_secrets.py`, pre-commit).
