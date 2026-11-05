@@ -20,11 +20,14 @@ JEUX = ["basketvibe", "derbymanager", "hardwood", "hockeynation", "sixzeroleague
 SEUIL_MS = 2000
 
 
+TRANSPORT = q.transport()  # une seule fois : la sonde du port 5432 coûte ~6,5 s par appel quand il est bloqué
+
+
 def une_mesure(vue: str, jeu: str):
     sql = f"select count(*) as n from (select * from {vue} where game = {q.litteral(jeu)}) t"
     t0 = time.perf_counter()
     try:
-        cols, lignes = q.via_https(sql) if q.transport() == "https" else q.via_pg(sql, None)
+        cols, lignes = q.via_https(sql) if TRANSPORT == "https" else q.via_pg(sql, None)
         return (time.perf_counter() - t0) * 1000, int(lignes[0][0])
     except SystemExit as e:  # sql.py quitte avec un message en cas d'erreur SQL
         return None, str(e)[:60]
