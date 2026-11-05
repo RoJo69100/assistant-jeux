@@ -4,7 +4,8 @@ Usage : python -I pipelines/rafraichir_avant_soir.py [--attendre]
 Appelle public.rafraichir_avant_soir() en POST (HTTPS, clé de service) : la fonction écrit une demande, que le job pg_cron
 « rafraichir-demande » exécute dans la minute. Pas par sql.py : sql_ro est en lecture seule et ne peut pas écrire la demande.
 Réponses : « à jour : rafraîchi à HH:MM:SS » | « demandé … » | « déjà demandé … » | « en cours … ».
---attendre : repose la question toutes les 20 s (150 s au plus) jusqu'à « à jour ».
+--attendre : repose la question toutes les 20 s (330 s au plus : un rafraîchissement complet dure ~3 min) jusqu'à « à jour ».
+Dans une session, lancer avec un délai d'outil de 600 s (le délai par défaut de 120 s coupe l'attente).
 """
 import argparse
 import json
@@ -40,7 +41,7 @@ def main() -> int:
     t0 = time.perf_counter()
     rep = appeler()
     print(rep, flush=True)
-    while a.attendre and not rep.startswith("à jour") and time.perf_counter() - t0 < 150:
+    while a.attendre and not rep.startswith("à jour") and time.perf_counter() - t0 < 330:
         time.sleep(20)
         rep = appeler()
         print(rep, flush=True)
