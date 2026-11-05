@@ -1,4 +1,4 @@
-"""Test du hook pipelines/police.py (aveux, H1, H2, H3, H4, H5, H6).
+"""Test du hook pipelines/police.py (aveux, H1, H2, H3, H4, H5, H6 ; H1/H2 limités aux gros transferts, S1).
 
 Lancer : python pipelines/test_police.py   (code 1 si un cas se trompe)
 Les cas H1/H2 utilisent un jeu fictif « testjeu » : aucun fichier réel n'est lu ni écrit.
@@ -36,7 +36,18 @@ PLAN_EXPORT = """Testjeu.
 |---|---|---|
 | 🟧 IMPORTANT | Export | Exporter la page du match. |
 """
-PLAN_VENTE = PLAN_ACHAT.replace("Enchère maximale 300 000 sur Fuchs", "Mettre Henry en vente à 25 000")
+PLAN_VENTE = PLAN_ACHAT.replace("Enchère maximale 300 000 sur Fuchs", "Mettre Henry en vente à 250 000")
+PLAN_PETIT = PLAN_ACHAT.replace("300 000", "50 000")
+PLAN_K = PLAN_ACHAT.replace("300 000", "120k")
+PLAN_SANS_MONTANT = PLAN_ACHAT.replace("Enchère maximale 300 000 sur Fuchs", "Mettre Henry en vente")
+PLAN_COMPO = """Testjeu, ce soir.
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | Saisir le cinq de ligue : Baron PG. |
+| 🟧 IMPORTANT | Entraînement | Baron : principale Tir. |
+| 🟧 IMPORTANT | Finances | Baisser le prix des billets à 12. |
+"""
+police.SEUIL_GROS_MONTANT["testjeu"] = 100_000
 AVEU = "Je n'ai pas tout lu le Discord, non relevé pour l'instant."
 MANQUE_OK = "Il me manque la forme de Chara — cherché dans : gold.bv_roster_now, bronze."
 
@@ -60,6 +71,11 @@ CAS = [
     ("H6 deux jeux nommés : pas contrôlé", "Testjeu et Hockey Nation : L-099.", [u("analyse")], True, []),
     ("vente reconnue", PLAN_VENTE, [u("que faire")], True, ["H1 : décision vente", "H2 : décision vente", "H3 : décision vente"]),
     ("export seul passe", PLAN_EXPORT, [u("que faire")], True, []),
+    ("S1 : achat sous le seuil sans dossier ni police", PLAN_PETIT, [u("que faire")], True, ["H3 : décision achat"]),
+    ("S1 : montant 120k au-dessus du seuil", PLAN_K, [u("que faire")], True, ["H1", "H2", "H3"]),
+    ("S1 : vente sans montant = contrôlée", PLAN_SANS_MONTANT, [u("que faire")], True, ["H1", "H2", "H3"]),
+    ("S1 : composition, entraînement, finances sans H1/H2", PLAN_COMPO, [u("que faire")], True,
+     ["H3 : décision composition", "H3 : décision entrainement", "H3 : décision finances"]),
     ("H4 conception + décision : H1 reste", PLAN_ACHAT, [u("conception des hooks")], True, ["H1", "H2", "H3"]),
     ("agent : pas de H1/H2", PLAN_ACHAT, [u("que faire")], False, []),
     ("H5 au-delà de 5 demandes", "Fait.", [u(f"demande {i}") for i in range(6)], True, ["H5"]),

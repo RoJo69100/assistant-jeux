@@ -3,9 +3,13 @@
 Contrôles (plan docs/plan-conception-iso-basketvibe.md, étape 0a) :
   aveux  « pas tout lu », « non relevé »… ou « il me manque » sans « cherché dans : … »
          (règle docs/decisions/variables.md) — session et agents.
-  H1     décision importante rendue sans dossier du jour : outputs/<jeu>/dossier/<date>-<type>.md
-         ou `pipelines/dossier.py <jeu> <type>` lancé dans la session — session seulement.
-  H2     décision importante sans trace police : outputs/<jeu>/police-<date>.md qui cite le type.
+  H1     achat, vente ou enchère au-dessus du seuil de gros montant rendu sans dossier du jour :
+         outputs/<jeu>/dossier/<date>-<type>.md ou `pipelines/dossier.py <jeu> <type>` lancé dans la session
+         — session seulement. Refonte v3, S1 (2026-11-05) : composition, tactique, entraînement, académie
+         et finances ne demandent plus ni dossier ni police.
+  H2     même périmètre que H1, sans trace police : outputs/<jeu>/police-<date>.md qui cite le type.
+         Seuil : SEUIL_GROS_MONTANT[jeu] (montant du jeu) ; absent = 0, tout transfert est contrôlé, en
+         attendant `core.club_strategy.seuil_gros_montant_pct` (S2). Montant illisible = contrôlé.
   H3     décision importante sans ligne au journal : `pipelines/decision.py new <jeu> <domaine>` lancé dans
          la session (ou son témoin du jour), domaine compatible avec le type (étape 3.2 de la refonte).
   H6     leçon L-nnn citée absente de outputs/<jeu>/learnings.md (export de learn.lesson) ou retirée.
@@ -47,6 +51,8 @@ JEUX = forme.JEUX
 CAT_TYPE = {"composition": "composition", "tactique": "composition", "entrainement": "entrainement",
             "academie/draft": "academie", "finances": "finances"}
 VENTE = re.compile(r"\bvend|\bvente\b|\bliber")
+SEUIL_GROS_MONTANT: dict[str, float] = {}  # jeu → montant ; rempli depuis la charte en S2
+MONTANT = re.compile(r"(\d{1,3}(?:[  .]\d{3})+|\d+(?:[.,]\d+)?)\s*(k|m|millions?)?\b", re.I)
 SEUIL_H5 = 5
 DOM_TYPE = {"achat": ("achat",), "vente": ("vente",), "composition": ("composition", "tactique"),
             "entrainement": ("entrainement",), "academie": ("academie",),
@@ -119,6 +125,34 @@ def decisions(text: str) -> set[str]:
     return types
 
 
+def montant(cellule: str) -> float | None:
+    """Plus grand montant lu dans une cellule Action (« 300 000 », « 300k », « 1,2 M ») ; None si aucun."""
+    vals = []
+    for m in MONTANT.finditer(cellule.replace(" ", " ")):
+        brut, unite = m.group(1), (m.group(2) or "").lower()
+        if re.search(r"[  .]\d{3}$", brut) and not unite:
+            v = float(re.sub(r"[  .]", "", brut))
+        else:
+            v = float(brut.replace(",", "."))
+        vals.append(v * (1_000 if unite == "k" else 1_000_000 if unite.startswith("m") else 1))
+    return max(vals) if vals else None
+
+
+def gros_transferts(text: str, jeu: str | None) -> set[str]:
+    """achat / vente rendus en 🟥/🟧 dont le montant dépasse le seuil du jeu (illisible = au-dessus)."""
+    seuil = SEUIL_GROS_MONTANT.get(jeu or "", 0)
+    types = set()
+    for cols, lignes in forme.tableaux(text):
+        if cols[:2] != ["priorite", "categorie"] or len(cols) < 3:
+            continue
+        for c in lignes:
+            if len(c) < 3 or forme.norm(c[1]) != "transferts" or not c[0].replace("*", "").startswith(("🟥", "🟧")):
+                continue
+            m = montant(c[2])
+            if m is None or m > seuil:
+                types.add("vente" if VENTE.search(norm(c[2])) else "achat")
+    return types
+
 
 def jours() -> list[str]:
     return sorted({date.today().isoformat(), datetime.now(timezone.utc).date().isoformat()})
@@ -185,12 +219,13 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
             f.append("« il me manque » sans « cherché dans : <sources> »")
     citees = sorted(set(LECON.findall(text))) if principal else []
     jeu = jeu_de(text, cmds) if types or citees else None
+    gros = gros_transferts(text, jeu) if jeu else set()
     for t in sorted(types):
         if not jeu:
             break
-        if not dossier_fait(jeu, t, cmds):
+        if t in gros and not dossier_fait(jeu, t, cmds):
             f.append(f"H1 : décision {t} ({jeu}) sans dossier — lance `python pipelines/dossier.py {jeu} {t}`")
-        if not police_faite(jeu, t):
+        if t in gros and not police_faite(jeu, t):
             f.append(f"H2 : décision {t} ({jeu}) sans trace police — agent `police`, qui écrit "
                      f"outputs/{jeu}/police-{date.today().isoformat()}.md")
         if not decision_faite(jeu, t, cmds):
@@ -229,10 +264,9 @@ def main() -> int:
     if all(x.startswith("H5") for x in fautes):
         raison = "Police : " + fautes[0] + "."
     else:
-        raison = ("Police : réponse incomplète (" + " ; ".join(fautes) + "). Ne rends pas cette réponse : "
-                  "lance le dossier (`python pipelines/dossier.py <jeu> <type>`), l'agent `police` sur la décision, "
-                  "lis ce qui reste (Discord/chat, connaissance, vues gold, bronze brut), complète chaque variable "
-                  "de docs/decisions/variables.md, puis réécris la réponse. Un manque réel s'écrit : "
+        raison = ("Police : réponse incomplète (" + " ; ".join(fautes) + "). Corrige seulement ce qui est cité : "
+                  "dossier et agent `police` pour un achat, une vente ou une enchère au-dessus du seuil (H1/H2) ; "
+                  "ligne de journal pour H3 ; aucune police pour les autres décisions. Un manque réel s'écrit : "
                   "« il me manque X — cherché dans : … — on le réunit comme ça : … ».")
     print(json.dumps({"decision": "block", "reason": raison}, ensure_ascii=False))
     return 0
