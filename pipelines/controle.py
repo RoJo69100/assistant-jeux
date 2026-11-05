@@ -5,16 +5,19 @@ Contrôles sur la réponse finale de la session principale :
   a  modèle     fichiers de conception modifiés dans la session (sql/, .claude/agents/, docs/fiches/,
                 pipelines/, .claude/settings.json) sans rappel du modèle : « /model opus » si la session
                 n'est pas sur Opus, « /model sonnet » (retour après le commit) si elle l'est.
-  b  deja-fait  tableau de plan (Priorité | Catégorie | Action) sans le skill `deja-fait` chargé dans le tour.
+  b  deja-fait  retiré (refonte v3, S1) : le skill `deja-fait` est chargé AVANT le premier rendu d'un plan
+                (étape 0 des skills <jeu>-aujourdhui), il ne bloque plus après coup.
   c  preuve     tableau chiffré sans source dans le tour : requête SQL, fichier lu ou agent `synthese`.
   d  tranche    phrase fermée : « veux-tu que », « oui ou non », « à toi de voir », « peut-être »…
   e  concision  réponse de conception de plus de 15 lignes hors tableaux et code, ou identifiant interne
                 (R-1, G3, « règle 75 ») dans une réponse de conception.
-  f  horizon    plan dont une cellule Action reporte (« demain matin », « la semaine prochaine », « plus tard »…).
+  f  horizon    seulement la colonne Action des tableaux : une cellule qui reporte (« demain matin »,
+                « plus tard »…). Les blocs « Si » et « Plan de saison » (forme.sans_blocs) ne sont pas lus.
   g  preuve     « je ne peux pas » sans « je ne sais pas encore » ni preuve.
   h  agent      agent lancé sans type propre (general-purpose), sauf si la réponse dit « introuvable ».
   i  Write      fichier écrit par heredoc dans le terminal (Bash ou PowerShell).
-Le texte entre « », "", `` ou ``` est ignoré. Une seule relance (stop_hook_active). Tests : test_controle.py.
+Le texte entre « », "", `` ou ``` est ignoré. Une seule relance (stop_hook_active), qui ne demande jamais
+de relancer dossier ni police. Tests : test_controle.py.
 """
 
 import json
@@ -83,10 +86,6 @@ def conception_modifiee(ops: list[tuple[str, dict]]) -> bool:
                for nom, inp in ops)
 
 
-def deja_fait(ops: list[tuple[str, dict]]) -> bool:
-    return any(nom == "Skill" and "deja-fait" in str(inp.get("skill", "")) for nom, inp in ops)
-
-
 def source(ops: list[tuple[str, dict]]) -> bool:
     for nom, inp in ops:
         if "execute_sql" in nom or nom in ("Read", "Grep"):
@@ -120,7 +119,7 @@ ECRIT_FICHIER = re.compile(r"\b(cat|tee)\b[^\n|]*>|>>?\s*[\w./~\\-]+\s*<<|write_
 def reports(text: str) -> list[str]:
     """Phrases de report (horizon) dans les cellules « Action » des tableaux de plan (règle E1 de actives.md)."""
     trouves = []
-    for cols, lignes in forme.tableaux(text):
+    for cols, lignes in forme.tableaux(forme.sans_blocs(text)):
         if forme.idx(cols, "action") < 0:
             continue
         ia = forme.idx(cols, "action")
@@ -169,8 +168,6 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
         if attendu not in dit:
             f.append(f"a : fichiers de conception modifiés sans rappel « {attendu} » — dis-le en une ligne "
                      "(« /model opus avant, /model sonnet après le commit »)")
-    if forme.a_plan(text) and not deja_fait(ops_tour):
-        f.append("b : tableau de plan sans le skill `deja-fait` chargé dans ce tour")
     if chiffre(text) and not source(ops_tour):
         f.append("c : tableau chiffré sans requête SQL, fichier lu ou `synthese` dans ce tour")
     f += [f"d : phrase fermée « {p} » — tranche (« fais X »), doute en une demi-ligne après" for p in FERMEES if p in n]
@@ -208,7 +205,8 @@ def main() -> int:
     text = data.get("last_assistant_message") or police.last_text(ents)
     fautes = fautes_de(text, ents)
     if fautes:
-        print(json.dumps({"decision": "block", "reason": "Contrôle de sortie : " + " ; ".join(fautes) + "."},
+        print(json.dumps({"decision": "block", "reason": "Contrôle de sortie : " + " ; ".join(fautes)
+                          + ". Corrige seulement ces points : ne relance ni le dossier ni l'agent police."},
                          ensure_ascii=False))
     return 0
 

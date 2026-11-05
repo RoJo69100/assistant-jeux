@@ -1,4 +1,4 @@
-"""Test du hook pipelines/controle.py : un cas valide et un cas fautif par contrôle (a à i).
+"""Test du hook pipelines/controle.py : un cas valide et un cas fautif par contrôle (a, c à j ; b retiré en S1).
 
 Lancer : python pipelines/test_controle.py   (code 1 si un cas se trompe)
 """
@@ -52,10 +52,9 @@ CAS = [
     ("a session opus avec retour sonnet", "Fait, /model sonnet après le commit.",
      [demande("ajoute la vue"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], True),
     ("a fichier hors conception", "Noté.", [demande("j'ai fait l'export"), EDIT_OUT], True),
-    # b : deja-fait
-    ("b plan sans deja-fait", PLAN, [demande("que faire"), SQL], False),
+    # b : retiré en S1 (deja-fait chargé avant le plan, plus de blocage après)
+    ("b plan sans deja-fait ne bloque plus", PLAN, [demande("que faire"), SQL], True),
     ("b plan avec deja-fait", PLAN, [demande("que faire"), SKILL, SQL], True),
-    ("b deja-fait d'un tour précédent", PLAN, [demande("que faire"), SKILL, SQL, demande("et après"), SQL], False),
     # c : preuve
     ("c tableau chiffré sans source", CHIFFRE, [demande("stats")], False),
     ("c tableau chiffré avec SQL", CHIFFRE, [demande("stats"), SQL], True),
@@ -73,6 +72,14 @@ CAS = [
     # f : horizon
     ("f action reportée", PLAN_REPORT, [demande("que faire"), SKILL, SQL], False),
     ("f composition d'un match de demain", PLAN_DEMAIN, [demande("que faire"), SKILL, SQL], True),
+    ("f bloc Si hors colonne Action", PLAN + "\n**Si** :\n- titre acquis : faire tourner les jeunes plus tard.\n",
+     [demande("que faire"), SQL], True),
+    ("f tableau Si | Action non lu", PLAN + "\n| Si | Action |\n|---|---|\n| titre acquis | jeunes la semaine prochaine |\n",
+     [demande("que faire"), SQL], True),
+    ("f bloc Plan de saison", "### Plan de saison\nTitre, puis jeunes plus tard.\n\n" + PLAN,
+     [demande("que faire"), SQL], True),
+    ("f report dans Action après un bloc Si", "**Si** :\n- titre acquis.\n\n### Ce soir\n" + PLAN_REPORT,
+     [demande("que faire"), SQL], False),
     # g : « je ne peux pas »
     ("g je ne peux pas sans preuve", "Je ne peux pas lire la base.", [demande("stats")], False),
     ("g je ne peux pas avec issue", "Je ne peux pas dire, je ne sais pas encore : je le trouve avec dossier.py.", [demande("stats")], True),
