@@ -22,3 +22,4 @@
 - [HN : matchs + scouts, pas finances](feedback-hn-matchs-scouts-pas-finances.md) — en saison : tous les matchs, scouts libres → prospects proposés seul ; jamais d'export finances/cap/staff (2026-11-04)
 - [État Derby Manager 04/11](project-derbymanager-etat-04-11.md) — décisions 547/307 rendues, exports et vérifications à la reprise
 - [BV : Preview de ligue toujours](feedback-bv-preview-ligue-toujours.md) — demander l'aperçu de chaque match de ligue/coupe avant la saisie, visible dès J-2 (2026-11-05)
+- [Que faire complet = référence](feedback-bv-que-faire-complet-reference.md) — tour de test : exports à refaire, aperçu, delta transferts, bilan club par vues gold, décision par secteur, sans attendre les questions (2026-11-05)
