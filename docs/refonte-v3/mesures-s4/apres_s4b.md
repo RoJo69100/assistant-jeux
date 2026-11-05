@@ -1,0 +1,32 @@
+| vue | jeu | 1er passage (ms) | médiane (ms) | lignes | verdict |
+|---|---|---|---|---|---|
+| gold.season_context | basketvibe | 931 | 452 | 1 | ✅ |
+| gold.season_context | derbymanager | 468 | 468 | 2 | ✅ |
+| gold.season_context | hardwood | 556 | 556 | 1 | ✅ |
+| gold.season_context | hockeynation | 457 | 457 | 1 | ✅ |
+| gold.season_context | sixzeroleague | 438 | 448 | 1 | ✅ |
+| gold.season_context | teamsoccer | 501 | 439 | 2 | ✅ |
+| gold.match_objective | basketvibe | 285 | 432 | 8 | ✅ |
+| gold.match_objective | derbymanager | 274 | 438 | 0 | ✅ |
+| gold.match_objective | hardwood | 447 | 422 | 0 | ✅ |
+| gold.match_objective | hockeynation | 460 | 473 | 25 | ✅ |
+| gold.match_objective | sixzeroleague | 419 | 419 | 12 | ✅ |
+| gold.match_objective | teamsoccer | 262 | 446 | 6 | ✅ |
+| gold.daily_alerts | basketvibe | 429 | 429 | 7 | ✅ |
+| gold.daily_alerts | derbymanager | 453 | 453 | 3 | ✅ |
+| gold.daily_alerts | hardwood | 257 | 287 | 12 | ✅ |
+| gold.daily_alerts | hockeynation | 421 | 427 | 23 | ✅ |
+| gold.daily_alerts | sixzeroleague | 476 | 448 | 13 | ✅ |
+| gold.daily_alerts | teamsoccer | 258 | 417 | 13 | ✅ |
+| core.standing | basketvibe | 424 | 439 | 48 | ✅ |
+| core.standing | derbymanager | 456 | 438 | 24 | ✅ |
+| core.standing | hardwood | 458 | 425 | 16 | ✅ |
+| core.standing | hockeynation | 443 | 442 | 20 | ✅ |
+| core.standing | sixzeroleague | 445 | 238 | 10 | ✅ |
+| core.standing | teamsoccer | 248 | 425 | 16 | ✅ |
+| core.player_daily | basketvibe | 456 | 444 | 259 | ✅ |
+| core.player_daily | derbymanager | 424 | 426 | 46 | ✅ |
+| core.player_daily | hardwood | 446 | 446 | 20 | ✅ |
+| core.player_daily | hockeynation | 418 | 418 | 590 | ✅ |
+| core.player_daily | sixzeroleague | 459 | 428 | 136 | ✅ |
+| core.player_daily | teamsoccer | 433 | 433 | 508 | ✅ |
