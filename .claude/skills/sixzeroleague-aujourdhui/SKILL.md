@@ -12,6 +12,7 @@ Sources : `gold.sz_agenda` et `gold.sz_daily_alerts` (`sql/gold/015_sz_agenda.sq
 
 ## Méthode (coût minimal : pas d'agent, deux requêtes)
 0. **Avant toute requête et avant le premier rendu du plan** : charge le skill `deja-fait` et lis `outputs/sixzeroleague/fait-AAAA-MM-JJ.md` du jour ; ce qui est fait ne sort pas du plan.
+0 bis. **Vues à jour** : `python -I pipelines/rafraichir_avant_soir.py --attendre` (150 s au plus) ; si la réponse n'est pas « à jour », le plan sort quand même, avec l'heure du dernier rafraîchissement.
 1. `select day_label, at_time, category, action from gold.sz_agenda` puis `select priority, category, alert from gold.sz_daily_alerts order by priority` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`).
 2. L'utilisateur agit **maintenant**, quand il demande : donne les actions du jour, sans « ce soir » ni liste horodatée (un match de 13:00 ou 17:00 se prépare la veille). « Après un match » seulement quand l'action en dépend vraiment.
 3. Pour chaque action, ajoute le détail concret du dernier brief concerné, sans relancer d'agent : composition (`*-tactique.md`), enchères (`*-transferts.md`), fiche d'entraînement (`*-entrainement.md`), sponsor et infrastructures (`*-finances.md`), conseils ouverts `C-nnn` (`outputs/sixzeroleague/learnings.md`).
