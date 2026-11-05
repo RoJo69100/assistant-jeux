@@ -29,3 +29,5 @@ Limite : seuil de gros montant non défini avant S2 (`SEUIL_GROS_MONTANT` vide) 
 | Date | Jeu | Durée (min) | Retours de hooks Stop | Police hors transfert |
 |---|---|---|---|---|
 | 2026-11-05 13:47 Paris | basketvibe | 2,4 (12:47:58 → 12:50:21 UTC, mesuré par `date -u`, jusqu'au rendu) | 1 (`police.py` : formule d'aveu dans une phrase + export Académie classé en catégorie Académie/Draft, donc pris pour une décision ; corrigé en catégorie Export, sans police) | 0 (aucun agent lancé) |
+| 2026-11-05 | basketvibe (exports reçus → `analyste`, `academie`) | non mesurable (début 12:52:56 UTC, fin non relevée) | 2 (fichiers non commités : registre, puis brief académie) | 0 |
+| 2026-11-05 | basketvibe (question amical → `tactique`) | non mesurable (début non relevé ; rendu vers 13:0x UTC) | 1 (`controle.py` g : « je ne peux pas » sans preuve) | 0 |
