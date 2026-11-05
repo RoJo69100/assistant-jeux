@@ -22,6 +22,13 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
    - **Historique global des transferts** si `select max(sold_on) from gold.bv_transfer_history` date d'avant hier : demander les ventes depuis cette date, pour mettre à jour la référence de prix `gold.bv_market_price_ref` par delta ; puis Marché et Mes enchères, lus par `gold.bv_market_bargains` (sans agent).
 
 5. Lis `select * from gold.bv_daily_alerts order by priority` : blessés, fatigue hors zone verte, forme ≤ 2, finances, joueurs disponibles, exports en retard, dernier match exporté, match joué non exporté.
+6. **Bilan du club, chaque soir, sans agent** (2026-11-05, demande de l'utilisateur : « je ne devrais pas avoir à poser la question ») — une requête chacune, puis une décision par secteur, tranchée :
+   - Finances : `gold.bv_finance_health` (solde, résultat hebdo, salaires en % des recettes) et `gold.bv_finance_projection` (solde de fin de saison) ;
+   - Effectif : `gold.bv_position_summary` (poste le plus faible), `gold.bv_roster_now` (âge, déclin), `gold.bv_next_opponents` (notre note d'équipe contre celle de la ligue) → « acheter un <poste> de note ≥ X », « vendre Y » ou « garder » ;
+   - Transferts : `gold.bv_market_bargains` contre `gold.bv_market_price_ref` si le Marché a moins de 24 h, sinon ligne Export ;
+   - Personnel : `gold.bv_personnel_status` ; export Personnel si `gold.bv_exports_state` le dit « à refaire » ;
+   - Entraînement : le samedi soir (cycle), sinon rien.
+   Une ligne « garder » n'est pas écrite (aucune ligne « rien à faire ») ; elle va dans le commentaire en une demi-ligne.
 
 ## Brief du matin (case F7)
 Si la demande est faite **le matin** (avant 12:00) ou si l'utilisateur demande « le brief » : écris aussi `outputs/basketvibe/briefs/AAAA-MM-JJ-quotidien.md`, qui regroupe en une page :
@@ -39,4 +46,4 @@ Pas plus d'une page ; pas de nouvelle recommandation, seulement ce que les brief
 - **Au plus 8 lignes**, triées par heure : `HH:MM — action — détail (source)`.
 - Mets en tête ce qui a une **heure limite** (verrouillage, fin d'enchère).
 - Termine par une ligne « Exports à faire aujourd'hui : … ».
-- Pas de règle de jeu sans source ; pas de recommandation nouvelle : seulement ce que les briefs ont déjà validé. Si une décision manque, propose l'agent à lancer.
+- Pas de règle de jeu sans source. Une recommandation nouvelle est permise si elle sort d'une vue gold citée (étape 6) ; sinon seulement ce que les briefs ont validé. Agent seulement pour un cas que les vues ne tranchent pas.
