@@ -23,7 +23,10 @@ Contrôles par jeu (H3, 2026-11-02 ; jeu reconnu dans le texte, sinon dans les c
   derbymanager  un bloc par club, Queen of the South puis Marmandes ; compo = remplaçants + set pieces
   entraînement  ordre de docs/ordre-export/<jeu>-entrainement.json du jeu reconnu (plus seulement BasketVibe)
 Dans tous les cas : aucun interdit des tests docs/attentes/tests/*.yaml. Le texte entre « », "" ou `` est ignoré.
-Une seule relance (stop_hook_active).
+Blocs autorisés (refonte v3, S1) : un bloc « Si » ou « Plan de saison » (titre `### Si`, `**Si** :`,
+`Plan de saison :`… jusqu'au titre suivant ou au tableau de plan ; une ligne qui commence par « Si » ; un
+tableau dont la 1re colonne est « Si ») échappe aux interdits : le raisonnement peut porter sur la saison.
+Une seule relance (stop_hook_active). La relance ne demande jamais de relancer dossier ni police.
 """
 
 import json
@@ -302,6 +305,45 @@ def fautes_texte(text: str, n: str) -> list[str]:
     return f
 
 
+TITRE_BLOC = re.compile(r"#*\s*(si|plan de saison)\b")
+LIGNE_SI = re.compile(r"(?:[-*>]\s*)?si\b")
+
+
+def _cellules(ligne: str) -> list[str]:
+    return [norm(c) for c in ligne.strip().strip("|").split("|")]
+
+
+def _titre(s: str) -> bool:
+    return s.startswith("#") or bool(re.fullmatch(r"\*\*[^*]+\*\*\s*:?|\*\*[^*]+:\*\*", s))
+
+
+def sans_blocs(text: str) -> str:
+    """Le texte sans les blocs « Si » et « Plan de saison » (raisonnement de saison autorisé, S1)."""
+    garde, dans, table_si = [], False, False
+    for l in text.splitlines():
+        s, n = l.strip(), norm(l.strip())
+        if s.startswith("|"):
+            if table_si:
+                continue
+            cel = _cellules(s)
+            if cel[:2] == ["priorite", "categorie"]:
+                dans = False
+            elif cel and cel[0] == "si":
+                table_si = True
+                continue
+        else:
+            table_si = False
+        if (_titre(s) or n.rstrip(" :") in ("si", "plan de saison")) and TITRE_BLOC.match(n):
+            dans = True
+            continue
+        if dans and _titre(s):
+            dans = False
+        if dans or (not s.startswith("|") and LIGNE_SI.match(n)):
+            continue
+        garde.append(l)
+    return "\n".join(garde)
+
+
 def a_plan(text: str) -> bool:
     return any(c[:2] == ["priorite", "categorie"] for c, _ in tableaux(text))
 
@@ -347,7 +389,8 @@ def fautes_de(text: str, jeu: str | None = None) -> list[str]:
     n = norm(CITATION.sub(" ", text))
     jeu = jeu or jeu_de(text)
     f = fautes_tableaux(text, jeu) + fautes_texte(text, n) + fautes_jeu(text, n, jeu)
-    f += [f"interdit : {i}" for i in interdits() if norm(i) in n]
+    libre = norm(CITATION.sub(" ", sans_blocs(text)))
+    f += [f"interdit : {i}" for i in interdits() if norm(i) in libre]
     return list(dict.fromkeys(f))
 
 
@@ -365,7 +408,8 @@ def main() -> int:
         "Forme : réponse hors format (" + " ; ".join(fautes) + "). Réécris-la dans le format fixe validé : "
         "plan = Priorité | Catégorie | Action avec 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI ; entraînement = joueurs dans "
         "l'ordre de l'export (select * from gold.bv_saisie_entrainement order by ordre) ou seulement ceux qui changent ; "
-        "tactique et adversaires = une ligne par joueur, ordre PG→C ; voir pipelines/forme.py pour chaque format.")},
+        "tactique et adversaires = une ligne par joueur, ordre PG→C ; voir pipelines/forme.py pour chaque format. "
+        "Corrige seulement la forme : ne relance ni le dossier ni l'agent police.")},
         ensure_ascii=False))
     return 0
 

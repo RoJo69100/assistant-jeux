@@ -182,6 +182,22 @@ DM_OK = """Derby Manager, Queen of the South puis Marmandes.
 Remplaçants S1-S5 : Brown (AUTO). Set pieces : PEN Smith, FK Brown, capitaine Smith.
 """
 DM_COMPO_KO = DM_OK.replace(" Set pieces : PEN Smith, FK Brown, capitaine Smith.", "")
+SI_TITRE = PLAN_OK + """
+**Si** :
+- on gagne J20, faire tourner les jeunes après le prochain match ;
+- on perd, garder le cinq plus tard aussi.
+"""
+SI_LIGNE = PLAN_OK + "\nSi Baron se blesse, on verra plus tard.\n"
+SI_TABLEAU = PLAN_OK + """
+| Si | Alors |
+|---|---|
+| titre acquis | faire tourner les jeunes plus tard |
+"""
+PLAN_SAISON = """### Plan de saison
+Titre visé ; après le prochain match, faire tourner les jeunes.
+
+""" + PLAN_OK
+SI_PUIS_INTERDIT = SI_TITRE + "\n### Ce soir\nOn verra plus tard.\n"
 
 CAS = [
     ("plan ok", PLAN_OK, True), ("plan ko", PLAN_KO, False),
@@ -202,6 +218,13 @@ CAS = [
     ("dm compo ok", DM_OK, True), ("dm clubs inversés", DM_KO, False), ("dm compo sans set pieces", DM_COMPO_KO, False),
     ("texte avec interdit", TEXTE_KO, False),
     ("texte sans tableau", "Voilà, c'est fait.", True),
+    # S1 : blocs « Si » et « Plan de saison » acceptés
+    ("bloc Si titré accepté", SI_TITRE, True),
+    ("ligne Si accepté", SI_LIGNE, True),
+    ("tableau Si | Alors accepté", SI_TABLEAU, True),
+    ("bloc Plan de saison accepté", PLAN_SAISON, True),
+    ("interdit après la fin du bloc Si", SI_PUIS_INTERDIT, False),
+    ("interdit hors bloc", PLAN_OK + "\nOn verra plus tard.\n", False),
 ]
 
 if __name__ == "__main__":
