@@ -13,3 +13,18 @@ Début : 2026-11-05. Plan : `docs/refonte-v3/plan.md`.
   **ÉCHEC**. `python -I pipelines/sql.py "select 1"` → `SUPABASE_DB_URL_RO absent de .env et de l'environnement`. Cause : la variable n'est pas définie dans l'environnement cloud (`echo ${SUPABASE_DB_URL_RO:+oui}` → vide). Action utilisateur : l'ajouter dans les réglages de l'environnement cloud (variable d'environnement ou Network secrets), puis rouvrir une session et rejouer la commande. Ne pas la coller dans le chat.
 - Contrôle du 2026-11-05 : `git ls-remote --heads origin` → `72d0271… refs/heads/ccr-d374a4ca-pxf92j` et `bdd444d… refs/heads/main` ; `git branch -r` → `origin/ccr-d374a4ca-pxf92j`, `origin/main`. Les cinq branches de la liste sont absentes (0 suppression nécessaire). Reste `ccr-d374a4ca-pxf92j`, branche de travail de cette session.
 - Preuve de fin « `git branch -r` ne liste que `main` » : **non satisfaite tant que `ccr-d374a4ca-pxf92j` existe**. Les commits S0 (`da76790`, `6cca59d`, `4287830`, `72d0271`) sont sur cette branche, pas sur `origin/main` (`bdd444d`) : fusion dans `main` puis suppression de la branche = décision de l'utilisateur, non faite. « `sql.py` marche en cloud » : satisfaite (voir ci-dessus), sous la réserve « session neuve ».
+
+## S1 — Désarmer le contrôle (2026-11-05)
+
+Commits : f794945 (`police.py` H1/H2 = gros transferts), bc16ace (agent `police` plafonné), efe3b80 (`forme.py` bloc « Si »), 75dff66 (`controle.py` f + b retiré), 5b584c8 (`deja-fait` en étape 0), 8b3e298 (`actives.md`). Aucun hook ajouté, `CLAUDE.md` intact.
+Limite : seuil de gros montant non défini avant S2 (`SEUIL_GROS_MONTANT` vide) → tout achat, vente ou enchère reste contrôlé ; montant illisible = contrôlé. H3 (ligne `decision.py new`) inchangé, hors demande.
+
+- [x] Tests verts (rejoués le 2026-11-05) :
+  `python -I pipelines/test_police.py | tail -1` → `24/24`, code 0
+  `python -I pipelines/test_forme.py | tail -1` → `38/38`, code 0
+  `python -I pipelines/test_controle.py | tail -1` → `33/33`, code 0
+- [ ] Tour réel BasketVibe : **non mesurable** dans cette session (aucun tour de jeu joué). À remplir au prochain tour : durée (cible < 15 min), retours de hooks Stop, passages de police hors transfert (cible 0).
+
+### Journal de durée (manuel, une ligne par tour)
+| Date | Jeu | Durée (min) | Retours de hooks Stop | Police hors transfert |
+|---|---|---|---|---|
