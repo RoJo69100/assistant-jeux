@@ -2,6 +2,12 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
+## Nouvelles (2026-11-05)
+N4. Quand je rends une saisie de ligue BasketVibe → je demande d'abord l'aperçu du match (jamais déduit des confrontations passées) ; « pas de Preview » vaut pour les amicaux seulement.
+N5. Quand je prépare le plan BasketVibe → `gold.bv_exports_state` lu dans le même tour que l'agenda ; chaque « à refaire » devient une ligne Export.
+N6. Quand je propose une règle → « BasketVibe seulement » ou « tous les jeux » dans la même phrase ; une action d'export = catégorie Export, jamais le domaine (évite H3 police).
+N8. Quand je lance un agent avec plafond d'appels → je le rappelle dans la demande ; quand j'écris un fichier → commit avant la réponse (N9, hook Stop).
+
 ## Nouvelles (2026-11-04)
 N1. `import psycopg` échoue (session cloud) → `pip install -r requirements.txt`, sinon connecteur Supabase en lecture et `(manuel, script non exécuté)` dans `parite-exports.log`.
 N3. DDL par le connecteur Supabase → jamais de `drop policy` (confirmation invisible) ; table neuve : `create policy` seul, sinon l'utilisateur applique.
@@ -20,8 +26,7 @@ K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau l
 
 ## S — soir du 04/11 (rétro)
 S1. « Que faire » → toutes les catégories (Composition, Tactique, Entraînement, Transferts, Finances, Analyse) ; une catégorie vide est prouvée par une requête.
-S2. Exports → `deja-fait` AVANT le plan ; jamais un export déjà lisible en base (E7/R-7).
-S3. Défaite en base → `analyste` dans le même tour (hook à écrire).
+S3. Défaite de ligue ou de coupe en base → `analyste` dans le même tour (hook à écrire) ; amical BasketVibe perdu = test jugé à son échéance (arbitrage 15).
 S4. `police` > 3 min ou 12 appels → brouillon « police partielle » ; pas de 2e passe (`.claude/agents/police.md`, S1 du 2026-11-05 ; aucun hook).
 S5. « Mon équipe » pour recrues ou scouts → cible = besoin de MON effectif.
 
