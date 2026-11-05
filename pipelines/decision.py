@@ -95,10 +95,10 @@ def cmd_new(a) -> int:
         a.lecon = a.lecon if ":" in a.lecon else f"{a.jeu}:{a.lecon}"  # ids migrés : <jeu>:L-nnn
     eval_apres = dt.datetime.combine(dt.date.fromisoformat(a.evaluer_le), dt.time(12, 0)).astimezone()
     if transport() == "https":  # cloud : écriture par la fonction public.decision_ecrire (POST, clé de service)
-        rep = rpc_post("decision_ecrire", {"op": "new", "jeu": a.jeu, "equipe": a.equipe, "domaine": a.domaine,
-                                           "label": a.label, "hypothese": a.hypothese, "prediction": pred,
-                                           "eval_after": eval_apres.isoformat(), "preuve": preuve,
-                                           "lecon": a.lecon, "sujet": a.sujet})
+        rep = rpc_post("decision_ecrire", {"p": {"op": "new", "jeu": a.jeu, "equipe": a.equipe, "domaine": a.domaine,
+                                                 "label": a.label, "hypothese": a.hypothese, "prediction": pred,
+                                                 "eval_after": eval_apres.isoformat(), "preuve": preuve,
+                                                 "lecon": a.lecon, "sujet": a.sujet}})
         if not rep.get("ok"):
             print(f"❌ décision refusée : {rep.get('erreur')}")
             return 1
@@ -144,7 +144,7 @@ def marque(jeu: str, domaine: str, jour: dt.date | None = None) -> Path:
 
 def cmd_statut(a) -> int:
     if transport() == "https":
-        rep = rpc_post("decision_ecrire", {"op": "statut", "id": a.id, "statut": a.statut, "note": a.note})
+        rep = rpc_post("decision_ecrire", {"p": {"op": "statut", "id": a.id, "statut": a.statut, "note": a.note}})
         if not rep.get("ok"):
             print(f"❌ décision D-{a.id} introuvable")
             return 1
