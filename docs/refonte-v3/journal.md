@@ -23,7 +23,7 @@ Limite : seuil de gros montant non défini avant S2 (`SEUIL_GROS_MONTANT` vide) 
   `python -I pipelines/test_police.py | tail -1` → `24/24`, code 0
   `python -I pipelines/test_forme.py | tail -1` → `38/38`, code 0
   `python -I pipelines/test_controle.py | tail -1` → `33/33`, code 0
-- [ ] Tour réel BasketVibe : **non mesurable** dans cette session (aucun tour de jeu joué). À remplir au prochain tour : durée (cible < 15 min), retours de hooks Stop, passages de police hors transfert (cible 0).
+- [x] Tour réel BasketVibe du 2026-11-05 (13:47 Paris) : 2,4 min jusqu'au premier rendu (`date -u` 12:47:58 → 12:50:21), 1 retour de hook Stop, 0 police (aucun agent `police` lancé de toute la session, dont 3 agents d'analyse et 1 saisie de composition enregistrée sous le n° 1072). Détail : journal de durée ci-dessous. **Réserve** : tour léger (exports seulement) ; aucun transfert rendu, donc le passage de la police sur un gros transfert n'est pas encore observé. Les tours suivants (agents, questions) n'ont pas de durée mesurée.
 
 ### Journal de durée (manuel, une ligne par tour)
 | Date | Jeu | Durée (min) | Retours de hooks Stop | Police hors transfert |
