@@ -206,3 +206,21 @@ Fichier : `docs/attentes/regles-decision-basketvibe.yaml` (commit 070759d). Char
 - **Base naïve** : prédire toujours « victoire » ; taux = victoires de ligue observées / matchs de ligue de la même population.
 - **Critère de réussite** : sur au moins **20 matchs** avec un classement antérieur disponible, la part de prédictions justes (hors équivalent) dépasse la base naïve d'**au moins 10 points**.
 - **Repli** : critère non tenu → statut « non utilisable » ; G1 et G2 désactivées dans le YAML (« désactivée le <date> : test L3c ») ; la revue hebdomadaire garde les paliers 1 à 4 et 6. Moins de 20 matchs avec classement antérieur → « non mesurable » avec le nombre exact (G1 et G2 restent désactivées tant que le palier 5 n'est pas validé).
+
+**Étapes 1 et 2 : script et résultat (2026-11-06).** `pipelines/palier5_test.py` et `pipelines/test_palier5.py` (commit 12e5a77 ; la correction d'un arrondi à E pile était dans le même commit, avant tout résultat réel).
+- `PYTHONIOENCODING=utf-8 python -I pipelines/test_palier5.py` → `11/11`.
+- `PYTHONIOENCODING=utf-8 python -I pipelines/palier5_test.py` :
+```
+matchs de ligue lus : 24 ; relevés de classement lus : 67
+| date | adversaire | nos points/match | les siens | prédiction | résultat réel | |
+| 2026-10-19 | BARIUM | 95.4 | 100.9 | défaite | victoire | faux |
+| 2026-10-21 | Žirmūnai | 95.4 | 106.3 | défaite | victoire | faux |
+| 2026-10-24 | Astur Hoops | 95.4 | 106.1 | défaite | défaite | juste |
+| 2026-10-26 | Wolves Empire | 97.1 | 93.7 | victoire | victoire | juste |
+n (avec classement antérieur) = 4 ; sans classement antérieur = 20 ; justes = 2, faux = 2, équivalents = 0
+part de prédictions justes (hors équivalent) = 50.0 % ; base naïve (toujours victoire) = 75.0 % ; E = 0.3
+verdict : non mesurable : 4 match(s) avec classement antérieur, il en faut 20
+```
+- Cause des 20 matchs sans classement antérieur : `select day, season_id, count(*), sum(wins+losses) from silver.bv_standings_weekly group by 1,2` → 5 relevés seulement : 2026-10-18 (12 équipes, 216 matchs), 2026-10-25 (252), 2026-10-26 (418), 2026-11-01 (saison 2, **0 match joué**), 2026-11-05 (24). Les 24 matchs de ligue vont du 2026-09-07 au 2026-11-04 : ceux d'avant le 2026-10-18 n'ont aucun relevé antérieur ; ceux de la saison 2 n'ont qu'un relevé à 0 match (points par match indéfinis).
+- **Verdict : non mesurable (4 matchs sur les 20 requis).** Sur ces 4 matchs : 50,0 % justes contre 75,0 % de base naïve, soit le palier 5 en dessous de la base ; n trop petit pour conclure, aucune décision sur la qualité du palier 5.
+- Piste : le test redevient mesurable quand `silver.bv_standings_weekly` aura au moins 20 matchs précédés d'un relevé à matchs joués (relevé du classement après chaque match) ; rejouable tel quel avec `python -I pipelines/palier5_test.py`.
