@@ -56,6 +56,13 @@ def reponses_https():
     yield "jsonb reçu en chaîne : décodé", sqlmod.lignes_de(json.loads(double)) == [ligne]
     ordinaire = sqlmod.lignes_de([{"nom": "[Jean]", "n": 1}])
     yield "chaîne ordinaire inchangée", ordinaire == [{"nom": "[Jean]", "n": 1}] and isinstance(ordinaire[0]["nom"], str)
+    for nom, brut, attendu in (("texte", "pas du json", "réponse inattendue de sql_ro : str : pas du json"),
+                               ("objet d'erreur", {"message": "boom"}, "réponse inattendue de sql_ro : dict : {'message': 'boom'}")):
+        try:
+            sqlmod.lignes_de(brut)
+            yield f"erreur lisible ({nom})", False
+        except SystemExit as e:
+            yield f"erreur lisible ({nom})", str(e) == attendu
 
 
 if __name__ == "__main__":

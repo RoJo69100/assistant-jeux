@@ -68,9 +68,16 @@ def via_pg(sql: str, params):
 def lignes_de(corps):
     """Liste de lignes (dict) depuis la réponse de sql_ro. Une réponse encodée deux fois (chaîne JSON au lieu de liste)
     est décodée ; les chaînes ordinaires des cellules ne sont jamais touchées."""
-    if isinstance(corps, str):
-        corps = json.loads(corps)
-    return [json.loads(l) if isinstance(l, str) else l for l in corps]
+    brut = corps
+    try:
+        if isinstance(corps, str):
+            corps = json.loads(corps)
+        lignes = [json.loads(l) if isinstance(l, str) else l for l in corps]
+        if all(isinstance(l, dict) for l in lignes):
+            return lignes
+    except (ValueError, TypeError):
+        pass
+    sys.exit(f"réponse inattendue de sql_ro : {type(brut).__name__} : {str(brut)[:200]}")
 
 
 def via_https(sql: str):
