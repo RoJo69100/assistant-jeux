@@ -25,8 +25,31 @@ CAS = [
     ("payload hors bronze", "select payload from silver.bv_x", True),
 ]
 
+def bascule_https():
+    """Postgres répond mais refuse l'authentification : la lecture passe en https ; autre erreur : relancée."""
+    class Refus(Exception):
+        pass
+
+    vus = []
+    sqlmod.via_pg = lambda sql, params: (_ for _ in ()).throw(Refus('FATAL: password authentication failed for user "postgres"'))
+    sqlmod.via_https = lambda sql: vus.append(sql) or (["ok"], [(1,)])
+    r = sqlmod.lire_pg_ou_https("select 1")
+    yield "auth refusée : bascule https", r == (["ok"], [(1,)]) and vus == ["select 1"]
+    sqlmod.via_pg = lambda sql, params: (_ for _ in ()).throw(Refus("syntax error"))
+    try:
+        sqlmod.lire_pg_ou_https("select 1")
+        yield "autre erreur : relancée", False
+    except Refus:
+        yield "autre erreur : relancée", len(vus) == 1
+
+
 if __name__ == "__main__":
     echecs = 0
+    extra = list(bascule_https())
+    for nom, ok in extra:
+        echecs += not ok
+        print(("OK " if ok else "ECHEC "), nom)
+    total = len(CAS) + len(extra)
     for nom, q, attendu in CAS:
         try:
             sqlmod.verifie(q)
@@ -36,5 +59,5 @@ if __name__ == "__main__":
         ok = accepte == attendu
         echecs += not ok
         print(("OK " if ok else "ECHEC "), nom)
-    print(f"{len(CAS) - echecs}/{len(CAS)}")
+    print(f"{total - echecs}/{total}")
     sys.exit(1 if echecs else 0)

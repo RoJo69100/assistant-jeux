@@ -101,6 +101,22 @@ def rpc_post(nom: str, corps: dict):
         sys.exit(f"erreur (https {e.code}) : {e.read().decode('utf-8', 'replace')[:300]}")
 
 
+def auth_refusee(e: Exception) -> bool:
+    return "authentication failed" in str(e).lower()
+
+
+def lire_pg_ou_https(sql: str, params=None):
+    """Postgres direct ; si le serveur répond mais refuse l'authentification, bascule en HTTPS (même requête)."""
+    try:
+        return via_pg(sql, params)
+    except Exception as e:  # noqa: BLE001 - psycopg.OperationalError, importé à la demande
+        if not auth_refusee(e):
+            raise
+        if params:
+            sql = sql % tuple(litteral(str(p)) if p is not None else "null" for p in params)
+        return via_https(sql)
+
+
 def executer(sql: str, params=None):
     """Lecture sur le transport de sql.py (HTTPS en cloud, Postgres direct sinon) : (colonnes, lignes).
     `params` (%s) n'est pris en charge qu'en Postgres direct ; en HTTPS, la requête doit être littérale (voir litteral())."""
@@ -108,7 +124,7 @@ def executer(sql: str, params=None):
         if params:
             sql = sql % tuple(litteral(str(p)) if p is not None else "null" for p in params)
         return via_https(sql)
-    return via_pg(sql, params)
+    return lire_pg_ou_https(sql, params)
 
 
 def litteral(s: str) -> str:
@@ -165,7 +181,7 @@ def main() -> int:
     else:
         p.error("donne une requête ou --page-id et --payload-path")
 
-    cols, lignes = via_https(sql) if mode == "https" else via_pg(sql, params)
+    cols, lignes = via_https(sql) if mode == "https" else lire_pg_ou_https(sql, params)
     tronque = len(lignes) > a.max_rows
     lignes = lignes[:a.max_rows]
     print(tableau(cols, lignes, a.max_col))
