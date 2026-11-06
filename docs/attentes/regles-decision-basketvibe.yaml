@@ -1,0 +1,272 @@
+# Règles de décision quotidienne BasketVibe (lot L3a, rédigé le 2026-11-06, rien n'est codé).
+# Statuts : sourcé (règle de jeu citée) | mesuré (chiffre lu en base le 2026-11-06) | a_valider (l'utilisateur tranche).
+# Une règle de jeu sans source n'est pas affirmée : statut a_valider.
+
+charte:
+  source: "utilisateur, 2026-11-06 (consignes des 2026-11-05/06)"
+  objectif: titre
+  horizon: "maintenant et moyen terme (core.club_strategy.horizon = 3_saisons)"
+  jeunes: "oui : minutes aux jeunes si rien à jouer (core.objective_rule titre_former / rien_former)"
+  vendre_pour_profit: oui
+  intouchables: "aucun (la meilleure équipe)"
+  temps_du_soir: "7 minutes par jeu (environ 1 heure pour l'ensemble des jeux, même budget pour chacun)"
+  taille_du_plan: "au plus 8 lignes, triées par priorité puis par heure limite ; le reste dans une ligne « autres points »"
+  tests_tactiques: "en AMICAL seulement ; aucun test en ligue ni en coupe ; un amical perdu = un test jugé à son échéance (arbitrage 15)"
+  analyse_des_matchs: "UNE fois par semaine, sur TOUS les matchs de la semaine (ligue, coupe, amicaux) ; pas d'analyse le soir sauf défaite GRAVE (revue_hebdo.exception_grave)"
+  colonnes_core_club_strategy: "aucune ligne BasketVibe dans core.club_strategy (select * : 0 ligne, 2026-11-06). Colonnes existantes : horizon, poids_jeunes, poids_veterans, appetit_risque, plafond_masse_salariale_pct_revenus, reserve_tresorerie, vendre_pour_profit, valide_le. Aucune migration créée ; l'insertion de la ligne reste à décider."
+
+seuils_mesures:   # requêtes et sorties : docs/refonte-v3/journal.md, section L3a
+  mesure_le: "2026-11-06"
+  gros_montant:
+    valeur_proposee: 450000
+    base: "gold.bv_finance_health.weekly_fixed_costs = 452 795 (une semaine de charges fixes) ; solde 1 167 106"
+    statut: a_valider
+    note: "aucun seuil n'est défini dans le dépôt (SEUIL_GROS_MONTANT vide, journal S2) ; le chiffre est une proposition, pas une règle de jeu"
+  perte_transferts_tolerée_4_semaines:
+    valeur_proposee: 261516
+    base: "solde 1 167 106 − gold.bv_finance_s2_projection.safety_reserve 905 590 (2 semaines de charges)"
+    contexte: "pertes de revente observées sur le marché (gold.bv_transfer_history, 69 reventes du 2026-09-02 au 2026-11-04) : 48 gagnantes, marge nette médiane 44 000, p10 −39 650, pire −256 800"
+    statut: mesuré
+  part_des_salaires:
+    valeur_mesuree_pct: 52.1
+    base: "gold.bv_finance_health.salaries_pct_of_income (292 795 / 561 642)"
+    plafond: "non mesurable : aucun plafond sourcé (core.club_strategy vide) ; levier utilisé = résultat hebdomadaire estimé 108 847, soit au plus +108 847 de salaire hebdomadaire avant le rouge (fiche finances § 2)"
+    statut: mesuré
+  poste_le_plus_faible:
+    valeur: "SG (ps_avg 46.4, profondeur 4) ; viennent ensuite SF 47.1, C 49.4, PG 49.4, PF 53.3"
+    base: "gold.bv_position_summary, semaine 2026-11-01 (5 postes, 1 observation par poste)"
+    plus_faible_joueur: "Sacha Leclerc (SG, ps 41.9, 17 ans) dans gold.bv_roster_now"
+    statut: mesuré
+    reserve: "écart de 0,7 point entre SG et SF : peu fiable (pas de variance mesurable sur un relevé)"
+  age_de_declin:
+    valeur: 31
+    base: "core.game_params age_declin = 31 (basketvibe-entrainement/05-apres-30-ans)"
+    effectif: "gold.bv_roster_now : aucun joueur de 31 ans ou plus (maximum 30 : Min-jun Dang) ; 1 joueur de 29 ans (Léo Lefebvre)"
+    statut: sourcé
+
+secteurs:
+  effectif:
+    - id: EFF-1
+      option: acheter
+      condition: "gold.bv_position_summary.depth <= 2 sur un poste (poste mince), ou gold.bv_market_candidates.enters_top8 = true avec would_rank_in_slot = 1 sur le poste le plus faible"
+      action: "Fais une enchère sur <joueur> (poste <poste>, PS >= <ps du titulaire + 1>) jusqu'à <bid_ceiling_resale>"
+      raison: "poste <poste> : profondeur <depth>, PS moyen <ps_avg> ; <joueur> entre dans le top 8 (TS +<x>)"
+      prouvera_erreur: "mesure : TS de l'équipe (standings.club_strength) sans hausse après l'arrivée ; échéance : 2 matchs de ligue"
+      source: "fiche effectif.md livrable 1 (postes minces <= 2) ; [M§2.2] TS = top 8"
+      statut: sourcé
+      mesure_du_jour: "profondeur minimale 3 (aucun poste mince) : règle non déclenchée"
+    - id: EFF-2
+      option: vendre
+      condition: "gold.bv_roster_now.age >= 31 (déclin chaque semaine) et minutes en ligue faibles, ou salaire par point de PS (bv_sell_candidates) au-dessus du poste"
+      action: "Mets <joueur> en vente"
+      raison: "<age> ans, déclin hebdomadaire [M§8.5], <min> min/match, salaire <x> (<y> par PS)"
+      prouvera_erreur: "mesure : l'équipe perd plus de <n> TS ou une défaite attribuée à son absence à la revue hebdo ; échéance : 2 semaines"
+      source: "fiche transferts.md livrable 2 ; [M§8.5], [M§11.1] taxe 5 %, 9 joueurs disponibles"
+      statut: sourcé
+      mesure_du_jour: "aucun joueur >= 31 ans : règle non déclenchée"
+    - id: EFF-3
+      option: vendre_pour_profit
+      condition: "valeur de marché (gold.bv_price_ref_ps, comparables >= 5) supérieure au prix d'achat et au coût de remplacement ; jamais si la vente fait passer sous 9 joueurs disponibles"
+      action: "Vends <joueur> à partir de <prix p25 de la tranche> et rachète <remplaçant libre à 10 000>"
+      raison: "marge nette attendue <x> (médiane du marché : 44 000, 48 reventes gagnantes sur 69)"
+      prouvera_erreur: "mesure : TS inchangé et marge réalisée >= 0 à la revente ; échéance : 1 semaine après la vente"
+      source: "charte (vendre pour profit : oui) ; gold.bv_transfer_history (mesuré le 2026-11-06)"
+      statut: a_valider
+      note: "règle de décision proposée ; le mécanisme de vente est sourcé, pas le seuil de déclenchement"
+    - id: EFF-4
+      option: minutes_aux_jeunes
+      condition: "gold.match_objective.objectif = former (titre acquis ou rien à jouer) et charte horizon 3_saisons"
+      action: "Aligne <jeunes> en priorité au match du jour"
+      raison: "<n> points d'avance / rang <rank>/<n_teams> : rien à gagner ce soir, minutes aux jeunes"
+      prouvera_erreur: "mesure : gains d'entraînement et de match des jeunes alignés non supérieurs à ceux restés sur le banc ; échéance : 4 semaines"
+      source: "core.objective_rule titre_former / rien_former (sql/core/011) ; la ligne club_strategy de BasketVibe est absente : la règle ne se déclenche pas tant qu'elle n'existe pas"
+      statut: a_valider
+    - id: EFF-5
+      option: garder
+      condition: "aucune des règles EFF-1 à EFF-4 ne se déclenche"
+      action: "Ne change rien à l'effectif (une demi-ligne dans le commentaire)"
+      raison: "profondeur >= 3 sur 5 postes, aucun joueur >= 31 ans, aucune bonne affaire"
+      prouvera_erreur: "mesure : une défaite expliquée par la composition (palier 2 de la revue hebdo) deux semaines de suite"
+      source: "CLAUDE.md inviolable 5 ; skill basketvibe-aujourdhui étape 6"
+      statut: sourcé
+
+  transferts:
+    - id: TRF-1
+      option: acheter_bonne_affaire
+      condition: "export Marché < 24 h (gold.bv_exports_state) ; gold.bv_market_bargains.ref_reliable = true ; resale_margin_p25 > 0 ; comparables >= 5"
+      action: "Enchère maximale <bid_ceiling_resale> sur <joueur>, fin de l'enchère <heure Paris>"
+      raison: "prix <x> contre p25 de la tranche <y> (<n> ventes comparables), taxe 5 % déduite"
+      prouvera_erreur: "mesure : revente au p25 impossible (marge nette < 0) ou TS sans gain ; échéance : 14 jours (durée médiane de détention du marché)"
+      source: "fiche transferts.md règle 4 ; [M§11.1], [M§11.3], [M§10.3]"
+      statut: sourcé
+      condition_argent: "coût total (prix + salaire x semaines restantes) <= solde − réserve de sécurité (905 590) ; au-dessus du seuil de gros montant : dossier.py puis police"
+    - id: TRF-2
+      option: acheter_libre
+      condition: "poste mince ou remplaçant manquant ; joueur libre au marché"
+      action: "Prends le libre <joueur> à 10 000"
+      raison: "libre à 10 000, meilleur rapport qualité-prix pour un remplaçant (PS <x> contre <y> en place)"
+      prouvera_erreur: "mesure : minutes en ligue < 10 par match sur 4 matchs ; échéance : 2 semaines"
+      source: "fiche transferts.md livrable 1 ; [M§11.4]"
+      statut: sourcé
+    - id: TRF-3
+      option: vendre
+      condition: "voir EFF-2 / EFF-3"
+      action: "Mets <joueur> en vente à <prix de départ>"
+      raison: "voir EFF-2 / EFF-3"
+      prouvera_erreur: "voir EFF-2 / EFF-3"
+      source: "fiche transferts.md livrable 2"
+      statut: sourcé
+    - id: TRF-4
+      option: garder
+      condition: "export Marché > 24 h ou aucune affaire fiable ou fonds sous la réserve"
+      action: "Pas d'enchère ce soir ; ligne Export « Marché » si > 24 h"
+      raison: "marché de <age_h> h ou marge p25 <= 0"
+      prouvera_erreur: "mesure : une affaire écartée se revend avec marge >= 20 % du prix (bv_resale_stats) ; échéance : 14 jours"
+      source: "skill basketvibe-aujourdhui étape 6"
+      statut: sourcé
+
+  finances:
+    - id: FIN-1
+      option: alerte_perte
+      condition: "gold.bv_finance_health.weekly_result_est < 0"
+      action: "Réduis <poste de charge le plus fort> (personnel ou académie) ce soir"
+      raison: "résultat hebdo estimé <x>, cause : <catégorie qui a le plus bougé>"
+      prouvera_erreur: "mesure : gold.bv_finance_weekly_result de la semaine suivante >= 0 ; échéance : dimanche suivant"
+      source: "fiche finances.md livrable 1 (case E15)"
+      statut: sourcé
+      mesure_du_jour: "weekly_result_est = +108 847 : règle non déclenchée"
+    - id: FIN-2
+      option: investir
+      condition: "montant <= gold.bv_finance_s2_projection.investable_now_end_s1 (570 288 le 2026-11-06) ; réserve de sécurité 905 590 intacte"
+      action: "Engage <montant> dans <académie | personnel | recrue>"
+      raison: "capacité d'investissement <x> après réserve ; rendement <règle de jeu>"
+      prouvera_erreur: "mesure : gain attendu (progression, forme, TS) non constaté ; échéance : 4 semaines"
+      source: "fiche finances.md livrable 3 (case E17) ; rapport investissement/jauge d'académie : skill basketvibe-academie"
+      statut: sourcé
+    - id: FIN-3
+      option: personnel
+      condition: "gold.bv_personnel_status : coût hebdomadaire > effet actuel, ou poste vacant utile (médecin après blessure)"
+      action: "Vire <poste> avant dimanche 02:30 | Recrute <poste>"
+      raison: "coût <x> par semaine pour un effet de <y> ; facturation au maximum de la semaine"
+      prouvera_erreur: "mesure : blessures ou forme dégradées dans les 2 semaines (gold.bv_daily_alerts)"
+      source: "fiche finances.md livrable 4 (case E18) ; [M§4.3], [Dev 2026-09-14]"
+      statut: sourcé
+    - id: FIN-4
+      option: masse_salariale
+      condition: "recrue ou prolongation dont le salaire hebdomadaire dépasse weekly_result_est (108 847)"
+      action: "Refuse la recrue au salaire de <x>"
+      raison: "elle fait passer la semaine type dans le rouge (résultat <y>)"
+      prouvera_erreur: "mesure : le résultat hebdo reste positif malgré le salaire ; échéance : 2 semaines"
+      source: "fiche finances.md livrable 2 (case E16)"
+      statut: sourcé
+    - id: FIN-5
+      option: garder
+      condition: "FIN-1 à FIN-4 non déclenchées"
+      action: "Aucun mouvement d'argent (demi-ligne dans le commentaire)"
+      raison: "solde <x>, résultat hebdo <y>, salaires <z> % des recettes (52,1 % mesuré)"
+      prouvera_erreur: "mesure : une occasion refusée par la règle de réserve aurait rapporté plus (comparer à bv_resale_stats) ; échéance : 4 semaines"
+      source: "skill basketvibe-aujourdhui étape 6"
+      statut: sourcé
+
+  entrainement_du_samedi:   # saisie avant dimanche 04:00 (Paris)
+    - id: ENT-1
+      option: changer_competence_lente
+      condition: "gold.bv_training_options : compétence principale >= 75 (rendement x0,88 à 75, x0,75 à 80) ; au-dessus de 80 : changer sauf raison forte"
+      action: "Passe <joueur> de <compétence> à <compétence du poste> en principale"
+      raison: "<compétence> à <valeur> : rendement x<coef> ; <nouvelle compétence> pèse <ps_weight> dans le PS du poste"
+      prouvera_erreur: "mesure : gold.bv_training_gains_exact du joueur sur 4 à 5 semaines inférieur au gain d'avant ; échéance : 5 semaines"
+      source: "fiche entrainement.md § 2 ; [M§8.4]"
+      statut: sourcé
+    - id: ENT-2
+      option: jeune_potentiel
+      condition: "joueur < 30 ans, gold.bv_potential_estimate.confidence élevée (16-18 ans et 25 ans : distance <= 0,03 et secondary_ratio 0,50)"
+      action: "Entraîne <joueur> sur la compétence de son emplacement réel"
+      raison: "potentiel estimé <p> (confiance <c>), gain attendu <x> par semaine"
+      prouvera_erreur: "mesure : gain réel < 70 % du gain attendu (blessure, choix non sauvegardé ou erreur de potentiel) ; échéance : 2 semaines"
+      source: "fiche entrainement.md § 1 et 2 ; [M§8.3] ; skill basketvibe-entrainement"
+      statut: sourcé
+    - id: ENT-3
+      option: age
+      condition: "joueur de 29 ans (dernier entraînement utile) ou 30 ans (plus de progression) ou >= 31 (déclin)"
+      action: "Pas de progression visée sur <joueur> ; entraîne l'endurance ou une compétence d'appoint"
+      raison: "<age> ans : 0 progression à 30 ans [M§8.5]"
+      prouvera_erreur: "mesure : gain positif mesuré à 30 ans ; échéance : 2 semaines"
+      source: "fiche entrainement.md règle 4 ; [M§8.5] ; core.game_params age_declin = 31"
+      statut: sourcé
+    - id: ENT-4
+      option: garder
+      condition: "choix cohérent depuis moins de 4 à 5 semaines (il en faut 4 à 5 pour juger)"
+      action: "Ne change pas l'entraînement de <joueur>"
+      raison: "choix cohérent, semaine <n> sur 5"
+      prouvera_erreur: "mesure : gain réel inférieur au gain attendu 2 semaines de suite ; échéance : 2 semaines"
+      source: "fiche entrainement.md § 2 critère 4 ; [Com 2026-09-01]"
+      statut: sourcé
+
+revue_hebdo:
+  declencheur: "une fois par semaine, sur tous les matchs de la semaine : gold.bv_match_report (competition = league, cup, friendly)"
+  note_amicaux: "un amical perdu est un test (arbitrage 15) : jugé à son échéance, pas diagnostiqué ici sauf s'il réfute le test"
+  resultat_du_match: "toujours my_result / is_mine de la base, jamais le score brut (inviolable 4)"
+  echelle_de_diagnostic:   # dans cet ordre, on s'arrête au premier palier qui explique
+    - palier: 1
+      nom: disponibilité
+      lecture: "blessés (gold.bv_roster_now.injury_return_on), fatigue, absents du cinq habituel"
+      verdict: "défaite expliquée par l'absence de <joueurs>"
+      statut: sourcé
+      source: "[M§5.6] fatigue ; core.alert_rule"
+    - palier: 2
+      nom: composition
+      lecture: "cinq et rotation alignés contre la meilleure composition disponible (gold.bv_slot_fit, rang à l'emplacement)"
+      verdict: "titulaire mal placé ou meilleur joueur sur le banc"
+      statut: sourcé
+      source: "fiche tactique.md ; [M§6.2]"
+    - palier: 3
+      nom: tactique
+      lecture: "réglages du match et écart aux matchs précédents (focus, tir, zone, agressivité) ; gold.bv_match_report vs matchs gagnés"
+      verdict: "réglage <x> changé d'un cran par rapport aux victoires"
+      statut: sourcé
+      source: "fiche tactique.md ; fiche match.md"
+    - palier: 4
+      nom: forme_des_joueurs
+      lecture: "gold.bv_roster_now.form et fatigue au coup d'envoi"
+      verdict: "forme <= 4 ou fatigue hors zone verte pour <joueurs>"
+      statut: sourcé
+      source: "[M§5.5], [M§5.6]"
+    - palier: 5
+      nom: force_relative
+      lecture: "points marqués et encaissés par match de l'adversaire (silver.bv_standings_weekly : points_for / points_against divisés par wins + losses) contre les nôtres avant le match, et club_strength"
+      verdict: "« défaite probable : adversaire plus fort » ou « défaite inattendue »"
+      statut: a_valider
+      confiance: faible
+      note: "non mesuré, à valider par un test sur l'historique avant d'être affiché comme certain (67 lignes de classement hebdomadaire disponibles le 2026-11-06 ; aucune confrontation prédiction/résultat n'a été faite)"
+    - palier: 6
+      nom: hasard
+      lecture: "écart de score faible (gold.bv_match_report.margin) et peu d'occasions (fga, fta)"
+      verdict: "défaite à moins de <seuil> points avec des statistiques équivalentes"
+      statut: a_valider
+      note: "seuil d'écart faible non mesuré : à fixer sur la distribution de margin (13 défaites de ligue, 0 de coupe, 14 d'amical au 2026-11-06)"
+  sortie:
+    max_lecons_candidates_par_semaine: 5
+    format_de_chaque_lecon: "palier | preuve chiffrée (vue, colonne, valeur) | correction testable en amical"
+    enregistrement: "outputs/basketvibe/learnings.md (C-nnn avec critère vérifiable)"
+  exception_grave:
+    definition: "série de 2 défaites de ligue d'affilée, amicaux exclus"
+    source: "core.objective_rule serie / condition serie_defaites (sql/core/011_objective_rule.sql) ; attente A-1"
+    statut: sourcé
+    action: "analyse le soir même (agent analyste) puis changement fort ce soir (composition, tactique ou joueur)"
+    autres_definitions: "toute autre définition de « grave » (défaite à la coupe, écart de plus de N points, défaite contre un adversaire plus faible) : a_valider par l'utilisateur"
+
+tactique_amical:
+  principe: "un seul réglage nommé à la fois, en AMICAL seulement ; jamais en ligue ni en coupe"
+  quand_proposer: "chaque amical où le dernier test est jugé (échéance atteinte) ou réfuté, et où aucun test n'est en cours"
+  avant_le_match:
+    - "nommer le réglage testé (zone Rim/Middle/Perimeter ou un réglage de nos joueurs) et sa valeur de départ"
+    - "écrire la prédiction chiffrée : effet attendu sur une colonne de gold.bv_match_report (ex. opp_efg_pct, def_rtg) et l'ordre de grandeur"
+    - "écrire ce qui réfute : valeur de la colonne hors de la marge à la date d'évaluation"
+  apres_le_match:
+    - "mesurer la colonne prédite sur ce match et sur les matchs au même réglage ; comparer avec le dernier amical sans ce réglage"
+    - "juger à l'échéance : confirmé, réfuté ou non concluant (n matchs au même réglage < 3 = non concluant)"
+    - "un test réfuté lance l'analyste ; un amical perdu sans test réfuté n'est pas analysé (arbitrage 15)"
+  reserve_amical: "fatigue et expérience comptent environ 1/10 en amical et pas de blessure [M§1.2] : un résultat d'amical se transpose à la ligue avec confiance faible"
+  composition_de_test: "complète, jamais le cinq de ligue ou de coupe ; réglages repris du dernier amical, pas de preset (résumé BasketVibe)"
+  statut: a_valider
+  note: "le protocole est rédigé d'après l'arbitrage 15 et le résumé BasketVibe ; le nombre minimal de matchs par test (3) est une proposition"
