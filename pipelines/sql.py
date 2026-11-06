@@ -8,6 +8,9 @@ Transport : Postgres direct (port 5432) si joignable, sinon HTTPS via la fonctio
 qui tourne en assistant_ro ; il faut alors SUPABASE_URL et SUPABASE_SECRET_KEY. Forcer : SQL_TRANSPORT=pg|https.
 Sortie : tableau Markdown compact, `limit` ajouté, cellules tronquées, « n lignes / tronqué » en pied.
 Toute écriture est refusée ici (une seule instruction select/with/explain) et par le rôle (transaction en lecture seule).
+Pièges du transport HTTPS : la requête ne doit contenir AUCUNE colonne nommée `t` (alias de la sous-requête de public.sql_ro :
+`json_agg(t)` renverrait cette colonne au lieu de la ligne, d'où une réponse en liste de chaînes) ; les requêtes avec
+`jsonb_pretty`, ou `jsonb_agg` combiné à `jsonb_object_keys`, peuvent être bloquées par Cloudflare (403, page HTML).
 """
 import argparse
 import json
