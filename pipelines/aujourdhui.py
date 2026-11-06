@@ -26,6 +26,20 @@ CAT_AGENDA = {"ligue": "Tactique", "amical": "Composition", "entraînement": "En
 CAT_ALERTE = {"blessure": "Composition", "fatigue": "Composition", "forme": "Composition",
               "finances": "Finances", "transferts": "Transferts", "export": "Exports"}
 MAX_COL = 8  # colonnes d'une vue affichées en « clé=valeur »
+# Registre outputs/basketvibe/fait-<jour>.md (skill deja-fait) : écran de bv_exports_state ou catégorie
+# d'agenda -> mots qui, présents dans une ligne du registre, retirent l'action du plan (« Déjà fait »).
+MOTS_FAIT = {
+    "Mes enchères": ("mes enchères",),
+    "Amical : tactique du match": ("export de l'amical",),
+    "Personnel": ("personnel",),
+    "Finances": ("finances",),
+    "Entraînement": ("entraînement",),
+    "Académie": ("académie",),
+    "Marché (enchères)": ("transferts en cours", "marché"),
+    "Match de ligue : aperçu": ("aperçu",),
+    "ligue": ("saisie de la ligue",),
+    "amical": ("saisie de l'amical",),
+}
 
 REQUETES = {
     "gold.bv_agenda": "select day, at_time, priority, category, action from gold.bv_agenda "
@@ -103,8 +117,18 @@ def heure(v):
     return None if v is None else str(v)[:5]
 
 
-def plan(donnees, erreurs, jour, maintenant):
-    """Liste de (catégorie, priorité 1-3, heure 'HH:MM' | None, action)."""
+def lire_fait(jour):
+    """Texte du registre du jour en minuscules (apostrophes droites), vide s'il n'existe pas."""
+    f = RACINE / "outputs/basketvibe" / f"fait-{jour.isoformat()}.md"
+    return f.read_text(encoding="utf-8").lower().replace("’", "'") if f.exists() else ""
+
+
+def deja(fait, cle):
+    return any(m in fait for m in MOTS_FAIT.get(cle, ()))
+
+
+def plan(donnees, erreurs, jour, maintenant, fait=""):
+    """Liste de (catégorie, priorité 1-3, heure 'HH:MM' | None, action) ; catégorie « Déjà fait » pour le registre."""
     out = []
     # 1. Agenda (aujourd'hui, et demain avant 10:00 après 18:00 : règle d'horizon du skill, étape 1)
     m = manque(donnees, erreurs, "gold.bv_agenda", "Équipe (aperçu, joueurs)")
@@ -114,6 +138,9 @@ def plan(donnees, erreurs, jour, maintenant):
         d = r["day"] if isinstance(r["day"], dt.date) else dt.date.fromisoformat(str(r["day"])[:10])
         h = heure(r["at_time"])
         if d == jour or (d == jour + dt.timedelta(days=1) and maintenant.hour >= 18 and h and h < "10:00"):
+            if deja(fait, r["category"]):
+                out.append(("Déjà fait", 3, h, r["action"]))
+                continue
             out.append((CAT_AGENDA.get(r["category"], "Composition"), int(r["priority"]), h, r["action"]))
     # 4. Exports en retard + aperçu + historique des transferts
     m = manque(donnees, erreurs, "gold.bv_exports_state", "tous les écrans")
@@ -122,7 +149,10 @@ def plan(donnees, erreurs, jour, maintenant):
     etat = {r["ecran"]: r for r in lignes_de(donnees, "gold.bv_exports_state")}
     for r in etat.values():
         if not str(r["statut"]).endswith("à jour"):
-            age = "jamais exporté" if r["age_h"] is None else f"dernier export il y a {int(r['age_h'])} h"
+            if deja(fait, r["ecran"]):
+                out.append(("Déjà fait", 3, None, f"{r['ecran']} (registre du jour)"))
+                continue
+            age ="jamais exporté" if r["age_h"] is None else f"dernier export il y a {int(r['age_h'])} h"
             out.append(("Exports", 1 if "jamais" in str(r["statut"]) else 2, None,
                         f"Exporte {r['ecran']} ({age}) — sert à : {r['pour_quoi']}"))
     ligues = [r for r in lignes_de(donnees, "gold.bv_agenda") if r["category"] == "ligue"]
@@ -197,6 +227,9 @@ def rendre(lignes, jour, erreurs=None):
             a = (f"{h} — " if h else "") + str(action).replace("|", "/").replace("\n", " ")
             texte.append(f"| {PASTILLE[min(max(prio, 1), 3)]} | {CATEGORIE_FORME.get(cat, cat)} | {a} |")
         texte.append("")
+    faits = [l[3] for l in lignes if l[0] == "Déjà fait"]
+    if faits:  # skill deja-fait : liste, jamais une demande
+        texte += ["Déjà fait (registre du jour) : " + " ; ".join(faits), ""]
     if erreurs:
         texte.append("Vues illisibles : " + "; ".join(f"{k} ({v[:60]})" for k, v in erreurs.items()))
     return "\n".join(texte)
@@ -223,7 +256,7 @@ def main() -> int:
     sqlmod = charger_sql()
     donnees, erreurs, n = lire_tout(sqlmod.executer, a.jour)
     sys.stdout.reconfigure(encoding="utf-8")
-    rendu = rendre(plan(donnees, erreurs, jour, maintenant), jour, erreurs)
+    rendu = rendre(plan(donnees, erreurs, jour, maintenant, lire_fait(jour)), jour, erreurs)
     print(rendu)
     if not a.jour:  # instantané quotidien (écrasé si relancé le même jour) : remplace le rejeu
         fichier = RACINE / "outputs/basketvibe" / f"aujourdhui-{jour.isoformat()}.md"

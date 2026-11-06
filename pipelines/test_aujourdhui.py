@@ -77,6 +77,13 @@ def cas():
     opp = (["match_day", "opponent"], [(dt.date(2026, 11, 4), "Passé FC"), (dt.date(2026, 11, 7), "Futur BC")])
     to = texte(figees(**{"gold.bv_next_opponents": opp}))
     yield "adversaire : match passé non rendu", "Passé FC" not in to and "Futur BC" in to
+    fait = "- [13:47 utc] mes enchères — source : déclaré\n- [13:47 utc] saisie de la ligue à póvoa — source : déclaré\n"
+    ef = figees()
+    ef["gold.bv_exports_state"] = (ef["gold.bv_exports_state"][0], [(9, "Mes enchères", "ventes", None, 51, "🟧 à refaire")])
+    tf = soir.rendre(soir.plan(ef, {}, JOUR, SOIR, fait), JOUR)
+    yield "registre : export déjà fait non redemandé", "Exporte Mes enchères" not in tf and "Mes enchères (registre du jour)" in tf
+    yield "registre : saisie de ligue faite retirée du plan", "| 🟥 URGENT | Tactique | 19:45" not in tf and "Déjà fait (registre du jour)" in tf
+    yield "sans registre : rien retiré", "Exporte Mes enchères" in soir.rendre(soir.plan(ef, {}, JOUR, SOIR), JOUR)
     # format de forme.py : chaque tableau rendu passe le contrôle du plan
     fautes = []
     for cols, lg in forme.tableaux(t):
