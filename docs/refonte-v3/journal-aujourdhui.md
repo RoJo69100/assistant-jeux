@@ -46,3 +46,5 @@ Même plan que le skill `hockeynation-aujourdhui` (il fait foi, le script ne le 
 | 2026-11-06 15:19 | aujourd'hui | 11.1 | 12 |
 | 2026-11-06 15:20 | aujourd'hui | 11.5 | 13 |
 | 2026-11-06 15:30 | aujourd'hui | 13.7 | 14 |
+| 2026-11-06 21:29 | hockeynation temps 1 (2026-11-06) | 16.9 | 8 |
+| 2026-11-06 21:30 | hockeynation temps 2 (2026-11-06) | 18.1 | 8 |
