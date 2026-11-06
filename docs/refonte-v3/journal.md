@@ -233,3 +233,35 @@ verdict : non mesurable : 4 match(s) avec classement antérieur, il en faut 20
 - **Critère de réussite — écart voulu par rapport au premier test** : le seuil de 20 matchs du premier test est inatteignable avec 19 matchs au plus. Je fixe donc ici, avant le calcul : **au moins 15 matchs mesurables** (au lieu de 20) **et** part de prédictions justes (hors équivalent) au moins **10 points au-dessus** de la base naïve. Sous 15 matchs mesurables : « non mesurable ».
 - **Portée du verdict** : avec 15 à 19 matchs, l'écart de 10 points est dans le bruit statistique ; un succès se lit « utilisable avec confiance faible », jamais « certain ».
 - **Repli** : critère non tenu → « non utilisable » ; les définitions de défaite grave « adversaire moins fort qui nous bat » et « match sûr qui est perdu » restent désactivées. Critère tenu → elles sont réactivées avec la mention « confiance faible, test L3c bis du 2026-11-06 », et le palier 5 est réactivé dans la revue hebdomadaire.
+
+**Résultat du second test (2026-11-06)** — code `pipelines/palier5_test.py --scores` (commit 07cbef1) ; `PYTHONIOENCODING=utf-8 python -I pipelines/test_palier5.py | tail -1` → `15/15`.
+- `PYTHONIOENCODING=utf-8 python -I pipelines/palier5_test.py --scores` :
+```
+matchs de ligue lus : 24 ; matchs terminés lus : 265 ; minimum de matchs antérieurs par équipe : 3
+| date | adversaire | nos points/match | les siens | prédiction | résultat réel | |
+| 2026-09-14 | Thrylos B.C. | 79.3 | 86.3 | défaite | victoire | faux |
+| 2026-09-16 | Póvoa Riptide | 83.8 | 104.5 | défaite | défaite | juste |
+| 2026-09-19 | San pancrazio salentino Cazzi | 81.8 | 78.0 | victoire | victoire | juste |
+| 2026-09-21 | Sierra Nevada | 86.8 | 84.0 | victoire | victoire | juste |
+| 2026-09-23 | BARIUM | 89.1 | 104.3 | défaite | défaite | juste |
+| 2026-09-26 | Žirmūnai | 89.4 | 105.6 | défaite | défaite | juste |
+| 2026-09-28 | Astur Hoops | 90.1 | 103.6 | défaite | victoire | faux |
+| 2026-09-30 | Wolves Empire | 92.5 | 95.2 | défaite | défaite | juste |
+| 2026-10-03 | KK Uola | 93.9 | 116.5 | défaite | défaite | juste |
+| 2026-10-05 | Mind Readers | 92.4 | 100.8 | défaite | défaite | juste |
+| 2026-10-07 | Águias do Guadiana | 92.1 | 94.6 | défaite | défaite | juste |
+| 2026-10-10 | Thrylos B.C. | 91.9 | 86.1 | victoire | victoire | juste |
+| 2026-10-12 | Póvoa Riptide | 93.4 | 104.9 | défaite | défaite | juste |
+| 2026-10-14 | San pancrazio salentino Cazzi | 94.2 | 81.7 | victoire | victoire | juste |
+| 2026-10-17 | Sierra Nevada | 94.6 | 90.9 | victoire | victoire | juste |
+| 2026-10-19 | BARIUM | 95.4 | 100.9 | défaite | victoire | faux |
+| 2026-10-21 | Žirmūnai | 96.3 | 106.4 | défaite | victoire | faux |
+| 2026-10-24 | Astur Hoops | 97.6 | 105.3 | défaite | défaite | juste |
+| 2026-10-26 | Wolves Empire | 97.1 | 93.7 | victoire | victoire | juste |
+n (avec classement antérieur) = 19 ; sans classement antérieur = 5 ; justes = 15, faux = 4, équivalents = 0
+part de prédictions justes (hors équivalent) = 78.9 % ; base naïve (toujours victoire) = 52.6 % ; E = 0.3
+verdict : utilisable avec confiance faible
+```
+- **Verdict : utilisable avec confiance faible** (19 matchs ≥ 15, 78,9 % contre 52,6 % de base naïve, soit +26,3 points ≥ 10). Les 5 matchs sans force antérieure sont les rondes 1 à 3 (3 matchs) et les 2 matchs de la saison 2, comme prévu avant le calcul.
+- Lecture du tableau : 6 prédictions « victoire », 6 victoires ; 13 prédictions « défaite », 9 défaites et 4 victoires. Aucun cas dans l'historique où l'on prédisait la victoire et où l'on a perdu : les deux définitions de défaite grave fondées sur ce palier n'ont donc jamais été déclenchées sur ces 19 matchs, on ne sait pas encore ce qu'elles donneraient à l'usage.
+- Réserves : 19 matchs, une seule saison, force calculée sur 3 matchs ou plus (bruit élevé au début), seuil de 15 matchs abaissé par rapport au premier test (écrit avant le calcul, voir ci-dessus). Premier test (classement hebdomadaire) : toujours « non mesurable », 4 matchs sur 20.
