@@ -25,6 +25,7 @@ Champs lisibles (vérifiés sur un match) :
 - Matchs PRO = choix de l'utilisateur. Matchs FRM, U21, U17 : comptés à part, marqués « expérience sans notre choix ».
 - Seuils de confiance (à valider) : **faible** si n < n requis ÷ 2 ; **moyenne** si n requis ÷ 2 ≤ n < n requis ; **solide** si n ≥ n requis. Verdict « confirmé » seulement en solide.
 - n requis (à valider) : 10 matchs par groupe pour comparer victoires et défaites ; 20 matchs pour un effet de réglage isolé ; 5 pour un simple état des lieux (aucun verdict). Pour une règle de gardien : 10 matchs complets du gardien.
+- Étape 2 (script, 2026-11-06) : « pour » et « contre » sont des nombres de matchs (ou de joueurs, ou de supériorités pour le PP) dont la mesure va dans le sens de la règle / à son encontre ; la colonne « mesure » donne les taux. Les règles de seuil (L-016 écart de 2 points en P3, L-018 .880, L-019 PP 23 %, L-002 .870) sont jugées match par match, sauf le PP (taux S27 contre 23 %). Un match sans `ppAttempts` est écarté du PP/PK (jamais compté 0). L-005 : seule la branche « arrêts < 60 % » est lue, verdict « partiel ».
 - `learnings.md` contient L-001 à L-011 puis L-015 à L-019 : **L-012 à L-014 n'existent pas** (aucune ligne à écrire).
 
 ## Règles du journal des enseignements (outputs/hockeynation/learnings.md)
