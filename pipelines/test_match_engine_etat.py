@@ -33,13 +33,46 @@ def cas():
     r = par_regle(me.evaluer(MS, GARDIENS, JOUEURS, DSC))
     l1 = r["L-001"]
     yield "L-001 : 4 défaites, toutes moins réalistes que l'adversaire", (l1["n"], l1["pour"], l1["contre"]) == (4, 4, 0)
-    yield "confiance faible sous la moitié de n requis (4 sur 10)", l1["confiance"] == "faible" and l1["verdict"].startswith("à surveiller")
+    yield "confiance faible sous la moitié de n requis (4 sur 10)", l1["confiance"] == "faible"
+    yield "L-001 : taux comparés, intervalles qui se chevauchent = indéterminé", l1["verdict"].startswith("indéterminé : n trop petit (IC95")
     l6 = r["L-006"]
     yield "L-006 : un match sans ppAttempts est écarté, pas compté 0", "1 match(s) écarté(s)" in l6["mesure"]
     yield "L-002 : 24/30 = .800 sous .870 dans 4 défaites sur 4", (r["L-002"]["pour"], r["L-002"]["contre"]) == (4, 0)
     yield "L-008 : DSC lu par nom de famille (Conte 3, Spinka 8)", "(1 joueurs)" in r["L-008"]["mesure"]
     yield "L-011 : descriptif, jamais de verdict", r["L-011"]["verdict"].startswith("descriptif")
     yield "L-005 : une branche non lue, verdict partiel", r["L-005"]["verdict"].startswith("partiel")
+
+
+def wilson():
+    yield "Wilson : 6 buts sur 26 supériorités contre le seuil PP = indéterminé", me.v_seuil(6, 26, me.SEUIL_PP, "au-dessus").startswith("indéterminé : n trop petit (IC95")
+    yield "Wilson : 6 sur 26 contre 23 % = indéterminé aussi", me.v_seuil(6, 26, 0.23, "au-dessus").startswith("indéterminé")
+    yield "Wilson : 60 sur 100 contre 20,7 % = confirmé", me.v_seuil(60, 100, me.SEUIL_PP, "au-dessus") == "confirmé"
+    yield "Wilson : 5 sur 100 contre 20,7 % = infirmé", me.v_seuil(5, 100, me.SEUIL_PP, "au-dessus") == "infirmé"
+    yield "Wilson : arrêts 800 sur 1000 sous .870 = confirmé", me.v_seuil(800, 1000, 0.87, "sous") == "confirmé"
+    yield "écart : 10 % contre 40 % sur 100 = confirmé", me.v_ecart((10, 100), (40, 100)) == "confirmé"
+    yield "écart : sens inverse = infirmé", me.v_ecart((40, 100), (10, 100)) == "infirmé"
+    yield "écart : « sans écart » jamais confirmé par un chevauchement", me.v_ecart((10, 20), (11, 20), "sans_ecart").startswith("indéterminé")
+    yield "un seul seuil PP, avec sa source", me.SEUILS["pp"][0] == 0.207 and "L-006" in me.SEUILS["pp"][1]
+
+
+def retraites():
+    carte = "| L-009 | Capitaine | 2026-11-02 | infirmé S26 | ⛔ retirée — ne plus appliquer |\n| L-004 | FOF | x | y | ✅ validée |"
+    yield "retirées : L-009 lue dans la carte (⛔)", me.retirees([carte]) == {"L-009"}
+    yield "retirées : « retirée » dans une table d'enseignements", me.retirees(["| L-012 | x | y | retirée | z |"]) == {"L-012"}
+    yield "retirées : une phrase hors tableau ne compte pas", me.retirees(["Le capitaine L-009 est retirée du texte"]) == set()
+    ms = MS
+    avec = me.rapport(ms, GARDIENS, JOUEURS, DSC)
+    sans = me.rapport(ms, GARDIENS, JOUEURS, DSC, retirees={"L-009"})
+    yield "règle retirée : L-009 mesurée sans le filtre", "L-009 capitaine" in avec
+    yield "règle retirée : L-009 ni mesurée ni affichée avec le filtre", "L-009" not in sans
+
+
+def glace():
+    vide = me.temps_de_glace([], {"jours": 1, "premier": "2026-11-06", "dernier": "2026-11-06"})
+    yield "temps de glace : sans lineup, une seule ligne non mesurable", len(vide) == 1 and vide[0].startswith("non mesurable : il manque la lineup en vigueur")
+    lignes = me.temps_de_glace([{"game_id": "g1", "jour": "2026-11-04", "line": x, "toi": s, "joueurs": 5}
+                                for x, s in (("L1", 1200), ("L2", 905), ("L3", 700), ("L4", 300))], {"jours": 3, "premier": "a", "dernier": "b"})
+    yield "temps de glace : une ligne par match, m:ss", any("| 2026-11-04 | 20:00 | 15:05 | 11:40 | 5:00 |" == l for l in lignes)
 
 
 def seuils():
@@ -63,8 +96,9 @@ def rapport():
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     echecs = total = 0
-    for groupe in (cas, seuils, rapport):
+    for groupe in (cas, wilson, retraites, glace, seuils, rapport):
         for nom, ok in groupe():
             total += 1
             echecs += not ok
