@@ -223,7 +223,12 @@ def main() -> int:
     sqlmod = charger_sql()
     donnees, erreurs, n = lire_tout(sqlmod.executer, a.jour)
     sys.stdout.reconfigure(encoding="utf-8")
-    print(rendre(plan(donnees, erreurs, jour, maintenant), jour, erreurs))
+    rendu = rendre(plan(donnees, erreurs, jour, maintenant), jour, erreurs)
+    print(rendu)
+    if not a.jour:  # instantané quotidien (écrasé si relancé le même jour) : remplace le rejeu
+        fichier = RACINE / "outputs/basketvibe" / f"soir-{jour.isoformat()}.md"
+        fichier.parent.mkdir(parents=True, exist_ok=True)
+        fichier.write_text(f"<!-- généré le {maintenant.strftime('%Y-%m-%d %H:%M')} -->\n{rendu}\n", encoding="utf-8")
     nonrej = [k for k, v in donnees.items() if v == "rejeu"]
     if nonrej:
         print("\n" + "\n".join(f"rejeu non disponible pour {k}" for k in nonrej))
