@@ -1,7 +1,7 @@
-"""Demande le rafraîchissement des vues matérialisées avant le que faire du soir (refonte v3, S4b).
+"""Demande le rafraîchissement des vues matérialisées avant le que faire d'aujourd'hui (refonte v3, S4b).
 
-Usage : python -I pipelines/rafraichir_avant_soir.py [--attendre]
-Appelle public.rafraichir_avant_soir() en POST (HTTPS, clé de service) : la fonction écrit une demande, que le job pg_cron
+Usage : python -I pipelines/rafraichir_avant_aujourdhui.py [--attendre]
+Appelle public.rafraichir_avant_aujourdhui() en POST (HTTPS, clé de service) : la fonction écrit une demande, que le job pg_cron
 « rafraichir-demande » exécute dans la minute. Pas par sql.py : sql_ro est en lecture seule et ne peut pas écrire la demande.
 Réponses : « à jour : rafraîchi à HH:MM:SS » | « demandé … » | « déjà demandé … » | « en cours … ».
 --attendre : repose la question toutes les 20 s (330 s au plus : un rafraîchissement complet dure ~3 min) jusqu'à « à jour ».
@@ -24,7 +24,7 @@ def appeler() -> str:
     if not base or not cle:
         sys.exit("SUPABASE_URL / SUPABASE_SECRET_KEY absents de .env et de l'environnement")
     req = urllib.request.Request(
-        base.rstrip("/") + "/rest/v1/rpc/rafraichir_avant_soir", data=b"{}", method="POST",
+        base.rstrip("/") + "/rest/v1/rpc/rafraichir_avant_aujourdhui", data=b"{}", method="POST",
         headers={"apikey": cle, "Authorization": f"Bearer {cle}", "Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=30) as r:

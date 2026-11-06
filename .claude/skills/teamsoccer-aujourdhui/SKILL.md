@@ -9,7 +9,7 @@ Sources : `gold.ts_agenda` et `gold.ts_daily_alerts` (`sql/gold/018_ts_agenda.sq
 
 ## Méthode (coût minimal : pas d'agent, deux requêtes)
 0. **Avant toute requête et avant le premier rendu du plan** : charge le skill `deja-fait` et lis `outputs/teamsoccer/fait-AAAA-MM-JJ.md` du jour ; ce qui est fait ne sort pas du plan.
-0 bis. **Vues à jour** : `python -I pipelines/rafraichir_avant_soir.py --attendre` (jusqu'à 5 min, délai d'outil 600 s) ; si la réponse n'est pas « à jour », le plan sort quand même, avec l'heure du dernier rafraîchissement.
+0 bis. **Vues à jour** : `python -I pipelines/rafraichir_avant_aujourdhui.py --attendre` (jusqu'à 5 min, délai d'outil 600 s) ; si la réponse n'est pas « à jour », le plan sort quand même, avec l'heure du dernier rafraîchissement.
 1. `select day_label, team, priority, category, action from gold.ts_agenda` puis `select priority, team, category, alert from gold.ts_daily_alerts order by priority, team` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`).
 2. L'utilisateur n'agit que **le soir après 19:00** : l'agenda le respecte déjà (une limite de composition avant 19:00 — par exemple un match de 13:50 — tombe la veille au soir). Ne donne jamais de liste sur la journée.
 3. Les jours de match viennent des données, pas de la règle « mardi et samedi » : Ben Ahmed Donkey joue le lundi et le jeudi à 19:30, Chomelix Cows le mardi et le samedi à 13:50 [Obs, `silver.ts_matches`, 2026-10-20].
