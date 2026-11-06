@@ -191,3 +191,10 @@ Fichier : `docs/attentes/regles-decision-basketvibe.yaml` (commit 070759d). Char
 ### Preuves
 - `python -c "import yaml; yaml.safe_load(open('docs/attentes/regles-decision-basketvibe.yaml'))"` → `YAML valide ['charte', 'seuils_mesures', 'secteurs', 'revue_hebdo', 'tactique_amical']` ; 18 règles, 0 sans source ni statut (statuts : sourcé, a_valider).
 - `git diff --stat 5db6880..HEAD -- '*.py' '*.sql' CLAUDE.md .claude` → aucune sortie (0 ligne). `git diff --stat 5db6880..HEAD` avant ce journal : `docs/attentes/regles-decision-basketvibe.yaml | 272 +++` ; `1 file changed, 272 insertions(+)`.
+
+### Corrections de l'utilisateur (2026-11-06, après le tableau de validation ; commit 01c97e8)
+- Seuils (gros montant, perte de transferts) : valeurs de départ révisées par Claude avec l'étude ; le déclencheur est « finances mauvaises » ou « joueur trop cher pour son utilité ». Tout seuil et nombre minimal est ajustable (charte.seuils_ajustables).
+- Jeunes : surtout en amical ; quelques minutes en ligue quand la victoire est sûre (homegrown 200 par minute de ligue des juniors, plafond 40 000 par semaine, fiche finances, [M§10.1.3]).
+- Revue : palier 5 à tester sur l'historique, Claude peut demander effectif adverse et derniers matchs ; palier 6 défini par Claude ; défaite grave = adversaire moins fort qui nous bat, ou match qu'on était sûr de gagner, ou série de 2 défaites de ligue.
+- Amical : aucune prédiction, aucun aperçu ; saisie complète (minutes, consignes, réglage des adversaires) ; minimum de 3 matchs par test, ajustable.
+- `python -c "import yaml; …"` → `YAML valide`, 18 règles, 0 sans source ni statut.
