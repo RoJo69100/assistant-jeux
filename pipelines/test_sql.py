@@ -48,9 +48,19 @@ def bascule_https():
         yield "autre erreur : relancée", len(vus) == 2
 
 
+def reponses_https():
+    """Réponse sql_ro encodée deux fois (colonne jsonb) : décodée ; chaîne ordinaire (nom de joueur) : inchangée."""
+    import json
+    ligne = {"teams": {"away": {"id": "a"}}, "nom": "Jean {Dupont}"}
+    double = json.dumps(json.dumps([ligne]))
+    yield "jsonb reçu en chaîne : décodé", sqlmod.lignes_de(json.loads(double)) == [ligne]
+    ordinaire = sqlmod.lignes_de([{"nom": "[Jean]", "n": 1}])
+    yield "chaîne ordinaire inchangée", ordinaire == [{"nom": "[Jean]", "n": 1}] and isinstance(ordinaire[0]["nom"], str)
+
+
 if __name__ == "__main__":
     echecs = 0
-    extra = list(bascule_https())
+    extra = list(bascule_https()) + list(reponses_https())
     for nom, ok in extra:
         echecs += not ok
         print(("OK " if ok else "ECHEC "), nom)

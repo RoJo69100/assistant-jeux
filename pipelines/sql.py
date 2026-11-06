@@ -65,6 +65,14 @@ def via_pg(sql: str, params):
         return [d.name for d in cur.description], cur.fetchall()
 
 
+def lignes_de(corps):
+    """Liste de lignes (dict) depuis la réponse de sql_ro. Une réponse encodée deux fois (chaîne JSON au lieu de liste)
+    est décodée ; les chaînes ordinaires des cellules ne sont jamais touchées."""
+    if isinstance(corps, str):
+        corps = json.loads(corps)
+    return [json.loads(l) if isinstance(l, str) else l for l in corps]
+
+
 def via_https(sql: str):
     base, cle = lire_env("SUPABASE_URL"), lire_env("SUPABASE_SECRET_KEY")
     if not base or not cle:
@@ -73,7 +81,7 @@ def via_https(sql: str):
     req = urllib.request.Request(url, headers={"apikey": cle, "Authorization": f"Bearer {cle}"})
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
-            lignes = json.load(r)
+            lignes = lignes_de(json.load(r))
     except urllib.error.HTTPError as e:
         corps = e.read().decode("utf-8", "replace")
         try:
