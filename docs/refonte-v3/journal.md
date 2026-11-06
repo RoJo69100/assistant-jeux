@@ -154,3 +154,12 @@ Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous 
 - `pip install -r requirements.txt` (module `psycopg` absent de ce PC, règle N1) puis `python -I pipelines/sql.py "select 1 as ok"` → `FATAL: password authentication failed for user "postgres"` (deux adresses du pooler, `aws-1-eu-west-2.pooler.supabase.com:5432`).
 - Cause : l'utilisateur de l'URL est `postgres.smkariminvfityondmmc` (le compte administrateur), pas `assistant_ro.smkariminvfityondmmc` ; le mot de passe saisi n'est pas celui de ce compte. Le rôle `assistant_ro` est créé par `sql/silver/ops_001_role_assistant_ro.sql`, mot de passe posé à part.
 - `python -I pipelines/soir.py basketvibe` : 13 requêtes en 0,4 s, toutes en échec → ce n'est pas une mesure. Preuves a et b restent **non mesurables**, L2 **non cochée**.
+
+### 6. Reprise après ajout de `SUPABASE_SECRET_KEY` (2026-11-06, 10:02)
+- `python -I pipelines/sql.py "select 1 as ok"` échoue encore (le transport `pg` passe avant `https` tant que le port 5432 répond, et l'URL `postgres.…` est refusée). `SQL_TRANSPORT=https python -I pipelines/sql.py "select 1 as ok"` → `ok = 1`. La clé fonctionne ; le `.env` garde une `SUPABASE_DB_URL_RO` fausse qui masque le transport https.
+- **a** `SQL_TRANSPORT=https python -I pipelines/soir.py basketvibe` : **14,4 s** (< 60 s), 13 requêtes, sortie complète : 8 lignes Export (aperçu de ligue du 07/11 URGENT, 5 exports « à refaire », historique des transferts depuis 2026-11-04), 1 ligne Composition (preset amical 23:45), faits de position/adversaires, 1 ligne Transferts (marché > 24 h), faits Finances et Personnel. Durée consignée dans `journal-soir.md`. ✅
+- **b** rejeu `--jour 2026-11-03`, `2026-11-04`, `2026-11-05` : toutes les vues sauf l'historique des ventes lisent `current_date` / `now()` → « rejeu non disponible » sur 12 vues sur 13. Les briefs de `outputs/basketvibe/briefs/` sont des sorties d'agents (tactique, transferts…), pas des plans du soir : aucune comparaison ligne à ligne possible, colonne « écart » = **non mesurable**. ❌
+- **c** `python pipelines/test_soir.py` : 15/15 ✅
+- Constat à corriger (hors lot) : `gold.bv_next_opponents` renvoie un match déjà joué (round 2, 2026-11-04) ; `soir.py` le recopie tel quel.
+- Cause du blocage de b : les vues gold ne sont pas paramétrées par date. Piste : vues `…_at(date)` ou instantanés journaliers (`ops`), à décider dans un lot dédié.
+- Case L2 **non cochée** (critère b non tenu).
