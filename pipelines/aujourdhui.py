@@ -17,7 +17,9 @@ le YAML ne porte pas est marquée « (à valider) ».
 import argparse
 import datetime as dt
 import importlib.util
+import re
 import sys
+import textwrap
 import time
 import unicodedata
 from pathlib import Path
@@ -59,6 +61,7 @@ REQUETES = {
                                  "from gold.bv_market_candidates where enters_top8 order by gain_vs_my_second desc nulls last limit 5",
     "gold.bv_personnel_status": "select * from gold.bv_personnel_status limit 10",
     "capacite": "select capacite_invest from gold.finance_health where game = 'basketvibe'",
+    "joueurs_declin": "select name, age from gold.bv_roster_now where age >= 31 order by age desc",
     "decisions_achat": "select id, label, hypothesis from learn.decision where game = 'basketvibe' and domain = 'achat' "
                        "and status in ('proposed', 'accepted') and eval_after >= now() and decided_at >= now() - interval '3 days' order by id",
     "encheres_ouvertes": "select name, ends_at at time zone 'Europe/Paris' as fin_paris from core.market_listing "
@@ -152,9 +155,19 @@ def montant(n):
     return f"{int(n):,}".replace(",", " ")
 
 
-def court(s, n=110):
-    s = str(s).replace("|", "/").replace("\n", " ")
-    return s if len(s) <= n else s[:n - 1].rstrip() + "…"
+def propre(s):
+    """Texte sur une ligne, sans coupure : une ligne longue est repliée à l'affichage par plier()."""
+    return str(s).replace("|", "/").replace("\n", " ")
+
+
+def plier(texte, largeur=100):
+    """Replie chaque ligne sur plusieurs lignes d'affichage (suite en retrait) ; un montant « 150 000 » ne se coupe pas."""
+    sortie = []
+    for l in texte.splitlines():
+        l = re.sub(r"(?<=\d) (?=\d{3}\b)", " ", l)
+        morceaux = textwrap.wrap(l, largeur, subsequent_indent="    ", break_long_words=False, break_on_hyphens=False)
+        sortie += [m.replace(" ", " ") for m in morceaux] or [""]
+    return "\n".join(sortie)
 
 
 def jour_fr(d):
@@ -195,15 +208,15 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         if reste and reste["reglages"]:
             etat, prio = f"corrige à l'écran {len(reste['reglages'])} réglages ({regrouper(reste['reglages'])})", 1
         elif deja(fait, t["type"]):
-            etat, prio = "saisie déclarée faite, rien à ressaisir", 1  # reste en tête : verrou et tests à relire
+            etat, prio = "", 1  # saisie déclarée faite : la ligne reste, pour l'heure limite et les conditions du test
         else:
             etat, prio = "saisis la tactique maintenant", 1
-        detail = f"verrou {t['verrou'] or 'inconnu'}"
+        detail = f"heure limite du verrou {t['verrou'] or 'inconnue'}"
         if t["preuves"]:
-            detail += " ; preuve contraire : " + " ; ".join(court(p.rstrip("."), 85) for p in t["preuves"][:2])
+            detail += " ; le test est perdu si : " + " ; ".join(propre(p.rstrip(".")) for p in t["preuves"])
         if t["vieux"]:
             detail += f" ; brief vieux de {t['age']} jours : relance l'agent tactique"
-        ajoute(limite, prio, f"{titre} ({quand}) : {etat}", detail,
+        ajoute(limite, prio, f"{titre} ({quand})" + (f" : {etat}" if etat else ""), detail,
                t["fichier"] + (", " + reste["fichier"] if reste else ""))
         couverts.append(t["match"])
         if reste:
@@ -216,16 +229,16 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
 
     # 2. Enchères décidées : montant maximum, fin d'enchère, police avant l'enchère
     for c in S.get("cibles", []):
-        pol = "police faite" if c["police"] else "police d'abord (aucun police du jour)"
+        pol = "police faite" if c["police"] else "police d'abord (aucune trace de police du jour)"
         fin = c["fin"]
         detail = (f"fin {jour_fr(fin.date())} {fin:%H:%M}" if fin
                   else "fin d'enchère absente de la base : export Marché (enchères)")
         ajoute(fin, 1, f"Enchère sur {c['nom']} ({c['poste']}) : maximum {montant(c['max'])}, {pol}", detail,
-               f"D-{c['decision']}, " + ("dossier du jour" if c["dossier"] else "dossier absent : python pipelines/dossier.py basketvibe achat"))
+               "décision d'achat ouverte, " + ("dossier du jour" if c["dossier"] else "dossier absent : python pipelines/dossier.py basketvibe achat"))
 
     # 3. Conseils arrivant à échéance
     for c in S.get("conseils", []):
-        ajoute(None, 3, f"Conseil {c['id']} à juger au plus tard le {c['echeance']:%d/%m}", court(c["conseil"], 90), "learnings.md")
+        ajoute(None, 3, f"Conseil {c['id']} à juger au plus tard le {c['echeance']:%d/%m}", propre(c["conseil"]), "learnings.md")
 
     # 4. Agenda (aujourd'hui, et demain avant 10:00 après 18:00) : ce que les briefs ne couvrent pas déjà
     m = manque(donnees, erreurs, "gold.bv_agenda", "Équipe (aperçu, joueurs)")
@@ -304,9 +317,20 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             x = round(float(cible["ps_max"]) + 1, 1)
             nom = f" : {cands[0]['name']} (PS {cands[0]['ps']})" if cands else ""
             ajoute(None, 2, f"Acheter un {cible['position']} de note ≥ {str(x).replace('.', ',')}{nom}",
-                   f"poste {cible['position']} : profondeur {cible['depth']}, PS moyen {cible['ps_avg']}", "EFF-1, gold.bv_position_summary")
+                   f"poste {cible['position']} : profondeur {cible['depth']}, PS moyen {cible['ps_avg']}", "gold.bv_position_summary")
         else:
-            garder.append(f"effectif (poste le plus faible {faible['position']} PS {faible['ps_avg']}, profondeur {faible['depth']} : EFF-1 non déclenchée)")
+            garder.append(f"effectif, acheter : seuil non atteint (le poste le plus faible, {faible['position']} PS {faible['ps_avg']}, "
+                          f"a assez de joueurs : {faible['depth']} contre 2 au plus pour un poste mince)")
+        declin = lignes_de(donnees, "joueurs_declin")
+        if donnees.get("joueurs_declin") is None:
+            ajoute(None, 3, manque(donnees, erreurs, "joueurs_declin", "Équipe (aperçu, joueurs)"))
+        elif declin:
+            ajoute(None, 2, f"Mets {declin[0]['name']} en vente ({declin[0]['age']} ans, déclin chaque semaine)",
+                   "31 ans ou plus", "gold.bv_roster_now")
+        else:
+            garder.append("effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin)")
+        garder.append("effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)")
+        garder.append("effectif, jeunes : règle non écrite — à valider (le script ne sait pas dire si un match de ligue est gagné d'avance)")
     m = manque(donnees, erreurs, "gold.bv_finance_health", "Finances")
     fh = lignes_de(donnees, "gold.bv_finance_health")
     if m:
@@ -316,14 +340,14 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         if res < 0:
             charge = max(("personnel", float(fh[0]["weekly_personnel"])), ("académie", float(fh[0]["weekly_academy"])), key=lambda x: x[1])
             ajoute(None, 1, f"Réduis le poste {charge[0]} ({montant(charge[1])} par semaine)",
-                   f"résultat hebdomadaire estimé {montant(res)}", "FIN-1, gold.bv_finance_health")
+                   f"résultat hebdomadaire estimé {montant(res)}", "gold.bv_finance_health")
         else:
-            garder.append(f"finances (résultat hebdo estimé +{montant(res)}, FIN-1 non déclenchée)")
+            garder.append(f"finances : seuil non atteint (résultat hebdo estimé +{montant(res)}, la réduction de charges commence sous 0)")
     m = manque(donnees, erreurs, "gold.bv_market_bargains", "Marché (enchères)")
     if m:
         ajoute(None, 2, m)
     elif not marche_frais:
-        garder.append("transferts (Marché de plus de 24 h : pas d'enchère nouvelle, TRF-4)")
+        garder.append("transferts : pas d'enchère nouvelle, l'export du Marché a plus de 24 h")
     else:
         bonnes = [r for r in lignes_de(donnees, "gold.bv_market_bargains")
                   if vrai(r["ref_reliable"]) and float(r["resale_margin_p25"] or 0) > 0 and int(r["ref_n"] or 0) >= 5 and libre(r)
@@ -331,17 +355,18 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         for r in bonnes:
             fin = dt.datetime.fromisoformat(str(r["ends_paris"])[:19]) if r.get("ends_paris") else None
             ajoute(fin, 2, f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
-                   f"marge de revente p25 {montant(r['resale_margin_p25'])}", "TRF-1, gold.bv_market_bargains")
+                   f"marge de revente p25 {montant(r['resale_margin_p25'])}", "gold.bv_market_bargains")
         if not bonnes:
-            garder.append("transferts (aucune affaire fiable dans la capacité restante"
-                          + (f" de {montant(reste_cap)}" if reste_cap is not None else "") + ", TRF-4 et E8)")
+            garder.append("transferts : aucune affaire fiable qui tienne dans ce que le club peut investir après les enchères déjà décidées "
+                          "(capacité restante (réserve de sécurité à valider)"
+                          + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")")
     m = manque(donnees, erreurs, "gold.bv_personnel_status", "Personnel")
     pers = lignes_de(donnees, "gold.bv_personnel_status")
     if m:
         ajoute(None, 3, m)
     elif pers:
         garder.append("Personnel (" + ", ".join(f"{r['role']} {r['hired']}/{r['slots']}" for r in pers)
-                      + ", semaine du " + str(pers[0].get("week", "?"))[:10] + " : FIN-3 non tranchée, à valider)")
+                      + ", semaine du " + str(pers[0].get("week", "?"))[:10] + ") : règle de personnel non tranchée, à valider")
     return {"actions": A, "exports": exports, "garder": garder}
 
 
@@ -354,7 +379,7 @@ def rendre(res, jour, erreurs=None):
     for limite, _, action, detail, source in sorted(vues, key=lambda a: (a[0] is None, a[0] or maxi, a[1])):
         t = f"{limite:%H:%M}" if limite else "--:--"
         lignes.append(f"{t} — {action}" + (f" — {detail}" if detail else "") + (f" ({source})" if source else ""))
-    autres = [court(a[2], 70) for a in reste] + [f"vue illisible {k}" for k in (erreurs or {})]
+    autres = [propre(a[2]) for a in reste] + [f"vue illisible {k}" for k in (erreurs or {})]
     if autres:
         lignes.append(f"Autres points ({len(autres)}) : " + " ; ".join(autres))
     if res["garder"]:
@@ -384,7 +409,7 @@ def main() -> int:
     sqlmod = charger_sql()
     donnees, erreurs, n = lire_tout(sqlmod.executer, a.jour)
     sys.stdout.reconfigure(encoding="utf-8")
-    rendu = rendre(plan(donnees, erreurs, jour, maintenant, lire_fait(jour), lire_sources(donnees, jour)), jour, erreurs)
+    rendu = plier(rendre(plan(donnees, erreurs, jour, maintenant, lire_fait(jour), lire_sources(donnees, jour)), jour, erreurs))
     print(rendu)
     if not a.jour:  # instantané quotidien (écrasé si relancé le même jour) : remplace le rejeu
         fichier = BASE / f"aujourdhui-{jour.isoformat()}.md"
