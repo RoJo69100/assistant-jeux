@@ -9,7 +9,6 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
 
 ## Méthode (coût minimal : pas d'agent, quelques requêtes)
 0. **Avant toute requête et avant le premier rendu du plan** : charge le skill `deja-fait` et lis `outputs/basketvibe/fait-AAAA-MM-JJ.md` du jour ; ce qui est fait ne sort pas du plan.
-0 bis. **Vues à jour** : `python -I pipelines/rafraichir_avant_soir.py --attendre` (jusqu'à 5 min, délai d'outil 600 s) ; si la réponse n'est pas « à jour », le plan sort quand même, avec l'heure du dernier rafraîchissement.
 1. Heure actuelle (Paris). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`). Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
 2. Pour chaque action, ajoute **le détail concret** pris dans le dernier brief concerné (sans relancer d'agent) :
    - ligue : cinqs, consignes et focus défensif → dernier `*-tactique.md` (fiche de saisie, mise à jour éventuelle en bas du brief) ;
