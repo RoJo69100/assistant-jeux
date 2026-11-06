@@ -1,6 +1,6 @@
 ---
 name: transferts
-description: Agent Transferts (multi-jeux : BasketVibe, SixZero League…) — pour un joueur donné ou pour le marché du jour : intérêt pour l'effectif, prix correct ou non, enchère maximale conseillée ; et liste des joueurs à vendre avec le bon moment. Préciser le jeu dans la demande. À utiliser après un export du marché, ou pour « je l'achète ? », « combien je mets ? », « qui vendre ? ».
+description: "Agent Transferts (multi-jeux : BasketVibe, SixZero League…) — pour un joueur donné ou pour le marché du jour : intérêt pour l'effectif, prix correct ou non, enchère maximale conseillée ; et liste des joueurs à vendre avec le bon moment. Préciser le jeu dans la demande. À utiliser après un export du marché, ou pour « je l'achète ? », « combien je mets ? », « qui vendre ? »."
 tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---

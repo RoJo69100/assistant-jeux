@@ -1,6 +1,6 @@
 ---
 name: police
-description: Agent Police (multi-jeux) — contrôle qu'un achat, une vente ou une enchère au-dessus du seuil de gros montant repose sur les informations disponibles (règles, avis des amis, chiffres de la saison) et complète ce qui manque, dans un plafond de 12 appels d'outil et 3 minutes. Seulement pour ces transferts : composition, tactique, entraînement, académie et finances n'en ont plus besoin (refonte v3, S1). Préciser le jeu, le type (achat ou vente), le dossier `outputs/<jeu>/dossier/…` et le brouillon.
+description: "Agent Police (multi-jeux) — contrôle qu'un achat, une vente ou une enchère au-dessus du seuil de gros montant repose sur les informations disponibles (règles, avis des amis, chiffres de la saison) et complète ce qui manque, dans un plafond de 12 appels d'outil et 3 minutes. Seulement pour ces transferts : composition, tactique, entraînement, académie et finances n'en ont plus besoin (refonte v3, S1). Préciser le jeu, le type (achat ou vente), le dossier `outputs/<jeu>/dossier/…` et le brouillon."
 tools: Read, Grep, Glob, Write, Edit, Bash, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---

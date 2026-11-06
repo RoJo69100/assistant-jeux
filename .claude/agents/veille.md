@@ -1,6 +1,6 @@
 ---
 name: veille
-description: Agent Veille (multi-jeux : BasketVibe, SixZero League…) — lit les nouveaux messages de la communauté et du développeur (Discord, chat du jeu, News selon le jeu) depuis le dernier passage, et propose des mises à jour des skills, chacune sourcée et datée, à faire valider par l'utilisateur. Ne modifie jamais un skill lui-même. Préciser le jeu dans la demande. À utiliser après chaque export Discord, du chat ou de la page News.
+description: "Agent Veille (multi-jeux : BasketVibe, SixZero League…) — lit les nouveaux messages de la communauté et du développeur (Discord, chat du jeu, News selon le jeu) depuis le dernier passage, et propose des mises à jour des skills, chacune sourcée et datée, à faire valider par l'utilisateur. Ne modifie jamais un skill lui-même. Préciser le jeu dans la demande. À utiliser après chaque export Discord, du chat ou de la page News."
 tools: Read, Grep, Glob, Write, Edit, mcp__supabase__execute_sql, mcp__Supabase__execute_sql
 model: sonnet
 ---
