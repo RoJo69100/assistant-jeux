@@ -65,15 +65,50 @@ def evaluer(matchs, classement, e=E):
     return lignes, sans
 
 
-def bilan(lignes, sans):
+MIN_PRECEDENTS = 3     # second test (--scores) : matchs terminés antérieurs exigés pour chaque équipe
+MIN_MATCHS_SCORES = 15  # second test : seuil écrit avant le calcul (journal, L3c bis)
+
+SQL_MATCHS_FIXTURES = ("select r.fixture_id, r.match_day, r.opponent, r.my_result, f.season_id, f.home_team_id, f.away_team_id "
+                       "from gold.bv_match_report r join silver.bv_fixtures f on f.fixture_id = r.fixture_id "
+                       "where r.competition = 'league' and r.my_result in ('W', 'L') order by r.match_day")
+SQL_FIXTURES = ("select season_id, match_day, home_team_id, away_team_id, home_team, away_team, home_score, away_score "
+                "from silver.bv_fixtures where status = 'finished' and home_score is not null and away_score is not null")
+SQL_MON_EQUIPE = "select team_id from silver.bv_my_team"
+
+
+def force_avant(fixtures, team_id, saison, date, minimum=MIN_PRECEDENTS):
+    """Points marqués par match sur les matchs terminés de la même saison STRICTEMENT antérieurs à `date` ; None sous `minimum` matchs."""
+    pts = [f["home_score"] if f["home_team_id"] == team_id else f["away_score"] for f in fixtures
+           if f["season_id"] == saison and jour(f["match_day"]) < jour(date) and team_id in (f["home_team_id"], f["away_team_id"])]
+    return sum(pts) / len(pts) if len(pts) >= minimum else None
+
+
+def evaluer_scores(matchs, fixtures, mon_id, e=E):
+    """Comme evaluer(), mais la force vient des scores des matchs (silver.bv_fixtures) ; (lignes, sans_force)."""
+    lignes, sans = [], []
+    for m in matchs:
+        adv_id = m["away_team_id"] if m["home_team_id"] == mon_id else m["home_team_id"]
+        p_nous = force_avant(fixtures, mon_id, m["season_id"], m["match_day"])
+        p_eux = force_avant(fixtures, adv_id, m["season_id"], m["match_day"])
+        if p_nous is None or p_eux is None:
+            sans.append(m)
+            continue
+        pred = predire(p_nous, p_eux, e)
+        issue = "équivalent" if pred == "=" else ("juste" if pred == m["my_result"] else "faux")
+        lignes.append({"date": jour(m["match_day"]), "adversaire": m["opponent"], "nous": p_nous, "eux": p_eux,
+                       "prediction": pred, "reel": m["my_result"], "issue": issue})
+    return lignes, sans
+
+
+def bilan(lignes, sans, min_matchs=MIN_MATCHS):
     n = len(lignes)
     juste = sum(l["issue"] == "juste" for l in lignes)
     faux = sum(l["issue"] == "faux" for l in lignes)
     equiv = sum(l["issue"] == "équivalent" for l in lignes)
     base = sum(l["reel"] == "W" for l in lignes) / n if n else None
     part = juste / (juste + faux) if juste + faux else None
-    if n < MIN_MATCHS:
-        verdict = f"non mesurable : {n} match(s) avec classement antérieur, il en faut {MIN_MATCHS}"
+    if n < min_matchs:
+        verdict = f"non mesurable : {n} match(s) avec classement antérieur, il en faut {min_matchs}"
     elif part is not None and base is not None and part >= base + MARGE_REQUISE:
         verdict = "utilisable avec confiance faible"
     else:
@@ -111,9 +146,17 @@ def dicts(res):
 
 def main() -> int:
     executer = charger_sql().executer
+    sys.stdout.reconfigure(encoding="utf-8")
+    if "--scores" in sys.argv[1:]:  # second test : force calculée sur les scores des matchs terminés
+        matchs, fixtures = dicts(executer(SQL_MATCHS_FIXTURES)), dicts(executer(SQL_FIXTURES))
+        mon_id = dicts(executer(SQL_MON_EQUIPE))[0]["team_id"]
+        lignes, sans = evaluer_scores(matchs, fixtures, mon_id)
+        print(f"matchs de ligue lus : {len(matchs)} ; matchs terminés lus : {len(fixtures)} ; "
+              f"minimum de matchs antérieurs par équipe : {MIN_PRECEDENTS}")
+        print(rendre(lignes, bilan(lignes, sans, MIN_MATCHS_SCORES)))
+        return 0
     matchs, classement = dicts(executer(SQL_MATCHS)), dicts(executer(SQL_CLASSEMENT))
     lignes, sans = evaluer(matchs, classement)
-    sys.stdout.reconfigure(encoding="utf-8")
     print(f"matchs de ligue lus : {len(matchs)} ; relevés de classement lus : {len(classement)}")
     print(rendre(lignes, bilan(lignes, sans)))
     return 0

@@ -50,6 +50,26 @@ def cas():
     yield "base naïve trop proche : non utilisable", p5.bilan(f, [])["verdict"] == "non utilisable"
     g = [{"issue": "juste", "reel": "L"}] * 20
     yield "marge de 10 points tenue : utilisable", p5.bilan(g, [])["verdict"] == "utilisable avec confiance faible"
+    # second test : force par scores des matchs terminés (3 matchs antérieurs, même saison, strictement avant)
+    fx = []
+    for i, jr in enumerate(["2026-10-01", "2026-10-02", "2026-10-03"]):
+        fx.append({"season_id": "S1", "match_day": dt.date.fromisoformat(jr), "home_team_id": "moi", "away_team_id": f"x{i}",
+                   "home_score": 100, "away_score": 90})
+        fx.append({"season_id": "S1", "match_day": dt.date.fromisoformat(jr), "home_team_id": "fort", "away_team_id": f"y{i}",
+                   "home_score": 110, "away_score": 80})
+    fx.append({"season_id": "S1", "match_day": dt.date(2026, 10, 9), "home_team_id": "fort", "away_team_id": "z",
+               "home_score": 10, "away_score": 80})  # postérieur au match du 10-05 : ne doit pas être lu
+    fx.append({"season_id": "S0", "match_day": dt.date(2026, 10, 4), "home_team_id": "fort", "away_team_id": "z",
+               "home_score": 10, "away_score": 80})  # autre saison : ne doit pas être lu
+    ms = [{"fixture_id": "f1", "match_day": dt.date(2026, 10, 5), "opponent": "Fort", "my_result": "L", "season_id": "S1",
+           "home_team_id": "moi", "away_team_id": "fort"},
+          {"fixture_id": "f2", "match_day": dt.date(2026, 10, 3), "opponent": "Fort", "my_result": "L", "season_id": "S1",
+           "home_team_id": "moi", "away_team_id": "fort"}]
+    ls, ss = p5.evaluer_scores(ms, fx, "moi")
+    yield "scores : force lue avant le match seulement", len(ls) == 1 and abs(ls[0]["nous"] - 100.0) < 1e-9 and abs(ls[0]["eux"] - 110.0) < 1e-9
+    yield "scores : prédit défaite, juste", ls[0]["prediction"] == "L" and ls[0]["issue"] == "juste"
+    yield "scores : moins de 3 matchs antérieurs exclus", len(ss) == 1 and ss[0]["fixture_id"] == "f2"
+    yield "scores : seuil de 15 matchs", p5.bilan(ls, ss, p5.MIN_MATCHS_SCORES)["verdict"].startswith("non mesurable : 1 match(s)")
     yield "prédiction à E pile", p5.predire(100.3, 100.0) == "W" and p5.predire(100.0, 100.3) == "L" and p5.predire(100.2, 100.0) == "="
 
 
