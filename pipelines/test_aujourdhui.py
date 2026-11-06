@@ -1,98 +1,174 @@
-"""Test de pipelines/aujourdhui.py sur des données figées (sans réseau ni base).
+"""Test de pipelines/aujourdhui.py et aujourdhui_sources.py sur des données figées (sans réseau ni base).
 
-Lancer : python pipelines/test_soir.py   (code 1 si un cas se trompe)
+Jeu d'essai : pipelines/jeu_essai/2026-11-06/ (copie des briefs, du registre, des learnings et du dossier du 06/11).
+Critères L1-L4, F1-F2, D1 : docs/refonte-v3/journal-aujourdhui.md.
+Lancer : python pipelines/test_aujourdhui.py   (code 1 si un cas se trompe)
 """
 import datetime as dt
 import importlib.util
+import re
 import sys
+import tempfile
 from pathlib import Path
 
-spec = importlib.util.spec_from_file_location("soir", Path(__file__).resolve().parent / "aujourdhui.py")
-soir = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(soir)
-spec_f = importlib.util.spec_from_file_location("forme", Path(__file__).resolve().parent / "forme.py")
-forme = importlib.util.module_from_spec(spec_f)
-spec_f.loader.exec_module(forme)
+DOSSIER = Path(__file__).resolve().parent
+sys.path.insert(0, str(DOSSIER))
+spec = importlib.util.spec_from_file_location("aujourdhui", DOSSIER / "aujourdhui.py")
+auj = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(auj)
+src = auj.src
 
 JOUR = dt.date(2026, 11, 6)
 SOIR = dt.datetime(2026, 11, 6, 19, 0)
+ESSAI = DOSSIER / "jeu_essai" / "2026-11-06"
+FAIT = (ESSAI / "fait-2026-11-06.md").read_text(encoding="utf-8").lower().replace("’", "'")
+DECISIONS = [{"id": 1076, "label": "Enchères 07-08/11 : Fujita C (max 150 000) et Stankevičius SF (max 100 000)",
+              "hypothesis": "Un C de PS 55,5 améliore le titulaire Fournier (52,4)"}]
+ENCHERES = [{"name": "Yuma Fujita", "fin_paris": "2026-11-08T03:50:46.834"},
+            {"name": "Bronius Stankevičius", "fin_paris": "2026-11-08T03:46:12.027"}]
+AGENDA = (["day", "at_time", "priority", "category", "action"], [
+    (JOUR, "20:50", 2, "export", "Après le match (~20:50) : exporter la page du match J3"),
+    (JOUR + dt.timedelta(days=1), "07:45", 1, "amical", "Avant 07:45 : preset amical sur le match contre Knight Jays (domicile)"),
+    (JOUR + dt.timedelta(days=1), "08:55", 3, "export", "Après l'amical (~08:55) : exporter la page du match"),
+    (JOUR + dt.timedelta(days=3), "04:30", 1, "export", "trop loin"),
+])
 
 
 def figees(**remplace):
     d = {
-        "gold.bv_agenda": (["day", "at_time", "priority", "category", "action"], [
-            (JOUR, "19:45", 1, "ligue", "Avant 19:45 : régler le focus défensif du match J3 contre Póvoa (domicile)"),
-            (JOUR, "20:50", 2, "export", "Après le match (~20:50) : exporter la page du match J3"),
-            (JOUR + dt.timedelta(days=3), "04:30", 1, "export", "trop loin"),
-        ]),
+        "gold.bv_agenda": AGENDA,
         "gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], [
             (1, "Équipe (aperçu, joueurs)", "effectif", None, 5, "🟩 à jour"),
-            (8, "Marché (enchères)", "cibles", None, 30, "🟧 à refaire"),
+            (8, "Marché (enchères)", "cibles", None, 3, "🟩 à jour"),
             (13, "Personnel", "staff", None, None, "🟥 jamais"),
+            (9, "Mes enchères", "ventes", None, 51, "🟧 à refaire"),
         ]),
         "gold.bv_daily_alerts": (["priority", "category", "alert"], [
             (2, "fatigue", "Dupont : fatigue 25 (hors zone verte)"),
             (3, "export", "Finances : dernier export il y a 8 jour(s)"),
         ]),
-        "gold.bv_finance_health": (["solde", "weekly_result_est"], [(1000, -50)]),
-        "gold.bv_finance_projection": (["solde_fin"], [(900,)]),
-        "gold.bv_position_summary": (["position", "n"], [("PG", 3)]),
-        "gold.bv_roster_now": (["name"], [("Dupont",)]),
-        "gold.bv_next_opponents": (["opponent"], [("Póvoa",)]),
-        "gold.bv_market_bargains": (["name", "prix"], [("Martin", 5000)]),
-        "gold.bv_market_price_ref": (["position", "median"], [("PG", 6000)]),
-        "gold.bv_personnel_status": (["role", "hired"], [("coach", 1)]),
+        "gold.bv_finance_health": (["weekly_result_est", "weekly_personnel", "weekly_academy"], [(108847, 60000, 100000)]),
+        "gold.bv_position_summary": (["position", "depth", "ps_avg", "ps_max"], [
+            ("PG", 3, 49.4, 56.2), ("SG", 4, 46.4, 51.6), ("C", 3, 49.4, 52.4)]),
+        "gold.bv_market_bargains": (["name", "position", "ps", "ref_n", "ref_reliable", "bid_ceiling_resale",
+                                     "resale_margin_p25", "ends_paris"], [
+            ("Martin", "PG", 57.0, 9, True, 120000, 40000, "2026-11-07T10:00:00"),
+            ("Yuma Fujita", "C", 55.5, 9, True, 735722, 700000, "2026-11-08T03:50:00")]),
+        "gold.bv_market_candidates": (["name", "position", "ps", "would_rank_in_slot", "enters_top8", "current_price", "ends_paris"], []),
+        "gold.bv_personnel_status": (["week", "role", "hired", "slots"], [("2026-11-02", "médecin", 2, 2), ("2026-11-02", "marketing", 0, 2)]),
+        "capacite": (["capacite_invest"], [(279666,)]),
+        "decisions_achat": (["id", "label", "hypothesis"], [(d["id"], d["label"], d["hypothesis"]) for d in DECISIONS]),
+        "encheres_ouvertes": (["name", "fin_paris"], [(e["name"], e["fin_paris"]) for e in ENCHERES]),
         "apercus": (["match_day"], []),
-        "derniere_vente": (["derniere"], [(dt.date(2026, 11, 3),)]),
+        "derniere_vente": (["derniere"], [(dt.date(2026, 11, 5),)]),
     }
     d.update(remplace)
     return d
 
 
-def texte(donnees, erreurs=None):
-    return soir.rendre(soir.plan(donnees, erreurs or {}, JOUR, SOIR), JOUR, erreurs)
+def sources_essai(base=ESSAI):
+    return {"tactique": src.lire_tactique(base, JOUR), "restes": src.lire_restes(base, JOUR),
+            "cibles": src.lire_cibles(DECISIONS, ENCHERES, base, JOUR), "conseils": src.lire_conseils(base, JOUR)}
+
+
+def texte(donnees, erreurs=None, fait="", sources=None, maintenant=SOIR):
+    return auj.rendre(auj.plan(donnees, erreurs or {}, JOUR, maintenant, fait, sources), JOUR, erreurs)
 
 
 def cas():
-    t = texte(figees())
-    lignes = soir.plan(figees(), {}, JOUR, SOIR)
-    yield "exports en tête", t.index("## Exports à faire aujourd'hui") < t.index("## Composition")
-    yield "agenda : jour courant gardé", "focus défensif du match J3" in t
+    S = sources_essai()
+    t = texte(figees(), fait=FAIT, sources=S)
+    lignes = t.splitlines()
+    # L1 : briefs tactique du jour
+    yield "L1 ligue : Póvoa 19:45", any(l.startswith("19:45") and "Póvoa" in l for l in lignes)
+    yield "L1 amical : Knight Jays 07:45", any(l.startswith("07:45") and "Knight Jays" in l for l in lignes)
+    yield "L1 tests « prouvera que j'avais tort » lus", "Faux si" in t and "Test 1" in t
+    yield "L1 saisie de ligue déclarée faite : pas redemandée", "saisie déclarée faite" in t and "saisis la tactique" not in t
+    yield "L1 sans registre : saisie demandée", "saisis la tactique maintenant" in texte(figees(), sources=S)
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        vieux = (ESSAI / "briefs" / "2026-11-06-tactique.md").read_text(encoding="utf-8").replace("sam. 07/11", "ven. 06/11")
+        (Path(tmp) / "briefs" / "2026-11-01-tactique.md").write_text(vieux, encoding="utf-8")
+        tv = src.lire_tactique(tmp, JOUR)
+        yield "L1 brief de 5 jours pour un match du jour : signalé", len(tv) == 1 and tv[0]["vieux"] and tv[0]["age"] == 5 \
+            and "vieux de 5 jours" in texte(figees(), sources={"tactique": tv})
+        yield "L1 brief absent : lecteur vide", src.lire_tactique(tmp + "/inexistant", JOUR) == []
+    # L2 : cibles d'achat
+    yield "L2 Fujita 150 000", any("Fujita" in l and "150 000" in l for l in lignes)
+    yield "L2 Stankevičius 100 000", any("Stankevičius" in l and "100 000" in l for l in lignes)
+    yield "L2 police absente : police d'abord", sum("police d'abord" in l for l in lignes) == 2
+    yield "L2 fin d'enchère en tête de ligne (03:50)", any(l.startswith("03:50") and "Fujita" in l for l in lignes)
+    yield "L2 pas de 2e ligne (bonne affaire) sur une cible décidée", t.count("Fujita") == 1
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "police-2026-11-06.md").write_text("police faite", encoding="utf-8")
+        c = src.lire_cibles(DECISIONS, ENCHERES, tmp, JOUR)
+        yield "L2 police du jour présente : police faite", all(x["police"] for x in c) \
+            and "police faite" in texte(figees(), sources={"cibles": c})
+    # L3 : registre « reste à corriger »
+    yield "L3 quatre réglages à corriger", "4 réglages" in t
+    yield "L3 réglages regroupés", "Agress. 1 : Dang, Albano, Ungureanu ; Tir 1 : Albano" in t
+    yield "L3 la saisie déclarée n'est pas seulement retirée", sum("Knight Jays" in l for l in lignes) == 1
+    # L4 : conseils à échéance
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "learnings.md").write_text(
+            "| C-900 | 2026-11-05 | Juger Fuchs | Test après le match du 07/11 | ouvert | |\n"
+            "| C-901 | 2026-11-05 | Autre | Test le 07/11 | **appliqué** | |\n"
+            "| C-902 | 2026-11-05 | Loin | Test le 20/11 | ouvert | |\n", encoding="utf-8")
+        cs = src.lire_conseils(tmp, JOUR)
+        yield "L4 conseil ouvert à échéance demain lu, les autres écartés", [c["id"] for c in cs] == ["C-900"]
+        yield "L4 conseil dans le plan", "C-900" in texte(figees(), sources={"conseils": cs}) or "C-900" in texte(figees(), sources={"conseils": cs})
+    # F1 : format
+    yield "F1 au plus 8 lignes", len(lignes) <= 8
+    yield "F1 chaque ligne d'action : HH:MM — action", all(re.match(r"^(\d\d:\d\d|--:--) — ", l) for l in lignes
+                                                           if not l.startswith(("Autres points", "Garder", "Exports à faire")))
+    yield "F1 dernière ligne = exports", lignes[-1].startswith("Exports à faire aujourd'hui :")
+    yield "F1 aucune ligne clé=valeur", not re.search(r"\w+=\S+", t)
+    heures = [l[:5] for l in lignes if re.match(r"^\d\d:\d\d", l)]
+    yield "F1 triées par échéance complète (06/11 20:50, 07/11 07:45 et 19:45, 08/11 03:46 et 03:50)", \
+        heures == ["20:50", "07:45", "19:45", "03:46", "03:50"]
+    beaucoup = [(dt.datetime(2026, 11, 6, 20, i), 2, f"action {i}", "", "") for i in range(7)]
+    tb = auj.rendre({"actions": beaucoup, "exports": [], "garder": []}, JOUR).splitlines()
+    yield "F1 surplus dans « Autres points », toujours 8 lignes au plus", len(tb) <= 8 and tb[-2].startswith("Autres points (2)")
+    # F2 : Personnel
+    yield "F2 Personnel étiqueté Personnel", "Personnel (médecin 2/2" in t
+    # D1 : décisions par secteur
+    yield "D1 poste le plus faible : garder en demi-ligne, pas en ligne", "Garder : effectif (poste le plus faible SG" in t \
+        and not any(l.startswith(("--:--", "0", "1", "2")) and "effectif" in l for l in lignes)
+    yield "D1 finances : garder si résultat hebdo positif", "finances (résultat hebdo estimé +108 847" in t
+    mince = figees(**{"gold.bv_position_summary": (["position", "depth", "ps_avg", "ps_max"], [("PG", 2, 49.4, 56.2), ("SG", 4, 46.4, 51.6)])})
+    yield "D1 EFF-1 : poste mince = acheter un PG de note ≥ 57,2", "Acheter un PG de note ≥ 57,2" in texte(mince)
+    rouge = figees(**{"gold.bv_finance_health": (["weekly_result_est", "weekly_personnel", "weekly_academy"], [(-5000, 60000, 100000)])})
+    yield "D1 FIN-1 : résultat négatif = réduire le plus gros poste", "Réduis le poste académie (100 000" in texte(rouge)
+    yield "D1 TRF-1 : affaire fiable = enchère maximale", "Enchère maximale 120 000 sur Martin" in texte(figees())
+    yield "D1 E8 : capacité restante (279 666 − 250 000 décidés) trop faible = affaire abandonnée", \
+        "Martin" not in t and "capacité restante de 29 666" in t
+    perime = figees(**{"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                                 [(8, "Marché (enchères)", "cibles", None, 30, "🟧 à refaire")])})
+    tp = texte(perime)
+    yield "D1 TRF-4 : Marché périmé = pas d'enchère, ligne Export", "Marché (enchères) (30 h)" in tp and "Martin" not in tp
+    # comportements conservés
+    ap = texte(figees(), sources=S)
+    yield "export en retard nommé dans la ligne finale", "Mes enchères (51 h)" in ap and "Personnel (jamais exporté)" in ap
+    yield "registre : export déjà fait non redemandé", "Mes enchères" not in t and "Personnel (jamais" not in t
     yield "agenda : jour lointain écarté", "trop loin" not in t
-    yield "export en retard nommé", "Exporte Marché (enchères) (dernier export il y a 30 h)" in t
-    yield "jamais exporté = URGENT", any(l[1] == 1 and "Personnel" in l[3] and "jamais" in l[3] for l in lignes)
-    yield "aperçu demandé (aucune ligne adverse)", "Exporte l'aperçu du match de ligue du 06/11" in t
-    yield "historique des transferts demandé (vente du 03/11)", "Exporte l'historique global des transferts depuis 2026-11-03" in t
+    yield "agenda : export d'après-match de demain écarté", "08:55" not in t
+    yield "agenda : export du jour gardé", "20:50 — Après le match" in ap
     yield "alerte export non doublée", "Finances : dernier export il y a 8" not in t
-    yield "marché périmé : pas de bonne affaire", "il me manque un Marché de moins de 24 h" in t and "bonne affaire" not in t
-    ok = figees()
-    ok["gold.bv_exports_state"] = (ok["gold.bv_exports_state"][0], [(8, "Marché (enchères)", "cibles", None, 3, "🟩 à jour")])
-    yield "marché frais : bonne affaire lue", "bonne affaire : name=Martin" in texte(ok)
-    yield "heure : 19:30 avant 19:45 dans Exports", t.index("19:30") < t.index("20:50")
-    yield "donnée absente", "il me manque gold.bv_finance_health" in texte(figees(**{"gold.bv_finance_health": None}), {"gold.bv_finance_health": "boum"})
+    yield "aperçu demandé (aucune ligne adverse)", "aperçu du match de ligue du 06/11" in texte(figees(**{"gold.bv_agenda": (
+        AGENDA[0], [(JOUR, "19:45", 1, "ligue", "Avant 19:45 : focus du match J3 contre Póvoa")])}))
+    yield "historique des transferts demandé (vente du 03/11)", "historique global des transferts depuis 2026-11-03" in texte(
+        figees(**{"derniere_vente": (["derniere"], [(dt.date(2026, 11, 3),)])}))
+    yield "donnée absente", "il me manque gold.bv_finance_health" in texte(
+        figees(**{"gold.bv_finance_health": None}), {"gold.bv_finance_health": "boum"})
     yield "rejeu non disponible", "rejeu non disponible pour gold.bv_agenda" in texte(figees(**{"gold.bv_agenda": "rejeu"}))
     yield "après 18:00 : demain avant 10:00 ajouté", "tôt demain" in texte(figees(**{"gold.bv_agenda": (
-        ["day", "at_time", "priority", "category", "action"],
-        [(JOUR + dt.timedelta(days=1), "04:30", 1, "export", "tôt demain")])}))
-    opp = (["match_day", "opponent"], [(dt.date(2026, 11, 4), "Passé FC"), (dt.date(2026, 11, 7), "Futur BC")])
-    to = texte(figees(**{"gold.bv_next_opponents": opp}))
-    yield "adversaire : match passé non rendu", "Passé FC" not in to and "Futur BC" in to
-    fait = "- [13:47 utc] mes enchères — source : déclaré\n- [13:47 utc] saisie de la ligue à póvoa — source : déclaré\n"
-    ef = figees()
-    ef["gold.bv_exports_state"] = (ef["gold.bv_exports_state"][0], [(9, "Mes enchères", "ventes", None, 51, "🟧 à refaire")])
-    tf = soir.rendre(soir.plan(ef, {}, JOUR, SOIR, fait), JOUR)
-    yield "registre : export déjà fait non redemandé", "Exporte Mes enchères" not in tf and "Mes enchères (registre du jour)" in tf
-    yield "registre : saisie de ligue faite retirée du plan", "| 🟥 URGENT | Tactique | 19:45" not in tf and "Déjà fait (registre du jour)" in tf
-    yield "sans registre : rien retiré", "Exporte Mes enchères" in soir.rendre(soir.plan(ef, {}, JOUR, SOIR), JOUR)
-    # format de forme.py : chaque tableau rendu passe le contrôle du plan
-    fautes = []
-    for cols, lg in forme.tableaux(t):
-        if cols[:2] == ["priorite", "categorie"]:
-            fautes += forme.plan(cols, lg)
-    yield "format forme.py (pastilles, catégories)", not fautes
+        AGENDA[0], [(JOUR + dt.timedelta(days=1), "04:30", 1, "entraînement", "tôt demain")])}))
+    yield "avant 18:00 : demain non ajouté", "tôt demain" not in texte(figees(**{"gold.bv_agenda": (
+        AGENDA[0], [(JOUR + dt.timedelta(days=1), "04:30", 1, "entraînement", "tôt demain")])}), maintenant=dt.datetime(2026, 11, 6, 12, 0))
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
     echecs = 0
     for nom, ok in cas():
         echecs += not ok

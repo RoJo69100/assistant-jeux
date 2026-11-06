@@ -27,3 +27,7 @@ Jeu d'essai figé : `pipelines/jeu_essai/2026-11-06/` (copie des fichiers du 06/
 | 2026-11-06 10:29 | aujourd'hui | 12.9 | 13 |
 | 2026-11-06 14:45 | aujourd'hui | 17.6 | 13 |
 | 2026-11-06 14:52 | aujourd'hui | 17.4 | 13 |
+| 2026-11-06 15:18 | aujourd'hui | 13.4 | 12 |
+| 2026-11-06 15:19 | aujourd'hui | 11.4 | 12 |
+| 2026-11-06 15:19 | aujourd'hui | 11.1 | 12 |
+| 2026-11-06 15:20 | aujourd'hui | 11.5 | 13 |
