@@ -37,6 +37,23 @@ CHIFFRE = """| Joueur | Points |
 |---|---|
 | Baron | 18 |
 """
+LIGNES = {"composition": "🟥 URGENT | Composition | Saisir l'amical du jour.",
+          "tactique": "🟥 URGENT | Tactique | Saisir la ligue.",
+          "entrainement": "🟧 IMPORTANT | Entraînement | Garder les réglages.",
+          "transferts": "🟧 IMPORTANT | Transferts | Enchérir sur Baron.",
+          "finances": "🟩 SUIVI | Finances | Billets à 12.",
+          "analyse": "🟩 SUIVI | Analyse | Lire la défaite."}
+
+
+def plan_bv(sans=(), commentaire=""):
+    corps = "\n".join(f"| {l} |" for c, l in LIGNES.items() if c not in sans)
+    return f"BasketVibe\n\n| Priorité | Catégorie | Action |\n|---|---|---|\n{corps}\n\n{commentaire}\n"
+
+
+PLAN_COMPLET = plan_bv()
+PLAN_PRESQUE = plan_bv(("transferts",), "Transferts : aucune enchère en cours (gold.bv_agenda).")
+PLAN_SANS_COMPO = plan_bv(("composition",), "Composition : aucun match aujourd'hui (gold.bv_agenda).")
+BV_SQL = outil("Bash", {"command": "python -I pipelines/sql.py \"select * from gold.bv_agenda\""})
 SQL = outil("mcp__supabase__execute_sql", {"query": "select 1"})
 SKILL = outil("Skill", {"skill": "deja-fait"})
 EDIT_SQL = outil("Edit", {"file_path": "/x/assistant-jeux/sql/gold/070_vue.sql"})
@@ -53,8 +70,8 @@ CAS = [
      [demande("ajoute la vue"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], True),
     ("a fichier hors conception", "Noté.", [demande("j'ai fait l'export"), EDIT_OUT], True),
     # b : retiré en S1 (deja-fait chargé avant le plan, plus de blocage après)
-    ("b plan sans deja-fait ne bloque plus", PLAN, [demande("que faire"), SQL], True),
-    ("b plan avec deja-fait", PLAN, [demande("que faire"), SKILL, SQL], True),
+    ("b plan sans deja-fait ne bloque plus", PLAN, [demande("la suite"), SQL], True),
+    ("b plan avec deja-fait", PLAN, [demande("la suite"), SKILL, SQL], True),
     # c : preuve
     ("c tableau chiffré sans source", CHIFFRE, [demande("stats")], False),
     ("c tableau chiffré avec SQL", CHIFFRE, [demande("stats"), SQL], True),
@@ -70,16 +87,16 @@ CAS = [
     ("e identifiant interne", "Fait, comme le demande R-1 et la règle 75.", [demande("conçois le hook")], False),
     ("e longue hors conception", LONG, [demande("raconte le match")], True),
     # f : horizon
-    ("f action reportée", PLAN_REPORT, [demande("que faire"), SKILL, SQL], False),
-    ("f composition d'un match de demain", PLAN_DEMAIN, [demande("que faire"), SKILL, SQL], True),
+    ("f action reportée", PLAN_REPORT, [demande("la suite"), SKILL, SQL], False),
+    ("f composition d'un match de demain", PLAN_DEMAIN, [demande("la suite"), SKILL, SQL], True),
     ("f bloc Si hors colonne Action", PLAN + "\n**Si** :\n- titre acquis : faire tourner les jeunes plus tard.\n",
-     [demande("que faire"), SQL], True),
+     [demande("la suite"), SQL], True),
     ("f tableau Si | Action non lu", PLAN + "\n| Si | Action |\n|---|---|\n| titre acquis | jeunes la semaine prochaine |\n",
-     [demande("que faire"), SQL], True),
+     [demande("la suite"), SQL], True),
     ("f bloc Plan de saison", "### Plan de saison\nTitre, puis jeunes plus tard.\n\n" + PLAN,
-     [demande("que faire"), SQL], True),
+     [demande("la suite"), SQL], True),
     ("f report dans Action après un bloc Si", "**Si** :\n- titre acquis.\n\n### Ce soir\n" + PLAN_REPORT,
-     [demande("que faire"), SQL], False),
+     [demande("la suite"), SQL], False),
     # g : « je ne peux pas »
     ("g je ne peux pas sans preuve", "Je ne peux pas lire la base.", [demande("stats")], False),
     ("g je ne peux pas avec issue", "Je ne peux pas dire, je ne sais pas encore : je le trouve avec dossier.py.", [demande("stats")], True),
@@ -94,6 +111,19 @@ CAS = [
     ("j absence sans requête", "La Preview n'est pas en base.", [demande("preview ?")], False),
     ("j absence après requête", "La Preview n'est pas en base.",
      [demande("preview ?"), outil("Bash", {"command": "python -I pipelines/sql.py \"select page_type from bronze.raw_pages\""})], True),
+    # k : registre fait
+    ("k saisie déclarée sans registre", "Noté, bonne soirée.", [demande("les deux compos sont faites")], False),
+    ("k j'ai exporté sans registre", "Merci.", [demande("j'ai exporté le personnel")], False),
+    ("k saisie déclarée avec registre", "Noté.", [demande("j'ai saisi l'amical"), EDIT_OUT], True),
+    ("k conception qui parle de fait", "Hook ajouté.", [demande("conçois le hook, j'ai fait le plan")], True),
+    # l : catégories du « que faire »
+    ("l plan incomplet", PLAN, [demande("que faire"), SQL], False),
+    ("l plan complet", PLAN_COMPLET, [demande("que faire"), BV_SQL], True),
+    ("l catégorie vide nommée sans requête", PLAN_PRESQUE, [demande("que faire")], False),
+    ("l catégorie vide nommée après requête", PLAN_PRESQUE, [demande("que faire"), BV_SQL], True),
+    ("l BasketVibe sans ligne Composition", PLAN_SANS_COMPO, [demande("que faire"), BV_SQL], False),
+    ("l autre jeu, Composition dans le commentaire", PLAN_SANS_COMPO.replace("BasketVibe", "Hardwood"),
+     [demande("que faire"), outil("Bash", {"command": "python -I pipelines/sql.py \"select * from gold.hw_agenda\""})], True),
 ]
 
 if __name__ == "__main__":

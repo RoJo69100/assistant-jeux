@@ -1,3 +1,4 @@
 #!/bin/sh
 python -I pipelines/scan_secrets.py || exit 1
 python -I pipelines/contexte_budget.py || exit 1
+python -I pipelines/test_agents.py > /dev/null || { python -I pipelines/test_agents.py | grep -v "^✅"; exit 1; }

@@ -16,6 +16,11 @@ Contrôles sur la réponse finale de la session principale :
   g  preuve     « je ne peux pas » sans « je ne sais pas encore » ni preuve.
   h  agent      agent lancé sans type propre (general-purpose), sauf si la réponse dit « introuvable ».
   i  Write      fichier écrit par heredoc dans le terminal (Bash ou PowerShell).
+  k  registre   l'utilisateur dit « j'ai saisi / exporté / fait X » (hors conception) sans écriture de
+                `outputs/<jeu>/fait-<jour>.md` dans le tour (N10, rétro du 2026-11-06).
+  l  catégories « que faire » rendu en plan sans l'une des catégories S1 (Composition, Tactique, Entraînement,
+                Transferts, Finances, Analyse) : ni ligne du plan, ni nommée dans le commentaire après une
+                requête sur la base ; BasketVibe : Composition toujours en ligne (amical du jour, S1).
 Le texte entre « », "", `` ou ``` est ignoré. Une seule relance (stop_hook_active), qui ne demande jamais
 de relancer dossier ni police. Tests : test_controle.py.
 """
@@ -150,6 +155,34 @@ def requete_base(ops: list[tuple[str, dict]]) -> bool:
     return False
 
 
+FAIT_DECLARE = re.compile(r"\bj'ai (deja )?(saisi|exporte|fait|mis|corrige|change|regle|enchere)|\bc'est fait\b"
+                          r"|\b(sont|est) (faite?s?|saisie?s?|exportee?s?)\b|\bdeja (fait|saisi|exporte)")
+REGISTRE = re.compile(r"outputs[/\\]\w+[/\\]fait-\d{4}-\d{2}-\d{2}\.md$")
+QUE_FAIRE = re.compile(r"\bque faire\b|\bqu'est-ce que je fais\b|\breprenons\b|\bplan du jour\b|\bon fait quoi\b")
+CATEGORIES_S1 = ["composition", "tactique", "entrainement", "transferts", "finances", "analyse"]
+
+
+def registre_ecrit(ops: list[tuple[str, dict]]) -> bool:
+    return any(nom in ("Edit", "Write", "MultiEdit") and REGISTRE.search(str(inp.get("file_path", "")))
+               for nom, inp in ops)
+
+
+def categories_manquantes(text: str, prouve: bool, jeu: str | None) -> list[str]:
+    """Catégories S1 absentes du plan : ni en ligne, ni nommées hors tableau avec une requête sur la base."""
+    en_ligne = {forme.norm(l[1]) for cols, lignes in forme.tableaux(text) if cols[:2] == ["priorite", "categorie"]
+                for l in lignes if len(l) > 1}
+    hors_tableau = police.norm("\n".join(l for l in text.splitlines() if not l.strip().startswith("|")))
+    manque = []
+    for c in CATEGORIES_S1:
+        if c in en_ligne:
+            continue
+        if c == "composition" and jeu == "basketvibe":
+            manque.append("Composition (amical du jour, toujours une ligne en BasketVibe)")
+        elif c not in hors_tableau or not prouve:
+            manque.append(c.capitalize())
+    return manque
+
+
 def agent_general(ops: list[tuple[str, dict]]) -> bool:
     return any(nom in ("Agent", "Task") and inp.get("subagent_type", "general-purpose") == "general-purpose"
                for nom, inp in ops)
@@ -184,6 +217,15 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
                  "(ou dis que le type est introuvable)")
     if heredoc_ecrit(ops_tour):
         f.append("i : fichier écrit par heredoc dans le terminal — utilise l'outil Write")
+    nd = police.norm(dem[-1]) if dem else ""
+    if FAIT_DECLARE.search(nd) and not police.CONCEPTION.search(nd) and not registre_ecrit(ops_tour):
+        f.append("k : l'utilisateur dit avoir fait quelque chose — inscris-le dans `outputs/<jeu>/fait-<jour>.md` "
+                 "(heure, quoi, « déclaré par l'utilisateur ») avant tout résumé")
+    if QUE_FAIRE.search(nd) and forme.a_plan(text):
+        manque = categories_manquantes(text, requete_base(ops_tour), forme.jeu_de(text, forme.commandes(ents)))
+        if manque:
+            f.append("l : catégories absentes du plan (" + ", ".join(manque) + ") — une ligne chacune, ou nommée "
+                     "dans le commentaire avec la requête qui prouve qu'elle est vide")
     if conception:
         nb = lignes_hors_tableau(text)
         if nb > SEUIL_LIGNES:

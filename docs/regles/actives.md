@@ -3,8 +3,7 @@
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
 ## Nouvelles (2026-11-06)
-N10. Quand l'utilisateur dit « j'ai saisi / exporté / fait X » → je l'inscris dans `fait-<jour>.md` dans le même tour, avant tout résumé (BasketVibe ; récidive de deja-fait, hook à écrire).
-N11. Quand un agent est « introuvable » → je compare les en-têtes YAML (`name`, `description` entre guillemets) dans le même tour ; jamais une commande donnée sans l'avoir vérifiée (test `pipelines/test_agents.py` à écrire ; tous les jeux).
+N11. Quand un agent est « introuvable » → je compare les en-têtes YAML (`name`, `description` entre guillemets) dans le même tour ; jamais une commande donnée sans l'avoir vérifiée (tous les jeux ; en-têtes contrôlés au pre-commit par `pipelines/test_agents.py`).
 N12. Quand je recopie un réglage d'un autre jour → je cite la règle ou le skill qui le justifie, sinon la règle uniforme de la ligue (BasketVibe).
 
 ## Nouvelles (2026-11-05 et 2026-11-04)
@@ -26,7 +25,6 @@ K8. Quand une règle globale et un résumé de jeu se contredisent → la règle
 K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau levier nommé (jusqu'à `learn.lesson`, phase 3).
 
 ## S — soir du 04/11 (rétro)
-S1. « Que faire » → toutes les catégories (Composition dont l'amical du jour, Tactique, Entraînement, Transferts, Finances, Analyse) ; une catégorie vide est prouvée par une requête (récidive le 06/11 : hook à écrire).
 S3. Défaite de ligue ou de coupe en base → `analyste` dans le même tour (hook à écrire) ; amical BasketVibe perdu = test jugé à son échéance (arbitrage 15).
 S4. `police` > 3 min ou 12 appels → brouillon « police partielle » ; pas de 2e passe (`.claude/agents/police.md`, S1 du 2026-11-05 ; aucun hook).
 S5. « Mon équipe » pour recrues ou scouts → cible = besoin de MON effectif.
@@ -38,4 +36,4 @@ E7. Quand je prépare un plan du jour → calendrier de moins de 12 h et registr
 E8. Quand je propose un achat → `capacite_invest` moins les dépenses déjà décidées couvre le prix, sinon la cible est abandonnée. (`gold.buy_targets`, 2.4)
 
 ## Déjà bloquées par un hook (pour mémoire, pas à relire)
-Horizon (report dans un plan), « je ne peux pas » sans preuve, agent `general-purpose`, heredoc d'écriture (`controle.py` f à i, 2026-11-03) · Format des tableaux et pastilles (`forme.py`) · dossier et trace police avant un achat, une vente ou une enchère au-dessus du seuil, aveux « pas tout lu » (`police.py`, S1 2026-11-05) · rappel `/model opus`, concision, « je tranche » (`controle.py`) ; `deja-fait` chargé avant le plan (skills aujourdhui), plus bloqué après · secrets (`scan_secrets.py`, pre-commit) · K4 (un commit par modification) et K9 (mémoire copiée) : CLAUDE.md 8 et 11.
+Horizon (report dans un plan), « je ne peux pas » sans preuve, agent `general-purpose`, heredoc d'écriture (`controle.py` f à i, 2026-11-03) · Format des tableaux et pastilles (`forme.py`) · dossier et trace police avant un achat, une vente ou une enchère au-dessus du seuil, aveux « pas tout lu » (`police.py`, S1 2026-11-05) · rappel `/model opus`, concision, « je tranche » (`controle.py`) ; `deja-fait` chargé avant le plan (skills aujourdhui), plus bloqué après · secrets (`scan_secrets.py`, pre-commit) · registre `fait-<jour>.md` écrit quand l'utilisateur dit avoir fait (N10) et catégories du « que faire », amical BasketVibe compris (S1) : `controle.py` k et l, 2026-11-06 · K4 (un commit par modification) et K9 (mémoire copiée) : CLAUDE.md 8 et 11.
