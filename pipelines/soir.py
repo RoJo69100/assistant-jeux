@@ -160,6 +160,9 @@ def plan(donnees, erreurs, jour, maintenant):
             out.append((cat, 3, None, m))
             continue
         for r in lignes_de(donnees, nom):
+            if nom == "gold.bv_next_opponents" and r.get("match_day") is not None \
+                    and dt.date.fromisoformat(str(r["match_day"])[:10]) < jour:
+                continue  # la vue peut garder un match déjà joué : on ne rend que les matchs à venir
             out.append((cat, 3, None, f"{nom.split('.')[1]} : {kv(r)}"))
     m = manque(donnees, erreurs, "gold.bv_roster_now", "Équipe (aperçu, joueurs)")
     if m:

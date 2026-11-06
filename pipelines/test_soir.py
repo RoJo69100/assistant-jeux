@@ -74,6 +74,9 @@ def cas():
     yield "après 18:00 : demain avant 10:00 ajouté", "tôt demain" in texte(figees(**{"gold.bv_agenda": (
         ["day", "at_time", "priority", "category", "action"],
         [(JOUR + dt.timedelta(days=1), "04:30", 1, "export", "tôt demain")])}))
+    opp = (["match_day", "opponent"], [(dt.date(2026, 11, 4), "Passé FC"), (dt.date(2026, 11, 7), "Futur BC")])
+    to = texte(figees(**{"gold.bv_next_opponents": opp}))
+    yield "adversaire : match passé non rendu", "Passé FC" not in to and "Futur BC" in to
     # format de forme.py : chaque tableau rendu passe le contrôle du plan
     fautes = []
     for cols, lg in forme.tableaux(t):
