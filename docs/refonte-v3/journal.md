@@ -149,3 +149,8 @@ Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous 
 - Piste : remplir `SUPABASE_SECRET_KEY` (ou `SUPABASE_DB_URL_RO`) dans `.env`, relancer `python -I pipelines/soir.py basketvibe`, coller la sortie ici. Colonnes de `bv_finance_health`, `bv_finance_projection`, `bv_position_summary`, `bv_next_opponents`, `bv_market_*` non vérifiées en base : ces vues sont lues par `select *` et rendues en `clé=valeur` (8 colonnes max) ; `bv_roster_now` est lue avec des colonnes supposées (`name, position, age, form, fatigue, injury_return_on`) à confirmer au premier vrai passage.
 - Limite assumée : le script lit les chiffres mais ne tranche pas « acheter / vendre / garder » (étape 6 du skill) : c'est une décision, pas du SQL.
 - Case L2 **non cochée**.
+
+### 5. Reprise après ajout de `SUPABASE_DB_URL_RO` (2026-11-06, 09:51)
+- `pip install -r requirements.txt` (module `psycopg` absent de ce PC, règle N1) puis `python -I pipelines/sql.py "select 1 as ok"` → `FATAL: password authentication failed for user "postgres"` (deux adresses du pooler, `aws-1-eu-west-2.pooler.supabase.com:5432`).
+- Cause : l'utilisateur de l'URL est `postgres.smkariminvfityondmmc` (le compte administrateur), pas `assistant_ro.smkariminvfityondmmc` ; le mot de passe saisi n'est pas celui de ce compte. Le rôle `assistant_ro` est créé par `sql/silver/ops_001_role_assistant_ro.sql`, mot de passe posé à part.
+- `python -I pipelines/soir.py basketvibe` : 13 requêtes en 0,4 s, toutes en échec → ce n'est pas une mesure. Preuves a et b restent **non mesurables**, L2 **non cochée**.
