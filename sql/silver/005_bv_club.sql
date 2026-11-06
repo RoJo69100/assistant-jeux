@@ -132,27 +132,72 @@ where a.endpoint ~ '^/teams/[0-9a-f-]{36}/sponsor$'
 order by a.team_id, date_trunc('week', a.day), a.captured_at desc;
 
 -- ---------- Personnel ----------
+-- Deux sources : l'API (/teams/<id>/personnel) et, depuis le 25/10 où l'API n'est plus capturée,
+-- le texte de la page (source 'dom'). Le relevé le plus récent de la semaine l'emporte.
+-- Texte : une ligne « <coût>/ week · <effet> » par employé, « Empty slot » par poste libre,
+-- effet de la section en tête (« -50% », « +10% », « -2 pp loss ») ; plafond de coût absent du texte.
 create or replace view silver.bv_personnel_weekly with (security_invoker = true) as
-select distinct on (a.team_id, date_trunc('week', a.day))
-       date_trunc('week', a.day)::date               as week,
-       a.team_id,
-       (a.body->>'weekly_cost')::numeric             as weekly_cost,
-       (a.body->>'weekly_cost_cap')::numeric         as weekly_cost_cap,
-       (a.body->>'doctors_hired')::int               as doctors,
-       (a.body->>'doctor_slots')::int                as doctor_slots,
-       (a.body->>'physiotherapists_hired')::int      as physios,
-       (a.body->>'physiotherapist_slots')::int       as physio_slots,
-       (a.body->>'psychologists_hired')::int         as psychologists,
-       (a.body->>'psychologist_slots')::int          as psychologist_slots,
-       (a.body->>'marketers_hired')::int             as marketers,
-       (a.body->>'marketer_slots')::int              as marketer_slots,
-       (a.body->>'treatment_reduction_pct')::numeric       as treatment_reduction_pct,
-       (a.body->>'prevention_reduction_pct')::numeric      as prevention_reduction_pct,
-       (a.body->>'form_improvement_shift_pp')::numeric     as form_improvement_pp,
-       (a.body->>'popularity_loss_mitigation_pp')::numeric as popularity_mitigation_pp
-from silver.bv_api a
-where a.endpoint ~ '^/teams/[0-9a-f-]{36}/personnel$'
-order by a.team_id, date_trunc('week', a.day), a.captured_at desc;
+with dom as (
+  select r.captured_at, (r.captured_at at time zone 'Europe/Paris')::date as day, r.payload->>'text' as t
+  from bronze.raw_pages r
+  where r.game = 'basketvibe' and r.source = 'dom' and r.page_type = 'personnel'
+    and r.payload->>'text' like '%Personnel payroll%'
+), sec as (
+  select captured_at, day, t,
+         substring(t from '\nDoctors\n[^\n]*\n(.*)\nPhysiotherapists\n')           as s_doc,
+         substring(t from '\nPhysiotherapists\n[^\n]*\n(.*)\nPsychologists\n')     as s_phy,
+         substring(t from '\nPsychologists\n[^\n]*\n(.*)\nMarketing specialists\n') as s_psy,
+         substring(t from '\nMarketing specialists\n[^\n]*\n(.*)$')                 as s_mkt
+  from dom
+), lu as (
+  select captured_at, day,
+         substring(t from 'Charged this Sunday\n([0-9.]+)k/ week')::numeric * 1000 as weekly_cost,
+         (length(s_doc) - length(replace(s_doc, '/ week · ', ''))) / 9   as doctors,
+         (length(s_doc) - length(replace(s_doc, 'Empty slot', ''))) / 10 as doc_empty,
+         (length(s_phy) - length(replace(s_phy, '/ week · ', ''))) / 9   as physios,
+         (length(s_phy) - length(replace(s_phy, 'Empty slot', ''))) / 10 as phy_empty,
+         (length(s_psy) - length(replace(s_psy, '/ week · ', ''))) / 9   as psychologists,
+         (length(s_psy) - length(replace(s_psy, 'Empty slot', ''))) / 10 as psy_empty,
+         (length(s_mkt) - length(replace(s_mkt, '/ week · ', ''))) / 9   as marketers,
+         (length(s_mkt) - length(replace(s_mkt, 'Empty slot', ''))) / 10 as mkt_empty,
+         abs(substring(s_doc from '^([+-]?[0-9.]+) ?(%|pp)')::numeric) as treat,
+         abs(substring(s_phy from '^([+-]?[0-9.]+) ?(%|pp)')::numeric) as prev,
+         abs(substring(s_psy from '^([+-]?[0-9.]+) ?(%|pp)')::numeric) as form,
+         abs(substring(s_mkt from '^([+-]?[0-9.]+) ?(%|pp)')::numeric) as pop
+  from sec
+), src as (
+  select a.captured_at, a.day, a.team_id,
+         (a.body->>'weekly_cost')::numeric             as weekly_cost,
+         (a.body->>'weekly_cost_cap')::numeric         as weekly_cost_cap,
+         (a.body->>'doctors_hired')::int               as doctors,
+         (a.body->>'doctor_slots')::int                as doctor_slots,
+         (a.body->>'physiotherapists_hired')::int      as physios,
+         (a.body->>'physiotherapist_slots')::int       as physio_slots,
+         (a.body->>'psychologists_hired')::int         as psychologists,
+         (a.body->>'psychologist_slots')::int          as psychologist_slots,
+         (a.body->>'marketers_hired')::int             as marketers,
+         (a.body->>'marketer_slots')::int              as marketer_slots,
+         (a.body->>'treatment_reduction_pct')::numeric       as treatment_reduction_pct,
+         (a.body->>'prevention_reduction_pct')::numeric      as prevention_reduction_pct,
+         (a.body->>'form_improvement_shift_pp')::numeric     as form_improvement_pp,
+         (a.body->>'popularity_loss_mitigation_pp')::numeric as popularity_mitigation_pp
+  from silver.bv_api a
+  where a.endpoint ~ '^/teams/[0-9a-f-]{36}/personnel$'
+  union all
+  select l.captured_at, l.day, (select m.team_id::text from silver.bv_my_team m limit 1),
+         l.weekly_cost, null,
+         l.doctors, l.doctors + l.doc_empty, l.physios, l.physios + l.phy_empty,
+         l.psychologists, l.psychologists + l.psy_empty, l.marketers, l.marketers + l.mkt_empty,
+         coalesce(l.treat, 0), coalesce(l.prev, 0), coalesce(l.form, 0), coalesce(l.pop, 0)
+  from lu l
+)
+select distinct on (s.team_id, date_trunc('week', s.day))
+       date_trunc('week', s.day)::date as week, s.team_id,
+       s.weekly_cost, s.weekly_cost_cap, s.doctors, s.doctor_slots, s.physios, s.physio_slots,
+       s.psychologists, s.psychologist_slots, s.marketers, s.marketer_slots,
+       s.treatment_reduction_pct, s.prevention_reduction_pct, s.form_improvement_pp, s.popularity_mitigation_pp
+from src s
+order by s.team_id, date_trunc('week', s.day), s.captured_at desc;
 
 -- ---------- Académie ----------
 create or replace view silver.bv_academy_weekly with (security_invoker = true) as
