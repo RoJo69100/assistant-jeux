@@ -25,11 +25,12 @@ LIBELLE = {"validated": "confirmé (learn)", "hard_rule": "règle dure (learn)",
 
 def lire_base(jeu: str) -> dict:
     try:
-        import psycopg
-        from sql import url_ro
-        with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
-            cur.execute("select public.learn_export(%s)", (jeu,))
-            return cur.fetchone()[0]
+        from sql import transport, url_ro
+        if transport() == "pg":  # en cloud (https), pas de tentative directe : le port 5432 est bloqué, 30 s perdues par appel
+            import psycopg
+            with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
+                cur.execute("select public.learn_export(%s)", (jeu,))
+                return cur.fetchone()[0]
     except (Exception, SystemExit):  # pas de psycopg, pas d'URL ou fonction réservée à service_role : REST
         pass
     url, cle = env("SUPABASE_URL"), env("SUPABASE_SECRET_KEY")

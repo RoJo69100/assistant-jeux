@@ -112,18 +112,16 @@ CORE = ROOT / "docs" / "decisions" / "cartes" / "_core"
 REQ = re.compile(r"`(select\b[^`]*)`", re.I)
 
 
-def valeur(cur, requete: str) -> str:
-    """Résumé d'une requête de la carte _core : 5 lignes au plus, une cellule de tableau."""
-    from sql import cellule, verifie
+def valeur(requete: str) -> str:
+    """Résumé d'une requête de la carte _core : 5 lignes au plus, une cellule de tableau (transport de sql.py)."""
+    from sql import cellule, executer, verifie
     try:
         q = verifie(requete)
     except SystemExit as e:
         return f"⚠ {e}"
     try:
-        cur.execute(f"select * from ({q}) t limit 6")
-        cols, rows = [d.name for d in cur.description], cur.fetchall()
-    except Exception as e:  # requête cassée ou vue absente : on le dit, on continue
-        cur.connection.rollback()
+        cols, rows = executer(f"select * from ({q}) t limit 6")
+    except (Exception, SystemExit) as e:  # requête cassée ou vue absente : on le dit, on continue (sql.py quitte par SystemExit)
         return f"⚠ erreur : {str(e).splitlines()[0]}"
     if not rows:
         return "aucune ligne"
@@ -139,27 +137,23 @@ def coeur(jeu: str, type_: str, jour: str) -> list[str]:
     lignes = carte.read_text(encoding="utf-8").replace(":game", f"'{jeu}'").splitlines()
     L = [f"## 0. Cœur commun `{carte.relative_to(ROOT).as_posix()}` (valeurs calculées le {jour})", ""]
     try:
-        import psycopg
-        from sql import url_ro
-        conn = psycopg.connect(url_ro(), connect_timeout=15)
-    except BaseException as e:  # pas de base : la carte reste utile sans valeurs
-        conn = None
+        from sql import executer
+        executer("select 1")  # la base répond-elle sur le transport de sql.py ?
+        base_ok = True
+    except (Exception, SystemExit) as e:  # pas de base : la carte reste utile sans valeurs
+        base_ok = False
         L += [f"⚠ base injoignable ({str(e).splitlines()[0] if str(e) else type(e).__name__}) : valeurs à lire à la main.", ""]
     suite = lignes[lignes.index("## Variables") + 1:] if "## Variables" in lignes else []
     fin = next((i for i, l in enumerate(suite) if l.startswith("## ")), len(suite))
-    try:
-        for l in suite[:fin]:
-            if l.startswith("| # "):
-                L.append(l + " Dernière valeur |")
-            elif l.startswith("|---"):
-                L.append(l + "---|")
-            elif l.startswith("| C"):
-                m = REQ.search(l)
-                v = valeur(conn.cursor(), m.group(1)) if (m and conn) else ""
-                L.append(f"{l} {v} |")
-    finally:
-        if conn:
-            conn.close()
+    for l in suite[:fin]:
+        if l.startswith("| # "):
+            L.append(l + " Dernière valeur |")
+        elif l.startswith("|---"):
+            L.append(l + "---|")
+        elif l.startswith("| C"):
+            m = REQ.search(l)
+            v = valeur(m.group(1)) if (m and base_ok) else ""
+            L.append(f"{l} {v} |")
     L += [""] + [l.replace("## ", "### ", 1) if l.startswith("## ") else l for l in suite[fin:]]  # couverture : ce que le delta doit fournir
     return L + ["", "La carte du jeu ci-dessous est le **delta** : ses variables s'ajoutent au cœur ; une variable qui répète une variable C renvoie à son numéro.", ""]
 

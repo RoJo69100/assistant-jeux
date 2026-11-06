@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # python -I n'ajoute pas le dossier du script
-from sql import DEBUT_OK, ECRITURE, url_ro  # noqa: E402
+from sql import DEBUT_OK, ECRITURE, executer, rpc_post, transport, url_ro  # noqa: E402
 
 DOMAINES = ("composition", "tactique", "entrainement", "academie", "achat", "vente",
             "finances", "infrastructure", "personnel")
@@ -91,9 +91,22 @@ def cmd_new(a) -> int:
     if erreurs:
         print("❌ décision refusée : " + " ; ".join(erreurs))
         return 1
+    if a.lecon:
+        a.lecon = a.lecon if ":" in a.lecon else f"{a.jeu}:{a.lecon}"  # ids migrés : <jeu>:L-nnn
+    eval_apres = dt.datetime.combine(dt.date.fromisoformat(a.evaluer_le), dt.time(12, 0)).astimezone()
+    if transport() == "https":  # cloud : écriture par la fonction public.decision_ecrire (POST, clé de service)
+        rep = rpc_post("decision_ecrire", {"p": {"op": "new", "jeu": a.jeu, "equipe": a.equipe, "domaine": a.domaine,
+                                                 "label": a.label, "hypothese": a.hypothese, "prediction": pred,
+                                                 "eval_after": eval_apres.isoformat(), "preuve": preuve,
+                                                 "lecon": a.lecon, "sujet": a.sujet}})
+        if not rep.get("ok"):
+            print(f"❌ décision refusée : {rep.get('erreur')}")
+            return 1
+        print(f"✅ décision D-{rep['id']} enregistrée (proposée) ; charte : {'copiée' if rep.get('charte') else 'aucune validée'}")
+        _marquer(a)
+        return 0
     with _connexion() as c, c.cursor() as cur:
         if a.lecon:
-            a.lecon = a.lecon if ":" in a.lecon else f"{a.jeu}:{a.lecon}"  # ids migrés : <jeu>:L-nnn
             cur.execute("select status from learn.lesson where id = %s", (a.lecon,))
             ligne = cur.fetchone()
             if not ligne:
@@ -110,14 +123,17 @@ def cmd_new(a) -> int:
                     " evidence, strategy_snapshot, lesson_id, sujet)"
                     " values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) returning id",
                     (a.jeu, a.equipe, a.domaine, a.label, a.hypothese, json.dumps(pred),
-                     dt.datetime.combine(dt.date.fromisoformat(a.evaluer_le), dt.time(12, 0)).astimezone(),
-                     json.dumps(preuve), json.dumps(ligne[0]) if ligne else None, a.lecon, a.sujet))
+                     eval_apres, json.dumps(preuve), json.dumps(ligne[0]) if ligne else None, a.lecon, a.sujet))
         print(f"✅ décision D-{cur.fetchone()[0]} enregistrée (proposée) ; charte : {'copiée' if ligne else 'aucune validée'}")
+    _marquer(a)
+    return 0
+
+
+def _marquer(a) -> None:
     try:  # trace lue par le hook police (H3) quand la commande n'est pas dans la session
         marque(a.jeu, a.domaine).write_text(dt.datetime.now().isoformat(), encoding="utf-8")
     except OSError:
         pass
-    return 0
 
 
 def marque(jeu: str, domaine: str, jour: dt.date | None = None) -> Path:
@@ -127,6 +143,13 @@ def marque(jeu: str, domaine: str, jour: dt.date | None = None) -> Path:
 
 
 def cmd_statut(a) -> int:
+    if transport() == "https":
+        rep = rpc_post("decision_ecrire", {"p": {"op": "statut", "id": a.id, "statut": a.statut, "note": a.note}})
+        if not rep.get("ok"):
+            print(f"❌ décision D-{a.id} introuvable")
+            return 1
+        print(f"✅ D-{a.id} : {a.statut}")
+        return 0
     with _connexion() as c, c.cursor() as cur:
         cur.execute("update learn.decision set status = %s, user_note = coalesce(%s, user_note) where id = %s",
                     (a.statut, a.note, a.id))
@@ -138,11 +161,10 @@ def cmd_statut(a) -> int:
 
 
 def cmd_liste(a) -> int:
-    with _connexion() as c, c.cursor() as cur:
-        cur.execute("select id, game, domain, status, eval_after::date, label from learn.decision"
-                    " where %s::text is null or game = %s order by id desc limit 30", (a.jeu, a.jeu))
-        for i, jeu, dom, st, ev, label in cur.fetchall():
-            print(f"D-{i}\t{jeu}\t{dom}\t{st}\t{ev}\t{label}")
+    _, lignes = executer("select id, game, domain, status, eval_after::date, label from learn.decision"
+                         " where %s::text is null or game = %s order by id desc limit 30", (a.jeu, a.jeu))
+    for i, jeu, dom, st, ev, label in lignes:
+        print(f"D-{i}\t{jeu}\t{dom}\t{st}\t{ev}\t{label}")
     return 0
 
 

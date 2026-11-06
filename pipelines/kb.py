@@ -27,11 +27,12 @@ STATUT = {"confirme": "conf", "complete": "compl", "contredit": "CONTREDIT", "en
 
 def appel(fonction: str, args: dict, sql: str, params: tuple):
     try:
-        import psycopg
-        from sql import url_ro
-        with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
-            cur.execute(sql, params)
-            return cur.fetchone()[0]
+        from sql import transport, url_ro
+        if transport() == "pg":  # en cloud (https), pas de tentative directe : le port 5432 est bloqué, 30 s perdues par appel
+            import psycopg
+            with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
+                cur.execute(sql, params)
+                return cur.fetchone()[0]
     except (Exception, SystemExit):
         pass
     url, cle = env("SUPABASE_URL"), env("SUPABASE_SECRET_KEY")

@@ -74,3 +74,54 @@ Commande (rejouable) : `SQL_TRANSPORT=https python -I pipelines/mesure_vues.py -
 | 3 | Parité avant/après identique | non mesurable en cloud ; substitut : hash de contenu identique pour 5 vues |
 | 4 | Taille base et objets | ✅ 50,8 % ; objets 0,4 % ; < 70 % |
 | 5 | Durée d'un rafraîchissement complet | ✅ 29,2 s (2 vues) |
+
+## S4b — Finir les vues rapides (2026-11-05) — **un point reste ouvert : parité locale**
+
+Décisions de l'utilisateur appliquées : `pg_cron` toutes les 10 minutes avec garde « page arrivée » ; appel explicite avant le que faire du soir ; `gold.daily_alerts` matérialisée avec `cle` et `rafraichi_a` à la fin ; `gold.match_objective` : filtre par jeu d'abord, matérialisation ensuite si nécessaire.
+Migrations (une par fichier) : `sql/core/014_rafraichissement.sql`, `015_daily_alerts_materialisee.sql`, `016_match_objective_materialisee.sql`, `017_daily_alerts_bascule.sql`, `018_cron_delai.sql`, `019_avant_soir_fraicheur.sql`, `sql/learn/002_decision_ecrire_https.sql`. Aucun hook ajouté, `CLAUDE.md` non touché, aucun `drop policy`.
+
+### 1. pg_cron et rafraîchissement automatique
+- [x] Extension installée par le connecteur (`create extension if not exists pg_cron with schema pg_catalog`, rôle `postgres`) : pas de blocage de droits.
+- [x] Jobs (`select jobid, jobname, schedule, command, active, username from cron.job order by jobid`) :
+  `1 rafraichir-vues | */10 * * * * | set statement_timeout = '15min'; select * from core.rafraichir_vues(false) | actif | postgres` ;
+  `2 rafraichir-demande | * * * * * | set statement_timeout = '15min'; select core.rafraichir_si_demande() | actif | postgres` ;
+  `3 purge-cron | 17 3 * * * | delete from cron.job_run_details where end_time < now() - interval '3 days' | actif | postgres`.
+- [x] Garde : `core.rafraichir_vues(false)` compare `max(bronze.raw_pages.id)` à `core.rafraichi_etat.last_page_id` ; sans page nouvelle elle sort en 0,1 à 0,2 s. `cron.job_run_details` : `rafraichir-vues succeeded 16:30:01 0.1s` et `succeeded 16:40:00 0.2s`.
+- [x] Passage de job avec rafraîchissement : `rafraichir-demande succeeded 2026-11-05 16:22:00 29.9s` (2 vues, avant les 2 autres vues), `succeeded 16:34:12 116.6s` et `succeeded 16:39:00 116.6s` (4 vues). État : `debut=16:39:00 fin=16:40:56 duree_ms=116298 last_page_id=37245`.
+- **Constat à connaître** : les sessions `pg_cron` ont `statement_timeout = 2min` (sonde : `raise exception` dans un job → `SONDE statement_timeout=2min lock_timeout=0 user=postgres`). Un premier passage à 4 vues a échoué à 130,6 s (`canceling statement due to statement timeout`, dans `refresh … gold.daily_alerts`, pendant que je lançais d'autres requêtes en parallèle) et se relançait chaque minute. Corrigé par la migration 018 : `set statement_timeout = '15min'` devant l'instruction du job (sonde : un `set statement_timeout = '3s'` posé ainsi coupe bien l'instruction suivante, échec à 3,4 s) et une demande n'est honorée que pendant 5 minutes. **Marge faible** : 116 s sur 120 s sans ce correctif.
+- **Changement de contenu après passage de job : non démontré par un passage réel.** Aucune page n'est arrivée dans `bronze.raw_pages` (`last_page_id` constant à 37245) : les empreintes md5 de `core.standing` (`a6135bcb…`) et `core.player_daily` (`2ba35ade…`) sont identiques avant et après les passages du job. Bronze est immuable en production : pas d'insertion réelle. La preuve de reflet reste le test annulé de S4 (points max 8 → insertion sans rafraîchir 8 → après rafraîchissement 999 → annulation, 0 page factice). À confirmer à la première vraie page.
+- [ ] Réserve : la garde ne voit que les nouvelles pages. Les alertes de `daily_alerts` dépendent de `now()` (âge des exports, enchères en cours) ; elles sont figées entre deux rafraîchissements.
+
+### 2. Appel explicite avant le soir
+- [x] `public.rafraichir_avant_soir()` (security definer, `search_path` vide, `execute` accordé à `service_role` et `assistant_ro`, au plus une demande par minute) + `pipelines/rafraichir_avant_soir.py` (POST, clé de service).
+- **Écart avec la consigne (« test : appel par sql_ro »)** : `sql_ro` s'exécute en transaction lecture seule, la fonction ne peut pas écrire sa demande. Preuve : `SQL_TRANSPORT=https python -I pipelines/sql.py "select public.rafraichir_avant_soir()"` → `erreur SQL (https 405) : cannot execute SELECT FOR UPDATE in a read-only transaction` (1,0 s). L'appel passe donc par le script en POST : réponse en 0,6 s (`python -I pipelines/rafraichir_avant_soir.py` → `à jour : rafraîchi à 16:22:30`) ; avec attente : `demandé` → `déjà demandé` → `en cours` ×N → `à jour : rafraîchi à 16:22:30`, 42,6 s pour 2 vues.
+- Ligne « 0 bis » ajoutée à `basketvibe-aujourdhui`, `sixzeroleague-aujourdhui`, `teamsoccer-aujourdhui` (attente jusqu'à 5 min, délai d'outil 600 s). `hardwood-aujourdhui` n'a pas d'étape 0 : non modifié.
+
+### 3. `gold.daily_alerts`, `gold.match_objective`, `gold.season_context` (SQL_TRANSPORT=https, médiane de 3 passages)
+Commande : `SQL_TRANSPORT=https python -I pipelines/mesure_vues.py --vues gold.season_context,gold.match_objective,gold.daily_alerts,core.standing,core.player_daily --passes 3`. Tableau complet : `docs/refonte-v3/mesures-s4/apres_s4b.md`. Avant : voir `avant_gold.md` (timeout sur les 6 jeux pour `season_context` et `daily_alerts`, 4 jeux sur 6 pour `match_objective`).
+- [x] **Les 30 couples vue/jeu sont < 2 s** : `gold.season_context` 439 à 556 ms ; `gold.match_objective` 419 à 473 ms (teamsoccer : 3 895 → 446 ms) ; `gold.daily_alerts` 287 à 453 ms (avant : 6,9 à 11,6 s et 2 timeouts) ; `core.standing` 238 à 442 ms ; `core.player_daily` 418 à 446 ms.
+- `match_objective` teamsoccer : le filtre par jeu était déjà poussé (le plan ne lit que la branche teamsoccer) ; coût = adaptateur de matchs lu deux fois (3,4 s + 0,9 s). Matérialisée (016), clé unique `(game, team_id, fixture_id)`.
+- [x] **Contenu identique** (md5) : `gold.match_objective` 51 lignes `f008f4933e1bc60a62fb5a544a81c98f` avant et après ; `gold.season_context` 8 lignes `1842552465595cd96202bae7fff1ae4a` avant et après (S4). `gold.daily_alerts` : comparaison à la vue d'origine `daily_alerts_src` faite avant la bascule : basketvibe (7) et sixzeroleague (13) md5 identiques ; derbymanager, hockeynation, hardwood (12), teamsoccer (13) : mêmes lignes, seul le compteur d'heures d'un export diffère (« 66 h » / « 65 h », vue calculée 40 min plus tard ; avec ce compteur neutralisé, 0 ligne différente pour hardwood et teamsoccer). Les colonnes d'origine ne sont ni modifiées ni réordonnées ; `cle` et `rafraichi_a` sont en fin de vue.
+- **Coût** : un rafraîchissement de `daily_alerts` seul dure ~2 min (anciennes vues par jeu `gold.ts_daily_alerts` et `gold.hw_daily_alerts` ~22 s chacune, `gold.exports_state` ~4 s, `gold.hn_daily_alerts` ~3 s ; mesures prises en parallèle, donc gonflées). Cause racine non traitée (ces vues par jeu), piste : les alléger plutôt que de matérialiser la somme.
+
+### 4. Cloud : transport commun
+- [x] `sql.py` : `transport()` renvoie `https` si `CLAUDE_CODE_REMOTE=true` (plus de sonde du port 5432) ; `select 1` : 6,8 s → 0,54 s. Ajout de `executer()` et `rpc_post()`.
+- [x] `dossier.py` lit par `executer()` (plus de `psycopg` direct). `decision.py` : lecture par `executer()`, écritures par `public.decision_ecrire(p jsonb)` en POST (service_role seulement, migration `sql/learn/002`). `kb.py` et `export_learnings_md.py` ne tentent plus la connexion directe en transport https (30 s perdues par appel : 125 s et 31 s dans le profil de `dossier.py`).
+- [x] `python pipelines/dossier.py <jeu> composition` en cloud, code 0, aucun « base injoignable », 0 « ⚠ erreur » : **basketvibe 18,3 s, teamsoccer 24,2 s, hockeynation 12,4 s** (< 60 s). Avant : 124 (arrêt à 120 s), 56 s et 42 s dont l'essentiel en attentes de connexion, aucune vue interrogée.
+- [x] Tests : `python -I pipelines/test_sql.py | tail -1` → `12/12` ; `python -I pipelines/test_decision.py | tail -1` → `15/15`.
+- Câblage de `decision.py` en https vérifié sans écrire : `liste basketvibe` → lignes `D-1072…` ; `new … --lecon L-999999` → `❌ décision refusée : leçon basketvibe:L-999999 introuvable` (refus par la base) ; `statut 999999999 done` → `❌ décision D-999999999 introuvable`. **Non testé : une écriture réelle** (créerait une décision de production) ; le chemin `ok = true` est donc non éprouvé.
+
+### 5. Non-régression
+- [ ] **Parité locale : à faire par l'utilisateur** (`agenda_parite.py`, `alertes_parite.py`, `exports_parite.py`, `finances_parite.py`, `contrat_core.py`, `recette.py --tous`, connexion directe, port 5432 bloqué en cloud). Sorties « avant » de S4 : aucune (ces scripts n'ont jamais tourné en cloud). Case décochée tant que les sorties ne sont pas collées ici et comparées. Attention : `alertes_parite.py` compare des alertes à des anciennes vues : `gold.daily_alerts` est maintenant figée entre deux rafraîchissements.
+- Substitut en cloud : md5 de contenu identique pour `core.standing`, `core.player_daily`, `gold.season_context`, `gold.match_objective`, `gold.finance_health`, `gold.roster_bilan` (avant/après la migration de S4) ; `gold.exports_state` et `gold.agenda` : empreintes « avant » prises (`d27ca490…`, `7c61ccbf…`), « après » non relevées.
+
+### Preuves de fin
+| # | Preuve | État |
+|---|---|---|
+| a | `cron.job` et `cron.job_run_details` en `succeeded` | ✅ voir § 1 |
+| b | `daily_alerts`, `season_context`, `match_objective` < 2 s sur 6 jeux | ✅ 30 couples, § 3 |
+| c | md5 identique | ✅ avec la réserve du compteur d'heures de `daily_alerts` |
+| d | `dossier.py` cloud < 60 s | ✅ 18,3 / 24,2 / 12,4 s |
+| e | parité locale collée | ❌ en attente de l'utilisateur |
+| f | taille base < 70 % du quota | ✅ 254,6 Mo = **50,93 %** ; 4 vues matérialisées : `core.player_daily` 1,73 Mo, `core.standing` 0,13 Mo, `gold.daily_alerts` 0,09 Mo, `gold.match_objective` 0,08 Mo (≈ 2,0 Mo, 0,4 %) |
+| g | durée du rafraîchissement complet (4 vues) | ✅ **116,5 s** (`duree_ms` 116 482 et 116 298) |
