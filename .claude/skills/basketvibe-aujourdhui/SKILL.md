@@ -1,6 +1,6 @@
 ---
 name: basketvibe-aujourdhui
-description: BasketVibe — que faire aujourd'hui : plan du jour depuis gold.bv_agenda et les alertes, avec les exports en retard. Pour tout « que faire », « reprenons » ou plan du soir.
+description: BasketVibe — que faire aujourd'hui : plan du jour depuis gold.bv_agenda et les alertes, avec les exports en retard. Pour tout « que faire », « reprenons » ou plan du jour.
 ---
 
 # BasketVibe — que faire aujourd'hui

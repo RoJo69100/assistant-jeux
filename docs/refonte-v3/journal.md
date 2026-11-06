@@ -93,8 +93,8 @@ Migrations (une par fichier) : `sql/core/014_rafraichissement.sql`, `015_daily_a
 - [ ] Réserve : la garde ne voit que les nouvelles pages. Les alertes de `daily_alerts` dépendent de `now()` (âge des exports, enchères en cours) ; elles sont figées entre deux rafraîchissements.
 
 ### 2. Appel explicite avant le soir
-- [x] `public.rafraichir_avant_soir()` (security definer, `search_path` vide, `execute` accordé à `service_role` et `assistant_ro`, au plus une demande par minute) + `pipelines/rafraichir_avant_soir.py` (POST, clé de service).
-- **Écart avec la consigne (« test : appel par sql_ro »)** : `sql_ro` s'exécute en transaction lecture seule, la fonction ne peut pas écrire sa demande. Preuve : `SQL_TRANSPORT=https python -I pipelines/sql.py "select public.rafraichir_avant_soir()"` → `erreur SQL (https 405) : cannot execute SELECT FOR UPDATE in a read-only transaction` (1,0 s). L'appel passe donc par le script en POST : réponse en 0,6 s (`python -I pipelines/rafraichir_avant_soir.py` → `à jour : rafraîchi à 16:22:30`) ; avec attente : `demandé` → `déjà demandé` → `en cours` ×N → `à jour : rafraîchi à 16:22:30`, 42,6 s pour 2 vues.
+- [x] `public.rafraichir_avant_soir()` (security definer, `search_path` vide, `execute` accordé à `service_role` et `assistant_ro`, au plus une demande par minute) + `pipelines/rafraichir_avant_aujourdhui.py` (POST, clé de service).
+- **Écart avec la consigne (« test : appel par sql_ro »)** : `sql_ro` s'exécute en transaction lecture seule, la fonction ne peut pas écrire sa demande. Preuve : `SQL_TRANSPORT=https python -I pipelines/sql.py "select public.rafraichir_avant_soir()"` → `erreur SQL (https 405) : cannot execute SELECT FOR UPDATE in a read-only transaction` (1,0 s). L'appel passe donc par le script en POST : réponse en 0,6 s (`python -I pipelines/rafraichir_avant_aujourdhui.py` → `à jour : rafraîchi à 16:22:30`) ; avec attente : `demandé` → `déjà demandé` → `en cours` ×N → `à jour : rafraîchi à 16:22:30`, 42,6 s pour 2 vues.
 - Ligne « 0 bis » ajoutée à `basketvibe-aujourdhui`, `sixzeroleague-aujourdhui`, `teamsoccer-aujourdhui` (attente jusqu'à 5 min, délai d'outil 600 s). `hardwood-aujourdhui` n'a pas d'étape 0 : non modifié.
 
 ### 3. `gold.daily_alerts`, `gold.match_objective`, `gold.season_context` (SQL_TRANSPORT=https, médiane de 3 passages)
@@ -126,50 +126,50 @@ Commande : `SQL_TRANSPORT=https python -I pipelines/mesure_vues.py --vues gold.s
 | f | taille base < 70 % du quota | ✅ 254,6 Mo = **50,93 %** ; 4 vues matérialisées : `core.player_daily` 1,73 Mo, `core.standing` 0,13 Mo, `gold.daily_alerts` 0,09 Mo, `gold.match_objective` 0,08 Mo (≈ 2,0 Mo, 0,4 %) |
 | g | durée du rafraîchissement complet (4 vues) | ✅ **116,5 s** (`duree_ms` 116 482 et 116 298) |
 
-## L2 — `soir.py basketvibe` (2026-11-06) — **INCOMPLET : preuves en base non mesurables sur ce PC**
+## L2 — `aujourdhui.py basketvibe` (2026-11-06) — **INCOMPLET : preuves en base non mesurables sur ce PC**
 
 ### 1. Ligne « 0 bis » retirée (commit f1780af, poussé)
 Commande : `grep -l "core\.standing\|core\.player_daily" sql/gold/*bv*` → **aucune sortie, code 1** (aucun fichier `sql/gold/*bv*` ne référence `core.standing` ni `core.player_daily`).
 Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous les fichiers bv_ (le motif `bv_` suffit) ; j'ai donc cherché les deux tables seules. Les définitions des vues lues par le skill sont toutes dans `sql/gold/*bv*` sauf `bv_exports_state` (`sql/gold/037_ts_bv_routine.sql`, qui lit `silver.bv_api`) et `bv_saisie_adversaires` (`023_bv_saisie_tactique.sql`) : aucune ne cite les deux tables. **Non mesuré** : la dépendance transitive en base (`pg_depend`), impossible faute de transport (§ 3).
 
 ### 2. Livrés
-- `pipelines/soir.py` (commit 3a933be) : lit en lecture seule par `executer()` les 11 vues du lot + `bv_saisie_adversaires` (aperçu) + `bv_transfer_history` (dernière vente) ; rend « Exports à faire aujourd'hui » puis Composition, Tactique, Entraînement, Transferts, Finances, Personnel au format de `forme.py`. « Personnel » est rendu avec la catégorie `Finances` et « Exports » avec `Export` (catégories fixes de `forme.py`). Aucun modèle, aucun agent. Une vue illisible s'écrit « il me manque X — export Y » ; chaque exécution ajoute une ligne à `docs/refonte-v3/journal-soir.md`.
+- `pipelines/aujourdhui.py` (commit 3a933be) : lit en lecture seule par `executer()` les 11 vues du lot + `bv_saisie_adversaires` (aperçu) + `bv_transfer_history` (dernière vente) ; rend « Exports à faire aujourd'hui » puis Composition, Tactique, Entraînement, Transferts, Finances, Personnel au format de `forme.py`. « Personnel » est rendu avec la catégorie `Finances` et « Exports » avec `Export` (catégories fixes de `forme.py`). Aucun modèle, aucun agent. Une vue illisible s'écrit « il me manque X — export Y » ; chaque exécution ajoute une ligne à `docs/refonte-v3/journal-aujourdhui.md`.
 - `--jour` : seule `bv_transfer_history` se rejoue (`sold_on <= jour`) ; toutes les autres lisent `current_date` ou `now()` → « rejeu non disponible pour <vue> ».
-- `pipelines/test_soir.py` : `PYTHONIOENCODING=utf-8 python -I pipelines/test_soir.py | tail -1` → **15/15** (données figées, sans réseau ; vérifie aussi que chaque tableau passe `forme.plan`).
+- `pipelines/test_aujourdhui.py` : `PYTHONIOENCODING=utf-8 python -I pipelines/test_aujourdhui.py | tail -1` → **15/15** (données figées, sans réseau ; vérifie aussi que chaque tableau passe `forme.plan`).
 
 ### 3. Preuves de fin
 | # | Preuve | État |
 |---|---|---|
-| a | `python -I pipelines/soir.py basketvibe` < 60 s, sortie complète | ❌ **non mesurable** : `.env` de ce PC a `SUPABASE_URL` mais `SUPABASE_SECRET_KEY` et `SUPABASE_DB_URL_RO` vides, port 5432 fermé (`python -I pipelines/sql.py "select 1"` → « port 5432 fermé et SUPABASE_URL / SUPABASE_SECRET_KEY absents »). Le script sort alors 13 lignes « il me manque … » en 0,0 s : ce n'est pas une mesure, la ligne de `journal-soir.md` a été supprimée. |
+| a | `python -I pipelines/aujourdhui.py basketvibe` < 60 s, sortie complète | ❌ **non mesurable** : `.env` de ce PC a `SUPABASE_URL` mais `SUPABASE_SECRET_KEY` et `SUPABASE_DB_URL_RO` vides, port 5432 fermé (`python -I pipelines/sql.py "select 1"` → « port 5432 fermé et SUPABASE_URL / SUPABASE_SECRET_KEY absents »). Le script sort alors 13 lignes « il me manque … » en 0,0 s : ce n'est pas une mesure, la ligne de `journal-aujourdhui.md` a été supprimée. |
 | b | Remplacée le 2026-11-06 par le mode ombre (3 soirs) et l'instantané quotidien ; décision de l'utilisateur. | ➖ remplacée |
-| c | `test_soir.py` vert | ✅ 15/15 |
+| c | `test_aujourdhui.py` vert | ✅ 15/15 |
 
 ### 4. Cause et piste
 - Cause : clé de service et URL Postgres lecture seule absentes du `.env` de cette machine (règle CLAUDE.md : « .env et MCP Supabase : une fois par machine »).
-- Piste : remplir `SUPABASE_SECRET_KEY` (ou `SUPABASE_DB_URL_RO`) dans `.env`, relancer `python -I pipelines/soir.py basketvibe`, coller la sortie ici. Colonnes de `bv_finance_health`, `bv_finance_projection`, `bv_position_summary`, `bv_next_opponents`, `bv_market_*` non vérifiées en base : ces vues sont lues par `select *` et rendues en `clé=valeur` (8 colonnes max) ; `bv_roster_now` est lue avec des colonnes supposées (`name, position, age, form, fatigue, injury_return_on`) à confirmer au premier vrai passage.
+- Piste : remplir `SUPABASE_SECRET_KEY` (ou `SUPABASE_DB_URL_RO`) dans `.env`, relancer `python -I pipelines/aujourdhui.py basketvibe`, coller la sortie ici. Colonnes de `bv_finance_health`, `bv_finance_projection`, `bv_position_summary`, `bv_next_opponents`, `bv_market_*` non vérifiées en base : ces vues sont lues par `select *` et rendues en `clé=valeur` (8 colonnes max) ; `bv_roster_now` est lue avec des colonnes supposées (`name, position, age, form, fatigue, injury_return_on`) à confirmer au premier vrai passage.
 - Limite assumée : le script lit les chiffres mais ne tranche pas « acheter / vendre / garder » (étape 6 du skill) : c'est une décision, pas du SQL.
 - Case L2 **non cochée**.
 
 ### 5. Reprise après ajout de `SUPABASE_DB_URL_RO` (2026-11-06, 09:51)
 - `pip install -r requirements.txt` (module `psycopg` absent de ce PC, règle N1) puis `python -I pipelines/sql.py "select 1 as ok"` → `FATAL: password authentication failed for user "postgres"` (deux adresses du pooler, `aws-1-eu-west-2.pooler.supabase.com:5432`).
 - Cause : l'utilisateur de l'URL est `postgres.smkariminvfityondmmc` (le compte administrateur), pas `assistant_ro.smkariminvfityondmmc` ; le mot de passe saisi n'est pas celui de ce compte. Le rôle `assistant_ro` est créé par `sql/silver/ops_001_role_assistant_ro.sql`, mot de passe posé à part.
-- `python -I pipelines/soir.py basketvibe` : 13 requêtes en 0,4 s, toutes en échec → ce n'est pas une mesure. Preuves a et b restent **non mesurables**, L2 **non cochée**.
+- `python -I pipelines/aujourdhui.py basketvibe` : 13 requêtes en 0,4 s, toutes en échec → ce n'est pas une mesure. Preuves a et b restent **non mesurables**, L2 **non cochée**.
 
 ### 6. Reprise après ajout de `SUPABASE_SECRET_KEY` (2026-11-06, 10:02)
 - `python -I pipelines/sql.py "select 1 as ok"` échoue encore (le transport `pg` passe avant `https` tant que le port 5432 répond, et l'URL `postgres.…` est refusée). `SQL_TRANSPORT=https python -I pipelines/sql.py "select 1 as ok"` → `ok = 1`. La clé fonctionne ; le `.env` garde une `SUPABASE_DB_URL_RO` fausse qui masque le transport https.
-- **a** `SQL_TRANSPORT=https python -I pipelines/soir.py basketvibe` : **14,4 s** (< 60 s), 13 requêtes, sortie complète : 8 lignes Export (aperçu de ligue du 07/11 URGENT, 5 exports « à refaire », historique des transferts depuis 2026-11-04), 1 ligne Composition (preset amical 23:45), faits de position/adversaires, 1 ligne Transferts (marché > 24 h), faits Finances et Personnel. Durée consignée dans `journal-soir.md`. ✅
+- **a** `SQL_TRANSPORT=https python -I pipelines/aujourdhui.py basketvibe` : **14,4 s** (< 60 s), 13 requêtes, sortie complète : 8 lignes Export (aperçu de ligue du 07/11 URGENT, 5 exports « à refaire », historique des transferts depuis 2026-11-04), 1 ligne Composition (preset amical 23:45), faits de position/adversaires, 1 ligne Transferts (marché > 24 h), faits Finances et Personnel. Durée consignée dans `journal-aujourdhui.md`. ✅
 - **b** rejeu `--jour 2026-11-03`, `2026-11-04`, `2026-11-05` : toutes les vues sauf l'historique des ventes lisent `current_date` / `now()` → « rejeu non disponible » sur 12 vues sur 13. Les briefs de `outputs/basketvibe/briefs/` sont des sorties d'agents (tactique, transferts…), pas des plans du soir : aucune comparaison ligne à ligne possible, colonne « écart » = **non mesurable**. ❌
-- **c** `python pipelines/test_soir.py` : 15/15 ✅
-- Constat à corriger (hors lot) : `gold.bv_next_opponents` renvoie un match déjà joué (round 2, 2026-11-04) ; `soir.py` le recopie tel quel.
+- **c** `python pipelines/test_aujourdhui.py` : 15/15 ✅
+- Constat à corriger (hors lot) : `gold.bv_next_opponents` renvoie un match déjà joué (round 2, 2026-11-04) ; `aujourdhui.py` le recopie tel quel.
 - Cause du blocage de b : les vues gold ne sont pas paramétrées par date. Piste : vues `…_at(date)` ou instantanés journaliers (`ops`), à décider dans un lot dédié.
 - Case L2 **non cochée** (critère b non tenu).
 
 ### 7. L2b (2026-11-06)
 - **Preuve b** : remplacée le 2026-11-06 par le mode ombre (3 soirs) et l'instantané quotidien ; décision de l'utilisateur. L'option `--jour` reste dans le code ; « rejeu non disponible » n'est plus une case à cocher.
 - `.env` / variable d'environnement SUPABASE_DB_URL_RO : à supprimer ou à remplacer par l'URL de assistant_ro (action de l'utilisateur).
-- Adversaires : `gold.bv_next_opponents` expose `match_day` (`sql/gold/004_bv_tactics.sql:147`) ; `soir.py` écarte les lignes dont `match_day` < aujourd'hui (commit 1675715). `PYTHONIOENCODING=utf-8 python -I pipelines/test_soir.py | tail -1` → `16/16` (cas « match passé non rendu »).
+- Adversaires : `gold.bv_next_opponents` expose `match_day` (`sql/gold/004_bv_tactics.sql:147`) ; `aujourdhui.py` écarte les lignes dont `match_day` < aujourd'hui (commit 1675715). `PYTHONIOENCODING=utf-8 python -I pipelines/test_aujourdhui.py | tail -1` → `16/16` (cas « match passé non rendu »).
 - `sql.py` : si Postgres répond mais refuse l'authentification (y compris le coupe-circuit `ECIRCUITBREAKER too many authentication failures`, vu ici), la lecture bascule en https et Postgres n'est plus réessayé dans le processus (commits 4de1742, 06594ef). `PYTHONIOENCODING=utf-8 python -I pipelines/test_sql.py | tail -1` → `15/15` (12 existants + 3 nouveaux). Constat : la 1re exécution réelle sans cette bascule laissait 3 vues illisibles ; avec elle, `Vues illisibles` absent.
-- `soir.py` écrit `outputs/basketvibe/soir-AAAA-MM-JJ.md` (écrasé le même jour, hors `--jour`) : `PYTHONIOENCODING=utf-8 python -I pipelines/soir.py basketvibe` → code 0, **13,0 s**, fichier `outputs/basketvibe/soir-2026-11-06.md` créé (4 248 octets), 0 « Vues illisibles », `bv_next_opponents` : seulement `match_day=2026-11-07` et `2026-11-09` (le match du 04/11 n'est plus rendu).
+- `aujourdhui.py` écrit `outputs/basketvibe/aujourdhui-AAAA-MM-JJ.md` (écrasé le même jour, hors `--jour`) : `PYTHONIOENCODING=utf-8 python -I pipelines/aujourdhui.py basketvibe` → code 0, **13,0 s**, fichier `outputs/basketvibe/soir-2026-11-06.md` créé (4 248 octets), 0 « Vues illisibles », `bv_next_opponents` : seulement `match_day=2026-11-07` et `2026-11-09` (le match du 04/11 n'est plus rendu).
 
 ## L3a — règles de décision BasketVibe (2026-11-06) : rédigé, pas codé
 Fichier : `docs/attentes/regles-decision-basketvibe.yaml` (commit 070759d). Charte en tête (source « utilisateur, 2026-11-06 »), 4 secteurs (18 règles, chacune avec option « garder » en concurrence), `revue_hebdo` (échelle de 6 paliers, exception « grave » = série de 2 défaites de ligue d'après `sql/core/011_objective_rule.sql`), `tactique_amical`.

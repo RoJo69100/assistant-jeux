@@ -1,4 +1,4 @@
-"""Test de pipelines/soir.py sur des données figées (sans réseau ni base).
+"""Test de pipelines/aujourdhui.py sur des données figées (sans réseau ni base).
 
 Lancer : python pipelines/test_soir.py   (code 1 si un cas se trompe)
 """
@@ -7,7 +7,7 @@ import importlib.util
 import sys
 from pathlib import Path
 
-spec = importlib.util.spec_from_file_location("soir", Path(__file__).resolve().parent / "soir.py")
+spec = importlib.util.spec_from_file_location("soir", Path(__file__).resolve().parent / "aujourdhui.py")
 soir = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(soir)
 spec_f = importlib.util.spec_from_file_location("forme", Path(__file__).resolve().parent / "forme.py")

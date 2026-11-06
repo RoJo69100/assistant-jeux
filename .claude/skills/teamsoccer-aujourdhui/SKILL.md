@@ -1,6 +1,6 @@
 ---
 name: teamsoccer-aujourdhui
-description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du soir.
+description: Team Soccer — que faire aujourd'hui : plan du jour pour les deux clubs depuis l'agenda et les alertes. Pour tout « que faire », « reprenons » ou plan du jour.
 ---
 
 # Team Soccer — que faire aujourd'hui
@@ -15,7 +15,7 @@ Sources : `gold.ts_agenda` et `gold.ts_daily_alerts` (`sql/gold/018_ts_agenda.sq
 3. Les jours de match viennent des données, pas de la règle « mardi et samedi » : Ben Ahmed Donkey joue le lundi et le jeudi à 19:30, Chomelix Cows le mardi et le samedi à 13:50 [Obs, `silver.ts_matches`, 2026-10-20].
 4. Pour chaque action, ajoute le détail concret du dernier brief concerné, sans relancer d'agent : composition (`*-tactique*.md`), enchères (`*-transferts.md`), entraînement (`*-entrainement.md`), solde, stade et HPC (`*-finances*.md`), révélations (`*-academie.md`), conseils `C-nnn` ouverts.
 5. Préparation au plus tôt (CLAUDE.md) : si les données utiles sont exportées, propose de préparer aussi les compositions des jours suivants (`gold.ts_upcoming`), avec « à refaire si : Forme, blessure, adversaire ».
-6. Brief de plus de 3 jours sur un sujet du soir (la Forme change chaque vendredi) : dis-le et propose l'agent.
+6. Brief de plus de 3 jours sur un sujet du jour (la Forme change chaque vendredi) : dis-le et propose l'agent.
 7. Si le calendrier (`matches`) a plus de 24 h dans `gold.ts_daily_alerts`, l'agenda peut être faux : demande l'export de la page Matchs des deux clubs.
 8. « Match de type inconnu » (ni ligue, ni coupe, ni amical dans l'API, souvent la nuit) : ne devine pas ce que c'est ; demande de regarder la page Matchs.
 

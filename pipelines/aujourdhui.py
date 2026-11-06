@@ -1,13 +1,13 @@
-"""Plan du soir BasketVibe, sans modèle ni agent (refonte v3, lot L2).
+"""Que faire aujourd'hui BasketVibe, sans modèle ni agent (refonte v3, lot L2).
 
 Exécute en lecture seule (executer() de sql.py) les étapes 1, 4, 5 et 6 du skill basketvibe-aujourdhui,
 puis rend un tableau par catégorie au format de forme.py (Priorité | Catégorie | Action), triés par heure limite.
 
 Usage :
-  python -I pipelines/soir.py basketvibe [--jour AAAA-MM-JJ]
+  python -I pipelines/aujourdhui.py basketvibe [--jour AAAA-MM-JJ]
 Rejeu (--jour) : seules les vues qui savent lire un jour passé sont rejouées ; toutes les autres, qui lisent
 current_date ou now(), répondent « rejeu non disponible pour <vue> ». Chaque exécution ajoute une ligne à
-docs/refonte-v3/journal-soir.md. Une donnée absente s'écrit « il me manque X — export Y ».
+docs/refonte-v3/journal-aujourdhui.md. Une donnée absente s'écrit « il me manque X — export Y ».
 """
 import argparse
 import datetime as dt
@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 
 RACINE = Path(__file__).resolve().parent.parent
-JOURNAL = RACINE / "docs/refonte-v3/journal-soir.md"
+JOURNAL = RACINE / "docs/refonte-v3/journal-aujourdhui.md"
 PASTILLE = {1: "🟥 URGENT", 2: "🟧 IMPORTANT", 3: "🟩 SUIVI"}
 ORDRE_CAT = ["Exports", "Composition", "Tactique", "Entraînement", "Transferts", "Finances", "Personnel"]
 CATEGORIE_FORME = {"Exports": "Export", "Personnel": "Finances"}  # catégories fixes de forme.py
@@ -186,7 +186,7 @@ def rendre(lignes, jour, erreurs=None):
     def tri(l):
         return (l[2] is None, l[2] or "", l[1])
 
-    texte = [f"# Plan du soir BasketVibe — {jour.isoformat()}", ""]
+    texte = [f"# Que faire aujourd'hui BasketVibe — {jour.isoformat()}", ""]
     for cat in ORDRE_CAT:
         sel = sorted((l for l in lignes if l[0] == cat), key=tri)
         if not sel:
@@ -204,7 +204,7 @@ def rendre(lignes, jour, erreurs=None):
 
 def journaliser(jour, secondes, requetes):
     if not JOURNAL.exists():
-        JOURNAL.write_text("# Journal de durée de `soir.py` (une ligne par exécution)\n\n"
+        JOURNAL.write_text("# Journal de durée de `aujourdhui.py` (une ligne par exécution)\n\n"
                            "| Date | Jour du plan | Durée (s) | Requêtes |\n|---|---|---|---|\n", encoding="utf-8")
     with JOURNAL.open("a", encoding="utf-8") as f:
         f.write(f"| {dt.datetime.now().strftime('%Y-%m-%d %H:%M')} | {jour} | {secondes:.1f} | {requetes} |\n")
@@ -216,7 +216,7 @@ def main() -> int:
     ap.add_argument("--jour", help="AAAA-MM-JJ : rejeu d'un jour passé quand la vue le permet")
     a = ap.parse_args()
     if a.jeu != "basketvibe":
-        sys.exit("soir.py : seul basketvibe est branché (lot L2)")
+        sys.exit("aujourdhui.py : seul basketvibe est branché (lot L2)")
     jour = dt.date.fromisoformat(a.jour) if a.jour else dt.date.today()
     maintenant = dt.datetime.now()
     debut = time.time()
@@ -226,7 +226,7 @@ def main() -> int:
     rendu = rendre(plan(donnees, erreurs, jour, maintenant), jour, erreurs)
     print(rendu)
     if not a.jour:  # instantané quotidien (écrasé si relancé le même jour) : remplace le rejeu
-        fichier = RACINE / "outputs/basketvibe" / f"soir-{jour.isoformat()}.md"
+        fichier = RACINE / "outputs/basketvibe" / f"aujourdhui-{jour.isoformat()}.md"
         fichier.parent.mkdir(parents=True, exist_ok=True)
         fichier.write_text(f"<!-- généré le {maintenant.strftime('%Y-%m-%d %H:%M')} -->\n{rendu}\n", encoding="utf-8")
     nonrej = [k for k, v in donnees.items() if v == "rejeu"]
