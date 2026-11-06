@@ -13,6 +13,7 @@ charte:
   taille_du_plan: "au plus 8 lignes, triées par priorité puis par heure limite ; le reste dans une ligne « autres points »"
   tests_tactiques: "en AMICAL seulement ; aucun test en ligue ni en coupe ; un amical perdu = un test jugé à son échéance (arbitrage 15)"
   analyse_des_matchs: "UNE fois par semaine, sur TOUS les matchs de la semaine (ligue, coupe, amicaux) ; pas d'analyse le soir sauf défaite GRAVE (revue_hebdo.exception_grave)"
+  seuils_ajustables: "tout seuil et tout nombre minimal de ce fichier est une valeur de départ que Claude révise seul avec l'étude de l'historique (ajustable en trop ou pas assez) ; chaque révision est datée dans le journal avec la mesure qui la justifie (utilisateur, 2026-11-06)"
   colonnes_core_club_strategy: "aucune ligne BasketVibe dans core.club_strategy (select * : 0 ligne, 2026-11-06). Colonnes existantes : horizon, poids_jeunes, poids_veterans, appetit_risque, plafond_masse_salariale_pct_revenus, reserve_tresorerie, vendre_pour_profit, valide_le. Aucune migration créée ; l'insertion de la ligne reste à décider."
 
 seuils_mesures:   # requêtes et sorties : docs/refonte-v3/journal.md, section L3a
@@ -20,13 +21,15 @@ seuils_mesures:   # requêtes et sorties : docs/refonte-v3/journal.md, section L
   gros_montant:
     valeur_proposee: 450000
     base: "gold.bv_finance_health.weekly_fixed_costs = 452 795 (une semaine de charges fixes) ; solde 1 167 106"
-    statut: a_valider
-    note: "aucun seuil n'est défini dans le dépôt (SEUIL_GROS_MONTANT vide, journal S2) ; le chiffre est une proposition, pas une règle de jeu"
+    statut: "provisoire : défini par Claude, révisé avec l'étude (décision utilisateur 2026-11-06 : « c'est à toi de le connaître ou de le définir plus tard »)"
+    revision: "recalculer chaque semaine : une semaine de charges fixes (gold.bv_finance_health.weekly_fixed_costs) puis, quand assez d'achats/ventes sont observés, le montant au-dessus duquel une erreur coûte plus que la marge médiane de revente"
+    note: "aucun seuil n'est défini dans le dépôt (SEUIL_GROS_MONTANT vide, journal S2) ; en attendant, tout montant illisible reste contrôlé"
   perte_transferts_tolerée_4_semaines:
     valeur_proposee: 261516
     base: "solde 1 167 106 − gold.bv_finance_s2_projection.safety_reserve 905 590 (2 semaines de charges)"
     contexte: "pertes de revente observées sur le marché (gold.bv_transfer_history, 69 reventes du 2026-09-02 au 2026-11-04) : 48 gagnantes, marge nette médiane 44 000, p10 −39 650, pire −256 800"
-    statut: mesuré
+    statut: "mesuré, valeur de départ ; le déclencheur n'est pas ce chiffre"
+    declencheur: "les finances ne sont pas bonnes (FIN-1 : résultat hebdomadaire estimé négatif, ou solde proche de la réserve de sécurité) ou un joueur coûte trop cher par rapport à son utilité (EFF-2 : salaire par point de PS et minutes jouées) ; le chiffre sert de garde-fou, pas de déclencheur (utilisateur, 2026-11-06)"
   part_des_salaires:
     valeur_mesuree_pct: 52.1
     base: "gold.bv_finance_health.salaries_pct_of_income (292 795 / 561 642)"
@@ -57,7 +60,7 @@ secteurs:
       mesure_du_jour: "profondeur minimale 3 (aucun poste mince) : règle non déclenchée"
     - id: EFF-2
       option: vendre
-      condition: "gold.bv_roster_now.age >= 31 (déclin chaque semaine) et minutes en ligue faibles, ou salaire par point de PS (bv_sell_candidates) au-dessus du poste"
+      condition: "le joueur coûte trop cher par rapport à son utilité (salaire par point de PS de gold.bv_sell_candidates au-dessus de la moyenne de son poste dans bv_position_summary.salary_per_ps, avec peu de minutes en ligue), ou gold.bv_roster_now.age >= 31 (déclin chaque semaine), ou finances mauvaises (FIN-1)"
       action: "Mets <joueur> en vente"
       raison: "<age> ans, déclin hebdomadaire [M§8.5], <min> min/match, salaire <x> (<y> par PS)"
       prouvera_erreur: "mesure : l'équipe perd plus de <n> TS ou une défaite attribuée à son absence à la revue hebdo ; échéance : 2 semaines"
@@ -75,12 +78,14 @@ secteurs:
       note: "règle de décision proposée ; le mécanisme de vente est sourcé, pas le seuil de déclenchement"
     - id: EFF-4
       option: minutes_aux_jeunes
-      condition: "gold.match_objective.objectif = former (titre acquis ou rien à jouer) et charte horizon 3_saisons"
-      action: "Aligne <jeunes> en priorité au match du jour"
-      raison: "<n> points d'avance / rang <rank>/<n_teams> : rien à gagner ce soir, minutes aux jeunes"
-      prouvera_erreur: "mesure : gains d'entraînement et de match des jeunes alignés non supérieurs à ceux restés sur le banc ; échéance : 4 semaines"
-      source: "core.objective_rule titre_former / rien_former (sql/core/011) ; la ligne club_strategy de BasketVibe est absente : la règle ne se déclenche pas tant qu'elle n'existe pas"
-      statut: a_valider
+      condition: "en AMICAL : toujours, quand il n'y a rien à tester sur ce joueur. En ligue : quelques minutes seulement quand la victoire est sûre (voir sur_de_gagner), jamais quand le match est serré"
+      action: "Aligne <jeunes> en amical (minutes complètes) ; en ligue, <n> minutes aux jeunes dans un match gagné d'avance"
+      raison: "amical : fatigue et expérience comptent 1/10 [M§1.2], aucun risque ; ligue sûre : homegrown 200 par minute de ligue des juniors de l'académie (plafond 40 000 par semaine), 9 600 la semaine dernière (gold.bv_finance_health.homegrown_last_week)"
+      prouvera_erreur: "mesure : gains d'entraînement et de match des jeunes alignés non supérieurs à ceux restés sur le banc, ou homegrown encaissé < minutes jouées × 200 ; échéance : 4 semaines"
+      source: "fiche finances.md livrable 2 + [M§10.1.3] pour l'argent (confirmé le 2026-11-06 d'après la fiche) ; core.objective_rule titre_former / rien_former (sql/core/011) pour la ligue"
+      statut: "sourcé pour l'argent ; sur_de_gagner à tester sur l'historique"
+      sur_de_gagner: "définition de départ = palier 5 de la revue (adversaire nettement plus faible en points par match et en club_strength) ; seuil à fixer en rejouant les 13 défaites et 11 victoires de ligue (gold.bv_match_report + silver.bv_standings_weekly)"
+      note: "la ligne BasketVibe est absente de core.club_strategy : la règle SQL titre_former / rien_former ne se déclenche pas encore ; l'amical n'en dépend pas"
     - id: EFF-5
       option: garder
       condition: "aucune des règles EFF-1 à EFF-4 ne se déclenche"
@@ -235,38 +240,50 @@ revue_hebdo:
       nom: force_relative
       lecture: "points marqués et encaissés par match de l'adversaire (silver.bv_standings_weekly : points_for / points_against divisés par wins + losses) contre les nôtres avant le match, et club_strength"
       verdict: "« défaite probable : adversaire plus fort » ou « défaite inattendue »"
-      statut: a_valider
+      statut: "non mesuré : à tester sur l'historique avant d'être affiché comme certain"
       confiance: faible
-      note: "non mesuré, à valider par un test sur l'historique avant d'être affiché comme certain (67 lignes de classement hebdomadaire disponibles le 2026-11-06 ; aucune confrontation prédiction/résultat n'a été faite)"
+      test_historique: "rejouer les matchs passés (13 défaites et 11 victoires de ligue au 2026-11-06) : le verdict « adversaire plus fort » aurait-il prédit le résultat ? ; part de matchs bien prédits, écrite dans le journal"
+      donnees_a_demander: "si le classement ne suffit pas, Claude demande à l'utilisateur l'effectif de l'adversaire et ses derniers matchs (utilisateur, 2026-11-06 : « tu peux me demander l'effectif de l'adversaire, ses derniers matchs pour voir s'ils sont meilleurs »)"
+      note: "67 lignes de classement hebdomadaire disponibles le 2026-11-06 ; aucune confrontation prédiction/résultat n'a été faite"
     - palier: 6
       nom: hasard
       lecture: "écart de score faible (gold.bv_match_report.margin) et peu d'occasions (fga, fta)"
       verdict: "défaite à moins de <seuil> points avec des statistiques équivalentes"
-      statut: a_valider
-      note: "seuil d'écart faible non mesuré : à fixer sur la distribution de margin (13 défaites de ligue, 0 de coupe, 14 d'amical au 2026-11-06)"
+      statut: "défini par Claude, révisable (utilisateur, 2026-11-06 : « le palier 6 c'est toi qui le définiras »)"
+      seuil_depart: "écart absolu de score inférieur à la médiane des écarts des victoires de ligue, avec |efg_pct − opp_efg_pct| et |fga − o_fga| faibles ; calcul sur gold.bv_match_report à la première revue, valeur chiffrée écrite dans le journal"
   sortie:
     max_lecons_candidates_par_semaine: 5
     format_de_chaque_lecon: "palier | preuve chiffrée (vue, colonne, valeur) | correction testable en amical"
     enregistrement: "outputs/basketvibe/learnings.md (C-nnn avec critère vérifiable)"
   exception_grave:
-    definition: "série de 2 défaites de ligue d'affilée, amicaux exclus"
-    source: "core.objective_rule serie / condition serie_defaites (sql/core/011_objective_rule.sql) ; attente A-1"
-    statut: sourcé
+    definitions:   # une seule suffit
+      - id: G1
+        definition: "défaite contre un adversaire moins fort (palier 5 : points par match et club_strength inférieurs aux nôtres avant le match)"
+        source: "utilisateur, 2026-11-06"
+        statut: "à tester sur l'historique (dépend du palier 5, confiance faible)"
+      - id: G2
+        definition: "défaite d'un match qu'on était sûr de gagner (même critère sur_de_gagner que EFF-4)"
+        source: "utilisateur, 2026-11-06"
+        statut: "à tester sur l'historique (dépend du palier 5, confiance faible)"
+      - id: G3
+        definition: "série de 2 défaites de ligue d'affilée, amicaux exclus"
+        source: "core.objective_rule serie / condition serie_defaites (sql/core/011_objective_rule.sql) ; attente A-1"
+        statut: sourcé
     action: "analyse le soir même (agent analyste) puis changement fort ce soir (composition, tactique ou joueur)"
-    autres_definitions: "toute autre définition de « grave » (défaite à la coupe, écart de plus de N points, défaite contre un adversaire plus faible) : a_valider par l'utilisateur"
+    note: "amicaux exclus : un amical perdu est un test (arbitrage 15) ; les seuils de G1 et G2 sont ajustables"
 
 tactique_amical:
   principe: "un seul réglage nommé à la fois, en AMICAL seulement ; jamais en ligue ni en coupe"
   quand_proposer: "chaque amical où le dernier test est jugé (échéance atteinte) ou réfuté, et où aucun test n'est en cours"
+  pas_de_prediction: "aucune prédiction de résultat ni de chiffre pour l'amical, et aucun aperçu (preview) de l'adversaire (utilisateur, 2026-11-06)"
   avant_le_match:
     - "nommer le réglage testé (zone Rim/Middle/Perimeter ou un réglage de nos joueurs) et sa valeur de départ"
-    - "écrire la prédiction chiffrée : effet attendu sur une colonne de gold.bv_match_report (ex. opp_efg_pct, def_rtg) et l'ordre de grandeur"
-    - "écrire ce qui réfute : valeur de la colonne hors de la marge à la date d'évaluation"
+    - "rendre la saisie complète de toute l'équipe : minutes, consignes de chaque joueur et réglage des adversaires (focus défensif + zone), dans l'ordre de l'export, aux formats de forme.py"
   apres_le_match:
-    - "mesurer la colonne prédite sur ce match et sur les matchs au même réglage ; comparer avec le dernier amical sans ce réglage"
-    - "juger à l'échéance : confirmé, réfuté ou non concluant (n matchs au même réglage < 3 = non concluant)"
+    - "mesurer la colonne de gold.bv_match_report liée au réglage testé sur ce match et sur les matchs au même réglage ; comparer avec le dernier amical sans ce réglage"
+    - "juger à l'échéance : confirmé, réfuté ou non concluant (moins de n matchs au même réglage = non concluant ; n = 3 au départ, ajustable si c'est trop ou pas assez)"
     - "un test réfuté lance l'analyste ; un amical perdu sans test réfuté n'est pas analysé (arbitrage 15)"
   reserve_amical: "fatigue et expérience comptent environ 1/10 en amical et pas de blessure [M§1.2] : un résultat d'amical se transpose à la ligue avec confiance faible"
   composition_de_test: "complète, jamais le cinq de ligue ou de coupe ; réglages repris du dernier amical, pas de preset (résumé BasketVibe)"
-  statut: a_valider
-  note: "le protocole est rédigé d'après l'arbitrage 15 et le résumé BasketVibe ; le nombre minimal de matchs par test (3) est une proposition"
+  statut: "validé par l'utilisateur le 2026-11-06 (sans prédiction, sans aperçu) ; le nombre minimal de matchs reste ajustable"
+  note: "protocole d'après l'arbitrage 15 et le résumé BasketVibe"
