@@ -141,7 +141,7 @@ Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous 
 | # | Preuve | État |
 |---|---|---|
 | a | `python -I pipelines/soir.py basketvibe` < 60 s, sortie complète | ❌ **non mesurable** : `.env` de ce PC a `SUPABASE_URL` mais `SUPABASE_SECRET_KEY` et `SUPABASE_DB_URL_RO` vides, port 5432 fermé (`python -I pipelines/sql.py "select 1"` → « port 5432 fermé et SUPABASE_URL / SUPABASE_SECRET_KEY absents »). Le script sort alors 13 lignes « il me manque … » en 0,0 s : ce n'est pas une mesure, la ligne de `journal-soir.md` a été supprimée. |
-| b | Rejeu de 3 jours passés comparé aux briefs | ❌ **non mesurable** (même cause) ; de plus 12 vues sur 13 ne sont pas rejouables (lisent `current_date`/`now()`), donc la comparaison ligne à ligne ne portera que sur l'historique des transferts. |
+| b | Remplacée le 2026-11-06 par le mode ombre (3 soirs) et l'instantané quotidien ; décision de l'utilisateur. | ➖ remplacée |
 | c | `test_soir.py` vert | ✅ 15/15 |
 
 ### 4. Cause et piste
@@ -163,3 +163,10 @@ Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous 
 - Constat à corriger (hors lot) : `gold.bv_next_opponents` renvoie un match déjà joué (round 2, 2026-11-04) ; `soir.py` le recopie tel quel.
 - Cause du blocage de b : les vues gold ne sont pas paramétrées par date. Piste : vues `…_at(date)` ou instantanés journaliers (`ops`), à décider dans un lot dédié.
 - Case L2 **non cochée** (critère b non tenu).
+
+### 7. L2b (2026-11-06)
+- **Preuve b** : remplacée le 2026-11-06 par le mode ombre (3 soirs) et l'instantané quotidien ; décision de l'utilisateur. L'option `--jour` reste dans le code ; « rejeu non disponible » n'est plus une case à cocher.
+- `.env` / variable d'environnement SUPABASE_DB_URL_RO : à supprimer ou à remplacer par l'URL de assistant_ro (action de l'utilisateur).
+- Adversaires : `gold.bv_next_opponents` expose `match_day` (`sql/gold/004_bv_tactics.sql:147`) ; `soir.py` écarte les lignes dont `match_day` < aujourd'hui (commit 1675715). `PYTHONIOENCODING=utf-8 python -I pipelines/test_soir.py | tail -1` → `16/16` (cas « match passé non rendu »).
+- `sql.py` : si Postgres répond mais refuse l'authentification (y compris le coupe-circuit `ECIRCUITBREAKER too many authentication failures`, vu ici), la lecture bascule en https et Postgres n'est plus réessayé dans le processus (commits 4de1742, 06594ef). `PYTHONIOENCODING=utf-8 python -I pipelines/test_sql.py | tail -1` → `15/15` (12 existants + 3 nouveaux). Constat : la 1re exécution réelle sans cette bascule laissait 3 vues illisibles ; avec elle, `Vues illisibles` absent.
+- `soir.py` écrit `outputs/basketvibe/soir-AAAA-MM-JJ.md` (écrasé le même jour, hors `--jour`) : `PYTHONIOENCODING=utf-8 python -I pipelines/soir.py basketvibe` → code 0, **13,0 s**, fichier `outputs/basketvibe/soir-2026-11-06.md` créé (4 248 octets), 0 « Vues illisibles », `bv_next_opponents` : seulement `match_day=2026-11-07` et `2026-11-09` (le match du 04/11 n'est plus rendu).
