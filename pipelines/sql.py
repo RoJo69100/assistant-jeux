@@ -101,17 +101,23 @@ def rpc_post(nom: str, corps: dict):
         sys.exit(f"erreur (https {e.code}) : {e.read().decode('utf-8', 'replace')[:300]}")
 
 
+AUTH_REFUSEE = []  # une fois refusé (ou coupe-circuit « too many authentication failures »), on ne réessaye plus Postgres
+
+
 def auth_refusee(e: Exception) -> bool:
-    return "authentication failed" in str(e).lower()
+    return "authentication" in str(e).lower()
 
 
 def lire_pg_ou_https(sql: str, params=None):
     """Postgres direct ; si le serveur répond mais refuse l'authentification, bascule en HTTPS (même requête)."""
     try:
+        if AUTH_REFUSEE:
+            raise RuntimeError("authentication refusée plus tôt dans ce processus")
         return via_pg(sql, params)
     except Exception as e:  # noqa: BLE001 - psycopg.OperationalError, importé à la demande
         if not auth_refusee(e):
             raise
+        AUTH_REFUSEE.append(1)
         if params:
             sql = sql % tuple(litteral(str(p)) if p is not None else "null" for p in params)
         return via_https(sql)

@@ -33,14 +33,19 @@ def bascule_https():
     vus = []
     sqlmod.via_pg = lambda sql, params: (_ for _ in ()).throw(Refus('FATAL: password authentication failed for user "postgres"'))
     sqlmod.via_https = lambda sql: vus.append(sql) or (["ok"], [(1,)])
+    sqlmod.AUTH_REFUSEE.clear()
     r = sqlmod.lire_pg_ou_https("select 1")
     yield "auth refusée : bascule https", r == (["ok"], [(1,)]) and vus == ["select 1"]
+    sqlmod.via_pg = lambda sql, params: (_ for _ in ()).throw(Refus("FATAL: (ECIRCUITBREAKER) too many authentication failures"))
+    sqlmod.lire_pg_ou_https("select 2")
+    yield "coupe-circuit : https aussi, sans réessayer pg", vus == ["select 1", "select 2"]
+    sqlmod.AUTH_REFUSEE.clear()
     sqlmod.via_pg = lambda sql, params: (_ for _ in ()).throw(Refus("syntax error"))
     try:
         sqlmod.lire_pg_ou_https("select 1")
         yield "autre erreur : relancée", False
     except Refus:
-        yield "autre erreur : relancée", len(vus) == 1
+        yield "autre erreur : relancée", len(vus) == 2
 
 
 if __name__ == "__main__":
