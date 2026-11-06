@@ -29,6 +29,12 @@ Elle n'est proposée que si l'un des cinq déclencheurs est vrai :
 - Amical seulement quand un test est ouvert (carte composition, var. 12).
 - **Défaite grave** = deux défaites de suite d'une même équipe (4 équipes) → analyse immédiate (`analyste`). Sinon une revue par semaine de tous les matchs.
 
+## Registre du Match Engine
+- **Où** : les pour/contre de chaque règle s'inscrivent dans `outputs/hockeynation/learnings.md` (§ Enseignements, colonnes Matchs et Statut des L-nnn). Une règle nouvelle prend le prochain L-nnn.
+- **Qui** : Claude, **une fois par semaine**, avec la revue des matchs : il reprend les lignes « L-nnn pour/contre » du bloc 3 des plans de la semaine et met à jour les compteurs et le statut.
+- **Plus tard** : un compteur automatique des pour/contre viendra dans un lot suivant ; d'ici là, le compte est tenu à la main.
+- **Match d'une équipe non PRO** (FRM, U21, U17 : lignes automatiques) : inscrit avec la mention **« expérience sans notre choix »** ; il apprend le moteur de match mais ne juge pas nos réglages.
+
 ## Échelle d'une défaite
 Dans cet ordre, on s'arrête à la première cause prouvée :
 1. **Composition** : joueur hors poste, case vide, lineup saisie moins d'1 h avant le match (carte composition, var. 1, 2, 11).
