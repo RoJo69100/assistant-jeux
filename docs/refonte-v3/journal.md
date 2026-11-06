@@ -125,3 +125,27 @@ Commande : `SQL_TRANSPORT=https python -I pipelines/mesure_vues.py --vues gold.s
 | e | parité locale collée | ❌ en attente de l'utilisateur |
 | f | taille base < 70 % du quota | ✅ 254,6 Mo = **50,93 %** ; 4 vues matérialisées : `core.player_daily` 1,73 Mo, `core.standing` 0,13 Mo, `gold.daily_alerts` 0,09 Mo, `gold.match_objective` 0,08 Mo (≈ 2,0 Mo, 0,4 %) |
 | g | durée du rafraîchissement complet (4 vues) | ✅ **116,5 s** (`duree_ms` 116 482 et 116 298) |
+
+## L2 — `soir.py basketvibe` (2026-11-06) — **INCOMPLET : preuves en base non mesurables sur ce PC**
+
+### 1. Ligne « 0 bis » retirée (commit f1780af, poussé)
+Commande : `grep -l "core\.standing\|core\.player_daily" sql/gold/*bv*` → **aucune sortie, code 1** (aucun fichier `sql/gold/*bv*` ne référence `core.standing` ni `core.player_daily`).
+Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous les fichiers bv_ (le motif `bv_` suffit) ; j'ai donc cherché les deux tables seules. Les définitions des vues lues par le skill sont toutes dans `sql/gold/*bv*` sauf `bv_exports_state` (`sql/gold/037_ts_bv_routine.sql`, qui lit `silver.bv_api`) et `bv_saisie_adversaires` (`023_bv_saisie_tactique.sql`) : aucune ne cite les deux tables. **Non mesuré** : la dépendance transitive en base (`pg_depend`), impossible faute de transport (§ 3).
+
+### 2. Livrés
+- `pipelines/soir.py` (commit 3a933be) : lit en lecture seule par `executer()` les 11 vues du lot + `bv_saisie_adversaires` (aperçu) + `bv_transfer_history` (dernière vente) ; rend « Exports à faire aujourd'hui » puis Composition, Tactique, Entraînement, Transferts, Finances, Personnel au format de `forme.py`. « Personnel » est rendu avec la catégorie `Finances` et « Exports » avec `Export` (catégories fixes de `forme.py`). Aucun modèle, aucun agent. Une vue illisible s'écrit « il me manque X — export Y » ; chaque exécution ajoute une ligne à `docs/refonte-v3/journal-soir.md`.
+- `--jour` : seule `bv_transfer_history` se rejoue (`sold_on <= jour`) ; toutes les autres lisent `current_date` ou `now()` → « rejeu non disponible pour <vue> ».
+- `pipelines/test_soir.py` : `PYTHONIOENCODING=utf-8 python -I pipelines/test_soir.py | tail -1` → **15/15** (données figées, sans réseau ; vérifie aussi que chaque tableau passe `forme.plan`).
+
+### 3. Preuves de fin
+| # | Preuve | État |
+|---|---|---|
+| a | `python -I pipelines/soir.py basketvibe` < 60 s, sortie complète | ❌ **non mesurable** : `.env` de ce PC a `SUPABASE_URL` mais `SUPABASE_SECRET_KEY` et `SUPABASE_DB_URL_RO` vides, port 5432 fermé (`python -I pipelines/sql.py "select 1"` → « port 5432 fermé et SUPABASE_URL / SUPABASE_SECRET_KEY absents »). Le script sort alors 13 lignes « il me manque … » en 0,0 s : ce n'est pas une mesure, la ligne de `journal-soir.md` a été supprimée. |
+| b | Rejeu de 3 jours passés comparé aux briefs | ❌ **non mesurable** (même cause) ; de plus 12 vues sur 13 ne sont pas rejouables (lisent `current_date`/`now()`), donc la comparaison ligne à ligne ne portera que sur l'historique des transferts. |
+| c | `test_soir.py` vert | ✅ 15/15 |
+
+### 4. Cause et piste
+- Cause : clé de service et URL Postgres lecture seule absentes du `.env` de cette machine (règle CLAUDE.md : « .env et MCP Supabase : une fois par machine »).
+- Piste : remplir `SUPABASE_SECRET_KEY` (ou `SUPABASE_DB_URL_RO`) dans `.env`, relancer `python -I pipelines/soir.py basketvibe`, coller la sortie ici. Colonnes de `bv_finance_health`, `bv_finance_projection`, `bv_position_summary`, `bv_next_opponents`, `bv_market_*` non vérifiées en base : ces vues sont lues par `select *` et rendues en `clé=valeur` (8 colonnes max) ; `bv_roster_now` est lue avec des colonnes supposées (`name, position, age, form, fatigue, injury_return_on`) à confirmer au premier vrai passage.
+- Limite assumée : le script lit les chiffres mais ne tranche pas « acheter / vendre / garder » (étape 6 du skill) : c'est une décision, pas du SQL.
+- Case L2 **non cochée**.
