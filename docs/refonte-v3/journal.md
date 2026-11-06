@@ -170,3 +170,24 @@ Réserve : la commande du lot (`grep -l "bv_\|core\.standing\|…"`) liste tous 
 - Adversaires : `gold.bv_next_opponents` expose `match_day` (`sql/gold/004_bv_tactics.sql:147`) ; `soir.py` écarte les lignes dont `match_day` < aujourd'hui (commit 1675715). `PYTHONIOENCODING=utf-8 python -I pipelines/test_soir.py | tail -1` → `16/16` (cas « match passé non rendu »).
 - `sql.py` : si Postgres répond mais refuse l'authentification (y compris le coupe-circuit `ECIRCUITBREAKER too many authentication failures`, vu ici), la lecture bascule en https et Postgres n'est plus réessayé dans le processus (commits 4de1742, 06594ef). `PYTHONIOENCODING=utf-8 python -I pipelines/test_sql.py | tail -1` → `15/15` (12 existants + 3 nouveaux). Constat : la 1re exécution réelle sans cette bascule laissait 3 vues illisibles ; avec elle, `Vues illisibles` absent.
 - `soir.py` écrit `outputs/basketvibe/soir-AAAA-MM-JJ.md` (écrasé le même jour, hors `--jour`) : `PYTHONIOENCODING=utf-8 python -I pipelines/soir.py basketvibe` → code 0, **13,0 s**, fichier `outputs/basketvibe/soir-2026-11-06.md` créé (4 248 octets), 0 « Vues illisibles », `bv_next_opponents` : seulement `match_day=2026-11-07` et `2026-11-09` (le match du 04/11 n'est plus rendu).
+
+## L3a — règles de décision BasketVibe (2026-11-06) : rédigé, pas codé
+Fichier : `docs/attentes/regles-decision-basketvibe.yaml` (commit 070759d). Charte en tête (source « utilisateur, 2026-11-06 »), 4 secteurs (18 règles, chacune avec option « garder » en concurrence), `revue_hebdo` (échelle de 6 paliers, exception « grave » = série de 2 défaites de ligue d'après `sql/core/011_objective_rule.sql`), `tactique_amical`.
+
+### Mesures (`python -I pipelines/sql.py "<requête>"`, 2026-11-06)
+- `core.club_strategy` : `select * from core.club_strategy` → **0 ligne** (aucune ligne BasketVibe ; colonnes existantes utilisées seulement, aucune migration).
+- `select * from gold.bv_finance_health` → as_of 2026-11-05, balance **1 167 106**, weekly_salaries 292 795, weekly_fixed_costs **452 795**, recurring_income_week 561 642, weekly_result_est **108 847**, salaries_pct_of_income **52,1**.
+- `select * from gold.bv_finance_s2_projection` → safety_reserve **905 590**, investable_now_end_s1 **570 288**, balance_end_s1 1 425 878.
+- `select * from gold.bv_finance_projection` → balance_end_projected 1 425 878, home_left 11, season_end 2026-12-21.
+- `select count(*) filter (where is_resale) …, percentile_cont(…) from gold.bv_transfer_history` → 69 reventes (2026-09-02 → 2026-11-04), 48 gagnantes, médiane **44 000**, p10 **−39 650**, pire **−256 800**. (Les ventes faites par moi : 0 revente, donc ces chiffres sont ceux du marché.)
+- `select * from gold.bv_position_summary` → depth 3/4/3/3/3 (PG/SG/SF/PF/C), ps_avg 49,4 / **46,4** / 47,1 / 53,3 / 49,4 ; poste le plus faible : **SG** ; joueur le plus faible : Sacha Leclerc (ps 41,9).
+- `select … from core.game_params where game='basketvibe' and key like '%age%'` → age_declin **31** ; `gold.bv_roster_now` : âge maximal 30 (Min-jun Dang), un joueur de 29 ans (Léo Lefebvre).
+- `select competition, my_result, count(*) from gold.bv_match_report group by 1,2` → ligue 11 V / 13 D, coupe 2 V / 0 D, amicaux 11 V / 14 D.
+- Seuil de gros montant : `grep -rn "gros montant"` ne trouve aucune valeur (SEUIL_GROS_MONTANT vide) → proposé 450 000 (une semaine de charges fixes), **a_valider**.
+- Perte de transferts tolérée sur 4 semaines : 1 167 106 − 905 590 = **261 516** (mesuré, formule à valider).
+- Part des salaires : 52,1 % mesuré ; plafond **non mesurable** (aucun plafond sourcé).
+- Palier 5 de la revue : « défaite probable / inattendue » écrit `a_valider`, confiance faible, non testé sur l'historique.
+
+### Preuves
+- `python -c "import yaml; yaml.safe_load(open('docs/attentes/regles-decision-basketvibe.yaml'))"` → `YAML valide ['charte', 'seuils_mesures', 'secteurs', 'revue_hebdo', 'tactique_amical']` ; 18 règles, 0 sans source ni statut (statuts : sourcé, a_valider).
+- `git diff --stat 5db6880..HEAD -- '*.py' '*.sql' CLAUDE.md .claude` → aucune sortie (0 ligne). `git diff --stat 5db6880..HEAD` avant ce journal : `docs/attentes/regles-decision-basketvibe.yaml | 272 +++` ; `1 file changed, 272 insertions(+)`.
