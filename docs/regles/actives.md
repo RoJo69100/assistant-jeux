@@ -2,6 +2,10 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
+## Nouvelles (2026-11-07)
+N13. Quand un hook rejette une réponse → je corrige seulement la ligne ou le tableau fautif, sans réécrire ni répéter le plan (tous les jeux ; non bloqué par code).
+N14. Quand je donne une heure de Paris → la ligne « Heure de Paris » du hook UserPromptSubmit (`pipelines/heure_paris.py`, 2026-11-07), ou cette commande pour un agent ; jamais `date` du shell. RÉCIDIVE (règle 12 archivée, L122) : montée dans `CLAUDE.md` (inviolable 3) et garde par hook le 2026-11-07.
+
 ## Nouvelles (2026-11-06)
 N11. Quand un agent est « introuvable » → je compare les en-têtes YAML (`name`, `description` entre guillemets) dans le même tour ; jamais une commande donnée sans l'avoir vérifiée (tous les jeux ; en-têtes contrôlés au pre-commit par `pipelines/test_agents.py`).
 N12. Quand je recopie un réglage d'un autre jour → je cite la règle ou le skill qui le justifie, sinon la règle uniforme de la ligue (BasketVibe).

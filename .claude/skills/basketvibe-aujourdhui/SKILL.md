@@ -9,10 +9,10 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
 
 ## Méthode (coût minimal : pas d'agent, quelques requêtes)
 0. **Avant toute requête et avant le premier rendu du plan** : charge le skill `deja-fait` et lis `outputs/basketvibe/fait-AAAA-MM-JJ.md` du jour ; ce qui est fait ne sort pas du plan.
-1. Heure actuelle (Paris). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`). Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
+1. Heure actuelle (Paris) = la ligne « Heure de Paris » injectée à chaque message (hook `pipelines/heure_paris.py`) ou `python -I pipelines/heure_paris.py` ; jamais `date` du shell (UTC, 2026-11-07), ni `at time zone` par sql.py (bloqué par Cloudflare en https, 2026-11-07). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`). Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
 2. Pour chaque action, ajoute **le détail concret** pris dans le dernier brief concerné (sans relancer d'agent) :
    - ligue : cinqs, consignes et focus défensif → dernier `*-tactique.md` (fiche de saisie, mise à jour éventuelle en bas du brief) ;
-   - amical : aucune action de saisie (pas de preset d'amical, consigne du 2026-10-26) ; seulement l'export de la page du match après coup ;
+   - amical : ligne Composition chaque jour (cinq de ligue à 0 minute, jeunes, agressivité 1 : plan du dernier brief) ; aucune donnée adverse ni Preview ni analyse (arbitrage 15) ; export de la page du match après coup ;
    - enchères qui se terminent aujourd'hui ou cette nuit : tableau ACTIONS du dernier `*-transferts.md` (montant maximum, heure limite). `gold.bv_agenda` ne connaît que **mes ventes**, pas mes enchères d'achat : lis-les dans le brief ;
    - entraînement (samedi soir) : fiche de saisie du dernier `*-entrainement.md` ;
    - personnel ou finances : actions datées du dernier `*-finances.md`.
@@ -25,7 +25,7 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
 6. **Bilan du club, chaque soir, sans agent** (2026-11-05, demande de l'utilisateur : « je ne devrais pas avoir à poser la question ») — une requête chacune, puis une décision par secteur, tranchée :
    - Finances : `gold.bv_finance_health` (solde, résultat hebdo, salaires en % des recettes) et `gold.bv_finance_projection` (solde de fin de saison) ;
    - Effectif : `gold.bv_position_summary` (poste le plus faible), `gold.bv_roster_now` (âge, déclin), `gold.bv_next_opponents` (notre note d'équipe contre celle de la ligue) → « acheter un <poste> de note ≥ X », « vendre Y » ou « garder » ;
-   - Transferts : `gold.bv_market_bargains` contre `gold.bv_market_price_ref` si le Marché a moins de 24 h, sinon ligne Export ;
+   - Transferts (ligne chaque jour, 2026-11-07) : `gold.bv_market_bargains` contre `gold.bv_market_price_ref` si le Marché a moins de 24 h, sinon ligne Export ; le plafond d'une enchère se donne seulement quand elle se termine (le prix monte), avant cela la cible seule ;
    - Personnel : `gold.bv_personnel_status` ; export Personnel si `gold.bv_exports_state` le dit « à refaire » ;
    - Entraînement : le samedi soir (cycle), sinon rien.
    Une ligne « garder » n'est pas écrite (aucune ligne « rien à faire ») ; elle va dans le commentaire en une demi-ligne.
