@@ -38,6 +38,8 @@ Sources lues : commit fa4743a (2026-10-31)
 | --- | --- | --- | --- | --- |
 | L-028 | SG / SF PS 56-62 : enchère max = bas de la fourchette des ventes des 7 derniers jours (750 000 et plus, `gold.bv_transfer_history`) si finançable, sinon ne pas enchérir ; la médiane `gold.bv_market_price_ref` sous-estime le prix final | 2026-11-02 | actif (2 échecs : C-108, C-109) | hypothèse |
 
+| L-029 | Achat-revente : le plafond `bid_ceiling_resale` vient de la bande `gold.bv_price_ref_ps` (p25 large) ; le recouper avec les ventes réelles du même poste, PS ±2 et âge ±3 sur 14 jours (`gold.bv_transfer_history`, colonne `fee`) ; prendre le plus bas, et ≤ `capacite_invest` (E8). Police 2026-11-07 : PG PS 50-52, plafonds 485 k/303 k contre médiane réelle ~250 k | 2026-11-07 | à mesurer (enchères Grauds, Aquino) | hypothèse |
+
 ## Historique des changements de checks
 | Date | Check | Avant → après | Pourquoi |
 |---|---|---|---|
