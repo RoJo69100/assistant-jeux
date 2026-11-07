@@ -6,6 +6,7 @@ Usage :
 Rôle Postgres `assistant_ro` (select sur silver et gold, métadonnées seules de bronze), chaîne SUPABASE_DB_URL_RO dans .env.
 Transport : Postgres direct (port 5432) si joignable, sinon HTTPS via la fonction public.sql_ro (sql/silver/ops_005),
 qui tourne en assistant_ro ; il faut alors SUPABASE_URL et SUPABASE_SECRET_KEY. Forcer : SQL_TRANSPORT=pg|https.
+Un refus d'authentification Postgres laisse un témoin (MARQUE_PG, 12 h) : les processus suivants passent en HTTPS d'office.
 Sortie : tableau Markdown compact, `limit` ajouté, cellules tronquées, « n lignes / tronqué » en pied.
 Toute écriture est refusée ici (une seule instruction select/with/explain) et par le rôle (transaction en lecture seule).
 Pièges du transport HTTPS : la requête ne doit contenir AUCUNE colonne nommée `t` (alias de la sous-requête de public.sql_ro :
@@ -18,6 +19,8 @@ import os
 import re
 import socket
 import sys
+import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -49,6 +52,8 @@ def transport() -> str:
     if choix in ("pg", "https"):
         return choix
     if os.environ.get("CLAUDE_CODE_REMOTE") == "true":  # session cloud : le port 5432 est bloqué, la sonde coûtait ~6,5 s par appel
+        return "https"
+    if pg_refuse_recemment():
         return "https"
     url = lire_env("SUPABASE_DB_URL_RO")
     if url:
@@ -120,10 +125,28 @@ def rpc_post(nom: str, corps: dict):
 
 
 AUTH_REFUSEE = []  # une fois refusé (ou coupe-circuit « too many authentication failures »), on ne réessaye plus Postgres
+# Témoin partagé entre processus (2026-11-07) : chaque appel de sql.py est un processus neuf ; sans témoin, chacun
+# retentait Postgres, se faisait refuser et ajoutait un échec, jusqu'au coupe-circuit du pooler (ECIRCUITBREAKER).
+MARQUE_PG = Path(tempfile.gettempdir()) / "claude-sql-pg-refuse"
+DUREE_MARQUE_H = 12
 
 
 def auth_refusee(e: Exception) -> bool:
     return "authentication" in str(e).lower()
+
+
+def pg_refuse_recemment() -> bool:
+    try:
+        return time.time() - MARQUE_PG.stat().st_mtime < DUREE_MARQUE_H * 3600
+    except OSError:
+        return False
+
+
+def marquer_pg_refuse() -> None:
+    try:
+        MARQUE_PG.write_text(time.strftime("%Y-%m-%dT%H:%M:%S"), encoding="utf-8")
+    except OSError:
+        pass
 
 
 def lire_pg_ou_https(sql: str, params=None):
@@ -136,6 +159,7 @@ def lire_pg_ou_https(sql: str, params=None):
         if not auth_refusee(e):
             raise
         AUTH_REFUSEE.append(1)
+        marquer_pg_refuse()
         if params:
             sql = sql % tuple(litteral(str(p)) if p is not None else "null" for p in params)
         return via_https(sql)

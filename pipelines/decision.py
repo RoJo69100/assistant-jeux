@@ -19,12 +19,14 @@ Usage :
 import argparse
 import datetime as dt
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # python -I n'ajoute pas le dossier du script
-from sql import DEBUT_OK, ECRITURE, executer, rpc_post, transport, url_ro  # noqa: E402
+from sql import (DEBUT_OK, ECRITURE, auth_refusee, executer, marquer_pg_refuse, rpc_post,  # noqa: E402
+                 transport, url_ro)
 
 DOMAINES = ("composition", "tactique", "entrainement", "academie", "achat", "vente",
             "finances", "infrastructure", "personnel")
@@ -74,6 +76,15 @@ def _connexion():
     return psycopg.connect(url_ro(), connect_timeout=15)
 
 
+def _bascule_https(e: Exception) -> bool:
+    """Postgres refuse l'authentification : témoin posé et HTTPS forcé pour ce processus (sinon l'erreur remonte)."""
+    if not auth_refusee(e):
+        return False
+    marquer_pg_refuse()
+    os.environ["SQL_TRANSPORT"] = "https"
+    return True
+
+
 def cmd_new(a) -> int:
     try:
         pred = json.loads(a.prediction)
@@ -105,6 +116,15 @@ def cmd_new(a) -> int:
         print(f"✅ décision D-{rep['id']} enregistrée (proposée) ; charte : {'copiée' if rep.get('charte') else 'aucune validée'}")
         _marquer(a)
         return 0
+    try:
+        return _new_pg(a, pred, preuve, eval_apres)
+    except Exception as e:  # noqa: BLE001 - psycopg.OperationalError, importé à la demande
+        if not _bascule_https(e):
+            raise
+        return cmd_new(a)
+
+
+def _new_pg(a, pred, preuve, eval_apres) -> int:
     with _connexion() as c, c.cursor() as cur:
         if a.lecon:
             cur.execute("select status from learn.lesson where id = %s", (a.lecon,))
@@ -150,12 +170,17 @@ def cmd_statut(a) -> int:
             return 1
         print(f"✅ D-{a.id} : {a.statut}")
         return 0
-    with _connexion() as c, c.cursor() as cur:
-        cur.execute("update learn.decision set status = %s, user_note = coalesce(%s, user_note) where id = %s",
-                    (a.statut, a.note, a.id))
-        if cur.rowcount != 1:
-            print(f"❌ décision D-{a.id} introuvable")
-            return 1
+    try:
+        with _connexion() as c, c.cursor() as cur:
+            cur.execute("update learn.decision set status = %s, user_note = coalesce(%s, user_note) where id = %s",
+                        (a.statut, a.note, a.id))
+            if cur.rowcount != 1:
+                print(f"❌ décision D-{a.id} introuvable")
+                return 1
+    except Exception as e:  # noqa: BLE001
+        if not _bascule_https(e):
+            raise
+        return cmd_statut(a)
     print(f"✅ D-{a.id} : {a.statut}")
     return 0
 

@@ -48,6 +48,29 @@ def bascule_https():
         yield "autre erreur : relancée", len(vus) == 2
 
 
+def temoin_partage():
+    """Un refus d'authentification pose un témoin ; le processus suivant passe en https sans sonder Postgres."""
+    import os
+    import tempfile
+    sqlmod.MARQUE_PG = Path(tempfile.mkdtemp()) / "claude-sql-pg-refuse"
+    os.environ.pop("SQL_TRANSPORT", None)
+    os.environ.pop("CLAUDE_CODE_REMOTE", None)
+    yield "sans témoin : pas de bascule forcée", not sqlmod.pg_refuse_recemment()
+
+    class Refus(Exception):
+        pass
+
+    sqlmod.via_pg = lambda sql, params: (_ for _ in ()).throw(Refus("FATAL: password authentication failed"))
+    sqlmod.via_https = lambda sql: (["ok"], [(1,)])
+    sqlmod.AUTH_REFUSEE.clear()
+    sqlmod.lire_pg_ou_https("select 1")
+    yield "refus : témoin posé", sqlmod.MARQUE_PG.exists()
+    yield "témoin récent : transport https", sqlmod.transport() == "https"
+    vieux = sqlmod.MARQUE_PG.stat().st_mtime - 13 * 3600
+    os.utime(sqlmod.MARQUE_PG, (vieux, vieux))
+    yield "témoin de plus de 12 h : ignoré", not sqlmod.pg_refuse_recemment()
+
+
 def reponses_https():
     """Réponse sql_ro encodée deux fois (colonne jsonb) : décodée ; chaîne ordinaire (nom de joueur) : inchangée."""
     import json
@@ -67,7 +90,8 @@ def reponses_https():
 
 if __name__ == "__main__":
     echecs = 0
-    extra = list(bascule_https()) + list(reponses_https())
+    sqlmod.MARQUE_PG = Path(__import__("tempfile").mkdtemp()) / "claude-sql-pg-refuse"  # jamais le vrai témoin
+    extra = list(bascule_https()) + list(temoin_partage()) + list(reponses_https())
     for nom, ok in extra:
         echecs += not ok
         print(("OK " if ok else "ECHEC "), nom)
