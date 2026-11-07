@@ -33,6 +33,12 @@ DOMAINES = ("composition", "tactique", "entrainement", "academie", "achat", "ven
 STATUTS = ("accepted", "rejected", "done", "expired")
 ATTENDU_RESULTAT = re.compile(r"^([WDL])(>=|<=|=)(\d+)$")
 ATTENDU_VALEUR = re.compile(r"^(>=|<=|>|<|=)\s*(-?\d+(?:[.,]\d+)?)$")
+SCHEMA_PREDICTION = """--prediction : objet JSON, une des deux formes (clés exactes) :
+  {"metric": "my_result", "fenetre_matchs": 1, "attendu": "W>=1"}
+      N prochains matchs hors amicaux ; attendu = W|D|L, puis >=, <= ou =, puis un entier ≤ N
+  {"metric": "sql", "requete": "select count(*) from …", "attendu": ">= 1"}
+      lecture (select / with) qui rend une seule valeur ; attendu = >=, <=, >, < ou =, puis un nombre
+Guillemets simples dans la requête : sous bash, '"'"'texte'"'"'."""
 
 
 def valider_prediction(pred: object) -> str | None:
@@ -101,6 +107,8 @@ def cmd_new(a) -> int:
         erreurs.append("preuve doit être une liste JSON")
     if erreurs:
         print("❌ décision refusée : " + " ; ".join(erreurs))
+        if valider_prediction(pred):
+            print(SCHEMA_PREDICTION)
         return 1
     if a.lecon:
         a.lecon = a.lecon if ":" in a.lecon else f"{a.jeu}:{a.lecon}"  # ids migrés : <jeu>:L-nnn
@@ -197,12 +205,12 @@ def main(argv=None) -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sp = p.add_subparsers(dest="cmd", required=True)
-    n = sp.add_parser("new")
+    n = sp.add_parser("new", epilog=SCHEMA_PREDICTION, formatter_class=argparse.RawDescriptionHelpFormatter)
     n.add_argument("jeu")
     n.add_argument("domaine", choices=DOMAINES)
     n.add_argument("--label", required=True)
     n.add_argument("--hypothese", required=True)
-    n.add_argument("--prediction", required=True)
+    n.add_argument("--prediction", required=True, help="objet JSON mesurable (schéma ci-dessous)")
     n.add_argument("--evaluer-le", required=True)
     n.add_argument("--equipe")
     n.add_argument("--preuve", default="[]")
