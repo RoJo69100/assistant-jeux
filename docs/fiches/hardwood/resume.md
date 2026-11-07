@@ -25,7 +25,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 4. Development (focus principal, secondaire, entraînements additionnels), Recruiting (contacts, offres), Coaches.
 
 ## Vues prêtes (lis-les avant de calculer ; colonnes choisies, `LIMIT`)
-- **Routine** : `gold.hw_today`, `gold.hw_daily_alerts` (rouge d'abord), `gold.hw_exports_state`.
+- **Routine** : `gold.hw_today`, `gold.daily_alerts where game = 'hardwood'` (rouge d'abord ; jamais `gold.hw_daily_alerts`, ~9 s), `gold.hw_exports_state`.
 - **Effectif** : `gold.hw_effectif` (tout : compétences, poste, potentiel et plafond de SI, stats, blessure, redshirt, départ en fin de saison, progression, évaluation du scout, walk_on), `gold.hw_player_fit`, `gold.hw_player_pos_scores` (note par poste = 0,6 × compétences clés + 0,4 × SI/14 [H]).
 - **Composition** : `gold.hw_depth_suggest` (proposé contre enregistré, `controle`, `walk_on_meilleur`), `silver.hw_depth_chart`, `silver.hw_tactics`, `silver.hw_management`.
 - **Adversaires** : `gold.hw_adversaires` (3 prochains matchs, rang de conférence, bilans, PF/PA, série, RPI/SOS, nos résultats et écarts contre lui).
