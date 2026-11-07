@@ -3,6 +3,9 @@
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
 ## Nouvelles (2026-11-07)
+N15. Quand une vue gold dit « export à refaire » → `select max(captured_at)` sur `bronze.raw_pages` par page_type dans le même tour ; si l'export existe après le calendrier, aucune demande. RÉCIDIVE de l'erreur 83 : `hook à écrire`.
+N16. Quand je recommande un recruté → il figure dans la dernière Prospect Search/Recruiting de la base, date citée dans la ligne ; sinon « à vérifier » (Hardwood).
+N17. Quand je cite une série (« n victoires ») → je la compte par requête (`count`), jamais à l'œil.
 N13. Quand un hook rejette une réponse → je corrige seulement la ligne ou le tableau fautif, sans réécrire ni répéter le plan (tous les jeux ; non bloqué par code).
 N14. Quand je donne une heure de Paris → la ligne « Heure de Paris » du hook UserPromptSubmit (`pipelines/heure_paris.py`, 2026-11-07), ou cette commande pour un agent ; jamais `date` du shell. RÉCIDIVE (règle 12 archivée, L122) : montée dans `CLAUDE.md` (inviolable 3) et garde par hook le 2026-11-07.
 
