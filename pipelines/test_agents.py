@@ -39,6 +39,12 @@ def fautes(chemin: Path) -> list[str]:
         f.append("description absente ou pas du texte")
     if not d.get("tools"):
         f.append("tools absent")
+    outils = [o.strip() for o in str(d.get("tools", "")).split(",")]
+    morts = [o for o in outils if o.lower().startswith("mcp__supabase__")]
+    if morts:  # serveur .mcp.json supprimé le 2026-11-04 : l'agent n'avait plus aucun accès à la base (rétro 07/11)
+        f.append(f"outil inexistant {morts} — lecture par Bash `python -I pipelines/sql.py`")
+    if "Bash" not in outils:
+        f.append("Bash absent : aucun accès à la base (pipelines/sql.py)")
     if d.get("model") not in MODELES:
         f.append(f"model « {d.get('model')} » hors {sorted(MODELES)}")
     return f
