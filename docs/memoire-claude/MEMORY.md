@@ -26,3 +26,4 @@
 - [DM : condition/forme avant composition](feedback-dm-condition-forme-avant-composition.md) — lire condition, forme, sharpness (titulaires cramés), pas la note seule (2026-11-06)
 - [Output de session avant clear](feedback-output-session-avant-clear.md) — à « clear » : écrire outputs/<jeu>/session-AAAA-MM-JJ.md avec toute la session, puis retro + mesure (2026-11-07)
 - [Pas de « si », pas d'impossible, enchères à la fin](feedback-pas-de-si-pas-d-impossible-encheres-fin.md) — plan = actions faisables ; conseil d'enchère seulement près de la fin ; heure de Paris prise en base (2026-11-07)
+- [HN : entraînement sur gain PRO](feedback-hn-entrainement-sur-gain-pro.md) — changer l'entraînement seulement si l'export Training montre un PRO qui gagne une caractéristique ; tactique après analyse des matchs (2026-11-07)
