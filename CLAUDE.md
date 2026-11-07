@@ -10,7 +10,7 @@ Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/jour
 3. **Horizon d'action = aujourd'hui.** L'utilisateur n'agit que le jour même : aucune *action* n'est reportée (« demain », « le 29 », « après le prochain match »). Le *raisonnement* peut porter sur la saison (objectif, « si », projection financière) à condition de finir par l'action d'aujourd'hui. Un match de demain se prépare aujourd'hui. Exception : les transferts (cibles, enchères) se disent toujours ; un plafond d'enchère se donne près de la fin de l'enchère. L'heure de Paris = la ligne « Heure de Paris » injectée à chaque message (`pipelines/heure_paris.py`), jamais `date`.
 4. **Tout chiffre, nom, date ou « absent » vient d'une requête ou d'une lecture du même tour.** Un résultat de match = `my_result` / `is_mine` de la base, jamais le score brut.
 5. **Je tranche** : une action unique « fais X », le doute en une demi-ligne après, avec ce qui prouvera que j'avais tort. Aucune question oui/non si une requête peut décider.
-6. Un achat, une vente ou une enchère au-dessus du seuil de gros montant : `python pipelines/dossier.py <jeu> <type>` avant de répondre, puis l'agent `police` (12 appels, 3 minutes). Composition, tactique, entraînement, académie et finances : pas de dossier ni de police, la décision s'appuie sur les vues gold. Les hooks bloquent seulement le cas des gros transferts.
+6. Un achat, une vente ou une enchère au-dessus du seuil de gros montant (`SEUIL_GROS_MONTANT` de `pipelines/police.py` ; BasketVibe 250 000) : `python pipelines/dossier.py <jeu> <type>` avant de répondre, puis l'agent `police` (12 appels, 3 minutes). Composition, tactique, entraînement, académie et finances : pas de dossier ni de police, la décision s'appuie sur les vues gold. Les hooks bloquent seulement le cas des gros transferts.
 7. **Un jeu par session.** `/clear` après chaque commit ou changement de jeu, `/compact` vers 15 % de contexte. Avant un `/clear` : proposer `retro` et lancer `python pipelines/mesure_session.py`.
 8. **Une modification = un commit.** Fichiers écrits avec l'outil Write, jamais par heredoc.
 9. **Conception** (vues SQL, agents, fiches, hooks, scripts) : dire en une ligne « `/model opus` avant, `/model sonnet` après le commit ». Sinon la session tourne en Sonnet.
@@ -26,7 +26,7 @@ Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/jour
 ## Agents (en attendant l'orchestrateur, phase 5 du plan)
 - Types propres dans `.claude/agents/` (match, tactique, entrainement, academie, transferts, veille, analyste, decideur, police, synthese, retro) ; jamais `general-purpose`. Donner le jeu et la règle d'horizon dans chaque demande.
 - Un agent ne tourne que si un export plus récent que son brief est arrivé. 3 agents d'analyse au plus par passage, 20 par semaine (hors `analyste` et `police`) ; j'annonce le nombre avant de lancer.
-- `police` avant le rendu de toute décision importante ; une défaite en base lance `analyste` ; `synthese` seulement pour assembler au moins deux briefs.
+- `police` seulement pour un gros transfert (inviolable 6) ; une défaite de ligue ou de coupe en base lance `analyste`, jamais un amical (arbitrage 15) ; `synthese` seulement pour assembler au moins deux briefs.
 - Agents d'analyse en medium + Sonnet : je demande `/effort medium` si la session n'y est pas.
 - Un tableau de données (saisie, agenda, alertes, effectif, état des exports) = une vue gold et une requête, zéro agent.
 

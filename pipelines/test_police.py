@@ -47,6 +47,7 @@ PLAN_COMPO = """Testjeu, ce soir.
 | 🟧 IMPORTANT | Entraînement | Baron : principale Tir. |
 | 🟧 IMPORTANT | Finances | Baisser le prix des billets à 12. |
 """
+assert police.SEUIL_GROS_MONTANT.get("basketvibe") == 250_000, "seuil BasketVibe (2026-11-07) perdu"
 police.SEUIL_GROS_MONTANT["testjeu"] = 100_000
 AVEU = "Je n'ai pas tout lu le Discord, non relevé pour l'instant."
 MANQUE_OK = "Il me manque la forme de Chara — cherché dans : gold.bv_roster_now, bronze."

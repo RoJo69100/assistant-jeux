@@ -8,7 +8,7 @@ Contrôles (plan docs/plan-conception-iso-basketvibe.md, étape 0a) :
          — session seulement. Refonte v3, S1 (2026-11-05) : composition, tactique, entraînement, académie
          et finances ne demandent plus ni dossier ni police.
   H2     même périmètre que H1, sans trace police : outputs/<jeu>/police-<date>.md qui cite le type.
-         Seuil : SEUIL_GROS_MONTANT[jeu] (montant du jeu) ; absent = 0, tout transfert est contrôlé, en
+         Seuil : SEUIL_GROS_MONTANT[jeu] (montant du jeu ; BasketVibe 250 000) ; absent = 0, tout transfert est contrôlé, en
          attendant `core.club_strategy.seuil_gros_montant_pct` (S2). Montant illisible = contrôlé.
   H3     décision importante sans ligne au journal : `pipelines/decision.py new <jeu> <domaine>` lancé dans
          la session (ou son témoin du jour), domaine compatible avec le type (étape 3.2 de la refonte).
@@ -51,7 +51,9 @@ JEUX = forme.JEUX
 CAT_TYPE = {"composition": "composition", "tactique": "composition", "entrainement": "entrainement",
             "academie/draft": "academie", "finances": "finances"}
 VENTE = re.compile(r"\bvend|\bvente\b|\bliber")
-SEUIL_GROS_MONTANT: dict[str, float] = {}  # jeu → montant ; rempli depuis la charte en S2
+# jeu → montant ; rempli depuis la charte en S2. BasketVibe (2026-11-07) : 250 000, capacité d'investissement du jour
+# (279 666, gold.finance_health) arrondie vers le bas ; sous ce montant, journal (H3) seulement, ni dossier ni police.
+SEUIL_GROS_MONTANT: dict[str, float] = {"basketvibe": 250_000}
 MONTANT = re.compile(r"(\d{1,3}(?:[  .]\d{3})+|\d+(?:[.,]\d+)?)\s*(k|m|millions?)?\b", re.I)
 SEUIL_H5 = 5
 DOM_TYPE = {"achat": ("achat",), "vente": ("vente",), "composition": ("composition", "tactique"),
