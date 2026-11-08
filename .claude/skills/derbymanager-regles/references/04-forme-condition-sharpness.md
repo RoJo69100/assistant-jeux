@@ -3,6 +3,7 @@
 - Condition = fatigue longue. Fatigue = énergie courte par action, récupère de 25 % par minute ; chaque cumul égal à la condition actuelle = −1 % de condition ; **chaque option tactique cochée = −1 % de condition à tous** — #updates 2026-10-18, dev.
 - Perte de condition = pourcentage de la condition restante (à 50 %, il perd 1 % au lieu de 2 %) ; un joueur à 100 % peut perdre ~7 % par match — #inconnu 2026-10-19, dev.
 - Récupération : +3 %/jour ; Low +4 %, Medium +3 %, High +2 % selon l'intensité ; blessé +4 % — #updates 2025-10-15, dev ; #discussion 2025-10-21, dev.
+- **S28 (2026-11-02)** : repos = même récupération que Low (**4 %/jour**) ; la proposition à 6 % est annulée. Condition et blessures **remises à zéro au changement de saison** — #updates 2026-11-02, dev. Le repos total n'a donc aucun avantage sur Low.
 - Blessure : chance = condition manquante (70 % ⇒ 30 %) ; base non nulle à 100 % ; durée courte (moyenne 2,3-2,5 jours) ; chaque blessure raccourcie d'un match ; l'écran montre la condition seule (2026-10-25) — #quick-questions 2025-01-24, dev ; #updates 2026-10-25, dev.
 - Sharpness = forme + club fit + autres modificateurs, légèrement aléatoire ; le cœur à l'écran = le visage probable — #quick-questions 2026-09-06, dev ; #italy 2025-08-06, dev. Ancienne sharpness « jouer régulièrement » : contredit.
 - Les GK perdent peu de condition — #inconnu 2026-10-30, dev.
