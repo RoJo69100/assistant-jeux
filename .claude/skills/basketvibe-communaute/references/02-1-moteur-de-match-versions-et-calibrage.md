@@ -10,6 +10,12 @@
 - **Duels 1 contre 1 plus marqués** : le v3 resserrait les gros écarts de compétences ; en v4, un défenseur à ~80 pèse plus contre un attaquant à ~40, et inversement. « La tactique a plus de place et plus d'impact. » Les équipes bots (≈ 10 points de compétences sous les humains) perdent 1,5 à 4,5 points par match de plus [News 2026-10-16].
 - **Fautes** : leur répartition suit maintenant l'agressivité défensive (manquait en v3). Avec un **Lock**, le défenseur direct provoque moins de fautes, puisqu'une partie des tirs du joueur visé part chez ses coéquipiers [News 2026-10-11].
 
+### Moteur v5 : amicaux seulement depuis le 28/10 (V-20261108-5)
+- [News 2026-10-28] Plus de 20 s d'inaction en fin de quart-temps ; tirs au buzzer et tirs de demi-terrain ou de tout le terrain en fin de quart, à pourcentage plus bas ; plus de possession de plus de 24 s dans le play-by-play.
+- **Dans le money-time, les dernières actions du match vont aux joueurs au focus offensif le plus élevé.**
+- Étend à chaque quart-temps le travail v4 sur le 4e ; déploiement dans tous les matchs « vers le milieu de la saison », sans date.
+- Impact : amical = v5, ligue = v4 jusqu'au déploiement. Ne pas mélanger leurs tendances.
+
 ### Autres annonces (toutes versions)
 - **Changement de poste d'un senior** sur sa fiche, dans la plage permise par sa taille [News 2026-10-14]. Complète le manuel (libellé modifiable dès 22 ans [M§4]).
 - **Primes de fin de saison** confirmées : 1er 400k, 2e 300k, 3e 200k, 4e 100k, 5e–8e 50k, 9e–12e rien [News 2026-10-14]. Concorde avec le manuel §10.1.4.

@@ -11,12 +11,12 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md`, `docs/attent
 | Quoi | Quand (Paris) | Saisie |
 |---|---|---|
 | Ligue | lun / mer / sam 20:00, verrou 19:45 ; saison 2 dès lun 02/11, moteur **v4** | oui, preset « League Tactic », à re-sélectionner sur chaque match planifié |
-| Coupe | ex. 28/10 18:00 | oui, preset « League Tactic » (même id) |
-| Amical | chaque jour 08:00, verrou 07:45, moteur v4 | composition de TEST complète (jamais le cinq de la coupe/ligue), réglages repris du dernier amical, **pas de preset**, adversaire sans importance (aucun aperçu à demander) ; un seul test à la fois (zone Rim/Middle/Perimeter ou un réglage de nos joueurs). Zone jouée : `gold.bv_zone_jouee` |
+| Coupe | saison 2 : jeu / dim 20:00 du 12/11 au 13/12, verrou au coup d'envoi ; fatigue 25 % de la ligue, sans blessure ni avantage du terrain | oui, preset « League Tactic » (même id) |
+| Amical | chaque jour 08:00, verrou 07:45, moteur **v5** depuis le 28/10 | composition de TEST complète (jamais le cinq de la coupe/ligue), réglages repris du dernier amical, **pas de preset**, adversaire sans importance (aucun aperçu à demander) ; un seul test à la fois (zone Rim/Middle/Perimeter ou un réglage de nos joueurs). Zone jouée : `gold.bv_zone_jouee` |
 | Entraînement, salaires, personnel | dimanche 04:00 | réglages avant 04:00 |
 | Rapport d'académie | jeudi 09:00 | — |
 - Amical perdu = test, pas défaite à analyser : pas d'`analyste` ; le test est jugé par requête à sa date d'évaluation, `analyste` seulement s'il est réfuté (arbitrage 15, 2026-11-05).
-- Ligue ≠ amical : fatigue et expérience ≈ 1/10 en amical, pas de blessure [M§1.2]. Ne mélange pas v3 (ligue ≤ 26/10) et v4.
+- Ligue ≠ amical : fatigue et expérience ≈ 1/10 en amical, pas de blessure [M§1.2]. Ne mélange pas v3 (ligue ≤ 26/10), v4 (ligue) et v5 (amicaux depuis le 28/10).
 
 ## Échelles de l'écran
 - Consignes : écran 1–5 = données 0–4 (+1). Rôle 1 Passeur → 5 Scoreur ; Off. focus 1 Low → 5 Primary ; Tir 1 = 2 pts → 5 = 3 pts ; Agress. déf. 1 Soft → 5 Agressive.
