@@ -3,7 +3,7 @@ import json
 import os
 from datetime import datetime
 
-GAMES_TO_RUN = ["BasketVibe"]
+GAMES_TO_RUN = ["BasketVibe","Hardwood","DerbyManager","SixZeroLeague","HockeyNation"]
 
 # --- CONFIGURATION ---
 def _load_token():
