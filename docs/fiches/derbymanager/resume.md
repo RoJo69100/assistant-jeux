@@ -29,7 +29,7 @@ Veille → Match → Effectif (moi, vues gold, sans agent depuis le 2026-11-02) 
 ## Ce que l'utilisateur attend (condensé ; → source : `docs/attentes/attentes.md`, `docs/chose-a-DM.txt`)
 - **Horizon : aujourd'hui seulement.** Le match de demain se prépare aujourd'hui.
 - **Rendu** : un bloc par club (Queen of the South puis Marmandes), tableau 🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI · catégorie · action « fais X » ; composition **poste par poste dans l'ordre de l'écran Squad** (poste, rôle, joueur), puis curseurs, options, remplaçants et statuts, set pieces ; aucun « si » ; donnée manquante = « il me manque X, fais l'export Y ».
-- **Compétitions** : ligue et coupe = compo de référence ; **amical = compo de test** (jeunes, autre formation).
+- **Compétitions** : ligue et coupe = compo de référence ; **amical = temps de jeu des jeunes**, pas une validation de formation (le développeur : amical contre bot non simulé, formation exotique moins payante en compétition ; 2 amicaux seulement, 2026-11-08).
 - **Décider** : chaque rendu propose un achat, une vente ou un jeune à promouvoir (nommé, prix, finançable avec `capacite_invest` et `marge_salaire_jour`) ou la raison chiffrée de n'en faire aucun ; défaite = analyse contre toute la saison (`gold.dm_saison_bilan`, `gold.dm_tirs_profil`).
 
 ## Règles qui décident (détail et sources dans les skills)

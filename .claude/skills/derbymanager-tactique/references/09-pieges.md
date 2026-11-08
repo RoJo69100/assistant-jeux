@@ -6,4 +6,6 @@
 - Le contre-attaque « gratuit » est en cours de correction (2026-10-30) — en doute.
 - Les statistiques de tirs sont des échantillons d'un jour ou d'un tour ; le développeur veut une conversion globale d'environ 1 tir sur 10, pas 1 sur 6 — #quick-questions 2026-04-22.
 - Hors-jeu : « offside trap » mentionné le 2026-10-30 (#inconnu) ; absent jusqu'en 2025-02 — en doute.
+- Formation exotique : en compétition elle rapporte bien moins (modificateur moyen 0,55 par joueur, plancher 0,5, pour un 1-5-4 contre un effectif de valeur double ; environ 20 points contre environ 60 en formation normale) — #belgium 2026-11-04, dev. Ne pas bâtir une compo dessus.
+- Les amicaux contre un bot ne sont pas simulés ; forme, blessure et cartons y suivent un tirage quotidien standard — #discussion 2026-11-03, dev. Un amical sert donc à donner du temps de jeu aux jeunes, pas à valider une formation ; et l'utilisateur n'en a que 2 : trop peu de tests (déclaré 2026-11-08).
 - Un joueur « individualistic » tire plus qu'il ne passe : à éviter en rôle de passeur.
