@@ -27,3 +27,4 @@
 - [Output de session avant clear](feedback-output-session-avant-clear.md) — à « clear » : écrire outputs/<jeu>/session-AAAA-MM-JJ.md avec toute la session, puis retro + mesure (2026-11-07)
 - [Pas de « si », pas d'impossible, enchères à la fin](feedback-pas-de-si-pas-d-impossible-encheres-fin.md) — plan = actions faisables ; conseil d'enchère seulement près de la fin ; heure de Paris prise en base (2026-11-07)
 - [HN : entraînement sur gain PRO](feedback-hn-entrainement-sur-gain-pro.md) — changer l'entraînement seulement si l'export Training montre un PRO qui gagne une caractéristique ; tactique après analyse des matchs (2026-11-07)
+- [Mes enchères vide](feedback-bv-mes-encheres-vide-si-aucune-enchere.md) — BV : ne pas redemander l'export si aucune enchère placée (2026-11-08)
