@@ -1,4 +1,5 @@
 ## School et jeunes (règle actuelle S25, 2026-08-22/24)
+- **S28 (2026-11-02) — remplace les lignes « salaire d'école » et « coût total » ci-dessous** : les joueurs d'école ont un **salaire de 0** ; on propose maintenant des **frais (fee)**, qui seuls départagent les clubs ; le joueur choisit en général un club de sa région sauf offre nettement supérieure — #updates 2026-11-02, dev. Déclaré par l'utilisateur le 2026-11-08 : la fee est « pas très chère mais quand même » un coût. Montant non mesuré : `silver.dm_school` n'a pas de colonne de frais ; à relever sur l'écran avant de chiffrer.
 - **4 jeunes max à l'école** ; plus de coachs : le jeune demande un salaire égal au coût de vos installations ; on peut en couvrir une petite part par un upfront fee — #updates 2026-08-22/24, dev.
 - Contrats futurs de 3 saisons ; jeunes libérés vers le marché libre à 19 ans (22 avant) ; marché des jeunes = 18 ans et moins — #updates 2026-08-24, dev ; âge de recrutement 21 cité le 2026-08-15 et 2026-10-03 : en doute.
 - Prix, tier, étoiles et expérience des jeunes sont masqués jusqu'à la promotion — #updates 2026-08-10 / 2026-08-22, dev.
