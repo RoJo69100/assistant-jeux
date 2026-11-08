@@ -270,3 +270,11 @@ Faits de la lecture intégrale appliqués à la situation du 2026-10-26 (J16 ce 
 | 6.17 | Comptes liés qui revendent deux joueurs à 25 000 € (Perosinho Reborn, ZG Hooligans) ; Les Gaulois (5e division) 17 victoires sur 17, +110 : Gazelle écarte le soupçon | chat 2026-10-26 20:49 → 2026-10-28 09:17 ; 2026-10-27 13:35 UTC | 2026-10-26/28 | Erin, Filipe / Gazelle | observation ; prix de 25 000 € = pas un repère de marché |
 | 8.13 | Sélections : un manager seul de son pays, élu d'office s'il postule (Erin, 10-28 19:13) ; Stoik candidat France (RoJo a voté pour lui) | chat 2026-10-28 19:35, 20:09, 20:53 UTC | 2026-10-28 | Gazelle / Stoik | CONFIRMÉ |
 Registre : 8.5 (fin de saison 10-27) est complétée par 8.5b ; la ligne « Calendrier » de « Ce qui change nos décisions » (J18 au soir du 10-27) est périmée.
+
+### Delta du 2026-11-08 (rapport `2026-11-08.md`, V-20261108-1 a 9)
+| # | Fait | Source | Date | Auteur | Statut |
+|---|---|---|---|---|---|
+| 11.1 | 0.6.3 Player Depth : talent 0,5 a 5 etoiles (plafond 50 + 10 par etoile, attaque/defense/gardien), sang-froid, 15 perks (1 U18 sur 20), ambidextres (1 sur 100), competences au plafond marquees Max | #dev-log 2026-11-02 21:02 Paris | 2026-11-02 | Gazelle | CONFIRME, contredit "sans plafond" |
+| 11.2 | Blessures au temps (bientot), suspensions en matchs ; enchere 2 jours +5 min ; calendrier "coming soon" ; loadouts prochaine mise a jour | #chat 2026-11-04/05 | 2026-11-05 | Gazelle | annonces sans date |
+| 11.3 | Coupe du monde : 18:00 Lisbonne, 5 groupes, 3 meilleurs deuxiemes, 10 a 25 convoques ; matchs lances a la main | #chat 2026-10-30/31 | 2026-10-31 | Gazelle | CONFIRME |
+| 11.4 | Bugs coupe 01/11 et ordre 2 min / jaune (non corrige) | #chat 2026-11-01, 11-05 | 2026-11-05 | blackzolee, krzykaczpl_ / Gazelle | observation |

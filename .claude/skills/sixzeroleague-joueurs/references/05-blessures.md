@@ -4,5 +4,6 @@
 - **Remplaçants** : un par rôle (onglet Tactique). Le remplaçant du rôle entre ; sinon un autre ; un gardien remplaçant ne joue dans le champ qu'en dernier recours. Les places vides sont remplies automatiquement par des joueurs valides ; chaque remplaçant n'entre qu'une fois.
 - **À court de joueurs** : défense moins bonne, moins d'espaces et de tirs en attaque (passe, technique, contrôle et physique intacts) ; l'équipe en surnombre marque plus facilement. Jamais de forfait pour une blessure pendant le match.
 - Pendant la convalescence : badge rouge, le joueur disparaît de la liste des disponibles ; un remplaçant valide prend sa place dans la composition, puis il revient automatiquement.
+- Toutes les rencontres (ligue, coupe, sélection) décomptent une blessure en matchs. **Les blessures passeront bientôt au temps réel** (annonce sans date) ; seules les suspensions resteront en matchs. Chance de blessure en match identique pour tous les matchs, chance séparée à l'entraînement selon l'intensité. Les matchs de Coupe du monde se comportent comme les autres : blessures, suspensions, bonus d'entraînement dû au temps de jeu [Dev chat 2026-11-04, 2026-11-05, 2026-10-31].
 - Moins de 7 joueurs aptes → forfait 15–0 [W:Competitions].
 

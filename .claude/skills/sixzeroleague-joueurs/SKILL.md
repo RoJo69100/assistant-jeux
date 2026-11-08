@@ -10,10 +10,11 @@ Ce fichier est un index : le contenu est dans `references/`. Lis seulement la se
 |---|---|
 | `references/00-introduction.md` | Introduction et sources |
 | `references/01-roles.md` | Rôles [W:Players] |
-| `references/02-les-20-competences-1-a-100-sans-plafond.md` | Les 20 compétences (1 à 100, sans plafond caché) [W:Attributes] |
+| `references/02-les-20-competences-1-a-100-sans-plafond.md` | Les 20 compétences (1 à 100 ; plafond de talent depuis la 0.6.3) [W:Attributes] |
 | `references/03-competences-cles-par-role.md` | Compétences clés par rôle [W:Attributes] |
 | `references/04-comment-les-competences-jouent.md` | Comment les compétences jouent [W:Attributes, Match] |
 | `references/05-blessures.md` | Blessures [W:Injuries] |
 | `references/06-age-et-retraite.md` | Âge et retraite [W:Retirement, Players, Training] |
 | `references/07-nos-donnees.md` | [Obs] Nos données |
 | `references/08-mise-a-jour-v-20261026-2.md` | [Veille 2026-10-26] Mise à jour (V-20261026-2) |
+| `references/09-talent-sang-froid-perks-v-20261108.md` | [Veille 2026-11-08] Talent, sang-froid, perks (0.6.3) |

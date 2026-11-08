@@ -1,4 +1,5 @@
-## Les 20 compétences (1 à 100, sans plafond caché) [W:Attributes]
+## Les 20 compétences (1 à 100) [W:Attributes]
+- ⚠️ **Depuis la 0.6.3 « Player Depth » (2026-11-02), il existe un plafond caché : le talent.** Chaque joueur a un talent de ½ à 5 étoiles, fixe à vie. Ses compétences d'attaque, de défense et de gardien s'arrêtent à **50 + 10 par étoile** (½ étoile = 55, 5 étoiles = 100). Les compétences physiques ne sont jamais plafonnées. La plupart des joueurs ont 1 à 3 étoiles, 5 étoiles est très rare. Les joueurs existants ont reçu talent et sang-froid selon les mêmes probabilités. [Dev chat Gazelle, #dev-log 2026-11-02 ; #chat 2026-11-02] Le titre « sans plafond » du tableau ci-dessous valait avant la 0.6.3.
 | Groupe | Compétence | Effet |
 |---|---|---|
 | Physique | Agilité | Battre son défenseur vers les 6 m ; intercepter proprement sans faute |
