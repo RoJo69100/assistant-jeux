@@ -6,7 +6,7 @@ Lu par chaque agent **à la place** de `docs/attentes/attentes.md` et `docs/atte
 - `hardwood`, préfixe `hw_` (bronze `game = 'hardwood'`, `source = 'dom'`). Basket universitaire, onlinecollegebasketball.org. Club **Eureka Red Devils** (#940), conférence **VI.26 (Division 3)**, région de recrutement **USA Central** (Illinois, Indiana, Missouri, Ohio, West Virginia).
 - **Pas de finances, pas de transferts, pas d'infrastructures** : les leviers sont le depth chart, la tactique, le Game Management, l'entraînement, le recrutement et les coachs.
 - **13 boursiers** + walk-ons. **Walk-ons [U, 2026-10-30]** : jamais exportés (pas de page joueur), jamais proposés dans le depth chart.
-- Heures en Paris (`captured_at` en UTC). Match simulé à 9:00 heure du Pacifique. Sources : `[R]` manuel > `[A]` doc d'aide > `[D]` Discord ; `[U]` règle de l'utilisateur, `[H]` hypothèse. Skills `hardwood-regles`, `hardwood-recrutement`, `hardwood-tactique` ; `kb_search('hardwood','<thème>',0)`.
+- Heures en Paris (`captured_at` en UTC). Match simulé à 9:00 heure du Pacifique (= 18:00 Paris en hiver, depuis le 01/11). Sources : `[R]` manuel > `[A]` doc d'aide > `[D]` Discord ; `[U]` règle de l'utilisateur, `[H]` hypothèse. Skills `hardwood-regles`, `hardwood-recrutement`, `hardwood-tactique` ; `kb_search('hardwood','<thème>',0)`.
 
 ## Saison (calendrier : `gold.hw_today`, `silver.hw_schedule`)
 | Phase | Quoi |
