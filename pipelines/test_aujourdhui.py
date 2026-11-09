@@ -63,6 +63,7 @@ def figees(**remplace):
         "joueurs_declin": (["name", "age"], []),
         "decisions_achat": (["id", "label", "hypothesis"], [(d["id"], d["label"], d["hypothesis"]) for d in DECISIONS]),
         "encheres_ouvertes": (["name", "fin_paris"], [(e["name"], e["fin_paris"]) for e in ENCHERES]),
+        "transferts_recents": (["name", "settled_at", "to_team", "achete"], []),
         "apercus": (["match_day"], []),
         "derniere_vente": (["derniere"], [(dt.date(2026, 11, 5),)]),
     }
@@ -236,6 +237,32 @@ def cas():
         auj.plan(retard, {}, JOUR9, TOT, "", {"cibles": inconnue}), JOUR9)
     yield "PB6 aucune décision d'achat : aucune ligne Mes enchères", "Mes enchères" not in auj.rendre(
         auj.plan(retard, {}, JOUR9, TOT, "", {"cibles": []}), JOUR9)
+    # PB7 : une enchère terminée n'est plus une action ; le résultat se lit dans silver.bv_transfers
+    resultats = (["name", "settled_at", "to_team", "achete"], [
+        ("Yuma Fujita", "2026-11-08T02:51:00+00:00", "San Jacobo", False),
+        ("Bronius Stankevičius", "2026-11-08T02:47:00+00:00", "Toronto Moose", False),
+        ("Bronius Stankevičius", "2026-10-04T09:05:00+00:00", "FC Dąb", False)])
+    d7 = figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": resultats})
+    t7 = auj.rendre(auj.plan(d7, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB7 09/11 : plus de ligne d'action pour Fujita ni Stankevičius (ni montant maximum, ni police)", \
+        not any(re.match(r"^(\d\d:\d\d|--:--) — ", l) and ("Fujita" in l or "Stankevi" in l) for l in t7.splitlines()) \
+        and "maximum 150 000" not in t7 and "police d'abord" not in t7
+    autres7 = next(l for l in t7.splitlines() if l.startswith("Autres points"))
+    yield "PB7 Fujita : terminée le 08/11, non acheté, résultat lu dans silver.bv_transfers", \
+        "Fujita (C) terminée le 08/11 : non acheté, parti à San Jacobo (résultat lu dans silver.bv_transfers)" in autres7
+    yield "PB7 Stankevičius : le transfert récent, pas celui du 04/10", \
+        "Stankevičius (SF) terminée le 08/11 : non acheté, parti à Toronto Moose" in autres7 and "FC Dąb" not in t7
+    achete = figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": (resultats[0], [
+        ("Yuma Fujita", "2026-11-08T02:51:00+00:00", "San Jacobo", True)])})
+    yield "PB7 acheté par mon équipe : dit « acheté »", "Fujita (C) terminée le 08/11 : acheté (résultat lu" in auj.rendre(
+        auj.plan(achete, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB7 aucune ligne en base : le dit, sans inventer", "aucune ligne (export Historique global des transferts)" in auj.rendre(
+        auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}), {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB7 vue illisible : « il me manque transferts_recents »", "il me manque transferts_recents" in auj.rendre(
+        auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": None}), {"transferts_recents": "boum"},
+                 JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB7 enchère encore ouverte : reste une action", "Enchère sur Fujita (C) : maximum 150 000" in auj.rendre(
+        auj.plan(d7, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
 
 
 if __name__ == "__main__":

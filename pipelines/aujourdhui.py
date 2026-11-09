@@ -64,8 +64,12 @@ REQUETES = {
     "joueurs_declin": "select name, age from gold.bv_roster_now where age >= 31 order by age desc",
     "decisions_achat": "select id, label, hypothesis from learn.decision where game = 'basketvibe' and domain = 'achat' "
                        "and status in ('proposed', 'accepted') and eval_after >= now() and decided_at >= now() - interval '3 days' order by id",
+    # enchères décidées : fin à venir (ouvertes) ou finie depuis moins de 4 jours (résultat à lire, PB7)
     "encheres_ouvertes": "select name, ends_at at time zone 'Europe/Paris' as fin_paris from core.market_listing "
-                         "where game = 'basketvibe' and not is_mine and ends_at > now() and ends_at < now() + interval '4 days'",
+                         "where game = 'basketvibe' and not is_mine and ends_at > now() - interval '4 days' and ends_at < now() + interval '4 days'",
+    "transferts_recents": "select t.name, t.settled_at, t.to_team, (t.to_team_id = m.team_id) as achete from silver.bv_transfers t "
+                          "cross join silver.bv_my_team m where t.entry_type = 'transfer' and t.settled_at >= now() - interval '6 days' "
+                          "order by t.settled_at desc limit 300",
     "apercus": "select distinct match_day from gold.bv_saisie_adversaires "
                "where kind in ('ligue', 'coupe') and match_day >= current_date",
     "derniere_vente": "select max(sold_on) as derniere from gold.bv_transfer_history",
@@ -186,9 +190,29 @@ def regrouper(reglages):
     return " ; ".join(f"{r} : {', '.join(n)}" for r, n in par.items())
 
 
+def enchere_terminee(c, fin, donnees, erreurs):
+    """Ligne d'une décision d'achat dont l'enchère est finie : résultat lu dans silver.bv_transfers (PB7), jamais écrit."""
+    titre = f"Enchère sur {c['nom']} ({c['poste']}) terminée le {fin:%d/%m}"
+    m = manque(donnees, erreurs, "transferts_recents", "Historique global des transferts")
+    if m:
+        return f"{titre} : {m}"
+    trouves = []
+    for r in lignes_de(donnees, "transferts_recents"):
+        if norm(c["nom"]) in norm(r["name"]):
+            quand = dt.datetime.fromisoformat(str(r["settled_at"])[:19])
+            if quand >= fin - dt.timedelta(days=1):
+                trouves.append((abs((quand - fin).total_seconds()), r))
+    if not trouves:
+        return f"{titre} : résultat lu dans silver.bv_transfers : aucune ligne (export Historique global des transferts)"
+    r = min(trouves, key=lambda x: x[0])[1]
+    verdict = "acheté" if vrai(r["achete"]) else f"non acheté, parti à {r['to_team']}"
+    return f"{titre} : {verdict} (résultat lu dans silver.bv_transfers)"
+
+
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
-    """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte]}."""
-    A, exports, garder = [], [], []
+    """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte],
+    'infos': [texte]} ; infos = enchères terminées, une ligne chacune, rangées dans « Autres points »."""
+    A, exports, garder, infos = [], [], [], []
     S = sources or {}
     restes = list(S.get("restes", []))
 
@@ -232,6 +256,9 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for c in S.get("cibles", []):
         pol = "police faite" if c["police"] else "police d'abord (aucune trace de police du jour)"
         fin = c["fin"]
+        if fin is not None and fin <= maintenant:  # enchère finie : plus une action, le résultat se lit en base (PB7)
+            infos.append(enchere_terminee(c, fin, donnees, erreurs))
+            continue
         detail = (f"fin {jour_fr(fin.date())} {fin:%H:%M}" if fin
                   else "fin d'enchère absente de la base : export Marché (enchères)")
         ajoute(fin, 1, f"Enchère sur {c['nom']} ({c['poste']}) : maximum {montant(c['max'])}, {pol}", detail,
@@ -372,7 +399,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     elif pers:
         garder.append("Personnel (" + ", ".join(f"{r['role']} {r['hired']}/{r['slots']}" for r in pers)
                       + ", semaine du " + str(pers[0].get("week", "?"))[:10] + ") : règle de personnel non tranchée, à valider")
-    return {"actions": A, "exports": exports, "garder": garder}
+    return {"actions": A, "exports": exports, "garder": garder, "infos": infos}
 
 
 def rendre(res, jour, erreurs=None):
@@ -384,7 +411,7 @@ def rendre(res, jour, erreurs=None):
     for limite, _, action, detail, source in sorted(vues, key=lambda a: (a[0] is None, a[0] or maxi, a[1])):
         t = f"{limite:%H:%M}" if limite else "--:--"
         lignes.append(f"{t} — {action}" + (f" — {detail}" if detail else "") + (f" ({source})" if source else ""))
-    autres = [propre(a[2]) for a in reste] + [f"vue illisible {k}" for k in (erreurs or {})]
+    autres = [propre(a[2]) for a in reste] + list(res.get("infos", [])) + [f"vue illisible {k}" for k in (erreurs or {})]
     if autres:
         lignes.append(f"Autres points ({len(autres)}) : " + " ; ".join(autres))
     if res["garder"]:
