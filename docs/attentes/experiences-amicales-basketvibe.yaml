@@ -1,0 +1,38 @@
+# File d'expériences amicales BasketVibe (critère H1, étape 5d, docs/refonte-v3/journal-aujourdhui.md).
+# Source : docs/refonte-v3/playbook-basketvibe.md, section « File d'expériences amicales » ; E1 validée par l'utilisateur le 2026-11-09.
+# Lu par pipelines/aujourdhui_sources.py (lire_experiences) : les expériences passent dans l'ordre du fichier ;
+# la suivante démarre quand la précédente a `amicaux_vises` lignes `[expérience=<id>:<niveau>]` dans le registre fait-<jour>.md.
+# `ordre` donne le niveau de chaque amical, répété si la liste est plus courte que `amicaux_vises`.
+# `niveaux` : texte saisi à l'écran pour ce niveau (affiché tel quel dans le plan du jour).
+experiences:
+  - id: E1
+    reglage: agressivité défensive, uniforme sur nos cinq
+    niveaux:
+      A: agressivité 2 sur les cinq
+      B: agressivité 4 sur les cinq
+    ordre: [A, B, A, B]
+    amicaux_vises: 4
+    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+  - id: E2
+    reglage: focus de tir de deux tireurs
+    niveaux:
+      A: focus de tir niveau 4 sur deux tireurs
+      B: focus de tir niveau 2 (référence, déjà en base)
+    ordre: [A]
+    amicaux_vises: 3
+    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+  - id: E3
+    reglage: focus offensif Primary à chaque quart-temps
+    niveaux:
+      A: focus offensif Primary à chaque quart-temps
+      B: focus offensif Normal (référence, déjà en base)
+    ordre: [A]
+    amicaux_vises: 7
+    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+  - id: E4
+    reglage: aucun (réglage habituel)
+    niveaux:
+      habituel: réglage habituel, rien ne change
+    ordre: [habituel]
+    amicaux_vises: 16
+    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
