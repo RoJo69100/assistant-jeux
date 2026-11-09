@@ -234,6 +234,19 @@ Aucun amical joué n'est absent du rapport. Le rapport est complet : il manque s
 
 F5 (cause a) : pages à réexporter pour l'amical Knight Jays du 07/11 — celles qu'un export d'amical produit (vues pour BC Calije) : l'**aperçu** (`friendlies/<id>/preview`), les **4 box scores par quart-temps** (`period-box`, Q1 à Q4) et les **réglages utilisés** (`match-tactics`). Je ne connais pas la page « play-by-play » : je ne l'ai vue sous aucun export d'amical, donc je ne la cite pas. Condition : ce match doit exister dans la liste des amicaux du jeu. Si le jeu ne montre aucun amical à cette date contre Knight Jays, 1075 décrit un match qui n'a pas eu lieu et la décision reste « en attente » (pas de correction de vue). Même constat pour 1099 : « Brasa Bombe » (09/11) est absent de `core.fixture`, qui ne contient que Garden City (09/11, non joué) ; le nom de l'adversaire dans 1099 est à vérifier. Ce qui prouvera que j'ai tort : un export d'amical 07/11 qui arrive en bronze et que `gold.bv_match_report` lit.
 
+## Calendrier, étape 5c (critères écrits le 2026-11-09 15:34 Paris, avant toute requête et tout code)
+
+Constat de départ : les pages calendrier (friendlies, league-fixtures, fixtures/round/<n>, cup-fixtures) sont en `bronze.raw_pages`, mais `core.fixture` n'a l'heure que pour 9 amicaux sur 37, 0 des 44 matchs de ligue et 0 des 4 de coupe ; aucune vue silver ne lit ces pages (`gold.bv_couverture_pages`). Faits de l'utilisateur à retrouver : amical Garden City 09/11 joué ce matin ; ligue J4 contre Naked Spartans ce soir 09/11, verrou 19:45 Paris ; amical Knight Jays 07/11 07:45 ; premier tour de coupe jeudi 12/11 (page : 19:00 UTC, soit 20:00 Paris). Écritures autorisées : une migration additive (create or replace, aucun drop) via le connecteur Supabase, et la mise à jour de `core.fixture` par le chemin qui l'alimente déjà.
+
+| # | Critère |
+|---|---|
+| J1 | Constat sur les pages calendrier : pour la dernière page de chaque type (date de réception), champs utiles lus avec `sql.py --page-id <N> --payload-path <chemin>` (adversaire, date, heure, fuseau, statut, résultat, identifiant du match, domicile/extérieur, compétition), 5 lignes collées par type. Réponse pour le 09/11 (amical du matin, ligue du soir), le 07/11 (Knight Jays présent ? identifiant ?) et la coupe. |
+| J2 | Alimentation de `core.fixture` (fichier:ligne) ; pourquoi `scheduled_at` est vide en ligue et coupe ; pourquoi Garden City 09/11 n'est pas joué ; pourquoi Knight Jays 07/11 est absent. Une cause par constat, avec la requête qui la prouve. |
+| J3 | Plus petit changement qui fait porter à `core.fixture`, pour toute journée dont une page est en bronze : jour, coup d'envoi en UTC avec le fuseau lu dans la page (jamais supposé), statut, résultat, adversaire, compétition, identifiant du match. Le tableau « champ de la page → colonne » est une configuration lisible (fichier ou table), pas du code en dur ; sinon, dire pourquoi. |
+| J4 | Preuve : comptes de `core.fixture` avant/après (heure renseignée par compétition) ; les quatre faits retrouvés (ou absence prouvée dans la page) ; aucune ligne supprimée ; les 123 tests de `test_aujourdhui.py` verts. |
+| J5 | `aujourdhui.py` : si `scheduled_at` est renseigné, limite et heure affichées viennent de lui (heure de Paris) ; sinon l'ancienne heure. Test figé sur la ligue J4 de ce soir (verrou 19:45) et le premier tour de coupe (20:00 Paris). Règles de `core.agenda_rule` qui portent une heure écrite, avant et après. |
+| J6 | Rejeu de `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée) ; au plus 8 lignes, 25 s au plus. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
