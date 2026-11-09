@@ -110,6 +110,28 @@ Source : `docs/refonte-v3/playbook-basketvibe.md`, liste « Étape 5 », actions
 | A8 | Constat de la base avant le code (09/11, 12:40 Paris) : `gold.match_objective` basketvibe 10 lignes (3 `serie`, ligue 09/11, 11/11, 14/11, `defaites_d_affilee` 2 ; 7 `amical` ; 0 `titre`/`rien`) ; `gold.bv_daily_alerts` domaine `match` 1 ligne (dernier match 2026-11-08, amical, L 94-96) ; `gold.daily_alerts` basketvibe domaine `match` 1 ligne (`dernier_match`), 0 `ligue_sans_resultat`/`coupe_sans_resultat` ; `gold.bv_finance_projection` 1 ligne (`as_of` 08/11, solde projeté 1 512 431, `weekly_salaries` 294 625 : A4 absent aujourd'hui) ; `core.fixture` : dernières ligues jouées 07/11 Póvoa Riptide L, 04/11 Eindhoven Wizards L ; dernier brief analyste `2026-11-05-analyste.md`. Aucune source vide ni instable. |
 | A9 | Constat du calendrier de coupe (pour l'étape 5c, rien modifié) : dernière page `bronze.raw_pages` id 34675, `/api/v1/teams/<id>/cup-fixtures`, reçue le 2026-11-04 10:35 UTC. 7 matchs : `Season 1 Edition` tour 1 (13/09) ; `National cups` tours 1 à 5 (28/10 au 01/11, `finished`, 18:00 UTC) ; `Season 2 Edition` **tour 1 seulement**, 12/11, `kickoff_time_local` 19:00, `kickoff_timezone` UTC, `scheduled`, contre Stare Kotlety (domicile). La saison 2 est présente, les 10 tours ne le sont pas. Écart : `core.fixture` dit les coupes du 29/10 et du 31/10 non jouées, la page les dit `finished`. |
 
+## Boucle d'apprentissage (critères écrits le 2026-11-09 13:30 Paris, avant toute lecture de `learn.decision`)
+
+Source : `docs/refonte-v3/playbook-basketvibe.md`, étape 5, action 19. Diagnostic en lecture seule : `docs/refonte-v3/diagnostic-boucle-apprentissage.md`. Aucune écriture en base, aucune vue ni règle modifiée.
+
+**Liste fermée des causes (B1), écrite avant de regarder.** Chaque conseil échu non jugé reçoit **une seule** cause : la première qui s'applique, dans cet ordre.
+| Code | Cause | Test |
+|---|---|---|
+| K1 | Pas de date d'échéance | `eval_after` vide |
+| K2 | Jamais marqué appliqué | statut resté « proposé » (jamais « accepté » ni « fait ») |
+| K3 | Pas de critère mesurable | aucune métrique ni seuil lisible par une requête (champ de critère vide, ou texte sans nombre ni métrique nommée) |
+| K4 | Filtre de la vue qui l'exclut | échu, appliqué, mesurable, mais absent de `gold.decisions_a_evaluer` à cause d'une condition de la vue |
+| K5 | Donnée d'évaluation absente | mesurable et dans la vue (ou exclu seulement faute de donnée), mais la donnée nécessaire (match, relevé) n'est pas en base |
+| K6 | Autre | aucune des causes ci-dessus ; la raison est écrite |
+
+| # | Critère |
+|---|---|
+| B1 | Pour chaque conseil échu non jugé, une cause K1 à K6 ; compte par cause ; 3 exemples collés par cause (identifiant, date, texte court). |
+| B2 | Définition SQL de `gold.decisions_a_evaluer` et code de `pipelines/evaluer_decisions.py` : le filtre exact qui vide la vue (ligne de SQL ou de code), et ce que le script ferait d'une ligne. |
+| B3 | Les conseils « faits » : combien ont un critère mesurable et une échéance passée ; leur évaluation calculée dans la réponse, rien n'est écrit. |
+| B4 | Chemin du « fait » jusqu'à `learn.decision` aujourd'hui ; le registre `fait-<jour>.md` y est-il relié ? Preuve fichier:ligne. |
+| B5 | Proposition d'une page, non appliquée : le plus petit changement qui ferait remonter les conseils échus et mesurables ; preuve = nombre de lignes de `learn.outcome` après un cycle. Les causes K1 à K6 classées en : se corrige par une vue ; demande un changement de skill ou d'agent ; sans critère mesurable, à reformuler. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
