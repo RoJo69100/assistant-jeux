@@ -253,7 +253,8 @@ def main():
     elif cmd == "comptes":
         comptes()
     elif cmd == "calculs":
-        import etude_evenements_calculs  # noqa: F401  (ajouté à l'étape 3)
+        import etude_evenements_calculs
+        etude_evenements_calculs.run()
     else:
         sys.exit(__doc__)
 
