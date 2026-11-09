@@ -328,6 +328,13 @@ Contexte : playbook, étape 5, actions 3 et 6 ; main = 9dc4365, plan en 22,5 s (
 | K5 | Tests figés, un cas présent et un cas absent pour K2, K3 et K4 ; sortie ≤ 8 lignes ; les 143 tests existants restent verts. |
 | K6 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée telle quelle) ; durée ≤ 25 s, visée 15 s. |
 
+**K2, réponse : non, `gold.bv_sell_candidates` ne sait pas dire « la force ne baisse pas ».** Définition lue en base (`pg_get_viewdef`, 3 013 caractères, mêmes tables que `sql/gold/006_bv_transfers.sql:102`). Elle rend par joueur `ps` (note globale), `salary`, `best_slot` (poste où son `fit` est le plus haut dans `gold.bv_slot_fit`) et `rank_in_slot` (rang à ce poste, sur tout l'effectif, trié par `fit_with_form`). Ce qui manque :
+1. **La force au poste** : ni `fit` ni `fit_with_form` ne sont exposés ; `ps` est la note globale, pas la force au poste `best_slot`.
+2. **Le remplaçant** : aucune colonne ne nomme le joueur de rang suivant au même poste ni sa force ; les rangs ne se suivent pas dans la vue (au poste C : rangs 3, 4, 5, 6, car les rangs 1 et 2 ont un autre `best_slot`), donc on ne peut pas le retrouver en relisant la vue.
+3. **Le sens de « même force »** : le remplaçant de rang r+1 a par construction un `fit_with_form` inférieur ou égal ; « même force » n'est vrai qu'à égalité stricte, sauf à écrire une tolérance, c'est-à-dire un seuil à la main (interdit par K2). Règle à fixer par l'utilisateur avant tout code.
+Incohérence relevée au passage : `best_slot` est choisi sur `fit`, `rank_in_slot` sur `fit_with_form`.
+Conséquence : aucune ligne « Vendre X » ajoutée au plan, aucun test K2 (rien à tester). La ligne « Garder : effectif, vendre pour profit : règle non écrite » reste telle quelle.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
