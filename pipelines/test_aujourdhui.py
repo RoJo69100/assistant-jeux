@@ -488,6 +488,7 @@ def cas_etape5a():
         ligne(sans, "Stare Kotlety")[0] is None and "verrou inconnue" in ligne(sans, "Stare Kotlety")[3]
 
     yield from cas_experiences(COLS_CAL, MIDI)
+    yield from cas_academie()
 
 
 def cas_experiences(COLS_CAL, MIDI):
@@ -562,6 +563,46 @@ def cas_experiences(COLS_CAL, MIDI):
     yield "H6 décalage, absent (pas de coup d'envoi) : heures écrites 19:45 et 19:30", \
         ag(sans, "preset")[0] == dt.datetime(2026, 11, 9, 19, 45) and ag(sans, "Preview")[0] == dt.datetime(2026, 11, 9, 19, 30) \
         and ag(sans, "preset")[2].startswith("Avant 19:45")
+
+
+COLS_PROS = ["rapport_paris", "slot", "name", "position", "age", "tsp_min", "tsp_max"]
+PROS = (COLS_PROS, [("2026-11-05T09:00:00.849", 0, "Nael Lopez", "PG", 16, 207, 367),
+                    ("2026-11-05T09:00:00.849", 1, "Nathan Vidal", "PF", 16, 219, 379),
+                    ("2026-11-05T09:00:00.849", 2, "Sacha Aubert", "C", 17, 244, 404)])
+COTE = (["academy_score", "p_high_8_10"], [(79, 21.2)])
+
+
+def cas_academie():
+    """K3 (étape 5e) : une ligne par prospect du dernier rapport ; cas présent et cas absent."""
+    MIDI9 = dt.datetime(2026, 11, 9, 12, 0)
+
+    def lignes(donnees, cles=()):
+        A = []
+        auj.academie(donnees, {}, list(cles), MIDI9, lambda *a: A.append(a))
+        return A
+
+    vals = lambda h, c: (["key", "value"], [("academie_valeur_high", h), ("academie_cout_test", c)])
+    manque = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": (["key", "value"], [])})
+    yield "K3 donnée manquante, présent : 3 lignes, une par prospect, qui nomment les deux données", \
+        len(manque) == 3 and all("donnée manquante : valeur d'un High (core.game_params.academie_valeur_high), "
+                                 "coût du test (core.game_params.academie_cout_test)" in a[2] for a in manque) \
+        and [a[2].split(" : ")[1].split(" (")[0] for a in manque] == ["Nael Lopez", "Nathan Vidal", "Sacha Aubert"]
+    une = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": (["key", "value"], [("academie_cout_test", 25000)])})
+    yield "K3 une seule donnée manquante : la ligne ne cite que celle-là", \
+        all("donnée manquante : valeur d'un High" in a[2] and "coût du test" not in a[2] for a in une)
+    tester = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": vals(200000, 25000)})
+    yield "K3 données présentes : « tester » si P(High) × valeur > coût (21,2 % × 200 000 = 42 400 > 25 000)", \
+        len(tester) == 3 and all(a[2].endswith(": tester") and "42 400" in a[3] for a in tester)
+    ignorer = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": vals(100000, 25000)})
+    yield "K3 données présentes : « ignorer » sinon (21 200 < 25 000)", all(a[2].endswith(": ignorer") for a in ignorer)
+    yield "K3 absent : aucun rapport en base, aucune ligne", lignes({"prospects": (COLS_PROS, [])}) == [] and lignes({}) == []
+    vieux = (COLS_PROS, [("2026-10-29T09:00:00", 0, "X", "PG", 16, 200, 300)])
+    yield "K3 absent : rapport de plus de 7 jours, aucune ligne", lignes({"prospects": vieux, "cote_potentiel": COTE}) == []
+    cle = {"nom": "Académie", "date": None, "jour": dt.date(2026, 11, 6), "fichier": "fait-2026-11-06.md"}
+    yield "K3 absent : décision déclarée au registre ([clé=Académie]) après le rapport, aucune ligne", \
+        lignes({"prospects": PROS, "cote_potentiel": COTE}, [cle]) == []
+    ancien = dict(cle, jour=dt.date(2026, 11, 4))
+    yield "K3 présent : clé Académie antérieure au rapport, les lignes restent", len(lignes({"prospects": PROS}, [ancien])) == 3
 
 
 def cas_base():

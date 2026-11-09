@@ -93,6 +93,12 @@ REQUETES = {
     "regles_agenda": "select rule_id, category, to_char(heure, 'HH24:MI') as heure, decalage_min from core.agenda_rule "
                      "where game = 'basketvibe' and competition_kind = 'ligue' and actif and heure is not null "
                      "and decalage_min is not null",
+    # K3 (étape 5e) : dernier rapport du scout, cote du potentiel à la jauge actuelle, valeur d'un High et coût du test
+    "prospects": "select scout_report_at at time zone 'Europe/Paris' as rapport_paris, slot, name, position, age, tsp_min, tsp_max "
+                 "from gold.bv_academy_prospects order by slot",
+    "cote_potentiel": "select academy_score, p_high_8_10 from gold.bv_academy_potential_odds where label = 'jauge actuelle'",
+    "valeurs_academie": "select key, value from core.game_params where game = 'basketvibe' "
+                        "and key in ('academie_valeur_high', 'academie_cout_test')",
     # A4 : solde projeté en fin de saison
     "gold.bv_finance_projection": "select season_end, balance_end_projected, tickets_left, sponsor_left, costs_left "
                                   "from gold.bv_finance_projection limit 1",
@@ -433,6 +439,39 @@ def solde_projete(donnees, erreurs, fh, ajoute):
            "gold.bv_finance_projection, gold.bv_finance_health")
 
 
+VALEURS_ACADEMIE = {"academie_valeur_high": "valeur d'un High", "academie_cout_test": "coût du test"}
+
+
+def academie(donnees, erreurs, cles, maintenant, ajoute):
+    """K3 : à l'arrivée d'un rapport du scout (moins de 7 jours, aucune clé `[clé=Académie]` au registre depuis), une ligne
+    par prospect, même sous 100 % de jauge. Verdict « tester » si P(High) × valeur d'un High dépasse le coût du test, sinon
+    « ignorer » (espérance, à valider) ; les deux montants viennent de core.game_params, sinon « donnée manquante : … ».
+    « signer » demande le résultat d'un test, absent de la base : jamais rendu. Vue absente ou rapport ancien : rien."""
+    pros = lignes_de(donnees, "prospects")
+    if not pros:
+        return
+    rapport = en_heure(pros[0]["rapport_paris"])
+    if not (maintenant - dt.timedelta(days=FENETRE) < rapport <= maintenant):
+        return
+    if any(norm(c["nom"]) == "academie" and c["jour"] >= rapport.date() for c in cles):
+        return
+    cote = lignes_de(donnees, "cote_potentiel")
+    vals = {r["key"]: r["value"] for r in lignes_de(donnees, "valeurs_academie")}
+    manquants = ([] if cote else ["cote du potentiel (gold.bv_academy_potential_odds)"]) \
+        + [f"{t} (core.game_params.{k})" for k, t in VALEURS_ACADEMIE.items() if vals.get(k) in (None, "")]
+    for p in pros:
+        tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({p['position']}, {p['age']} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
+        if manquants:
+            ajoute(None, 3, f"{tete} : donnée manquante : {', '.join(manquants)}", "", "gold.bv_academy_prospects")
+            continue
+        ph = float(cote[0]["p_high_8_10"])
+        gain, cout = ph / 100 * float(vals["academie_valeur_high"]), float(vals["academie_cout_test"])
+        verdict = "tester" if gain > cout else "ignorer"
+        ajoute(None, 2, f"{tete} : {verdict}",
+               f"P(High) {str(ph).replace('.', ',')} % × valeur d'un High {montant(vals['academie_valeur_high'])} = {montant(gain)} "
+               f"contre test {montant(cout)} (règle d'espérance, à valider)", "gold.bv_academy_potential_odds, core.game_params")
+
+
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte],
     'infos': [texte]} ; infos = enchères terminées, une ligne chacune, rangées dans « Autres points »."""
@@ -586,6 +625,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         if cat and cat != "Exports":
             ajoute(None, int(r["priority"]), r["alert"], "", "gold.bv_daily_alerts")
     alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute)
+    academie(donnees, erreurs, cles, maintenant, ajoute)
 
     # 7. Décisions par secteur (étape 6 du skill) : une ligne si la règle du YAML se déclenche, sinon « Garder »
     m = manque(donnees, erreurs, "gold.bv_position_summary", "Équipe (aperçu, joueurs)")
