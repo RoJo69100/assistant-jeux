@@ -322,13 +322,80 @@ def cas():
     yield "PB7 enchère encore ouverte : reste une action", "Enchère sur Fujita (C) : maximum 150 000" in auj.rendre(
         auj.plan(d7, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
 
+    # R3 : Mes enchères « optionnel » (sans page récente) n'est jamais demandé
+    optionnel = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": (
+        ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+        [(9, "Mes enchères", "ventes", None, 120, "🟩 optionnel"), (13, "Personnel", "staff", None, 80, "🟧 à refaire")])})
+    en_cours = [dict(c, fin=dt.datetime(2026, 11, 10, 3, 50)) for c in cibles9]  # enchère ouverte : PB6 ne filtre pas
+    tr3 = auj.rendre(auj.plan(optionnel, {}, JOUR9, TOT, "", {"cibles": en_cours}), JOUR9)
+    yield "R3 Mes enchères « 🟩 optionnel » : non demandé, même avec une enchère ouverte", "Mes enchères" not in tr3
+    yield "R3 les autres écrans en retard restent demandés", "Personnel (80 h)" in tr3
+    # R5 : déclarations par clé `[clé=…]`, registres des 7 derniers jours
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        (tmp / "briefs").mkdir()
+        for f in (ESSAI9 / "briefs").glob("*.md"):
+            (tmp / "briefs" / f.name).write_text(f.read_text(encoding="utf-8"), encoding="utf-8")
+
+        def registre(jour_fichier, *lignes):
+            (tmp / f"fait-{jour_fichier}.md").write_text("\n".join(lignes) + "\n", encoding="utf-8")
+
+        def garden(cles):
+            r = auj.rendre(auj.plan(vide, {}, JOUR9, TOT, "", {"tactique": tactique9, "cles": cles}), JOUR9)
+            return next(l for l in r.splitlines() if "Garden City" in l)
+        registre("2026-11-08", "- [10:34 UTC] [clé=Garden City 09/11] Amical Garden City : composition et consignes faites — source : déclaré par l'utilisateur")
+        cles = src.lire_cles(tmp, JOUR9)
+        yield "R5 la clé du 08/11 est lue : Garden City, 09/11", [(c["nom"], c["date"], c["jour"]) for c in cles] == [("Garden City", JOUR9, dt.date(2026, 11, 8))]
+        yield "R5 sans aucun mot connu du registre, la clé seule retire « saisis la tactique » (déclarée le 08/11, reconnue le 09/11)", \
+            "saisis la tactique" not in garden(cles) and "heure limite du verrou 07:45" in garden(cles)
+        yield "R5 sans la clé : « saisis la tactique maintenant » (contrôle)", "saisis la tactique maintenant" in garden([])
+        registre("2026-11-08", "- [10:34 UTC] [clé=Garden City 14/11] Amical : composition faite")
+        yield "R5 clé datée d'un autre jour : le match du 09/11 reste à saisir", "saisis la tactique maintenant" in garden(src.lire_cles(tmp, JOUR9))
+        registre("2026-11-08", "- [10:34 UTC] [clé=Garden City] Amical : composition faite")
+        yield "R5 clé sans date : valable pour un match des 7 jours suivants", "saisis la tactique" not in garden(src.lire_cles(tmp, JOUR9))
+        registre("2026-11-08", "- [10:34 UTC] [clé=Garden City 09/11] reste à corriger : Tir 1 : Albano")
+        yield "R5 une ligne « reste à … » n'est jamais une déclaration faite", src.lire_cles(tmp, JOUR9) == []
+        registre("2026-11-08", "- [clé=Garden City 09/11] Amical : composition faite")
+        yield "R5 registre de 7 jours : lu le 14/11, ignoré le 15/11", \
+            len(src.lire_cles(tmp, dt.date(2026, 11, 14))) == 1 and src.lire_cles(tmp, dt.date(2026, 11, 15)) == []
+        yield "R5 registre du lendemain d'un jour futur : jamais lu", src.lire_cles(tmp, dt.date(2026, 11, 7)) == []
+        # écran déclaré par clé : même jour seulement
+        registre("2026-11-09", "- [08:00 UTC] [clé=Personnel] Export Personnel — source : déclaré par l'utilisateur")
+        registre("2026-11-08", "- [08:00 UTC] [clé=Finances] Export Finances — source : déclaré par l'utilisateur")
+        retard9 = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": (
+            ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+            [(13, "Personnel", "staff", None, 80, "🟧 à refaire"), (10, "Finances", "semaine", None, 80, "🟧 à refaire")])})
+        tc = auj.rendre(auj.plan(retard9, {}, JOUR9, TOT, "", {"cles": src.lire_cles(tmp, JOUR9)}), JOUR9)
+        yield "R5 écran déclaré aujourd'hui par clé (Personnel) : non redemandé", "Personnel (80 h)" not in tc
+        yield "R5 écran déclaré hier par clé (Finances) : redemandé, la base fait foi", "Finances (80 h)" in tc
+    yield "R5 repli : l'ancienne correspondance par mots garde son effet sans clé", \
+        "Personnel (80 h)" not in auj.rendre(auj.plan(retard9, {}, JOUR9, TOT, "- [10:00 utc] export personnel", {"cles": []}), JOUR9) \
+        and "Personnel (80 h)" in auj.rendre(auj.plan(retard9, {}, JOUR9, TOT, "", {"cles": []}), JOUR9)
+
+
+def cas_base():
+    """R4, sur la base (option --base) : un type de page sans lecteur sort en alerte, un type lu n'en porte pas."""
+    spec = importlib.util.spec_from_file_location("sqlmod", DOSSIER / "sql.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    cols, lignes = mod.executer("select type_page, lu_par_silver, alerte from gold.bv_couverture_pages")
+    par = {l[0]: dict(zip(cols, l)) for l in lignes}
+    yield "R4 base : /api/v1/teams/<id>/tactics reçu, aucun lecteur silver : « page reçue, non lue »", \
+        par.get("/api/v1/teams/<id>/tactics", {}).get("alerte") == "page reçue, non lue"
+    yield "R4 base : /api/v1/teams/<id>/academy lu par silver, sans alerte", \
+        par.get("/api/v1/teams/<id>/academy", {}).get("lu_par_silver") == "oui" and par["/api/v1/teams/<id>/academy"]["alerte"] is None
+    yield "R4 base : friendlies lue par gold seulement, signalée comme telle", \
+        par.get("/api/v1/teams/<id>/friendlies", {}).get("alerte") == "lue par gold seulement"
+    yield "R4 base : toute ligne sans lecteur porte une alerte", all(v["alerte"] for v in par.values() if v["lu_par_silver"] == "non")
+
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
     echecs = 0
-    for nom, ok in cas():
+    jeux = list(cas()) + (list(cas_base()) if "--base" in sys.argv else [])
+    for nom, ok in jeux:
         echecs += not ok
         print(("OK " if ok else "ECHEC "), nom)
-    n = sum(1 for _ in cas())
+    n = len(jeux)
     print(f"{n - echecs}/{n}")
     sys.exit(1 if echecs else 0)

@@ -32,6 +32,7 @@ import aujourdhui_sources as src  # noqa: E402
 RACINE = Path(__file__).resolve().parent.parent
 BASE = RACINE / "outputs/basketvibe"
 JOURNAL = RACINE / "docs/refonte-v3/journal-aujourdhui.md"
+FENETRE = 7  # jours : durée de validité d'une clé de match sans date (R5)
 ACTIONS_MAX = 5  # + « Autres points » + « Garder » + « Exports » = 8 lignes au plus
 CAT_ALERTE = {"blessure": "Composition", "fatigue": "Composition", "forme": "Composition",
               "finances": "Finances", "transferts": "Transferts", "export": "Exports"}
@@ -140,11 +141,31 @@ def lire_sources(donnees, jour, base=BASE):
     """Fichiers du jour (aujourdhui_sources.py) et décisions d'achat ouvertes de la base."""
     return {"tactique": src.lire_tactique(base, jour), "restes": src.lire_restes(base, jour),
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
-            "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour)}
+            "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
+            "cles": src.lire_cles(base, jour)}
 
 
 def deja(fait, cle):
     return any(m in fait for m in MOTS_FAIT.get(cle, ()))
+
+
+def declare(fait, cles, jour, nom):
+    """Écran ou catégorie déclaré fait aujourd'hui : clé du registre du jour (R5), sinon l'ancienne correspondance par mots."""
+    return any(c["jour"] == jour and c["date"] is None and norm(c["nom"]) == norm(nom) for c in cles) or deja(fait, nom)
+
+
+def cle_match(cles, match, date):
+    """Déclaration par clé d'un match à venir (R5) : même adversaire ; la date de la clé est celle du match, sans date
+    la déclaration vaut pour un match des 7 jours suivant le registre."""
+    for c in cles:
+        if not meme_match(c["nom"], match):
+            continue
+        if c["date"] is not None:
+            if c["date"] == date:
+                return c
+        elif date is None or c["jour"] <= date <= c["jour"] + dt.timedelta(days=FENETRE):
+            return c
+    return None
 
 
 def norm(s):
@@ -216,6 +237,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     A, exports, garder, infos = [], [], [], []
     S = sources or {}
     restes = list(S.get("restes", []))
+    cles = S.get("cles", [])
 
     def ajoute(limite, prio, action, detail="", source=""):
         A.append((limite, prio, action, detail, source))
@@ -238,7 +260,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             titre = f"Amical contre {t['match']}"
         if reste and reste["reglages"]:
             etat, prio = f"corrige à l'écran {len(reste['reglages'])} réglages ({regrouper(reste['reglages'])})", 1
-        elif deja(fait, t["type"]) or saisie:
+        elif deja(fait, t["type"]) or saisie or cle_match(cles, t["match"], t["date"]):
             etat, prio = "", 1  # saisie déclarée faite (registre du jour ou d'un jour antérieur) : la ligne reste, pour l'heure limite et les conditions du test
         else:
             etat, prio = "saisis la tactique maintenant", 1
@@ -291,7 +313,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             continue  # export d'après-match de demain : pas une action d'aujourd'hui
         if r["category"] in ("ligue", "amical", "coupe") and h and dt.datetime.combine(d, dt.time.fromisoformat(h)) < maintenant:
             continue  # verrou de saisie passé (PB9)
-        if deja(fait, r["category"]):
+        if declare(fait, cles, jour, r["category"]):
             continue
         ajoute(dt.datetime.combine(d, dt.time.fromisoformat(h)) if h else None, int(r["priority"]), r["action"], "", "gold.bv_agenda")
 
@@ -305,7 +327,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for r in etat.values():
         if r["ecran"] == "Mes enchères" and not encheres_en_cours:
             continue
-        if not str(r["statut"]).endswith("à jour") and not deja(fait, r["ecran"]):
+        if not str(r["statut"]).endswith(("à jour", "optionnel")) and not declare(fait, cles, jour, r["ecran"]):
             exports.append(f"{r['ecran']} ({'jamais exporté' if r['age_h'] is None else str(int(r['age_h'])) + ' h'})")
     ligues = [r for r in lignes_de(donnees, "gold.bv_agenda") if r["category"] == "ligue"]
     apercus = {str(r["match_day"])[:10] for r in lignes_de(donnees, "apercus")}
@@ -313,7 +335,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         exports.append(manque(donnees, erreurs, "apercus", "Match de ligue : aperçu"))
     for r in ligues:
         d = str(r["day"])[:10]
-        if jour <= dt.date.fromisoformat(d) <= jour + dt.timedelta(days=2) and d not in apercus and not deja(fait, "Match de ligue : aperçu"):
+        if jour <= dt.date.fromisoformat(d) <= jour + dt.timedelta(days=2) and d not in apercus and not declare(fait, cles, jour, "Match de ligue : aperçu"):
             exports.append(f"aperçu du match de ligue du {d[8:]}/{d[5:7]} (aucune ligne adverse en base)")
     vente = lignes_de(donnees, "derniere_vente")
     derniere = vente[0]["derniere"] if vente else None

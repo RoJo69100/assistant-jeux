@@ -10,6 +10,7 @@ L'utilisateur déteste qu'on lui redemande ce qu'il a déjà fait. Avant toute l
 ## 1. Registre de ce que l'utilisateur dit avoir fait
 - Fichier : `outputs/<jeu>/fait-AAAA-MM-JJ.md` (créé au premier ajout du jour). Une ligne par action : `- [HH:MM UTC] <action> — source : <déclaré par l'utilisateur | vérifié en base>`.
 - Dès que l'utilisateur écrit « j'ai fait / j'ai exporté / j'ai réglé … », j'ajoute la ligne (Edit/Write), puis je vérifie quand c'est possible (§ 2).
+- **Clé obligatoire** (lue par `pipelines/aujourdhui.py` sur les 7 derniers registres) : chaque ligne porte `[clé=<écran ou match>]` juste après l'heure, ex. `- [10:34 UTC] [clé=Garden City 09/11] Saisie de l'amical …` ou `- [10:10 UTC] [clé=Personnel] Export Personnel …`. Écran = nom exact de l'écran de `gold.bv_exports_state` (valable le jour même seulement, la base fait foi ensuite). Match = adversaire suivi de la date du match `JJ/MM` (sans date : valable 7 jours). Une ligne « reste à corriger / à faire » ne porte jamais de clé. Sans clé, l'ancienne correspondance par mots reste en repli.
 - Une action déclarée mais non vérifiable (réglage d'écran absent de la base) reste notée **faite** : je ne la redemande pas ; je dis seulement « non vérifiable en base » une fois.
 
 ## 2. Vérifications (une requête chacune, colonnes choisies, `LIMIT`)

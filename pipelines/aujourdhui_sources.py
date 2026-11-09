@@ -6,6 +6,7 @@ aucune n'écrit. Critères L1 à L4 de docs/refonte-v3/journal-aujourdhui.md.
   lire_restes     L3  lignes « reste à corriger / à faire » du registre `fait-<jour>.md`, un réglage par couple
   lire_cibles     L2  décisions d'achat ouvertes (learn.decision) + fin d'enchère en base + dossier + police
   lire_conseils   L4  conseils ouverts de learnings.md dont la date du critère tombe aujourd'hui ou demain
+  lire_cles       R5  lignes du registre `fait-<j>.md` des 7 derniers jours qui portent une clé `[clé=<écran ou match>]`
 """
 import datetime as dt
 import re
@@ -126,6 +127,35 @@ def lire_saisies(base, jour: dt.date) -> list[dict]:
             date = _jm(jour, s.group(1), s.group(2))
             if date >= jour:
                 res.append({"match": s.group(3).strip(), "date": date, "fichier": f.name})
+    return res
+
+
+CLE = re.compile(r"\[clé=([^\]]+)\]", re.I)
+CLE_DATE = re.compile(r"^(.*?)\s+(\d{2})/(\d{2})$")
+FENETRE_CLES = 7  # jours de registre relus (aujourd'hui compris)
+
+
+def lire_cles(base, jour: dt.date, fenetre: int = FENETRE_CLES) -> list[dict]:
+    """Déclarations structurées (critère R5) : une ligne du registre `fait-<j>.md` porte `[clé=<écran ou match>]`,
+    la clé d'un match pouvant finir par sa date (`[clé=Garden City 09/11]`). Les registres des `fenetre` derniers jours
+    sont lus ; une ligne « reste à … » n'est jamais une déclaration faite. Rend {nom, date|None, jour, fichier}."""
+    res = []
+    for f in sorted(Path(base).glob("fait-*.md")):
+        m = re.match(r"^fait-(\d{4}-\d{2}-\d{2})\.md$", f.name)
+        if not m:
+            continue
+        j = dt.date.fromisoformat(m.group(1))
+        if j > jour or (jour - j).days >= fenetre:
+            continue
+        for l in f.read_text(encoding="utf-8").splitlines():
+            if re.search(r"reste à", l, re.I):
+                continue
+            for c in CLE.finditer(l):
+                nom, date = c.group(1).strip(), None
+                d = CLE_DATE.match(nom)
+                if d:
+                    nom, date = d.group(1).strip(), _jm(jour, d.group(2), d.group(3))
+                res.append({"nom": nom, "date": date, "jour": j, "fichier": f.name})
     return res
 
 
