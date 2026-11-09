@@ -418,6 +418,31 @@ Aucune lecture ne donne « niveau d'agressivité uniforme par match » : la vue 
 
 Les trois : agressivité uniforme écran 1 (cran 0, Soft), aucun focus offensif Primary (écran 5). Aucun n'est un amical E1.
 
+**Résultats 5g (2026-11-09 17:00 Paris).**
+- **M1** (`c20d3ae`) : constat ci-dessus ; lecture réutilisée = `silver.bv_match_tactics`.
+- **M2** (`8d0184c`) : `gold.bv_amical_reglage` (`sql/gold/073_bv_amical_reglage.sql`, migration `gold_073_bv_amical_reglage`, `security_invoker`, `grant select … to assistant_ro`) : `match_day`, `opponent`, `my_result`, `joueurs`, `agress_uniforme`, `agress_cran`, `agress_ecran`, `agress_min/max`, `primary_quarts`, `focus_off_max`, `tir_cran4_joueurs`, `zone` (lue dans les réglages utilisés). 26 lignes en `assistant_ro` ; 07, 08, 09/11 : uniforme, écran 1, 0 quart Primary, Perimeter. Requête seule : 1,2 s.
+- **M3** (`f2cad2f`) : un fait `[expérience=…]` est rattaché au match de sa clé, sinon au premier amical joué le jour du registre ou le lendemain. Vérifié = réglage joué conforme à `joue` du YAML (E1 : `agress_cran` 2 ou 4 ; E2 : ≥ 2 joueurs au focus de tir cran 4 ; E3 : Primary aux 4 quarts ; E4 : tout amical joué) ; écart → « réglage joué ≠ réglage du test (Club JJ/MM) » ; non exporté → « déclaré non vérifié (match à exporter) ». Passage à l'expérience suivante : vérifiés seuls ; niveau A/B suivant : vérifiés + en attente (un écart fait rejouer le même niveau). L'avancement est ajouté au détail de la ligne du test (pas de ligne de plus). **Correction du YAML** : textes des niveaux en valeurs écran (E1 A « agressivité 3 à l'écran (cran 2, équilibrée) », B « 5 (cran 4) » ; E2 « focus de tir 5 à l'écran (cran 4) ») ; avant, « agressivité 2 » faisait saisir le cran 1.
+- **M4** : `debut: 2026-11-10` dans le YAML (E1 validée le 09/11 vers 16:00, amical du 09/11 déjà joué) ; un fait dont l'amical est antérieur ne compte pour rien. Aucune écriture au registre (test : fichiers inchangés).
+- **M5** : `test_aujourdhui.py` 167 → **181/181**. Réécrits : « passage à E2 » (absent, présent) et « H4 toutes terminées » (ils comptaient les déclarés ; ils ont maintenant des réglages joués), H3 sans brief et avec brief (nouveau texte du niveau A) ; les anciens cas H7 neutralisent `debut` (cas d'avant 5g). Ajoutés 14 : M3 passage sans export, écart (niveau rejoué), ligne présente / absente, écart présent / absent, rattachement sans clé, match compté une fois, plan sans déclaration, plan avec saisie déclarée ; M4 avant début présent / absent, début lu, aucune écriture. Autres suites : vertes (`fin_etape.py`). Sortie : 8 lignes logiques.
+- **M6** : avant 9,3 s (27 requêtes), après **11,2 s** (28 requêtes). `diff` : seule la ligne 07:45 change.
+
+Avant :
+```
+07:45 — Amical contre Opper Cards (mar. 10/11) : saisis le test E1 niveau A : agressivité 2 sur les
+    cinq — heure limite du verrou 07:45 ; réglage du test à la place de celui du brief ; après le
+    match exporte : aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour
+```
+Après :
+```
+07:45 — Amical contre Opper Cards (mar. 10/11) : saisis le test E1 niveau A : agressivité 3 à
+    l'écran (cran 2, équilibrée) sur tous les joueurs — heure limite du verrou 07:45 ; réglage du
+    test à la place de celui du brief ; après le match exporte : aperçu, box scores par quart-temps,
+    réglages utilisés, page Équipe du jour ; E1 : 0 vérifié sur 4
+```
+(Les 7 autres lignes sont identiques, sortie complète dans le rapport de session.)
+- `fusion_main.py` : 4 commits ajoutés, `origin/main == HEAD` (f2cad2f). `fin_etape.py` : 0 commit d'avance, 22 suites vertes (dont `test_aujourdhui.py` 181/181).
+- Hors périmètre, non commité : `outputs/basketvibe/aujourdhui-2026-11-09.md`.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -453,3 +478,4 @@ Les trois : agressivité uniforme écran 1 (cran 0, Soft), aucun focus offensif 
 | 2026-11-09 16:17 | aujourd'hui | 7.8 | 25 |
 | 2026-11-09 16:21 | aujourd'hui | 9.6 | 27 |
 | 2026-11-09 16:26 | aujourd'hui | 9.3 | 27 |
+| 2026-11-09 16:32 | aujourd'hui | 11.1 | 28 |
