@@ -62,6 +62,44 @@ Une routine = une ligne : déclencheur | condition | lancement | ce qu'elle appr
 | Projection de saison | nouvelle semaine financière | `gold.bv_finance_projection` | le solde de fin de saison | à relier | `sql/gold/018_bv_fixes_2026_10_22.sql:11` (1 ligne) |
 | Nouvelle semaine | une semaine d'historique de plus | à créer : recalcul de chaque seuil de « Trous constatés » sur l'historique | des seuils qui suivent le jeu (règle 5) | à créer | ce qui prouvera qu'elle sert : chaque seuil a une date de calcul de moins de 7 jours et sa valeur change au moins une fois en 4 semaines |
 
+## Chaque semaine
+
+| Déclencheur | Condition | Lancement | Ce qu'elle apprend | État | Preuve |
+|---|---|---|---|---|---|
+| Fin de semaine | matchs de la semaine en base | `gold.bv_match_report`, `gold.bv_match_trends` : revue de tous les matchs | ce qui a marché, les L-nnn | à relier | `docs/attentes/tests/basketvibe.yaml:201`, `:210` (bilan de la semaine) ; `sql/gold/003_bv_match_report.sql:6` |
+| Fin de semaine | conseils dont l'échéance est passée | `python pipelines/evaluer_decisions.py` | si les conseils ont marché | à relier | `learn.decision` : 107 conseils « proposed » échus non jugés (premier le 16/10), `gold.decisions_a_evaluer` : 0 ligne, `learn.outcome` : 0 ligne (lus le 09/11) : la vue ne remonte pas les conseils échus |
+| Fin de semaine | ventes de la semaine en base | `gold.bv_price_ref_ps`, `gold.bv_market_price_ref` : prix de référence ; seuils recalculés (Chaque cycle, « Nouvelle semaine ») | les prix du marché à jour | à relier | `sql/gold/022_bv_transfer_history.sql:45` ; `sql/gold/006_bv_transfers.sql:11` |
+| Fin de semaine | matchs d'autres équipes exportés | `python -I pipelines/preanalyse_matchs_basketvibe.py` | si une question passe « décidable » | à relier | `docs/refonte-v3/preanalyse-matchs-basketvibe.md`, étape 4 (b) ; hors du plan du jour |
+| Fin de semaine : veille | nouveaux messages Discord depuis le curseur | `python pipelines/kb_ingest.py estimer`, agent `veille` | le delta de la semaine | à relier | `pipelines/kb_ingest.py` (docstring) ; table `kb.ingest_cursor` (lue le 09/11) |
+| Fin de semaine : versions du moteur | annonce de version | à créer : table des versions du moteur (date, compétition, version) | à quel moteur appartient chaque match et chaque conseil | à créer | aucune table de versions (`learn`, `kb`, `core` lus le 09/11) ; versions déduites des dates (`preanalyse-matchs-basketvibe.md`, étape 4 (c)) ; ce qui prouvera qu'elle sert : 0 match « à la frontière » mal classé dans l'étude rejouée |
+| Fin de semaine : couverture des sources | types de pages reçus | `gold.bv_couverture_pages` | les pages reçues et non lues | à relier | `sql/core/022_page_reader.sql:43` (91 types non lus le 09/11) |
+
+### Remise en question du modèle (chaque semaine)
+
+| Question | Mesure | Ce qui existe en base | État | Ce qui prouvera qu'elle sert |
+|---|---|---|---|---|
+| Prédictions contre résultats, et biais | part de prédictions justes ; biais = prédit moins observé, par domaine | `learn.decision` : 109 proposées, 32 faites ; `learn.outcome` : 0 ligne | à créer | prouvera : le taux de prédictions justes est publié chaque semaine et le biais baisse sur 4 semaines |
+| Part de variance expliquée | r² de la marge prédite contre la marge observée, en ligue v4 | préanalyse : r = 0,65 en ligue v3 (scores seuls, historique, r² ≈ 0,42) ; ligue v4 : « n trop petit » | à créer | prouvera : r² calculé chaque semaine sur la ligue v4 dès 30 matchs avec force connue |
+| Cinq matchs les plus mal prédits | écart absolu entre marge prédite et marge observée, 5 plus grands | `estimated_chance` des pages de match (27 pages, étude, faisabilité 4 (c)) ; aucune prédiction de marge stockée | à créer | prouvera : chacun des 5 matchs a une cause écrite et une règle revue |
+| Règles confirmées retestées | taux de réussite de chaque leçon validée sur les matchs de la semaine | `learn.lesson` : 3 « validated », 34 « hypothesis » | à créer | prouvera : une leçon validée qui échoue 2 semaines repasse en hypothèse |
+| Hypothèses bloquées | hypothèses sans nouvelle mesure depuis 2 semaines, et la donnée qui manque | `learn.lesson` : 34 « hypothesis » | à créer | prouvera : le nombre d'hypothèses bloquées baisse |
+| Données non collectées | types de pages non lus ; pages manquantes de l'étude | `gold.bv_couverture_pages` (91 types non lus) ; étude, étape 4 (b) | à relier | le nombre de types non lus baisse chaque semaine |
+| Ce que font les meilleures équipes | profil des meilleurs joueurs et des 3 premiers du classement | `gold.bv_league_top_players` ; tactiques adverses illisibles (préanalyse, étape 4 (c)) | à relier | une différence chiffrée avec notre effectif, reprise dans une décision d'achat ou de composition |
+| Le playbook lui-même | routines jamais déclenchées en 4 semaines | aucun journal de déclenchement ; G1 et G2 « jamais déclenchée sur ces 19 matchs » (`regles-decision-basketvibe.yaml:266`) | à créer | prouvera : chaque routine jamais déclenchée est supprimée ou sa condition corrigée |
+
+## Coupe
+
+Règles de la BasketVibe Cup, édition saison 2 (`.claude/skills/basketvibe-saison/references/05-coupes.md:6`, [News 2026-11-03]) : 10 tours ; premier tour jeudi 12/11/2026, puis jeudis et dimanches ; finale dimanche 13/12/2026 ; même coup d'envoi pour tous, non modifiable, tactique verrouillée au coup d'envoi ; tableau complété par des bots ; prime de 100 000 par équipe ; fatigue = 25 % de celle de la ligue ; billetterie 0 ; blessures désactivées ; avantage du terrain désactivé ; expérience non citée (ne pas la supposer). Règle générale : le plus faible reçoit (`05-coupes.md:3`).
+
+Déjà saisi en base (lu le 09/11) : `core.fixture` a 4 matchs de coupe, du 28/10 au 31/10 (2 joués, 2 gagnés), aucun de l'édition saison 2, aucun avec heure ; `core.agenda_rule` n'a aucune règle de coupe ; `core.alert_rule` a `coupe_sans_resultat`.
+
+| Déclencheur | Condition | Lancement | Ce qu'elle apprend | État | Preuve |
+|---|---|---|---|---|---|
+| Calendrier de coupe exporté | page `/api/v1/teams/<id>/cup-fixtures` reçue | à créer : lecture en silver vers `core.fixture` | les 10 tours datés | à créer | `gold.bv_couverture_pages` : 18 pages, « page reçue, non lue » ; ce qui prouvera qu'elle sert : les tours de l'édition saison 2 sont dans `core.fixture` avant le premier tour |
+| Match de coupe à venir | ligne de coupe dans `core.fixture`, limite = coup d'envoi | à créer : règle de coupe dans `core.agenda_rule` (saisie et verrou) | la saisie de coupe à faire | à créer | `core.agenda_rule` (aucune règle de coupe) ; ce qui prouvera qu'elle sert : chaque match de coupe a sa saisie déclarée avant le verrou |
+| Match de coupe joué non exporté | règle `coupe_sans_resultat` | `gold.bv_daily_alerts` ; domaine `match` ignoré par `aujourdhui.py` | l'export à faire | à relier | `core.alert_rule` (`coupe_sans_resultat`) ; `pipelines/aujourdhui.py:37-38` |
+| Défaite de coupe | `my_result = 'L'` en coupe | agent `analyste` (arbitrage 15) | les causes | à relier | voir « Chaque match » ; `docs/regles/actives.md:35` (S3) |
+
 ## Sur événement
 
 | Déclencheur | Condition | Lancement | Ce qu'elle apprend | État | Preuve |
@@ -72,12 +110,29 @@ Une routine = une ligne : déclencheur | condition | lancement | ce qu'elle appr
 | Vente pour profit, place aux jeunes | toujours | `aujourdhui.py`, ligne « Garder » | rien de décidé : « règle non écrite — à valider » | existe | `pipelines/aujourdhui.py:406-407` |
 | Fatigue projetée | ligne de `gold.bv_fatigue_plan` | vue | les minutes à couper avant le match | à relier | `sql/gold/004_bv_tactics.sql:75` (280 lignes) |
 | Gros transfert | montant au-dessus de `SEUIL_GROS_MONTANT` | `python pipelines/dossier.py basketvibe <type>` puis agent `police` (hook `pipelines/police.py`) | si la décision repose sur toutes les informations | existe | `pipelines/aujourdhui.py:287` ; `.claude/settings.json:74` |
+| Deux défaites de ligue de suite | `my_result = 'L'` deux fois de suite en ligue, amicaux exclus (G3) | `gold.match_objective` (règle `serie` de `core.objective_rule`) ; agent `analyste` le soir même | les causes chiffrées ; un changement fort ce soir | à relier | `docs/attentes/regles-decision-basketvibe.yaml:271-275` ; `sql/gold/070_match_objective.sql:7` ; `gold.match_objective` (10 lignes basketvibe) ; absente des requêtes de `pipelines/aujourdhui.py:54-78` |
+| Troisième défaite de suite | série de 3 défaites ou plus, toutes compétitions | brief de l'agent `match` : au moins un changement de composition ou de tactique chiffré | si le changement chiffré corrige la série | à relier | `.claude/agents/match.md:54` ; hors du plan du jour |
+| Levier échoué deux fois | 2 échecs ou plus sur un même levier | agent `match` : levier interdit, levier différent nommé ; `docs/regles/actives.md:32` (K10) | quels leviers ne marchent pas | à créer | `.claude/agents/match.md:53` (consigne d'agent, aucun contrôle par code) ; `learn.outcome` : 0 ligne, donc aucun échec compté ; ce qui prouvera qu'elle sert : 0 décision proposée sur un levier qui a 2 échecs dans `learn.outcome` |
+| Titre acquis ou rien à jouer | condition `titre_acquis` ou `rien_a_jouer` de `core.objective_rule` | `gold.match_objective` (objectif `former`, `tester`) | minutes aux jeunes sans risque de classement | à relier | `core.objective_rule` (règles `titre`, `rien`, `titre_former`, `rien_former`, lues le 09/11) ; `docs/attentes/regles-decision-basketvibe.yaml:9`, `:79-87` (EFF-4) |
+| Moins de 5 joueurs éligibles | joueurs disponibles < 5 | à créer : règle de `core.alert_rule` « forfait » | le forfait évité (défaite 20-0) | à créer | `.claude/skills/basketvibe-saison/references/02-ligue-et-saison.md:4` ; `core.alert_rule` n'a que `dispo` (moins de 9 joueurs : vente impossible) ; ce qui prouvera qu'elle sert : rejouée sur l'historique, l'alerte sort chaque jour où `available_players` < 5, et 0 forfait en base |
+| Solde projeté proche de zéro | solde de fin de saison projeté bas (FIN, « solde proche de 0 ») | `gold.bv_finance_projection` : cause | la charge qui fait baisser le solde | à relier | `docs/attentes/regles-decision-basketvibe.yaml:32` ; `sql/gold/018_bv_fixes_2026_10_22.sql:11` |
+| Solde proche de zéro : enchères | capacité = solde moins les enchères ouvertes | `aujourdhui.py` : toute enchère hors capacité est abandonnée | la limite d'enchère du jour | existe | `pipelines/aujourdhui.py:366-379` |
+| Joueur qui gagne une compétence | hausse d'une compétence dans `gold.bv_skill_progress_weekly` | `gold.bv_slot_fit`, `gold.bv_potential_estimate` | le poste et le potentiel recalculés | à relier | `sql/gold/001_bv_gold.sql:77` ; `sql/gold/004_bv_tactics.sql:32` ; `sql/gold/005_bv_training.sql:48` |
+| Annonce du développeur ou nouvelle version du moteur | nouvelle News ou message du développeur | à créer : version du moteur sur chaque conseil (`learn.decision`), conseils de l'ancienne version marqués périmés | quels conseils ne valent plus | à créer | `.claude/skills/basketvibe-communaute/references/02-1-moteur-de-match-versions-et-calibrage.md:2` (versions v3, v4, v5) ; aucune table de versions en base (`learn`, `kb`, `core` lus le 09/11) ; ce qui prouvera qu'elle sert : le jour d'un changement de version, 100 % des conseils ouverts de l'ancienne version sont marqués périmés |
+| Test de la file au nombre de matchs requis | n disponible ≥ n requis (étude) ou échéance du test (n = 3 au départ) | à créer : verdict confirmé, réfuté ou non concluant | si le réglage testé marche | à créer | `docs/attentes/regles-decision-basketvibe.yaml:278-288` ; ce qui prouvera qu'elle sert : chaque expérience E1 à E4 a son verdict écrit le jour où son n est atteint |
 
 ## Phases de saison
 
 | Déclencheur | Condition | Lancement | Ce qu'elle apprend | État | Preuve |
 |---|---|---|---|---|---|
 | Dernier match de la saison | règle `fin_saison` | `gold.bv_agenda` lu par `aujourdhui.py` | maintien et prime de classement | existe | `core.agenda_rule` (`fin_saison`) |
+| Début de saison : sponsor | nouvelle saison ; date limite = 1re journée moins le délai du jeu (sinon contrat Stability) | à créer : ligne du plan avec les six offres comparées à la force du club | le contrat qui rapporte le plus pour notre niveau | à créer | `.claude/skills/basketvibe-economie/references/02-recettes.md:12` ; `docs/attentes/attentes.md:37` (A-11) ; ce qui prouvera qu'elle sert : le sponsor est choisi avant la date limite, et l'écart entre prime prévue et prime touchée est mesuré en fin de saison |
+| Début de saison : forme, fatigue, popularité | 1er jour de la saison | à créer : contrôle des remises à zéro lues en base | si le jeu applique ses règles | à créer | `.claude/skills/basketvibe-saison/references/02-ligue-et-saison.md:11` (forme 6, fatigue 0, popularité 70 %) ; ce qui prouvera qu'elle sert : écart entre valeurs lues le 1er jour et valeurs du skill = 0, ou écart signalé |
+| Début de saison : objectif, marketing | nouvelle saison | à créer | objectif du sponsor, personnel marketing | à créer | non vérifié (moment de la décision : aucune source ; faits : `02-recettes.md:13`, `.claude/skills/basketvibe-economie/references/03-depenses.md:17`) ; ce qui prouvera qu'elle sert : popularité de fin de saison comparée à celle de la saison 1 |
+| Milieu de saison : bilan | moitié des journées jouées | à créer | où en est l'objectif, ce qu'il faut changer | à créer | non vérifié (aucune source) ; ce qui prouvera qu'elle sert : au moins une décision prise au bilan, avec sa prédiction dans `learn.decision` |
+| Fin de saison : ventes avant le recalcul des salaires | dernières journées | à créer : liste des ventes à faire avant le changement de saison | la masse salariale de la saison suivante | à créer | fait : salaires recalculés en nouvelle saison (`02-ligue-et-saison.md:11`) ; règle « vendre avant » : non vérifié (consigne de l'utilisateur, aucune source écrite) ; ce qui prouvera qu'elle sert : masse salariale du 1er jour de la saison suivante plus basse que sans les ventes |
+| Fin de saison : primes, âge, retraite | dernière journée | à créer : primes de classement, +1 an, retraite à 38 ans | les recettes de fin et les départs | à créer | `.claude/skills/basketvibe-economie/references/02-recettes.md:21` ; `02-ligue-et-saison.md:11` ; ce qui prouvera qu'elle sert : chaque départ à la retraite annoncé avant la fin, 0 surprise |
+| Entre deux saisons | semaine sans match de ligue | à créer : déroulé A-11 (sponsor, nouvelle ligue, effectifs) | la préparation de la saison | à créer | `.claude/skills/basketvibe-saison/references/03-fin-de-la-saison-1-saison-2-dates-2026.md:3` ; `docs/attentes/attentes.md:37` ; ce qui prouvera qu'elle sert : les étapes d'A-11 faites avant la 1re journée |
 | Changement de phase (saison, intersaison, promotion) | ligne de `core.season` pour basketvibe | à créer : remplir `core.season` et lire `phase` | ce qui change selon la phase | à créer | `core.season` : 0 ligne pour basketvibe le 09/11 ; ce qui prouvera qu'elle sert : chaque phase a sa date de début dans `core.season` et le plan du jour change de règles le jour même |
 
 ## Marché
@@ -144,6 +199,19 @@ Total contrôlé selon l'étude : 4 + 3 + 7 = environ 14 amicaux. L'alternance A
 | Plan du jour rendu | ni rejeu ni heure imposée | `aujourdhui.py`, instantané `aujourdhui-<jour>.md` | ce qui a été proposé ce jour-là | existe | `pipelines/aujourdhui.py:507-510` |
 | Sauvegarde du bronze ancienne | âge de la dernière sauvegarde | hook de début `pipelines/rappel_debut.py`, `pipelines/sauvegarde_bronze.py` | rien : protège les pages reçues | à relier | `pipelines/rappel_debut.py:33-40` ; hors du plan du jour |
 | Type de page reçu et non lu | alerte « page reçue, non lue » dans `gold.bv_couverture_pages` | à créer : ligne du plan du jour | une page à lire ou à ne plus envoyer | à créer | `sql/core/022_page_reader.sql:43` ; ce qui prouvera qu'elle sert : le nombre de types « page reçue, non lue » baisse (91 le 09/11) |
+| Fin de semaine | toujours | à créer : inventaire en lecture seule (tableau ci-dessous), rien n'est supprimé sans accord | ce qui encombre le contexte des agents | à créer | ce qui prouvera qu'elle sert : chaque chiffre de l'inventaire baisse ou reste stable d'une semaine sur l'autre |
+
+Inventaire en lecture seule (mesuré le 09/11 dans le dépôt et la base) :
+
+| Objet | Chiffre | Commande |
+|---|---|---|
+| Briefs | 75 fichiers, dont 60 d'octobre | `find outputs/basketvibe/briefs -type f`, `-name '2026-10-*'` |
+| Registres `fait-*` | 14 (du 24/10 au 08/11) ; le plan n'en lit que 7 jours | `ls outputs/basketvibe/fait-*.md` ; `pipelines/aujourdhui.py:35` |
+| Veilles | 13 fichiers | `find outputs/basketvibe/veille -type f` |
+| Notes de session | 3 (`resume-session-2026-11-06.md`, `session-2026-11-07.md`, `session-2026-11-08.md`) et `discussion-2026-11-06.md` | `ls outputs/basketvibe` |
+| Vues gold `bv_*` sans référence | 5 sur 53 hors de leur définition (`bv_academy_chat`, `bv_academy_prospects`, `bv_finance_season_rates`, `bv_resale_stats`, `bv_training_options`) ; 16 sur 53 si l'on ne compte que `pipelines/` et `.claude/` | script de recherche (scratchpad), sur `pipelines`, `.claude`, `sql` |
+| Connaissance en double | `kb.claim` basketvibe : 375 lignes, 375 textes distincts (0 doublon exact) ; doublons de règles : « Trous constatés » | `select count(*), count(distinct lower(text)) from kb.claim where game='basketvibe'` |
+| Conseils périmés | `learn.decision` : 107 « proposed » échus non jugés, 1 « expired » | `select … from learn.decision where game='basketvibe'` |
 
 ## Trous constatés
 
@@ -213,3 +281,28 @@ Total contrôlé selon l'étude : 4 + 3 + 7 = environ 14 amicaux. L'alternance A
 | 10 | Remplir `core.season` (phases) depuis `/api/v1/leagues/<id>/seasons` | moyen |
 | 11 | Ligne « pages reçues, non lues » dans le plan et tri des 91 types (lire ou ne plus envoyer) | gros |
 | 12 | Veille : import Discord et agent `veille` déclenchés par l'arrivée de messages | petit |
+
+Ajouts du 09/11 (routines convenues), classés par effort :
+
+| # | Action | Effort |
+|---|---|---|
+| 13 | Lire `gold.match_objective` dans le plan : série de 2 défaites de ligue (analyste), titre acquis ou rien à jouer (jeunes) | petit |
+| 14 | Règle d'alerte « moins de 5 joueurs éligibles » (forfait) dans `core.alert_rule` | petit |
+| 15 | Relier défaite de coupe et `coupe_sans_resultat` au plan (même correction que l'action 1) | petit |
+| 16 | Lire `gold.bv_finance_projection` dans le plan quand le solde projeté est bas (cause) | petit |
+| 17 | Lancer `preanalyse_matchs_basketvibe.py` et `kb_ingest.py estimer` chaque semaine | petit |
+| 18 | Inventaire de nettoyage hebdomadaire en lecture seule | petit |
+| 19 | Comprendre pourquoi `gold.decisions_a_evaluer` est vide alors que 107 conseils sont échus, puis évaluer chaque semaine | moyen |
+| 20 | Calendrier de la coupe saison 2 en base et règle de coupe dans `core.agenda_rule` | moyen |
+| 21 | Compétence gagnée : poste et potentiel recalculés dans le plan | moyen |
+| 22 | Verdict automatique d'un test de la file à son n requis | moyen |
+| 23 | Table des versions du moteur ; version sur chaque conseil, conseils périmés au changement | moyen |
+| 24 | Revue hebdomadaire des matchs et des prix de référence | moyen |
+| 25 | Phases de saison : début (sponsor, remises à zéro, objectif, marketing), milieu (bilan), fin (ventes avant le recalcul des salaires, primes, âge, retraite), entre deux saisons | gros |
+| 26 | Contrôle par code du levier échoué deux fois (`learn.outcome`) | gros |
+
+## Étape 6 : à faire, dans l'ordre
+
+| # | Action | Effort |
+|---|---|---|
+| 1 | **Remise en question hebdomadaire du modèle** (tableau de « Chaque semaine ») : prédictions contre résultats et biais, variance expliquée, cinq matchs les plus mal prédits, règles confirmées retestées, hypothèses bloquées, données non collectées, meilleures équipes, routines jamais déclenchées | gros |
