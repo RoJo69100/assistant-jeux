@@ -204,6 +204,8 @@ Réponses de l'utilisateur : 1076 = pas misé ; E1 = oui, agressivité défensiv
 | F4 | Pour chaque amical joué des 10 derniers jours (`core.fixture`) : présent ou non dans `gold.bv_match_report`, avec la date. Tableau collé. |
 | F5 | Cause (a) : liste exacte des pages à réexporter (box score, play-by-play, réglages utilisés, aperçu). Causes (b), (c), (e) : la plus petite correction, en une phrase, sans l'appliquer. |
 
+**F1 (2026-11-09 15:24 Paris).** `decision.py statut 1076 rejected` → « ✅ D-1076 : rejected » ; `decision.py liste basketvibe` : 9 done, 18 proposed, 3 rejected (1072, 1076, 1088). Pronostic de cause F3, écrit avant les requêtes : **(b)** pages arrivées en bronze, non lues par silver (l'utilisateur dit avoir exporté ; la ligue du 07/11 est lue). Faux si `bronze.raw_pages` n'a aucune page du match.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
