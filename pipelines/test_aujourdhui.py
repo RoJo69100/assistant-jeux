@@ -487,6 +487,82 @@ def cas_etape5a():
     yield "J5 coupe sans scheduled_at : verrou inconnu (jamais supposé)", \
         ligne(sans, "Stare Kotlety")[0] is None and "verrou inconnue" in ligne(sans, "Stare Kotlety")[3]
 
+    yield from cas_experiences(COLS_CAL, MIDI)
+
+
+def cas_experiences(COLS_CAL, MIDI):
+    """H7 (étape 5d) : file d'expériences amicales et décalage d'agenda ; cas présent et cas absent pour chacun."""
+    with tempfile.TemporaryDirectory() as tmp:
+        reg = Path(tmp)
+
+        def exps(*lignes, jour=JOUR9):
+            (reg / "fait-2026-11-08.md").write_text("\n".join(lignes) + "\n", encoding="utf-8")
+            return src.lire_experiences(reg, jour)
+
+        AM = {"match": "Opper Cards", "date": dt.date(2026, 11, 10), "limite": dt.datetime(2026, 11, 10, 7, 45)}
+        def niveau(x):
+            t = auj.test_en_cours(x, AM)
+            return t and (t[0]["id"], t[1], t[2])
+        e1 = lambda n: ["- [08:00 UTC] Saisie de l'amical [expérience=E1:" + "ABAB"[i] + "]" for i in range(n)]
+        yield "H7 E1 alternance, absent (aucun fait) : niveau A", niveau(exps()) == ("E1", "A", False)
+        yield "H7 E1 alternance, présent : A,B,A,B (1 fait -> B, 2 -> A, 3 -> B)", \
+            [niveau(exps(*e1(n)))[1] for n in (1, 2, 3)] == ["B", "A", "B"]
+        yield "H7 passage à E2, absent (E1 à 3 sur 4) : encore E1", niveau(exps(*e1(3))) == ("E1", "B", False)
+        yield "H7 passage à E2, présent (E1 à 4 sur 4) : E2 niveau A", niveau(exps(*e1(4))) == ("E2", "A", False)
+        toutes = e1(4) + [f"- [x] [expérience={i}:{n}]" for i, n, k in (("E2", "A", 3), ("E3", "A", 7), ("E4", "habituel", 16))
+                         for _ in range(k)]
+        yield "H4 toutes terminées : aucune expérience en cours", niveau(exps(*toutes)) is None
+        yield "H7 fichier absent : None, plan sans ligne de test", \
+            src.lire_experiences(reg, JOUR9, reg / "absent.yaml") is None and auj.test_en_cours(None, AM) is None
+        yield "H7 fichier présent : E1 à E4 dans l'ordre", [e["id"] for e in exps()["file"]] == ["E1", "E2", "E3", "E4"]
+        yield "H7 ligne « reste à » ignorée, présent : aucun fait", \
+            exps("- reste à faire : saisie de l'amical [expérience=E1:A]")["faits"] == []
+        yield "H7 ligne « reste à » ignorée, absent (ligne normale) : 1 fait", len(exps(*e1(1))["faits"]) == 1
+        deja = exps("- [16:00 UTC] [clé=Opper Cards 10/11] Saisie de l'amical [expérience=E1:A]", jour=JOUR9)
+        yield "H2 fait avec la clé du prochain amical : saisi au niveau A, n'avance pas l'expérience", \
+            niveau(deja) == ("E1", "A", True)
+
+        CAL = (COLS_CAL, [("2026-11-10", "amical", "Opper Cards", "2026-11-10T08:00:00", "2026-11-10T07:45:00")])
+        donnees = figees(**{"gold.bv_agenda": (AGENDA[0], [
+            ("2026-11-10", "07:45:00", 1, "amical", "Avant 07:45 : preset amical sur le match contre Opper Cards")]),
+            "calendrier": CAL})
+        sans_brief = auj.plan(donnees, {}, JOUR9, MIDI, "", {"experiences": exps()})
+        l = [a for a in sans_brief["actions"] if "Opper" in a[2]]
+        yield "H3 amical sans brief, présent : une ligne E1 niveau A, verrou 07:45 du calendrier, exports après le match", \
+            len(l) == 1 and l[0][0] == dt.datetime(2026, 11, 10, 7, 45) \
+            and "test E1 niveau A : agressivité 2 sur les cinq" in l[0][2] and "verrou 07:45" in l[0][3] \
+            and "aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour" in l[0][3]
+        yield "H3 amical sans brief, absent (pas d'amical aujourd'hui ni demain) : aucune ligne de test", \
+            not any("test E" in a[2] + a[3] for a in auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}), {}, JOUR9, MIDI,
+                                                                "", {"experiences": exps()})["actions"])
+        tac = [{"type": "amical", "match": "Opper Cards", "date": dt.date(2026, 11, 10), "verrou": "07:30", "manche": None,
+                "lieu": "domicile", "preuves": [], "fichier": "briefs/2026-11-09-tactique-amical.md", "age": 0, "vieux": False}]
+        avec_brief = [a for a in auj.plan(donnees, {}, JOUR9, MIDI, "", {"experiences": exps(), "tactique": tac})["actions"]
+                      if "Opper" in a[2]]
+        yield "H3 amical avec brief : une seule ligne, celle du brief, qui porte le test à la place de l'agressivité", \
+            len(avec_brief) == 1 and "tactique-amical" in avec_brief[0][4] \
+            and "test E1 niveau A : agressivité 2 sur les cinq (remplace l'agressivité du brief pour ce match)" in avec_brief[0][3]
+        yield "H4 fichier absent : plan sans ligne de test, sans plantage", \
+            not any("test E" in a[2] + a[3] for a in auj.plan(donnees, {}, JOUR9, MIDI, "", {"experiences": None})["actions"])
+
+    # H6 : règle de ligue à heure écrite recalée sur le coup d'envoi + decalage_min ; sans coup d'envoi, l'heure écrite
+    REG = (["rule_id", "category", "heure", "decalage_min"], [("ligue_preview", "export", "19:30", -30),
+                                                              ("ligue_preset", "ligue", "19:45", -15),
+                                                              ("ligue_export", "export", "20:50", 50)])
+    AG = (AGENDA[0], [("2026-11-09", "19:45:00", 1, "ligue", "Avant 19:45 : vérifier le preset de ligue contre Naked Spartans"),
+                      ("2026-11-09", "19:30:00", 2, "export", "Avant 19:45 si possible : exporter la page Preview du match J4")])
+    tard = (COLS_CAL, [("2026-11-09", "ligue", "Naked Spartans", "2026-11-09T20:30:00", "2026-11-09T20:15:00")])
+    avec = auj.plan(figees(**{"gold.bv_agenda": AG, "calendrier": tard, "regles_agenda": REG}), {}, JOUR9, MIDI, "", {})
+    sans = auj.plan(figees(**{"gold.bv_agenda": AG, "regles_agenda": REG}), {}, JOUR9, MIDI, "", {})
+    def ag(d, mot):
+        return next(a for a in d["actions"] if mot in a[2])
+    yield "H6 décalage, présent (coup d'envoi 20:30) : preset 20:15, preview 20:00 « Avant 20:15 si possible »", \
+        ag(avec, "preset")[0] == dt.datetime(2026, 11, 9, 20, 15) and ag(avec, "preset")[2].startswith("Avant 20:15") \
+        and ag(avec, "Preview")[0] == dt.datetime(2026, 11, 9, 20, 0) and ag(avec, "Preview")[2].startswith("Avant 20:15 si")
+    yield "H6 décalage, absent (pas de coup d'envoi) : heures écrites 19:45 et 19:30", \
+        ag(sans, "preset")[0] == dt.datetime(2026, 11, 9, 19, 45) and ag(sans, "Preview")[0] == dt.datetime(2026, 11, 9, 19, 30) \
+        and ag(sans, "preset")[2].startswith("Avant 19:45")
+
 
 def cas_base():
     """R4, sur la base (option --base) : un type de page sans lecteur sort en alerte, un type lu n'en porte pas."""

@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-09 15:54 -->
+<!-- généré le 2026-11-09 16:00 -->
 19:30 — Avant 19:45 si possible : exporter la page Preview du match J4 (effectif adverse à jour)
     (gold.bv_agenda)
 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
@@ -6,12 +6,15 @@
     defense_tier n'est pas 0 pour tous (briefs/2026-11-08-tactique.md)
 20:50 — Après le match (~20:50) : exporter la page du match J4 (puis analyse de l'agent Match)
     (gold.bv_agenda)
+07:45 — Amical contre Opper Cards (mar. 10/11) : saisis le test E1 niveau A : agressivité 2 sur les
+    cinq — heure limite du verrou 07:45 ; réglage du test à la place de celui du brief ; après le
+    match exporte : aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour
+    (docs/attentes/experiences-amicales-basketvibe.yaml, core.fixture)
 --:-- — Analyse : lance l'agent analyste ce soir — 2 défaites d'affilée en ligue ou coupe (dernière
     : Póvoa Riptide, 07/11, ligue) ; dernier brief analyste du 05/11 (core.fixture,
     gold.match_objective)
---:-- — Acheter un SF de note ≥ 61,0 — poste SF : profondeur 2, PS moyen 51.8
-    (gold.bv_position_summary)
-Autres points (1) : Analyse : Dernier match exporté : 09/11 (amical, L 104-120 contre Garden City)
+Autres points (2) : Acheter un SF de note ≥ 61,0 ; Analyse : Dernier match exporté : 09/11 (amical,
+    L 104-120 contre Garden City)
 Garder : effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin) ;
     effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
     ; effectif, jeunes : ni titre acquis ni rien à jouer sur les 7 prochains jours

@@ -343,3 +343,4 @@ Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligu
 | 2026-11-09 15:34 | aujourd'hui | 19.8 | 18 |
 | 2026-11-09 15:46 | aujourd'hui | 21.9 | 19 |
 | 2026-11-09 15:54 | aujourd'hui | 22.2 | 19 |
+| 2026-11-09 16:00 | aujourd'hui | 22.5 | 20 |

@@ -7,6 +7,7 @@ aucune n'écrit. Critères L1 à L4 de docs/refonte-v3/journal-aujourdhui.md.
   lire_cibles     L2  décisions d'achat ouvertes (learn.decision) + fin d'enchère en base + dossier + police
   lire_conseils   L4  conseils ouverts de learnings.md dont la date du critère tombe aujourd'hui ou demain
   lire_cles       R5  lignes du registre `fait-<j>.md` des 7 derniers jours qui portent une clé `[clé=<écran ou match>]`
+  lire_experiences 5d file d'expériences amicales (YAML) + lignes `[expérience=<id>:<niveau>]` de tout le registre
 """
 import datetime as dt
 import re
@@ -157,6 +158,42 @@ def lire_cles(base, jour: dt.date, fenetre: int = FENETRE_CLES) -> list[dict]:
                     nom, date = d.group(1).strip(), _jm(jour, d.group(2), d.group(3))
                 res.append({"nom": nom, "date": date, "jour": j, "fichier": f.name})
     return res
+
+
+EXPERIENCE = re.compile(r"\[expérience=([^:\]]+):([^\]]+)\]", re.I)
+FICHIER_EXPERIENCES = Path(__file__).resolve().parent.parent / "docs/attentes/experiences-amicales-basketvibe.yaml"
+
+
+def lire_experiences(base, jour: dt.date, fichier=FICHIER_EXPERIENCES):
+    """File d'expériences amicales (étape 5d, H1-H2) : {'file': [expériences du YAML, dans l'ordre], 'faits': [...]}.
+    Un fait = une ligne du registre `fait-<j>.md` (tout le registre jusqu'à `jour`, pas 7 jours : H2) qui porte
+    `[expérience=<id>:<niveau>]`, avec la clé de match de la même ligne si elle existe ; « reste à » ignorée (R5).
+    Fichier de configuration absent ou illisible : None (aucune ligne, H4)."""
+    try:
+        import yaml
+        file = (yaml.safe_load(Path(fichier).read_text(encoding="utf-8")) or {}).get("experiences") or []
+    except Exception:  # noqa: BLE001 - absent, illisible ou YAML cassé : le plan continue sans expérience (H4)
+        return None
+    faits = []
+    for f in sorted(Path(base).glob("fait-*.md")):
+        m = re.match(r"^fait-(\d{4}-\d{2}-\d{2})\.md$", f.name)
+        if not m or dt.date.fromisoformat(m.group(1)) > jour:
+            continue
+        j = dt.date.fromisoformat(m.group(1))
+        for l in f.read_text(encoding="utf-8").splitlines():
+            if re.search(r"reste à", l, re.I):
+                continue
+            for e in EXPERIENCE.finditer(l):
+                cle = None
+                c = CLE.search(l)
+                if c:
+                    nom, date = c.group(1).strip(), None
+                    d = CLE_DATE.match(nom)
+                    if d:
+                        nom, date = d.group(1).strip(), _jm(j, d.group(2), d.group(3))
+                    cle = {"nom": nom, "date": date, "jour": j, "fichier": f.name}
+                faits.append({"id": e.group(1).strip(), "niveau": e.group(2).strip(), "cle": cle, "jour": j, "fichier": f.name})
+    return {"file": file, "faits": faits}
 
 
 def lire_cibles(decisions: list[dict], encheres: list[dict], base, jour: dt.date) -> list[dict]:

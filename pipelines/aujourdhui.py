@@ -89,6 +89,10 @@ REQUETES = {
                   "(extras ->> 'verrou_at')::timestamptz at time zone 'Europe/Paris' as verrou_paris from core.fixture "
                   "where game = 'basketvibe' and not played and scheduled_at is not null "
                   "and day between current_date - 1 and current_date + 7 order by scheduled_at",
+    # H6 (étape 5d) : règles d'agenda de ligue à heure écrite, avec leur décalage relatif au coup d'envoi
+    "regles_agenda": "select rule_id, category, to_char(heure, 'HH24:MI') as heure, decalage_min from core.agenda_rule "
+                     "where game = 'basketvibe' and competition_kind = 'ligue' and actif and heure is not null "
+                     "and decalage_min is not null",
     # A4 : solde projeté en fin de saison
     "gold.bv_finance_projection": "select season_end, balance_end_projected, tickets_left, sponsor_left, costs_left "
                                   "from gold.bv_finance_projection limit 1",
@@ -159,7 +163,8 @@ def lire_sources(donnees, jour, base=BASE):
     return {"tactique": src.lire_tactique(base, jour), "restes": src.lire_restes(base, jour),
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
-            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour)}
+            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour),
+            "experiences": src.lire_experiences(base, jour)}
 
 
 def deja(fait, cle):
@@ -263,6 +268,59 @@ def verrou_calendrier(donnees, date, match):
             if v:
                 return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v)[:19])
     return None
+
+
+def en_heure(v):
+    return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v)[:19])
+
+
+def recaler(donnees, d, h, category, action):
+    """H6 : ligne d'agenda de ligue à heure écrite -> (limite, action) recalées sur le coup d'envoi du match de ligue
+    du jour `d` (core.fixture) + decalage_min de core.agenda_rule ; coup d'envoi inconnu ou règle sans décalage :
+    (None, action), l'appelant garde l'heure écrite."""
+    regles = lignes_de(donnees, "regles_agenda")
+    ce = next((r["coup_envoi_paris"] for r in lignes_de(donnees, "calendrier")
+               if r["competition_kind"] == "ligue" and en_date(r["day"]) == d and r.get("coup_envoi_paris")), None)
+    if not regles or ce is None or not any(r["heure"] == h and r["category"] == category for r in regles):
+        return None, action
+    nouvelles = {r["heure"]: en_heure(ce) + dt.timedelta(minutes=int(r["decalage_min"])) for r in regles}
+    texte = re.sub(r"\b\d{2}:\d{2}\b", lambda m: f"{nouvelles[m.group(0)]:%H:%M}" if m.group(0) in nouvelles else m.group(0), action)
+    return nouvelles[h], texte
+
+
+def prochain_amical(donnees, jour, maintenant):
+    """H3 : premier amical d'aujourd'hui ou de demain dans core.fixture dont le verrou n'est pas passé :
+    {'match', 'date', 'limite'} ; None sinon."""
+    for r in lignes_de(donnees, "calendrier"):
+        d = en_date(r["day"])
+        v = r.get("verrou_paris") or r.get("coup_envoi_paris")
+        if r["competition_kind"] == "amical" and d in (jour, jour + dt.timedelta(days=1)) and v and en_heure(v) >= maintenant:
+            return {"match": r["opponent"], "date": d, "limite": en_heure(v)}
+    return None
+
+
+def test_en_cours(experiences, amical):
+    """H1-H2 : (expérience, niveau, déjà saisi) du test à jouer sur `amical`, None si aucune expérience en cours (H4).
+    Les expériences passent dans l'ordre du fichier ; un fait dont la clé désigne cet amical ne le fait pas avancer :
+    il dit l'amical saisi à ce niveau."""
+    if not experiences or not amical:
+        return None
+    ici = [f for f in experiences["faits"] if f["cle"] and cle_match([f["cle"]], amical["match"], amical["date"])]
+    autres = [f for f in experiences["faits"] if f not in ici]
+    for e in experiences["file"]:
+        fait = next((f for f in ici if f["id"] == e["id"]), None)
+        if fait:
+            return e, fait["niveau"], True
+        n = sum(f["id"] == e["id"] for f in autres)
+        if n < int(e["amicaux_vises"]):
+            ordre = e["ordre"]
+            return e, ordre[n % len(ordre)], False
+    return None
+
+
+def texte_test(e, niveau):
+    nom = f"test {e['id']}" + (f" niveau {niveau}" if len(e["niveaux"]) > 1 else "")
+    return f"{nom} : {e['niveaux'].get(niveau, niveau)}"
 
 
 def alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute):
@@ -373,6 +431,15 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
 
     # 1. Matchs à venir : brief tactique du jour (verrou, tests), registre « reste à corriger »
     couverts = []
+    # 1 bis (5d, H3) : test de la file d'expériences sur le prochain amical (aujourd'hui ou demain, core.fixture)
+    am = prochain_amical(donnees, jour, maintenant)
+    test = test_en_cours(S.get("experiences"), am)
+    apres = ""
+    if test:
+        e, niveau, _ = test
+        apres = f"{texte_test(e, niveau)} (remplace l'agressivité du brief pour ce match)" if e["id"] == "E1" \
+            else f"{texte_test(e, niveau)} (remplace ce réglage du brief pour ce match)"
+        apres_exports = "après le match exporte : " + ", ".join(e.get("export_requis") or [])
     for t in S.get("tactique", []):
         cal = verrou_calendrier(donnees, t["date"], t["match"])
         verrou = f"{cal:%H:%M}" if cal else t["verrou"]  # scheduled_at de core.fixture d'abord, sinon l'heure du brief
@@ -398,6 +465,9 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         else:
             etat, prio = "saisis la tactique maintenant", 1
         detail = f"heure limite du verrou {verrou or 'inconnue'}"
+        if test and t["type"] == "amical" and t["date"] == am["date"] and meme_match(t["match"], am["match"]):
+            detail = f"{apres} ; {detail} ; {apres_exports}"
+            test = None  # ligne du test posée sur celle du brief
         if t["preuves"]:
             detail += " ; le test est perdu si : " + " ; ".join(propre(p.rstrip(".")) for p in t["preuves"])
         if t["vieux"]:
@@ -407,6 +477,13 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         couverts.append(t["match"])
         if reste:
             restes.remove(reste)
+    if test:  # amical sans brief du jour : la ligne vient de core.fixture et du fichier d'expériences
+        e, niveau, saisi = test
+        etat = f"{texte_test(e, niveau)} saisi" if saisi else f"saisis le {texte_test(e, niveau)}"
+        ajoute(am["limite"], 1, f"Amical contre {am['match']} ({jour_fr(am['date'])}) : {etat}",
+               f"heure limite du verrou {am['limite']:%H:%M} ; réglage du test à la place de celui du brief ; {apres_exports}",
+               "docs/attentes/experiences-amicales-basketvibe.yaml, core.fixture")
+        couverts.append(am["match"])
     for r in restes:  # reste à faire sans brief du jour
         limite = dt.datetime.combine(r["date"], dt.time.fromisoformat(r["heure"])) if r["date"] and r["heure"] else None
         couverts.append(r["match"])
@@ -438,6 +515,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for r in lignes_de(donnees, "gold.bv_agenda"):
         d = r["day"] if isinstance(r["day"], dt.date) else dt.date.fromisoformat(str(r["day"])[:10])
         h = heure(r["at_time"])
+        cal, r["action"] = recaler(donnees, d, h, r["category"], r["action"])  # H6 : coup d'envoi + décalage
+        h = f"{cal:%H:%M}" if cal else h
         if not (d == jour or (d == jour + dt.timedelta(days=1) and maintenant.hour >= 18 and h and h < "10:00")):
             continue
         if r["category"] in ("ligue", "amical") and any(norm(c).split()[0] in norm(r["action"]) for c in couverts if c):
