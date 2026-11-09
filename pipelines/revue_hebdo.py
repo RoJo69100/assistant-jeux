@@ -167,8 +167,25 @@ def sec_experiences(experiences, joues, jour):
     return t + [""]
 
 
+def sec_a_conclure(experiences, joues):
+    """S3 (étape 6b) : expériences dont les amicaux vérifiés atteignent le visé ; aucun verdict n'est écrit."""
+    t = ["## 5. Expériences à conclure"]
+    if experiences is None or joues is None:
+        return t + ["donnée manquante : fichier d'expériences ou gold.bv_amical_reglage illisible", ""]
+    v = auj.verifier(experiences, joues)
+    pretes = [e for e in experiences["file"] if v[e["id"]]["verifies"] >= int(e["amicaux_vises"])]
+    source = " — source : fichier d'expériences (clé lecons) × gold.bv_amical_reglage ; verdict non écrit"
+    if not pretes:
+        t.append(f"aucune expérience à conclure (0 sur {len(experiences['file'])} au nombre visé d'amicaux vérifiés)" + source)
+    for i, e in enumerate(pretes):
+        lecons = ", ".join(e.get("lecons") or []) or "aucune (leçon à créer, voir le fichier d'expériences)"
+        t.append(f"verdict à produire : {e['id']}, n = {v[e['id']]['verifies']}, leçons {lecons}"
+                 + (source if i == len(pretes) - 1 else ""))
+    return t + [""]
+
+
 def sec_donnees(couverture, precedent):
-    t = ["## 5. Données non collectées"]
+    t = ["## 6. Données non collectées"]
     if not couverture:
         return t + ["donnée manquante : gold.bv_couverture_pages illisible", ""], None
     n, types = int(couverture[0]["non_lus"]), int(couverture[0]["types"])
@@ -195,7 +212,7 @@ def lire_parametres(texte):
 
 
 def sec_parametres(parametres, params):
-    t = ["## 6. Paramètres écrits à la main"]
+    t = ["## 7. Paramètres écrits à la main"]
     if not parametres:
         return t + ["donnée manquante : tableau « Paramètres écrits à la main » absent du playbook", ""]
     cles = {p["key"]: p for p in params or []}
@@ -237,6 +254,7 @@ def page(donnees, jour, experiences, parametres, precedent):
     t += sec_lecons(donnees.get("lecons"), jour, precedent)
     t += sec_matchs(donnees.get("matchs"))
     t += sec_experiences(experiences, donnees.get("amical_reglage"), jour)
+    t += sec_a_conclure(experiences, donnees.get("amical_reglage"))
     d, non_lus = sec_donnees(donnees.get("couverture"), precedent)
     t += d
     t += sec_parametres(parametres, donnees.get("params"))

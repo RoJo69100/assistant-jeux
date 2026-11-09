@@ -76,6 +76,32 @@ def cas():
         "E1 0 vérifié sur 4" in e0 and "étude" not in e0
     yield "R5 absent : fichier d'expériences illisible = donnée manquante", "donnée manquante" in txt(r.sec_experiences(None, J, JOUR))
 
+    # S2 (6b) : clé `lecons` du fichier d'expériences réel
+    vrai = r.src.lire_experiences(Path(tempfile.gettempdir()) / "aucun-registre", LUNDI)
+    lec = {e["id"]: e.get("lecons") for e in vrai["file"]}
+    yield "S2 présent : E1 relie L-004, L-008, L-011#2, L-015, L-021 ; E2 relie L-002, L-020, L-025", \
+        lec["E1"] == ["L-004", "L-008", "L-011#2", "L-015", "L-021"] and lec["E2"] == ["L-002", "L-020", "L-025"]
+    yield "S2 absent : E3 et E4 sans leçon (liste vide, clé présente)", lec["E3"] == [] and lec["E4"] == []
+
+    # S3 (6b) : expériences à conclure
+    X4 = {"file": [{"id": "E1", "amicaux_vises": 2, "joue": {"A": {"agress_cran": 2}}, "ordre": ["A"],
+                    "lecons": ["L-004", "L-008"]},
+                   {"id": "E3", "amicaux_vises": 1, "joue": {}, "ordre": ["A"], "lecons": []}],
+          "faits": [{"id": i, "niveau": "A", "cle": {"nom": n, "date": dt.date(2026, 11, d), "jour": LUNDI, "fichier": "f"},
+                     "jour": LUNDI, "fichier": "f"} for i, n, d in (("E1", "Alpha", 11), ("E1", "Bravo", 12), ("E3", "Charlie", 13))],
+          "debut": dt.date(2026, 11, 10)}
+    J4 = [{"fixture_id": f"f{d}", "match_day": f"2026-11-{d}", "opponent": f"{n} BC", "agress_cran": 2,
+           "primary_quarts": 0, "tir_cran4_joueurs": 0} for n, d in (("Alpha", 11), ("Bravo", 12), ("Charlie", 13))]
+    c = txt(r.sec_a_conclure(X4, J4))
+    yield "S3 présent : « verdict à produire : E1, n = 2, leçons L-004, L-008 »", \
+        "verdict à produire : E1, n = 2, leçons L-004, L-008" in c
+    yield "S3 présent, sans leçon : E3 dit « leçon à créer »", "verdict à produire : E3, n = 1, leçons aucune (leçon à créer" in c
+    c0 = txt(r.sec_a_conclure(X4, J4[:1]))
+    yield "S3 absent (E1 à 1 sur 2, E3 non exporté) : « aucune expérience à conclure »", \
+        "aucune expérience à conclure (0 sur 2" in c0 and "verdict à produire" not in c0
+    yield "S3 absent : réglage non conforme (cran 4 au lieu de 2) = pas de verdict pour E1", \
+        "E1" not in txt(r.sec_a_conclure(X4, [dict(j, agress_cran=4) for j in J4[:2]]))
+
     # R6 : données
     d6, n = r.sec_donnees([{"non_lus": 90, "types": 126}], {"jour": "08/11", "non_lus": 93})
     yield "R6 présent : 90 non lus sur 126, écart −3 avec l'instantané", \
