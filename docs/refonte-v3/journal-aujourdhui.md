@@ -77,3 +77,4 @@ Constat avant le branchement : `basketvibe-aujourdhui` ne citait pas `pipelines/
 | 2026-11-06 21:29 | hockeynation temps 1 (2026-11-06) | 16.9 | 8 |
 | 2026-11-06 21:30 | hockeynation temps 2 (2026-11-06) | 18.1 | 8 |
 | 2026-11-09 09:17 | aujourd'hui | 20.2 | 14 |
+| 2026-11-09 10:35 | aujourd'hui | 14.4 | 14 |
