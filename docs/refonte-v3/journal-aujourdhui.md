@@ -284,6 +284,18 @@ Réponses : **09/11** — amical Garden City (44f3e0f3) `finished` 104-120 dans 
 - Knight Jays absent : aucune page du match en bronze avant 09/11 14:26 UTC (première capture de 92fe979b à 14:26:16), et la branche 3 ne garde que `status = 'scheduled'` : un amical fini, non exporté, présent dans la liste (finished 86-104), est jeté. Depuis le réexport de 14:26, il est dans `core.fixture` (joué, L).
 - Coupe du 12/11 absente : aucune branche ne lit la liste de coupe pour un match non exporté (branche 2 = ligue seulement). Preuve : `core.fixture` coupe = 4 lignes, toutes ≤ 31/10.
 
+**J3 (2026-11-09 16:20 Paris).** Migration `sql/core/023_calendrier_pages.sql` (connecteur, `core_023_calendrier_pages`) : deux tables de configuration, `core.calendrier_page` (6 types de page : listes amicaux, coupe, ligue ; aperçus ligue, amical, coupe — motif d'URL, chemin, compétition, statuts « joué », minutes de verrou et leur source) et `core.calendrier_champ` (le tableau « champ de la page → colonne », 69 lignes), et une vue générique `silver.calendrier` (dernière valeur non nulle par champ ; coup d'envoi = instant ISO de la page, sinon jour + heure locale dans le fuseau lu ; sans fuseau : null). Puis `adapt.basketvibe_fixture` (`sql/adapters/basketvibe.sql`, migration `adapt_basketvibe_fixture_calendrier`) : `scheduled_at`, `played`, score et résultat complétés depuis `silver.calendrier`, `extras.verrou_at` / `fuseau_lu` / `source_heure`, et une 4ᵉ branche pour les matchs connus seulement d'une page calendrier. Un autre jeu : des lignes dans les deux tables, et son adaptateur lit `silver.calendrier where game = '<jeu>'` (le lien « mon équipe » reste dans l'adaptateur). Non fait (hors écritures autorisées) : lignes `core.page_reader` pour que `gold.bv_couverture_pages` voie ces pages lues.
+
+**J4.** Avant / après (`core.fixture`, BasketVibe) :
+
+| compétition | lignes avant | heure avant | joués avant | lignes après | heure après | joués après |
+|---|---|---|---|---|---|---|
+| amical | 38 | 9 | 29 | 40 | 40 | 31 |
+| coupe | 4 | 0 | 2 | 7 | 7 | 6 |
+| ligue | 44 | 0 | 25 | 44 | 26 | 25 |
+
+Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligue n'a pas d'heure ; jamais supposée). Lignes : 86 → 91, **0 disparue** (comparaison des `fixture_id`), 5 nouvelles (coupe Blood Wolves 13/09, Reims Monarchs 01/11, Stare Kotlety 12/11 ; amicaux Woodlands Wizards 14/10, Mallorca Waves 28/10). Faits : Garden City 09/11 joué, L, 08:00 Paris ; ligue J4 Naked Spartans 09/11 20:00 Paris, verrou 19:45 ; Knight Jays 07/11 joué, L, 08:00, verrou 07:45 ; coupe Stare Kotlety 12/11 20:00 Paris (fuseau lu : UTC), verrou 20:00. Coupe PSG 29/10 et Ploppers 31/10 passent joués (W). `test_aujourdhui.py` : 123/123.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |

@@ -60,6 +60,24 @@ scheduled as (
   select f.*
   from silver.bv_fixtures f
   where f.is_mine and not exists (select 1 from played p where p.fixture_id = f.fixture_id)
+),
+cal as (
+  -- Calendrier lu dans les pages (sql/core/023_calendrier_pages.sql) : coup d'envoi UTC avec le fuseau de la page,
+  -- statut, score ; seulement mes matchs.
+  select c.*, case when c.dom_id = (select team_id from mine) then c.score_dom else c.score_ext end as cal_my,
+              case when c.dom_id = (select team_id from mine) then c.score_ext else c.score_dom end as cal_opp
+  from silver.calendrier c
+  where c.game = 'basketvibe' and (select team_id from mine) in (c.dom_id, c.ext_id)
+),
+amis as (
+  -- Amicaux programmés : dernière capture de la liste des amicaux (kickoff_at en UTC dans l'API).
+  select x
+  from (select a.body from silver.bv_api a
+        where a.endpoint ~ '^/teams/[0-9a-f-]{36}/friendlies$'
+        order by a.captured_at desc limit 1) a,
+       jsonb_array_elements(a.body -> 'friendlies') x
+  where x ->> 'status' = 'scheduled'
+    and not exists (select 1 from played p where p.fixture_id::text = x ->> 'id')
 )
 select
   'basketvibe'::text                                   as game,
@@ -70,28 +88,38 @@ select
   p.round_number                                       as round_no,
   case when p.competition = 'league' then 22 end       as rounds_total,  -- core.game_params rounds_total
   p.match_day                                          as day,
-  null::timestamptz                                    as scheduled_at,  -- fuseau de kickoff_time non sourcé ; connu seulement pour les amicaux programmés
-  p.status = 'finished'                                as played,
-  case p.my_side when 'home' then p.home_score else p.away_score end as my_score,
-  case p.my_side when 'home' then p.away_score else p.home_score end as opp_score,
-  p.my_result                                          as my_result,
+  c.coup_envoi_utc                                     as scheduled_at,  -- fuseau lu dans la page (silver.calendrier), null sinon
+  p.status = 'finished' or coalesce(c.joue, false)     as played,
+  coalesce(case p.my_side when 'home' then p.home_score else p.away_score end, case when c.joue then c.cal_my end) as my_score,
+  coalesce(case p.my_side when 'home' then p.away_score else p.home_score end, case when c.joue then c.cal_opp end) as opp_score,
+  coalesce(p.my_result, case when c.joue and c.cal_my is not null and c.cal_opp is not null
+                             then case when c.cal_my > c.cal_opp then 'W' else 'L' end end) as my_result,
   case p.my_side when 'home' then p.away_team else p.home_team end   as opponent,
   p.my_side = 'home'                                   as home,
   jsonb_build_object('match_id', p.match_id, 'season_id', p.season_id, 'status', p.status,
                      'kickoff_time', p.kickoff_time, 'is_walkover', p.is_walkover,
-                     'overtime_periods', p.overtime_periods, 'source', 'bv_matches') as extras
+                     'overtime_periods', p.overtime_periods, 'source', 'bv_matches')
+    || jsonb_strip_nulls(jsonb_build_object('verrou_at', c.coup_envoi_utc - make_interval(mins => c.verrou_minutes),
+                                            'fuseau_lu', c.fuseau_lu, 'source_heure', c.source_heure,
+                                            'statut_calendrier', c.statut, 'verrou_source', c.verrou_source)) as extras
 from played p
+left join cal c on c.fixture_id = p.fixture_id::text
 union all
 select
   'basketvibe', (select team_id from mine), s.fixture_id::text, 'ligue', s.round_number, 22, s.match_day,
-  null::timestamptz, s.status = 'finished',
-  null::int, null::int, null::text,  -- score et résultat seulement depuis bv_matches (R-9)
+  c.coup_envoi_utc, s.status = 'finished' or coalesce(c.joue, false),
+  case when c.joue then c.cal_my end, case when c.joue then c.cal_opp end,  -- score de la page calendrier (R-9 : base, jamais saisi)
+  case when c.joue and c.cal_my is not null and c.cal_opp is not null
+       then case when c.cal_my > c.cal_opp then 'W' else 'L' end end,
   case when s.home_team_id::text = (select team_id from mine) then s.away_team else s.home_team end,
   s.home_team_id::text = (select team_id from mine),
   jsonb_build_object('match_id', s.match_id, 'season_id', s.season_id, 'status', s.status, 'source', 'bv_fixtures')
+    || jsonb_strip_nulls(jsonb_build_object('verrou_at', c.coup_envoi_utc - make_interval(mins => c.verrou_minutes),
+                                            'fuseau_lu', c.fuseau_lu, 'source_heure', c.source_heure,
+                                            'statut_calendrier', c.statut, 'verrou_source', c.verrou_source))
 from scheduled s
+left join cal c on c.fixture_id = s.fixture_id::text
 union all
--- Amicaux programmés : dernière capture de la liste des amicaux (kickoff_at en UTC dans l'API).
 select
   'basketvibe', (select team_id from mine), x ->> 'id', 'amical', null::int, null::int,
   ((x ->> 'kickoff_at')::timestamptz at time zone 'Europe/Paris')::date,  -- fuseau_affichage (match_day = jour de l'hôte, dans extras)
@@ -101,12 +129,29 @@ select
   x ->> 'home_team_id' = (select team_id from mine),
   jsonb_build_object('status', x ->> 'status', 'match_day', x ->> 'match_day', 'has_saved_match_tactics', (x ->> 'has_saved_match_tactics')::boolean,
                      'source', 'bv_api friendlies')
-from (select a.body from silver.bv_api a
-      where a.endpoint ~ '^/teams/[0-9a-f-]{36}/friendlies$'
-      order by a.captured_at desc limit 1) a,
-     jsonb_array_elements(a.body -> 'friendlies') x
-where x ->> 'status' = 'scheduled'
-  and not exists (select 1 from played p where p.fixture_id::text = x ->> 'id');
+    || jsonb_strip_nulls(jsonb_build_object('verrou_at', c.coup_envoi_utc - make_interval(mins => c.verrou_minutes),
+                                            'fuseau_lu', c.fuseau_lu, 'source_heure', c.source_heure, 'verrou_source', c.verrou_source))
+from amis a
+left join cal c on c.fixture_id = a.x ->> 'id'
+union all
+-- Matchs connus seulement des pages calendrier (coupe programmée, amical fini non exporté…).
+select
+  'basketvibe', (select team_id from mine), c.fixture_id, c.competition_kind, c.tour,
+  case when c.competition_kind = 'ligue' then 22 end, c.jour,
+  c.coup_envoi_utc, c.joue,
+  case when c.joue then c.cal_my end, case when c.joue then c.cal_opp end,
+  case when c.joue and c.cal_my is not null and c.cal_opp is not null
+       then case when c.cal_my > c.cal_opp then 'W' else 'L' end end,
+  case when c.dom_id = (select team_id from mine) then c.ext_nom else c.dom_nom end,
+  c.dom_id = (select team_id from mine),
+  jsonb_strip_nulls(jsonb_build_object('match_id', c.match_id, 'status', c.statut, 'competition_nom', c.competition_nom,
+                                       'verrou_at', c.coup_envoi_utc - make_interval(mins => c.verrou_minutes),
+                                       'fuseau_lu', c.fuseau_lu, 'source_heure', c.source_heure,
+                                       'verrou_source', c.verrou_source, 'source', 'calendrier'))
+from cal c
+where not exists (select 1 from played p where p.fixture_id::text = c.fixture_id)
+  and not exists (select 1 from scheduled s where s.fixture_id::text = c.fixture_id)
+  and not exists (select 1 from amis a where a.x ->> 'id' = c.fixture_id);
 
 -- Classement : une ligne par club et par relevé de ma ligue (relevés sans mon club écartés : autre ligue).
 create or replace view adapt.basketvibe_standing with (security_invoker = true) as
