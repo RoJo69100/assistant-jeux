@@ -377,6 +377,19 @@ Résultat : `club | decent | 1 | 1 | 10250` ; `player | decent | 1 | 1 | 10250` 
 - `fusion_main.py` : `origin/main == HEAD` (c6cb630). `fin_etape.py` : 0 commit d'avance, tous les tests verts.
 - Hors périmètre, non commité : `outputs/basketvibe/aujourdhui-2026-11-09.md`.
 
+## Plan du jour, étape 5g (critères écrits le 2026-11-09 16:35 Paris, avant le code)
+
+Contexte : l'avancement des expériences amicales E1 à E4 (`docs/attentes/experiences-amicales-basketvibe.yaml`) compte les lignes `[expérience=<id>:<niveau>]` du registre sans vérifier que le réglage a été joué ; la page « réglages utilisés » (`match-tactics-used`) arrive en bronze pour chaque amical exporté. Écritures en base autorisées : une migration additive (nouvelle vue, aucun drop) et des lignes de configuration avec leur source.
+
+| # | Critère |
+|---|---|
+| M1 | Constat : où et comment les réglages utilisés d'un amical sont lus aujourd'hui (`silver.bv_fixture_api`, `gold.bv_match_tactics_used` ou autre). Pour les 3 derniers amicaux joués, tableau : match, quart-temps, agressivité par joueur, focus offensif, zone. Une lecture existe déjà → la nommer et ne pas en créer une deuxième. |
+| M2 | Si le niveau d'agressivité joué est lisible par match : vue `gold.bv_amical_reglage` (additive, `security_invoker`, `grant select … to assistant_ro` comme les autres vues gold) : match, date, niveau uniforme (oui/non et valeur), focus offensif, zone. Sinon, dire ce qui manque. |
+| M3 | Le plan du jour distingue, pour chaque expérience : déclarés, joués, vérifiés. La ligne dit « E1 : 1 vérifié sur 4, 1 déclaré non vérifié (match à exporter) » ; un amical déclaré dont le réglage joué ne correspond pas au niveau demandé est signalé « réglage joué ≠ réglage du test ». Le passage à l'expérience suivante ne compte que les amicaux vérifiés. |
+| M4 | Les amicaux joués avant le début du test E1 ne comptent pour aucune expérience ; rien n'est écrit rétroactivement dans le registre. |
+| M5 | Tests figés, un cas présent et un cas absent pour M3 ; sortie ≤ 8 lignes, durée ≤ 15 s ; les 167 tests existants restent verts. |
+| M6 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée telle quelle). |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -411,3 +424,4 @@ Résultat : `club | decent | 1 | 1 | 10250` ; `player | decent | 1 | 1 | 10250` 
 | 2026-11-09 16:10 | aujourd'hui | 7.6 | 25 |
 | 2026-11-09 16:17 | aujourd'hui | 7.8 | 25 |
 | 2026-11-09 16:21 | aujourd'hui | 9.6 | 27 |
+| 2026-11-09 16:26 | aujourd'hui | 9.3 | 27 |
