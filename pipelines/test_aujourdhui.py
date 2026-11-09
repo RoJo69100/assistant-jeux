@@ -442,6 +442,22 @@ def cas_etape5a():
     t = plan5a(objectifs=(COLS_OBJ, [amical, serie[1][0]]))
     yield "A3 amicaux « tester » et série seulement : aucune ligne jeunes (absent)", \
         "minutes aux jeunes" not in t and "ni titre acquis ni rien à jouer" in t and "règle non écrite — à valider (le script" not in t
+    # A4 : solde projeté sous une semaine de masse salariale
+    COLS_FH = ["balance", "weekly_result_est", "weekly_salaries", "weekly_personnel", "weekly_academy"]
+    fh = (COLS_FH, [(960181, 97137, 294625, 60000, 100000)])
+    COLS_PR = ["season_end", "balance_end_projected", "tickets_left", "sponsor_left", "costs_left"]
+    t = plan5a(**{"gold.bv_finance_health": fh,
+                  "gold.bv_finance_projection": (COLS_PR, [("2026-12-21", 200000, 2800000, 480000, 2727750)])})
+    l = next((x for x in t.splitlines() if "solde projeté" in x), "")
+    yield "A4 solde projeté 200 000 < une semaine de salaires 294 625 : ligne Finances avec la cause (présent)", \
+        "Finances : solde projeté au 21/12 de 200 000, sous une semaine de salaires (294 625)" in t \
+        and "cause : charges restantes 2 727 750 contre recettes restantes 3 280 000" in t and "salaires (294 625 par semaine)" in t
+    t = plan5a(**{"gold.bv_finance_health": fh,
+                  "gold.bv_finance_projection": (COLS_PR, [("2026-12-21", -50000, 0, 0, 500000)])})
+    yield "A4 solde projeté négatif : ligne Finances", "solde projeté au 21/12 de -50 000" in t
+    t = plan5a(**{"gold.bv_finance_health": fh,
+                  "gold.bv_finance_projection": (COLS_PR, [("2026-12-21", 1512431, 2800000, 480000, 2727750)])})
+    yield "A4 solde projeté 1 512 431 (base du 09/11) : aucune ligne (absent)", "solde projeté" not in t
 
 
 def cas_base():

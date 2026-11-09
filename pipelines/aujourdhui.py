@@ -84,6 +84,9 @@ REQUETES = {
     "dernier_officiel": "select day, competition_kind, opponent, my_result from core.fixture where game = 'basketvibe' "
                         "and played and my_result is not null and competition_kind <> 'amical' "
                         "order by day desc, scheduled_at desc nulls last limit 1",
+    # A4 : solde projeté en fin de saison
+    "gold.bv_finance_projection": "select season_end, balance_end_projected, tickets_left, sponsor_left, costs_left "
+                                  "from gold.bv_finance_projection limit 1",
 }
 # Vues rejouables sur un jour passé : requête de remplacement avec le paramètre {jour}.
 REJEU = {
@@ -313,6 +316,31 @@ def minutes_jeunes(donnees, erreurs, ajoute, garder):
            propre(r["raison"]), "gold.match_objective")
 
 
+def solde_projete(donnees, erreurs, fh, ajoute):
+    """A4 : ligne Finances si le solde projeté de fin de saison est négatif ou inférieur à une semaine de masse salariale
+    (`weekly_salaries` de gold.bv_finance_health, aucun seuil écrit à la main), avec la cause. Source absente : rien."""
+    if "gold.bv_finance_projection" not in donnees:
+        return
+    m = manque(donnees, erreurs, "gold.bv_finance_projection", "Finances")
+    if m:
+        ajoute(None, 3, m)
+        return
+    p = next(iter(lignes_de(donnees, "gold.bv_finance_projection")), None)
+    if p is None or p.get("balance_end_projected") is None or fh.get("weekly_salaries") is None:
+        return
+    fin, semaine = float(p["balance_end_projected"]), float(fh["weekly_salaries"])
+    if fin >= 0 and fin >= semaine:
+        return
+    recettes = float(p["tickets_left"] or 0) + float(p["sponsor_left"] or 0)
+    charge = max((("salaires", fh.get("weekly_salaries")), ("personnel", fh.get("weekly_personnel")),
+                  ("académie", fh.get("weekly_academy"))), key=lambda x: float(x[1] or 0))
+    ajoute(None, 1, f"Finances : solde projeté au {str(p['season_end'])[8:10]}/{str(p['season_end'])[5:7]} de {montant(fin)}, "
+                    f"sous une semaine de salaires ({montant(semaine)})",
+           f"cause : charges restantes {montant(p['costs_left'] or 0)} contre recettes restantes {montant(recettes)} ; "
+           f"plus grosse charge : {charge[0]} ({montant(charge[1] or 0)} par semaine)",
+           "gold.bv_finance_projection, gold.bv_finance_health")
+
+
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte],
     'infos': [texte]} ; infos = enchères terminées, une ligne chacune, rangées dans « Autres points »."""
@@ -504,6 +532,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    f"résultat hebdomadaire estimé {montant(res)}", "gold.bv_finance_health")
         else:
             garder.append(f"finances : seuil non atteint (résultat hebdo estimé +{montant(res)}, la réduction de charges commence sous 0)")
+        solde_projete(donnees, erreurs, fh[0], ajoute)
     m = manque(donnees, erreurs, "gold.bv_market_bargains", "Marché (enchères)")
     if m:
         ajoute(None, 2, m)
