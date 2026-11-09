@@ -206,6 +206,34 @@ Réponses de l'utilisateur : 1076 = pas misé ; E1 = oui, agressivité défensiv
 
 **F1 (2026-11-09 15:24 Paris).** `decision.py statut 1076 rejected` → « ✅ D-1076 : rejected » ; `decision.py liste basketvibe` : 9 done, 18 proposed, 3 rejected (1072, 1076, 1088). Pronostic de cause F3, écrit avant les requêtes : **(b)** pages arrivées en bronze, non lues par silver (l'utilisateur dit avoir exporté ; la ligue du 07/11 est lue). Faux si `bronze.raw_pages` n'a aucune page du match.
 
+**F3-F5, résultats (2026-11-09 15:40 Paris).** Pronostic (b) **faux**. Cause retenue : **(a) aucune page de ce match en bronze**, avec (d) en conséquence (aucune fixture « Knight Jays »).
+
+Requêtes (via `python -I pipelines/sql.py`) :
+- (b) écarté — silver ne manque rien de ce qui est arrivé : `silver.bv_matches` depuis le 01/11, aucune ligne dont `home_team`/`away_team` contient « Knight » ou « Brasa » (0 ligne) ; chaque amical joué de `core.fixture` y est (colonne `sil` = 1 partout).
+- (c) écarté : chaque amical joué de `core.fixture` a 1 ligne dans `gold.bv_match_report` (F4). La vue joint `gold.bv_match_team_totals` à `silver.bv_matches` et ne filtre pas la compétition (`sql/gold/003_bv_match_report.sql`).
+- (d) : `select … from core.fixture where opponent ilike '%knight%' or opponent ilike '%brasa%'` → 0 ligne. Aucun amical daté 07/11 dans `core.fixture` (le 07/11 : seulement la ligue Póvoa). La fixture `17bcb69d` exportée le 07/11 à 12:09 (6 pages : preview, 4 period-box, match-tactics) est **BC Calije, amical du 31/10**, déjà en base : c'est un réexport, pas Knight Jays.
+- (a) : amicaux avec pages en bronze depuis le 04/11 (`bronze.raw_pages`, `source_url like '%friendlies/%'`) : baker street (11/04), NY Lighters (11/03), Istanbul Cobras (10/30), /HAVEX/ (11/05), The Bombers (11/06), BC Calije (10/31, réexport 07/11), New York City Cyclones (11/08), Garden City (11/09, 2 pages, `played` = faux). Aucun Knight Jays.
+- Limite : le garde-fou de `sql.py` refuse toute recherche dans le texte des payloads ; je n'ai pas pu chercher « Knight Jays » dans les pages elles-mêmes (un autre libellé d'adversaire reste possible).
+
+F4 (amicaux joués de `core.fixture`, 10 derniers jours, tous présents dans `gold.bv_match_report`) :
+
+| jour | adversaire | joué | résultat | dans le rapport |
+|---|---|---|---|---|
+| 2026-10-30 | Istanbul Cobras | oui | W | oui |
+| 2026-10-31 | BC Calije | oui | L | oui |
+| 2026-11-01 | Granada Sentinel | oui | W | oui |
+| 2026-11-02 | Galit sa gobyerno | oui | L | oui |
+| 2026-11-03 | NY Lighters | oui | L | oui |
+| 2026-11-04 | baker street | oui | W | oui |
+| 2026-11-05 | /HAVEX/ | oui | L | oui |
+| 2026-11-06 | The Bombers | oui | L | oui |
+| 2026-11-08 | New York City Cyclones | oui | L | oui |
+| 2026-11-09 | Garden City | non (pas encore joué en base) | — | non |
+
+Aucun amical joué n'est absent du rapport. Le rapport est complet : il manque seulement des matchs qui n'existent pas en base.
+
+F5 (cause a) : pages à réexporter pour l'amical Knight Jays du 07/11 — celles qu'un export d'amical produit (vues pour BC Calije) : l'**aperçu** (`friendlies/<id>/preview`), les **4 box scores par quart-temps** (`period-box`, Q1 à Q4) et les **réglages utilisés** (`match-tactics`). Je ne connais pas la page « play-by-play » : je ne l'ai vue sous aucun export d'amical, donc je ne la cite pas. Condition : ce match doit exister dans la liste des amicaux du jeu. Si le jeu ne montre aucun amical à cette date contre Knight Jays, 1075 décrit un match qui n'a pas eu lieu et la décision reste « en attente » (pas de correction de vue). Même constat pour 1099 : « Brasa Bombe » (09/11) est absent de `core.fixture`, qui ne contient que Garden City (09/11, non joué) ; le nom de l'adversaire dans 1099 est à vérifier. Ce qui prouvera que j'ai tort : un export d'amical 07/11 qui arrive en bronze et que `gold.bv_match_report` lit.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
