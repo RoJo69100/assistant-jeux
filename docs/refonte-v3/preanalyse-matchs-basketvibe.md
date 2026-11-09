@@ -8,15 +8,15 @@ Moteur actuel de la ligue = v4 (G2). Les nombres sont des matchs (question 2 : j
 
 | # | Question | n disponible : ligue v4 (G2) ; meilleur autre groupe | n requis | Verdict | Décision possible aujourd'hui |
 |---|---|---|---|---|---|
-| 1 | Ce qui sépare victoires et défaites (eFG, rebonds offensifs, pertes de balle, lancers francs) | 5 ; 22 en ligue v3 (G1, historique) | 40 | n trop petit | Aucune. Indice v3 : eFG r = 0,92 [0,77 ; 0,97] (presque tautologique : un tir réussi est un point), rebonds offensifs 0,77 [0,42 ; 0,92], pertes de balle −0,59 [−0,85 ; −0,10], lancers francs 0,18 [−0,37 ; 0,64] |
-| 2a | Minutes lourdes (≥ 27 min avant le Q4) : évaluation par minute au Q4 | 13 ; 32 en amical v4 (G4) | 783 (σ de G2) ; 190 (σ de G4) | n trop petit | Aucune. Indice, amical v4 : −56,6 % [−84,5 ; −28,7] contre +14,0 % [−19,3 ; 47,4] pour les joueurs moins sollicités |
-| 2b | Fatigue du matin et évaluation par minute (nos joueurs) | 29 ; 107 en amical v4 (G4) | 103 | Ligue v4 : n trop petit. **Amical v4 : décidable, effet absent** | Amical v4 seulement : r = −0,04 [−0,26 ; 0,17] pour une fatigue de 0,18 à 24,6 : un effet de corrélation d'au moins 0,3 est écarté dans cette plage |
-| 3 | Rotation (joueurs utilisés, minutes des cinq premiers) | 5 ; 15 en amical v4 | 56 | n trop petit | Aucune. Signe opposé en coupe v4 (joueurs utilisés −0,67, contre +0,58 à +0,92 dans les autres groupes) ; un match déjà gagné vide le banc (cause inverse) |
-| 4 | Tirs à 3 points : (i) points par tir à 3 moins par tir à 2 ; (ii) part de tirs à 3 contre marge | 5 ; 22 en ligue v3 | (i) 50 (σ de G2) ; (ii) 56 | n trop petit | Aucune. Indice : (i) négatif dans les 5 groupes (−0,13 à −0,31 point par tir) |
-| 5 | Avantage du terrain | 5 ; 22 en ligue v3 | (a) 598 (σ de G2) ; (b) 236 | n trop petit | Aucune, et hors de portée en ligue v4 cette saison (132 matchs au total) |
-| 6 | Points de marge par point de force d'équipe | 5 sur 5 ; 4 sur 22 en ligue v3 (force connue dès le 18/10) | 30 | n trop petit (ligue v3 : n < 5, aucun calcul) | Aucune. La force d'équipe de la base (`club_strength`) n'est pas la PS : à ne pas utiliser pour un achat |
+| 1 | Ce qui sépare victoires et défaites (eFG, rebonds offensifs, pertes de balle, lancers francs) | 16 en ligue v4 (3 à nous, 13 des autres, relevé de 11:00) ; 22 en ligue v3 (G1, historique) | 40 | n trop petit | Aucune. Ligue v4 : eFG r = 0,97 [0,90 ; 0,99] (presque tautologique : un tir réussi est un point), rebonds offensifs 0,60 [0,00 ; 0,88], pertes de balle −0,46 [−0,83 ; 0,19], lancers francs −0,13 [−0,68 ; 0,51] ; ligue v3 : eFG 0,92 [0,77 ; 0,97], rebonds offensifs 0,77 [0,42 ; 0,92], pertes −0,59 [−0,85 ; −0,10], lancers francs 0,18 [−0,37 ; 0,64] |
+| 2a | Minutes lourdes (≥ 27 min avant le Q4) : évaluation par minute au Q4 | 33 en ligue v4 ; 32 en amical v4 (G4) | 397 (écart-type de la ligue v4) ; 190 (écart-type de l'amical v4) | n trop petit | Aucune. Ligue v4 : −42,1 % [−81,7 ; −2,4] contre −1,0 % [−23,2 ; 21,2] pour les joueurs moins sollicités ; amical v4 : −56,6 % [−84,5 ; −28,7] contre +14,0 % [−19,3 ; 47,4] |
+| 2b | Fatigue du matin et évaluation par minute (nos joueurs) | 29 en ligue v4 ; 107 en amical v4 (G4) | 103 | Ligue v4 : n trop petit. **Amical v4 : décidable, effet absent** | **Historique, non applicable aux amicaux v5** (le moteur des amicaux depuis le 28/10) ni à la ligue : en amical v4, r = −0,04 [−0,26 ; 0,17] pour une fatigue de 0,18 à 24,6 : un effet de corrélation d'au moins 0,3 est écarté dans cette plage |
+| 3 | Rotation (joueurs utilisés, minutes des cinq premiers) | 16 en ligue v4 ; 15 en amical v4 | 56 | n trop petit | Aucune. Ligue v4 : joueurs utilisés 0,50 [−0,07 ; 0,83], part des cinq premiers −0,69 [−0,90 ; −0,23]. Signe opposé en coupe v4 (joueurs utilisés −0,67, contre +0,58 à +0,92 dans les autres groupes) ; un match déjà gagné vide le banc (cause inverse) |
+| 4 | Tirs à 3 points : (i) points par tir à 3 moins par tir à 2 ; (ii) part de tirs à 3 contre marge | 16 en ligue v4 ; 22 en ligue v3 | (i) 57 (écart-type de la ligue v4) ; (ii) 56 | n trop petit | Aucune. Indice : (i) négatif dans les 5 groupes (−0,13 à −0,31 point par tir), dont la ligue v4 : −0,168 [−0,320 ; −0,017] |
+| 5 | Avantage du terrain | 16 en ligue v4 ; **264 en ligue v3, scores seuls** | Ligue v4 : (a) 990 (écart-type de la ligue v4) ; (b) 236. Ligue v3 : (a) 236 ; (b) 640 | Ligue v4 : n trop petit. **Ligue v3 : victoires à domicile décidable, effet absent** ; marge : n trop petit | **Historique, non transférable au v4** : 131 victoires à domicile sur 264 = 49,6 % [42,8 ; 56,5], p exact 0,951 : un avantage de 10 points de taux de victoire est écarté en v3 ; marge domicile − extérieur −0,42 point [−3,84 ; 2,99] (σ 24,6 ; n requis 640 non atteint). Rien pour la ligue v4 |
+| 6 | Points de marge par point de force d'équipe | 10 sur 16 en ligue v4 (force connue pour 10 matchs) ; **228 en ligue v3, scores seuls** (force = moyenne des marges des matchs antérieurs, au moins 3) | 30 | Ligue v4 : n trop petit. **Ligue v3 : décidable, effet présent** | **Historique, non transférable au v4** : r = 0,65 [0,57 ; 0,72], pente 0,88 point de marge par point d'écart de force [0,75 ; 1,02]. La force mesurée est la marge moyenne des matchs passés, pas la PS : à ne pas utiliser pour un achat |
 
-**Lecture honnête** : sur six questions, une seule est décidable (2b, amical v4, effet absent dans une plage de fatigue étroite). Les indices des questions 1 à 4 n'atteignent pas le n requis fixé avant le calcul ; seul l'indice des minutes lourdes (2a) va dans le sens d'une annonce du moteur (fatigue plus punitive en v4), sans en être une preuve.
+**Lecture honnête** : trois résultats sont décidables, aucun ne concerne le moteur actuel de la ligue : (2b) fatigue du matin en amical v4, effet absent, **historique, non applicable aux amicaux v5** ; (5) taux de victoire à domicile en ligue v3, effet absent ; (6) force d'équipe en ligue v3, effet présent. En ligue v4, tous les verdicts restent « n trop petit ». Les indices des questions 1 à 4 n'atteignent pas le n requis fixé avant le calcul ; seul l'indice des minutes lourdes (2a) va dans le sens d'une annonce du moteur (fatigue plus punitive en v4), sans en être une preuve.
 
 ## Étape 1 : inventaire
 
@@ -42,14 +42,16 @@ Requête (sortie ci-dessous) : voir `Annexe A`. Seuls les matchs `finished` de `
 | v3 | ligue | nous | 22 | 07/09 au 26/10 | 11 | 22 (les 2 équipes) | 22 | 22 : la nôtre et celle de l'adversaire | 22 : les nôtres |
 | v3 | amical | nous | 1 | 10/10 | 1 | 1 | 1 | 1 : les deux | 1 : les nôtres |
 | v4 | ligue | nous | 3 | 02/11 au 07/11 | 3 | 3 | 3 | 3 : les deux | 3 : les nôtres |
-| v4 | ligue | autres équipes | 2 | 02/11 au 04/11 | non applicable | 2 (les 2 équipes) | 2 | absente | absents |
+| v4 | ligue | autres équipes | 13 (relevé de 11:00 ; 2 à 10:40) | 02/11 au 07/11 | non applicable | 13 (les 2 équipes) | 13 | absente | absents |
 | v4 | coupe | nous | 2 | 28/10 au 30/10 | 2 | 2 | 2 | 1 sur 2 | 1 sur 2 : les nôtres |
 | v4 | coupe | autres équipes | 8 | 28/10 au 31/10 | non applicable | 8 (les 2 équipes) | 8 | absente | absents |
 | v4 | amical | nous | 16 | 11/10 au 27/10 | 16 | 16 (15 avec les 2 équipes) | 16 | 14 sur 16 : les deux | 14 sur 16 : les nôtres |
 | v5 | amical | nous | 10 | 29/10 au 08/11 | 10 | 10 | 10 | 9 sur 10 : les deux | 9 sur 10 : les nôtres |
-| Total | | | 64 | 07/09 au 08/11 | 56 équipes en tout dans `bv_matches` (07/09 au 09/11) | 64 | 64 | 50 | 50 |
+| Total | | | 75 (64 à 10:40) | 07/09 au 08/11 | 56 équipes en tout dans `bv_matches` à 10:40 (07/09 au 09/11) | 75 | 75 | 50 | 50 |
 
-Matchs sans détail (score seul) : saison 1, ligue, 242 matchs des autres équipes (`silver.bv_fixtures`, aucun dans `silver.bv_matches`) ; saison 2, ligue, 8 matchs terminés des autres équipes sur 10 ; 120 matchs de ligue de la saison 2 programmés. Un match « score seul » ne sert à aucune des six questions.
+Matchs sans détail (score seul) : saison 1, ligue, 242 matchs des autres équipes (`silver.bv_fixtures`, aucun dans `silver.bv_matches`). Saison 2, relevé de 11:00 : 54 matchs de ligue terminés dans trois divisions de 12 équipes (18 par division), dont 16 avec box score (10 dans notre division, 6 dans une autre) et 38 sans (8 dans notre division, 12 et 18 dans les deux autres) ; 114 matchs de ligue restent à jouer par division (132 au total). Un match « score seul » **ne sert pas** aux questions 1 à 4 ni à la question 2 (facteurs, rotation, tirs, minutes, fatigue : il leur faut un box score) ; il **sert aux questions 5 et 6**, qui ne demandent que le score (§ 2.4, résultats à l'étape 3 bis).
+
+**Relevé de 11:00 (mise à jour du tableau ci-dessus, état de 10:40)** : un export a ajouté 11 matchs de ligue v4 d'autres équipes avec box score et play-by-play (5 dans notre division, 6 dans une autre) : la ligue v4 compte maintenant 16 matchs (3 à nous, 13 des autres équipes), le total passe de 64 à 75 matchs. Les verdicts de l'étape 3 sont inchangés (tous « n trop petit » pour la ligue v4) ; les chiffres de la synthèse et de l'annexe C sont ceux de 11:00 ; l'annexe A reste le relevé de 10:40.
 
 ### 1.3 Ce que contient chaque niveau de détail
 - **Score et quarts-temps** : `quarter_scores` pour les 64 matchs (points domicile et extérieur par quart).
@@ -107,52 +109,81 @@ Règles : le verdict suit § 2.1 (n disponible ≥ n requis pour « décidable �
 
 ## Étape 3 : calculs (script `pipelines/preanalyse_matchs_basketvibe.py`, rejouable, 8 s)
 
-Commande : `python -I pipelines/preanalyse_matchs_basketvibe.py --sensibilite`. Sortie complète collée en annexe C (et dans `preanalyse-matchs-basketvibe-sortie.md`). Matchs analysés (box score des deux côtés) : G1 ligue v3 22 ; G2 ligue v4 5 (3 à nous, 2 des autres) ; G3 coupe v4 10 (2 à nous, 8 des autres) ; G4 amical v4 15 ; G5 amical v5 10 (un amical v4 sans les deux côtés est écarté).
+Commande : `python -I pipelines/preanalyse_matchs_basketvibe.py --sensibilite`. Sortie complète collée en annexe C (et dans `preanalyse-matchs-basketvibe-sortie.md`). Matchs analysés (box score des deux côtés) : G1 ligue v3 22 ; G2 ligue v4 16 (3 à nous, 13 des autres ; 5 au relevé de 10:40) ; G3 coupe v4 10 (2 à nous, 8 des autres) ; G4 amical v4 15 ; G5 amical v5 10 (un amical v4 sans les deux côtés est écarté).
 
 **Verdict par question et par groupe** (effet, intervalle, n disponible contre n requis : tableaux de l'annexe C) :
-- **Question 1** (ligue) : G1 et G2 « n trop petit » (22 et 5 contre 40) pour les quatre facteurs.
-- **Question 2(a)** : « n trop petit » partout (13 à 116 joueurs-matchs contre 190 à 783).
+- **Question 1** (ligue) : G1 et G2 « n trop petit » (22 et 16 contre 40) pour les quatre facteurs.
+- **Question 2(a)** : « n trop petit » partout (18 à 116 joueurs-matchs contre 190 à 523).
 - **Question 2(b)** : G1 51, G2 29, G3 12, G5 94 : « n trop petit » ; **G4 107 contre 103 : décidable, effet absent** (r = −0,04 [−0,26 ; 0,17]).
-- **Questions 3 et 4(ii)** : « n trop petit » partout (5 à 22 contre 56).
-- **Question 4(i)** : « n trop petit » partout (5 à 22 contre 39 à 81).
-- **Question 5** : « n trop petit » partout (5 à 22 contre 311 à 848 pour la marge, 236 pour les victoires).
-- **Question 6** : G1 : n = 4 (force d'équipe connue seulement dès le 18/10) : aucun calcul ; G2 : 5 sur 5, « n trop petit ».
+- **Questions 3 et 4(ii)** : « n trop petit » partout (10 à 22 contre 56).
+- **Question 4(i)** : « n trop petit » partout (10 à 22 contre 39 à 81).
+- **Question 5** (box score) : « n trop petit » partout (10 à 22 contre 311 à 990 pour la marge, 236 pour les victoires). Sur les scores seuls de la ligue v3 : étape 3 bis.
+- **Question 6** (box score, force `club_strength`) : G1 : n = 4 (force d'équipe connue seulement dès le 18/10) : aucun calcul ; G2 : 10 sur 16, « n trop petit ». Sur les scores seuls de la ligue v3 : étape 3 bis.
 
 **Lectures à garder en tête avant d'utiliser un chiffre**
 - Le critère écrit avant calcul dit « n trop petit » même quand l'intervalle exclut déjà l'effet minimal. Exemple : eFG en ligue v3, r = 0,92 [0,77 ; 0,97] avec n = 22 contre 40. Ce chiffre est un indice, pas un verdict ; de plus, l'eFG contient les tirs réussis, donc les points : la corrélation avec la marge est presque tautologique.
 - Question 2(a), contrôle hors critères : les joueurs qui jouent 5 à 26 minutes avant le Q4 ne baissent pas au Q4 (G1 −1,3 % [−25,3 ; 22,7] ; G4 +14,0 % [−19,3 ; 47,4]). La baisse des joueurs lourds en amical v4 (−56,6 % [−84,5 ; −28,7], n = 32) et v5 (−43,4 % [−89,9 ; 3,2], n = 24) n'est donc pas un simple effet « le Q4 est plus faible pour tout le monde », mais l'échantillon est petit (190 à 382 requis) et l'écart-type relatif est de 0,7 à 1,4. En ligue v3 : −4,4 % [−27,8 ; 19,1] (n = 116), ce qui va dans le sens de l'annonce « fatigue plus punitive en v4 » ([News 2026-10-17], skill `basketvibe-communaute`) ; ce n'est pas une preuve.
 - Question 2(b) : l'échelle de la fatigue du relevé quotidien n'est pas documentée ; plage observée en amical v4 : 0,18 à 24,63 (médiane 6,47 ; 30 joueurs-matchs au-dessus de 10). En coupe v4 (maximum 0,47) et en amical v5 (maximum 8,84), la plage est trop étroite pour tester quoi que ce soit. « Effet absent » ne vaut que dans la plage observée : les effets annoncés par le moteur (−4 % à une fatigue de 20, −15 % à 40) sont de toute façon trop petits pour être vus avec r ≥ 0,3.
-- Question 5 : l'écart-type de la marge est de 17 à 28 points ; il faudrait 311 à 848 matchs pour mesurer 3 points. Les 22 matchs de la ligue v3 sont tous les nôtres : la marge « domicile − extérieur » mélange l'avantage du terrain et l'écart de force entre nous et chaque adversaire.
-- Question 6 : `club_strength` est un proxy de la force d'équipe dont la définition n'est pas documentée ; la pente en ligue v4 (17,6 points de marge par point de force, [3,5 ; 31,7], 5 matchs) est trop grande pour être crédible sur une étendue de force de 50,8 à 58,4.
+- Question 5 : l'écart-type de la marge est de 17 à 31 points ; il faudrait 311 à 990 matchs pour mesurer 3 points. Les 22 matchs de la ligue v3 sont tous les nôtres : la marge « domicile − extérieur » mélange l'avantage du terrain et l'écart de force entre nous et chaque adversaire.
+- Question 6 : `club_strength` est un proxy de la force d'équipe dont la définition n'est pas documentée ; la pente en ligue v4 (12,6 points de marge par point de force, [2,2 ; 23,0], 10 matchs) est trop grande pour être crédible sur une étendue de force de 50,8 à 58,4.
 - Questions 1, 3, 4 : corrélations entre un écart de statistique et la marge du même match ; elles ne disent pas ce qui cause la victoire (un match gagné d'avance fait jouer le banc, et une équipe qui perd tire plus à 3 points).
+
+## Étape 3 bis : questions 5 et 6 sur les scores seuls (ligue saison 1, moteur v3, historique)
+
+Critères : § 2.4 (commit `c571b30`, avant tout calcul). Script `pipelines/preanalyse_scores_basketvibe.py` (commit `fd8d09c`), tests figés `pipelines/test_preanalyse_scores_basketvibe.py` (25 sur 25 : lois, six matchs aux valeurs calculées à la main, force d'équipe sur quatre équipes et quatre journées, pente et verdicts). Commande : `python -I pipelines/preanalyse_scores_basketvibe.py` (1,8 s, code 0). Sortie complète en annexe D.
+
+264 matchs terminés, 24 équipes (deux divisions de 12), du 07/09 au 26/10, dont 22 à nous et 242 des autres équipes.
+
+| Question | Résultat | n disponible | n requis | Verdict |
+|---|---|---|---|---|
+| 5(a) victoires à domicile | 131 sur 264 = 49,6 % [Wilson à 97,5 % : 42,8 ; 56,5], p exact 0,951 | 264 | 236 | **décidable : effet absent** (aucun avantage de 10 points de taux de victoire) |
+| 5(b) marge domicile − extérieur | −0,42 point [−3,84 ; 2,99], σ = 24,61, p = 0,780 | 264 | 640 | n trop petit (l'intervalle exclut déjà +3 points par le haut, sans atteindre le n requis) |
+| 6 corrélation de l'écart de force avec la marge | r = 0,65 [0,57 ; 0,72], p < 0,0001 | 228 | 30 | **décidable : effet présent** |
+| 6 pente (points de marge par point d'écart de force) | 0,88 [0,75 ; 1,02] | 228 | 30 | **décidable : effet présent** |
+
+Description non retenue pour le verdict : nos matchs seuls, 13 victoires à domicile sur 22 (59,1 %, n trop petit) ; matchs des autres équipes, 118 sur 242 (48,8 %, effet absent). Matchs écartés de la question 6 faute de 3 matchs antérieurs pour une des deux équipes : 36 sur 264 (les trois premières journées).
+
+**Lectures** : (1) moteur v3, **historique, non transférable** à la ligue v4 (fatigue et duels changés) ni aux amicaux v5. (2) Question 5(a) : un avantage du terrain de 10 points de taux de victoire est écarté ; un avantage plus petit (jusqu'à 6,5 points au bord de l'intervalle) ne l'est pas. (3) L'écart-type de la marge est de 24,6 points en v3 : l'écart de talent entre équipes est très grand. (4) Question 6 : la pente de 0,88, proche de 1, vient d'une force définie comme la marge moyenne des matchs passés : elle dit que la marge passée prédit la marge suivante, pas ce que vaut un point de PS (la PS n'est pas mesurée ici). (5) Les matchs d'une même équipe ne sont pas indépendants : les intervalles sont trop étroits.
 
 ## Étape 4 : conclusions
 
 ### (a) Décisions que l'historique permet déjà
-1. **Une seule, limitée aux amicaux v4** : une fatigue du matin dans la plage 0,18 à 24,6 n'explique pas la performance du joueur dans le match (question 2(b), r = −0,04 [−0,26 ; 0,17], n = 107 ≥ 103). Décision : en amical v4, ne pas sortir un joueur du cinq pour la seule raison d'une fatigue du matin dans cette plage. Elle ne dit rien de la ligue, du v5, ni d'une fatigue supérieure à 25.
+1. **Une seule, limitée aux amicaux v4 : historique, non applicable aux amicaux v5** (le moteur des amicaux depuis le 28/10) : une fatigue du matin dans la plage 0,18 à 24,6 n'explique pas la performance du joueur dans le match (question 2(b), r = −0,04 [−0,26 ; 0,17], n = 107 ≥ 103). Décision : en amical v4, ne pas sortir un joueur du cinq pour la seule raison d'une fatigue du matin dans cette plage. Elle ne dit rien de la ligue, ni d'une fatigue supérieure à 25 ; pour les amicaux v5, elle ne vaut pas : la plage de fatigue observée y est trop étroite (maximum 8,84) pour tester quoi que ce soit.
+   Deux autres résultats décidables sont **historiques (ligue v3), sans décision applicable aujourd'hui** : pas d'avantage du terrain mesurable (49,6 % de victoires à domicile) et la marge moyenne des matchs passés prédit la marge suivante (r = 0,65) ; voir l'étape 3 bis.
 2. **Rien d'autre.** Aucune décision de tactique, de minutes ou d'achat n'est décidable au sens du critère. Les indices non décisifs, à ne pas traiter comme des règles :
-   - minutes lourdes : −56,6 % [−84,5 ; −28,7] au Q4 pour les joueurs de plus de 27 minutes avant le Q4 (amical v4, 32 joueurs-matchs) ;
-   - tirs à 3 points : un tir à 3 rapporte moins de points qu'un tir à 2 dans les cinq groupes (−0,185 [−0,311 ; −0,059] en ligue v3, −0,154 [−0,285 ; −0,023] en amical v4, −0,313 [−0,542 ; −0,085] en amical v5 ; intervalles contenant 0 en ligue v4 et en coupe v4) ;
-   - aucun indice utilisable pour un achat : la pente de la force d'équipe repose sur 5 matchs et sur une grandeur qui n'est pas la PS.
+   - minutes lourdes : −42,1 % [−81,7 ; −2,4] au Q4 pour les joueurs de plus de 27 minutes avant le Q4 en ligue v4 (33 joueurs-matchs, contre −1,0 % [−23,2 ; 21,2] pour les joueurs moins sollicités), −56,6 % [−84,5 ; −28,7] en amical v4 (32 joueurs-matchs) ;
+   - tirs à 3 points : un tir à 3 rapporte moins de points qu'un tir à 2 dans les cinq groupes (−0,185 [−0,311 ; −0,059] en ligue v3, −0,154 [−0,285 ; −0,023] en amical v4, −0,313 [−0,542 ; −0,085] en amical v5, −0,168 [−0,320 ; −0,017] en ligue v4 ; intervalle contenant 0 en coupe v4 seulement) ;
+   - aucun indice utilisable pour un achat : la pente de la force d'équipe en ligue v4 repose sur 10 matchs et sur une grandeur qui n'est pas la PS.
 
-### (b) Matchs détaillés manquants par question non décidable (ligue v4, le moteur actuel)
-Capacité : une journée de ligue compte 6 matchs, 3 journées par semaine (lundi, mercredi, samedi) ; 132 matchs de ligue au total dans la saison 2, 12 terminés, 5 avec détail. Retard immédiat : 8 matchs terminés d'autres équipes sans box score. Les n requis des questions 2(a), 4(i) et 5(a) utilisent l'écart-type de G2 (5 matchs, peu fiable) : ils sont à recalculer à chaque ajout.
+### (b) Matchs détaillés manquants par question non décidable (ligue v4, le moteur actuel ; relevé de 11:00)
+Capacité : trois divisions de 12 équipes, 6 matchs par journée et par division, 3 journées par semaine (lundi, mercredi, samedi) ; 132 matchs par division dans la saison 2, dont 18 terminés par division. Matchs de ligue v4 avec box score : 16 (10 dans notre division, 6 dans une autre). **Retard immédiat : 38 matchs de ligue terminés sans box score** : 8 dans notre division, 12 dans la division `a7250ea5` (6 sur 18 ont un box score), 18 dans la division `45caebc5` (aucun). Les n requis des questions 2(a), 4(i) et 5(a) utilisent l'écart-type de la ligue v4 (16 matchs, encore peu fiable) : à recalculer à chaque ajout. Les trois divisions sont poolées (même moteur v4 ; la saison 1 a déjà été poolée sur deux divisions) : en ne gardant que notre division, tout vaut pour 10 matchs au lieu de 16, et il y a 8 matchs de retard au lieu de 38.
 
-| Question | n requis | n disponible (ligue v4) | Manque | En journées de ligue complètes (6 matchs) après le retard de 8 |
+| Question | n requis | n disponible (ligue v4) | Manque | Si l'on exporte les 38 matchs du retard |
 |---|---|---|---|---|
-| 1 facteurs | 40 matchs | 5 | 35 | 5 |
-| 3 rotation ; 4(ii) tirs à 3 | 56 matchs | 5 | 51 | 8 |
-| 4(i) points par tir | 50 matchs (σ de G2) | 5 | 45 | 7 |
-| 6 force d'équipe | 30 matchs | 5 | 25 | 3 |
+| 1 facteurs | 40 matchs | 16 | 24 | atteint (54 matchs) |
+| 3 rotation ; 4(ii) tirs à 3 | 56 matchs | 16 | 40 | presque (54 sur 56) |
+| 4(i) points par tir | 57 matchs (écart-type de la ligue v4) | 16 | 41 | presque (54 sur 57) |
+| 6 force d'équipe | 30 matchs avec force connue | 10 (sur 16) | 20 | à vérifier : la force (`club_strength`, relevés hebdomadaires) n'est connue que pour 10 des 16 matchs |
 | 2(b) fatigue | 103 joueurs-matchs de nos joueurs | 29 | 74, soit environ 8 de nos matchs (9,7 joueurs-matchs par match) | non applicable (nos matchs seulement) : environ 3 semaines |
-| 2(a) minutes lourdes | 783 joueurs-matchs (σ de G2), 190 avec le σ de G4 | 13 | de 177 à 770, soit de 55 à 237 matchs (3,25 joueurs-matchs par match en ligue v4) | hors de portée avec un σ de G2 ; 8 journées avec le σ de G4 |
-| 5 avantage du terrain | 236 victoires ; de 311 à 848 matchs pour la marge selon le groupe (σ de G2 : 598) | 5 | plus que les 132 matchs de la saison | hors de portée en ligue v4 cette saison |
+| 2(a) minutes lourdes | 397 joueurs-matchs (écart-type de la ligue v4) ; 190 avec celui de l'amical v4 | 33 | de 157 à 364, soit de 38 à 89 matchs (4,1 joueurs-matchs par match en ligue v4) | atteint avec l'écart-type de l'amical v4 (54 matchs), pas avec celui de la ligue v4 (89 matchs) |
+| 5 avantage du terrain | 236 victoires ; de 311 à 990 matchs pour la marge selon le groupe | 16 | 220 pour les victoires, plus de 295 pour la marge | hors de portée cette saison : 396 matchs de ligue au total pour les trois divisions, si tout est exporté |
 
-Équipes dont il faut les matchs, dans l'ordre demandé :
-1. **Les prochains adversaires** : Naked Spartans (journée 4, 09/11), BC KIT (journée 5, 11/11), BC Gelrode (journée 6, 14/11) ont chacun 2 matchs terminés sans box score en base (6 matchs au plus, certains peuvent être le même match entre deux d'entre eux). Póvoa Riptide, dernier adversaire, a déjà ses matchs en base.
-2. **Les meilleures équipes** : Žirmūnai (2e, 3 victoires en 3) et Eindhoven Wizards (3e, 3 victoires en 3), puis Águias do Guadiana (5e).
-3. **Le reste de la ligue** : les autres matchs des 12 équipes, jusqu'à compléter les 8 matchs de retard puis chaque journée jouée.
-Rappel : seules des pages de match exportées par l'utilisateur entrent en base (inviolable 1), et les box scores des autres équipes existent déjà pour 10 matchs (8 de coupe, 2 de ligue) : une page de match d'une autre équipe suffit, sans réglage tactique.
+**Les 8 matchs de notre division terminés sans box score** (liste exacte, `silver.bv_fixtures` moins `silver.bv_matches`, saison 2, division `5fdd980c`), dans l'ordre demandé. Classement lu avant l'export des autres divisions : Póvoa Riptide 1er, Žirmūnai 2e, Eindhoven Wizards 3e, Naked Spartans 4e, Águias do Guadiana 5e, BC Gelrode 6e, Wrzos Zmigrod 8e, C.B.Granada 9e, BC KIT 10e, Astur Hoops 11e, Chara legends 12e. Prochains matchs de ligue de l'équipe : Naked Spartans (journée 4, 09/11), BC KIT (journée 5, 11/11), BC Gelrode (journée 6, 14/11), Astur Hoops (journée 7, 16/11).
+
+| Ordre | Priorité | Journée | Date | Match (domicile − extérieur) | Score |
+|---|---|---|---|---|---|
+| 1 | 1 : prochain adversaire Naked Spartans (09/11) | 1 | 02/11 | BC Gelrode − Naked Spartans | 73 − 92 |
+| 2 | 1 : Naked Spartans | 2 | 04/11 | Naked Spartans − Astur Hoops | 113 − 86 |
+| 3 | 1 : Naked Spartans | 3 | 07/11 | C.B.Granada − Naked Spartans | 106 − 95 |
+| 4 | 1 : prochain adversaire BC KIT (11/11) | 1 | 02/11 | BC KIT − Águias do Guadiana | 75 − 95 |
+| 5 | 1 : BC KIT | 2 | 04/11 | BC KIT − BC Gelrode | 96 − 105 |
+| 6 | 1 : BC KIT | 3 | 07/11 | Astur Hoops − BC KIT | 93 − 97 |
+| 7 | 1 : prochain adversaire BC Gelrode (14/11) | 3 | 07/11 | BC Gelrode − Águias do Guadiana | 105 − 114 |
+| 8 | 3 : reste de la division | 2 | 04/11 | Wrzos Zmigrod − Chara legends | 129 − 97 |
+
+**Priorité 2, meilleures équipes** (Póvoa Riptide, Žirmūnai, Eindhoven Wizards, puis Naked Spartans et Águias do Guadiana) : aucun match de plus. Póvoa Riptide, Žirmūnai et Eindhoven Wizards n'ont aucun match sans box score dans cette liste ; Naked Spartans (matchs 1 à 3) et Águias do Guadiana (matchs 4 et 7) sont déjà dans la priorité 1. Les 30 matchs sans box score des deux autres divisions (12 et 18) viennent après ces 8.
+
+Rappel : seules des pages de match exportées par l'utilisateur entrent en base (inviolable 1) ; une page de match d'une autre équipe suffit, sans réglage tactique.
 
 ### (c) Ce que les données ne montrent pas
 - **Les réglages tactiques de l'adversaire** (focus, rôles, niveaux de tir) : seuls les nôtres sont lisibles ; l'adversaire n'apparaît que par sa composition de début de quart et par ses actions.
@@ -164,7 +195,7 @@ Rappel : seules des pages de match exportées par l'utilisateur entrent en base 
 - **Les minutes réellement jouées dans le quart** au-delà du box score (entrées et sorties) : le play-by-play contient 123 remplacements seulement, pour 39 matchs.
 - **Aucune des six questions ne dit comment acheter** : pas de lien mesuré entre une compétence achetée et un résultat.
 
-## Annexe A : sorties collées de l'étape 1
+## Annexe A : sorties collées de l'étape 1 (relevé de 10:40, avant l'export de 11 matchs de ligue v4)
 
 Requête 1 (matchs par saison, compétition, statut) : `select season_id, competition, status, (my_side is not null) mien, count(*) n, min(match_day) du, max(match_day) au from silver.bv_matches group by 1,2,3,4 order by 1,2,3,4`
 
@@ -235,16 +266,16 @@ from m left join ps using (fixture_id) left join ev using (fixture_id) left join
 group by 1,2,3 order by 1,2,3
 ```
 
-## Annexe C : sortie complète du script (étape 3)
+## Annexe C : sortie complète du script principal (étape 3, relevé de 11:00)
 
-Commande : `python -I pipelines/preanalyse_matchs_basketvibe.py --sensibilite` (8 s, code 0), le 2026-11-09. Les titres de la sortie sont descendus d'un niveau.
+Commande : `python -I pipelines/preanalyse_matchs_basketvibe.py --sensibilite` (8 s, code 0), le 2026-11-09 à 11:00. Les titres de la sortie sont descendus d'un niveau.
 
 #### Matchs analysés par groupe (box score des deux côtés)
 
 | groupe | matchs | dont nous | dont autres équipes |
 |---|---|---|---|
 | G1 ligue v3 | 22 | 22 | 0 |
-| G2 ligue v4 | 5 | 3 | 2 |
+| G2 ligue v4 | 16 | 3 | 13 |
 | G3 coupe v4 | 10 | 2 | 8 |
 | G4 amical v4 | 15 | 15 | 0 |
 | G5 amical v5 | 10 | 10 | 0 |
@@ -259,10 +290,10 @@ Corrélation de l'écart « nous − eux » du facteur avec la marge ; IC de Fis
 | G1 | rebonds offensifs % | 0.77 [0.42 ; 0.92] | 0.000 | 22 | 40 | n trop petit |
 | G1 | pertes de balle % | -0.59 [-0.85 ; -0.10] | 0.004 | 22 | 40 | n trop petit |
 | G1 | lancers francs par tir | 0.18 [-0.37 ; 0.64] | 0.413 | 22 | 40 | n trop petit |
-| G2 | eFG % | 0.99 [0.78 ; 1.00] | 0.001 | 5 | 40 | n trop petit |
-| G2 | rebonds offensifs % | 0.19 [-0.92 ; 0.96] | 0.756 | 5 | 40 | n trop petit |
-| G2 | pertes de balle % | -0.67 [-0.99 ; 0.74] | 0.219 | 5 | 40 | n trop petit |
-| G2 | lancers francs par tir | -0.12 [-0.96 ; 0.93] | 0.847 | 5 | 40 | n trop petit |
+| G2 | eFG % | 0.97 [0.90 ; 0.99] | 0.000 | 16 | 40 | n trop petit |
+| G2 | rebonds offensifs % | 0.60 [0.00 ; 0.88] | 0.014 | 16 | 40 | n trop petit |
+| G2 | pertes de balle % | -0.46 [-0.83 ; 0.19] | 0.072 | 16 | 40 | n trop petit |
+| G2 | lancers francs par tir | -0.13 [-0.68 ; 0.51] | 0.623 | 16 | 40 | n trop petit |
 
 Description (moyenne en victoire / en défaite de « nous », écart « nous − eux » du facteur) :
 
@@ -272,10 +303,10 @@ Description (moyenne en victoire / en défaite de « nous », écart « nous −
 | G1 | rebonds off. % | 0.084 (10) | -0.087 (12) |
 | G1 | pertes % | -0.056 (10) | 0.024 (12) |
 | G1 | LF par tir | 0.022 (10) | 0.016 (12) |
-| G2 | eFG % | 0.277 (1) | -0.042 (4) |
-| G2 | rebonds off. % | -0.006 (1) | -0.060 (4) |
-| G2 | pertes % | 0.009 (1) | 0.043 (4) |
-| G2 | LF par tir | -0.035 (1) | -0.007 (4) |
+| G2 | eFG % | 0.155 (8) | -0.088 (8) |
+| G2 | rebonds off. % | 0.106 (8) | -0.085 (8) |
+| G2 | pertes % | -0.002 (8) | 0.032 (8) |
+| G2 | LF par tir | 0.025 (8) | -0.002 (8) |
 
 ##### Question 2 : minutes lourdes et fatigue
 
@@ -284,7 +315,7 @@ Description (moyenne en victoire / en défaite de « nous », écart « nous −
 | groupe | effet relatif [IC] | différence moyenne par minute | n disponible (joueurs-matchs, matchs) | n requis | verdict |
 |---|---|---|---|---|---|
 | G1 | -4.4 % [-27.8 ; 19.1] | -0.016 (base 0.362) | 116 / 20 | 523 (σ relatif 1.11) | n trop petit |
-| G2 | -39.7 % [-136.4 ; 56.9] | -0.133 (base 0.333) | 13 / 4 | 783 (σ relatif 1.36) | n trop petit |
+| G2 | -42.1 % [-81.7 ; -2.4] | -0.147 (base 0.350) | 33 / 8 | 397 (σ relatif 0.97) | n trop petit |
 | G3 | -21.0 % [-66.3 ; 24.4] | -0.115 (base 0.551) | 18 / 6 | 259 (σ relatif 0.78) | n trop petit |
 | G4 | -56.6 % [-84.5 ; -28.7] | -0.269 (base 0.475) | 32 / 10 | 190 (σ relatif 0.67) | n trop petit |
 | G5 | -43.4 % [-89.9 ; 3.2] | -0.198 (base 0.456) | 24 / 7 | 382 (σ relatif 0.95) | n trop petit |
@@ -294,7 +325,7 @@ Contrôle hors critères (non retenu pour le verdict) : mêmes mesures pour les 
 | groupe | effet relatif au Q4 [IC] | n (joueurs-matchs) |
 |---|---|---|
 | G1 | -1.3 % [-25.3 ; 22.7] | 43 |
-| G2 | 8.4 % [-42.8 ; 59.7] | 21 |
+| G2 | -1.0 % [-23.2 ; 21.2] | 83 |
 | G3 | -4.3 % [-28.2 ; 19.6] | 71 |
 | G4 | 14.0 % [-19.3 ; 47.4] | 47 |
 | G5 | -20.9 % [-72.6 ; 30.9] | 26 |
@@ -335,8 +366,8 @@ Corrélation de l'écart « nous − eux » avec la marge ; IC de Fisher à 97.5
 |---|---|---|---|---|---|---|
 | G1 | joueurs utilisés | 0.62 [0.21 ; 0.85] | 0.002 | 22 | 56 | n trop petit |
 | G1 | part des minutes des 5 premiers | -0.70 [-0.88 ; -0.34] | 0.000 | 22 | 56 | n trop petit |
-| G2 | joueurs utilisés | 0.92 [0.02 ; 1.00] | 0.026 | 5 | 56 | n trop petit |
-| G2 | part des minutes des 5 premiers | -0.94 [-1.00 ; -0.12] | 0.019 | 5 | 56 | n trop petit |
+| G2 | joueurs utilisés | 0.50 [-0.07 ; 0.83] | 0.047 | 16 | 56 | n trop petit |
+| G2 | part des minutes des 5 premiers | -0.69 [-0.90 ; -0.23] | 0.003 | 16 | 56 | n trop petit |
 | G3 | joueurs utilisés | -0.67 [-0.93 ; 0.04] | 0.036 | 10 | 56 | n trop petit |
 | G3 | part des minutes des 5 premiers | 0.66 [-0.05 ; 0.93] | 0.036 | 10 | 56 | n trop petit |
 | G4 | joueurs utilisés | 0.58 [0.02 ; 0.86] | 0.023 | 15 | 56 | n trop petit |
@@ -353,8 +384,8 @@ Corrélation de l'écart « nous − eux » avec la marge ; IC de Fisher à 97.5
 |---|---|---|---|---|---|
 | G1 | (i) 3 pts − 2 pts par tir | -0.185 [-0.311 ; -0.059] pt/tir (σ 0.245) | 22 | 57 | n trop petit |
 | G1 | (ii) part de tirs à 3 → marge | r = -0.73 [-0.89 ; -0.39] | 22 | 56 | n trop petit |
-| G2 | (i) 3 pts − 2 pts par tir | -0.231 [-0.588 ; 0.125] pt/tir (σ 0.228) | 5 | 50 | n trop petit |
-| G2 | (ii) part de tirs à 3 → marge | r = -0.55 [-0.98 ; 0.74] | 5 | 56 | n trop petit |
+| G2 | (i) 3 pts − 2 pts par tir | -0.168 [-0.320 ; -0.017] pt/tir (σ 0.244) | 16 | 57 | n trop petit |
+| G2 | (ii) part de tirs à 3 → marge | r = -0.58 [-0.86 ; -0.04] | 16 | 56 | n trop petit |
 | G3 | (i) 3 pts − 2 pts par tir | -0.125 [-0.373 ; 0.122] pt/tir (σ 0.291) | 10 | 81 | n trop petit |
 | G3 | (ii) part de tirs à 3 → marge | r = -0.59 [-0.91 ; 0.17] | 10 | 56 | n trop petit |
 | G4 | (i) 3 pts − 2 pts par tir | -0.154 [-0.285 ; -0.023] pt/tir (σ 0.202) | 15 | 39 | n trop petit |
@@ -370,8 +401,8 @@ Corrélation de l'écart « nous − eux » avec la marge ; IC de Fisher à 97.5
 |---|---|---|---|---|---|
 | G1 | (a) marge à domicile | 6.6 [-8.0 ; 21.2] pts (σ 28.3) | 22 | 848 | n trop petit |
 | G1 | (b) victoires à domicile | 13 sur 22 (p exact 0.523) | 22 | 236 | n trop petit |
-| G2 | (a) marge à domicile | -11.2 [-48.4 ; 26.0] pts (σ 23.8) | 5 | 598 | n trop petit |
-| G2 | (b) victoires à domicile | 1 sur 5 (p exact 0.375) | 5 | 236 | n trop petit |
+| G2 | (a) marge à domicile | 1.2 [-17.8 ; 20.3] pts (σ 30.6) | 16 | 990 | n trop petit |
+| G2 | (b) victoires à domicile | 8 sur 16 (p exact 1.000) | 16 | 236 | n trop petit |
 | G3 | (a) marge à domicile | -7.5 [-23.0 ; 8.0] pts (σ 18.3) | 10 | 353 | n trop petit |
 | G3 | (b) victoires à domicile | 3 sur 10 (p exact 0.344) | 10 | 236 | n trop petit |
 | G4 | (a) marge à domicile | 1.7 [-9.4 ; 12.8] pts (σ 17.1) | 15 | 311 | n trop petit |
@@ -386,4 +417,44 @@ Corrélation de l'écart « nous − eux » avec la marge ; IC de Fisher à 97.5
 | groupe | r [IC] | pente (points de marge par point de force) [IC] | n disponible / matchs du groupe | n requis | verdict |
 |---|---|---|---|---|---|
 | G1 | — | — | 4 / 22 | 30 | n < 5 : aucun calcul |
-| G2 | 0.92 [0.18 ; 0.99] | 17.61 [3.48 ; 31.73] | 5 / 5 | 30 | n trop petit |
+| G2 | 0.70 [0.13 ; 0.92] | 12.59 [2.18 ; 23.00] | 10 / 16 | 30 | n trop petit |
+
+## Annexe D : sortie complète du script des scores seuls (étape 3 bis)
+
+Commande : `python -I pipelines/preanalyse_scores_basketvibe.py` (1,8 s, code 0), le 2026-11-09 à 11:00.
+
+#### Ligue saison 1, moteur v3 : 264 matchs terminés (22 à nous, 242 des autres équipes), 2026-09-07 au 2026-10-26, 24 équipes
+
+##### Question 5 : avantage du terrain (α = 0,025 par test)
+
+| population | mesure | résultat | n disponible | n requis | verdict |
+|---|---|---|---|---|---|
+| tous les matchs | (a) victoires à domicile | 131 sur 264 = 49.6 % [Wilson 97,5 % : 42.8 ; 56.5], p exact 0.951 | 264 | 236 | décidable : effet absent |
+| tous les matchs | (b) marge domicile − extérieur | -0.42 points [-3.84 ; 2.99], σ = 24.61, p = 0.780 | 264 | 640 | n trop petit |
+| nos matchs (description) | (a) victoires à domicile | 13 sur 22 = 59.1 % [Wilson 97,5 % : 36.1 ; 78.7], p exact 0.523 | 22 | 236 | n trop petit |
+| nos matchs (description) | (b) marge domicile − extérieur | 6.59 points [-7.98 ; 21.17], σ = 28.32, p = 0.287 | 22 | 848 | n trop petit |
+| matchs des autres (description) | (a) victoires à domicile | 118 sur 242 = 48.8 % [Wilson 97,5 % : 41.7 ; 55.9], p exact 0.748 | 242 | 236 | décidable : effet absent |
+| matchs des autres (description) | (b) marge domicile − extérieur | -1.06 points [-4.57 ; 2.45], σ = 24.21, p = 0.496 | 242 | 620 | n trop petit |
+
+##### Question 6 : force d'équipe (moyenne des marges des matchs antérieurs, au moins 3) et marge
+
+| mesure | résultat | n disponible | n requis | verdict |
+|---|---|---|---|---|
+| corrélation de l'écart de force avec la marge | r = 0.65 [0.57 ; 0.72], p = 0.0000 | 228 | 30 | décidable : effet présent |
+| pente (points de marge par point d'écart de force) | 0.88 [0.75 ; 1.02] | 228 | 30 | décidable : effet présent |
+
+Matchs écartés faute de 3 matchs antérieurs pour l'une des deux équipes : 36 sur 264.
+
+## Annexe E : inventaire rejoué à 11:00 (requête de l'annexe B)
+
+```
+| moteur | competition | equipe | matchs | du | au | adversaires_distincts | box | box_2cotes | pbp | lineups_nous | lineups_adv |
+| v3 | friendly | nous | 1 | 2026-10-10 | 2026-10-10 | 1 | 1 | 1 | 1 | 1 | 1 |
+| v3 | league | nous | 22 | 2026-09-07 | 2026-10-26 | 11 | 22 | 22 | 22 | 22 | 22 |
+| v4 | cup | autres | 8 | 2026-10-28 | 2026-10-31 | 0 | 8 | 8 | 8 |  |  |
+| v4 | cup | nous | 2 | 2026-10-28 | 2026-10-30 | 2 | 2 | 2 | 2 | 1 | 1 |
+| v4 | friendly | nous | 16 | 2026-10-11 | 2026-10-27 | 16 | 16 | 15 | 16 | 14 | 14 |
+| v4 | league | autres | 13 | 2026-11-02 | 2026-11-07 | 0 | 13 | 13 | 13 |  |  |
+| v4 | league | nous | 3 | 2026-11-02 | 2026-11-07 | 3 | 3 | 3 | 3 | 3 | 3 |
+| v5 | friendly | nous | 10 | 2026-10-29 | 2026-11-08 | 10 | 10 | 10 | 10 | 9 | 9 |
+```
