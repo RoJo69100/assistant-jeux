@@ -89,6 +89,22 @@ Calcul des n requis fixes (Fisher, `n = ((z_α + z_β)/atanh(r))² + 3`, arrondi
 - Les matchs successifs de la même équipe (les nôtres) ne sont pas indépendants (même effectif, même tactique) : les intervalles sont plus étroits qu'ils ne devraient ; le verdict « décidable » est donc un minimum à exiger, pas une garantie.
 - La version du moteur par date est une déduction (§ 1.1).
 
+### 2.4 Complément du 2026-11-09 : questions 5 et 6 sur les matchs à score seul (critères écrits avant tout calcul)
+Les 242 matchs de ligue de la saison 1 des autres équipes n'ont pas de box score mais ont un score (`silver.bv_fixtures`) : ils servent les questions 5 et 6, qui ne demandent que le score. Contrôle de qualité fait avant les critères : 264 matchs terminés, aucun score absent, aucun nul, aucun score nul à zéro. Les 264 matchs viennent de 24 équipes (deux divisions de 12, 12 matchs par journée, 22 journées du 07/09 au 26/10), moteur v3. Les deux divisions sont poolées (même moteur).
+
+| # | Mesure et population | Test | Effet minimal | n requis |
+|---|---|---|---|---|
+| 5' | Matchs de ligue de la saison 1 (`season_id = 8fa19101-…`), `status = 'finished'`, scores présents ; nos matchs et ceux des autres équipes. (a) Victoire de l'équipe qui reçoit (oui / non) ; (b) marge de l'équipe qui reçoit (points domicile − points extérieur). | (a) test binomial exact bilatéral du taux de victoires à domicile contre 0,5 ; (b) t de Student de la moyenne de la marge contre 0, intervalle à 97,5 %. 2 tests : α = 0,025 par test. | (a) 60 % contre 50 % ; (b) 3 points | (a) **236** (déjà fixé, § 2.2) ; (b) `((2,241 + 0,842) · σ / 3)²` avec σ = écart-type de la marge **mesuré sur ce groupe** |
+| 6' | Force d'une équipe à la date d'un match = moyenne, sur ses matchs terminés de la même saison dont le jour est **strictement antérieur** à celui du match, de (points marqués − points encaissés) ; **au moins 3 matchs antérieurs** pour chacune des deux équipes (même seuil que le test de prédiction du journal, `MIN_PRECEDENTS = 3` de `pipelines/palier5_test.py`). Écart de force = force du domicile − force de l'extérieur ; marge = points domicile − points extérieur. | Pente des moindres carrés de la marge sur l'écart de force (intervalle de Student), et corrélation de Pearson avec intervalle de Fisher. 1 test : α = 0,05. | r = 0,5 | **30** (déjà fixé, § 2.2) |
+
+Règles : le verdict suit § 2.1 (n disponible ≥ n requis pour « décidable »). La population de 6' est l'ensemble des matchs pour lesquels les deux équipes ont au moins 3 matchs antérieurs.
+
+**Limites écrites avant calcul**
+- Moteur v3 : résultat **historique, non transférable** à la ligue actuelle (v4 : fatigue et duels changés) ni aux amicaux v5.
+- 5' : chaque paire d'équipes se rencontre à domicile et à l'extérieur (double ronde) : la différence de force entre équipes s'annule en moyenne dans la marge domicile − extérieur, sans quoi la mesure ne vaudrait rien ; la compétition (ligue, saison 1) est la seule à avoir ce plan.
+- 6' : la force est une moyenne de marges, non corrigée de la force des adversaires déjà rencontrés (aucun ajustement) ; la pente attendue d'une force parfaitement connue n'est pas 1 (régression vers la moyenne) ; la marge du match inclut l'avantage du terrain, qui ne change pas la pente si l'écart de force est symétrique.
+- Les matchs d'une même équipe ne sont pas indépendants : les intervalles sont plus étroits qu'ils ne devraient.
+
 ## Étape 3 : calculs (script `pipelines/preanalyse_matchs_basketvibe.py`, rejouable, 8 s)
 
 Commande : `python -I pipelines/preanalyse_matchs_basketvibe.py --sensibilite`. Sortie complète collée en annexe C (et dans `preanalyse-matchs-basketvibe-sortie.md`). Matchs analysés (box score des deux côtés) : G1 ligue v3 22 ; G2 ligue v4 5 (3 à nous, 2 des autres) ; G3 coupe v4 10 (2 à nous, 8 des autres) ; G4 amical v4 15 ; G5 amical v5 10 (un amical v4 sans les deux côtés est écarté).
