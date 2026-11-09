@@ -1,28 +1,33 @@
-"""Évaluation des décisions échues (refonte v2, étape 3.3).
+"""Évaluation des décisions échues (refonte v2, étape 3.3 ; HTTPS depuis la refonte v3, étape 5b-2).
 
 Lit gold.decisions_a_evaluer, mesure la prédiction, écrit learn.outcome et fait évoluer la leçon liée :
   confirmations ≥ lecon_valider sans contradiction → validated ; ≥ lecon_regle → hard_rule proposée (affichée, non appliquée) ;
   contradictions ≥ lecon_retirer → retired + learn.error ouverte (conseil à réécrire, attentes A-7).
 Seuils : core.game_params, game = '_tous'.
 Mesures :
-  my_result : les N premiers matchs joués (hors amicaux) de l'équipe après la décision ; moins de N → en attente
+  my_result : les N premiers matchs joués (hors amicaux) de l'équipe après la décision ; moins de N → en attente.
+              Un match sans heure (scheduled_at vide) compte si son jour est ≥ la date de Paris de la décision.
   sql       : la requête de lecture, une valeur numérique comparée au seuil
+Transport : lectures par sql.py (HTTPS en cloud) ; écriture par la fonction public.evaluer_ecrire (POST, clé de service),
+qui insère le résultat et met à jour la leçon dans une seule transaction (sql/learn/004_evaluer_ecrire_https.sql).
 Usage : python -I pipelines/evaluer_decisions.py [--essai]   (--essai : mesure et affiche, n'écrit rien)
 """
 
 import argparse
+import datetime as dt
 import json
 import operator
-import re
 import sys
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from decision import ATTENDU_RESULTAT, ATTENDU_VALEUR  # noqa: E402
-from sql import url_ro  # noqa: E402
+from sql import executer, litteral, rpc_post  # noqa: E402
 
 OPS = {">=": operator.ge, "<=": operator.le, ">": operator.gt, "<": operator.lt, "=": operator.eq}
 SEUILS_DEFAUT = {"lecon_valider": 3, "lecon_regle": 5, "lecon_retirer": 2}
+PARIS = ZoneInfo("Europe/Paris")
 
 
 def verdict_resultats(resultats: list[str], attendu: str) -> str:
@@ -52,22 +57,72 @@ def statut_lecon(statut: str, n_for: int, n_against: int, seuils: dict) -> tuple
     return statut, None
 
 
-def mesurer(cur, d: dict) -> tuple[str | None, dict]:
+def instant(v) -> dt.datetime | None:
+    """timestamptz lu en Postgres (datetime) ou en HTTPS (chaîne ISO)."""
+    if v is None or v == "":
+        return None
+    return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v))
+
+
+def jour(v) -> dt.date:
+    return v if isinstance(v, dt.date) and not isinstance(v, dt.datetime) else dt.date.fromisoformat(str(v)[:10])
+
+
+def dans_fenetre(jour_match, scheduled_at, decided_at) -> bool:
+    """Match postérieur à la décision : heure connue → après decided_at ; heure vide → jour ≥ date de Paris de la décision."""
+    decide = instant(decided_at)
+    heure = instant(scheduled_at)
+    if heure is not None:
+        return heure > decide
+    return jour(jour_match) >= decide.astimezone(PARIS).date()
+
+
+def fenetre_resultats(matchs: list[tuple], decided_at, n: int) -> list[str]:
+    """matchs : (jour, scheduled_at, my_result) triés ; rend les N premiers résultats de la fenêtre."""
+    return [r for j, h, r in matchs if dans_fenetre(j, h, decided_at)][:n]
+
+
+def charge_ecriture(d: dict, verdict: str, observe: dict, lecon: dict | None, seuils: dict) -> tuple[dict, str | None]:
+    """Corps de public.evaluer_ecrire et message éventuel sur la leçon. Sans leçon (ou verdict non concluant) : lecon = null."""
+    p = {"decision_id": d["id"], "observed": observe, "verdict": verdict, "lecon": None}
+    if not lecon or verdict == "inconclusive":
+        return p, None
+    n_for = lecon["n_for"] + (verdict == "confirmed")
+    n_against = lecon["n_against"] + (verdict == "contradicted")
+    statut, message = statut_lecon(lecon["status"], n_for, n_against, seuils)
+    erreur = (f"Leçon {lecon['id']} contredite {n_against} fois : {lecon['claim']}"
+              if statut == "retired" and lecon["status"] != "retired" else None)
+    p["lecon"] = {"id": lecon["id"], "n_for_avant": lecon["n_for"], "n_against_avant": lecon["n_against"],
+                  "n_for": n_for, "n_against": n_against, "statut": statut, "erreur": erreur}
+    return p, message
+
+
+def lire(sql: str) -> list[dict]:
+    cols, lignes = executer(sql)
+    return [dict(zip(cols, l)) for l in lignes]
+
+
+def json_de(v):
+    return json.loads(v) if isinstance(v, str) else v
+
+
+def mesurer(d: dict) -> tuple[str | None, dict]:
     pred = d["prediction"]
     if pred["metric"] == "my_result":
         n = pred["fenetre_matchs"]
-        cur.execute("select my_result from core.fixture where game = %s and team_id is not distinct from %s"
-                    " and played and my_result is not null and competition_kind <> 'amical'"
-                    " and coalesce(scheduled_at, day::timestamptz) > %s"
-                    " order by coalesce(scheduled_at, day::timestamptz) limit %s",
-                    (d["game"], d["team_id"], d["decided_at"], n))
-        res = [r[0] for r in cur.fetchall()]
+        equipe = "" if d["team_id"] is None else f" and team_id = {litteral(str(d['team_id']))}"
+        date_paris = instant(d["decided_at"]).astimezone(PARIS).date().isoformat()
+        lignes = lire("select day, scheduled_at, my_result from core.fixture"
+                      f" where game = {litteral(d['game'])}{equipe}"
+                      " and played and my_result is not null and competition_kind <> 'amical'"
+                      f" and day >= {litteral(date_paris)}::date"
+                      " order by coalesce(scheduled_at, day::timestamptz), day")
+        res = fenetre_resultats([(l["day"], l["scheduled_at"], l["my_result"]) for l in lignes], d["decided_at"], n)
         if len(res) < n:
             return None, {"matchs": res, "attendus": n}
         return verdict_resultats(res, pred["attendu"]), {"matchs": res}
-    cur.execute(pred["requete"])
-    ligne = cur.fetchone()
-    valeur = next(iter(ligne.values())) if ligne else None  # curseur en dict_row
+    lignes = lire(pred["requete"])
+    valeur = next(iter(lignes[0].values())) if lignes else None
     return verdict_valeur(valeur, pred["attendu"]), {"valeur": None if valeur is None else float(valeur)}
 
 
@@ -76,49 +131,35 @@ def main(argv=None) -> int:
     a = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     a.add_argument("--essai", action="store_true")
     args = a.parse_args(argv)
-    import psycopg
-    from psycopg.rows import dict_row
-
-    with psycopg.connect(url_ro(), connect_timeout=15, row_factory=dict_row) as c, c.cursor() as cur:
-        cur.execute("select key, value::text::int as v from core.game_params where game = '_tous' and key like 'lecon_%'")
-        seuils = {**SEUILS_DEFAUT, **{r["key"]: r["v"] for r in cur.fetchall()}}
-        cur.execute("select * from gold.decisions_a_evaluer order by id")
-        decisions = cur.fetchall()
-        for d in decisions:
-            verdict, observe = mesurer(cur, d)
-            if verdict is None:
-                print(f"⏳ D-{d['id']} en attente : {observe}")
-                continue
-            print(f"{'✅' if verdict == 'confirmed' else '❌' if verdict == 'contradicted' else '⚪'} D-{d['id']} {verdict} {observe}")
-            if args.essai:
-                continue
-            cur.execute("insert into learn.outcome (decision_id, observed, verdict) values (%s, %s, %s)",
-                        (d["id"], json.dumps(observe), verdict))
-            if not d["lesson_id"] or verdict == "inconclusive":
-                continue
-            cur.execute("select * from learn.lesson where id = %s", (d["lesson_id"],))
-            l = cur.fetchone()
-            if not l:
-                print(f"  ⚠️ leçon {d['lesson_id']} introuvable")
-                continue
-            n_for = l["n_for"] + (verdict == "confirmed")
-            n_against = l["n_against"] + (verdict == "contradicted")
-            statut, message = statut_lecon(l["status"], n_for, n_against, seuils)
-            cur.execute("update learn.lesson set n_for = %s, n_against = %s, status = %s,"
-                        " promoted_at = case when %s <> status then now() else promoted_at end,"
-                        " source_decisions = array_append(source_decisions, %s) where id = %s",
-                        (n_for, n_against, statut, statut, d["id"], l["id"]))
-            if message:
-                print(f"  → {l['id']} : {message}")
-            if statut == "retired" and l["status"] != "retired":
-                cur.execute("insert into learn.error (game, description, recurrence, enforcement, guard_ref)"
-                            " values (%s, %s, %s, 'sql', 'garde.py : leçon retirée bloquée')",
-                            (l["game"], f"Leçon {l['id']} contredite {n_against} fois : {l['claim']}", n_against))
-        if not decisions:
-            print("Aucune décision à évaluer.")
+    seuils = {**SEUILS_DEFAUT, **{l["key"]: int(l["v"]) for l in lire(
+        "select key, value::text as v from core.game_params where game = '_tous' and key like 'lecon_%'")}}
+    decisions = lire("select id, game, team_id, decided_at, prediction, lesson_id from gold.decisions_a_evaluer order by id")
+    erreurs = 0
+    for d in decisions:
+        d["prediction"] = json_de(d["prediction"])
+        verdict, observe = mesurer(d)
+        if verdict is None:
+            print(f"⏳ D-{d['id']} en attente : {observe}")
+            continue
+        print(f"{'✅' if verdict == 'confirmed' else '❌' if verdict == 'contradicted' else '⚪'} D-{d['id']} {verdict} {observe}")
+        lecon = None
+        if d["lesson_id"]:
+            ls = lire(f"select id, status, n_for, n_against, claim from learn.lesson where id = {litteral(d['lesson_id'])}")
+            lecon = ls[0] if ls else None
+            if not lecon:
+                print(f"  ⚠️ leçon {d['lesson_id']} introuvable : résultat écrit sans leçon")
+        p, message = charge_ecriture(d, verdict, observe, lecon, seuils)
+        if message:
+            print(f"  → {lecon['id']} : {message}")
         if args.essai:
-            c.rollback()
-    return 0
+            continue
+        rep = rpc_post("evaluer_ecrire", {"p": p})
+        if not rep.get("ok"):
+            erreurs += 1
+            print(f"  ❌ non écrit : {rep.get('erreur')}")
+    if not decisions:
+        print("Aucune décision à évaluer.")
+    return 1 if erreurs else 0
 
 
 if __name__ == "__main__":
