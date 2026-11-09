@@ -395,3 +395,38 @@ Périmètre : BasketVibe, lecture seule sur la base, aucune migration, aucun age
 - **Y6** Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après ; `python -I pipelines/composition.py "Opper Cards"` (sortie collée telle quelle).
 
 Étapes : 1 critères (ce commit) ; 2a Y1 (script, tests) ; 2b Y2 et Y3 (plan, requête, tests) ; 2c Y4 (YAML, tests) ; 3 `fusion_main.py` puis `fin_etape.py`, rejeu et résultats collés ici.
+
+### Résultats 5j (2026-11-09 17:5x Paris)
+
+- **Y1** (commit 668c183) : `pipelines/composition.py` ; `test_composition.py` **16/16**. Sur le brief réel du 08/11 (`python -I pipelines/composition.py "Naked Spartans"`) : 14 joueurs dans l'ordre PG, SG, SF, PF, C, 13 adversaires (focus réel de l'aperçu, zone Middle lue sous le tableau), `forme.fautes_de` sans erreur. Vérifié que `forme.py` **rejette** l'ordre « C, …, PG » (`tactique : ordre PG→C puis alphabétique rompu à B`) : l'ordre alphabétique demandé par Y1 ne passe pas `forme.py`, d'où le choix PG→C écrit avant le code.
+- **Y6 amical du 10/11** : `python -I pipelines/composition.py "Opper Cards"` →
+```
+aucune fiche : lance l'agent tactique
+```
+  Aucun brief ne nomme Opper Cards (dernier brief d'amical : Garden City). Le tableau d'amical avec agressivité du test et mentions « constant pendant E1 » n'est donc prouvé que par les tests (fiche figée), pas sur une fiche réelle.
+- **Y2, Y3** (commit 32613f5) : requête `apercus_matchs` (`core.fixture` × `silver.bv_fixture_api`, historique des captures). 13 cas figés. Sur la base, aujourd'hui (rejeu complet ci-dessous) : la ligne du match J4 porte « Saisis la composition : python -I pipelines/composition.py "Naked Spartans" » (brief du 08/11, même jour que l'aperçu du 08/11 11:31) et « Réexporte l'aperçu : l'effectif adverse a pu changer » apparaît (verrou 19:45 dans moins de 24 h, aperçu de 30 h). Une seule capture en base pour J4 : « composition adverse changée » ne peut pas se déclencher aujourd'hui, prouvé par les cas figés seulement. Le J5 (BC KIT, 11/11) n'a pas d'aperçu : aucune ligne de composition ; sa ligne d'export « aperçu du match de ligue du 11/11 » n'apparaît pas non plus car `gold.bv_agenda` n'est lu que jusqu'à demain (`REQUETES["gold.bv_agenda"]`, `day <= current_date + 1`) : constat, non corrigé ici.
+  - Interprétations écrites avant le code : brief du même jour que l'aperçu = brief à jour ; « composition adverse changée » n'est pas répétée si un brief daté de la dernière capture ou après existe déjà.
+  - **Effet de bord à valider** : la ligne « Réexporte l'aperçu » (priorité 2) prend une des 5 places d'action et repousse « Analyse : lance l'agent analyste ce soir » dans « Autres points » (voir le diff ci-dessous). Elle double aussi la ligne d'agenda existante « 19:30 : exporter la page Preview du match J4 ». À trancher : faire taire la ligne d'agenda quand Y3 la couvre, ou rendre Y3 moins prioritaire.
+- **Y4** (commit 4f27d78) : E5 entre E1 et E2 dans le fichier des expériences, `constants` de E1 (zone Perimeter, focus 3) et de E5 (focus 3), 6 cas ; trois cas existants adaptés parce qu'ils affirmaient « E2 après E1 » (`H7 passage à E5`, `H4 toutes terminées`, `H7 fichier présent`), plus 3 clubs ajoutés à la liste de leurs fixtures.
+- **Y5** : `test_aujourdhui.py` **227/227** (208 + 13 + 6 ; 3 cas adaptés), `test_revue_hebdo.py` **38/38**, `test_composition.py` **16/16** ; plan à 8 lignes au plus (cas figé) ; durée du plan 9,7 s (avant 10,0 s) ≤ 15 s.
+- **Y6 plan, avant → après** (`python -I pipelines/aujourdhui.py basketvibe`, `diff` des deux sorties complètes ; le reste est identique) :
+```
+< 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
+<     du verrou 19:45 ; le test est perdu si : Faux si à J4 le Q3 est < 0 et le Q2 < −5, ou si
+<     defense_tier n'est pas 0 pour tous (briefs/2026-11-08-tactique.md)
+---
+> 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — Saisis la
+>     composition : python -I pipelines/composition.py "Naked Spartans" ; heure limite du verrou 19:45
+>     ; le test est perdu si : Faux si à J4 le Q3 est < 0 et le Q2 < −5, ou si defense_tier n'est pas
+>     0 pour tous (briefs/2026-11-08-tactique.md)
+> 19:45 — Réexporte l'aperçu : l'effectif adverse a pu changer — match de ligue contre Naked Spartans
+>     ; dernier aperçu du 08/11 11:31, il y a 30 h (silver.bv_fixture_api, core.fixture)
+< --:-- — Analyse : lance l'agent analyste ce soir — 2 défaites d'affilée en ligue ou coupe (dernière
+<     : Póvoa Riptide, 07/11, ligue) ; dernier brief analyste du 05/11 (core.fixture,
+<     gold.match_objective)
+< Autres points (4) : Acheter un SF de note ≥ 61,0 : aucune annonce … (inchangé)
+---
+> Autres points (5) : Analyse : lance l'agent analyste ce soir ; Acheter un SF de note ≥ 61,0 : aucune
+>     annonce … (inchangé)
+```
+- **`python -I pipelines/fusion_main.py`** : `Poussé : origin/main == HEAD.` (4f27d7801194). **`python -I pipelines/fin_etape.py`** : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, `test_aujourdhui.py : 227/227`, `test_composition.py : 16/16`, `test_revue_hebdo.py : 38/38`, `test_agents.py : 0 échec(s)`, `HEAD dans origin/main : oui`.
