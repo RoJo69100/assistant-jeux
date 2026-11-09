@@ -503,6 +503,50 @@ Contexte : main = ff98afe. La revue du 09/11 montre 34 hypothèses sur 34 sans m
 | S4 | Champs de `pipelines/decision.py` qui permettent de relier une décision à une leçon (`lesson_id`), et changements proposés dans `decision.py` ou un skill pour que le lien soit rempli à la création ; proposé, non appliqué. |
 | S5 | Tests figés pour S2 (lecture de la clé `lecons`) et S3, un cas présent et un cas absent chacun ; 197 tests du plan et 28 de la revue verts. |
 
+**S1, inventaire (lecture seule, `select id, domain, status, claim from learn.lesson where game = 'basketvibe'`, 37 lignes, 2026-11-09 17:15).** Aucune leçon n'a de `check_sql` ; `n_for`/`n_against` non nuls seulement pour L-001 (21/0), L-004 (7/1), L-006 (3/0). Expériences : E1 agressivité défensive uniforme (cran 2 / 4) ; E2 focus de tir cran 4 sur deux tireurs ; E3 focus offensif Primary aux 4 quarts ; E4 réglage habituel (chiffre 1 de l'étude : réussite du tir selon la compétence). Étude = `pipelines/etude_evenements_basketvibe.py`, chiffres 1 à 8.
+
+| Leçon | État | Domaine | Énoncé court | Classement | Justification |
+|---|---|---|---|---|---|
+| L-001 | validée | tactique | V et D se séparent par eFG, eFG adverse, OREB, pertes adverses | historique : `gold.bv_match_report` | les quatre facteurs sont des colonnes de la vue, par `my_result`, recalculables chaque semaine |
+| L-002 | hypothèse | tactique | moins de tirs à 3 → meilleure eFG | expériences : E2 | E2 fait varier le focus de tir et mesure la part de tirs à 3 (chiffre 5) ; seul le réglage change |
+| L-003 | hypothèse | composition | rotation 2 × 24 min meilleure que 5 × 48 | historique : `gold.bv_match_report` × `gold.bv_match_player_lines` | minutes par joueur et marge en base, mais adversaires et moteur différents : comparaison confondue, à dire |
+| L-004 | validée | tactique | `defense_tier` 0 : eFG adverse plus basse, FT rate adverse plus bas | expériences : E1 | E1 joue les crans 2 et 4 uniformes ; mesure du FT rate et de l'eFG adverse par cran (chiffre 2) |
+| L-005 | hypothèse | tactique | matchs serrés perdus sur une perte de balle en fin de match | historique : `silver.bv_match_events` | les actions de fin de match sont en base ; n = 3 matchs serrés, n insuffisant aujourd'hui |
+| L-006 | validée | achat | le give_up sur le vrai scoreur lui laisse 34 à 39 pts | historique : `gold.bv_match_opp_focus` | focus défensif et part de tirs du joueur adverse par match ; domaine `achat` probablement faux (tactique) |
+| L-007 | hypothèse | tactique | sous 5 × 48, pas de signal net de la pénalité au Q4 | historique : étude, chiffre 4 | l'étude mesure la pénalité au-delà de 36 min sur les tirs du Q4 |
+| L-008 | hypothèse | tactique | amical cran 2 : eFG, FT rate, fautes adverses plus hauts qu'au cran 0 | expériences : E1 | E1 niveau A = cran 2 uniforme, comparé au cran 0 déjà en base |
+| L-009 | hypothèse | tactique | Q4 du preset amical à −10, Boyer 6 fautes | à reformuler | constat d'un match nommé, aucune règle générale à tester |
+| L-009#2 | hypothèse | tactique | 3 amicaux sur 3 avec un Q4 négatif | à reformuler | doublon de L-009 avec une généralisation ; à écrire « Q4 des amicaux négatif » et mesurer par `quarter_margins` |
+| L-010 | hypothèse | tactique | écart entre les deux unités de 24 min en J19 | à reformuler | un match, deux unités nommées ; pas de règle |
+| L-010#2 | hypothèse | tactique | idem L-010 avec J20 | à reformuler | doublon de L-010 ; deux matchs, pas de règle |
+| L-011 | hypothèse | composition | amical Carnage joué sans plan sauvegardé | à reformuler | constat de donnée (plan absent), pas une hypothèse de jeu |
+| L-011#2 | hypothèse | tactique | fautes et FT rate adverses montent avec l'agressivité, eFG adverse aussi | expériences : E1 | énoncé exact du chiffre 2 ; E1 donne 2 matchs par cran |
+| L-012 | hypothèse | tactique | en amical, fatigue des plus chargés sous la zone jaune | historique : `gold.bv_fatigue_plan`, `gold.bv_player_outlook` | fatigue par joueur et projection en base |
+| L-012#2 | hypothèse | composition | aucun Lock dans nos données, effet du focus 4/5 inconnu | sans mesure possible | 5 cas `off` (Lock) en base ; aucune expérience ne fait varier le focus défensif |
+| L-013 | hypothèse | composition | pas de lien entre minutes et rendement des jeunes | historique : `gold.bv_match_player_lines` | minutes et éval par minute par joueur et par match en base |
+| L-013#2 | hypothèse | tactique | J21 perdu aux rebonds | à reformuler | un match ; la règle générale est L-016#2 |
+| L-014 | hypothèse | composition | amical Vigolana : consignes absentes de l'export | à reformuler | constat de donnée, pas une hypothèse de jeu |
+| L-014#2 | hypothèse | tactique | la Preview désigne mal la cible du focus | historique : pages `preview` × `gold.bv_match_opp_focus` | effectif de la Preview et part de tirs réelle sont tous deux en base |
+| L-015 | hypothèse | tactique | cran 5 supposé : fautes au maximum, eFG adverse aussi | expériences : E1 | E1 niveau B = cran 4 uniforme, réglage enfin vérifié par les réglages utilisés |
+| L-015#2 | hypothèse | tactique | J21 : 1re mi-temps perdue au tir, 2e aux lancers | à reformuler | un match, pas de règle |
+| L-016 | hypothèse | composition | Q4 à −18 après la sortie de Baron (6 fautes) | à reformuler | un match ; la règle générale (fautes des meneurs) est L-021 |
+| L-016#2 | hypothèse | tactique | écart d'OREB ≤ −13,9 : défaites lourdes | historique : `gold.bv_match_report` | OREB et marge par match en base |
+| L-017 | hypothèse | tactique | focus sur les stars adverses : leurs coéquipiers reprennent les tirs | historique : `gold.bv_match_opp_focus` | part de tirs par adversaire et focus en base |
+| L-017#2 | hypothèse | composition | `off` = Lock : part de tirs adverse 4 % | historique : `gold.bv_match_opp_focus` | 8 cas en base, n petit ; mesure possible, n insuffisant |
+| L-018 | hypothèse | tactique | libellé d'export `off` = Lock | à reformuler | confirmé par l'utilisateur ; c'est une règle de lecture (skill ou vue), pas une hypothèse |
+| L-019 | hypothèse | tactique | J22 gagné aux rebonds et aux pertes forcées | à reformuler | un match ; la règle générale est L-001 |
+| L-020 | hypothèse | tactique | Debrecen perdu par l'attaque, un tireur faible au focus de tir élevé | expériences : E2 | E2 fait varier le focus de tir de deux tireurs et mesure leur part de tirs à 3 |
+| L-021 | hypothèse | tactique | sorties pour 6 fautes en amical entre 28 et 34 min | expériences : E1 | E1 mesure les fautes par cran d'agressivité ; les sorties pour 6 fautes sont dans `gold.bv_match_player_lines` (`fouled_out`) |
+| L-022 | hypothèse | tactique | New Generation gagné au tir | à reformuler | un match ; la règle générale est L-001 |
+| L-023 | hypothèse | tactique | adversaire à 5 × 48 ; zone Rim prouvée | à reformuler | un match, trois facteurs (minutes adverses, zone, focus) |
+| L-024 | hypothèse | tactique | lire les réglages d'un amical dans `gold.bv_zone_jouee` | à reformuler | règle de lecture, dépassée par l'étape 5h (la vue lit désormais les réglages utilisés) |
+| L-025 | hypothèse | tactique | Statyba perdu par l'attaque : 37 tirs à 3 à 16 % | expériences : E2 | même mécanisme que L-020 (focus de tir) |
+| L-026 | hypothèse | composition | en coupe, le Q4 au-delà de 36 min coûte | historique : étude, chiffre 4 | l'étude mesure la pénalité au-delà de 36 min (coupe v4 : 78 tirs) |
+| L-027 | hypothèse | tactique | zone Middle en amical v4 = pire 2P % adverse | historique : `gold.bv_zone_jouee` × `gold.bv_match_report` | zone jouée corrigée en 5h et 2P % adverse par match en base |
+| L-028 | hypothèse | achat | enchères maximales trop basses sur les SG 57-60 | historique : `gold.bv_transfer_history` | prix de vente par poste et PS en base |
+
+Bilan (37) : expériences 8 (E1 : 5, E2 : 3, E3 : 0, E4 : 0) ; historique 14 ; à reformuler 14 (dont 4 doublons `#2` ou constats d'un seul match) ; sans mesure possible 1.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
