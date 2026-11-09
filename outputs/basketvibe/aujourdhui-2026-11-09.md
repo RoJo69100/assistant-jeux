@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-09 16:32 -->
+<!-- généré le 2026-11-09 16:48 -->
 19:30 — Avant 19:45 si possible : exporter la page Preview du match J4 (effectif adverse à jour)
     (gold.bv_agenda)
 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
@@ -25,5 +25,5 @@ Garder : effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, â
     réduction de charges commence sous 0) ; transferts : pas d'enchère nouvelle, l'export du Marché
     a plus de 24 h ; Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2,
     semaine du 2026-11-02) : règle de personnel non tranchée, à valider
-Exports à faire aujourd'hui : Équipe (aperçu, joueurs) (29 h) ; Amical : tactique du match (29 h) ;
-    Marché (enchères) (29 h)
+Exports à faire aujourd'hui : Équipe (aperçu, joueurs) (30 h) ; Amical : tactique du match (30 h) ;
+    Marché (enchères) (30 h)

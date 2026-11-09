@@ -455,6 +455,14 @@ Contexte : main = c202605 ; playbook, étape 5, actions 7 et 8. `gold.bv_zone_jo
 | N4 | Tests figés, un cas présent et un cas absent pour N2 et N3 ; sortie ≤ 8 lignes, durée ≤ 15 s ; les 181 tests existants restent verts. |
 | N5 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée telle quelle). |
 
+**Résultats 5h (2026-11-09 17:15 Paris).**
+- **N1** (`d8bce39`, migration `gold_074_bv_zone_jouee_reglages_utilises`). Lecteurs de `gold.bv_zone_jouee` avant changement : aucune vue dépendante (`pg_depend` : 0 ligne) ; aucun script de `pipelines/` (seuls des briefs du jeu d'essai la citent) ; `docs/attentes/tests/basketvibe.yaml` (Q2, Q3), cartes `docs/decisions/cartes/basketvibe/defaite.md:31` et `composition.md:35`, `docs/regles/triage.md:132` (L36, ce défaut), briefs et learnings (texte). Colonnes d'origine gardées, `source` ajoutée (`reglages_utilises` / `avant_match`) ; 20 → 58 lignes. Amicaux 07, 08, 09/11 : **avant** absent, absent, Middle (3) ; **après** Perimeter (1) ×3, source `reglages_utilises`. Ligue J4 du 09/11 (à venir) : Middle, `avant_match`.
+- **N2** (`6640a53`). `gold.bv_saisie_entrainement` sait : l'entraînement **saisi** (principale, secondaire) par joueur, dans l'ordre de l'écran, d'après le dernier export `training` (08/11 10:08 UTC, 14 joueurs). Il manque : le **focus attendu** (aucune table, aucune colonne ; `learn.decision` domaine entrainement : texte libre, dernière décision le 25/10). Source retenue : la fiche « Poste | Joueur | Principale | Secondaire » du dernier brief `briefs/<date>-entrainement.md` (aujourd'hui celui du 25/10, 17 joueurs dont 4 partis ; Ungureanu absent). Règle `entrainement_sam` : `isodow` 6, 23:00. Le samedi avant 23:00, une ligne « Entraînement (fin du cycle …) : corrige n écarts » (focus attendu et saisi), à la place de la ligne d'agenda ; « indifférent » non contrôlé ; joueur hors fiche signalé ; zéro écart → la ligne d'agenda seule. Contrôle à blanc sur les données du jour : 0 écart de focus, 1 joueur hors fiche (Ungureanu). Aujourd'hui lundi : aucune ligne.
+- **N3** (`805bde3`, migration `gold_075_bv_fatigue_avant_match`, nouvelle vue). Joueurs à minutes > 0 dans la saisie d'un match de ligue ou de coupe à venir (`gold.bv_saisie_joueurs`) × `gold.bv_fatigue_plan` (minutes, cran d'agressivité) ; zone verte = `seuil_bas` de la règle `fatigue` (20) lue dans la vue. Jointure par nom de famille (la saisie n'expose pas `player_id`). J4 du 09/11 : 10 joueurs à 24 min, cran 2, fatigue 11,0 à 14,1 : aucune ligne. Ligne « Sors X, Y avant le match de ligue contre Z (jour) » à l'heure du verrou, seulement si dépassement.
+- **N4** : `test_aujourdhui.py` 181 → **193/193** (N2 : 8 cas, dont zéro écart / écarts, autre jour, cycle passé, fiche absente, règle absente, lecteur présent / absent ; N3 : 4 cas, dépassement / vue vide / verrou passé / seuil venu de la vue). Aucun test existant modifié. Sortie : 8 lignes logiques.
+- **N5** : avant 11,0 s (28 requêtes), après **10,1 s** (31 requêtes). Sortie **identique** (`diff`) : lundi, pas de fin de cycle ; aucune fatigue hors zone verte.
+- `fusion_main.py` : 5 commits ajoutés, `origin/main == HEAD` (805bde3). `fin_etape.py` : 0 commit d'avance, 22 suites vertes.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -491,3 +499,6 @@ Contexte : main = c202605 ; playbook, étape 5, actions 7 et 8. `gold.bv_zone_jo
 | 2026-11-09 16:21 | aujourd'hui | 9.6 | 27 |
 | 2026-11-09 16:26 | aujourd'hui | 9.3 | 27 |
 | 2026-11-09 16:32 | aujourd'hui | 11.1 | 28 |
+| 2026-11-09 16:44 | aujourd'hui | 10.9 | 28 |
+| 2026-11-09 16:47 | aujourd'hui | 9.8 | 30 |
+| 2026-11-09 16:48 | aujourd'hui | 10.0 | 31 |
