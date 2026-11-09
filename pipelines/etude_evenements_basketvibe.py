@@ -5,6 +5,7 @@ Usage : python -I pipelines/etude_evenements_basketvibe.py inventaire     (étap
         python -I pipelines/etude_evenements_basketvibe.py calculs        (étape 3, après les critères)
 Les groupes de moteur ne sont jamais mélangés : v3 ligue, v3 amical, v4 ligue, v4 coupe, v4 amical, v5 amical.
 """
+import json
 import sys
 from pathlib import Path
 
@@ -121,11 +122,136 @@ def inventaire():
     print("\n" + md(pd.DataFrame(lignes), index=False))
 
 
+def _js(x):
+    if x is None or (isinstance(x, float) and x != x):
+        return None
+    return json.loads(x) if isinstance(x, str) else x
+
+
+def jour_avant(jour, n=1):
+    return (pd.Timestamp(str(jour)[:10]) - pd.Timedelta(days=n)).strftime("%Y-%m-%d")
+
+
+def preparer(d):
+    """Données d'événements prêtes pour les huit mesures (aucun effet calculé ici).
+
+    tirs : un tir (réussi `fg2`/`fg3`, raté `miss_fg`, sans les contrés), avec son type (3 points ; cercle ou mi-distance quand
+    le moteur l'étiquette), le tireur, son camp, `nous` (le tireur est de notre équipe) et les compétences de nos tireurs (relevé de
+    la veille ou du jour). reglages : réglages tactiques de nos joueurs par match. quarts : composition de chaque quart (deux camps).
+    """
+    M = d["matchs"]
+    E = d["evenements"].merge(M[["fixture_id", "groupe", "mien", "my_side", "match_day"]], on="fixture_id").copy()
+    E["payload"] = E.payload.map(_js)
+    E["zone"] = E.payload.map(lambda p: (p or {}).get("shot_zone"))
+    E["nous"] = E.mien & (E.team_side == E.my_side)
+    E["period"] = pd.to_numeric(E.period)
+    tirs = E[E.kind.isin(["fg2", "fg3"]) | ((E.kind == "miss") & (E.detail == "miss_fg"))].copy()
+    tirs["make"] = tirs.kind.isin(["fg2", "fg3"])
+    tirs["trois"] = (tirs.kind == "fg3") | ((tirs.kind == "miss") & (tirs.is_three == True))  # noqa: E712
+    z = {"fg2_make_paint": "cercle", "fg2_make_mid": "mi", "paint": "cercle", "mid": "mi"}
+    tirs["type2"] = [None if t else z.get(dt if m else zn) for t, m, dt, zn in zip(tirs.trois, tirs.make, tirs.detail, tirs.zone)]
+    J = d["joueurs"]
+    snap = {}
+    for (pid, jr), _ in tirs[tirs.nous].groupby(["player_id", "match_day"]):
+        j = J[(J.player_id == pid) & (J.day <= str(jr)[:10]) & (J.day >= jour_avant(jr))]
+        if len(j):
+            snap[(pid, jr)] = j.sort_values("day").iloc[-1]
+    tirs["releve"] = [snap.get((p, j)) if n else None for p, j, n in zip(tirs.player_id, tirs.match_day, tirs.nous)]
+    reglages, quarts = [], []
+    for r in d["tactiques"].itertuples():
+        m = M[M.fixture_id == r.fixture_id]
+        if m.empty:
+            continue
+        for x in _js(r.player_directives) or []:
+            reglages.append({"fixture_id": r.fixture_id, "player_id": x["player_id"], "role": x.get("role_tier"), "tir": x.get("shot_tier"),
+                             "focus_off": x.get("offensive_focus_tier"), "defense": x.get("defense_tier")})
+        side = m.iloc[0].my_side
+        autre = "away" if side == "home" else "home"
+        for q, ids in enumerate(_js(r.lineup_by_quarter) or []):
+            quarts.append({"fixture_id": r.fixture_id, "period": q + 1, "side": side, "joueurs": ids})
+        for q, ids in enumerate(_js(r.opponent_lineup_by_quarter) or []):
+            quarts.append({"fixture_id": r.fixture_id, "period": q + 1, "side": autre, "joueurs": ids})
+    return {"evenements": E, "tirs": tirs, "reglages": pd.DataFrame(reglages), "quarts": pd.DataFrame(quarts)}
+
+
+def comptes():
+    """Nombre d'événements disponibles par question et par groupe (comptages seulement, aucun effet)."""
+    d = charger()
+    P = preparer(d)
+    E, T, R, Q, M, box = P["evenements"], P["tirs"], P["reglages"], P["quarts"], d["matchs"], d["box"]
+    lignes = []
+    # 1. tirs de nos joueurs avec compétences connues
+    t1 = T[T.nous & T.releve.notna()]
+    for g in GROUPES:
+        a = t1[t1.groupe == g]
+        lignes.append({"question": "1 tirs de nos joueurs avec compétences", "groupe": g, "n": len(a),
+                       "dont 3 points": int(a.trois.sum()), "dont cercle étiqueté": int((a.type2 == "cercle").sum()),
+                       "dont mi-distance étiquetée": int((a.type2 == "mi").sum()), "dont 2 points non étiquetés": int((~a.trois & a.type2.isna()).sum())})
+    # 2. tirs adverses dans des quarts où notre composition est connue, fautes sur tir de notre défense
+    qn = Q[Q.side.isin(["home", "away"])].merge(M[["fixture_id", "groupe", "my_side"]], on="fixture_id")
+    qn = qn[(qn.side == qn.my_side) & (qn.period <= 4)]
+    adv = E[E.kind.isin(["fg2", "fg3", "miss"]) & E.mien & ~E.nous].merge(qn[["fixture_id", "period"]], on=["fixture_id", "period"])
+    fau = E[(E.kind == "foul") & (E.detail == "shooting_foul") & E.mien & E.nous].merge(qn[["fixture_id", "period"]], on=["fixture_id", "period"])
+    for g in GROUPES:
+        lignes.append({"question": "2 tirs adverses (quarts à composition connue) et fautes de notre défense", "groupe": g,
+                       "n": int((adv.groupe == g).sum()), "fautes sur tir": int((fau.groupe == g).sum()),
+                       "quarts": int((qn.groupe == g).sum())})
+    # 3. tirs de nos joueurs avec fatigue connue ; au-dessus de 10 et de 20
+    for g in GROUPES:
+        a = t1[t1.groupe == g]
+        f = a.releve.map(lambda r: float(r.fatigue))
+        lignes.append({"question": "3 tirs de nos joueurs avec fatigue connue", "groupe": g, "n": len(a),
+                       "fatigue ≥ 10": int((f >= 10).sum()), "fatigue ≥ 20": int((f >= 20).sum()),
+                       "fatigue maximale": round(float(f.max()), 2) if len(a) else None})
+    # 4. tirs au Q4 de joueurs ayant joué 36 minutes aux Q1-Q3 ; contrôle : de 12 à 30 minutes
+    b = box[box.period.between(1, 3)].groupby(["fixture_id", "player_id", "team_side"]).minutes.sum().reset_index(name="cum")
+    sh = E[E.kind.isin(["fg2", "fg3"]) | ((E.kind == "miss") & (E.detail == "miss_fg"))]
+    q4 = sh[sh.period == 4].merge(b, left_on=["fixture_id", "player_id", "team_side"], right_on=["fixture_id", "player_id", "team_side"])
+    for g in GROUPES:
+        a = q4[q4.groupe == g]
+        lignes.append({"question": "4 tirs au Q4 selon les minutes cumulées avant le Q4", "groupe": g, "n": len(a),
+                       "joueurs à 36 min ou plus": int((a.cum >= 35.5).sum()), "contrôle (12 à 30 min)": int(((a.cum >= 12) & (a.cum < 30)).sum())})
+    # 5. joueurs-matchs de nos tireurs avec niveau de tir, au moins 8 tirs
+    if len(R):
+        ct = T[T.nous].groupby(["fixture_id", "player_id"]).size().reset_index(name="tirs").merge(R, on=["fixture_id", "player_id"]).merge(M[["fixture_id", "groupe"]], on="fixture_id")
+        for g in GROUPES:
+            a = ct[(ct.groupe == g) & (ct.tirs >= 8)]
+            lignes.append({"question": "5 joueurs-matchs (≥ 8 tirs) selon le niveau de tir", "groupe": g, "n": len(a),
+                           **{f"niveau {k}": int((a.tir == k).sum()) for k in (0, 1, 2, 3, 4)}})
+        # 6. joueurs-quarts sur le terrain selon le niveau de focus offensif
+        qq = Q.merge(M[["fixture_id", "groupe", "my_side"]], on="fixture_id")
+        qq = qq[(qq.side == qq.my_side) & (qq.period <= 4)]
+        lignes6 = []
+        for r in qq.itertuples():
+            for pid in r.joueurs or []:
+                lignes6.append({"fixture_id": r.fixture_id, "period": r.period, "player_id": pid, "groupe": r.groupe})
+        pq = pd.DataFrame(lignes6).merge(R, on=["fixture_id", "player_id"]) if lignes6 else pd.DataFrame()
+        tirs_q = T[T.nous].groupby(["fixture_id", "period", "player_id"]).size().reset_index(name="tirs")
+        pq = pq.merge(tirs_q, on=["fixture_id", "period", "player_id"], how="left").fillna({"tirs": 0}) if len(pq) else pq
+        for g in GROUPES:
+            a = pq[pq.groupe == g] if len(pq) else pq
+            lignes.append({"question": "6 joueurs-quarts sur le terrain selon le focus offensif", "groupe": g, "n": len(a),
+                           **{f"niveau {k}": int((a.focus_off == k).sum()) for k in (0, 1, 2, 3, 4)}, "tirs": int(a.tirs.sum()) if len(a) else 0})
+    # 7. équipes-matchs
+    for g in GROUPES:
+        lignes.append({"question": "7 équipes-matchs (box score des deux côtés)", "groupe": g, "n": int(2 * (M.groupe == g).sum())})
+    # 8. entre-deux et tirs à domicile / à l'extérieur
+    for g in GROUPES:
+        lignes.append({"question": "8 entre-deux et tirs", "groupe": g, "n": int(((E.groupe == g) & (E.kind == "jump_ball")).sum()),
+                       "tirs": int((T.groupe == g).sum())})
+    df = pd.DataFrame(lignes)
+    for q, a in df.groupby("question", sort=False):
+        print(f"\n### {q}\n")
+        print(md(a.drop(columns="question").dropna(axis=1, how="all"), index=False))
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     if cmd == "inventaire":
         inventaire()
+    elif cmd == "comptes":
+        comptes()
     elif cmd == "calculs":
         import etude_evenements_calculs  # noqa: F401  (ajouté à l'étape 3)
     else:
