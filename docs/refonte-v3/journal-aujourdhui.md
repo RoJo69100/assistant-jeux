@@ -132,6 +132,19 @@ Source : `docs/refonte-v3/playbook-basketvibe.md`, étape 5, action 19. Diagnost
 | B4 | Chemin du « fait » jusqu'à `learn.decision` aujourd'hui ; le registre `fait-<jour>.md` y est-il relié ? Preuve fichier:ligne. |
 | B5 | Proposition d'une page, non appliquée : le plus petit changement qui ferait remonter les conseils échus et mesurables ; preuve = nombre de lignes de `learn.outcome` après un cycle. Les causes K1 à K6 classées en : se corrige par une vue ; demande un changement de skill ou d'agent ; sans critère mesurable, à reformuler. |
 
+## Boucle d'apprentissage, étape 5b-2 (critères écrits le 2026-11-09 13:40 Paris, avant le code)
+
+Source : `docs/refonte-v3/diagnostic-boucle-apprentissage.md` (`7ee5ce8`), sections B2 et B5. Écritures autorisées : la migration `sql/learn/004_evaluer_ecrire_https.sql` ; `learn.decision.status` par `python -I pipelines/decision.py statut <id> done`, seulement pour un conseil dont l'exécution est prouvée ; `learn.outcome` et `learn.lesson` par la fonction de la migration. Les 98 conseils `migre` proposés et les 32 faits ne sont pas touchés.
+
+| # | Critère |
+|---|---|
+| C1 | `public.evaluer_ecrire(p jsonb)` (security definer, `search_path = ''`, exécution réservée à `service_role`, comme `decision_ecrire`) insère `learn.outcome` et met à jour la leçon liée dans **une** transaction. Refus sans rien écrire si la décision n'est pas `accepted`/`done`, si elle a déjà un résultat, ou si la leçon a changé depuis sa lecture (compteurs différents). Une décision sans leçon n'échoue pas. Migration additive et rejouable (`create or replace`), aucun drop. |
+| C2 | `pipelines/evaluer_decisions.py` : lectures par le transport de `sql.py` (HTTPS en cloud), écriture par `evaluer_ecrire` en HTTPS ; plus aucune écriture par le port 5432. Fenêtre `my_result` : un match dont `scheduled_at` est vide compte si son jour est `>=` la date de la décision (date de Paris, `decided_at at time zone 'Europe/Paris'`) ; avec `scheduled_at`, il compte s'il est postérieur à `decided_at`. |
+| C3 | `python -I pipelines/evaluer_decisions.py --essai` liste le verdict de chaque ligne de `gold.decisions_a_evaluer` sans écrire et sort avec le code 0. Tests figés sans base dans `pipelines/test_evaluer.py` : verdict confirmé, contredit, non concluant (valeur vide), décision sans leçon (charge sans leçon), match du jour (jour = date de la décision, `scheduled_at` vide → compté ; veille → exclu). |
+| C4 | Les 9 conseils mesurables échus (1070 à 1076, 1088, 1099) : pour chacun, la ligne de `outputs/basketvibe/fait-*.md`, d'un brief ou du journal qui prouve son application, collée. Preuve trouvée → `done`. Sinon il reste proposé et va dans la liste « à confirmer par l'utilisateur » avec son texte court. Aucune supposition. |
+| C5 | Évaluateur lancé hors `--essai` ; `select count(*) from learn.outcome` avant et après, et le verdict de chaque ligne. Nombre attendu = nombre de conseils prouvés appliqués en C4, pas 9. |
+| C6 | Pour chaque verdict écrit : il mesure l'exécution (présence, achat) ou l'effet (résultat, solde). Pas d'interprétation. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
