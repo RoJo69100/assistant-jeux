@@ -599,6 +599,17 @@ Contexte : aucune version du moteur en base ; l'étude des événements et la pr
 - **V5** : `test_revue_hebdo.py` 34 → **38/38** (4 cas V4) ; `test_aujourdhui.py` **197/197** ; page **59 lignes**, 3,4 s.
 - `fusion_main.py` : `commits à ajouter à main (3)` (f6ab108, 99bb125, 0ff013e) ; `Poussé : origin/main == HEAD.` (0ff013e). `fin_etape.py` : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, 23 suites vertes (dont revue 38/38, aujourdhui 197/197), `HEAD dans origin/main : oui`.
 
+## Versions du moteur, étape 6c-bis (critères écrits le 2026-11-09 Paris, avant la migration)
+
+Contexte : main = 4f41967. Écart du contrôle V3 de 6c = amical du 10/10 (non attribué ; l'étude le classe en v3). Coupes du 13/09 et du 01/11 non attribuées. Écritures autorisées : une migration additive qui insère dans `core.engine_version` et met à jour la seule ligne « coupe v4 » (`end_date` → null) ; rien d'autre.
+
+| # | Critère |
+|---|---|
+| W1 | Insère dans `core.engine_version` : amical v3 du 2026-09-07 au 2026-10-10 (statut déduit, source « préanalyse § 1.1 et étude des événements ») ; coupe v3 du 2026-09-07 au 2026-10-27 (statut déduit, source skill `basketvibe-communaute` 02-1 : v4 actif en coupe depuis le 27/10, donc v3 avant). |
+| W2 | Met à jour la ligne coupe v4 : `start_date` 2026-10-27 (source V-20261027-2), `end_date` null ; la borne du 31/10 était celle des matchs détaillés, pas celle de la version. Valeur avant et après dite. |
+| W3 | Vue `gold.bv_match_engine_version` rejouée : matchs non attribués de 3 à 0 (ou cause dite pour chacun) ; contrôle V3 de 1 écart à 0 (script hors dépôt, sortie collée). |
+| W4 | 197 tests du plan et 38 de la revue verts. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
