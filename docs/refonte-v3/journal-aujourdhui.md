@@ -344,6 +344,20 @@ Conséquence : aucune ligne « Vendre X » ajoutée au plan, aucun test K2 (rien
 - **K6** : rejeu avant 23,0 s (20 requêtes), après **7,6 s** (25 requêtes ; en série elles font 24,3 s). Différence de sortie : seule la ligne « Autres points » passe de 2 à 5 éléments (les 3 prospects).
 - Hors périmètre, non commité : `outputs/basketvibe/aujourdhui-2026-11-09.md` (instantané réécrit par chaque exécution du script).
 
+## Plan du jour, étape 5f (critères écrits le 2026-11-09 16:20 Paris, avant le code)
+
+Contexte : main = 1d45858 ; suite de K2 et K3 (étape 5e). Décisions de l'utilisateur : même force = écart de 1 point de PS au poste ; coût du test = 25 000 ; valeur d'un High dérivée de l'historique si possible. Écritures en base autorisées : une migration additive (nouvelle vue) et des lignes de `core.game_params` avec leur source.
+
+| # | Critère |
+|---|---|
+| L1 | Nouvelle vue `gold.bv_sell_replacement` (`sql/gold/072_bv_sell_replacement.sql`, additive, `security_invoker`, `grant select … to assistant_ro`), une ligne par joueur de `gold.bv_slot_fit` : `best_slot`, `fit_best` (force au meilleur poste), `replacement_id`, `replacement_name`, `replacement_fit`, `gap` (= `fit_best − replacement_fit`), `weekly_salary` (salaire économisé, `gold.bv_player_outlook.salary`, lu dans `silver.bv_player_salary_weekly`), `on_transfer_list`, `available_players`. **Colonne de force : `fit`** (sans la forme) pour le poste ET pour le rang : une vente est définitive, la forme (1-10, −11 % à +15 %) change d'un jour à l'autre. Le rang est recalculé sur `fit` dans la vue (l'incohérence de `bv_sell_candidates`, `best_slot` sur `fit` et `rank_in_slot` sur `fit_with_form`, n'est pas reprise). Meilleur poste : `fit` le plus haut, égalité départagée par l'ordre des postes (PG→C). Remplaçant : le meilleur autre joueur disponible (ni en vente, ni blessé) dont le `fit` au même poste est inférieur ou égal (égalité départagée par `player_id`) ; aucun → colonnes nulles. |
+| L2 | `core.game_params` (`basketvibe`, `vente_tolerance_force`, `1.0`, source « décision de l'utilisateur du 2026-11-09 : même force = écart de 1 point de PS au poste », `verified_on` 2026-11-09). Le script lit la clé ; aucune valeur écrite dans le code. Clé absente → aucune ligne de vente. |
+| L3 | Une seule ligne Transferts « Vendre X : économie S par semaine, remplaçant Y au poste Z, écart E » pour le joueur qui remplit `gap ≤ tolérance`, n'est pas déjà en vente, et laisse au moins 9 joueurs disponibles après la vente (`available_players` moins lui s'il est disponible) ; plusieurs candidats → le plus gros salaire. Sinon aucune ligne. La demi-ligne « vendre pour profit » reste. |
+| L4 | `core.game_params` (`basketvibe`, `academie_cout_test`, `25000`, source `.claude/skills/basketvibe-academie/references/06-tests.md` — le 25 000 est dans ce skill, pas dans `basketvibe-economie`). Valeur d'un High : recherche dans `gold.bv_transfer_history` et dans les pages brutes (catégorie de potentiel connue d'un joueur vendu) ; requête et résultat collés ; ligne `academie_valeur_high` écrite seulement si au moins un High vendu existe. |
+| L5 | Académie : les deux clés présentes → tester / ignorer comme à l'étape 5e ; sinon UNE ligne pour tout le rapport « Académie, rapport du JJ/MM : n prospects ; valeur d'un High inconnue » (donnée manquante nommée), au lieu d'une par prospect. |
+| L6 | Tests figés, cas présent et cas absent pour L3 et L5 ; sortie ≤ 8 lignes, durée ≤ 15 s ; les 157 tests existants restent verts (ceux de K3 qui attendent une ligne par prospect sans donnée sont remplacés par L5, dit dans le résultat). |
+| L7 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après, sortie collée. Avant (16:17, 7,8 s) : 3 lignes « donnée manquante » par prospect dans « Autres points ». |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -376,3 +390,4 @@ Conséquence : aucune ligne « Vendre X » ajoutée au plan, aucun test K2 (rien
 | 2026-11-09 16:05 | aujourd'hui | 23.0 | 20 |
 | 2026-11-09 16:07 | aujourd'hui | 7.5 | 20 |
 | 2026-11-09 16:10 | aujourd'hui | 7.6 | 25 |
+| 2026-11-09 16:17 | aujourd'hui | 7.8 | 25 |
