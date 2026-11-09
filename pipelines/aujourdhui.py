@@ -103,6 +103,9 @@ REQUETES = {
     "gold.bv_sell_replacement": "select name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
                                 "on_transfer_list, available, available_players from gold.bv_sell_replacement",
     "tolerance_vente": "select value from core.game_params where game = 'basketvibe' and key = 'vente_tolerance_force'",
+    # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
+    "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
+                      "from gold.bv_amical_reglage where match_day >= current_date - 120",
     # K4 (étape 5e) : décisions échues à mesurer, et décisions encore « proposed » (faits du registre à relier)
     "a_evaluer": "select count(*) as n from gold.decisions_a_evaluer where game = 'basketvibe'",
     "decisions_proposees": "select id, status, game from learn.decision where game = 'basketvibe' and status = 'proposed'",
@@ -333,22 +336,94 @@ def prochain_amical(donnees, jour, maintenant):
     return None
 
 
-def test_en_cours(experiences, amical):
+def _jour(v):
+    return v if isinstance(v, dt.date) else dt.date.fromisoformat(str(v)[:10])
+
+
+def conforme(regle, r):
+    """M3 : le réglage joué `r` (ligne de gold.bv_amical_reglage) respecte la règle `joue` du niveau ; règle vide : oui."""
+    for k, v in (regle or {}).items():
+        if k == "agress_cran" and r.get("agress_cran") != v:
+            return False
+        if k == "tir_cran4_min" and (r.get("tir_cran4_joueurs") or 0) < v:
+            return False
+        if k == "primary_quarts_min" and (r.get("primary_quarts") or 0) < v:
+            return False
+    return True
+
+
+def verifier(experiences, joues, exclus=()):
+    """M3-M4 : {id: {'verifies', 'attente', 'ecarts'}} pour les faits déclarés (hors `exclus`).
+    Match d'un fait : celui de sa clé, sinon le premier amical joué le jour du registre ou le lendemain.
+    Vérifié = match exporté dont le réglage joué respecte `joue` ; écart = réglage différent ; attente = match non
+    exporté ou pas encore joué. Un amical joué avant `debut` ne compte pas (M4) ; un match compte une fois."""
+    res = {e["id"]: {"verifies": 0, "attente": 0, "ecarts": []} for e in (experiences or {}).get("file", [])}
+    if not experiences:
+        return res
+    debut = experiences.get("debut")
+    regles = {e["id"]: e.get("joue") or {} for e in experiences["file"]}
+    lignes = sorted(({**r, "jour": _jour(r["match_day"])} for r in joues or []), key=lambda r: r["jour"])
+    vus = set()
+    for f in experiences["faits"]:
+        if f in exclus or f["id"] not in res:
+            continue
+        c = f["cle"]
+        if c:
+            r = next((r for r in lignes if cle_match([c], r["opponent"], r["jour"])), None)
+            quand = c["date"] or f["jour"]
+        else:
+            r = next((r for r in lignes if f["jour"] <= r["jour"] <= f["jour"] + dt.timedelta(days=1)), None)
+            quand = f["jour"]
+        if debut and ((r and r["jour"] < debut) or (not r and quand < debut)):
+            continue  # M4 : amical d'avant le test, ne compte pour aucune expérience
+        if r is None:
+            res[f["id"]]["attente"] += 1
+            continue
+        if (f["id"], r["fixture_id"]) in vus:
+            continue
+        vus.add((f["id"], r["fixture_id"]))
+        if conforme(regles[f["id"]].get(f["niveau"]), r):
+            res[f["id"]]["verifies"] += 1
+        else:
+            res[f["id"]]["ecarts"].append(f"{r['opponent']} {r['jour']:%d/%m}")
+    return res
+
+
+def _pluriel(n, mot):
+    return f"{n} {mot}" + ("s" if n > 1 else "")
+
+
+def texte_avancement(e, v):
+    """M3 : « E1 : 1 vérifié sur 4, 1 déclaré non vérifié (match à exporter) », écarts signalés."""
+    t = f"{e['id']} : {_pluriel(v['verifies'], 'vérifié')} sur {e['amicaux_vises']}"
+    if v["attente"]:
+        t += f", {v['attente']} déclaré{'s' if v['attente'] > 1 else ''} non vérifié{'s' if v['attente'] > 1 else ''}" \
+             " (match à exporter)"
+    if v["ecarts"]:
+        t += f", réglage joué ≠ réglage du test ({', '.join(v['ecarts'])})"
+    return t
+
+
+def faits_ici(experiences, amical):
+    return [f for f in experiences["faits"] if f["cle"] and cle_match([f["cle"]], amical["match"], amical["date"])]
+
+
+def test_en_cours(experiences, amical, joues=()):
     """H1-H2 : (expérience, niveau, déjà saisi) du test à jouer sur `amical`, None si aucune expérience en cours (H4).
     Les expériences passent dans l'ordre du fichier ; un fait dont la clé désigne cet amical ne le fait pas avancer :
-    il dit l'amical saisi à ce niveau."""
+    il dit l'amical saisi à ce niveau. M3 (5g) : la suivante démarre quand la précédente a `amicaux_vises` amicaux
+    vérifiés (réglage joué conforme dans `joues`) ; le niveau suit les vérifiés et les déclarés en attente, pas les écarts."""
     if not experiences or not amical:
         return None
-    ici = [f for f in experiences["faits"] if f["cle"] and cle_match([f["cle"]], amical["match"], amical["date"])]
-    autres = [f for f in experiences["faits"] if f not in ici]
+    ici = faits_ici(experiences, amical)
+    v = verifier(experiences, joues, exclus=ici)
     for e in experiences["file"]:
         fait = next((f for f in ici if f["id"] == e["id"]), None)
         if fait:
             return e, fait["niveau"], True
-        n = sum(f["id"] == e["id"] for f in autres)
-        if n < int(e["amicaux_vises"]):
+        if v[e["id"]]["verifies"] < int(e["amicaux_vises"]):
             ordre = e["ordre"]
-            return e, ordre[n % len(ordre)], False
+            return e, ordre[(v[e["id"]]["verifies"] + v[e["id"]]["attente"]) % len(ordre)], False
     return None
 
 
@@ -548,13 +623,15 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     couverts = []
     # 1 bis (5d, H3) : test de la file d'expériences sur le prochain amical (aujourd'hui ou demain, core.fixture)
     am = prochain_amical(donnees, jour, maintenant)
-    test = test_en_cours(S.get("experiences"), am)
+    joues = lignes_de(donnees, "amical_reglage")
+    test = test_en_cours(S.get("experiences"), am, joues)
     apres = ""
     if test:
         e, niveau, _ = test
         apres = f"{texte_test(e, niveau)} (remplace l'agressivité du brief pour ce match)" if e["id"] == "E1" \
             else f"{texte_test(e, niveau)} (remplace ce réglage du brief pour ce match)"
-        apres_exports = "après le match exporte : " + ", ".join(e.get("export_requis") or [])
+        avance = texte_avancement(e, verifier(S.get("experiences"), joues)[e["id"]])  # M3 : déclarés, vérifiés, écarts
+        apres_exports = "après le match exporte : " + ", ".join(e.get("export_requis") or []) + " ; " + avance
     for t in S.get("tactique", []):
         cal = verrou_calendrier(donnees, t["date"], t["match"])
         verrou = f"{cal:%H:%M}" if cal else t["verrou"]  # scheduled_at de core.fixture d'abord, sinon l'heure du brief

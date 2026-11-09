@@ -168,10 +168,13 @@ def lire_experiences(base, jour: dt.date, fichier=FICHIER_EXPERIENCES):
     """File d'expériences amicales (étape 5d, H1-H2) : {'file': [expériences du YAML, dans l'ordre], 'faits': [...]}.
     Un fait = une ligne du registre `fait-<j>.md` (tout le registre jusqu'à `jour`, pas 7 jours : H2) qui porte
     `[expérience=<id>:<niveau>]`, avec la clé de match de la même ligne si elle existe ; « reste à » ignorée (R5).
-    Fichier de configuration absent ou illisible : None (aucune ligne, H4)."""
+    Fichier de configuration absent ou illisible : None (aucune ligne, H4). `debut` : date du YAML (M4, étape 5g)."""
     try:
         import yaml
-        file = (yaml.safe_load(Path(fichier).read_text(encoding="utf-8")) or {}).get("experiences") or []
+        conf = yaml.safe_load(Path(fichier).read_text(encoding="utf-8")) or {}
+        file = conf.get("experiences") or []
+        debut = conf.get("debut")  # M4 (étape 5g) : aucun amical joué avant cette date ne compte
+        debut = dt.date.fromisoformat(str(debut)) if debut else None
     except Exception:  # noqa: BLE001 - absent, illisible ou YAML cassé : le plan continue sans expérience (H4)
         return None
     faits = []
@@ -193,7 +196,7 @@ def lire_experiences(base, jour: dt.date, fichier=FICHIER_EXPERIENCES):
                         nom, date = d.group(1).strip(), _jm(j, d.group(2), d.group(3))
                     cle = {"nom": nom, "date": date, "jour": j, "fichier": f.name}
                 faits.append({"id": e.group(1).strip(), "niveau": e.group(2).strip(), "cle": cle, "jour": j, "fichier": f.name})
-    return {"file": file, "faits": faits}
+    return {"file": file, "faits": faits, "debut": debut}
 
 
 def lire_cibles(decisions: list[dict], encheres: list[dict], base, jour: dt.date) -> list[dict]:

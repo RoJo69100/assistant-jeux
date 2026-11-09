@@ -1,31 +1,46 @@
 # File d'expériences amicales BasketVibe (critère H1, étape 5d, docs/refonte-v3/journal-aujourdhui.md).
 # Source : docs/refonte-v3/playbook-basketvibe.md, section « File d'expériences amicales » ; E1 validée par l'utilisateur le 2026-11-09.
 # Lu par pipelines/aujourdhui_sources.py (lire_experiences) : les expériences passent dans l'ordre du fichier ;
-# la suivante démarre quand la précédente a `amicaux_vises` lignes `[expérience=<id>:<niveau>]` dans le registre fait-<jour>.md.
+# la suivante démarre quand la précédente a `amicaux_vises` amicaux VÉRIFIÉS (étape 5g, M3) : ligne
+# `[expérience=<id>:<niveau>]` du registre fait-<jour>.md ET réglage joué conforme dans gold.bv_amical_reglage.
 # `ordre` donne le niveau de chaque amical, répété si la liste est plus courte que `amicaux_vises`.
 # `niveaux` : texte saisi à l'écran pour ce niveau (affiché tel quel dans le plan du jour).
+# `joue` : réglage attendu dans gold.bv_amical_reglage, en crans de l'API (écran = cran + 1, docs/fiches/basketvibe/match.md:19).
+#   agress_cran = agressivité uniforme des joueurs de Q1-Q4 ; tir_cran4_min = nombre minimal de joueurs au focus de tir cran 4 ;
+#   primary_quarts_min = quarts-temps (sur 4) avec un joueur au focus offensif Primary (cran 4). Vide : tout amical joué compte.
+# Niveaux de l'étude (etude-evenements-basketvibe.md:135 et :218) = crans de l'API : E1 « 2 puis 4 » = écran 3 puis 5 (étape 5g, M1).
+# `debut` (M4) : aucun amical joué avant cette date ne compte. E1 validée le 2026-11-09 vers 16:00 Paris (journal 5d) ;
+#   l'amical du 09/11 (Garden City) était déjà joué.
+debut: 2026-11-10
 experiences:
   - id: E1
     reglage: agressivité défensive, uniforme sur nos cinq
     niveaux:
-      A: agressivité 2 sur les cinq
-      B: agressivité 4 sur les cinq
+      A: agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs
+      B: agressivité 5 à l'écran (cran 4, agressive) sur tous les joueurs
+    joue:
+      A: {agress_cran: 2}
+      B: {agress_cran: 4}
     ordre: [A, B, A, B]
     amicaux_vises: 4
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
   - id: E2
     reglage: focus de tir de deux tireurs
     niveaux:
-      A: focus de tir niveau 4 sur deux tireurs
-      B: focus de tir niveau 2 (référence, déjà en base)
+      A: focus de tir 5 à l'écran (cran 4, 3 pts) sur deux tireurs
+      B: focus de tir 3 à l'écran (cran 2, référence, déjà en base)
+    joue:
+      A: {tir_cran4_min: 2}
     ordre: [A]
     amicaux_vises: 3
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
   - id: E3
     reglage: focus offensif Primary à chaque quart-temps
     niveaux:
-      A: focus offensif Primary à chaque quart-temps
+      A: focus offensif Primary (5 à l'écran) à chaque quart-temps
       B: focus offensif Normal (référence, déjà en base)
+    joue:
+      A: {primary_quarts_min: 4}
     ordre: [A]
     amicaux_vises: 7
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]

@@ -498,23 +498,69 @@ def cas_experiences(COLS_CAL, MIDI):
     with tempfile.TemporaryDirectory() as tmp:
         reg = Path(tmp)
 
-        def exps(*lignes, jour=JOUR9):
+        def exps(*lignes, jour=JOUR9, debut=None):
+            """Registre du 08/11 ; `debut` remplace celui du YAML (None : pas de borne M4, cas H7 d'avant 5g)."""
             (reg / "fait-2026-11-08.md").write_text("\n".join(lignes) + "\n", encoding="utf-8")
-            return src.lire_experiences(reg, jour)
+            x = src.lire_experiences(reg, jour)
+            if x is not None:
+                x["debut"] = debut
+            return x
 
         AM = {"match": "Opper Cards", "date": dt.date(2026, 11, 10), "limite": dt.datetime(2026, 11, 10, 7, 45)}
-        def niveau(x):
-            t = auj.test_en_cours(x, AM)
+        def niveau(x, joues=()):
+            t = auj.test_en_cours(x, AM, joues)
             return t and (t[0]["id"], t[1], t[2])
         e1 = lambda n: ["- [08:00 UTC] Saisie de l'amical [expérience=E1:" + "ABAB"[i] + "]" for i in range(n)]
+        # M3 (5g) : faits à clé distincte et réglage joué en base (gold.bv_amical_reglage), un club par amical
+        CLUBS = ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Fox", "Golf", "Hotel", "India", "Juliet", "Kilo", "Lima",
+                 "Mike", "Nova", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Ultra", "Victor", "Whisky",
+                 "Xray", "Yankee", "Zulu", "Ares", "Bora", "Ceres", "Dune"]
+        def joue(i, cran=0, pq=0, t4=0):
+            return {"fixture_id": f"f{i}", "match_day": f"2026-11-{1 + i % 8:02d}", "opponent": f"{CLUBS[i]} BC",
+                    "agress_cran": cran, "primary_quarts": pq, "tir_cran4_joueurs": t4}
+        def fait(i, exp, niv):
+            return f"- [x] [clé={CLUBS[i]} BC {1 + i % 8:02d}/11] [expérience={exp}:{niv}]"
+        e1v = lambda n: ([fait(i, "E1", "ABAB"[i]) for i in range(n)], [joue(i, cran=(2, 4)["ABAB"[i] == "B"]) for i in range(n)])
         yield "H7 E1 alternance, absent (aucun fait) : niveau A", niveau(exps()) == ("E1", "A", False)
         yield "H7 E1 alternance, présent : A,B,A,B (1 fait -> B, 2 -> A, 3 -> B)", \
             [niveau(exps(*e1(n)))[1] for n in (1, 2, 3)] == ["B", "A", "B"]
-        yield "H7 passage à E2, absent (E1 à 3 sur 4) : encore E1", niveau(exps(*e1(3))) == ("E1", "B", False)
-        yield "H7 passage à E2, présent (E1 à 4 sur 4) : E2 niveau A", niveau(exps(*e1(4))) == ("E2", "A", False)
-        toutes = e1(4) + [f"- [x] [expérience={i}:{n}]" for i, n, k in (("E2", "A", 3), ("E3", "A", 7), ("E4", "habituel", 16))
-                         for _ in range(k)]
-        yield "H4 toutes terminées : aucune expérience en cours", niveau(exps(*toutes)) is None
+        f3, j3 = e1v(3)
+        f4, j4 = e1v(4)
+        yield "H7 passage à E2, absent (E1 à 3 vérifiés sur 4) : encore E1", niveau(exps(*f3), j3) == ("E1", "B", False)
+        yield "H7 passage à E2, présent (E1 à 4 vérifiés sur 4) : E2 niveau A", niveau(exps(*f4), j4) == ("E2", "A", False)
+        suite = [(i, e, n, kw) for i, (e, n, kw) in enumerate([("E2", "A", {"t4": 2})] * 3 + [("E3", "A", {"pq": 4})] * 7
+                                                              + [("E4", "habituel", {})] * 16, start=4)]
+        toutes = f4 + [fait(i, e, n) for i, e, n, _ in suite]
+        jt = j4 + [joue(i, **kw) for i, _, _, kw in suite]
+        yield "H4 toutes terminées (vérifiées) : aucune expérience en cours", niveau(exps(*toutes), jt) is None
+        # M3 : déclarés, vérifiés, écarts
+        yield "M3 passage, absent (4 déclarés, aucun exporté) : encore E1, rien ne passe à E2", \
+            niveau(exps(*f4), []) == ("E1", "A", False)
+        j_ecart = j4[:3] + [joue(3, cran=0)]
+        yield "M3 écart, présent (4e amical joué en cran 0 au lieu de 4) : encore E1, niveau B rejoué", \
+            niveau(exps(*f4), j_ecart) == ("E1", "B", False)
+        av = lambda x, j: auj.texte_avancement(x["file"][0], auj.verifier(x, j)["E1"])
+        yield "M3 ligne, présent : « E1 : 1 vérifié sur 4, 1 déclaré non vérifié (match à exporter) »", \
+            av(exps(*e1v(2)[0]), e1v(1)[1]) == "E1 : 1 vérifié sur 4, 1 déclaré non vérifié (match à exporter)"
+        yield "M3 ligne, absent (rien déclaré) : « E1 : 0 vérifié sur 4 », sans attente ni écart", \
+            av(exps(), j4) == "E1 : 0 vérifié sur 4"
+        yield "M3 écart, présent : « réglage joué ≠ réglage du test (Delta BC 04/11) »", \
+            av(exps(*f4), j_ecart) == "E1 : 3 vérifiés sur 4, réglage joué ≠ réglage du test (Delta BC 04/11)"
+        yield "M3 écart, absent (réglages conformes) : aucun « ≠ »", "≠" not in av(exps(*f4), j4)
+        yield "M3 sans clé : fait du 08/11 rattaché à l'amical joué le 08 ou le 09", \
+            auj.verifier(exps(*e1(1)), [{"fixture_id": "g", "match_day": "2026-11-09", "opponent": "Garden City",
+                                         "agress_cran": 2, "primary_quarts": 0, "tir_cran4_joueurs": 0}])["E1"]["verifies"] == 1
+        yield "M3 un match compte une fois (deux faits sur le même amical) : 1 vérifié", \
+            auj.verifier(exps(fait(0, "E1", "A"), fait(0, "E1", "A")), [joue(0, cran=2)])["E1"]["verifies"] == 1
+        # M4 : amical joué avant le début du test
+        d10 = dt.date(2026, 11, 10)
+        yield "M4 avant le début, présent (amical du 01/11, début 10/11) : ne compte pour rien", \
+            auj.verifier(exps(fait(0, "E1", "A"), debut=d10), [joue(0, cran=2)])["E1"] == {"verifies": 0, "attente": 0, "ecarts": []}
+        yield "M4 avant le début, absent (sans début) : le même amical compte", \
+            auj.verifier(exps(fait(0, "E1", "A")), [joue(0, cran=2)])["E1"]["verifies"] == 1
+        yield "M4 YAML : début 2026-11-10", src.lire_experiences(reg, JOUR9)["debut"] == d10
+        yield "M4 aucune écriture au registre : fichiers inchangés après vérification", \
+            sorted(p.name for p in reg.iterdir()) == ["fait-2026-11-08.md"]
         yield "H7 fichier absent : None, plan sans ligne de test", \
             src.lire_experiences(reg, JOUR9, reg / "absent.yaml") is None and auj.test_en_cours(None, AM) is None
         yield "H7 fichier présent : E1 à E4 dans l'ordre", [e["id"] for e in exps()["file"]] == ["E1", "E2", "E3", "E4"]
@@ -533,7 +579,7 @@ def cas_experiences(COLS_CAL, MIDI):
         l = [a for a in sans_brief["actions"] if "Opper" in a[2]]
         yield "H3 amical sans brief, présent : une ligne E1 niveau A, verrou 07:45 du calendrier, exports après le match", \
             len(l) == 1 and l[0][0] == dt.datetime(2026, 11, 10, 7, 45) \
-            and "test E1 niveau A : agressivité 2 sur les cinq" in l[0][2] and "verrou 07:45" in l[0][3] \
+            and "test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs" in l[0][2] and "verrou 07:45" in l[0][3] \
             and "aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour" in l[0][3]
         yield "H3 amical sans brief, absent (pas d'amical aujourd'hui ni demain) : aucune ligne de test", \
             not any("test E" in a[2] + a[3] for a in auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}), {}, JOUR9, MIDI,
@@ -544,7 +590,13 @@ def cas_experiences(COLS_CAL, MIDI):
                       if "Opper" in a[2]]
         yield "H3 amical avec brief : une seule ligne, celle du brief, qui porte le test à la place de l'agressivité", \
             len(avec_brief) == 1 and "tactique-amical" in avec_brief[0][4] \
-            and "test E1 niveau A : agressivité 2 sur les cinq (remplace l'agressivité du brief pour ce match)" in avec_brief[0][3]
+            and "test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs (remplace l'agressivité du brief pour ce match)" in avec_brief[0][3]
+        yield "M3 plan, présent : la ligne du test porte l'avancement « E1 : 0 vérifié sur 4 »", \
+            "E1 : 0 vérifié sur 4" in l[0][3] and "E1 : 0 vérifié sur 4" in avec_brief[0][3]
+        cle_ici = "- [16:00 UTC] [clé=Opper Cards 10/11] Saisie de l'amical [expérience=E1:A]"
+        l_ici = [a for a in auj.plan(donnees, {}, JOUR9, MIDI, "", {"experiences": exps(cle_ici)})["actions"] if "Opper" in a[2]]
+        yield "M3 plan, saisie déclarée pour cet amical : « 1 déclaré non vérifié (match à exporter) »", \
+            "E1 : 0 vérifié sur 4, 1 déclaré non vérifié (match à exporter)" in l_ici[0][3]
         yield "H4 fichier absent : plan sans ligne de test, sans plantage", \
             not any("test E" in a[2] + a[3] for a in auj.plan(donnees, {}, JOUR9, MIDI, "", {"experiences": None})["actions"])
 
