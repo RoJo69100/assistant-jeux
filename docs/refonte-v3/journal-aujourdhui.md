@@ -491,6 +491,18 @@ Contexte : playbook, « Remise en question du modèle (chaque semaine) », huit 
 - **R9** : `test_revue_hebdo.py` **28/28** ; `test_aujourdhui.py` 193 → **197/197** (R8 : 4 cas) ; autres suites vertes.
 - `fusion_main.py` : 3 commits ajoutés, `origin/main == HEAD` (b5364d9). `fin_etape.py` : 0 commit d'avance, 23 suites vertes.
 
+## Revue hebdomadaire, étape 6b (critères écrits le 2026-11-09 17:10 Paris, avant le code)
+
+Contexte : main = ff98afe. La revue du 09/11 montre 34 hypothèses sur 34 sans mesure depuis 14 jours ; les décisions ne sont pas reliées aux leçons qu'elles testent. Lecture seule sur la base, aucune écriture dans `learn.*` ; seuls le fichier de configuration des expériences, le script de revue, ses tests et le journal bougent.
+
+| # | Critère |
+|---|---|
+| S1 | Inventaire en lecture seule des leçons de `learn.lesson` (34 hypothèses, 3 validées) : identifiant, énoncé court, domaine, et un classement parmi « testable par la file d'expériences » (laquelle), « testable sur l'historique » (étude des événements ou vue gold nommée), « à reformuler », « sans mesure possible avec les données actuelles », avec une phrase de justification. Tableau dans ce journal. |
+| S2 | Pour chaque expérience du fichier `docs/attentes/experiences-amicales-basketvibe.yaml` : nouvelle clé `lecons` (identifiants des leçons que son verdict met à jour). Aucune hypothèse ne correspond → une phrase de leçon à créer dans ce journal, non écrite en base. |
+| S3 | `pipelines/revue_hebdo.py` : section « Expériences à conclure » ; pour chaque expérience dont les amicaux vérifiés atteignent le visé : « verdict à produire : E1, n = 4, leçons L-xxx » ; sinon « aucune expérience à conclure ». Aucun verdict écrit. Page ≤ 60 lignes. |
+| S4 | Champs de `pipelines/decision.py` qui permettent de relier une décision à une leçon (`lesson_id`), et changements proposés dans `decision.py` ou un skill pour que le lien soit rempli à la création ; proposé, non appliqué. |
+| S5 | Tests figés pour S2 (lecture de la clé `lecons`) et S3, un cas présent et un cas absent chacun ; 197 tests du plan et 28 de la revue verts. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
