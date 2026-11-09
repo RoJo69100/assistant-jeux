@@ -84,6 +84,11 @@ REQUETES = {
     "dernier_officiel": "select day, competition_kind, opponent, my_result from core.fixture where game = 'basketvibe' "
                         "and played and my_result is not null and competition_kind <> 'amical' "
                         "order by day desc, scheduled_at desc nulls last limit 1",
+    # J5 (étape 5c) : verrou des matchs à venir depuis scheduled_at (fuseau lu dans la page), heure de Paris
+    "calendrier": "select day, competition_kind, opponent, scheduled_at at time zone 'Europe/Paris' as coup_envoi_paris, "
+                  "(extras ->> 'verrou_at')::timestamptz at time zone 'Europe/Paris' as verrou_paris from core.fixture "
+                  "where game = 'basketvibe' and not played and scheduled_at is not null "
+                  "and day between current_date - 1 and current_date + 7 order by scheduled_at",
     # A4 : solde projeté en fin de saison
     "gold.bv_finance_projection": "select season_end, balance_end_projected, tickets_left, sponsor_left, costs_left "
                                   "from gold.bv_finance_projection limit 1",
@@ -247,6 +252,19 @@ def en_date(v):
     return v if isinstance(v, dt.date) and not isinstance(v, dt.datetime) else dt.date.fromisoformat(str(v)[:10])
 
 
+def verrou_calendrier(donnees, date, match):
+    """Verrou (heure de Paris) du match `match` le `date` d'après core.fixture.scheduled_at (étape 5c, J5) ;
+    None si le calendrier n'a pas d'heure pour ce match : l'appelant garde alors l'heure du brief."""
+    if not date:
+        return None
+    for r in lignes_de(donnees, "calendrier"):
+        if en_date(r["day"]) == date and meme_match(r["opponent"], match):
+            v = r.get("verrou_paris") or r.get("coup_envoi_paris")
+            if v:
+                return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v)[:19])
+    return None
+
+
 def alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute):
     """A1 : dernier match -> ligne « Analyse : … » ; ligue ou coupe jouée non exportée -> ligne Exports, sans doublon.
     Source absente du jeu de données (anciens tests) : rien ; illisible : « il me manque »."""
@@ -356,7 +374,9 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     # 1. Matchs à venir : brief tactique du jour (verrou, tests), registre « reste à corriger »
     couverts = []
     for t in S.get("tactique", []):
-        limite = dt.datetime.combine(t["date"], dt.time.fromisoformat(t["verrou"])) if t["date"] and t["verrou"] else None
+        cal = verrou_calendrier(donnees, t["date"], t["match"])
+        verrou = f"{cal:%H:%M}" if cal else t["verrou"]  # scheduled_at de core.fixture d'abord, sinon l'heure du brief
+        limite = cal or (dt.datetime.combine(t["date"], dt.time.fromisoformat(t["verrou"])) if t["date"] and t["verrou"] else None)
         reste = next((r for r in restes if meme_match(r["match"], t["match"])), None)
         if limite is not None and limite < maintenant:  # verrou passé : plus une action à faire maintenant (PB9)
             couverts.append(t["match"])
@@ -367,6 +387,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         quand = jour_fr(t["date"]) if t["date"] else "date inconnue"
         if t["type"] == "ligue":
             titre = f"Ligue {t['manche'] or ''} {'à' if t['lieu'] == 'extérieur' else 'contre'} {t['match']}".replace("  ", " ")
+        elif t["type"] == "coupe":
+            titre = f"Coupe contre {t['match']}"
         else:
             titre = f"Amical contre {t['match']}"
         if reste and reste["reglages"]:
@@ -375,7 +397,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             etat, prio = "", 1  # saisie déclarée faite (registre du jour ou d'un jour antérieur) : la ligne reste, pour l'heure limite et les conditions du test
         else:
             etat, prio = "saisis la tactique maintenant", 1
-        detail = f"heure limite du verrou {t['verrou'] or 'inconnue'}"
+        detail = f"heure limite du verrou {verrou or 'inconnue'}"
         if t["preuves"]:
             detail += " ; le test est perdu si : " + " ; ".join(propre(p.rstrip(".")) for p in t["preuves"])
         if t["vieux"]:

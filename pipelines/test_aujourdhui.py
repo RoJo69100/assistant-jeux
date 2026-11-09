@@ -464,6 +464,29 @@ def cas_etape5a():
                   "gold.bv_finance_projection": (COLS_PR, [("2026-12-21", 1512431, 2800000, 480000, 2727750)])})
     yield "A4 solde projeté 1 512 431 (base du 09/11) : aucune ligne (absent)", "solde projeté" not in t
 
+    # J5 (étape 5c) : verrou depuis core.fixture.scheduled_at (lignes de la base du 09/11 16:20), sinon heure du brief
+    COLS_CAL = ["day", "competition_kind", "opponent", "coup_envoi_paris", "verrou_paris"]
+    CAL = (COLS_CAL, [("2026-11-09", "ligue", "Naked Spartans", "2026-11-09T20:00:00", "2026-11-09T19:45:00"),
+                      ("2026-11-12", "coupe", "Stare Kotlety", "2026-11-12T20:00:00", "2026-11-12T20:00:00")])
+    MIDI = dt.datetime(2026, 11, 9, 12, 0)
+    tac = [{"type": "ligue", "match": "Naked Spartans", "date": JOUR9, "verrou": "19:30", "manche": "J4", "lieu": "domicile",
+            "preuves": [], "fichier": "briefs/essai.md", "age": 0, "vieux": False},
+           {"type": "coupe", "match": "Stare Kotlety", "date": dt.date(2026, 11, 12), "verrou": None, "manche": None,
+            "lieu": "domicile", "preuves": [], "fichier": "briefs/essai.md", "age": 0, "vieux": False}]
+    vide = figees(**{"gold.bv_agenda": (AGENDA[0], [])})
+    def ligne(d, nom):
+        return next(l for l in d["actions"] if nom in l[2])
+    avec = auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "calendrier": CAL}), {}, JOUR9, MIDI, "", {"tactique": tac})
+    sans = auj.plan(vide, {}, JOUR9, MIDI, "", {"tactique": tac})
+    yield "J5 ligue J4 : verrou 19:45 Paris pris dans scheduled_at (le brief disait 19:30)", \
+        ligne(avec, "Naked Spartans")[0] == dt.datetime(2026, 11, 9, 19, 45) and "verrou 19:45" in ligne(avec, "Naked Spartans")[3]
+    yield "J5 ligue J4 sans scheduled_at : ancienne heure du brief (19:30)", \
+        ligne(sans, "Naked Spartans")[0] == dt.datetime(2026, 11, 9, 19, 30) and "verrou 19:30" in ligne(sans, "Naked Spartans")[3]
+    yield "J5 coupe 12/11 : limite 20:00 Paris depuis scheduled_at, titre « Coupe contre »", \
+        ligne(avec, "Stare Kotlety")[0] == dt.datetime(2026, 11, 12, 20, 0) and ligne(avec, "Stare Kotlety")[2].startswith("Coupe contre")
+    yield "J5 coupe sans scheduled_at : verrou inconnu (jamais supposé)", \
+        ligne(sans, "Stare Kotlety")[0] is None and "verrou inconnue" in ligne(sans, "Stare Kotlety")[3]
+
 
 def cas_base():
     """R4, sur la base (option --base) : un type de page sans lecteur sort en alerte, un type lu n'en porte pas."""

@@ -296,6 +296,10 @@ Réponses : **09/11** — amical Garden City (44f3e0f3) `finished` 104-120 dans 
 
 Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligue n'a pas d'heure ; jamais supposée). Lignes : 86 → 91, **0 disparue** (comparaison des `fixture_id`), 5 nouvelles (coupe Blood Wolves 13/09, Reims Monarchs 01/11, Stare Kotlety 12/11 ; amicaux Woodlands Wizards 14/10, Mallorca Waves 28/10). Faits : Garden City 09/11 joué, L, 08:00 Paris ; ligue J4 Naked Spartans 09/11 20:00 Paris, verrou 19:45 ; Knight Jays 07/11 joué, L, 08:00, verrou 07:45 ; coupe Stare Kotlety 12/11 20:00 Paris (fuseau lu : UTC), verrou 20:00. Coupe PSG 29/10 et Ploppers 31/10 passent joués (W). `test_aujourdhui.py` : 123/123.
 
+**J5.** `pipelines/aujourdhui.py` : requête `calendrier` (core.fixture à venir, `scheduled_at` et `extras.verrou_at` en heure de Paris) et `verrou_calendrier()` : pour un match du brief tactique, la limite et l'heure du verrou viennent de `core.fixture` si elle a l'heure, sinon du brief ; titre « Coupe contre » pour une coupe. Tests figés ajoutés (127/127) : ligue J4 → 19:45 depuis `scheduled_at` (brief d'essai à 19:30), 19:30 sans calendrier ; coupe 12/11 → 20:00 Paris, « verrou inconnue » sans calendrier. Règles de `core.agenda_rule` (BasketVibe, déclencheur match) avec heure écrite, avant et après (inchangées, aucune écriture autorisée sur cette table) : `ligue_export` 20:50, `ligue_preset` 19:45, `ligue_preview` 19:30. Prochaine étape possible : les passer en `decalage` relatif à `scheduled_at` (+00:50, −00:15, −00:30), comme les règles d'amical — demande une écriture sur `core.agenda_rule`.
+
+**J6.** Rejeu avant (19,9 s) et après (22,0 s) : 8 lignes chacun ; mêmes heures (19:30, 19:45, 20:50) ; la ligne 19:45 de la ligue vient maintenant de `scheduled_at` ; « Dernier match exporté » passe du 08/11 (New York City Cyclones) au 09/11 (Garden City, L 104-120), effet du réexport de 15:33 Paris.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -322,3 +326,4 @@ Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligu
 | 2026-11-09 12:38 | aujourd'hui | 19.2 | 18 |
 | 2026-11-09 12:39 | aujourd'hui | 16.1 | 18 |
 | 2026-11-09 15:34 | aujourd'hui | 19.8 | 18 |
+| 2026-11-09 15:46 | aujourd'hui | 21.9 | 19 |
