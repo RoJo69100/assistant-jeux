@@ -135,7 +135,7 @@ def lire_sources(donnees, jour, base=BASE):
     """Fichiers du jour (aujourdhui_sources.py) et décisions d'achat ouvertes de la base."""
     return {"tactique": src.lire_tactique(base, jour), "restes": src.lire_restes(base, jour),
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
-            "conseils": src.lire_conseils(base, jour)}
+            "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour)}
 
 
 def deja(fait, cle):
@@ -200,6 +200,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for t in S.get("tactique", []):
         limite = dt.datetime.combine(t["date"], dt.time.fromisoformat(t["verrou"])) if t["date"] and t["verrou"] else None
         reste = next((r for r in restes if meme_match(r["match"], t["match"])), None)
+        saisie = next((s for s in S.get("saisies", []) if s["date"] == t["date"] and meme_match(s["match"], t["match"])), None)
         quand = jour_fr(t["date"]) if t["date"] else "date inconnue"
         if t["type"] == "ligue":
             titre = f"Ligue {t['manche'] or ''} {'à' if t['lieu'] == 'extérieur' else 'contre'} {t['match']}".replace("  ", " ")
@@ -207,8 +208,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             titre = f"Amical contre {t['match']}"
         if reste and reste["reglages"]:
             etat, prio = f"corrige à l'écran {len(reste['reglages'])} réglages ({regrouper(reste['reglages'])})", 1
-        elif deja(fait, t["type"]):
-            etat, prio = "", 1  # saisie déclarée faite : la ligne reste, pour l'heure limite et les conditions du test
+        elif deja(fait, t["type"]) or saisie:
+            etat, prio = "", 1  # saisie déclarée faite (registre du jour ou d'un jour antérieur) : la ligne reste, pour l'heure limite et les conditions du test
         else:
             etat, prio = "saisis la tactique maintenant", 1
         detail = f"heure limite du verrou {t['verrou'] or 'inconnue'}"

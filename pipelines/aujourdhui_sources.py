@@ -106,6 +106,29 @@ def lire_restes(base, jour: dt.date) -> list[dict]:
     return res
 
 
+SAISIE = re.compile(r"\bdu (\d{2})/(\d{2}) contre ([^(—\n]+?)\s*(?:\(|—|$)", re.I)
+
+
+def lire_saisies(base, jour: dt.date) -> list[dict]:
+    """Saisies de match à venir déclarées dans n'importe quel registre `fait-<j>.md` daté d'au plus `jour` (critère PB5) :
+    une ligne « saisie … du JJ/MM contre <adversaire> » dont la date est celle d'aujourd'hui ou plus tard."""
+    res = []
+    for f in sorted(Path(base).glob("fait-*.md")):
+        m = re.match(r"^fait-(\d{4}-\d{2}-\d{2})\.md$", f.name)
+        if not m or dt.date.fromisoformat(m.group(1)) > jour:
+            continue
+        for l in f.read_text(encoding="utf-8").splitlines():
+            if not re.search(r"\bsaisi", l, re.I) or re.search(r"reste à", l, re.I):
+                continue
+            s = SAISIE.search(l)
+            if not s:
+                continue
+            date = _jm(jour, s.group(1), s.group(2))
+            if date >= jour:
+                res.append({"match": s.group(3).strip(), "date": date, "fichier": f.name})
+    return res
+
+
 def lire_cibles(decisions: list[dict], encheres: list[dict], base, jour: dt.date) -> list[dict]:
     """Une cible par « Nom POSTE (max N) » des décisions d'achat ouvertes ; fin d'enchère lue dans `encheres`."""
     base = Path(base)

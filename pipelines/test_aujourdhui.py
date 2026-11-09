@@ -21,6 +21,9 @@ src = auj.src
 JOUR = dt.date(2026, 11, 6)
 SOIR = dt.datetime(2026, 11, 6, 19, 0)
 ESSAI = DOSSIER / "jeu_essai" / "2026-11-06"
+JOUR9 = dt.date(2026, 11, 9)  # jeu d'essai du 09/11 : briefs et registre du 08/11 (critères PB5 à PB9)
+ESSAI9 = DOSSIER / "jeu_essai" / "2026-11-09"
+TOT = dt.datetime(2026, 11, 9, 6, 0)
 FAIT = (ESSAI / "fait-2026-11-06.md").read_text(encoding="utf-8").lower().replace("’", "'")
 DECISIONS = [{"id": 1076, "label": "Enchères 07-08/11 : Fujita C (max 150 000) et Stankevičius SF (max 100 000)",
               "hypothesis": "Un C de PS 55,5 améliore le titulaire Fournier (52,4)"}]
@@ -200,6 +203,23 @@ def cas():
         AGENDA[0], [(JOUR + dt.timedelta(days=1), "04:30", 1, "entraînement", "tôt demain")])}))
     yield "avant 18:00 : demain non ajouté", "tôt demain" not in texte(figees(**{"gold.bv_agenda": (
         AGENDA[0], [(JOUR + dt.timedelta(days=1), "04:30", 1, "entraînement", "tôt demain")])}), maintenant=dt.datetime(2026, 11, 6, 12, 0))
+    # PB5 : une saisie déclarée dans un registre antérieur retire l'action de saisie
+    vide = figees(**{"gold.bv_agenda": (AGENDA[0], [])})
+    saisies = src.lire_saisies(ESSAI9, JOUR9)
+    yield "PB5 la ligne de 10:34 UTC du 08/11 est lue : Garden City, 09/11", \
+        [(s["match"], s["date"]) for s in saisies] == [("Garden City", JOUR9)]
+    tactique9 = src.lire_tactique(ESSAI9, JOUR9)
+    avec = auj.rendre(auj.plan(vide, {}, JOUR9, TOT, "", {"tactique": tactique9, "saisies": saisies}), JOUR9)
+    sans = auj.rendre(auj.plan(vide, {}, JOUR9, TOT, "", {"tactique": tactique9, "saisies": []}), JOUR9)
+    garden = next(l for l in avec.splitlines() if "Garden City" in l)
+    yield "PB5 Garden City : la ligne reste (verrou, test) sans « saisis la tactique »", \
+        garden.startswith("07:45") and "heure limite du verrou 07:45" in garden and "saisis la tactique" not in garden
+    yield "PB5 sans la déclaration : « saisis la tactique » pour Garden City", \
+        "saisis la tactique maintenant" in next(l for l in sans.splitlines() if "Garden City" in l)
+    yield "PB5 la ligue non déclarée (Naked Spartans) reste à saisir", \
+        "saisis la tactique maintenant" in next(l for l in avec.splitlines() if "Naked Spartans" in l)
+    yield "PB5 une saisie datée d'un jour passé n'est pas retenue", \
+        src.lire_saisies(ESSAI9, dt.date(2026, 11, 10)) == []
 
 
 if __name__ == "__main__":
