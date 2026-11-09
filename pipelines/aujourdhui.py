@@ -7,7 +7,9 @@ d'achat ouverte (learn.decision) et les fichiers du jour (aujourdhui_sources.py 
 dossier, police, learnings). Critères : docs/refonte-v3/journal-aujourdhui.md.
 
 Usage :
-  python -I pipelines/aujourdhui.py basketvibe [--jour AAAA-MM-JJ]
+  python -I pipelines/aujourdhui.py basketvibe [--jour AAAA-MM-JJ] [--maintenant HH:MM]
+L'heure et le jour viennent de pipelines/heure_paris.py (jamais de l'horloge du shell) ; une action dont le verrou est passé n'est
+plus proposée. --maintenant HH:MM impose l'heure pour les tests : ni instantané, ni ligne de durée.
 Rejeu (--jour) : seules les vues qui savent lire un jour passé sont rejouées ; toutes les autres, qui lisent
 current_date ou now(), répondent « rejeu non disponible pour <vue> ». Chaque exécution ajoute une ligne à
 docs/refonte-v3/journal-aujourdhui.md. Une donnée absente s'écrit « il me manque X — export Y ».
@@ -223,6 +225,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for t in S.get("tactique", []):
         limite = dt.datetime.combine(t["date"], dt.time.fromisoformat(t["verrou"])) if t["date"] and t["verrou"] else None
         reste = next((r for r in restes if meme_match(r["match"], t["match"])), None)
+        if limite is not None and limite < maintenant:  # verrou passé : plus une action à faire maintenant (PB9)
+            couverts.append(t["match"])
+            if reste:
+                restes.remove(reste)
+            continue
         saisie = next((s for s in S.get("saisies", []) if s["date"] == t["date"] and meme_match(s["match"], t["match"])), None)
         quand = jour_fr(t["date"]) if t["date"] else "date inconnue"
         if t["type"] == "ligue":
@@ -247,9 +254,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             restes.remove(reste)
     for r in restes:  # reste à faire sans brief du jour
         limite = dt.datetime.combine(r["date"], dt.time.fromisoformat(r["heure"])) if r["date"] and r["heure"] else None
+        couverts.append(r["match"])
+        if limite is not None and limite < maintenant:  # verrou passé (PB9)
+            continue
         ajoute(limite, 1, f"{r['match'] or 'Match'} : corrige à l'écran {len(r['reglages'])} réglages ({regrouper(r['reglages'])})",
                "", r["fichier"])
-        couverts.append(r["match"])
 
     # 2. Enchères décidées : montant maximum, fin d'enchère, police avant l'enchère
     for c in S.get("cibles", []):
@@ -280,6 +289,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             continue  # la ligne du brief est plus complète
         if r["category"] == "export" and d != jour:
             continue  # export d'après-match de demain : pas une action d'aujourd'hui
+        if r["category"] in ("ligue", "amical", "coupe") and h and dt.datetime.combine(d, dt.time.fromisoformat(h)) < maintenant:
+            continue  # verrou de saisie passé (PB9)
         if deja(fait, r["category"]):
             continue
         ajoute(dt.datetime.combine(d, dt.time.fromisoformat(h)) if h else None, int(r["priority"]), r["action"], "", "gold.bv_agenda")
@@ -421,37 +432,57 @@ def rendre(res, jour, erreurs=None):
     return "\n".join(lignes)
 
 
-def journaliser(jour, secondes, requetes):
+def journaliser(jour, secondes, requetes, quand=None):
     if not JOURNAL.exists():
         JOURNAL.write_text("# Journal de durée de `aujourdhui.py` (une ligne par exécution)\n\n"
                            "| Date | Jour du plan | Durée (s) | Requêtes |\n|---|---|---|---|\n", encoding="utf-8")
     with JOURNAL.open("a", encoding="utf-8") as f:
-        f.write(f"| {dt.datetime.now().strftime('%Y-%m-%d %H:%M')} | {jour} | {secondes:.1f} | {requetes} |\n")
+        f.write(f"| {(quand or heure_paris_naive()).strftime('%Y-%m-%d %H:%M')} | {jour} | {secondes:.1f} | {requetes} |\n")
+
+
+def heure_paris_naive():
+    """Heure de Paris (pipelines/heure_paris.py, jamais l'horloge du shell, UTC en cloud), sans fuseau pour les comparaisons."""
+    from heure_paris import paris
+    return paris().replace(tzinfo=None)
+
+
+def reperes(jour_arg, maintenant_arg, ref):
+    """(jour du plan, heure de référence) : `ref` = heure de Paris ; `--jour` change le jour, `--maintenant HH:MM` l'heure (PB9)."""
+    jour = dt.date.fromisoformat(jour_arg) if jour_arg else ref.date()
+    if maintenant_arg:
+        try:
+            h = dt.time.fromisoformat(maintenant_arg)
+        except ValueError:
+            sys.exit(f"aujourdhui.py : --maintenant attend HH:MM, reçu « {maintenant_arg} »")
+        return jour, dt.datetime.combine(jour, h.replace(second=0, microsecond=0))
+    return jour, ref
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("jeu")
     ap.add_argument("--jour", help="AAAA-MM-JJ : rejeu d'un jour passé quand la vue le permet")
+    ap.add_argument("--maintenant", help="HH:MM : heure de référence pour les tests (rien n'est écrit) ; défaut : l'heure de Paris")
     a = ap.parse_args()
     if a.jeu != "basketvibe":
         sys.exit("aujourdhui.py : seul basketvibe est branché (lot L2)")
-    jour = dt.date.fromisoformat(a.jour) if a.jour else dt.date.today()
-    maintenant = dt.datetime.now()
+    ref = heure_paris_naive()
+    jour, maintenant = reperes(a.jour, a.maintenant, ref)
     debut = time.time()
     sqlmod = charger_sql()
     donnees, erreurs, n = lire_tout(sqlmod.executer, a.jour)
     sys.stdout.reconfigure(encoding="utf-8")
     rendu = plier(rendre(plan(donnees, erreurs, jour, maintenant, lire_fait(jour), lire_sources(donnees, jour)), jour, erreurs))
     print(rendu)
-    if not a.jour:  # instantané quotidien (écrasé si relancé le même jour) : remplace le rejeu
+    if not a.jour and not a.maintenant:  # instantané quotidien (écrasé si relancé le même jour) : ni rejeu ni simulation d'heure
         fichier = BASE / f"aujourdhui-{jour.isoformat()}.md"
         fichier.parent.mkdir(parents=True, exist_ok=True)
         fichier.write_text(f"<!-- généré le {maintenant.strftime('%Y-%m-%d %H:%M')} -->\n{rendu}\n", encoding="utf-8")
     nonrej = [k for k, v in donnees.items() if v == "rejeu"]
     if nonrej:
         print("\n" + "\n".join(f"rejeu non disponible pour {k}" for k in nonrej))
-    journaliser(a.jour or "aujourd'hui", time.time() - debut, n)
+    if not a.maintenant:
+        journaliser(a.jour or "aujourd'hui", time.time() - debut, n, ref)
     return 0
 
 

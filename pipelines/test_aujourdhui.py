@@ -275,7 +275,40 @@ def cas():
         auj.plan(sans_solde, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
     yield "PB8 le mot « réserve » n'apparaît dans aucune sortie", \
         not any("réserve" in x for x in (t, t8_finies, t8_ouvertes, auj.rendre(auj.plan(sans_solde, {}, JOUR9, TOT, "", {}), JOUR9)))
-    yield "PB7 enchère encore ouverte : reste une action","Enchère sur Fujita (C) : maximum 150 000" in auj.rendre(
+    # PB9 : une action dont le verrou est passé n'est plus « à faire maintenant »
+    matin = dt.datetime(2026, 11, 9, 9, 18)
+    S9 = {"tactique": tactique9, "saisies": []}
+    t9_tot = auj.rendre(auj.plan(vide, {}, JOUR9, TOT, "", S9), JOUR9)
+    t9_matin = auj.rendre(auj.plan(vide, {}, JOUR9, matin, "", S9), JOUR9)
+    yield "PB9 à 06:00 : la ligne amical de 07:45 est présente", any(l.startswith("07:45") and "Garden City" in l for l in t9_tot.splitlines())
+    yield "PB9 à 09:18 : la ligne amical de 07:45 est absente", "Garden City" not in t9_matin and not any(l.startswith("07:45") for l in t9_matin.splitlines())
+    yield "PB9 à 09:18 : la ligue de 19:45 reste", any(l.startswith("19:45") and "Naked Spartans" in l for l in t9_matin.splitlines())
+    yield "PB9 à 20:00 : la ligue de 19:45 est absente aussi", "Naked Spartans" not in auj.rendre(
+        auj.plan(vide, {}, JOUR9, dt.datetime(2026, 11, 9, 20, 0), "", S9), JOUR9)
+    agenda9 = figees(**{"gold.bv_agenda": (AGENDA[0], [
+        (JOUR9, "07:45", 1, "amical", "Avant 07:45 : preset amical sur le match contre Garden City (domicile)"),
+        (JOUR9, "19:30", 2, "export", "Avant 19:45 si possible : exporter la page Preview du match J4")])})
+    ta = auj.rendre(auj.plan(agenda9, {}, JOUR9, matin, "", {}), JOUR9)
+    yield "PB9 ligne d'agenda sans brief : verrou 07:45 passé, absente à 09:18 ; l'export de 19:30 reste", \
+        "preset amical" not in ta and "19:30 — Avant 19:45 si possible" in ta
+    yield "PB9 la même ligne d'agenda est présente à 06:00", "preset amical" in auj.rendre(auj.plan(agenda9, {}, JOUR9, TOT, "", {}), JOUR9)
+    reste9 = {"restes": [{"match": "Garden City", "date": JOUR9, "heure": "07:45", "reglages": [("Tir 1", "Albano")], "texte": "", "fichier": "fait.md"}]}
+    yield "PB9 réglage à corriger au verrou passé : absent à 09:18, présent à 06:00", \
+        "Garden City" not in auj.rendre(auj.plan(vide, {}, JOUR9, matin, "", reste9), JOUR9) \
+        and "Garden City : corrige à l'écran 1 réglages" in auj.rendre(auj.plan(vide, {}, JOUR9, TOT, "", reste9), JOUR9)
+    ref = dt.datetime(2026, 11, 9, 10, 28)
+    yield "PB9 défaut inchangé : jour et heure de Paris", auj.reperes(None, None, ref) == (JOUR9, ref)
+    yield "PB9 --maintenant 09:18 : même jour, heure imposée", auj.reperes(None, "09:18", ref) == (JOUR9, matin)
+    yield "PB9 --jour : jour imposé, heure de Paris", auj.reperes("2026-11-06", None, ref) == (dt.date(2026, 11, 6), ref)
+    try:
+        auj.reperes(None, "neuf heures", ref)
+        refus = False
+    except SystemExit as e:
+        refus = "HH:MM" in str(e)
+    yield "PB9 --maintenant illisible : refus qui dit le format", refus
+    hp = auj.heure_paris_naive()
+    yield "PB9 l'heure vient de heure_paris.py : datetime sans fuseau", isinstance(hp, dt.datetime) and hp.tzinfo is None
+    yield "PB7 enchère encore ouverte : reste une action", "Enchère sur Fujita (C) : maximum 150 000" in auj.rendre(
         auj.plan(d7, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
 
 
