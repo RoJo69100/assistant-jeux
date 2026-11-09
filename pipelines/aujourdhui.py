@@ -327,7 +327,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for r in etat.values():
         if r["ecran"] == "Mes enchères" and not encheres_en_cours:
             continue
-        if not str(r["statut"]).endswith(("à jour", "optionnel")) and not declare(fait, cles, jour, r["ecran"]):
+        statut = str(r["statut"])
+        if r["ecran"] == "Mes enchères" and statut.endswith("optionnel"):
+            # R3 : « optionnel » vaut seulement sans enchère ouverte ; avec une enchère ouverte, page de plus de 24 h = à refaire
+            statut = "🟧 à refaire" if r["age_h"] is None or r["age_h"] > 24 else "🟩 à jour"
+        if not statut.endswith(("à jour", "optionnel")) and not declare(fait, cles, jour, r["ecran"]):
             exports.append(f"{r['ecran']} ({'jamais exporté' if r['age_h'] is None else str(int(r['age_h'])) + ' h'})")
     ligues = [r for r in lignes_de(donnees, "gold.bv_agenda") if r["category"] == "ligue"]
     apercus = {str(r["match_day"])[:10] for r in lignes_de(donnees, "apercus")}

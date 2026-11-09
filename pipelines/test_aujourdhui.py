@@ -327,9 +327,11 @@ def cas():
         ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
         [(9, "Mes enchères", "ventes", None, 120, "🟩 optionnel"), (13, "Personnel", "staff", None, 80, "🟧 à refaire")])})
     en_cours = [dict(c, fin=dt.datetime(2026, 11, 10, 3, 50)) for c in cibles9]  # enchère ouverte : PB6 ne filtre pas
-    tr3 = auj.rendre(auj.plan(optionnel, {}, JOUR9, TOT, "", {"cibles": en_cours}), JOUR9)
-    yield "R3 Mes enchères « 🟩 optionnel » : non demandé, même avec une enchère ouverte", "Mes enchères" not in tr3
+    tr3 = auj.rendre(auj.plan(optionnel, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "R3 Mes enchères non demandé : « 🟩 optionnel » sans enchère ouverte (absent)", "Mes enchères" not in tr3
     yield "R3 les autres écrans en retard restent demandés", "Personnel (80 h)" in tr3
+    tr3b = auj.rendre(auj.plan(optionnel, {}, JOUR9, TOT, "", {"cibles": en_cours}), JOUR9)
+    yield "R3 Mes enchères avec enchère ouverte et page de 120 h (présent)", "Mes enchères (120 h)" in tr3b
     # R5 : déclarations par clé `[clé=…]`, registres des 7 derniers jours
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
