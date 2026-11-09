@@ -335,6 +335,15 @@ Contexte : playbook, étape 5, actions 3 et 6 ; main = 9dc4365, plan en 22,5 s (
 Incohérence relevée au passage : `best_slot` est choisi sur `fit`, `rank_in_slot` sur `fit_with_form`.
 Conséquence : aucune ligne « Vendre X » ajoutée au plan, aucun test K2 (rien à tester). La ligne « Garder : effectif, vendre pour profit : règle non écrite » reste telle quelle.
 
+**Résultats 5e (2026-11-09 16:10 Paris).**
+- **K1** (`d57c796`) : durée par requête, en série (script de mesure hors dépôt, `sql.executer` sur chaque entrée de `REQUETES`), avant K3-K4 : agenda 0,89 · exports_state 1,19 · daily_alerts 2,31 · finance_health 0,50 · **position_summary 4,49** · market_bargains 0,60 · market_candidates 1,39 · personnel_status 0,57 · joueurs_declin 0,62 · decisions_achat 0,46 · encheres_ouvertes 0,86 · transferts_recents 0,55 · apercus 0,45 · derniere_vente 0,55 · alertes_match 0,44 · objectifs 0,47 · dernier_officiel 1,15 · calendrier 1,05 · regles_agenda 0,45 · finance_projection 0,73 ; **total 19,73 s** (+ ~3 s de démarrage : 23,0 s mesurés par le script). Total > 20 s → `lire_tout` lance les requêtes en parallèle (8 fils, résultat rangé dans l'ordre de `REQUETES`) : **23,0 s → 7,5 s**, `diff` avant/après : « sortie identique ». Le plancher est `gold.bv_position_summary` (≈ 4,3-4,5 s).
+- **K2** (`34a4193`) : non, voir ci-dessus ; rien de codé.
+- **K3** (`34e1776`) : valeur d'un High et coût du test **absents de la base** (`core.game_params` n'a aucune des deux clés ; le 25 000 n'existe que dans le commentaire de `sql/gold/010_bv_academy.sql:6` et le skill `06-tests.md`). Clés lues : `academie_valeur_high`, `academie_cout_test` de `core.game_params`. Rapport du 05/11 09:00 : 3 lignes « donnée manquante : valeur d'un High …, coût du test … » (Nael Lopez PG, Nathan Vidal PF, Sacha Aubert C), rangées dans « Autres points ». Quand les deux clés existeront : « tester » si P(High) × valeur > coût, sinon « ignorer » (règle d'espérance, marquée « à valider ») ; « signer » demande le résultat d'un test, absent de la base, donc jamais rendu. P(High) = `p_high_8_10` à la jauge actuelle (79 → 21,2 %), le même pour les trois : la vue ne donne pas de cote par prospect. Fin de la ligne : `[clé=Académie]` au registre après le rapport, ou rapport de plus de 7 jours.
+- **K4** (`2040ea3`) : `gold.decisions_a_evaluer` = 0 ligne, aucun `[décision=<id>]` dans les registres des 7 derniers jours → aucune ligne (conforme). Lecture des registres par `relier_faits.lire_references`, aucune écriture.
+- **K5** : `test_aujourdhui.py` 143 → **157/157** (K3 : 8 cas, K4 : 6 cas, présents et absents ; K2 : aucun, rien de codé). Sortie réelle : 8 lignes logiques.
+- **K6** : rejeu avant 23,0 s (20 requêtes), après **7,6 s** (25 requêtes ; en série elles font 24,3 s). Différence de sortie : seule la ligne « Autres points » passe de 2 à 5 éléments (les 3 prospects).
+- Hors périmètre, non commité : `outputs/basketvibe/aujourdhui-2026-11-09.md` (instantané réécrit par chaque exécution du script).
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -366,3 +375,4 @@ Conséquence : aucune ligne « Vendre X » ajoutée au plan, aucun test K2 (rien
 | 2026-11-09 16:00 | aujourd'hui | 22.5 | 20 |
 | 2026-11-09 16:05 | aujourd'hui | 23.0 | 20 |
 | 2026-11-09 16:07 | aujourd'hui | 7.5 | 20 |
+| 2026-11-09 16:10 | aujourd'hui | 7.6 | 25 |
