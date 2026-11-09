@@ -479,6 +479,18 @@ Contexte : playbook, « Remise en question du modèle (chaque semaine) », huit 
 | R8 | Plan du jour : le dimanche, une ligne « Revue de la semaine : à lire (outputs/basketvibe/revue-hebdo-AAAA-MM-JJ.md) », sinon rien ; test figé présent / absent ; plan ≤ 8 lignes, ≤ 15 s. **Écart à la consigne, tranché** : R8 oblige à toucher `pipelines/aujourdhui.py` et `pipelines/test_aujourdhui.py`, en plus du nouveau script, de son test, du dossier de sorties et du journal. |
 | R9 | Tests figés (données factices) pour R2 à R7, un cas présent et un cas absent chacun (`pipelines/test_revue_hebdo.py`) ; les 193 tests existants restent verts. |
 
+**Résultats 6a (2026-11-09 17:20 Paris).**
+- **R1** (`723a661`) : `python -I pipelines/revue_hebdo.py basketvibe` → `écrit outputs/basketvibe/revue-hebdo-2026-11-09.md (55 lignes, 2.2 s)` ; 7 requêtes en parallèle ; au-delà de 60 lignes la page est coupée et la dernière ligne le dit (testé).
+- **R2** : 6 verdicts de la semaine (composition 1 confirmé / 3 contredits, tactique 0 / 2), tous « effet » (requêtes sur `gold.bv_match_report` ou `my_result`) ; 5 décisions en attente (académie 1, achat 2, composition 1, tactique 1) ; part contredite : « n insuffisant » partout (n ≤ 4 < 10).
+- **R3** : hypothèse 34, validée 3, aucune retirée ; « contre » : pas d'instantané précédent (total 1) ; hypothèses sans mesure depuis 14 jours : 34 sur 34 (aucune décision liée n'a de verdict).
+- **R4** : 9 matchs (7 amicaux, 2 ligue), 1 V – 8 D par `my_result`, marge moyenne −17,0 ; « matchs les plus mal prédits : donnée manquante ». Le nom d'adversaire `|HAVEX|` est échappé dans le tableau.
+- **R5** : E1 à E4 : 0 vérifié (aucun fait déclaré) ; le n de l'étude n'est pas calculé (11,4 s mesurés > 10 s) ; la ligne ne paraît que le dimanche.
+- **R6** : 93 types non lus sur 126 ; pas d'instantané précédent ; instantané écrit : `outputs/basketvibe/revue-hebdo/instantane-2026-11-09.json` = `{"n_against": 1, "non_lus": 93}`. Instantané de comparaison = le plus récent daté de 7 jours ou plus, sinon le plus récent avant le jour.
+- **R7** : 8 paramètres lus dans le playbook ; 1 avec date (Âge de déclin, `age_declin`, 2026-11-03) ; 7 « jamais calculé ». Âge des écrans et seuils de fatigue/forme sont en base (`core.export_rule`, `core.alert_rule`) mais sans date de calcul : marqués « jamais calculé » comme la consigne le demande.
+- **R8** (`b5364d9`) : ligne le dimanche seulement (priorité 3, sans heure ; page absente → la commande en détail). Rejeu du lundi : sortie identique (10,3 s).
+- **R9** : `test_revue_hebdo.py` **28/28** ; `test_aujourdhui.py` 193 → **197/197** (R8 : 4 cas) ; autres suites vertes.
+- `fusion_main.py` : 3 commits ajoutés, `origin/main == HEAD` (b5364d9). `fin_etape.py` : 0 commit d'avance, 23 suites vertes.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -518,3 +530,4 @@ Contexte : playbook, « Remise en question du modèle (chaque semaine) », huit 
 | 2026-11-09 16:44 | aujourd'hui | 10.9 | 28 |
 | 2026-11-09 16:47 | aujourd'hui | 9.8 | 30 |
 | 2026-11-09 16:48 | aujourd'hui | 10.0 | 31 |
+| 2026-11-09 16:57 | aujourd'hui | 10.2 | 31 |

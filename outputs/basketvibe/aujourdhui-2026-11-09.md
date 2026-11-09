@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-09 16:48 -->
+<!-- généré le 2026-11-09 16:57 -->
 19:30 — Avant 19:45 si possible : exporter la page Preview du match J4 (effectif adverse à jour)
     (gold.bv_agenda)
 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
