@@ -261,7 +261,9 @@ def cas():
         auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": None}), {"transferts_recents": "boum"},
                  JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
     # PB8 : capacité = solde − enchères encore ouvertes (une enchère finie ne retient plus d'argent), jamais de réserve
-    d8 = figees(**{"gold.bv_agenda": (AGENDA[0], [])})
+    bargains9 = (["name", "position", "ps", "ref_n", "ref_reliable", "bid_ceiling_resale", "resale_margin_p25", "ends_paris"], [
+        ("Martin", "PG", 57.0, 9, True, 120000, 40000, "2026-11-09T21:00:00")])  # fin ce soir : encore une action
+    d8 = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_market_bargains": bargains9})
     t8_finies = auj.rendre(auj.plan(d8, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
     t8_ouvertes = auj.rendre(auj.plan(d8, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
     yield "PB8 enchères finies : rien n'est retenu, l'affaire de 120 000 tient dans le solde (279 666)", \
@@ -296,6 +298,15 @@ def cas():
     yield "PB9 réglage à corriger au verrou passé : absent à 09:18, présent à 06:00", \
         "Garden City" not in auj.rendre(auj.plan(vide, {}, JOUR9, matin, "", reste9), JOUR9) \
         and "Garden City : corrige à l'écran 1 réglages" in auj.rendre(auj.plan(vide, {}, JOUR9, TOT, "", reste9), JOUR9)
+    finie = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_market_bargains": (bargains9[0], [
+        ("Zhang", "PG", 55.1, 9, True, 120000, 541500, "2026-11-08T19:55:44"),   # fin hier soir : plus une action
+        ("Martin", "PG", 57.0, 9, True, 120000, 40000, "2026-11-09T21:00:00")])})
+    tf = auj.rendre(auj.plan(finie, {}, JOUR9, matin, "", {}), JOUR9)
+    yield "PB9 enchère du Marché finie hier soir : plus de ligne ; celle de ce soir reste", \
+        "Zhang" not in tf and "21:00 — Enchère maximale 120 000 sur Martin" in tf
+    yield "PB9 fin d'enchère du Marché inconnue : l'affaire reste proposée", "Enchère maximale 120 000 sur Zhang" in auj.rendre(
+        auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_market_bargains": (bargains9[0], [
+            ("Zhang", "PG", 55.1, 9, True, 120000, 541500, None)])}), {}, JOUR9, matin, "", {}), JOUR9)
     ref = dt.datetime(2026, 11, 9, 10, 28)
     yield "PB9 défaut inchangé : jour et heure de Paris", auj.reperes(None, None, ref) == (JOUR9, ref)
     yield "PB9 --maintenant 09:18 : même jour, heure imposée", auj.reperes(None, "09:18", ref) == (JOUR9, matin)

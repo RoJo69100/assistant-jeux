@@ -345,6 +345,10 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     def libre(r):
         return not any(n in norm(r["name"]) for n in decides)
 
+    def pas_finie(r):  # une enchère du Marché dont la fin est passée n'est plus une action (PB9) ; fin inconnue : reste proposée
+        fin = r.get("ends_paris")
+        return not fin or dt.datetime.fromisoformat(str(fin)[:19]) > maintenant
+
     def finance(prix):  # prix inconnu ou capacité illisible : on ne tranche pas, la cible reste proposée
         return reste_cap is None or prix is None or float(prix) <= reste_cap
 
@@ -355,7 +359,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         minces = [r for r in pos if int(r["depth"]) <= 2]
         cands = [r for r in lignes_de(donnees, "gold.bv_market_candidates")
                  if vrai(r["enters_top8"]) and str(r["would_rank_in_slot"]) == "1" and r["position"] == faible["position"]
-                 and libre(r) and finance(r["current_price"])] if marche_frais else []
+                 and libre(r) and finance(r["current_price"]) and pas_finie(r)] if marche_frais else []
         cible = minces[0] if minces else faible if cands else None
         if cible:
             x = round(float(cible["ps_max"]) + 1, 1)
@@ -395,7 +399,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     else:
         bonnes = [r for r in lignes_de(donnees, "gold.bv_market_bargains")
                   if vrai(r["ref_reliable"]) and float(r["resale_margin_p25"] or 0) > 0 and int(r["ref_n"] or 0) >= 5 and libre(r)
-                  and finance(r["bid_ceiling_resale"])][:2]
+                  and finance(r["bid_ceiling_resale"]) and pas_finie(r)][:2]
         for r in bonnes:
             fin = dt.datetime.fromisoformat(str(r["ends_paris"])[:19]) if r.get("ends_paris") else None
             ajoute(fin, 2, f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
