@@ -124,6 +124,15 @@ REQUETES = {
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
                       "from gold.bv_amical_reglage where match_day >= current_date - 120",
+    # 5j (Y2, Y3) : aperçus (une ligne par capture de match-tactics, historique de silver) des matchs de ligue et de coupe des 3 jours
+    "apercus_matchs": "select f.fixture_id, f.competition_kind, f.round_no, f.day, f.opponent, "
+                      "a.captured_at at time zone 'Europe/Paris' as capture_paris, "
+                      "(select string_agg(p ->> 'last_name', ',' order by p ->> 'last_name') from jsonb_array_elements("
+                      "case when (a.body ->> 'is_home')::boolean then a.body -> 'preview' -> 'away_players' "
+                      "else a.body -> 'preview' -> 'home_players' end) p) as adverse "
+                      "from core.fixture f left join silver.bv_fixture_api a on a.fixture_id::text = f.fixture_id::text and a.part = 'match-tactics' "
+                      "where f.game = 'basketvibe' and not f.played and f.competition_kind in ('ligue', 'coupe') "
+                      "and f.day between current_date and current_date + 2 order by f.day, f.fixture_id, a.captured_at",
     # K4 (étape 5e) : décisions échues à mesurer, et décisions encore « proposed » (faits du registre à relier)
     "a_evaluer": "select count(*) as n from gold.decisions_a_evaluer where game = 'basketvibe'",
     "decisions_proposees": "select id, status, game from learn.decision where game = 'basketvibe' and status = 'proposed'",
@@ -358,6 +367,59 @@ def prochain_amical(donnees, jour, maintenant):
 
 LIBELLES = {"passing": "Passes", "defense": "Défense", "ball_handling": "Dribble", "rebounding": "Rebond",
             "two_point": "2 points", "three_point": "3 points", "athleticism": "Athlétisme", "stamina": "Endurance"}
+
+
+def date_du_brief(fichier):
+    """Date (AAAA-MM-JJ du nom de fichier) d'un brief `briefs/AAAA-MM-JJ-tactique.md` ; None si illisible."""
+    m = re.search(r"(\d{4}-\d{2}-\d{2})-tactique", str(fichier))
+    return dt.date.fromisoformat(m.group(1)) if m else None
+
+
+def brief_du_match(S, kind, adversaire, jour_match):
+    """Brief tactique de ligue ou de coupe lu par lire_tactique pour ce match (même adversaire, même jour) ; None sinon."""
+    return next((t for t in S.get("tactique", []) if t["type"] != "amical" and t["date"] == jour_match
+                 and meme_match(t["match"], adversaire)), None)
+
+
+def lignes_composition(donnees, S, jour, maintenant, ajoute):
+    """5j, Y2 et Y3 : par match de ligue ou de coupe des 3 prochains jours, d'après les captures de l'aperçu en base.
+    Y2 : aperçu en base et aucun brief daté du jour de la capture ou après -> « lance l'agent tactique » (limite = verrou) ;
+    aperçu absent : rien ici (la ligne d'export existante reste). Y3 : verrou dans moins de 24 h et dernier aperçu de plus de 24 h
+    -> « Réexporte l'aperçu » (ligue) ; deux captures ou plus dont la composition adverse diffère -> « composition adverse
+    changée » avec les noms entrés et sortis, sauf si un brief postérieur à la dernière capture en tient déjà compte.
+    Vue absente (anciens jeux de données) : rien."""
+    if "apercus_matchs" not in donnees or donnees["apercus_matchs"] in (None, "rejeu"):
+        return
+    matchs = {}
+    for r in lignes_de(donnees, "apercus_matchs"):
+        m = matchs.setdefault(r["fixture_id"], {"kind": r["competition_kind"], "manche": r.get("round_no"), "jour": _jour(r["day"]),
+                                                "adv": r["opponent"], "captures": []})
+        if r.get("capture_paris"):
+            m["captures"].append((en_heure(r["capture_paris"]), set(filter(None, str(r.get("adverse") or "").split(",")))))
+    for m in matchs.values():
+        limite = verrou_calendrier(donnees, m["jour"], m["adv"])
+        if m["jour"] < jour or (limite is not None and limite < maintenant) or not m["captures"]:
+            continue  # match passé, verrou passé (PB9) ou aperçu absent : l'export existant reste
+        m["captures"].sort(key=lambda c: c[0])
+        derniere, effectif = m["captures"][-1]
+        brief = brief_du_match(S, m["kind"], m["adv"], m["jour"])
+        date_b = date_du_brief(brief["fichier"]) if brief else None
+        couvert = date_b is not None and date_b >= derniere.date()
+        titre = (f"{'J' + str(m['manche']) if m['manche'] else 'ligue'} contre {m['adv']}" if m["kind"] == "ligue"
+                 else f"coupe contre {m['adv']}")
+        source = "silver.bv_fixture_api, core.fixture"
+        if len(m["captures"]) >= 2 and m["captures"][-2][1] != effectif and not couvert:
+            avant = m["captures"][-2][1]
+            ajoute(limite, 1, f"Composition {titre} : composition adverse changée : relance l'agent tactique",
+                   f"entrés : {', '.join(sorted(effectif - avant)) or 'aucun'} ; sortis : {', '.join(sorted(avant - effectif)) or 'aucun'} "
+                   f"(aperçus du {m['captures'][-2][0]:%d/%m %H:%M} et du {derniere:%d/%m %H:%M})", source)
+        elif not couvert:
+            ajoute(limite, 1, f"Composition {titre} : lance l'agent tactique (aperçu du {derniere:%d/%m} en base)",
+                   "aucun brief tactique daté de cet aperçu ou après" + (f" ; dernier brief du {date_b:%d/%m}" if date_b else ""), source)
+        age_h = (maintenant - derniere).total_seconds() / 3600
+        if m["kind"] == "ligue" and limite is not None and 0 <= (limite - maintenant).total_seconds() < 86400 and age_h > 24:
+            ajoute(limite, 2, "Réexporte l'aperçu : l'effectif adverse a pu changer",
+                   f"match de ligue contre {m['adv']} ; dernier aperçu du {derniere:%d/%m %H:%M}, il y a {int(age_h)} h", source)
 
 
 def ecarts_entrainement(saisie, fiche):
@@ -727,6 +789,12 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         else:
             etat, prio = "saisis la tactique maintenant", 1
         detail = f"heure limite du verrou {verrou or 'inconnue'}"
+        if t["type"] != "amical" and "apercus_matchs" in donnees:  # 5j, Y2 : brief existant et pas plus ancien que l'aperçu = saisie complète
+            capt = [en_heure(r["capture_paris"]) for r in lignes_de(donnees, "apercus_matchs")
+                    if r.get("capture_paris") and _jour(r["day"]) == t["date"] and meme_match(r["opponent"], t["match"])]
+            db = date_du_brief(t["fichier"])
+            if db and (not capt or db >= max(capt).date()):
+                detail = f"Saisis la composition : python -I pipelines/composition.py \"{t['match']}\" ; " + detail
         if test and t["type"] == "amical" and t["date"] == am["date"] and meme_match(t["match"], am["match"]):
             detail = f"{apres} ; {detail} ; {apres_exports}"
             test = None  # ligne du test posée sur celle du brief
@@ -753,6 +821,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             continue
         ajoute(limite, 1, f"{r['match'] or 'Match'} : corrige à l'écran {len(r['reglages'])} réglages ({regrouper(r['reglages'])})",
                "", r["fichier"])
+
+    lignes_composition(donnees, S, jour, maintenant, ajoute)  # 5j : Y2 et Y3
 
     # 1 ter (5h, N3) : fatigue projetée hors zone verte pour un joueur qui doit jouer : une ligne par match
     for (kind, d, adv), rs in lignes_fatigue(donnees).items():

@@ -494,6 +494,7 @@ def cas_etape5a():
     yield from cas_vente()
     yield from cas_boucle()
     yield from cas_marche_5i()
+    yield from cas_composition_5j()
     yield from cas_entrainement()
     yield from cas_fatigue()
     yield from cas_revue()
@@ -887,6 +888,57 @@ def cas_marche_5i():
     t6 = auj.rendre(p6, JOUR)
     yield "X6 8 lignes au plus ; Martin (fin 22:00) et Dupuis (fin 21:00) restent malgré 7 autres actions", \
         len(t6.splitlines()) <= 8 and "Martin" in t6 and "Dupuis" in t6
+
+
+def cas_composition_5j():
+    """5j (Y2, Y3) : lignes de composition d'après les aperçus en base ; cas présent et cas absent."""
+    cols = ["fixture_id", "competition_kind", "round_no", "day", "opponent", "capture_paris", "adverse"]
+    cal = (["day", "competition_kind", "opponent", "coup_envoi_paris", "verrou_paris"], [
+        ("2026-11-09", "ligue", "Naked Spartans", "2026-11-09T20:00:00", "2026-11-09T19:45:00"),
+        ("2026-11-10", "ligue", "BC KIT", "2026-11-10T20:00:00", "2026-11-10T19:45:00")])
+    matin = dt.datetime(2026, 11, 9, 10, 0)
+    brief = lambda jour_b: {"type": "ligue", "match": "Naked Spartans", "manche": "J4", "lieu": "domicile", "date": JOUR9, "verrou": "19:45",
+                            "preuves": [], "fichier": f"briefs/{jour_b}-tactique.md", "age": 1, "vieux": False}
+
+    def lignes(rows, S=None, maintenant=matin):
+        d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "calendrier": cal, "apercus_matchs": (cols, rows)})
+        return auj.plan(d, {}, JOUR9, maintenant, "", S or {})
+
+    def spart(capture, adverse="A,B,C", jour="2026-11-09", adv="Naked Spartans", rang=4):
+        return ("f1", "ligue", rang, jour, adv, capture, adverse)
+
+    def a(p, mot):
+        return [x for x in p["actions"] if mot in x[2] or mot in x[3]]
+
+    # Y2 : aperçu en base et aucun brief plus récent
+    p = lignes([spart("2026-11-08T11:31:58")])
+    y2 = a(p, "lance l'agent tactique (aperçu du 08/11 en base)")
+    yield "Y2 présent : « Composition J4 contre Naked Spartans : lance l'agent tactique (aperçu du 08/11 en base) », limite = verrou 19:45", \
+        len(y2) == 1 and y2[0][2].startswith("Composition J4 contre Naked Spartans") and y2[0][0] == dt.datetime(2026, 11, 9, 19, 45)
+    yield "Y2 présent : le plan rendu reste à 8 lignes au plus", len(auj.rendre(p, JOUR9).splitlines()) <= 8
+    p2 = lignes([spart("2026-11-08T11:31:58")], {"tactique": [brief("2026-11-08")]})
+    yield "Y2 présent : brief du jour de l'aperçu = « Saisis la composition : python -I pipelines/composition.py » dans la ligne du match, pas de relance", \
+        not a(p2, "lance l'agent tactique (aperçu") and len(a(p2, "Saisis la composition : python -I pipelines/composition.py \"Naked Spartans\"")) == 1
+    p3 = lignes([spart("2026-11-08T11:31:58")], {"tactique": [brief("2026-11-07")]})
+    yield "Y2 présent : brief plus ancien que l'aperçu = relance, pas de saisie proposée", \
+        len(a(p3, "lance l'agent tactique (aperçu")) == 1 and not a(p3, "Saisis la composition")
+    yield "Y2 absent : aperçu absent (aucune capture), aucune ligne de composition", \
+        not a(lignes([spart(None)]), "Composition") and not a(lignes([]), "Composition")
+    yield "Y2 absent : verrou passé, aucune ligne", not a(lignes([spart("2026-11-08T11:31:58")], maintenant=dt.datetime(2026, 11, 9, 20, 30)), "Composition")
+    # Y3 : rappel J-1
+    ancien = lignes([spart("2026-11-08T08:00:00")])
+    yield "Y3 présent : verrou dans moins de 24 h et aperçu de plus de 24 h = « Réexporte l'aperçu : l'effectif adverse a pu changer »", \
+        len(a(ancien, "Réexporte l'aperçu : l'effectif adverse a pu changer")) == 1
+    yield "Y3 absent : aperçu de 8 h", not a(lignes([spart("2026-11-09T02:00:00")]), "Réexporte l'aperçu")
+    yield "Y3 absent : verrou à plus de 24 h (BC KIT le 10/11 19:45)", not a(lignes([spart("2026-11-06T08:00:00", jour="2026-11-10", adv="BC KIT", rang=5)]), "Réexporte l'aperçu")
+    deux = lignes([spart("2026-11-08T08:00:00", "A,B,C"), spart("2026-11-09T02:00:00", "A,B,D")])
+    ch = a(deux, "composition adverse changée : relance l'agent tactique")
+    yield "Y3 présent : deux aperçus qui diffèrent = « composition adverse changée », entrés D, sortis C", \
+        len(ch) == 1 and "entrés : D" in ch[0][3] and "sortis : C" in ch[0][3] and not a(deux, "lance l'agent tactique (aperçu")
+    yield "Y3 absent : deux aperçus identiques", not a(lignes([spart("2026-11-08T08:00:00"), spart("2026-11-09T02:00:00")]), "composition adverse changée")
+    yield "Y3 absent : un brief daté de la dernière capture en tient compte", \
+        not a(lignes([spart("2026-11-08T08:00:00", "A,B,C"), spart("2026-11-09T02:00:00", "A,B,D")], {"tactique": [brief("2026-11-09")]}), "composition adverse changée")
+    yield "Y5 plan complet avec composition et rappel : 8 lignes au plus", len(auj.rendre(deux, JOUR9).splitlines()) <= 8
 
 
 def cas_base():
