@@ -58,10 +58,19 @@ REQUETES = {
     "gold.bv_daily_alerts": "select priority, category, alert from gold.bv_daily_alerts order by priority limit 30",
     "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde ; capacité = solde − enchères ouvertes
     "gold.bv_position_summary": "select * from gold.bv_position_summary limit 10",
-    "gold.bv_market_bargains": "select name, position, ps, ref_n, ref_reliable, bid_ceiling_resale, resale_margin_p25, "
-                               "ends_paris from gold.bv_market_bargains order by resale_margin_p25 desc nulls last limit 5",
-    "gold.bv_market_candidates": "select name, position, ps, would_rank_in_slot, enters_top8, current_price, ends_paris "
-                                 "from gold.bv_market_candidates where enters_top8 order by gain_vs_my_second desc nulls last limit 5",
+    # 5i : seules les annonces encore ouvertes (fin à venir ou inconnue) ; le prix est celui de la page exportée
+    "gold.bv_market_bargains": "select name, position, ps, price_now, ref_n, ref_reliable, bid_ceiling_resale, resale_margin_p25, "
+                               "ends_paris from gold.bv_market_bargains "
+                               "where ends_paris is null or ends_paris > now() at time zone 'Europe/Paris' "
+                               "order by resale_margin_p25 desc nulls last limit 8",
+    # plafond de besoin = p75 de la tranche de PS et d'âge (gold.bv_price_ref_ps n'a pas de colonne poste)
+    "gold.bv_market_candidates": "select c.name, c.position, c.ps, c.would_rank_in_slot, c.enters_top8, c.current_price, "
+                                 "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, r.p75 as ref_p75 "
+                                 "from gold.bv_market_candidates c left join gold.bv_price_ref_ps r "
+                                 "on r.ps_band = (floor(c.ps / 5) * 5)::int and r.age_band = case when c.age <= 21 then '≤21' "
+                                 "when c.age <= 25 then '22-25' when c.age <= 29 then '26-29' else '30+' end "
+                                 "where c.ends_paris is null or c.ends_paris > now() at time zone 'Europe/Paris' "
+                                 "order by c.ps desc nulls last limit 30",
     "gold.bv_personnel_status": "select * from gold.bv_personnel_status limit 10",
     "joueurs_declin": "select name, age from gold.bv_roster_now where age >= 31 order by age desc",
     "decisions_achat": "select id, label, hypothesis from learn.decision where game = 'basketvibe' and domain = 'achat' "
@@ -853,7 +862,29 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     # 7. Décisions par secteur (étape 6 du skill) : une ligne si la règle du YAML se déclenche, sinon « Garder »
     m = manque(donnees, erreurs, "gold.bv_position_summary", "Équipe (aperçu, joueurs)")
     pos = lignes_de(donnees, "gold.bv_position_summary")
-    marche_frais = etat.get("Marché (enchères)") is not None and str(etat["Marché (enchères)"]["statut"]).endswith("à jour")
+    # 5i : une page du Marché ancienne n'est plus cachée ; chaque ligne dit l'âge de la page et que le prix a pu monter.
+    marche = etat.get("Marché (enchères)") or {}
+    age_h = marche.get("age_h")
+    page = f"page du Marché de {int(float(age_h))} h : le prix a pu monter" if age_h is not None \
+        else "âge de la page du Marché inconnu : le prix a pu monter"
+    if marche.get("dernier_paris"):
+        jj_mm = f"{str(marche['dernier_paris'])[8:10]}/{str(marche['dernier_paris'])[5:7]}"
+    elif age_h is not None:
+        jj_mm = f"{maintenant - dt.timedelta(hours=float(age_h)):%d/%m}"
+    else:
+        jj_mm = None
+    dans_marche = f"dans le Marché du {jj_mm}" if jj_mm else "dans le Marché exporté"
+    MISE = "fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond"  # X4 : aucun historique des mises en base
+
+    def fin_de(r):
+        return dt.datetime.fromisoformat(str(r["ends_paris"])[:19]) if r.get("ends_paris") else None
+
+    def fin_txt(fin):
+        return f"fin {fin:%d/%m %H:%M}" if fin else "fin inconnue"
+
+    def prio_fin(fin):  # l'enchère qui finit aujourd'hui passe en tête (horizon = aujourd'hui)
+        return 1 if fin and fin.date() == jour else 2
+
     decides = [norm(c["nom"]) for c in S.get("cibles", [])]  # déjà décidés (plafond de la décision) : pas de 2e ligne
 
     # Capacité (PB8, décision de l'utilisateur du 09/11) : solde moins les enchères encore ouvertes, sans réserve de sécurité.
@@ -876,15 +907,35 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     elif pos:
         faible = min(pos, key=lambda r: float(r["ps_avg"]))
         minces = [r for r in pos if int(r["depth"]) <= 2]
-        cands = [r for r in lignes_de(donnees, "gold.bv_market_candidates")
-                 if vrai(r["enters_top8"]) and str(r["would_rank_in_slot"]) == "1" and r["position"] == faible["position"]
-                 and libre(r) and finance(r["current_price"]) and pas_finie(r)] if marche_frais else []
-        cible = minces[0] if minces else faible if cands else None
-        if cible:
-            x = round(float(cible["ps_max"]) + 1, 1)
-            nom = f" : {cands[0]['name']} (PS {cands[0]['ps']})" if cands else ""
-            ajoute(None, 2, f"Acheter un {cible['position']} de note ≥ {str(x).replace('.', ',')}{nom}",
-                   f"poste {cible['position']} : profondeur {cible['depth']}, PS moyen {cible['ps_avg']}", "gold.bv_position_summary")
+        cible = minces[0] if minces else faible
+        x = round(float(cible["ps_max"]) + 1, 1)
+        offres = []  # X3 : annonces ouvertes au poste de la cible dont le PS atteint la note ; plafond de besoin = p75 PS/âge borné par la capacité
+        for r in lignes_de(donnees, "gold.bv_market_candidates"):
+            if r["position"] != cible["position"] or float(r["ps"]) < x or not libre(r) or not pas_finie(r):
+                continue
+            prix = r.get("price_now") if r.get("price_now") is not None else r.get("current_price")
+            p75 = r.get("ref_p75")
+            plafond = None if p75 is None else (float(p75) if reste_cap is None else min(float(p75), reste_cap))
+            if plafond is None and not finance(prix) or plafond is not None and prix is not None and float(prix) > plafond:
+                continue  # le prix à l'export dépasse déjà le plafond de besoin ou la capacité
+            offres.append((r, prix, plafond))
+        offres = offres[:3]
+        if minces or offres:
+            note = str(x).replace(".", ",")
+            tete = f"Acheter un {cible['position']} de note ≥ {note}"
+            if offres:
+                tete += " : " + " ; ".join(
+                    f"{r['name']} (PS {r['ps']}) : " + (f"{montant(prix)} à l'export" if prix is not None else "prix inconnu")
+                    + f", {fin_txt(fin_de(r))}, " + (f"plafond de besoin {montant(pl)}, à valider" if pl is not None
+                                                      else "plafond de besoin non calculé (aucune référence de prix)")
+                    for r, prix, pl in offres)
+            else:
+                tete += f" : aucune annonce au poste {cible['position']} {dans_marche} (annonces encore ouvertes de l'export)"
+            fins = [f for f in (fin_de(r) for r, _, _ in offres) if f]
+            detail = f"poste {cible['position']} : profondeur {cible['depth']}, PS moyen {cible['ps_avg']}"
+            if offres:
+                detail += f" ; plafond de besoin = p75 des prix de la tranche de PS et d'âge, borné par la capacité ; {page} ; {MISE}"
+            ajoute(min(fins) if fins else None, prio_fin(min(fins)) if fins else 2, tete, detail, "gold.bv_position_summary")
         else:
             garder.append(f"effectif, acheter : seuil non atteint (le poste le plus faible, {faible['position']} PS {faible['ps_avg']}, "
                           f"a assez de joueurs : {faible['depth']} contre 2 au plus pour un poste mince)")
@@ -917,18 +968,19 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     m = manque(donnees, erreurs, "gold.bv_market_bargains", "Marché (enchères)")
     if m:
         ajoute(None, 2, m)
-    elif not marche_frais:
-        garder.append("transferts : pas d'enchère nouvelle, l'export du Marché a plus de 24 h")
     else:
         bonnes = [r for r in lignes_de(donnees, "gold.bv_market_bargains")
                   if vrai(r["ref_reliable"]) and float(r["resale_margin_p25"] or 0) > 0 and int(r["ref_n"] or 0) >= 5 and libre(r)
-                  and finance(r["bid_ceiling_resale"]) and pas_finie(r)][:2]
-        for r in bonnes:
-            fin = dt.datetime.fromisoformat(str(r["ends_paris"])[:19]) if r.get("ends_paris") else None
-            ajoute(fin, 2, f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
-                   f"marge de revente p25 {montant(r['resale_margin_p25'])}", "gold.bv_market_bargains")
+                  and finance(r["bid_ceiling_resale"]) and pas_finie(r)][:3]
+        for r in bonnes:  # X2 : affaire ouverte, même sur une page ancienne ; X8 : « plafond de revente »
+            fin = fin_de(r)
+            prix = r.get("price_now")
+            ajoute(fin, prio_fin(fin), f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
+                   "plafond de revente (95 % du p25) ; prix à l'export " + (montant(prix) if prix is not None else "inconnu")
+                   + f" ; {fin_txt(fin)} ; marge de revente p25 {montant(r['resale_margin_p25'])} ; {page} ; {MISE}",
+                   "gold.bv_market_bargains")
         if not bonnes:
-            garder.append("transferts : aucune affaire fiable qui tienne dans le solde moins les enchères encore ouvertes "
+            garder.append(f"transferts : aucune affaire fiable ouverte {dans_marche} qui tienne dans le solde moins les enchères encore ouvertes "
                           "(capacité restante"
                           + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")")
     m = manque(donnees, erreurs, "gold.bv_personnel_status", "Personnel")

@@ -167,7 +167,9 @@ def cas():
     perime = figees(**{"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                                  [(8, "Marché (enchères)", "cibles", None, 30, "🟧 à refaire")])})
     tp = texte(perime)
-    yield "D1 TRF-4 : Marché périmé = pas d'enchère, ligne Export", "Marché (enchères) (30 h)" in tp and "Martin" not in tp
+    # 5i X2 : une page du Marché ancienne n'est plus cachée ; l'annonce encore ouverte reste, avec l'âge de la page
+    yield "D1 TRF-4 (5i) : Marché de 30 h = ligne Export, annonce ouverte gardée avec « page du Marché de 30 h »", \
+        "Marché (enchères) (30 h)" in tp and "Martin" in tp and "page du Marché de 30 h : le prix a pu monter" in tp
     # Lisibilité : ni coupure par « … », ni code interne, une ligne longue passe sur plusieurs lignes d'affichage
     alerte = figees(**{"gold.bv_daily_alerts": (["priority", "category", "alert"], [
         (1, "blessure", "Gimenez blessé : absent 3 jours, retire-le du cinq de départ avant le verrou")])})
@@ -491,6 +493,7 @@ def cas_etape5a():
     yield from cas_academie()
     yield from cas_vente()
     yield from cas_boucle()
+    yield from cas_marche_5i()
     yield from cas_entrainement()
     yield from cas_fatigue()
     yield from cas_revue()
@@ -819,6 +822,71 @@ def cas_boucle():
         (Path(tmp) / "fait-2026-11-09.md").write_text("- [x] saisie [décision=1076]\n- reste à faire [décision=1077]\n", encoding="utf-8")
         refs = auj.lire_refs_decisions(tmp, JOUR9)
     yield "K4 registre lu : [décision=1076] pris, ligne « reste à » ignorée", [r["id"] for r in refs] == [1076]
+
+
+def cas_marche_5i():
+    """5i (X2, X3, X4, X6, X8) : Marché ancien, joueur de besoin, deux plafonds ; chaque cas présent et absent."""
+    cb = ["name", "position", "ps", "price_now", "ref_n", "ref_reliable", "bid_ceiling_resale", "resale_margin_p25", "ends_paris"]
+    cc = ["name", "position", "ps", "would_rank_in_slot", "enters_top8", "current_price", "price_now", "ends_paris", "ref_p75"]
+    vieux = (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+             [(8, "Marché (enchères)", "cibles", "2026-11-05T13:00:00", 30, "🟧 à refaire")])
+    mince = (["position", "depth", "ps_avg", "ps_max"], [("PG", 2, 49.4, 56.2), ("SG", 4, 46.4, 51.6)])
+
+    def plan5i(bargains, candidates):
+        d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_daily_alerts": (["priority", "category", "alert"], []),
+                      "gold.bv_exports_state": vieux, "gold.bv_position_summary": mince,
+                      "gold.bv_market_bargains": (cb, bargains), "gold.bv_market_candidates": (cc, candidates)})
+        return auj.plan(d, {}, JOUR, SOIR, "", {})
+
+    # X2 : 3 affaires ouvertes (+ 1 au-delà de 3, 1 finie, 1 référence non fiable) sur une page de 30 h
+    affaires = [("Martin", "PG", 57.0, 80000, 9, True, 120000, 40000, "2026-11-06T22:00:00"),
+                ("Durand", "SG", 50.0, 10000, 9, True, 60000, 50000, "2026-11-07T09:00:00"),
+                ("Perrin", "C", 52.0, 5000, 9, True, 50000, 45000, "2026-11-07T10:00:00"),
+                ("Quatre", "C", 51.0, 5000, 9, True, 40000, 35000, "2026-11-07T11:00:00"),
+                ("Fini", "PG", 55.0, 1000, 9, True, 90000, 89000, "2026-11-06T08:00:00"),
+                ("Fragile", "SF", 50.0, 1000, 2, False, 90000, 89000, "2026-11-07T08:00:00")]
+    p = plan5i(affaires, [])
+    lig = [a for a in p["actions"] if a[2].startswith("Enchère maximale")]
+    martin = next((a for a in lig if "Martin" in a[2]), None)
+    yield "X2 présent : au plus 3 lignes d'affaire sur une page de 30 h", len(lig) == 3
+    yield "X2 présent : nom, poste, PS, plafond de revente, prix à l'export, fin, âge de la page", martin is not None \
+        and "Enchère maximale 120 000 sur Martin (PG, PS 57.0)" in martin[2] and "plafond de revente" in martin[3] \
+        and "prix à l'export 80 000" in martin[3] and "fin 06/11 22:00" in martin[3] \
+        and "page du Marché de 30 h : le prix a pu monter" in martin[3]
+    yield "X2 absent : annonce finie et référence non fiable écartées", not any(n in a[2] for a in lig for n in ("Fini", "Fragile"))
+    pf = plan5i([affaires[4]], [])
+    yield "X2 absent : toutes finies, aucune ligne, la demi-ligne Garder dit le Marché du 05/11", \
+        not [a for a in pf["actions"] if a[2].startswith("Enchère maximale")] \
+        and any("aucune affaire fiable ouverte dans le Marché du 05/11" in g for g in pf["garder"])
+    # X3 : joueur de besoin au poste PG (note ≥ 57,2), capacité 279 666 (solde, aucune enchère ouverte)
+    cands = [("Dupuis", "PG", 58.0, 1, True, 100000, 100000, "2026-11-06T21:00:00", 150000),
+             ("Borne", "PG", 58.5, 1, True, 200000, 200000, "2026-11-07T10:00:00", 400000),
+             ("Cher", "PG", 59.0, 1, True, 300000, 300000, "2026-11-07T10:00:00", 400000),
+             ("Bas", "PG", 56.0, 2, True, 1000, 1000, "2026-11-07T10:00:00", 5000),
+             ("Ailier", "SF", 60.0, 1, True, 1000, 1000, "2026-11-07T10:00:00", 5000),
+             ("Tard", "PG", 60.0, 1, True, 1000, 1000, "2026-11-06T08:00:00", 5000)]
+    p3 = plan5i([], cands)
+    ach = next((a for a in p3["actions"] if a[2].startswith("Acheter un PG")), None)
+    yield "X3 présent : nomme les annonces au poste qui atteignent la note, prix à l'export, fin, plafond de besoin à valider", ach is not None \
+        and "Dupuis (PS 58.0) : 100 000 à l'export, fin 06/11 21:00, plafond de besoin 150 000, à valider" in ach[2]
+    yield "X3 présent : plafond de besoin borné par la capacité (p75 400 000 → 279 666)", ach is not None and "Borne (PS 58.5) : 200 000 à l'export, fin 07/11 10:00, plafond de besoin 279 666, à valider" in ach[2]
+    yield "X3 absent : note non atteinte, autre poste, fin passée, prix au-dessus du plafond", ach is not None \
+        and not any(n in ach[2] for n in ("Bas", "Ailier", "Tard", "Cher"))
+    pa = plan5i([], [])
+    aucun = next((a for a in pa["actions"] if a[2].startswith("Acheter un PG")), None)
+    yield "X3 absent : aucune annonce, le dit avec la date du Marché", aucun is not None \
+        and "aucune annonce au poste PG dans le Marché du 05/11" in aucun[2]
+    # X4 et X8
+    yield "X4 chaque ligne d'enchère dit « fenêtre de mise non mesurée »", all("fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond" in a[3]
+                                                                            for a in p3["actions"] + p["actions"] if a[2].startswith(("Enchère maximale", "Acheter un PG")) and "annonce" not in a[2])
+    yield "X8 affaire : « plafond de revente » seul ; besoin : « plafond de besoin » seul", martin is not None and ach is not None \
+        and "plafond de besoin" not in martin[2] + martin[3] and "plafond de revente" not in ach[2] + ach[3]
+    # X6 : 8 lignes au plus, les enchères qui finissent aujourd'hui passent en tête
+    p6 = plan5i(affaires, cands)
+    p6["actions"] += [(dt.datetime(2026, 11, 6, 20, i), 2, f"action {i}", "", "") for i in range(7)]
+    t6 = auj.rendre(p6, JOUR)
+    yield "X6 8 lignes au plus ; Martin (fin 22:00) et Dupuis (fin 21:00) restent malgré 7 autres actions", \
+        len(t6.splitlines()) <= 8 and "Martin" in t6 and "Dupuis" in t6
 
 
 def cas_base():
