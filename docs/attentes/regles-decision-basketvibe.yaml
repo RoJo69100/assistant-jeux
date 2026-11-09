@@ -26,10 +26,10 @@ seuils_mesures:   # requêtes et sorties : docs/refonte-v3/journal.md, section L
     note: "aucun seuil n'est défini dans le dépôt (SEUIL_GROS_MONTANT vide, journal S2) ; en attendant, tout montant illisible reste contrôlé"
   perte_transferts_tolerée_4_semaines:
     valeur_proposee: 261516
-    base: "solde 1 167 106 − gold.bv_finance_s2_projection.safety_reserve 905 590 (2 semaines de charges)"
+    base: "valeur calculée le 2026-11-06 avec l'ancienne réserve : solde 1 167 106 − gold.bv_finance_s2_projection.safety_reserve 905 590 (2 semaines de charges). Réserve supprimée le 2026-11-09 (décision de l'utilisateur, consigne de session du 09/11 : pas de réserve fixe, solde jamais négatif, on dépense pour être meilleur) : cette valeur est à recalculer sans réserve"
     contexte: "pertes de revente observées sur le marché (gold.bv_transfer_history, 69 reventes du 2026-09-02 au 2026-11-04) : 48 gagnantes, marge nette médiane 44 000, p10 −39 650, pire −256 800"
     statut: "mesuré, valeur de départ ; le déclencheur n'est pas ce chiffre"
-    declencheur: "les finances ne sont pas bonnes (FIN-1 : résultat hebdomadaire estimé négatif, ou solde proche de la réserve de sécurité) ou un joueur coûte trop cher par rapport à son utilité (EFF-2 : salaire par point de PS et minutes jouées) ; le chiffre sert de garde-fou, pas de déclencheur (utilisateur, 2026-11-06)"
+    declencheur: "les finances ne sont pas bonnes (FIN-1 : résultat hebdomadaire estimé négatif, ou solde proche de 0 : le solde ne doit jamais être négatif, il n'y a plus de réserve de sécurité depuis la décision de l'utilisateur du 2026-11-09) ou un joueur coûte trop cher par rapport à son utilité (EFF-2 : salaire par point de PS et minutes jouées) ; le chiffre sert de garde-fou, pas de déclencheur (utilisateur, 2026-11-06)"
   part_des_salaires:
     valeur_mesuree_pct: 52.1
     base: "gold.bv_finance_health.salaries_pct_of_income (292 795 / 561 642)"
@@ -104,7 +104,7 @@ secteurs:
       prouvera_erreur: "mesure : revente au p25 impossible (marge nette < 0) ou TS sans gain ; échéance : 14 jours (durée médiane de détention du marché)"
       source: "fiche transferts.md règle 4 ; [M§11.1], [M§11.3], [M§10.3]"
       statut: sourcé
-      condition_argent: "coût total (prix + salaire x semaines restantes) <= solde − réserve de sécurité (905 590) ; au-dessus du seuil de gros montant : dossier.py puis police"
+      condition_argent: "coût total (prix + salaire x semaines restantes) <= solde − enchères encore ouvertes ; pas de réserve de sécurité (décision de l'utilisateur, 2026-11-09, consigne de session : solde jamais négatif, on dépense pour être meilleur ; l'ancienne réserve de 905 590 du 2026-11-06 est supprimée) ; au-dessus du seuil de gros montant : dossier.py puis police"
     - id: TRF-2
       option: acheter_libre
       condition: "poste mince ou remplaçant manquant ; joueur libre au marché"
@@ -123,7 +123,7 @@ secteurs:
       statut: sourcé
     - id: TRF-4
       option: garder
-      condition: "export Marché > 24 h ou aucune affaire fiable ou fonds sous la réserve"
+      condition: "export Marché > 24 h ou aucune affaire fiable ou montant au-dessus du solde moins les enchères ouvertes (plus de réserve depuis la décision de l'utilisateur du 2026-11-09)"
       action: "Pas d'enchère ce soir ; ligne Export « Marché » si > 24 h"
       raison: "marché de <age_h> h ou marge p25 <= 0"
       prouvera_erreur: "mesure : une affaire écartée se revend avec marge >= 20 % du prix (bv_resale_stats) ; échéance : 14 jours"
@@ -142,9 +142,9 @@ secteurs:
       mesure_du_jour: "weekly_result_est = +108 847 : règle non déclenchée"
     - id: FIN-2
       option: investir
-      condition: "montant <= gold.bv_finance_s2_projection.investable_now_end_s1 (570 288 le 2026-11-06) ; réserve de sécurité 905 590 intacte"
+      condition: "montant <= gold.bv_finance_s2_projection.investable_now_end_s1 (570 288 le 2026-11-06, calculé avec l'ancienne réserve) ; sans réserve de sécurité depuis la décision de l'utilisateur du 2026-11-09 (consigne de session : solde jamais négatif, on dépense pour être meilleur) : le plafond est le solde moins les enchères encore ouvertes"
       action: "Engage <montant> dans <académie | personnel | recrue>"
-      raison: "capacité d'investissement <x> après réserve ; rendement <règle de jeu>"
+      raison: "capacité d'investissement <x> (solde moins les enchères ouvertes, sans réserve : décision du 2026-11-09) ; rendement <règle de jeu>"
       prouvera_erreur: "mesure : gain attendu (progression, forme, TS) non constaté ; échéance : 4 semaines"
       source: "fiche finances.md livrable 3 (case E17) ; rapport investissement/jauge d'académie : skill basketvibe-academie"
       statut: sourcé
@@ -169,7 +169,7 @@ secteurs:
       condition: "FIN-1 à FIN-4 non déclenchées"
       action: "Aucun mouvement d'argent (demi-ligne dans le commentaire)"
       raison: "solde <x>, résultat hebdo <y>, salaires <z> % des recettes (52,1 % mesuré)"
-      prouvera_erreur: "mesure : une occasion refusée par la règle de réserve aurait rapporté plus (comparer à bv_resale_stats) ; échéance : 4 semaines"
+      prouvera_erreur: "mesure : une occasion refusée par la règle de capacité (solde moins les enchères ouvertes, sans réserve depuis le 2026-11-09) aurait rapporté plus (comparer à bv_resale_stats) ; échéance : 4 semaines"
       source: "skill basketvibe-aujourdhui étape 6"
       statut: sourcé
 

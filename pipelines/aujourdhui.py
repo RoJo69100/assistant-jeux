@@ -53,14 +53,13 @@ REQUETES = {
                       "where day <= current_date + 1 order by day, at_time, priority",
     "gold.bv_exports_state": "select ordre, ecran, pour_quoi, dernier_paris, age_h, statut from gold.bv_exports_state order by ordre",
     "gold.bv_daily_alerts": "select priority, category, alert from gold.bv_daily_alerts order by priority limit 30",
-    "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",
+    "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde ; capacité = solde − enchères ouvertes
     "gold.bv_position_summary": "select * from gold.bv_position_summary limit 10",
     "gold.bv_market_bargains": "select name, position, ps, ref_n, ref_reliable, bid_ceiling_resale, resale_margin_p25, "
                                "ends_paris from gold.bv_market_bargains order by resale_margin_p25 desc nulls last limit 5",
     "gold.bv_market_candidates": "select name, position, ps, would_rank_in_slot, enters_top8, current_price, ends_paris "
                                  "from gold.bv_market_candidates where enters_top8 order by gain_vs_my_second desc nulls last limit 5",
     "gold.bv_personnel_status": "select * from gold.bv_personnel_status limit 10",
-    "capacite": "select capacite_invest from gold.finance_health where game = 'basketvibe'",
     "joueurs_declin": "select name, age from gold.bv_roster_now where age >= 31 order by age desc",
     "decisions_achat": "select id, label, hypothesis from learn.decision where game = 'basketvibe' and domain = 'achat' "
                        "and status in ('proposed', 'accepted') and eval_after >= now() and decided_at >= now() - interval '3 days' order by id",
@@ -327,8 +326,10 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     marche_frais = etat.get("Marché (enchères)") is not None and str(etat["Marché (enchères)"]["statut"]).endswith("à jour")
     decides = [norm(c["nom"]) for c in S.get("cibles", [])]  # déjà décidés (plafond de la décision) : pas de 2e ligne
 
-    cap = lignes_de(donnees, "capacite")  # règle E8 : capacité d'investissement moins les dépenses déjà décidées
-    reste_cap = float(cap[0]["capacite_invest"]) - sum(c["max"] for c in S.get("cibles", [])) if cap else None
+    # Capacité (PB8, décision de l'utilisateur du 09/11) : solde moins les enchères encore ouvertes, sans réserve de sécurité.
+    solde = next((r.get("balance") for r in lignes_de(donnees, "gold.bv_finance_health")), None)
+    ouvertes = [c for c in S.get("cibles", []) if c["fin"] is None or c["fin"] > maintenant]
+    reste_cap = float(solde) - sum(c["max"] for c in ouvertes) if solde is not None else None
 
     def libre(r):
         return not any(n in norm(r["name"]) for n in decides)
@@ -389,8 +390,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             ajoute(fin, 2, f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
                    f"marge de revente p25 {montant(r['resale_margin_p25'])}", "gold.bv_market_bargains")
         if not bonnes:
-            garder.append("transferts : aucune affaire fiable qui tienne dans ce que le club peut investir après les enchères déjà décidées "
-                          "(capacité restante (réserve de sécurité à valider)"
+            garder.append("transferts : aucune affaire fiable qui tienne dans le solde moins les enchères encore ouvertes "
+                          "(capacité restante"
                           + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")")
     m = manque(donnees, erreurs, "gold.bv_personnel_status", "Personnel")
     pers = lignes_de(donnees, "gold.bv_personnel_status")

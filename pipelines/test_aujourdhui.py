@@ -50,7 +50,7 @@ def figees(**remplace):
             (2, "fatigue", "Dupont : fatigue 25 (hors zone verte)"),
             (3, "export", "Finances : dernier export il y a 8 jour(s)"),
         ]),
-        "gold.bv_finance_health": (["weekly_result_est", "weekly_personnel", "weekly_academy"], [(108847, 60000, 100000)]),
+        "gold.bv_finance_health": (["balance", "weekly_result_est", "weekly_personnel", "weekly_academy"], [(279666, 108847, 60000, 100000)]),
         "gold.bv_position_summary": (["position", "depth", "ps_avg", "ps_max"], [
             ("PG", 3, 49.4, 56.2), ("SG", 4, 46.4, 51.6), ("C", 3, 49.4, 52.4)]),
         "gold.bv_market_bargains": (["name", "position", "ps", "ref_n", "ref_reliable", "bid_ceiling_resale",
@@ -59,7 +59,6 @@ def figees(**remplace):
             ("Yuma Fujita", "C", 55.5, 9, True, 735722, 700000, "2026-11-08T03:50:00")]),
         "gold.bv_market_candidates": (["name", "position", "ps", "would_rank_in_slot", "enters_top8", "current_price", "ends_paris"], []),
         "gold.bv_personnel_status": (["week", "role", "hired", "slots"], [("2026-11-02", "médecin", 2, 2), ("2026-11-02", "marketing", 0, 2)]),
-        "capacite": (["capacite_invest"], [(279666,)]),
         "joueurs_declin": (["name", "age"], []),
         "decisions_achat": (["id", "label", "hypothesis"], [(d["id"], d["label"], d["hypothesis"]) for d in DECISIONS]),
         "encheres_ouvertes": (["name", "fin_paris"], [(e["name"], e["fin_paris"]) for e in ENCHERES]),
@@ -156,15 +155,15 @@ def cas():
     vieux = figees(**{"joueurs_declin": (["name", "age"], [("Vétéran", 33)])})
     yield "D1 joueur de 31 ans ou plus : vendre", "Mets Vétéran en vente (33 ans" in texte(vieux) \
         and "rien de vendable" not in texte(vieux)
-    yield "D1 capacité restante suivie de la réserve à valider", "Capacité restante (réserve de sécurité à valider)" not in t \
-        and "capacité restante (réserve de sécurité à valider) : 29 666" in t
+    yield "D1 capacité restante = solde − enchères ouvertes, sans réserve (PB8)", "réserve" not in t \
+        and "(capacité restante : 29 666)" in t
     mince = figees(**{"gold.bv_position_summary": (["position", "depth", "ps_avg", "ps_max"], [("PG", 2, 49.4, 56.2), ("SG", 4, 46.4, 51.6)])})
     yield "D1 EFF-1 : poste mince = acheter un PG de note ≥ 57,2", "Acheter un PG de note ≥ 57,2" in texte(mince)
     rouge = figees(**{"gold.bv_finance_health": (["weekly_result_est", "weekly_personnel", "weekly_academy"], [(-5000, 60000, 100000)])})
     yield "D1 FIN-1 : résultat négatif = réduire le plus gros poste", "Réduis le poste académie (100 000" in texte(rouge)
     yield "D1 TRF-1 : affaire fiable = enchère maximale", "Enchère maximale 120 000 sur Martin" in texte(figees())
-    yield "D1 E8 : capacité restante (279 666 − 250 000 décidés) trop faible = affaire abandonnée", \
-        "Martin" not in t and "ce que le club peut investir après les enchères déjà décidées" in t and ": 29 666)" in t
+    yield "D1 capacité restante (solde 279 666 − 250 000 d'enchères ouvertes) trop faible = affaire abandonnée", \
+        "Martin" not in t and "tienne dans le solde moins les enchères encore ouvertes" in t and "(capacité restante : 29 666)" in t
     perime = figees(**{"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                                  [(8, "Marché (enchères)", "cibles", None, 30, "🟧 à refaire")])})
     tp = texte(perime)
@@ -261,7 +260,22 @@ def cas():
     yield "PB7 vue illisible : « il me manque transferts_recents »", "il me manque transferts_recents" in auj.rendre(
         auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": None}), {"transferts_recents": "boum"},
                  JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
-    yield "PB7 enchère encore ouverte : reste une action", "Enchère sur Fujita (C) : maximum 150 000" in auj.rendre(
+    # PB8 : capacité = solde − enchères encore ouvertes (une enchère finie ne retient plus d'argent), jamais de réserve
+    d8 = figees(**{"gold.bv_agenda": (AGENDA[0], [])})
+    t8_finies = auj.rendre(auj.plan(d8, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    t8_ouvertes = auj.rendre(auj.plan(d8, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
+    yield "PB8 enchères finies : rien n'est retenu, l'affaire de 120 000 tient dans le solde (279 666)", \
+        "Enchère maximale 120 000 sur Martin" in t8_finies
+    yield "PB8 enchères ouvertes (250 000) : capacité 29 666, l'affaire de 120 000 est écartée", \
+        "Martin" not in t8_ouvertes and "(capacité restante : 29 666)" in t8_ouvertes
+    sans_solde = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_finance_health": (
+        ["weekly_result_est", "weekly_personnel", "weekly_academy"], [(108847, 60000, 100000)])})
+    yield "PB8 solde illisible : capacité dite illisible, affaire non écartée", "(capacité restante illisible)" in auj.rendre(
+        auj.plan(sans_solde, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9) or "Martin" in auj.rendre(
+        auj.plan(sans_solde, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB8 le mot « réserve » n'apparaît dans aucune sortie", \
+        not any("réserve" in x for x in (t, t8_finies, t8_ouvertes, auj.rendre(auj.plan(sans_solde, {}, JOUR9, TOT, "", {}), JOUR9)))
+    yield "PB7 enchère encore ouverte : reste une action","Enchère sur Fujita (C) : maximum 150 000" in auj.rendre(
         auj.plan(d7, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
 
 
