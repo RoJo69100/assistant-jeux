@@ -610,6 +610,12 @@ Contexte : main = 4f41967. Écart du contrôle V3 de 6c = amical du 10/10 (non a
 | W3 | Vue `gold.bv_match_engine_version` rejouée : matchs non attribués de 3 à 0 (ou cause dite pour chacun) ; contrôle V3 de 1 écart à 0 (script hors dépôt, sortie collée). |
 | W4 | 197 tests du plan et 38 de la revue verts. |
 
+**Résultats 6c-bis (2026-11-09 Paris).**
+- **W1, W2** (`1db0dc1`, migration `core_027_engine_version_v3_amical_coupe` appliquée par le connecteur ; fichier `sql/core/027_engine_version_v3_amical_coupe.sql`) : `core.engine_version` 5 → **7 lignes** (+ amical v3 07/09 → 10/10 déduit ; + coupe v3 07/09 → 27/10 déduit). Ligne coupe v4, **avant** : `2026-10-28 → 2026-10-31` ; **après** : `2026-10-27 → null` (source mise à jour : V-20261027-2). Réserve : coupe v3 (fin 27/10) et coupe v4 (début 27/10) se recouvrent le 27/10 ; aucun match de coupe ce jour (62 lignes = 62 matchs distincts après la migration), pas de doublon.
+- **W3** : `gold.bv_match_engine_version`, non attribuées **3 → 0** (coupe 13/09 → v3 ; amical 10/10 → v3 ; coupe 01/11 → v4). Compte après : amical v3 1, v4 17, v5 13 ; coupe v3 1, v4 5 ; ligue v3 22, v4 3 (= 62). Contrôle V3 (script hors dépôt) : `matchs contrôlés : 80 (dans la vue : 56, autres équipes par la table : 24)` ; `écarts : 0` (avant : 1).
+- **W4** : `test_aujourdhui.py` **197/197** ; `test_revue_hebdo.py` **38/38**.
+- `fusion_main.py` : `commits à ajouter à main (2)` (6297183, 1db0dc1) ; `Poussé : origin/main == HEAD.` (1db0dc1). `fin_etape.py` : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, 23 suites vertes, `HEAD dans origin/main : oui`.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
