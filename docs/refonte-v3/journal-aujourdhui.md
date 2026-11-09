@@ -368,6 +368,15 @@ from o left join gold.bv_transfer_history h on h.player_id::text = o.pid group b
 ```
 Résultat : `club | decent | 1 | 1 | 10250` ; `player | decent | 1 | 1 | 10250` ; `roster | decent | 1 | 1 | 10250`. Un seul joueur à catégorie connue (Decent), **aucun High** : `academie_valeur_high` n'est pas écrite. Lignes écrites (`sql/core/025_game_params_vente_academie.sql`) : `vente_tolerance_force` = 1, `academie_cout_test` = 25 000.
 
+**Résultats 5f (2026-11-09 16:25 Paris).**
+- **L1** (`a3148fb`) : `gold.bv_sell_replacement` appliquée (migration `gold_072_bv_sell_replacement`), 14 lignes lues en `assistant_ro`. Écart ≤ 1 : Bernard/Albano (PF, 0,0, l'un remplace l'autre), Baron (PG, 0,4), Ungureanu (C, 0,7) ; tous les autres ≥ 1,2.
+- **L2, L4** (`ba113e1`) : `vente_tolerance_force` = 1, `academie_cout_test` = 25 000 ; `academie_valeur_high` non écrite (aucun High, requête ci-dessus).
+- **L3, L5** (`c6cb630`) : ligne « Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,7 » (plus gros salaire des 4 candidats, 14 disponibles → 13 après). Elle tombe dans « Autres points » : les lignes à heure limite passent d'abord et la ligne analyste (sans heure) prend la 5e place ; ordre de `rendre` inchangé. Académie : une ligne « Académie, rapport du 05/11 : 3 prospects ; valeur d'un High inconnue » au lieu de 3.
+- **L6** : `test_aujourdhui.py` 157 → **167/167**. 3 cas K3 réécrits pour L5 (« une ligne par prospect sans donnée » → une ligne par rapport ; « clé antérieure → 3 lignes » → 1), 1 cas L5 ajouté de plus (singulier) et 1 cas absent (données présentes) ; L3 : 8 cas (4 présents, 4 absents). Autres suites : toutes vertes (`fin_etape.py`).
+- **L7** : avant 7,8 s (25 requêtes), après **9,6 s** (27 requêtes) ; 8 lignes logiques. `diff` : seule « Autres points » change (5 → 4 éléments : + Vendre, 3 lignes académie → 1).
+- `fusion_main.py` : `origin/main == HEAD` (c6cb630). `fin_etape.py` : 0 commit d'avance, tous les tests verts.
+- Hors périmètre, non commité : `outputs/basketvibe/aujourdhui-2026-11-09.md`.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -401,3 +410,4 @@ Résultat : `club | decent | 1 | 1 | 10250` ; `player | decent | 1 | 1 | 10250` 
 | 2026-11-09 16:07 | aujourd'hui | 7.5 | 20 |
 | 2026-11-09 16:10 | aujourd'hui | 7.6 | 25 |
 | 2026-11-09 16:17 | aujourd'hui | 7.8 | 25 |
+| 2026-11-09 16:21 | aujourd'hui | 9.6 | 27 |
