@@ -433,6 +433,15 @@ def cas_etape5a():
     yield "A1/A2 même match : une seule ligne Analyse", sum("Analyse :" in x for x in t.splitlines()) == 1
     t = plan5a(alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
     yield "A2 amical perdu seul (dernier match amical) : pas d'analyste", "analyste" not in t
+    # A3 : titre acquis ou rien à jouer -> minutes aux jeunes
+    amical = (JOUR9 + dt.timedelta(days=1), "amical", "Opper Cards", "tester", "amical : tester", "amical", 2)
+    rien = (dt.date(2026, 11, 14), "ligue", "BC Gelrode", "former", "rien à jouer (8e sur 12)", "rien_former", 0)
+    t = plan5a(objectifs=(COLS_OBJ, [amical, rien]))
+    yield "A3 rien à jouer : « minutes aux jeunes » (présent)", \
+        "Composition : minutes aux jeunes, ligue contre BC Gelrode (sam. 14/11)" in t and "rien à jouer (8e sur 12)" in t
+    t = plan5a(objectifs=(COLS_OBJ, [amical, serie[1][0]]))
+    yield "A3 amicaux « tester » et série seulement : aucune ligne jeunes (absent)", \
+        "minutes aux jeunes" not in t and "ni titre acquis ni rien à jouer" in t and "règle non écrite — à valider (le script" not in t
 
 
 def cas_base():

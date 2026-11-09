@@ -293,6 +293,26 @@ def defaite_officielle(donnees, erreurs, brief_analyste, ajoute):
            "core.fixture" + (", gold.match_objective" if serie else ""))
 
 
+REGLES_JEUNES = ("titre", "titre_former", "rien", "rien_former")  # core.objective_rule : titre acquis, rien à jouer
+
+
+def minutes_jeunes(donnees, erreurs, ajoute, garder):
+    """A3 : titre acquis ou rien à jouer (règle de gold.match_objective, pas l'objectif seul : `tester` sort aussi de la
+    règle amical) -> ligne Composition « minutes aux jeunes » ; sinon demi-ligne « Garder ». Source absente : rien."""
+    if "objectifs" not in donnees:
+        return
+    m = manque(donnees, erreurs, "objectifs", "Classement")
+    if m:
+        ajoute(None, 3, m)
+        return
+    r = next((r for r in lignes_de(donnees, "objectifs") if r["rule_id"] in REGLES_JEUNES), None)
+    if r is None:
+        garder.append("effectif, jeunes : ni titre acquis ni rien à jouer sur les 7 prochains jours (gold.match_objective)")
+        return
+    ajoute(None, 2, f"Composition : minutes aux jeunes, {r['competition_kind']} contre {r['opponent']} ({jour_fr(en_date(r['day']))})",
+           propre(r["raison"]), "gold.match_objective")
+
+
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte],
     'infos': [texte]} ; infos = enchères terminées, une ligne chacune, rangées dans « Autres points »."""
@@ -469,7 +489,9 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         else:
             garder.append("effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin)")
         garder.append("effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)")
-        garder.append("effectif, jeunes : règle non écrite — à valider (le script ne sait pas dire si un match de ligue est gagné d'avance)")
+        if "objectifs" not in donnees:  # A3 : sans gold.match_objective (anciens jeux de données), l'ancienne demi-ligne
+            garder.append("effectif, jeunes : règle non écrite — à valider (le script ne sait pas dire si un match de ligue est gagné d'avance)")
+    minutes_jeunes(donnees, erreurs, ajoute, garder)
     m = manque(donnees, erreurs, "gold.bv_finance_health", "Finances")
     fh = lignes_de(donnees, "gold.bv_finance_health")
     if m:
