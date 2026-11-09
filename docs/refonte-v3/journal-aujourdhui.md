@@ -180,6 +180,18 @@ Réponses de l'utilisateur (telles quelles) : « 1088 = rejeté (il n'a pas mis�
 **Résultats (2026-11-09 15:05 Paris).** Migration `005` appliquée (`ea4bee1`). D1 (`904fe09`) : `test_evaluer.py` 34/34. D3 : 1088 `rejected` (« 1088 = rejeté (il n'a pas misé) »), 1072 `rejected` (« 1072 = rejeté, remplacé par 1073 ») ; 1076 reste `proposed` (réponse non donnée). D4-D5 (`4962921`) : `test_relier_faits.py` 8/8 ; `relier_faits.py basketvibe --essai` : « Aucune ligne [décision=<id>] dans les registres des 7 derniers jours. »
 D6 : `gold.decisions_a_evaluer` = 1075, 1099. Cycle réel : les deux « en attente » (`gold.bv_match_report` n'a pas les amicaux des 07/11 et 09/11 ; seule ligne : ligue du 07/11, `opp_fg2_pct` 53,0). `learn.outcome` : 6 lignes, aucun doublon ; 1075 et 1099 gardent leur ancien « inconclusive » jusqu'à l'arrivée de la donnée, puis seront remplacés. Refus contrôlés : 1070 `confirmed` → « déjà évaluée (contradicted) » ; 1075 `inconclusive` → « verdict inconclusive refusé ».
 
+## Garde-fous mécaniques (critères écrits le 2026-11-09 15:10 Paris, avant le code)
+
+Constat : un Claude de cloud enfreint de façon répétée trois règles de forme (heredoc pour écrire un fichier, push sur une branche de session au lieu de main, commit et push enchaînés). Les règles écrites ne tiennent pas ; on les rend mécaniques.
+
+| # | Critère |
+|---|---|
+| T1 | Hook PreToolUse Bash `pipelines/garde_heredoc.py` : refuse une commande qui écrit un fichier par heredoc (une redirection, ou python/cat/tee, avec `<<` suivi d'un délimiteur) ; accepte `git commit -m "$(cat <<'EOF' ...)"`. Message du refus : « écris le fichier avec Write ». Tests figés (`pipelines/test_garde_heredoc.py`) : cas refusés et acceptés. |
+| T2 | `pipelines/garde_push.py` : le texte du refus de `git push -q/--quiet` devient « retire -q/--quiet, la sortie doit être lue ». Même hook, aucun autre changement. |
+| T3 | `pipelines/fusion_main.py` : sur la branche courante, `git fetch`, vérifie que main peut avancer en fast-forward, sinon refuse sans rien changer ; puis pousse main et imprime avant/après les hashs (HEAD, origin/main). `--essai` imprime sans pousser. Jamais de `--force`. Tests figés sur un dépôt temporaire (`pipelines/test_fusion_main.py`) : fast-forward, divergent, déjà à jour. |
+| T4 | `pipelines/fin_etape.py` (lecture seule, code retour 1 si HEAD n'est pas dans origin/main) : branche, HEAD, origin/main, commits d'avance sur main, `git status --short`, dernière ligne de chaque `pipelines/test_*.py`. Tests figés (`pipelines/test_fin_etape.py`). |
+| T5 | Aucun autre hook, aucune autre règle en prose ; `CLAUDE.md` reçoit une seule ligne : « fin d'étape = python -I pipelines/fusion_main.py puis python -I pipelines/fin_etape.py, sortie collée ». |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
