@@ -489,6 +489,7 @@ def cas_etape5a():
 
     yield from cas_experiences(COLS_CAL, MIDI)
     yield from cas_academie()
+    yield from cas_vente()
     yield from cas_boucle()
 
 
@@ -584,13 +585,20 @@ def cas_academie():
 
     vals = lambda h, c: (["key", "value"], [("academie_valeur_high", h), ("academie_cout_test", c)])
     manque = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": (["key", "value"], [])})
-    yield "K3 donnée manquante, présent : 3 lignes, une par prospect, qui nomment les deux données", \
-        len(manque) == 3 and all("donnée manquante : valeur d'un High (core.game_params.academie_valeur_high), "
-                                 "coût du test (core.game_params.academie_cout_test)" in a[2] for a in manque) \
-        and [a[2].split(" : ")[1].split(" (")[0] for a in manque] == ["Nael Lopez", "Nathan Vidal", "Sacha Aubert"]
+    yield "L5 (remplace K3) deux données manquantes : UNE ligne pour le rapport, qui nomme les deux", \
+        len(manque) == 1 and manque[0][2] == "Académie, rapport du 05/11 : 3 prospects ; valeur d'un High inconnue, coût du test inconnu" \
+        and manque[0][3] == "donnée manquante : core.game_params.academie_valeur_high, core.game_params.academie_cout_test"
     une = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": (["key", "value"], [("academie_cout_test", 25000)])})
-    yield "K3 une seule donnée manquante : la ligne ne cite que celle-là", \
-        all("donnée manquante : valeur d'un High" in a[2] and "coût du test" not in a[2] for a in une)
+    yield "L5 présent : coût du test en base, valeur d'un High absente → « 3 prospects ; valeur d'un High inconnue »", \
+        len(une) == 1 and une[0][2] == "Académie, rapport du 05/11 : 3 prospects ; valeur d'un High inconnue" \
+        and "coût du test" not in une[0][2] and une[0][1] == 3
+    un_seul = lignes({"prospects": (COLS_PROS, PROS[1][:1]), "cote_potentiel": COTE,
+                      "valeurs_academie": (["key", "value"], [("academie_cout_test", 25000)])})
+    yield "L5 un seul prospect : « 1 prospect » au singulier", \
+        len(un_seul) == 1 and "1 prospect ; valeur d'un High inconnue" in un_seul[0][2]
+    yield "L5 absent : les deux données en base, aucune ligne « inconnue », une ligne par prospect", \
+        (lambda A: len(A) == 3 and not any("inconnu" in a[2] for a in A))(
+            lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": vals(200000, 25000)}))
     tester = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": vals(200000, 25000)})
     yield "K3 données présentes : « tester » si P(High) × valeur > coût (21,2 % × 200 000 = 42 400 > 25 000)", \
         len(tester) == 3 and all(a[2].endswith(": tester") and "42 400" in a[3] for a in tester)
@@ -603,7 +611,44 @@ def cas_academie():
     yield "K3 absent : décision déclarée au registre ([clé=Académie]) après le rapport, aucune ligne", \
         lignes({"prospects": PROS, "cote_potentiel": COTE}, [cle]) == []
     ancien = dict(cle, jour=dt.date(2026, 11, 4))
-    yield "K3 présent : clé Académie antérieure au rapport, les lignes restent", len(lignes({"prospects": PROS}, [ancien])) == 3
+    yield "K3 présent : clé Académie antérieure au rapport, la ligne reste (une seule, L5)", len(lignes({"prospects": PROS}, [ancien])) == 1
+
+
+COLS_REMP = ["name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary",
+             "on_transfer_list", "available", "available_players"]
+# Extrait de gold.bv_sell_replacement du 2026-11-09 16:25 Paris (4 lignes sur 14)
+REMP = [("Maël Bernard", "PF", 47.8, "Anselmo Albano", 47.8, 0.0, 17303, False, True, 14),
+        ("Catalin Ungureanu", "C", 48.5, "Maël Bernard", 47.8, 0.7, 19030, False, True, 14),
+        ("Sacha Leclerc", "SG", 42.3, "Nolan Baron", 41.1, 1.2, 13767, False, True, 14),
+        ("Léo Lefebvre", "PF", 63.1, "Hadrien Gimenez", 58.8, 4.3, 31803, False, True, 14)]
+TOL = (["value"], [(1.0,)])
+
+
+def cas_vente():
+    """L3 (étape 5f) : ligne « Vendre X » ; cas présent et cas absent."""
+    def lignes(remp, tol=TOL):
+        A = []
+        auj.vendre_remplacable({"gold.bv_sell_replacement": (COLS_REMP, remp), "tolerance_vente": tol}, lambda *a: A.append(a))
+        return A
+
+    un = lignes(REMP)
+    yield "L3 présent : une seule ligne, le plus gros salaire sous la tolérance (Ungureanu 19 030, écart 0,7)", \
+        len(un) == 1 and un[0][2] == ("Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard "
+                                      "au poste C, écart 0,7") and un[0][4] == "gold.bv_sell_replacement"
+    yield "L3 présent : la tolérance vient de la base (2,0 → Lefebvre exclu à 4,3, Ungureanu reste)", \
+        lignes(REMP, (["value"], [(2.0,)]))[0][2].startswith("Vendre Catalin Ungureanu")
+    yield "L3 absent : aucun écart sous la tolérance, aucune ligne", lignes(REMP[2:]) == []
+    yield "L3 absent : tolérance absente de core.game_params, aucune ligne", lignes(REMP, (["value"], [])) == [] \
+        and (lambda A: (auj.vendre_remplacable({"gold.bv_sell_replacement": (COLS_REMP, REMP)}, lambda *a: A.append(a)), A)[1])([]) == []
+    neuf = [r[:9] + (9,) for r in REMP]
+    yield "L3 absent : 9 disponibles, 8 après la vente, aucune ligne", lignes(neuf) == []
+    dix = [r[:9] + (10,) for r in REMP]
+    yield "L3 présent : 10 disponibles, 9 après la vente, la ligne sort", len(lignes(dix)) == 1
+    en_vente = [REMP[0], REMP[1][:7] + (True, False, 14)]
+    yield "L3 joueur déjà en vente exclu : Bernard (17 303) à la place d'Ungureanu", \
+        lignes(en_vente)[0][2].startswith("Vendre Maël Bernard : économie 17 303")
+    yield "L3 absent : dernier du poste (aucun remplaçant, écart nul), aucune ligne", \
+        lignes([("X", "C", 30.0, None, None, None, 10000, False, True, 14)]) == []
 
 
 def cas_boucle():

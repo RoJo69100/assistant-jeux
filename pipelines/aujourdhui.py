@@ -99,6 +99,10 @@ REQUETES = {
     "cote_potentiel": "select academy_score, p_high_8_10 from gold.bv_academy_potential_odds where label = 'jauge actuelle'",
     "valeurs_academie": "select key, value from core.game_params where game = 'basketvibe' "
                         "and key in ('academie_valeur_high', 'academie_cout_test')",
+    # L3 (étape 5f) : remplaçant au même poste (force fit), écart et salaire ; tolérance de force lue dans core.game_params
+    "gold.bv_sell_replacement": "select name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
+                                "on_transfer_list, available, available_players from gold.bv_sell_replacement",
+    "tolerance_vente": "select value from core.game_params where game = 'basketvibe' and key = 'vente_tolerance_force'",
     # K4 (étape 5e) : décisions échues à mesurer, et décisions encore « proposed » (faits du registre à relier)
     "a_evaluer": "select count(*) as n from gold.decisions_a_evaluer where game = 'basketvibe'",
     "decisions_proposees": "select id, status, game from learn.decision where game = 'basketvibe' and status = 'proposed'",
@@ -448,13 +452,40 @@ def solde_projete(donnees, erreurs, fh, ajoute):
            "gold.bv_finance_projection, gold.bv_finance_health")
 
 
+DISPONIBLES_APRES_VENTE = 9  # L3 (étape 5f, règle de l'utilisateur) : joueurs disponibles qui doivent rester après une vente
+
+
+def vendre_remplacable(donnees, ajoute):
+    """L3 (étape 5f) : « Vendre X » si un joueur a au même poste un remplaçant d'écart de force (fit) au plus égal à la
+    tolérance de core.game_params.vente_tolerance_force, n'est pas déjà en vente et laisse au moins 9 joueurs disponibles ;
+    plusieurs candidats : le plus gros salaire. Tolérance absente ou aucun candidat : aucune ligne."""
+    tol = next((r["value"] for r in lignes_de(donnees, "tolerance_vente")), None)
+    if tol in (None, ""):
+        return
+    tol = float(tol)
+    ok = [r for r in lignes_de(donnees, "gold.bv_sell_replacement")
+          if r.get("gap") is not None and r.get("weekly_salary") is not None and not vrai(r.get("on_transfer_list"))
+          and float(r["gap"]) <= tol
+          and int(r["available_players"]) - (1 if vrai(r.get("available")) else 0) >= DISPONIBLES_APRES_VENTE]
+    if not ok:
+        return
+    r = max(ok, key=lambda r: float(r["weekly_salary"]))
+    fr = lambda x: str(round(float(x), 1)).replace(".", ",")
+    ajoute(None, 2, f"Vendre {r['name']} : économie {montant(r['weekly_salary'])} par semaine, remplaçant {r['replacement_name']} "
+                    f"au poste {r['best_slot']}, écart {fr(r['gap'])}",
+           f"force au poste {fr(r['fit_best'])} contre {fr(r['replacement_fit'])}, tolérance {fr(tol)} "
+           f"(core.game_params.vente_tolerance_force)", "gold.bv_sell_replacement")
+
+
 VALEURS_ACADEMIE = {"academie_valeur_high": "valeur d'un High", "academie_cout_test": "coût du test"}
+INCONNUES_ACADEMIE = {"academie_valeur_high": "valeur d'un High inconnue", "academie_cout_test": "coût du test inconnu"}
 
 
 def academie(donnees, erreurs, cles, maintenant, ajoute):
     """K3 : à l'arrivée d'un rapport du scout (moins de 7 jours, aucune clé `[clé=Académie]` au registre depuis), une ligne
     par prospect, même sous 100 % de jauge. Verdict « tester » si P(High) × valeur d'un High dépasse le coût du test, sinon
-    « ignorer » (espérance, à valider) ; les deux montants viennent de core.game_params, sinon « donnée manquante : … ».
+    « ignorer » (espérance, à valider) ; les deux montants viennent de core.game_params. L5 (étape 5f) : une donnée
+    manque → UNE ligne pour tout le rapport (« n prospects ; valeur d'un High inconnue »), pas une par prospect.
     « signer » demande le résultat d'un test, absent de la base : jamais rendu. Vue absente ou rapport ancien : rien."""
     pros = lignes_de(donnees, "prospects")
     if not pros:
@@ -466,13 +497,17 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
         return
     cote = lignes_de(donnees, "cote_potentiel")
     vals = {r["key"]: r["value"] for r in lignes_de(donnees, "valeurs_academie")}
-    manquants = ([] if cote else ["cote du potentiel (gold.bv_academy_potential_odds)"]) \
-        + [f"{t} (core.game_params.{k})" for k, t in VALEURS_ACADEMIE.items() if vals.get(k) in (None, "")]
+    manquants = ([] if cote else ["gold.bv_academy_potential_odds"]) \
+        + [f"core.game_params.{k}" for k in VALEURS_ACADEMIE if vals.get(k) in (None, "")]
+    if manquants:
+        inconnues = ([] if cote else ["cote du potentiel inconnue"]) \
+            + [t for k, t in INCONNUES_ACADEMIE.items() if vals.get(k) in (None, "")]
+        n = len(pros)
+        ajoute(None, 3, f"Académie, rapport du {rapport:%d/%m} : {n} prospect{'s' if n > 1 else ''} ; {', '.join(inconnues)}",
+               f"donnée manquante : {', '.join(manquants)}", "gold.bv_academy_prospects")
+        return
     for p in pros:
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({p['position']}, {p['age']} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
-        if manquants:
-            ajoute(None, 3, f"{tete} : donnée manquante : {', '.join(manquants)}", "", "gold.bv_academy_prospects")
-            continue
         ph = float(cote[0]["p_high_8_10"])
         gain, cout = ph / 100 * float(vals["academie_valeur_high"]), float(vals["academie_cout_test"])
         verdict = "tester" if gain > cout else "ignorer"
@@ -700,6 +735,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    "31 ans ou plus", "gold.bv_roster_now")
         else:
             garder.append("effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin)")
+        vendre_remplacable(donnees, ajoute)
         garder.append("effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)")
         if "objectifs" not in donnees:  # A3 : sans gold.match_objective (anciens jeux de données), l'ancienne demi-ligne
             garder.append("effectif, jeunes : règle non écrite — à valider (le script ne sait pas dire si un match de ligue est gagné d'avance)")
