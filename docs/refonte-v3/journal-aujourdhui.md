@@ -581,6 +581,24 @@ Contexte : aucune version du moteur en base ; l'étude des événements et la pr
 | V4 | Revue hebdomadaire, une ligne sous l'en-tête : « Version du moteur : ligue v4, amical v5 ; décisions ouvertes d'une version antérieure : n » (version en cours = ligne dont la période contient le jour de la revue ; décision ouverte = `learn.decision` BasketVibe au statut `proposed` ou `done`, sans `learn.outcome` ; version antérieure = décidée, en jour de Paris, avant le `start_date` le plus récent). Nouvelle ligne de version = clé `jeu/compétition/version/début` absente de l'instantané précédent ; alors une ligne liste les identifiants de ces décisions ouvertes, sans rien marquer. Instantané précédent sans clé de versions : aucune liste. Lecture seule. |
 | V5 | Tests figés (`test_revue_hebdo.py`) : V4 présent et absent (ligne de version, liste après une nouvelle ligne, aucune liste sans nouvelle ligne) ; 197 tests du plan et 34 de la revue verts ; page réelle ≤ 60 lignes. |
 
+**Résultats 6c (2026-11-09 17:40 Paris).**
+- **V1** (`99bb125`, migration `core_026_engine_version` appliquée par le connecteur, fichier `sql/core/026_engine_version.sql`) : `select version, competition_kind, start_date, end_date, statut from core.engine_version order by start_date` → v3 ligue 2026-09-07 → 2026-10-26 déduit ; v4 amical 2026-10-11 → 2026-10-27 déduit ; v4 coupe 2026-10-28 → 2026-10-31 déduit ; v5 amical 2026-10-28 → (en cours) annoncé ; v4 ligue 2026-11-02 → (en cours) annoncé. Source de chaque ligne dans la colonne `source`.
+- **V2** : `select competition_kind, version, statut, count(*) from gold.bv_match_engine_version group by 1,2,3` →
+```
+| amical | non attribuée |  | 1 |
+| amical | v4 | déduit | 17 |
+| amical | v5 | annoncé | 13 |
+| coupe | non attribuée |  | 2 |
+| coupe | v4 | déduit | 4 |
+| ligue | v3 | déduit | 22 |
+| ligue | v4 | annoncé | 3 |
+```
+  62 lignes = 62 matchs distincts = 62 matchs joués de `core.fixture` (aucun doublon). Non attribuées : coupe 13/09 (Blood Wolves, L), amical 10/10 (Isotopi&aAllies, W), coupe 01/11 (Reims Monarchs, L).
+- **V3** (script de contrôle hors dépôt, `groupe()` importé, aucun script modifié) : `matchs contrôlés : 80 (dans la vue : 56, autres équipes par la table : 24)` ; `écarts : 1` → `| 2026-10-10 | friendly | 3373b15f | vue | non attribuée | v3 amical |`. 80 et non 78 : `select count(distinct fixture_id) from silver.bv_match_events` → 80 (2 matchs détaillés arrivés depuis l'étude). L'écart est celui annoncé avant le code (amical du 10/10 hors des cinq lignes). Pour l'annuler : une ligne « amical v3 jusqu'au 10/10, déduit (préanalyse § 1.1) » ; non insérée (hors de la liste de V1).
+- **V4** (`0ff013e`) : page du 09/11, ligne 4 : « Version du moteur : ligue v4, amical v5 ; décisions ouvertes d'une version antérieure : 126 (avant le 02/11) ». Contrôle : `select count(*), count(*) filter (where (decided_at at time zone 'Europe/Paris')::date < '2026-11-02') … status in ('proposed','done') and not exists (learn.outcome)` → 132 ouvertes, 126 avant. Instantané du 09/11 : clé `versions` (5 clés) ; aucune liste aujourd'hui (pas d'instantané précédent avec versions).
+- **V5** : `test_revue_hebdo.py` 34 → **38/38** (4 cas V4) ; `test_aujourdhui.py` **197/197** ; page **59 lignes**, 3,4 s.
+- `fusion_main.py` : `commits à ajouter à main (3)` (f6ab108, 99bb125, 0ff013e) ; `Poussé : origin/main == HEAD.` (0ff013e). `fin_etape.py` : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, 23 suites vertes (dont revue 38/38, aujourdhui 197/197), `HEAD dans origin/main : oui`.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
