@@ -94,6 +94,22 @@ Une routine = une ligne : déclencheur | condition | lancement (commande, vue ou
 | P10 | Chaque ligne « existe » ajoutée a sa preuve fichier:ligne lue dans le tour ; chaque ligne « à créer » a « ce qui prouvera qu'elle sert » (une mesure). |
 | P11 | La liste « Étape 5 » est mise à jour : routines ajoutées classées par effort ; la remise en question hebdomadaire en tête de l'étape 6. |
 
+## Plan du jour, étape 5a (critères écrits le 2026-11-09, avant le code)
+
+Source : `docs/refonte-v3/playbook-basketvibe.md`, liste « Étape 5 », actions 1, 2, 13, 15, 16. Fichiers modifiés : `pipelines/aujourdhui.py`, `aujourdhui_sources.py`, `test_aujourdhui.py`, skill `basketvibe-aujourdhui` ; aucune vue, migration ni règle.
+
+| # | Critère |
+|---|---|
+| A1 | **Alertes de domaine « match ».** Dernier match → ligne « Analyse : … » ; match de ligue ou de coupe joué non exporté (`ligue_sans_resultat`, `coupe_sans_resultat`) → élément de la ligne « Exports à faire aujourd'hui ». Sans doublon : l'export de ligue n'est pas ajouté si l'écran « Match de ligue : box » est déjà demandé ou déclaré fait ; la ligne « Dernier match » n'est pas ajoutée si la ligne analyste (A2) porte le même match. **Écart constaté :** `coupe_sans_resultat` n'existe pas dans `gold.bv_daily_alerts` (`sql/gold/012_bv_daily_alerts.sql:38-44` : dernier match et ligue seulement) ; il est lu dans `gold.daily_alerts` (domaine `match`, colonne `rule_id`), qui porte les trois règles de `core.alert_rule`. Le domaine `match` de `gold.bv_daily_alerts` reste ignoré (pas de doublon). |
+| A2 | **Défaite de ligue ou de coupe.** Ligne « Analyse : lance l'agent analyste ce soir » si le dernier match de ligue ou de coupe joué (`core.fixture`, `my_result`) est une défaite plus récente que le dernier brief analyste (`briefs/*-analys*.md`). Si `gold.match_objective` porte la règle `serie`, la ligne dit « N défaites de ligue d'affilée ». Amicaux exclus (arbitrage 15). Une seule ligne. |
+| A3 | **Titre acquis ou rien à jouer.** Ligne Composition « minutes aux jeunes » seulement si un match à venir de `gold.match_objective` a la règle `titre`, `titre_former`, `rien` ou `rien_former`. **Écart constaté :** l'objectif `tester` sort aussi de la règle `amical` (7 lignes sur 10 le 09/11) ; filtrer sur l'objectif seul déclencherait la ligne chaque jour d'amical, d'où le filtre sur `rule_id`. Sinon aucune ligne. |
+| A4 | **Solde projeté.** Ligne Finances si `balance_end_projected` de `gold.bv_finance_projection` est négatif ou inférieur à `weekly_salaries` de `gold.bv_finance_health` (une semaine de masse salariale ; aucun seuil écrit à la main). La ligne dit la cause : charges restantes contre recettes restantes, et la plus grosse charge hebdomadaire. Sinon aucune ligne. |
+| A5 | Skill `basketvibe-aujourdhui` : la ligne fixe (d) périmée est supprimée ; rien d'autre ne change. |
+| A6 | Au plus 8 lignes (surplus en « Autres points », priorité d'abord) ; script en 25 s au plus ; les 104 tests existants restent verts. |
+| A7 | Un test figé par critère A1 à A4 : cas présent et cas absent. |
+| A8 | Constat de la base avant le code (09/11, 12:40 Paris) : `gold.match_objective` basketvibe 10 lignes (3 `serie`, ligue 09/11, 11/11, 14/11, `defaites_d_affilee` 2 ; 7 `amical` ; 0 `titre`/`rien`) ; `gold.bv_daily_alerts` domaine `match` 1 ligne (dernier match 2026-11-08, amical, L 94-96) ; `gold.daily_alerts` basketvibe domaine `match` 1 ligne (`dernier_match`), 0 `ligue_sans_resultat`/`coupe_sans_resultat` ; `gold.bv_finance_projection` 1 ligne (`as_of` 08/11, solde projeté 1 512 431, `weekly_salaries` 294 625 : A4 absent aujourd'hui) ; `core.fixture` : dernières ligues jouées 07/11 Póvoa Riptide L, 04/11 Eindhoven Wizards L ; dernier brief analyste `2026-11-05-analyste.md`. Aucune source vide ni instable. |
+| A9 | Constat du calendrier de coupe (pour l'étape 5c, rien modifié) : dernière page `bronze.raw_pages` id 34675, `/api/v1/teams/<id>/cup-fixtures`, reçue le 2026-11-04 10:35 UTC. 7 matchs : `Season 1 Edition` tour 1 (13/09) ; `National cups` tours 1 à 5 (28/10 au 01/11, `finished`, 18:00 UTC) ; `Season 2 Edition` **tour 1 seulement**, 12/11, `kickoff_time_local` 19:00, `kickoff_timezone` UTC, `scheduled`, contre Stare Kotlety (domicile). La saison 2 est présente, les 10 tours ne le sont pas. Écart : `core.fixture` dit les coupes du 29/10 et du 31/10 non jouées, la page les dit `finished`. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -116,3 +132,4 @@ Une routine = une ligne : déclencheur | condition | lancement (commande, vue ou
 | 2026-11-06 21:30 | hockeynation temps 2 (2026-11-06) | 18.1 | 8 |
 | 2026-11-09 09:17 | aujourd'hui | 20.2 | 14 |
 | 2026-11-09 10:35 | aujourd'hui | 14.4 | 14 |
+| 2026-11-09 12:35 | aujourd'hui | 15.5 | 14 |
