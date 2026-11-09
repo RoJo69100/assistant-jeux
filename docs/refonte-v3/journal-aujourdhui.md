@@ -390,6 +390,34 @@ Contexte : l'avancement des expériences amicales E1 à E4 (`docs/attentes/exper
 | M5 | Tests figés, un cas présent et un cas absent pour M3 ; sortie ≤ 8 lignes, durée ≤ 15 s ; les 167 tests existants restent verts. |
 | M6 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée telle quelle). |
 
+**M1, constat (2026-11-09 16:45 Paris).** `gold.bv_match_tactics_used` n'existe pas. Lectures en place :
+1. **`silver.bv_match_tactics`** (`sql/silver/003_bv_matches.sql:125`) : dernière capture `match-tactics-used` (page « réglages utilisés ») de `silver.bv_fixture_api`, par match et par équipe : `player_directives` (par joueur, pour tout le match : `defense_tier`, `offensive_focus_tier`, `shot_tier`, `role_tier`, crans 0–4 de l'API), `lineup_by_quarter` (5 tableaux de 5 `player_id` : Q1 à Q4, puis prolongation), `defensive_focus` (par adversaire : `focus`, `area_step`). Amicaux finis : 29, dont 26 avec cette page.
+2. **`gold.bv_match_player_lines`** (`sql/gold/003_bv_match_report.sql:75-103`) : la relit par joueur et par match (consignes jouées) ; pas de lecture par quart-temps ni de niveau d'équipe.
+3. **`gold.bv_zone_jouee`** (`sql/gold/025_bv_zone_jouee.sql`) : zone lue dans `match-tactics` (page **avant** le match), pas dans les réglages utilisés. Écart constaté le 09/11 (Garden City) : `bv_zone_jouee` = Middle (3), capture du 08/11 10:12 UTC ; réglages utilisés = Perimeter (1) pour les 12 adversaires. Les deux autres amicaux n'ont pas de page `match-tactics`. Vue non modifiée (hors périmètre).
+
+Aucune lecture ne donne « niveau d'agressivité uniforme par match » : la vue M2 est créée sur `silver.bv_match_tactics` (pas de deuxième lecture du bronze).
+
+Échelle (`docs/fiches/basketvibe/match.md:19`, confirmée par l'utilisateur le 2026-10-18) : écran = cran API + 1. L'étude (`etude-evenements-basketvibe.md:135`, tranches « moins de 1 ; de 1 à 3 ; plus de 3 ») compte en crans API : E1 A = cran 2 (**écran 3**), B = cran 4 (**écran 5**). Le texte du YAML « agressivité 2 sur les cinq » fait saisir écran 2 = cran 1, dans la même tranche que B mal saisi (écran 4 = cran 3) : E1 ne séparerait aucune tranche. Corrigé avec M3 (texte écran + cran attendu).
+
+3 derniers amicaux joués (`silver.bv_match_tactics` × `silver.bv_my_team`), valeurs **écran** ; joueurs dans l'ordre C, PF, PG, SF, SG ; focus offensif dans le même ordre ; Q5 = case prolongation (aucune prolongation jouée, `overtime_periods` = 0) :
+
+| Match | Q | Agressivité par joueur | Focus offensif | Zone (12-13 adversaires) |
+|---|---|---|---|---|
+| 09/11 Garden City (L) | 1 | Bernard 1, Albano 1, Baron 1, Durand 1, Leclerc 1 | 2 3 2 3 4 | Perimeter (1), focus normal |
+| | 2 | Bernard 1, Legrand 1, Boyer 1, Durand 1, Leclerc 1 | 2 3 2 3 4 | |
+| | 3 | Ungureanu 1, Albano 1, Baron 1, Durand 1, Leclerc 1 | 3 3 2 3 4 | |
+| | 4 | Ungureanu 1, Legrand 1, Boyer 1, Durand 1, Dang 1 | 3 3 2 3 3 | |
+| 08/11 New York City Cyclones (L) | 1 | Bernard 1, Albano 1, Baron 1, Durand 1, Leclerc 1 | 2 3 2 3 4 | Perimeter (1), focus normal |
+| | 2 | Bernard 1, Legrand 1, Boyer 1, Durand 1, Leclerc 1 | 2 3 2 3 4 | |
+| | 3 | Ungureanu 1, Albano 1, Baron 1, Durand 1, Leclerc 1 | 3 3 2 3 4 | |
+| | 4 | Ungureanu 1, Legrand 1, Boyer 1, Durand 1, Dang 1 | 3 3 2 3 3 | |
+| 07/11 Knight Jays (L) | 1 | Bernard 1, Albano 1, Baron 1, Durand 1, Leclerc 1 | 2 3 2 3 4 | Perimeter (1), focus normal |
+| | 2 | Bernard 1, Lefebvre 1, Boyer 1, Durand 1, Leclerc 1 | 2 3 2 3 4 | |
+| | 3 | Ungureanu 1, Albano 1, Baron 1, Durand 1, Leclerc 1 | 3 3 2 3 4 | |
+| | 4 | Ungureanu 1, Lefebvre 1, Boyer 1, Durand 1, Dang 1 | 3 3 2 3 3 | |
+
+Les trois : agressivité uniforme écran 1 (cran 0, Soft), aucun focus offensif Primary (écran 5). Aucun n'est un amical E1.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
