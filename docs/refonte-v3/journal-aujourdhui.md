@@ -76,6 +76,21 @@ Mesure : avant et après chaque migration, nombre de lignes de `gold.bv_exports_
 Tests figés : Mes enchères non demandé ; saisie Garden City déclarée le 08/11 reconnue le 09/11 ; un type de page sans lecteur détecté.
 Preuve (étape 3) : comptes avant et après, `gold.bv_couverture_pages`, script rejoué ; tableau critère / commande / sortie collée.
 
+## Playbook (critères écrits le 2026-11-09, avant le fichier `docs/refonte-v3/playbook-basketvibe.md`)
+
+Une routine = une ligne : déclencheur | condition | lancement (commande, vue ou fichier réel du dépôt, ou « à créer ») | ce qu'elle apprend | état | preuve. État : « existe » (un script ou une vue le fait déjà, dans le plan du jour), « à relier » (vue ou donnée présente, le plan du jour ne l'utilise pas), « à créer ». Preuve : fichier:ligne ou vue lue dans le tour d'écriture ; sinon « non vérifié ».
+
+| # | Critère |
+|---|---|
+| P1 | **Aucune heure fixe.** Chaque routine a un déclencheur (donnée ou événement) et une limite calculée depuis le calendrier du jeu, jamais une heure écrite à la main. |
+| P2 | **Sections** : Chaque passage ; Chaque match (ligue, coupe, amical) ; Chaque cycle (entraînement, académie, paie, semaine) ; Sur événement ; Phases de saison ; Marché ; Comprendre le moteur de match ; Veille ; Nettoyage. |
+| P3 | **Règles de tête**, reprises de CLAUDE.md et des décisions de l'utilisateur : au plus tôt (sauf enchères et résultats) ; solde jamais négatif, sans réserve fixe ; vente pour baisser la masse salariale quand la force ne baisse pas ; étude de tous les prospects d'académie, même sous 100 % ; aucun paramètre fixé à la main (calculé sur l'historique, revu chaque semaine). |
+| P4 | Chaque routine du plan du jour actuel (`pipelines/aujourdhui.py`) apparaît avec l'état « existe » ; aucune ligne « existe » sans preuve. |
+| P5 | **Comprendre le moteur de match** : faits de `etude-evenements-basketvibe.md` et de la préanalyse (50 possessions par quart-temps ; effet cercle +6,81 [4,02 ; 9,01] ; fautes 6,5 % contre 16,5 % annoncés, dénominateur non défini ; tireur niveau 4 vers 65 % de tirs à 3 points ; fatigue observée au plus 24,6 ; règle des 24 s conforme en v5), avec le verdict exact du fichier, ni durci ni adouci. |
+| P6 | **File d'expériences amicales**, une ligne par expérience : réglage testé, niveaux, pourquoi, n visé, export requis (4 pages du match et la page Équipe), statut. Besoins de l'étude repris tels quels : au moins 4 amicaux à agressivité uniforme 2 et 4 ; 3 avec deux tireurs de niveau 4 ; 7 avec Primary à chaque quart-temps ; 16 de plus pour les tirs à 3 points (environ 14 amicaux contrôlés au total). Un seul réglage change à la fois ; niveaux en alternance A, B, A, B. |
+| P7 | Chaque routine « à créer » porte « ce qui prouvera qu'elle sert » (une mesure, pas une opinion). Le fichier finit par la liste ordonnée de l'étape 5, avec l'effort (petit, moyen, gros) de chaque ligne. |
+| P8 | **Trous constatés** : chaque écran ou type de page reçu et non lu (`gold.bv_couverture_pages`), avec la question « sert-il à une routine ? » ; chaque doublon de règles (`core.export_rule`, `core.agenda_rule`, `core.alert_rule`, `aujourdhui.py`, skills), avec la source qui fait foi. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
