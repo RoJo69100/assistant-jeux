@@ -145,6 +145,23 @@ Source : `docs/refonte-v3/diagnostic-boucle-apprentissage.md` (`7ee5ce8`), secti
 | C5 | Évaluateur lancé hors `--essai` ; `select count(*) from learn.outcome` avant et après, et le verdict de chaque ligne. Nombre attendu = nombre de conseils prouvés appliqués en C4, pas 9. |
 | C6 | Pour chaque verdict écrit : il mesure l'exécution (présence, achat) ou l'effet (résultat, solde). Pas d'interprétation. |
 
+**Résultats (2026-11-09 13:42 Paris).** Migration `004` appliquée (`prosecdef` vrai, `search_path=""`, exécution : `service_role` seul). Écart trouvé au code : les 9 décisions ont `team_id` vide, `core.fixture` porte l'identifiant de l'équipe ; l'ancien filtre `team_id is not distinct from` ne trouvait aucun match. Décision sans équipe → pas de filtre d'équipe.
+
+C4, preuves d'exécution :
+| Id | Preuve collée | Statut |
+|---|---|---|
+| 1070 | `fait-2026-11-04.md` : « [soir, déclaré] Composition de la ligue J2 (Eindhoven Wizards) saisie » ; `briefs/2026-11-05-tactique.md:3` : « plan « League Tactic » sauvegardé le 04/11 contre Eindhoven (gold.bv_saisie_joueurs, sauvegarde_match = true) » | done |
+| 1071 | `fait-2026-11-04.md` : « [soir, déclaré] Composition de l'amical du 05/11 (/HAVEX/) saisie » et « [19:43 Paris] Export de la tactique de l'amical du 05/11 : sauvegardée » | done |
+| 1073, 1074 | `fait-2026-11-06.md` : « [13:47 UTC] Saisie de la ligue à Póvoa (J3, 07/11 20:00) — source : déclaré par l'utilisateur (« les deux compos sont faites ») » ; `resume-session-2026-11-06.md:8` : « D-1073 (tactique Póvoa), D-1074 (Lefebvre Q2) » | done |
+| 1075 | `fait-2026-11-06.md` : « [13:47 UTC] Saisie de l'amical contre Knight Jays (07/11 07:45) » ; `resume-session-2026-11-06.md:7` : « Correction faite : Agress. 1 pour tous » | done |
+| 1099 | `fait-2026-11-08.md` : « [10:34 UTC] Saisie de l'amical du 09/11 contre Garden City (composition, consignes, adversaires Perimeter) » ; `session-2026-11-08.md:26` : « D-1099 composition, amical du 09/11 (Garden City, nom corrigé ici) » | done |
+
+À confirmer par l'utilisateur (restent proposés) : 1072 « Ligue J3 Póvoa 07/11 : Lefebvre Q1-Q2-Q4, Legrand Q3 SF » (plan du 05/11, aucune saisie déclarée le 05/11 ; la saisie du 06/11 suit les décisions 1073-1074) ; 1076 « Enchères 07-08/11 : Fujita C (max 150 000) et Stankevičius » (aucune enchère déclarée ; `fait-2026-11-06.md` : « Mes enchères — aucune enchère en cours ») ; 1088 « Enchère maximale 190 000 sur Salvador Aquino » (`session-2026-11-07.md:25` : « L'utilisateur ne misera pas »).
+
+C5 : `learn.outcome` 0 → 6. 1070 contredit (`["L"]`), 1071 confirmé (55,2), 1073 contredit (50,6), 1074 contredit (81,9), 1075 et 1099 non concluants (valeur vide). `basketvibe:L-004` : `n_against` 0 → 1, reste `validated`, `source_decisions` `[1070]` ; `learn.error` 88 → 88. Relance `--essai` : « Aucune décision à évaluer. »
+
+C6 : les 6 verdicts mesurent l'effet (résultat du match, `opp_fg2_pct`, `opp_efg_pct`, `off_rtg`) ; aucun ne mesure l'exécution.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
