@@ -463,6 +463,22 @@ Contexte : main = c202605 ; playbook, étape 5, actions 7 et 8. `gold.bv_zone_jo
 - **N5** : avant 11,0 s (28 requêtes), après **10,1 s** (31 requêtes). Sortie **identique** (`diff`) : lundi, pas de fin de cycle ; aucune fatigue hors zone verte.
 - `fusion_main.py` : 5 commits ajoutés, `origin/main == HEAD` (805bde3). `fin_etape.py` : 0 commit d'avance, 22 suites vertes.
 
+## Revue hebdomadaire, étape 6a (critères écrits le 2026-11-09 17:00 Paris, avant le code)
+
+Contexte : playbook, « Remise en question du modèle (chaque semaine) », huit questions, la plupart « à créer ». Première version : seulement ce que la base permet aujourd'hui ; « n insuffisant » ou « donnée manquante » pour le reste ; aucune interprétation, aucun conseil. Lecture seule sur la base, aucune migration ni vue modifiée.
+
+| # | Critère |
+|---|---|
+| R1 | `python -I pipelines/revue_hebdo.py basketvibe` écrit `outputs/basketvibe/revue-hebdo-AAAA-MM-JJ.md` : une page, 60 lignes au plus, 20 s au plus. Chaque section a un chiffre, un n et la source. Semaine = les 7 jours finissant le jour de Paris. |
+| R2 | Décisions : verdicts de la semaine (`learn.outcome` × `learn.decision`, `measured_at` dans la semaine) par domaine : confirmés, contredits, non concluants ; en attente = décisions prises dans la semaine sans verdict. Chaque verdict dit s'il mesure l'**exécution** (la requête lit un réglage saisi ou joué : `tier`, `bv_match_tactics`, `bv_saisie`, `player_directives`, `bv_amical_reglage`, `bv_zone_jouee`) ou l'**effet** (résultat ou statistique du match). Part contredite par domaine avec son n ; « n insuffisant » sous 10 verdicts. |
+| R3 | Leçons : comptes par état de `learn.lesson` (hypothèse, validée, retirée) ; « contre » ajoutés cette semaine = somme des `n_against` moins celle de l'instantané précédent du dossier de sorties (aucun instantané : « pas d'instantané précédent ») ; hypothèses sans nouvelle mesure depuis 14 jours = aucun `learn.outcome` depuis 14 jours sur une décision liée (`lesson_id`), liste des identifiants. |
+| R4 | Matchs de la semaine (`gold.bv_match_report`) : une ligne par match, résultat par `my_result` ; marge moyenne ; compte par compétition. « Matchs les plus mal prédits » : « donnée manquante : aucune prédiction de marge en base ». |
+| R5 | Expériences amicales : par expérience, amicaux vérifiés sur visés (`gold.bv_amical_reglage`, même règle que le plan du jour). Le dimanche, n disponible de l'étude : `etude_evenements_basketvibe.py calculs` mesuré à **11,4 s** le 09/11 17:00 (> 10 s) → « non calculé » écrit, le script de l'étude n'est pas lancé. |
+| R6 | Données : nombre de types de pages reçus et non lus (`gold.bv_couverture_pages`, `lu_par_silver = 'non'`) et écart avec la semaine précédente ; instantané JSON écrit dans `outputs/basketvibe/revue-hebdo/` (même instantané que R3). |
+| R7 | Paramètres écrits à la main : la liste du playbook (« Paramètres écrits à la main », lue dans le fichier) avec la date de leur dernière vérification dans `core.game_params` (source et `verified_on`) ; correspondance paramètre → clé écrite dans le script ; sans clé : « jamais calculé ». |
+| R8 | Plan du jour : le dimanche, une ligne « Revue de la semaine : à lire (outputs/basketvibe/revue-hebdo-AAAA-MM-JJ.md) », sinon rien ; test figé présent / absent ; plan ≤ 8 lignes, ≤ 15 s. **Écart à la consigne, tranché** : R8 oblige à toucher `pipelines/aujourdhui.py` et `pipelines/test_aujourdhui.py`, en plus du nouveau script, de son test, du dossier de sorties et du journal. |
+| R9 | Tests figés (données factices) pour R2 à R7, un cas présent et un cas absent chacun (`pipelines/test_revue_hebdo.py`) ; les 193 tests existants restent verts. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
