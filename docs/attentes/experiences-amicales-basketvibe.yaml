@@ -11,6 +11,9 @@
 # Niveaux de l'étude (etude-evenements-basketvibe.md:135 et :218) = crans de l'API : E1 « 2 puis 4 » = écran 3 puis 5 (étape 5g, M1).
 # `debut` (M4) : aucun amical joué avant cette date ne compte. E1 validée le 2026-11-09 vers 16:00 Paris (journal 5d) ;
 #   l'amical du 09/11 (Garden City) était déjà joué.
+# `lecons` (étape 6b, S2) : leçons de learn.lesson que le verdict de l'expérience met à jour (identifiants courts,
+#   préfixe `basketvibe:` en base). Classement : docs/refonte-v3/journal-aujourdhui.md, « Revue hebdomadaire, étape 6b », S1.
+#   Liste vide : aucune hypothèse ne correspond ; la leçon à créer est proposée en commentaire, jamais écrite en base ici.
 debut: 2026-11-10
 experiences:
   - id: E1
@@ -23,6 +26,7 @@ experiences:
       B: {agress_cran: 4}
     ordre: [A, B, A, B]
     amicaux_vises: 4
+    lecons: [L-004, L-008, L-011#2, L-015, L-021]
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
   - id: E2
     reglage: focus de tir de deux tireurs
@@ -33,6 +37,7 @@ experiences:
       A: {tir_cran4_min: 2}
     ordre: [A]
     amicaux_vises: 3
+    lecons: [L-002, L-020, L-025]
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
   - id: E3
     reglage: focus offensif Primary à chaque quart-temps
@@ -43,6 +48,9 @@ experiences:
       A: {primary_quarts_min: 4}
     ordre: [A]
     amicaux_vises: 7
+    # leçon à créer (proposée) : « Un joueur au focus offensif Primary tente environ 1,33 fois les tirs d'un joueur Normal
+    #   sur le même quart [M§6.3] » (chiffre 6 de l'étude).
+    lecons: []
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
   - id: E4
     reglage: aucun (réglage habituel)
@@ -50,4 +58,7 @@ experiences:
       habituel: réglage habituel, rien ne change
     ordre: [habituel]
     amicaux_vises: 16
+    # leçon à créer (proposée) : « La réussite à 3 points de nos tireurs monte avec leur compétence Trois points, à type de
+    #   tir égal » (chiffre 1 de l'étude, 871 tirs requis en v5).
+    lecons: []
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
