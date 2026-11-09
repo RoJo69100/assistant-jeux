@@ -177,6 +177,16 @@ def lire_cibles(decisions: list[dict], encheres: list[dict], base, jour: dt.date
     return res
 
 
+ANALYSTE = re.compile(r"^(\d{4}-\d{2}-\d{2})-analys")
+
+
+def lire_analyste(base, jour: dt.date):
+    """A2 : date du dernier brief de l'agent analyste (`briefs/<date>-analys*.md`) daté d'au plus `jour` ; None sinon."""
+    dates = [dt.date.fromisoformat(m.group(1)) for f in (Path(base) / "briefs").glob("*.md") if (m := ANALYSTE.match(f.name))]
+    dates = [d for d in dates if d <= jour]
+    return max(dates) if dates else None
+
+
 def lire_conseils(base, jour: dt.date) -> list[dict]:
     """Conseils « ouvert » de learnings.md dont la dernière date du critère est aujourd'hui ou demain."""
     f = Path(base) / "learnings.md"

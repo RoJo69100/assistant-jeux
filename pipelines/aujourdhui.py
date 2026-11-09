@@ -78,6 +78,12 @@ REQUETES = {
     # A1 : alertes de domaine « match » (dernier match, ligue ou coupe jouée non exportée) ; coupe_sans_resultat
     # n'existe que dans gold.daily_alerts (core.alert_rule), pas dans gold.bv_daily_alerts
     "alertes_match": "select rule_id, prio, alerte from gold.daily_alerts where game = 'basketvibe' and domaine = 'match' order by prio",
+    # A2 et A3 : objectif des matchs des 7 prochains jours (règle serie, titre, rien) et dernier match officiel joué
+    "objectifs": "select day, competition_kind, opponent, objectif, raison, rule_id, defaites_d_affilee "
+                 "from gold.match_objective where game = 'basketvibe' order by day",
+    "dernier_officiel": "select day, competition_kind, opponent, my_result from core.fixture where game = 'basketvibe' "
+                        "and played and my_result is not null and competition_kind <> 'amical' "
+                        "order by day desc, scheduled_at desc nulls last limit 1",
 }
 # Vues rejouables sur un jour passé : requête de remplacement avec le paramètre {jour}.
 REJEU = {
@@ -145,7 +151,7 @@ def lire_sources(donnees, jour, base=BASE):
     return {"tactique": src.lire_tactique(base, jour), "restes": src.lire_restes(base, jour),
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
-            "cles": src.lire_cles(base, jour)}
+            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour)}
 
 
 def deja(fait, cle):
@@ -260,6 +266,31 @@ def alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute):
                 continue  # l'écran box du match de ligue est déjà demandé ou déclaré fait
             if texte not in exports:
                 exports.append(texte)
+
+
+def defaite_officielle(donnees, erreurs, brief_analyste, ajoute):
+    """A2 (arbitrage 15) : dernier match de ligue ou de coupe joué perdu, plus récent que le dernier brief analyste
+    -> une ligne « Analyse : lance l'agent analyste ce soir » ; série de `gold.match_objective` (règle serie) dite en clair.
+    Amicaux exclus par la requête. Source absente du jeu de données : rien."""
+    if "dernier_officiel" not in donnees:
+        return
+    m = manque(donnees, erreurs, "dernier_officiel", "page du dernier match")
+    if m:
+        ajoute(None, 2, m)
+        return
+    o = lignes_de(donnees, "dernier_officiel")
+    if not o or str(o[0]["my_result"]) != "L":
+        return
+    d = en_date(o[0]["day"])
+    if brief_analyste is not None and brief_analyste >= d:
+        return  # défaite déjà analysée
+    serie = [r for r in lignes_de(donnees, "objectifs") if r["rule_id"] == "serie"]
+    quoi = (f"{serie[0]['defaites_d_affilee']} défaites d'affilée en ligue ou coupe" if serie
+            else f"défaite de {o[0]['competition_kind']}")
+    vu = f"dernier brief analyste du {brief_analyste:%d/%m}" if brief_analyste else "aucun brief analyste"
+    ajoute(None, 2, "Analyse : lance l'agent analyste ce soir",
+           f"{quoi} (dernière : {o[0]['opponent']}, {d:%d/%m}, {o[0]['competition_kind']}) ; {vu}",
+           "core.fixture" + (", gold.match_objective" if serie else ""))
 
 
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
@@ -378,6 +409,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         exports.append(manque(donnees, erreurs, "derniere_vente", "Historique global des transferts"))
     elif derniere is None or dt.date.fromisoformat(str(derniere)[:10]) < jour - dt.timedelta(days=1):
         exports.append("historique global des transferts depuis " + ("le début" if derniere is None else str(derniere)[:10]))
+
+    defaite_officielle(donnees, erreurs, S.get("analyste"), ajoute)
 
     # 6. Alertes (les exports en retard viennent déjà de bv_exports_state)
     m = manque(donnees, erreurs, "gold.bv_daily_alerts", "Équipe (aperçu, joueurs)")

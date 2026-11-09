@@ -406,6 +406,33 @@ def cas_etape5a():
     t = plan5a(alertes_match=(COLS_AM, []))
     yield "A1 aucune alerte de match (absent)", "Analyse :" not in t and "non exporté" not in t
     yield "A1 alertes illisibles : « il me manque »", "il me manque alertes_match" in plan5a(alertes_match=None)
+    # A2 : défaite de ligue ou de coupe -> analyste ce soir
+    COLS_OBJ = ["day", "competition_kind", "opponent", "objectif", "raison", "rule_id", "defaites_d_affilee"]
+    COLS_OFF = ["day", "competition_kind", "opponent", "my_result"]
+    serie = (COLS_OBJ, [(JOUR9, "ligue", "Naked Spartans", "corriger", "2 défaites d'affilée", "serie", 2)])
+    perdu = (COLS_OFF, [(dt.date(2026, 11, 7), "ligue", "Póvoa Riptide", "L")])
+    t = plan5a(objectifs=serie, dernier_officiel=perdu)
+    l = next((x for x in t.splitlines() if "analyste" in x), "")
+    yield "A2 série de 2 défaites de ligue : « lance l'agent analyste ce soir » (présent)", \
+        "Analyse : lance l'agent analyste ce soir" in l and "2 défaites d'affilée" in l and "Póvoa Riptide, 07/11" in l
+    t = plan5a(objectifs=(COLS_OBJ, []), dernier_officiel=(COLS_OFF, [(dt.date(2026, 11, 8), "coupe", "Ploppers", "L")]))
+    yield "A2 défaite de coupe sans série : même ligne", "lance l'agent analyste ce soir" in t and "défaite de coupe" in t
+    t = plan5a(objectifs=(COLS_OBJ, []), dernier_officiel=(COLS_OFF, [(dt.date(2026, 11, 7), "ligue", "Póvoa Riptide", "W")]))
+    yield "A2 dernier match officiel gagné (absent)", "analyste" not in t
+    d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": ETAT_VIDE,
+                  "gold.bv_daily_alerts": (["priority", "category", "alert"], [])}, objectifs=serie, dernier_officiel=perdu)
+    t = auj.rendre(auj.plan(d, {}, JOUR9, TOT, "", {"analyste": dt.date(2026, 11, 8)}), JOUR9)
+    yield "A2 défaite déjà analysée (brief analyste plus récent) : absent", "analyste" not in t
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        for n in ("2026-11-05-analyste.md", "2026-10-24-analyse-defaite-j21.md", "2026-11-10-analyste.md", "2026-11-08-tactique.md"):
+            (Path(tmp) / "briefs" / n).write_text("x", encoding="utf-8")
+        yield "A2 lecteur : dernier brief analyste daté d'au plus le jour", src.lire_analyste(tmp, JOUR9) == dt.date(2026, 11, 5)
+    t = plan5a(alertes_match=(COLS_AM, [("dernier_match", 2, "Dernier match exporté : 07/11 (ligue, L 80-90 contre Póvoa Riptide)")]),
+               objectifs=serie, dernier_officiel=perdu)
+    yield "A1/A2 même match : une seule ligne Analyse", sum("Analyse :" in x for x in t.splitlines()) == 1
+    t = plan5a(alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
+    yield "A2 amical perdu seul (dernier match amical) : pas d'analyste", "analyste" not in t
 
 
 def cas_base():
