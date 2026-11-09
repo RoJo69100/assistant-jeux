@@ -358,6 +358,16 @@ Contexte : main = 1d45858 ; suite de K2 et K3 (étape 5e). Décisions de l'utili
 | L6 | Tests figés, cas présent et cas absent pour L3 et L5 ; sortie ≤ 8 lignes, durée ≤ 15 s ; les 157 tests existants restent verts (ceux de K3 qui attendent une ligne par prospect sans donnée sont remplacés par L5, dit dans le résultat). |
 | L7 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après, sortie collée. Avant (16:17, 7,8 s) : 3 lignes « donnée manquante » par prospect dans « Autres points ». |
 
+**L4, valeur d'un High : non calculable.** `gold.bv_transfer_history` (1 025 ventes, 02/09 → 08/11) n'a aucune colonne de potentiel ; `silver` non plus (recherche `information_schema.columns` sur `%potential%`). Dans les pages brutes, la catégorie n'apparaît que sous `potential_bucket` (pages `club`, `player`, `roster` ; les 5 pages `transfers` n'ont que `player_roster_potential_tests`). Requête (connecteur Supabase, lecture) :
+```sql
+with o as (select distinct p.page_type, j->>'potential_bucket' b, coalesce(j->>'player_id', j->>'id') pid
+  from bronze.raw_pages p, jsonb_path_query(p.payload, 'strict $.**') j
+  where p.game='basketvibe' and p.page_type in ('club','player','roster') and jsonb_typeof(j)='object' and j ? 'potential_bucket')
+select o.page_type, o.b, count(distinct o.pid) joueurs, count(distinct h.player_id) vendus_en_historique, round(avg(h.fee)) prix_moyen
+from o left join gold.bv_transfer_history h on h.player_id::text = o.pid group by 1,2 order by 1,2
+```
+Résultat : `club | decent | 1 | 1 | 10250` ; `player | decent | 1 | 1 | 10250` ; `roster | decent | 1 | 1 | 10250`. Un seul joueur à catégorie connue (Decent), **aucun High** : `academie_valeur_high` n'est pas écrite. Lignes écrites (`sql/core/025_game_params_vente_academie.sql`) : `vente_tolerance_force` = 1, `academie_cout_test` = 25 000.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
