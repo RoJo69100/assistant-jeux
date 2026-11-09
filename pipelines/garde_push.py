@@ -27,7 +27,7 @@ def verdict(evenement: str, commande: str, statut: str | None = None) -> str | N
         return None
     if evenement == "PreToolUse":
         if MUET.search(commande):
-            return "git push sans -q/--quiet : la sortie doit être lue pour confirmer le push."
+            return "Refusé : retire -q/--quiet, la sortie doit être lue."
         return None
     if evenement == "PostToolUse":
         statut = statut_branche() if statut is None else statut

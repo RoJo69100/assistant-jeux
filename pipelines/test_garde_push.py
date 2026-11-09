@@ -15,6 +15,7 @@ def test_hors_push_ignore():
 def test_push_muet_refuse():
     assert verdict("PreToolUse", "git push -q") is not None
     assert verdict("PreToolUse", "git add . ; git push --quiet origin main") is not None
+    assert "retire -q/--quiet, la sortie doit être lue" in verdict("PreToolUse", "git push -q")
 
 
 def test_push_lisible_accepte():
@@ -32,3 +33,17 @@ def test_en_avance():
 
 def test_synchro():
     assert verdict("PostToolUse", "git push", "## main...origin/main") is None
+
+
+if __name__ == "__main__":
+    tests = [f for n, f in sorted(globals().items()) if n.startswith("test_") and callable(f)]
+    echecs = 0
+    for f in tests:
+        try:
+            f()
+            print("OK ", f.__name__)
+        except AssertionError:
+            echecs += 1
+            print("ECHEC ", f.__name__)
+    print(f"{len(tests) - echecs}/{len(tests)}")
+    sys.exit(1 if echecs else 0)
