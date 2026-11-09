@@ -177,6 +177,9 @@ Réponses de l'utilisateur (telles quelles) : « 1088 = rejeté (il n'a pas mis�
 | D5 | Skill `deja-fait` : une phrase qui dit d'ajouter `[décision=<id>]` quand la saisie déclarée vient d'une décision ouverte (identifiant lu avec `decision.py` ou dans le brief). Rien d'autre ne change dans les skills. |
 | D6 | Après le cycle : la vue contient 1075 et 1099 si leur valeur est toujours vide, chacune évaluée ou en attente selon silver ; `learn.outcome` n'a aucun doublon par décision ; chaque verdict collé. |
 
+**Résultats (2026-11-09 15:05 Paris).** Migration `005` appliquée (`ea4bee1`). D1 (`904fe09`) : `test_evaluer.py` 34/34. D3 : 1088 `rejected` (« 1088 = rejeté (il n'a pas misé) »), 1072 `rejected` (« 1072 = rejeté, remplacé par 1073 ») ; 1076 reste `proposed` (réponse non donnée). D4-D5 (`4962921`) : `test_relier_faits.py` 8/8 ; `relier_faits.py basketvibe --essai` : « Aucune ligne [décision=<id>] dans les registres des 7 derniers jours. »
+D6 : `gold.decisions_a_evaluer` = 1075, 1099. Cycle réel : les deux « en attente » (`gold.bv_match_report` n'a pas les amicaux des 07/11 et 09/11 ; seule ligne : ligue du 07/11, `opp_fg2_pct` 53,0). `learn.outcome` : 6 lignes, aucun doublon ; 1075 et 1099 gardent leur ancien « inconclusive » jusqu'à l'arrivée de la donnée, puis seront remplacés. Refus contrôlés : 1070 `confirmed` → « déjà évaluée (contradicted) » ; 1075 `inconclusive` → « verdict inconclusive refusé ».
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
