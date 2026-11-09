@@ -7,8 +7,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from evaluer_decisions import (SEUILS_DEFAUT as S, charge_ecriture, dans_fenetre, fenetre_resultats,  # noqa: E402
-                               statut_lecon, verdict_resultats, verdict_valeur)
+from evaluer_decisions import (SEUILS_DEFAUT as S, a_ecrire, charge_ecriture, dans_fenetre,  # noqa: E402
+                               fenetre_resultats, issue_valeur, statut_lecon, verdict_resultats, verdict_valeur)
 from garde import revirement  # noqa: E402
 
 D = {"id": 1070, "decided_at": "2026-11-04T10:54:06+00:00"}
@@ -19,7 +19,15 @@ NC_LECON, _ = charge_ecriture(D, "inconclusive", {"valeur": None}, LECON, S)
 # Ligue du 04/11 (jour de la décision, heure vide) puis du 07/11 : la fenêtre d'un match commence au 04/11.
 MATCHS = [("2026-11-03", None, "W"), ("2026-11-04", None, "L"), ("2026-11-07", None, "W")]
 
+VIDE = issue_valeur(None, "<= 53.4", "select opp_fg2_pct from gold.bv_match_report where …")
+
 CAS = [
+    ("D1 valeur vide → en attente (aucun verdict)", VIDE[0], None),
+    ("D1 valeur vide → donnée manquante affichée", "manque" in VIDE[1] and "opp_fg2_pct" in VIDE[1]["manque"], True),
+    ("D1 valeur présente → verdict", issue_valeur(50.6, "<= 53.4", "q"), ("confirmed", {"valeur": 50.6})),
+    ("D1 « inconclusive » jamais écrit", a_ecrire("inconclusive"), False),
+    ("D1 en attente jamais écrit", a_ecrire(None), False),
+    ("D1 confirmé / contredit écrits", (a_ecrire("confirmed"), a_ecrire("contradicted")), (True, True)),
     ("C3 confirmé : 115000 <= 190000", verdict_valeur(115000, "<= 190000"), "confirmed"),
     ("C3 contredit : -8 >= -5", verdict_valeur(-8, ">= -5"), "contradicted"),
     ("C3 non concluant : valeur vide", verdict_valeur(None, "<= 53.4"), "inconclusive"),

@@ -7,7 +7,8 @@ Seuils : core.game_params, game = '_tous'.
 Mesures :
   my_result : les N premiers matchs joués (hors amicaux) de l'équipe après la décision ; moins de N → en attente.
               Un match sans heure (scheduled_at vide) compte si son jour est ≥ la date de Paris de la décision.
-  sql       : la requête de lecture, une valeur numérique comparée au seuil
+  sql       : la requête de lecture, une valeur numérique comparée au seuil ; valeur vide → en attente (jamais « inconclusive »)
+Un résultat « inconclusive » ancien est remplacé par le nouveau verdict (sql/learn/005_evaluer_reevaluable.sql).
 Transport : lectures par sql.py (HTTPS en cloud) ; écriture par la fonction public.evaluer_ecrire (POST, clé de service),
 qui insère le résultat et met à jour la leçon dans une seule transaction (sql/learn/004_evaluer_ecrire_https.sql).
 Usage : python -I pipelines/evaluer_decisions.py [--essai]   (--essai : mesure et affiche, n'écrit rien)
@@ -123,7 +124,19 @@ def mesurer(d: dict) -> tuple[str | None, dict]:
         return verdict_resultats(res, pred["attendu"]), {"matchs": res}
     lignes = lire(pred["requete"])
     valeur = next(iter(lignes[0].values())) if lignes else None
-    return verdict_valeur(valeur, pred["attendu"]), {"valeur": None if valeur is None else float(valeur)}
+    return issue_valeur(valeur, pred["attendu"], pred["requete"])
+
+
+def issue_valeur(valeur, attendu: str, requete: str) -> tuple[str | None, dict]:
+    """D1 (étape 5b-3) : une valeur vide n'est pas un verdict ; la décision reste en attente avec la donnée qui manque."""
+    if valeur is None:
+        return None, {"valeur": None, "manque": f"aucune valeur rendue par : {requete}"}
+    return verdict_valeur(valeur, attendu), {"valeur": float(valeur)}
+
+
+def a_ecrire(verdict: str | None) -> bool:
+    """Seul un verdict conclusif s'écrit dans learn.outcome (jamais « inconclusive », D1)."""
+    return verdict in ("confirmed", "contradicted")
 
 
 def main(argv=None) -> int:
@@ -138,10 +151,10 @@ def main(argv=None) -> int:
     for d in decisions:
         d["prediction"] = json_de(d["prediction"])
         verdict, observe = mesurer(d)
-        if verdict is None:
+        if not a_ecrire(verdict):
             print(f"⏳ D-{d['id']} en attente : {observe}")
             continue
-        print(f"{'✅' if verdict == 'confirmed' else '❌' if verdict == 'contradicted' else '⚪'} D-{d['id']} {verdict} {observe}")
+        print(f"{'✅' if verdict == 'confirmed' else '❌'} D-{d['id']} {verdict} {observe}")
         lecon = None
         if d["lesson_id"]:
             ls = lire(f"select id, status, n_for, n_against, claim from learn.lesson where id = {litteral(d['lesson_id'])}")
