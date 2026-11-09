@@ -36,10 +36,13 @@ Matchs les plus mal prédits : donnée manquante : aucune prédiction de marge e
 ## 4. Expériences amicales
 E1 0 vérifié sur 4 ; E2 0 vérifié sur 3 ; E3 0 vérifié sur 7 ; E4 0 vérifié sur 16 (faits déclarés : 0) — source : registre fait-*.md × gold.bv_amical_reglage
 
-## 5. Données non collectées
+## 5. Expériences à conclure
+aucune expérience à conclure (0 sur 4 au nombre visé d'amicaux vérifiés) — source : fichier d'expériences (clé lecons) × gold.bv_amical_reglage ; verdict non écrit
+
+## 6. Données non collectées
 Types de pages reçus et non lus : 93 sur 126 ; pas d'instantané précédent — source : gold.bv_couverture_pages
 
-## 6. Paramètres écrits à la main
+## 7. Paramètres écrits à la main
 | Paramètre | Valeur | Dernier calcul (core.game_params) |
 |---|---|---|
 | Âge de déclin | 31 ans | 2026-11-03 (basketvibe-entrainement/05-apres-30-ans (toutes les compétences baissent chaque dimanche)) |

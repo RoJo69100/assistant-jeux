@@ -547,6 +547,28 @@ Contexte : main = ff98afe. La revue du 09/11 montre 34 hypothèses sur 34 sans m
 
 Bilan (37) : expériences 8 (E1 : 5, E2 : 3, E3 : 0, E4 : 0) ; historique 14 ; à reformuler 14 (dont 4 doublons `#2` ou constats d'un seul match) ; sans mesure possible 1.
 
+**S4, lien décision → leçon (proposé, non appliqué).** État : `learn.decision` = 149 décisions BasketVibe, **1** avec `lesson_id` (47 des 14 derniers jours, 1 liée). Champs de `pipelines/decision.py new` qui peuvent porter le lien :
+1. `--lecon L-nnn` → `lesson_id` : seul lien direct ; **optionnel**, préfixé `basketvibe:` par le script (`decision.py:117`), refusé si la leçon est retirée. Aucun agent ni skill ne le passe (grep de `--lecon` dans `.claude/` : 0 résultat ; `pipelines/dossier.py:221` donne la commande sans `--lecon`).
+2. `domaine` → `domain` : même vocabulaire que `learn.lesson.domain` ; filtre possible, pas un lien.
+3. `--hypothese` → `hypothesis` et `--label` → `label` : texte libre ; un lien par texte serait une supposition.
+4. `--prediction` → `prediction` (`metric`, `requete`) : la requête pourrait être comparée au `check_sql` de la leçon, mais les 37 leçons ont `check_sql` vide.
+5. `--sujet` → `sujet` : joueur ou réglage visé, utile pour retrouver une leçon sur le même réglage, pas un lien.
+
+Changements proposés :
+- **`decision.py`** : `--lecon` obligatoire, ou `--sans-lecon "<raison>"` explicite (raison dans `evidence`) ; la commande affiche les leçons ouvertes du même domaine (`select id, left(claim, 80) from learn.lesson where game = … and domain = … and status <> 'retired'`) pour que l'agent choisisse. Refus si l'identifiant n'existe pas (aujourd'hui seul « retirée » est refusé).
+- **`decision.py`** : si le libellé porte `[expérience=<id>:<niveau>]`, `lesson_id` = première leçon de la clé `lecons` de cette expérience (fichier de configuration), plusieurs leçons → la décision cite les autres dans `evidence`.
+- **`pipelines/dossier.py:221`** : la commande proposée contient `--lecon <L-nnn | aucune>`.
+- **Skill `deja-fait` et agents `tactique`, `match`, `decideur`** : une phrase « toute décision enregistrée cite la leçon qu'elle teste (`--lecon`) ou dit pourquoi aucune ».
+- **`learn.lesson.check_sql`** : remplir pour les 14 leçons « historique » (S1) ; sans ce champ, ni le lien ni la mesure ne sont automatiques.
+
+**Résultats 6b (2026-11-09 17:30 Paris).**
+- **S1** (`dc8a12f`) : inventaire ci-dessus ; 37 leçons classées.
+- **S2** (`ef7ab19`) : clé `lecons` : E1 [L-004, L-008, L-011#2, L-015, L-021] ; E2 [L-002, L-020, L-025] ; E3 [] ; E4 []. Les 8 identifiants existent en base (`select count(*) … in (…)` = 8). Leçons à créer, proposées en commentaire du fichier, non écrites : E3 « Un joueur au focus offensif Primary tente environ 1,33 fois les tirs d'un joueur Normal sur le même quart [M§6.3] » ; E4 « La réussite à 3 points de nos tireurs monte avec leur compétence Trois points, à type de tir égal ».
+- **S3** (`3eb37ed`) : section « 5. Expériences à conclure » ; page réelle du 09/11 : « aucune expérience à conclure (0 sur 4 au nombre visé d'amicaux vérifiés) — source : fichier d'expériences (clé lecons) × gold.bv_amical_reglage ; verdict non écrit ». Page : 58 lignes, 1,9 s. Limite : une semaine de 14 matchs dépasse 60 lignes ; la page est alors coupée et la dernière ligne le dit (comportement R1).
+- **S4** : ci-dessus, rien appliqué.
+- **S5** : `test_revue_hebdo.py` 28 → **34/34** (S2 : 2 cas, S3 : 4 cas) ; `test_aujourdhui.py` **197/197**.
+- `fusion_main.py` : 4 commits ajoutés, `origin/main == HEAD` (3eb37ed). `fin_etape.py` : 0 commit d'avance, 23 suites vertes.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
