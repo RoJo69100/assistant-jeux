@@ -315,6 +315,19 @@ Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligu
 | H7 | Tests figés, cas présent et cas absent pour chacun : alternance A,B,A,B de E1 ; passage à E2 quand E1 est complète ; fichier absent ; ligne « reste à » ignorée ; amical sans brief ; règle d'agenda avec décalage et sans coup d'envoi. Sortie ≤ 8 lignes, script ≤ 25 s, les 127 tests existants restent verts. |
 | H8 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée). L'amical du 10/11 contre Opper Cards (coup d'envoi 08:00 Paris, verrou 07:45) affiche E1 niveau A avec l'heure limite du calendrier. |
 
+## Plan du jour, étape 5e (critères écrits le 2026-11-09 16:05 Paris, avant le code)
+
+Contexte : playbook, étape 5, actions 3 et 6 ; main = 9dc4365, plan en 22,5 s (limite 25 s), 8 lignes au plus. Seuls `aujourdhui.py`, `aujourdhui_sources.py`, `test_aujourdhui.py` et ce journal bougent ; lecture seule sur la base, aucune migration ni vue modifiée.
+
+| # | Critère |
+|---|---|
+| K1 | Durée d'abord : temps de chaque requête du script (tableau collé). Total > 20 s → regrouper ou paralléliser les requêtes indépendantes, sans changer la sortie, pour tomber à 15 s au plus ; sortie avant/après identique, preuve collée. |
+| K2 | Masse salariale (règle de l'utilisateur : on vend pour baisser la masse salariale quand l'équipe n'y perd pas en force) : lire la définition de `gold.bv_sell_candidates` et dire si elle sait répondre « la force ne baisse pas ». Si oui : une ligne « Vendre X : salaire … par semaine, remplaçant au poste Y de même force » quand un candidat existe, aucun seuil écrit à la main (comparaison avec le remplaçant du même poste). Si non : dire exactement ce qui manque, aucune règle inventée. |
+| K3 | Académie (règle : étudier tous les prospects, même sous 100 % de jauge) : à l'arrivée d'un rapport (`gold.bv_academy_prospects`), une ligne par prospect « tester / signer / ignorer » d'après `gold.bv_academy_potential_odds` ; valeur d'un High et coût du test lus dans la base, pas écrits. Une des deux données manque → la dire ; la ligne dit « donnée manquante : … ». |
+| K4 | Boucle d'apprentissage : une ligne de compte « n décisions à mesurer, n faits à relier » lue dans `gold.decisions_a_evaluer` et dans les registres (lecture seule, aucune écriture), seulement si n > 0 ; sinon aucune ligne. |
+| K5 | Tests figés, un cas présent et un cas absent pour K2, K3 et K4 ; sortie ≤ 8 lignes ; les 143 tests existants restent verts. |
+| K6 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée telle quelle) ; durée ≤ 25 s, visée 15 s. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
