@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-09 16:00 -->
+<!-- généré le 2026-11-09 16:10 -->
 19:30 — Avant 19:45 si possible : exporter la page Preview du match J4 (effectif adverse à jour)
     (gold.bv_agenda)
 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
@@ -13,8 +13,14 @@
 --:-- — Analyse : lance l'agent analyste ce soir — 2 défaites d'affilée en ligue ou coupe (dernière
     : Póvoa Riptide, 07/11, ligue) ; dernier brief analyste du 05/11 (core.fixture,
     gold.match_objective)
-Autres points (2) : Acheter un SF de note ≥ 61,0 ; Analyse : Dernier match exporté : 09/11 (amical,
-    L 104-120 contre Garden City)
+Autres points (5) : Acheter un SF de note ≥ 61,0 ; Analyse : Dernier match exporté : 09/11 (amical,
+    L 104-120 contre Garden City) ; Académie, rapport du 05/11 : Nael Lopez (PG, 16 ans, TSP
+    207-367) : donnée manquante : valeur d'un High (core.game_params.academie_valeur_high), coût du
+    test (core.game_params.academie_cout_test) ; Académie, rapport du 05/11 : Nathan Vidal (PF, 16
+    ans, TSP 219-379) : donnée manquante : valeur d'un High (core.game_params.academie_valeur_high),
+    coût du test (core.game_params.academie_cout_test) ; Académie, rapport du 05/11 : Sacha Aubert
+    (C, 17 ans, TSP 244-404) : donnée manquante : valeur d'un High
+    (core.game_params.academie_valeur_high), coût du test (core.game_params.academie_cout_test)
 Garder : effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin) ;
     effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
     ; effectif, jeunes : ni titre acquis ni rien à jouer sur les 7 prochains jours
