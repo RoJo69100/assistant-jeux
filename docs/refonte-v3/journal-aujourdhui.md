@@ -162,6 +162,21 @@ C5 : `learn.outcome` 0 → 6. 1070 contredit (`["L"]`), 1071 confirmé (55,2), 1
 
 C6 : les 6 verdicts mesurent l'effet (résultat du match, `opp_fg2_pct`, `opp_efg_pct`, `off_rtg`) ; aucun ne mesure l'exécution.
 
+## Boucle d'apprentissage, étape 5b-3 (critères écrits le 2026-11-09 13:58 Paris, avant le code)
+
+Constat : les résultats « inconclusive » de 1075 et 1099 (`{"valeur": null}`) sont figés, car `gold.decisions_a_evaluer` exclut toute décision ayant déjà un résultat. Écritures autorisées : la migration `sql/learn/005_evaluer_reevaluable.sql` (`create or replace` de `public.evaluer_ecrire` et de `gold.decisions_a_evaluer`, aucun drop, aucun GRANT élargi) ; `learn.decision.status` par `python -I pipelines/decision.py statut` pour les trois conseils ci-dessous ; `learn.outcome` et `learn.lesson` par `evaluer_ecrire`.
+
+Réponses de l'utilisateur (telles quelles) : « 1088 = rejeté (il n'a pas misé) ; 1072 = rejeté, remplacé par 1073 ; 1076 = [MISÉ ou PAS MISÉ]. » La réponse pour 1076 est restée à l'état de gabarit : son statut n'est pas touché tant que l'utilisateur n'a pas répondu.
+
+| # | Critère |
+|---|---|
+| D1 | `evaluer_decisions.py` n'écrit jamais un verdict « inconclusive » : une valeur vide laisse la décision « en attente », affichée avec la donnée qui manque. Test figé dans `pipelines/test_evaluer.py`. |
+| D2 | Les deux résultats « inconclusive » (1075, 1099) redeviennent évaluables : `gold.decisions_a_evaluer` inclut une décision dont le seul résultat est « inconclusive » ; `evaluer_ecrire` remplace un résultat « inconclusive » par le nouveau verdict, jamais un résultat « confirmed » ou « contradicted ». Aucune ligne supprimée à la main. |
+| D3 | 1088 et 1072 passent `rejected` ; 1076 `done` ou `rejected` selon la réponse de l'utilisateur ; aucun autre statut n'est touché. |
+| D4 | Une ligne de `fait-<jour>.md` peut porter `[décision=<id>]` (en plus de `[clé=…]`). `pipelines/relier_faits.py` lit les registres des 7 derniers jours et appelle `decision.py statut <id> done` pour chaque identifiant dont la décision est encore « proposed ». Jamais de correspondance floue, jamais d'identifiant inventé. `--essai` liste sans écrire. Tests figés (`pipelines/test_relier_faits.py`) : identifiant valide, déjà done, inconnu, ligne « reste à ». |
+| D5 | Skill `deja-fait` : une phrase qui dit d'ajouter `[décision=<id>]` quand la saisie déclarée vient d'une décision ouverte (identifiant lu avec `decision.py` ou dans le brief). Rien d'autre ne change dans les skills. |
+| D6 | Après le cycle : la vue contient 1075 et 1099 si leur valeur est toujours vide, chacune évaluée ou en attente selon silver ; `learn.outcome` n'a aucun doublon par décision ; chaque verdict collé. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
