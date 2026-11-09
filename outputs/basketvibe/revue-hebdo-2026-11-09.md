@@ -1,6 +1,7 @@
 # Revue de la semaine BasketVibe — du 03/11 au 09/11/2026
 
 Chiffres seuls, sans interprétation ni conseil. Source et n à chaque section.
+Version du moteur : ligue v4, amical v5 ; décisions ouvertes d'une version antérieure : 126 (avant le 02/11) — source : core.engine_version × learn.decision
 
 ## 1. Décisions : prédictions contre résultats
 | Domaine | Confirmés | Contredits | Non concluants | En attente | Mesure | Part contredite (n) |

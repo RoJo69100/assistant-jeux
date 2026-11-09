@@ -6,6 +6,8 @@ outputs/basketvibe/revue-hebdo/instantane-AAAA-MM-JJ.json (somme des « contre �
 Lecture seule sur la base. Aucune interprétation, aucun conseil : un chiffre, son n et sa source par section ;
 « n insuffisant » ou « donnée manquante » quand la base ne permet pas de répondre.
 Semaine = les 7 jours finissant le jour de Paris (pipelines/heure_paris.py, jamais l'horloge du shell).
+Étape 6c (V4) : ligne « Version du moteur » sous l'en-tête (core.engine_version) ; une version absente de l'instantané
+précédent fait lister les décisions ouvertes d'avant son début, sans rien marquer.
 """
 import argparse
 import datetime as dt
@@ -56,6 +58,11 @@ def requetes(jour: dt.date) -> dict:
         "couverture": "select count(*) filter (where lu_par_silver = 'non') as non_lus, count(*) as types "
                       "from gold.bv_couverture_pages",
         "params": "select key, value, source, verified_on from core.game_params where game = 'basketvibe'",
+        # V4 (6c) : versions du moteur et décisions ouvertes (proposées ou faites, sans verdict), jour de Paris
+        "versions": "select version, competition_kind, start_date, end_date from core.engine_version where game = 'basketvibe'",
+        "ouvertes": "select d.id, (d.decided_at at time zone 'Europe/Paris')::date as jour from learn.decision d "
+                    "where d.game = 'basketvibe' and d.status in ('proposed', 'done') "
+                    "and not exists (select 1 from learn.outcome o where o.decision_id = d.id) order by d.id",
     }
 
 
@@ -68,7 +75,7 @@ def lire_tout(executer, jour):
         except SystemExit:
             return None
     q = requetes(jour)
-    with ThreadPoolExecutor(max_workers=7) as pool:
+    with ThreadPoolExecutor(max_workers=len(q)) as pool:
         fut = {k: pool.submit(une, v) for k, v in q.items()}
     return {k: f.result() for k, f in fut.items()}
 
@@ -195,6 +202,37 @@ def sec_donnees(couverture, precedent):
     return t + [""], n
 
 
+def cle_version(v):
+    return f"basketvibe/{v['competition_kind']}/{v['version']}/{auj._jour(v['start_date']).isoformat()}"
+
+
+def lignes_version(versions, ouvertes, jour, precedent):
+    """V4 (6c) : (lignes sous l'en-tête, clés des versions pour l'instantané). Lecture seule, rien n'est marqué."""
+    if versions is None or ouvertes is None:
+        return ["Version du moteur : donnée manquante (core.engine_version ou learn.decision illisible)"], None
+    en_cours = {}
+    for v in versions:
+        fin = v["end_date"]
+        if auj._jour(v["start_date"]) <= jour and (fin is None or auj._jour(fin) >= jour):
+            en_cours[v["competition_kind"]] = v["version"]
+    debuts = [auj._jour(v["start_date"]) for v in versions if auj._jour(v["start_date"]) <= jour]
+    dernier = max(debuts) if debuts else None
+    n = sum(auj._jour(o["jour"]) < dernier for o in ouvertes) if dernier else 0
+    t = [f"Version du moteur : ligue {en_cours.get('ligue', 'non attribuée')}, amical {en_cours.get('amical', 'non attribuée')} ; "
+         f"décisions ouvertes d'une version antérieure : {n}"
+         + (f" (avant le {dernier:%d/%m})" if dernier else "") + " — source : core.engine_version × learn.decision"]
+    cles = sorted(cle_version(v) for v in versions)
+    if precedent is not None and precedent.get("versions") is not None:
+        for v in sorted(versions, key=cle_version):
+            if cle_version(v) in precedent["versions"]:
+                continue
+            debut = auj._jour(v["start_date"])
+            ids = [str(o["id"]) for o in ouvertes if auj._jour(o["jour"]) < debut]
+            t.append(f"Nouvelle version {v['competition_kind']} {v['version']} (depuis le {debut:%d/%m}) : conseils ouverts d'avant "
+                     f"({len(ids)}) : {', '.join(ids) or 'aucun'} ; rien n'est marqué")
+    return t, cles
+
+
 def lire_parametres(texte):
     """R7 : lignes (paramètre, valeur, où) du tableau « ### Paramètres écrits à la main » du playbook."""
     res, dans = [], False
@@ -249,7 +287,9 @@ def precedent_instantane(dossier, jour):
 def page(donnees, jour, experiences, parametres, precedent):
     """(lignes de la page, instantané à écrire)."""
     t = [f"# Revue de la semaine BasketVibe — du {jour - dt.timedelta(days=6):%d/%m} au {jour:%d/%m/%Y}", "",
-         "Chiffres seuls, sans interprétation ni conseil. Source et n à chaque section.", ""]
+         "Chiffres seuls, sans interprétation ni conseil. Source et n à chaque section."]
+    v, cles = lignes_version(donnees.get("versions"), donnees.get("ouvertes"), jour, precedent)
+    t += v + [""]
     t += sec_decisions(donnees.get("verdicts"), donnees.get("attente"))
     t += sec_lecons(donnees.get("lecons"), jour, precedent)
     t += sec_matchs(donnees.get("matchs"))
@@ -259,7 +299,8 @@ def page(donnees, jour, experiences, parametres, precedent):
     t += d
     t += sec_parametres(parametres, donnees.get("params"))
     lecons = donnees.get("lecons")
-    snap = {"n_against": sum(int(l["n_against"] or 0) for l in lecons) if lecons else None, "non_lus": non_lus}
+    snap = {"n_against": sum(int(l["n_against"] or 0) for l in lecons) if lecons else None, "non_lus": non_lus,
+            "versions": cles}
     return t, snap
 
 

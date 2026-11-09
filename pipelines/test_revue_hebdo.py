@@ -120,6 +120,27 @@ def cas():
         and "1 sur 2 jamais calculés" in p7
     yield "R7 absent : tableau absent du playbook = donnée manquante", "donnée manquante" in txt(r.sec_parametres([], []))
 
+    # V4 (6c) : version du moteur et décisions ouvertes d'une version antérieure
+    VE = [{"version": "v3", "competition_kind": "ligue", "start_date": "2026-09-07", "end_date": "2026-10-26"},
+          {"version": "v5", "competition_kind": "amical", "start_date": "2026-10-28", "end_date": None},
+          {"version": "v4", "competition_kind": "ligue", "start_date": "2026-11-02", "end_date": None}]
+    OU = [{"id": 7, "jour": "2026-10-30"}, {"id": 9, "jour": "2026-11-01"}, {"id": 12, "jour": "2026-11-05"}]
+    cles = sorted(r.cle_version(x) for x in VE)
+    v4, k4 = r.lignes_version(VE, OU, LUNDI, {"jour": "02/11", "versions": cles})
+    yield "V4 présent : « ligue v4, amical v5 ; décisions ouvertes d'une version antérieure : 2 », sans liste", \
+        len(v4) == 1 and "Version du moteur : ligue v4, amical v5 ; décisions ouvertes d'une version antérieure : 2 (avant le 02/11)" in v4[0] \
+        and k4 == cles
+    VE5 = VE + [{"version": "v5", "competition_kind": "ligue", "start_date": "2026-11-15", "end_date": None}]
+    VE5[2] = dict(VE5[2], end_date="2026-11-14")
+    v5, _ = r.lignes_version(VE5, OU, JOUR, {"jour": "08/11", "versions": cles})
+    yield "V4 présent : nouvelle ligne de version = liste des conseils ouverts d'avant, rien de marqué", \
+        "ligue v5, amical v5 ; décisions ouvertes d'une version antérieure : 3" in v5[0] and len(v5) == 2 \
+        and "Nouvelle version ligue v5 (depuis le 15/11) : conseils ouverts d'avant (3) : 7, 9, 12 ; rien n'est marqué" in v5[1]
+    v0, _ = r.lignes_version(VE5, OU, JOUR, {"jour": "08/11", "n_against": 1})
+    yield "V4 absent : instantané précédent sans clé de versions = aucune liste", len(v0) == 1
+    vm, km = r.lignes_version(None, OU, JOUR, None)
+    yield "V4 absent : table illisible = donnée manquante, aucune clé", "donnée manquante" in vm[0] and km is None
+
     # R1 et instantané
     yield "R1 page coupée à 60 lignes, la dernière le dit", \
         len(r.borner(["x"] * 70)) == 60 and "11 lignes de plus" in r.borner(["x"] * 70)[-1]
