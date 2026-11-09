@@ -108,6 +108,10 @@ REQUETES = {
                                    "from gold.bv_saisie_entrainement order by ordre",
     "regle_entrainement": "select isodow, to_char(heure, 'HH24:MI') as heure from core.agenda_rule "
                           "where game = 'basketvibe' and rule_id = 'entrainement_sam' and actif",
+    # N3 (étape 5h) : joueurs qui doivent jouer un match de ligue ou de coupe à venir et dont la fatigue projetée
+    # dépasse la zone verte (seuil lu dans core.alert_rule par la vue)
+    "fatigue_avant_match": "select kind, match_day, opponent, joueur, minutes, defense_tier, sat_fatigue, zone_verte "
+                           "from gold.bv_fatigue_avant_match where depasse order by match_day, sat_fatigue desc",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
                       "from gold.bv_amical_reglage where match_day >= current_date - 120",
@@ -382,6 +386,14 @@ def ligne_entrainement(donnees, S, jour, maintenant):
         return None
     return limite, f"{titre} : corrige {len(e)} écart{'s' if len(e) > 1 else ''} à l'écran", \
         " ; ".join(e) + f" ; fiche du {fiche['date']:%d/%m}", f"gold.bv_saisie_entrainement, {fiche['fichier']}"
+
+
+def lignes_fatigue(donnees):
+    """N3 : {(kind, date, adversaire): [lignes]} de gold.bv_fatigue_avant_match (déjà filtrée sur `depasse`)."""
+    res = {}
+    for r in lignes_de(donnees, "fatigue_avant_match"):
+        res.setdefault((r["kind"], _jour(r["match_day"]), r["opponent"]), []).append(r)
+    return res
 
 
 def _jour(v):
@@ -731,6 +743,19 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             continue
         ajoute(limite, 1, f"{r['match'] or 'Match'} : corrige à l'écran {len(r['reglages'])} réglages ({regrouper(r['reglages'])})",
                "", r["fichier"])
+
+    # 1 ter (5h, N3) : fatigue projetée hors zone verte pour un joueur qui doit jouer : une ligne par match
+    for (kind, d, adv), rs in lignes_fatigue(donnees).items():
+        limite = verrou_calendrier(donnees, d, adv)
+        if (limite is not None and limite < maintenant) or d < jour:
+            continue
+        noms = ", ".join(r["joueur"] for r in rs)
+        detail = " ; ".join(f"{r['joueur']} {str(r['sat_fatigue']).replace('.', ',')} ({r['minutes']} min, agressivité "
+                            f"{int(r['defense_tier']) + 1} à l'écran)" for r in rs)
+        ajoute(limite, 2, f"Sors {noms} avant le match {'de ligue' if kind == 'ligue' else 'de coupe'} contre {adv} "
+                          f"({jour_fr(d)})",
+               f"fatigue projetée {detail} ; zone verte jusqu'à {rs[0]['zone_verte']}",
+               "gold.bv_fatigue_avant_match, core.alert_rule")
 
     # 2. Enchères décidées : montant maximum, fin d'enchère, police avant l'enchère
     for c in S.get("cibles", []):

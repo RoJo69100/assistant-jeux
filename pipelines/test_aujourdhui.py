@@ -492,6 +492,31 @@ def cas_etape5a():
     yield from cas_vente()
     yield from cas_boucle()
     yield from cas_entrainement()
+    yield from cas_fatigue()
+
+
+def cas_fatigue():
+    """N3 (étape 5h) : « sors X avant le match Y » seulement si la fatigue projetée dépasse la zone verte."""
+    COLS = ["kind", "match_day", "opponent", "joueur", "minutes", "defense_tier", "sat_fatigue", "zone_verte"]
+    CAL = (["day", "competition_kind", "opponent", "coup_envoi_paris", "verrou_paris"],
+           [("2026-11-09", "ligue", "Naked Spartans", "2026-11-09T20:00:00", "2026-11-09T19:45:00")])
+    MIDI = dt.datetime(2026, 11, 9, 12, 0)
+
+    def lignes(rows, maintenant=MIDI):
+        d = figees(**{"fatigue_avant_match": (COLS, rows), "calendrier": CAL})
+        return [a for a in auj.plan(d, {}, JOUR9, maintenant, "", {})["actions"] if a[2].startswith("Sors ")]
+
+    deux = [("ligue", "2026-11-09", "Naked Spartans", "Bernard", 36, 3, 24.6, 20),
+            ("ligue", "2026-11-09", "Naked Spartans", "Boyer", 36, 2, 21.2, 20)]
+    l = lignes(deux)
+    yield "N3 dépassement, présent : une ligne par match, joueurs nommés, verrou du calendrier, zone verte lue", \
+        len(l) == 1 and l[0][2] == "Sors Bernard, Boyer avant le match de ligue contre Naked Spartans (lun. 09/11)" \
+        and l[0][0] == dt.datetime(2026, 11, 9, 19, 45) and "Bernard 24,6 (36 min, agressivité 4 à l'écran)" in l[0][3] \
+        and "zone verte jusqu'à 20" in l[0][3]
+    yield "N3 aucun dépassement (vue vide), absent : aucune ligne « Sors »", lignes([]) == []
+    yield "N3 verrou passé, absent : aucune ligne « Sors »", lignes(deux, dt.datetime(2026, 11, 9, 20, 0)) == []
+    yield "N3 aucun seuil dans le code : la zone verte affichée vient de la vue", \
+        "zone verte jusqu'à 25" in lignes([deux[0][:7] + (25,)])[0][3]
 
 
 def cas_entrainement():
