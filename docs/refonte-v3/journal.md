@@ -267,3 +267,21 @@ verdict : utilisable avec confiance faible
 - Réserves : 19 matchs, une seule saison, force calculée sur 3 matchs ou plus (bruit élevé au début), seuil de 15 matchs abaissé par rapport au premier test (écrit avant le calcul, voir ci-dessus). Premier test (classement hebdomadaire) : toujours « non mesurable », 4 matchs sur 20.
 
 - `sql.py` : repli HTTPS, réponse sql_ro encodée deux fois (chaîne au lieu de liste) → `lignes_de()` la décode (`str has no attribute keys`, ancien `sql.py:84`). Cause non vue en direct (session cloud) : reproduite par simulation. `test_sql.py` 17/17 (15 + 2).
+
+## Plan du jour, étape 5i, transferts (2026-11-09) — critères écrits avant le code
+
+Périmètre : BasketVibe, lecture seule sur la base, aucune migration. Seuls `aujourdhui.py`, `aujourdhui_sources.py`, `test_aujourdhui.py` et ce journal bougent. Le plan propose ; jamais d'achat, de vente ni d'enchère sans accord écrit de l'utilisateur.
+
+Contexte : le plan dit « Acheter un SF de note ≥ 61,0 » sans nom ni prix, et « pas d'enchère nouvelle, l'export du Marché a plus de 24 h » : il cache tout quand la page a plus de 24 h (`pipelines/aujourdhui.py:917-931`). Plafond actuel des affaires : `gold.bv_market_bargains.bid_ceiling_resale` (95 % du p25 de référence = prix de revente sans perte). Playbook, section « Marché ».
+
+- **X1 Constat** : date de la dernière page Marché en bronze ; sortie de `gold.bv_market_bargains` et `gold.bv_market_candidates` sur cette page telle quelle (10 lignes au plus) ; compte des annonces dont la fin est passée et de celles encore ouvertes. Sortie collée.
+- **X2 Marché ancien** : au lieu de tout cacher au-delà de 24 h, le plan affiche, pour chaque annonce encore ouverte qui remplit les conditions d'une affaire (référence fiable, marge de revente positive, tient dans la capacité), jusqu'à 3 lignes : nom, poste, PS, prix à l'export, plafond (`bid_ceiling_resale`), fin de l'enchère, et « page du Marché de N h : le prix a pu monter ». Les annonces dont la fin est passée disparaissent. Aucun seuil écrit à la main.
+- **X3 Joueur de besoin** : la ligne « Acheter un SF de note ≥ X » nomme jusqu'à 3 annonces de `gold.bv_market_candidates` au poste qui satisfont la note, avec : nom, PS, prix à l'export, fin, et plafond = p75 du prix de référence de `gold.bv_price_ref_ps`, borné par la capacité du plan (solde moins les enchères ouvertes), marqué « plafond de besoin, à valider ». Sans annonce : « aucune annonce au poste SF dans le Marché du JJ/MM ».
+  - **Écart connu avant le code** : `gold.bv_price_ref_ps` n'a que deux axes, tranche de PS (pas de 5) et tranche d'âge (≤21, 22-25, 26-29, 30+) ; elle n'a **pas de colonne poste**. Le p75 sera donc celui de la tranche de PS et d'âge de l'annonce, pas du poste. Écrit dans la ligne (« p75 PS/âge ») ; aucun poste inventé.
+- **X4 Moment de miser** : chercher dans les pages brutes et dans `gold.bv_transfer_history` si l'historique des mises (instants et montants) existe ; réponse oui ou non avec la requête collée. Si non, chaque ligne d'enchère dit « fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond » et n'invente aucune durée.
+- **X5 Bilan des conseils d'achat** : nombre de `learn.decision` (domaine `achat`) suivies, rejetées ou sans suite ; tableau collé, lecture seule. Correspondance posée avant la lecture : `done` = suivie, `rejected` = rejetée, `proposed` = sans suite ; `accepted` et `expired` comptés à part s'ils existent.
+- **X6 Tests figés** : un cas présent et un cas absent pour X2 et pour X3 ; sortie à 8 lignes au plus (les lignes d'enchère passent en tête quand leur fin est proche) ; durée au plus 15 s ; les 197 tests du plan et les 38 de la revue restent verts.
+- **X7 Rejeu** : `python -I pipelines/aujourdhui.py basketvibe` avant et après, sortie collée telle quelle.
+- **X8 Deux plafonds distincts** : « plafond de revente » pour une affaire, « plafond de besoin » pour un joueur à jouer ; jamais le même mot pour les deux.
+
+Étapes : 1 critères (ce commit) ; 2a X1, X4, X5 (journal) ; 2b X2, X3, X6, X8 (code et tests) ; 3 `python -I pipelines/fusion_main.py` puis `python -I pipelines/fin_etape.py`, sorties, rejeu avant/après et résultats collés ici.
