@@ -247,6 +247,43 @@ Constat de départ : les pages calendrier (friendlies, league-fixtures, fixtures
 | J5 | `aujourdhui.py` : si `scheduled_at` est renseigné, limite et heure affichées viennent de lui (heure de Paris) ; sinon l'ancienne heure. Test figé sur la ligue J4 de ce soir (verrou 19:45) et le premier tour de coupe (20:00 Paris). Règles de `core.agenda_rule` qui portent une heure écrite, avant et après. |
 | J6 | Rejeu de `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée) ; au plus 8 lignes, 25 s au plus. |
 
+**J1, constat (2026-11-09 16:00 Paris).** Lecture par `silver.bv_api` (même payload que `bronze.raw_pages`, `--page-id` renvoie le JSON entier en une cellule, illisible ; `jsonb_array_elements` sur la dernière capture de chaque type). Dernières pages : league-fixtures 39315 (09/11 14:26 UTC), cup-fixtures 34675 (04/11 10:35 UTC), friendlies 38576 (09/11 09:57 UTC), fixtures/round/4 38938 (09/11 09:59 UTC), preview par match (fixtures/friendlies/cup-fixtures/<id>/preview).
+
+Champs par type : league-fixtures et fixtures/round/<n> = `id`, `match_id`, `match_day`, `status`, `round_number`, `home/away_team_id`, `home/away_score` ; **aucune heure ni fuseau** (noms dans `team_labels`/`team_names`). cup-fixtures = mêmes champs + `cup_name`, `edition_label`, `home/away_team_name`, **`kickoff_time_local` + `kickoff_timezone`**. friendlies = mêmes + noms + **`kickoff_at` (ISO en UTC, suffixe Z)**. preview = **`kickoff_time` + `league_timezone`** (fuseau de l'hôte : The Bombers 06/11 « 08:00 Asia/Tokyo », cohérent avec `kickoff_at` 05/11 23:00Z).
+
+| type | jour | tour | statut | id | domicile | extérieur | score | heure |
+|---|---|---|---|---|---|---|---|---|
+| league-fixtures | 04/11 | 2 | finished | 40c7cd3b | (id) | (id) | 107-114 | — |
+| league-fixtures | 07/11 | 3 | finished | aca88448 | (id) | (id) | 106-82 | — |
+| league-fixtures | 09/11 | 4 | scheduled | ddb4d263 | (id) | (id) | — | — |
+| league-fixtures | 11/11 | 5 | scheduled | 46f9ae01 | (id) | (id) | — | — |
+| league-fixtures | 14/11 | 6 | scheduled | 6d0ced02 | (id) | (id) | — | — |
+| cup-fixtures | 29/10 | 2 | finished | dc345bfb | Chomelix Cow | Paris Saint-Germain | 107-97 | 18:00 Europe/Paris |
+| cup-fixtures | 30/10 | 3 | finished | 720d9d11 | Yannick Skulls | Chomelix Cow | 97-106 | 18:00 Europe/Paris |
+| cup-fixtures | 31/10 | 4 | finished | a536c811 | Chomelix Cow | Ploppers | 82-72 | 18:00 Europe/Paris |
+| cup-fixtures | 01/11 | 5 | finished | 16c8812a | Reims Monarchs | Chomelix Cow | 107-102 | 18:00 Europe/Paris |
+| cup-fixtures | 12/11 | 1 | scheduled | 3667d243 | Chomelix Cow | Stare Kotlety | — | 19:00 UTC (BasketVibe Cup, Season 2) |
+| friendlies | 06/11 | — | finished | 9b8afa39 | The Bombers | Chomelix Cow | 120-67 | 2026-11-05T23:00Z |
+| friendlies | 07/11 | — | finished | 92fe979b | Chomelix Cow | Knight Jays | 86-104 | 2026-11-07T07:00Z |
+| friendlies | 08/11 | — | finished | e57c6b05 | Chomelix Cow | New York City Cyclones | 94-96 | 2026-11-08T07:00Z |
+| friendlies | 09/11 | — | finished | 44f3e0f3 | Chomelix Cow | Garden City | 104-120 | 2026-11-09T07:00Z |
+| friendlies | 10/11 | — | scheduled | 1632fa97 | Chomelix Cow | Opper Cards | — | 2026-11-10T07:00Z |
+| round/4 (autre ligue) | 09/11 | 4 | scheduled | e100123d | Bibim Bożejewice | Sakar SuperSonics | — | — |
+| round/4 (autre ligue) | 09/11 | 4 | scheduled | a6cd5b28 | KK Glen Johnson | Rifiuti Organici | — | — |
+| round/4 (autre ligue) | 09/11 | 4 | scheduled | 9a1fe025 | Artica Slayers | Suricata Squad | — | — |
+| round/4 (autre ligue) | 09/11 | 4 | scheduled | fbe5562d | KK Bedex | Bratrstwo Wlkodlaka | — | — |
+| round/4 (autre ligue) | 09/11 | 4 | scheduled | f2990c58 | Milano Jazz | DenverNug | — | — |
+| preview ligue J4 | 09/11 | 4 | scheduled_lineups | ddb4d263 | Chomelix Cow | Naked Spartans | — | 20:00 Europe/Paris |
+| preview amical | 09/11 | — | finished | 44f3e0f3 | Chomelix Cow | Garden City | — | 08:00 Europe/Paris |
+
+Réponses : **09/11** — amical Garden City (44f3e0f3) `finished` 104-120 dans la liste des amicaux de 09:57 UTC ; ligue J4 Naked Spartans (ddb4d263) `scheduled`, heure seulement dans la preview : 20:00 Europe/Paris, verrou 19:45 = 15 min avant (skill `basketvibe-saison`, 01-rythme, [M§1.3]). **07/11** — Knight Jays présent dans la liste des amicaux, fixture `92fe979b-031f-446e-aaed-43991bfdb176`, 07:00Z = 08:00 Paris, verrou 07:45 ; F3 se trompait (le garde-fou de `sql.py` sur le texte des payloads m'avait empêché de lire la liste). **Coupe** — 12/11, tour 1, BasketVibe Cup Season 2, contre Stare Kotlety (3667d243), 19:00 `UTC` lu dans la page = 20:00 Paris ; verrou au coup d'envoi (skill `basketvibe-saison`, 05-coupes, V-20261108-1).
+
+**J2, constat.** `core.fixture` = vue `sql/core/002_core_views.sql:17`, union de `adapt.basketvibe_fixture` (`sql/adapters/basketvibe.sql:47`, définition en base identique au fichier : elle lit `bv_api`). Trois branches : matchs exportés (`silver.bv_matches`, l. 5-11), calendrier de saison non exporté (`silver.bv_fixtures`, l. 12-17, ligue seulement), amicaux `status = 'scheduled'` de la liste (l. 48-63).
+- `scheduled_at` vide en ligue et coupe : écrit `null::timestamptz` en dur, l. 73 (« fuseau de kickoff_time non sourcé ») et l. 87. Le fuseau existe pourtant dans la preview (`league_timezone`) et la liste de coupe (`kickoff_timezone`). Preuve : requête preview ci-dessus (20:00 Europe/Paris) ; `core.fixture` coupe et ligue : `count(scheduled_at)` = 0.
+- Garden City non joué : `played` = statut de la dernière capture de `silver.bv_matches` ; la seule page du match jusqu'à 14:33 UTC était la preview d'avant-match (08/11 10:12, `scheduled_lineups`). La liste des amicaux (09:57, `finished`) n'est pas lue pour un match déjà exporté (branche 3 : `not exists … played`). Preuve : `bronze.raw_pages` du fixture 44f3e0f3, première capture 08/11 10:12, `silver.bv_matches` `finished` seulement à 14:33. Corrigé de fait par le réexport de 14:33 ; même cause encore active en coupe : PSG 29/10 et Ploppers 31/10 sont `played = false` dans `core.fixture` (`scheduled_lineups`) alors que la liste de coupe dit `finished` 107-97 et 82-72.
+- Knight Jays absent : aucune page du match en bronze avant 09/11 14:26 UTC (première capture de 92fe979b à 14:26:16), et la branche 3 ne garde que `status = 'scheduled'` : un amical fini, non exporté, présent dans la liste (finished 86-104), est jeté. Depuis le réexport de 14:26, il est dans `core.fixture` (joué, L).
+- Coupe du 12/11 absente : aucune branche ne lit la liste de coupe pour un match non exporté (branche 2 = ligue seulement). Preuve : `core.fixture` coupe = 4 lignes, toutes ≤ 31/10.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -272,3 +309,4 @@ Constat de départ : les pages calendrier (friendlies, league-fixtures, fixtures
 | 2026-11-09 12:35 | aujourd'hui | 15.5 | 14 |
 | 2026-11-09 12:38 | aujourd'hui | 19.2 | 18 |
 | 2026-11-09 12:39 | aujourd'hui | 16.1 | 18 |
+| 2026-11-09 15:34 | aujourd'hui | 19.8 | 18 |
