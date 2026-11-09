@@ -75,6 +75,9 @@ REQUETES = {
     "apercus": "select distinct match_day from gold.bv_saisie_adversaires "
                "where kind in ('ligue', 'coupe') and match_day >= current_date",
     "derniere_vente": "select max(sold_on) as derniere from gold.bv_transfer_history",
+    # A1 : alertes de domaine « match » (dernier match, ligue ou coupe jouée non exportée) ; coupe_sans_resultat
+    # n'existe que dans gold.daily_alerts (core.alert_rule), pas dans gold.bv_daily_alerts
+    "alertes_match": "select rule_id, prio, alerte from gold.daily_alerts where game = 'basketvibe' and domaine = 'match' order by prio",
 }
 # Vues rejouables sur un jour passé : requête de remplacement avec le paramètre {jour}.
 REJEU = {
@@ -231,6 +234,34 @@ def enchere_terminee(c, fin, donnees, erreurs):
     return f"{titre} : {verdict} (résultat lu dans silver.bv_transfers)"
 
 
+def en_date(v):
+    return v if isinstance(v, dt.date) and not isinstance(v, dt.datetime) else dt.date.fromisoformat(str(v)[:10])
+
+
+def alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute):
+    """A1 : dernier match -> ligne « Analyse : … » ; ligue ou coupe jouée non exportée -> ligne Exports, sans doublon.
+    Source absente du jeu de données (anciens tests) : rien ; illisible : « il me manque »."""
+    if "alertes_match" not in donnees:
+        return
+    m = manque(donnees, erreurs, "alertes_match", "page du dernier match")
+    if m:
+        ajoute(None, 3, m)
+        return
+    for r in lignes_de(donnees, "alertes_match"):
+        texte = propre(r["alerte"])
+        if r["rule_id"] == "dernier_match":
+            jm = re.search(r"\d{2}/\d{2}", texte)
+            if jm and any(a[2].startswith("Analyse : lance l'agent analyste") and jm.group(0) in a[3] for a in A):
+                continue  # la ligne analyste porte déjà ce match (A2)
+            ajoute(None, int(r["prio"]), f"Analyse : {texte}", "", "gold.daily_alerts")
+        elif r["rule_id"] in ("ligue_sans_resultat", "coupe_sans_resultat"):
+            if r["rule_id"] == "ligue_sans_resultat" and (any(e.startswith("Match de ligue : box") for e in exports)
+                                                         or declare(fait, cles, jour, "Match de ligue : box")):
+                continue  # l'écran box du match de ligue est déjà demandé ou déclaré fait
+            if texte not in exports:
+                exports.append(texte)
+
+
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte],
     'infos': [texte]} ; infos = enchères terminées, une ligne chacune, rangées dans « Autres points »."""
@@ -356,6 +387,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         cat = CAT_ALERTE.get(r["category"])
         if cat and cat != "Exports":
             ajoute(None, int(r["priority"]), r["alert"], "", "gold.bv_daily_alerts")
+    alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute)
 
     # 7. Décisions par secteur (étape 6 du skill) : une ligne si la règle du YAML se déclenche, sinon « Garder »
     m = manque(donnees, erreurs, "gold.bv_position_summary", "Équipe (aperçu, joueurs)")

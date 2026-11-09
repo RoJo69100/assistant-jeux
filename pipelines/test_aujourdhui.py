@@ -373,6 +373,39 @@ def cas():
     yield "R5 repli : l'ancienne correspondance par mots garde son effet sans clé", \
         "Personnel (80 h)" not in auj.rendre(auj.plan(retard9, {}, JOUR9, TOT, "- [10:00 utc] export personnel", {"cles": []}), JOUR9) \
         and "Personnel (80 h)" in auj.rendre(auj.plan(retard9, {}, JOUR9, TOT, "", {"cles": []}), JOUR9)
+    yield from cas_etape5a()
+
+
+ETAT_VIDE = (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], [])
+COLS_AM = ["rule_id", "prio", "alerte"]
+
+
+def plan5a(**remplace):
+    """Plan du 09/11 à 06:00 sur une base sans agenda ni export en retard, plus les sources de l'étape 5a."""
+    d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": ETAT_VIDE,
+                  "gold.bv_daily_alerts": (["priority", "category", "alert"], [])})
+    d.update(remplace)
+    return auj.rendre(auj.plan(d, {}, JOUR9, TOT, "", {}), JOUR9)
+
+
+def cas_etape5a():
+    # A1 : alertes de domaine « match »
+    dernier = (2, "Dernier match exporté : 08/11 (amical, L 94-96 contre New York City Cyclones)")
+    t = plan5a(alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
+    yield "A1 dernier match : ligne « Analyse : » (présent)", "Analyse : Dernier match exporté : 08/11" in t
+    t = plan5a(alertes_match=(COLS_AM, [("coupe_sans_resultat", 2, "Match de coupe joué non exporté : J2 du 08/11")]))
+    yield "A1 coupe jouée non exportée : dans la ligne Exports (présent)", \
+        "Match de coupe joué non exporté : J2 du 08/11" in t.splitlines()[-1]
+    box = (ETAT_VIDE[0], [(6, "Match de ligue : box", "match", None, 30, "🟧 à refaire")])
+    t = plan5a(alertes_match=(COLS_AM, [("ligue_sans_resultat", 2, "Match de ligue joué non exporté : J4 du 07/11")]),
+               **{"gold.bv_exports_state": box})
+    yield "A1 ligue non exportée et écran box déjà demandé : pas de doublon", \
+        "Match de ligue : box (30 h)" in t and "non exporté" not in t
+    t = plan5a(alertes_match=(COLS_AM, [("ligue_sans_resultat", 2, "Match de ligue joué non exporté : J4 du 07/11")]))
+    yield "A1 ligue non exportée sans écran box demandé : dans la ligne Exports", "Match de ligue joué non exporté : J4 du 07/11" in t
+    t = plan5a(alertes_match=(COLS_AM, []))
+    yield "A1 aucune alerte de match (absent)", "Analyse :" not in t and "non exporté" not in t
+    yield "A1 alertes illisibles : « il me manque »", "il me manque alertes_match" in plan5a(alertes_match=None)
 
 
 def cas_base():
