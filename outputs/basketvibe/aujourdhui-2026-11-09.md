@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-09 16:21 -->
+<!-- généré le 2026-11-09 16:32 -->
 19:30 — Avant 19:45 si possible : exporter la page Preview du match J4 (effectif adverse à jour)
     (gold.bv_agenda)
 19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
@@ -6,9 +6,10 @@
     defense_tier n'est pas 0 pour tous (briefs/2026-11-08-tactique.md)
 20:50 — Après le match (~20:50) : exporter la page du match J4 (puis analyse de l'agent Match)
     (gold.bv_agenda)
-07:45 — Amical contre Opper Cards (mar. 10/11) : saisis le test E1 niveau A : agressivité 2 sur les
-    cinq — heure limite du verrou 07:45 ; réglage du test à la place de celui du brief ; après le
-    match exporte : aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour
+07:45 — Amical contre Opper Cards (mar. 10/11) : saisis le test E1 niveau A : agressivité 3 à
+    l'écran (cran 2, équilibrée) sur tous les joueurs — heure limite du verrou 07:45 ; réglage du
+    test à la place de celui du brief ; après le match exporte : aperçu, box scores par quart-temps,
+    réglages utilisés, page Équipe du jour ; E1 : 0 vérifié sur 4
     (docs/attentes/experiences-amicales-basketvibe.yaml, core.fixture)
 --:-- — Analyse : lance l'agent analyste ce soir — 2 défaites d'affilée en ligue ou coupe (dernière
     : Póvoa Riptide, 07/11, ligue) ; dernier brief analyste du 05/11 (core.fixture,
