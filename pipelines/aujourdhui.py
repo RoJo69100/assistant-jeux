@@ -263,7 +263,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     if m:
         exports.append(m)
     etat = {r["ecran"]: r for r in lignes_de(donnees, "gold.bv_exports_state")}
+    # Mes enchères : la page est vide (et jamais envoyée) sans enchère d'achat en cours ; fin inconnue = peut-être en cours (PB6)
+    encheres_en_cours = any(c["fin"] is None or c["fin"] > maintenant for c in S.get("cibles", []))
     for r in etat.values():
+        if r["ecran"] == "Mes enchères" and not encheres_en_cours:
+            continue
         if not str(r["statut"]).endswith("à jour") and not deja(fait, r["ecran"]):
             exports.append(f"{r['ecran']} ({'jamais exporté' if r['age_h'] is None else str(int(r['age_h'])) + ' h'})")
     ligues = [r for r in lignes_de(donnees, "gold.bv_agenda") if r["category"] == "ligue"]

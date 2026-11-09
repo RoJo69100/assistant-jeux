@@ -220,6 +220,22 @@ def cas():
         "saisis la tactique maintenant" in next(l for l in avec.splitlines() if "Naked Spartans" in l)
     yield "PB5 une saisie datée d'un jour passé n'est pas retenue", \
         src.lire_saisies(ESSAI9, dt.date(2026, 11, 10)) == []
+    # PB6 : Mes enchères jamais en ligne Export sans enchère d'achat dont la fin est à venir
+    cibles9 = src.lire_cibles(DECISIONS, ENCHERES, ESSAI9, JOUR9)  # Fujita et Stankevičius ont fini le 08/11
+    retard = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": (
+        ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+        [(9, "Mes enchères", "ventes", None, 119, "🟧 à refaire"), (13, "Personnel", "staff", None, 80, "🟧 à refaire")])})
+    t6 = auj.rendre(auj.plan(retard, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB6 09/11 : aucune ligne Mes enchères (enchères finies le 08/11)", "Mes enchères" not in t6
+    yield "PB6 les autres exports en retard restent demandés", "Personnel (80 h)" in t6
+    ouvertes = [dict(c, fin=dt.datetime(2026, 11, 10, 3, 50)) for c in cibles9]
+    yield "PB6 une enchère dont la fin est à venir : Mes enchères demandé", "Mes enchères (119 h)" in auj.rendre(
+        auj.plan(retard, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
+    inconnue = [dict(c, fin=None) for c in cibles9]
+    yield "PB6 fin d'enchère inconnue : Mes enchères demandé (peut-être en cours)", "Mes enchères (119 h)" in auj.rendre(
+        auj.plan(retard, {}, JOUR9, TOT, "", {"cibles": inconnue}), JOUR9)
+    yield "PB6 aucune décision d'achat : aucune ligne Mes enchères", "Mes enchères" not in auj.rendre(
+        auj.plan(retard, {}, JOUR9, TOT, "", {"cibles": []}), JOUR9)
 
 
 if __name__ == "__main__":
