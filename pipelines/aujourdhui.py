@@ -99,6 +99,9 @@ REQUETES = {
     "cote_potentiel": "select academy_score, p_high_8_10 from gold.bv_academy_potential_odds where label = 'jauge actuelle'",
     "valeurs_academie": "select key, value from core.game_params where game = 'basketvibe' "
                         "and key in ('academie_valeur_high', 'academie_cout_test')",
+    # K4 (étape 5e) : décisions échues à mesurer, et décisions encore « proposed » (faits du registre à relier)
+    "a_evaluer": "select count(*) as n from gold.decisions_a_evaluer where game = 'basketvibe'",
+    "decisions_proposees": "select id, status, game from learn.decision where game = 'basketvibe' and status = 'proposed'",
     # A4 : solde projeté en fin de saison
     "gold.bv_finance_projection": "select season_end, balance_end_projected, tickets_left, sponsor_left, costs_left "
                                   "from gold.bv_finance_projection limit 1",
@@ -185,7 +188,13 @@ def lire_sources(donnees, jour, base=BASE):
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
             "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour),
-            "experiences": src.lire_experiences(base, jour)}
+            "experiences": src.lire_experiences(base, jour), "refs_decisions": lire_refs_decisions(base, jour)}
+
+
+def lire_refs_decisions(base, jour):
+    """K4 : `[décision=<id>]` des registres des 7 derniers jours (lecteur de relier_faits.py, sans écriture)."""
+    import relier_faits
+    return relier_faits.lire_references(Path(base), jour)
 
 
 def deja(fait, cle):
@@ -472,6 +481,23 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
                f"contre test {montant(cout)} (règle d'espérance, à valider)", "gold.bv_academy_potential_odds, core.game_params")
 
 
+def boucle(donnees, refs, ajoute):
+    """K4 : « n décisions à mesurer, m faits à relier » si n + m > 0 ; n = gold.decisions_a_evaluer, m = identifiants
+    `[décision=<id>]` des registres des 7 derniers jours (relier_faits.lire_references) encore « proposed » en base.
+    Lecture seule : les commandes qui écrivent sont citées, jamais lancées. Une source illisible compte 0."""
+    import relier_faits
+    a_mesurer = sum(int(r["n"]) for r in lignes_de(donnees, "a_evaluer"))
+    ouvertes = {int(r["id"]): (r["status"], r["game"]) for r in lignes_de(donnees, "decisions_proposees")}
+    a_relier = sum(1 for r in relier_faits.plan(refs or [], ouvertes, "basketvibe") if r["a_faire"])
+    if a_mesurer + a_relier == 0:
+        return
+    pl = lambda n, s, p: f"{n} {s if n < 2 else p}"
+    ajoute(None, 3, f"Boucle d'apprentissage : {pl(a_mesurer, 'décision à mesurer', 'décisions à mesurer')}, "
+                    f"{pl(a_relier, 'fait à relier', 'faits à relier')}",
+           "python -I pipelines/evaluer_decisions.py ; python -I pipelines/relier_faits.py basketvibe",
+           "gold.decisions_a_evaluer, registres fait-<jour>.md")
+
+
 def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     """{'actions': [(limite|None, priorité 1-3, action, détail, source)], 'exports': [texte], 'garder': [texte],
     'infos': [texte]} ; infos = enchères terminées, une ligne chacune, rangées dans « Autres points »."""
@@ -626,6 +652,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             ajoute(None, int(r["priority"]), r["alert"], "", "gold.bv_daily_alerts")
     alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute)
     academie(donnees, erreurs, cles, maintenant, ajoute)
+    boucle(donnees, S.get("refs_decisions"), ajoute)
 
     # 7. Décisions par secteur (étape 6 du skill) : une ligne si la règle du YAML se déclenche, sinon « Garder »
     m = manque(donnees, erreurs, "gold.bv_position_summary", "Équipe (aperçu, joueurs)")

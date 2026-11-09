@@ -489,6 +489,7 @@ def cas_etape5a():
 
     yield from cas_experiences(COLS_CAL, MIDI)
     yield from cas_academie()
+    yield from cas_boucle()
 
 
 def cas_experiences(COLS_CAL, MIDI):
@@ -603,6 +604,29 @@ def cas_academie():
         lignes({"prospects": PROS, "cote_potentiel": COTE}, [cle]) == []
     ancien = dict(cle, jour=dt.date(2026, 11, 4))
     yield "K3 présent : clé Académie antérieure au rapport, les lignes restent", len(lignes({"prospects": PROS}, [ancien])) == 3
+
+
+def cas_boucle():
+    """K4 (étape 5e) : ligne de compte de la boucle d'apprentissage ; cas présent et cas absent."""
+    def lignes(n, proposees, refs):
+        A = []
+        d = {"a_evaluer": (["n"], [(n,)]), "decisions_proposees": (["id", "status", "game"], [(i, "proposed", "basketvibe") for i in proposees])}
+        auj.boucle(d, refs, lambda *a: A.append(a))
+        return A
+
+    ref = lambda i: {"id": i, "fichier": "fait-2026-11-09.md", "ligne": 1}
+    deux = lignes(2, [1076], [ref(1076)])
+    yield "K4 présent : « 2 décisions à mesurer, 1 fait à relier »", \
+        len(deux) == 1 and deux[0][2] == "Boucle d'apprentissage : 2 décisions à mesurer, 1 fait à relier"
+    yield "K4 présent : fait seul (décision « proposed » citée au registre), 0 à mesurer", \
+        lignes(0, [1076], [ref(1076)])[0][2] == "Boucle d'apprentissage : 0 décision à mesurer, 1 fait à relier"
+    yield "K4 absent : n = 0 et aucun fait, aucune ligne", lignes(0, [], []) == []
+    yield "K4 absent : identifiant du registre déjà done (pas « proposed »), aucune ligne", lignes(0, [], [ref(1070)]) == []
+    yield "K4 absent : sources illisibles, aucune ligne", (lambda A: (auj.boucle({}, None, lambda *a: A.append(a)), A)[1])([]) == []
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "fait-2026-11-09.md").write_text("- [x] saisie [décision=1076]\n- reste à faire [décision=1077]\n", encoding="utf-8")
+        refs = auj.lire_refs_decisions(tmp, JOUR9)
+    yield "K4 registre lu : [décision=1076] pris, ligne « reste à » ignorée", [r["id"] for r in refs] == [1076]
 
 
 def cas_base():
