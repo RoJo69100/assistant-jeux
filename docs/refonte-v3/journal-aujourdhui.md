@@ -133,3 +133,5 @@ Source : `docs/refonte-v3/playbook-basketvibe.md`, liste « Étape 5 », actions
 | 2026-11-09 09:17 | aujourd'hui | 20.2 | 14 |
 | 2026-11-09 10:35 | aujourd'hui | 14.4 | 14 |
 | 2026-11-09 12:35 | aujourd'hui | 15.5 | 14 |
+| 2026-11-09 12:38 | aujourd'hui | 19.2 | 18 |
+| 2026-11-09 12:39 | aujourd'hui | 16.1 | 18 |
