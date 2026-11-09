@@ -262,7 +262,8 @@ def alertes_match(donnees, erreurs, fait, cles, jour, A, exports, ajoute):
             jm = re.search(r"\d{2}/\d{2}", texte)
             if jm and any(a[2].startswith("Analyse : lance l'agent analyste") and jm.group(0) in a[3] for a in A):
                 continue  # la ligne analyste porte déjà ce match (A2)
-            ajoute(None, int(r["prio"]), f"Analyse : {texte}", "", "gold.daily_alerts")
+            # priorité 3 : un constat, pas une action ; il ne doit pas chasser une action du plan (A6)
+            ajoute(None, 3, f"Analyse : {texte}", "", "gold.daily_alerts")
         elif r["rule_id"] in ("ligue_sans_resultat", "coupe_sans_resultat"):
             if r["rule_id"] == "ligue_sans_resultat" and (any(e.startswith("Match de ligue : box") for e in exports)
                                                          or declare(fait, cles, jour, "Match de ligue : box")):

@@ -393,6 +393,11 @@ def cas_etape5a():
     dernier = (2, "Dernier match exporté : 08/11 (amical, L 94-96 contre New York City Cyclones)")
     t = plan5a(alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
     yield "A1 dernier match : ligne « Analyse : » (présent)", "Analyse : Dernier match exporté : 08/11" in t
+    d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": ETAT_VIDE,
+                  "gold.bv_daily_alerts": (["priority", "category", "alert"], [])}, alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
+    a = auj.plan(d, {}, JOUR9, TOT, "", {})["actions"]
+    yield "A1/A6 « Dernier match » en priorité 3 (constat, ne chasse pas une action)", \
+        [x[1] for x in a if x[2].startswith("Analyse : Dernier")] == [3]
     t = plan5a(alertes_match=(COLS_AM, [("coupe_sans_resultat", 2, "Match de coupe joué non exporté : J2 du 08/11")]))
     yield "A1 coupe jouée non exportée : dans la ligne Exports (présent)", \
         "Match de coupe joué non exporté : J2 du 08/11" in t.splitlines()[-1]
