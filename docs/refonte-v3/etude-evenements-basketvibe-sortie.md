@@ -86,6 +86,16 @@ Pertes de balle par joueur-quart (box score), pente par +10 de fatigue :
 | v5 amical | 3 | 0 | — | non identifiable (moins de 5 joueurs-matchs) |
 | v5 amical | 4 | 9 | — | non identifiable |
 
+Part de tirs à 3 points de l'équipe par match (les deux équipes de chaque match) :
+
+| groupe | équipes-matchs | moyenne (%) | 95e centile (%) | maximum (%) | équipes-matchs au-dessus de 50 % |
+|---|---|---|---|---|---|
+| v3 ligue | 44 | 39.7 | 53.5 | 54.7 | 5 |
+| v4 ligue | 38 | 33.2 | 53.1 | 54.2 | 4 |
+| v4 coupe | 20 | 30.6 | 47.0 | 50.6 | 1 |
+| v4 amical | 32 | 36.9 | 48.8 | 53.4 | 1 |
+| v5 amical | 20 | 41.7 | 51.3 | 52.3 | 2 |
+
 ### 6. Tirs par quart selon le focus offensif
 
 | groupe | joueurs-quarts Primary (niveau 4) | joueurs-quarts Normal (niveau 2) | rapport des tirs par quart, Primary / Normal [intervalle] | verdict (annoncé 1,33) |

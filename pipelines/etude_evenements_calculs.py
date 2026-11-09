@@ -302,8 +302,17 @@ def mesure5(P):
                 ident = len(c) >= 15
                 v = f"plafond 66,7 % : {v_bande(res, 0, 66.7 + 5, 5.0, ident)} ; plafond 50 % : {v_bande(res, 0, 55.0, 5.0, ident)}" if res else "non identifiable"
             lignes.append([g, niv, len(c), fmt(res, 1, " %"), v])
-    return base.md(pd.DataFrame(lignes, columns=["groupe", "niveau de tir", "joueurs-matchs (≥ 8 tirs)", "part de tirs à 3 points [intervalle]",
-                                                  "verdict (niveau 4 : annoncé ≤ 66,7 % et ≤ 50 %)"]), index=False)
+    s = base.md(pd.DataFrame(lignes, columns=["groupe", "niveau de tir", "joueurs-matchs (≥ 8 tirs)", "part de tirs à 3 points [intervalle]",
+                                              "verdict (niveau 4 : annoncé ≤ 66,7 % et ≤ 50 %)"]), index=False)
+    # part de l'équipe par match (les deux équipes de chaque match) : plafond annoncé d'environ 50 %
+    eq = T.groupby(["fixture_id", "team_side", "groupe"]).agg(tirs=("make", "size"), trois=("trois", "sum")).reset_index()
+    eq["part"] = 100 * eq.trois / eq.tirs
+    lig = []
+    for g in GROUPES:
+        a = eq[eq.groupe == g]
+        lig.append([g, len(a), f"{a.part.mean():.1f}", f"{a.part.quantile(0.95):.1f}", f"{a.part.max():.1f}", int((a.part > 50).sum())])
+    return s + "\n\nPart de tirs à 3 points de l'équipe par match (les deux équipes de chaque match) :\n\n" + base.md(
+        pd.DataFrame(lig, columns=["groupe", "équipes-matchs", "moyenne (%)", "95e centile (%)", "maximum (%)", "équipes-matchs au-dessus de 50 %"]), index=False)
 
 
 # ---------- mesure 6 : tirs par quart selon le focus offensif ----------
