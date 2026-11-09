@@ -491,6 +491,57 @@ def cas_etape5a():
     yield from cas_academie()
     yield from cas_vente()
     yield from cas_boucle()
+    yield from cas_entrainement()
+
+
+def cas_entrainement():
+    """N2 (étape 5h) : contrôle focus attendu (fiche de l'agent) contre focus saisi, le jour de fin de cycle."""
+    SAM = dt.date(2026, 11, 14)  # samedi, isodow 6
+    MATIN = dt.datetime(2026, 11, 14, 10, 0)
+    REGLE = (["isodow", "heure"], [(6, "23:00")])
+    COLS = ["ordre", "nom", "poste", "principale", "secondaire", "export_le"]
+    SAISIE = (COLS, [(1, "Albano", "PF", "rebounding", "defense", None), (2, "Baron", "PG", "passing", "defense", None),
+                     (3, "Dang", "SG", "three_point", "defense", None)])
+    FICHE = {"date": dt.date(2026, 11, 8), "fichier": "briefs/2026-11-08-entrainement.md",
+             "joueurs": {"Albano": ("rebounding", "defense"), "Baron": ("passing", "defense"), "Dang": (None, None)}}
+    AG = (AGENDA[0], [("2026-11-14", "23:00:00", 2, "entraînement",
+                       "Avant dimanche 04:00 : vérifier et sauvegarder les choix d'entraînement")])
+
+    def lignes(saisie=SAISIE, fiche=FICHE, jour=SAM, maintenant=MATIN, regle=REGLE):
+        d = figees(**{"gold.bv_agenda": AG, "gold.bv_saisie_entrainement": saisie, "regle_entrainement": regle})
+        return [a for a in auj.plan(d, {}, jour, maintenant, "", {"fiche_entrainement": fiche})["actions"]
+                if "ntraînement" in a[2]]
+
+    yield "N2 zéro écart, absent : aucune ligne de contrôle, la ligne d'agenda reste", \
+        [a[2] for a in lignes()] == ["Avant dimanche 04:00 : vérifier et sauvegarder les choix d'entraînement"]
+    ecart = (COLS, [(1, "Albano", "PF", "defense", "defense", None), (2, "Baron", "PG", "passing", "ball_handling", None),
+                    (3, "Dang", "SG", "passing", "stamina", None), (4, "Ungureanu", "C", "rebounding", "passing", None)])
+    l = lignes(saisie=ecart)
+    yield "N2 écarts, présent : une ligne, principale et secondaire attendues, joueur hors fiche, « indifférent » ignoré", \
+        len(l) == 1 and l[0][0] == dt.datetime(2026, 11, 14, 23, 0) and "corrige 3 écarts" in l[0][2] \
+        and l[0][3] == "Albano : principale Rebond (saisi Défense) ; Baron : secondaire Défense (saisi Dribble) ; " \
+                       "Ungureanu : absent de la fiche ; fiche du 08/11" and "Dang" not in l[0][3]
+    yield "N2 autre jour que celui de la règle, absent : aucune ligne de contrôle même avec écarts", \
+        not any("corrige" in a[2] for a in lignes(saisie=ecart, jour=dt.date(2026, 11, 13), maintenant=dt.datetime(2026, 11, 13, 10)))
+    yield "N2 cycle passé (après 23:00), absent : aucune ligne de contrôle", \
+        not any("corrige" in a[2] for a in lignes(saisie=ecart, maintenant=dt.datetime(2026, 11, 14, 23, 30)))
+    yield "N2 fiche absente, présent : « il me manque la fiche de l'agent Entraînement »", \
+        any("il me manque la fiche" in a[2] for a in lignes(fiche=None))
+    yield "N2 règle absente, absent : aucune ligne de contrôle", \
+        not any("corrige" in a[2] for a in lignes(saisie=ecart, regle=(["isodow", "heure"], [])))
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        (Path(tmp) / "briefs" / "2026-11-08-entrainement.md").write_text(
+            "| Joueur | Âge | Principale : gain |\n|---|---|---|\n| Baron (PG) | 17 | Passes +1 |\n\n"
+            "| Poste | Joueur (âge) | Principale (valeur) | Secondaire (valeur) | Gain |\n|---|---|---|---|---|\n"
+            "| PG | Baron (17) | Passes 54,6 | Défense 41,4 | +1,6 |\n| SG | Dang (30) | indifférent (3PT) | indifférent | 0 |\n"
+            "| C | Bernard (18) | Rebond 63,2 | Athlétisme 53,6 | +2,2 |\n", encoding="utf-8")
+        f = src.lire_fiche_entrainement(tmp, SAM)
+        yield "N2 lecteur de fiche, présent : 3 joueurs, libellés traduits, « indifférent » = None", \
+            f["joueurs"] == {"Baron": ("passing", "defense"), "Dang": (None, None), "Bernard": ("rebounding", "athleticism")} \
+            and f["date"] == dt.date(2026, 11, 8)
+        yield "N2 lecteur de fiche, absent (brief postérieur au jour) : None", \
+            src.lire_fiche_entrainement(tmp, dt.date(2026, 11, 7)) is None
 
 
 def cas_experiences(COLS_CAL, MIDI):

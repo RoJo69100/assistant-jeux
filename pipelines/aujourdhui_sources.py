@@ -8,6 +8,7 @@ aucune n'écrit. Critères L1 à L4 de docs/refonte-v3/journal-aujourdhui.md.
   lire_conseils   L4  conseils ouverts de learnings.md dont la date du critère tombe aujourd'hui ou demain
   lire_cles       R5  lignes du registre `fait-<j>.md` des 7 derniers jours qui portent une clé `[clé=<écran ou match>]`
   lire_experiences 5d file d'expériences amicales (YAML) + lignes `[expérience=<id>:<niveau>]` de tout le registre
+  lire_fiche_entrainement 5h fiche de saisie (joueur, principale, secondaire) du dernier brief de l'agent Entraînement
 """
 import datetime as dt
 import re
@@ -225,6 +226,48 @@ def lire_analyste(base, jour: dt.date):
     dates = [dt.date.fromisoformat(m.group(1)) for f in (Path(base) / "briefs").glob("*.md") if (m := ANALYSTE.match(f.name))]
     dates = [d for d in dates if d <= jour]
     return max(dates) if dates else None
+
+
+ENTRAINEMENT = re.compile(r"^(\d{4}-\d{2}-\d{2})-entrainement\.md$")
+# Libellés de la fiche de l'agent Entraînement → identifiants de la page /club/training (gold.bv_saisie_entrainement)
+COMPETENCES = [("passe", "passing"), ("défense", "defense"), ("defense", "defense"), ("dribble", "ball_handling"),
+               ("rebond", "rebounding"), ("2 points", "two_point"), ("2pt", "two_point"), ("3 points", "three_point"),
+               ("3pt", "three_point"), ("athl", "athleticism"), ("endurance", "stamina")]
+
+
+def competence(cellule: str):
+    """Identifiant de compétence d'une cellule « Passes 54,6 » ; None pour « indifférent » ou un libellé inconnu."""
+    c = cellule.strip().lower()
+    if c.startswith("indiff"):
+        return None
+    return next((v for k, v in COMPETENCES if c.startswith(k)), None)
+
+
+def lire_fiche_entrainement(base, jour: dt.date):
+    """N2 (étape 5h) : fiche de saisie du dernier brief `briefs/<date>-entrainement.md` daté d'au plus `jour`.
+    Table « | Poste | Joueur … | Principale … | Secondaire … | » : {'date', 'fichier', 'joueurs': {nom: (principale,
+    secondaire)}} ; compétence None = « indifférent » (aucun contrôle). Aucun brief : None."""
+    trouves = [(dt.date.fromisoformat(m.group(1)), f) for f in (Path(base) / "briefs").glob("*.md")
+               if (m := ENTRAINEMENT.match(f.name)) and dt.date.fromisoformat(m.group(1)) <= jour]
+    if not trouves:
+        return None
+    date, f = max(trouves, key=lambda x: x[0])
+    joueurs, dans = {}, False
+    for l in f.read_text(encoding="utf-8").splitlines():
+        c = [x.strip() for x in l.strip().strip("|").split("|")] if l.lstrip().startswith("|") else []
+        if len(c) >= 4 and c[0].lower() == "poste" and c[1].lower().startswith("joueur") and c[2].lower().startswith("principale"):
+            dans = True
+            continue
+        if not dans:
+            continue
+        if not c:
+            dans = False
+            continue
+        if set(c[0]) <= set("-: ") or len(c) < 4:
+            continue
+        nom = re.sub(r"\s*\(.*", "", _nettoie(c[1]))
+        joueurs[nom] = (competence(_nettoie(c[2])), competence(_nettoie(c[3])))
+    return {"date": date, "fichier": f"briefs/{f.name}", "joueurs": joueurs}
 
 
 def lire_conseils(base, jour: dt.date) -> list[dict]:

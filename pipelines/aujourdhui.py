@@ -103,6 +103,11 @@ REQUETES = {
     "gold.bv_sell_replacement": "select name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
                                 "on_transfer_list, available, available_players from gold.bv_sell_replacement",
     "tolerance_vente": "select value from core.game_params where game = 'basketvibe' and key = 'vente_tolerance_force'",
+    # N2 (étape 5h) : entraînement saisi (dernier export /club/training) et jour/heure de fin de cycle (règle d'agenda)
+    "gold.bv_saisie_entrainement": "select ordre, nom, poste, principale, secondaire, export_le "
+                                   "from gold.bv_saisie_entrainement order by ordre",
+    "regle_entrainement": "select isodow, to_char(heure, 'HH24:MI') as heure from core.agenda_rule "
+                          "where game = 'basketvibe' and rule_id = 'entrainement_sam' and actif",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
                       "from gold.bv_amical_reglage where match_day >= current_date - 120",
@@ -195,7 +200,8 @@ def lire_sources(donnees, jour, base=BASE):
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
             "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour),
-            "experiences": src.lire_experiences(base, jour), "refs_decisions": lire_refs_decisions(base, jour)}
+            "experiences": src.lire_experiences(base, jour), "refs_decisions": lire_refs_decisions(base, jour),
+            "fiche_entrainement": src.lire_fiche_entrainement(base, jour)}
 
 
 def lire_refs_decisions(base, jour):
@@ -334,6 +340,48 @@ def prochain_amical(donnees, jour, maintenant):
         if r["competition_kind"] == "amical" and d in (jour, jour + dt.timedelta(days=1)) and v and en_heure(v) >= maintenant:
             return {"match": r["opponent"], "date": d, "limite": en_heure(v)}
     return None
+
+
+LIBELLES = {"passing": "Passes", "defense": "Défense", "ball_handling": "Dribble", "rebounding": "Rebond",
+            "two_point": "2 points", "three_point": "3 points", "athleticism": "Athlétisme", "stamina": "Endurance"}
+
+
+def ecarts_entrainement(saisie, fiche):
+    """N2 (étape 5h) : écarts entre l'entraînement saisi (gold.bv_saisie_entrainement) et la fiche de l'agent
+    (joueur, focus attendu), dans l'ordre de l'écran ; « indifférent » n'est pas contrôlé ; joueur hors fiche signalé."""
+    res = []
+    for r in sorted(saisie, key=lambda r: int(r["ordre"])):
+        attendu = fiche["joueurs"].get(r["nom"])
+        if attendu is None:
+            res.append(f"{r['nom']} : absent de la fiche")
+            continue
+        for rang, att, sai in (("principale", attendu[0], r["principale"]), ("secondaire", attendu[1], r["secondaire"])):
+            if att is not None and att != sai:
+                res.append(f"{r['nom']} : {rang} {LIBELLES.get(att, att)} (saisi {LIBELLES.get(sai, sai)})")
+    return res
+
+
+def ligne_entrainement(donnees, S, jour, maintenant):
+    """N2 : (limite, action, détail, source) le jour de fin de cycle (règle entrainement_sam), seulement s'il y a des
+    écarts ou s'il manque la fiche ou l'export ; None sinon (zéro écart = zéro ligne)."""
+    regle = lignes_de(donnees, "regle_entrainement")
+    if not regle or jour.isoweekday() != int(regle[0]["isodow"]):
+        return None
+    limite = dt.datetime.combine(jour, dt.time.fromisoformat(regle[0]["heure"]))
+    if limite < maintenant:
+        return None
+    titre = f"Entraînement (fin du cycle {jour_fr(jour)} {regle[0]['heure']})"
+    fiche, saisie = S.get("fiche_entrainement"), lignes_de(donnees, "gold.bv_saisie_entrainement")
+    if fiche is None:
+        return limite, f"{titre} : il me manque la fiche de l'agent Entraînement", "relance l'agent entraînement", \
+            "gold.bv_saisie_entrainement"
+    if not saisie:
+        return limite, f"{titre} : il me manque l'export Entraînement", "exporte la page Entraînement", fiche["fichier"]
+    e = ecarts_entrainement(saisie, fiche)
+    if not e:
+        return None
+    return limite, f"{titre} : corrige {len(e)} écart{'s' if len(e) > 1 else ''} à l'écran", \
+        " ; ".join(e) + f" ; fiche du {fiche['date']:%d/%m}", f"gold.bv_saisie_entrainement, {fiche['fichier']}"
 
 
 def _jour(v):
@@ -704,7 +752,12 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     m = manque(donnees, erreurs, "gold.bv_agenda", "Équipe (aperçu, joueurs)")
     if m:
         ajoute(None, 2, m)
+    ent = ligne_entrainement(donnees, S, jour, maintenant)  # N2 : contrôle de l'entraînement, remplace la ligne d'agenda
+    if ent:
+        ajoute(ent[0], 2, ent[1], ent[2], ent[3])
     for r in lignes_de(donnees, "gold.bv_agenda"):
+        if ent and r["category"] == "entraînement":
+            continue
         d = r["day"] if isinstance(r["day"], dt.date) else dt.date.fromisoformat(str(r["day"])[:10])
         h = heure(r["at_time"])
         cal, r["action"] = recaler(donnees, d, h, r["category"], r["action"])  # H6 : coup d'envoi + décalage
