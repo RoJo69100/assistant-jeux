@@ -39,5 +39,6 @@ Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/jour
 
 ## Commandes
 - `python pipelines/dossier.py <jeu> <type>` dossier ou carte · `python pipelines/mesure_session.py` coût de la session · `python pipelines/recette.py --tous` contrôle des jeux
+- fin d'étape = python -I pipelines/fusion_main.py puis python -I pipelines/fin_etape.py, sortie collée
 - Tests : `pipelines/test_*.py` · budget de contexte : `pipelines/contexte_budget.py`
 - Requêtes SQL de lecture : `python -I pipelines/sql.py "select …" [--max-rows 30]` (tableau compact, lecture seule ; `--page-id N --payload-path a,b` pour un morceau de payload). Connecteur claude.ai `Supabase` (`project_id = smkariminvfityondmmc`) pour les migrations et le DDL ; plus de serveur `.mcp.json`. Jamais l'historique brut entier.
