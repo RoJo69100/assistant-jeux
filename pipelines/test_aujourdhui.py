@@ -495,6 +495,7 @@ def cas_etape5a():
     yield from cas_boucle()
     yield from cas_marche_5i()
     yield from cas_composition_5j()
+    yield from cas_experience_e5()
     yield from cas_entrainement()
     yield from cas_fatigue()
     yield from cas_revue()
@@ -613,7 +614,7 @@ def cas_experiences(COLS_CAL, MIDI):
         # M3 (5g) : faits à clé distincte et réglage joué en base (gold.bv_amical_reglage), un club par amical
         CLUBS = ["Alpha", "Bravo", "Charlie", "Delta", "Echo", "Fox", "Golf", "Hotel", "India", "Juliet", "Kilo", "Lima",
                  "Mike", "Nova", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Ultra", "Victor", "Whisky",
-                 "Xray", "Yankee", "Zulu", "Ares", "Bora", "Ceres", "Dune"]
+                 "Xray", "Yankee", "Zulu", "Ares", "Bora", "Ceres", "Dune", "Eris", "Faro", "Gaia"]
         def joue(i, cran=0, pq=0, t4=0):
             return {"fixture_id": f"f{i}", "match_day": f"2026-11-{1 + i % 8:02d}", "opponent": f"{CLUBS[i]} BC",
                     "agress_cran": cran, "primary_quarts": pq, "tir_cran4_joueurs": t4}
@@ -626,8 +627,8 @@ def cas_experiences(COLS_CAL, MIDI):
         f3, j3 = e1v(3)
         f4, j4 = e1v(4)
         yield "H7 passage à E2, absent (E1 à 3 vérifiés sur 4) : encore E1", niveau(exps(*f3), j3) == ("E1", "B", False)
-        yield "H7 passage à E2, présent (E1 à 4 vérifiés sur 4) : E2 niveau A", niveau(exps(*f4), j4) == ("E2", "A", False)
-        suite = [(i, e, n, kw) for i, (e, n, kw) in enumerate([("E2", "A", {"t4": 2})] * 3 + [("E3", "A", {"pq": 4})] * 7
+        yield "H7 passage à E5 (5j : E5 entre E1 et E2), présent (E1 à 4 vérifiés sur 4) : E5 niveau A", niveau(exps(*f4), j4) == ("E5", "A", False)
+        suite = [(i, e, n, kw) for i, (e, n, kw) in enumerate([("E5", "A", {})] * 3 + [("E2", "A", {"t4": 2})] * 3 + [("E3", "A", {"pq": 4})] * 7
                                                               + [("E4", "habituel", {})] * 16, start=4)]
         toutes = f4 + [fait(i, e, n) for i, e, n, _ in suite]
         jt = j4 + [joue(i, **kw) for i, _, _, kw in suite]
@@ -662,7 +663,7 @@ def cas_experiences(COLS_CAL, MIDI):
             sorted(p.name for p in reg.iterdir()) == ["fait-2026-11-08.md"]
         yield "H7 fichier absent : None, plan sans ligne de test", \
             src.lire_experiences(reg, JOUR9, reg / "absent.yaml") is None and auj.test_en_cours(None, AM) is None
-        yield "H7 fichier présent : E1 à E4 dans l'ordre", [e["id"] for e in exps()["file"]] == ["E1", "E2", "E3", "E4"]
+        yield "H7 fichier présent : E1, E5 (5j), E2 à E4 dans l'ordre", [e["id"] for e in exps()["file"]] == ["E1", "E5", "E2", "E3", "E4"]
         yield "H7 ligne « reste à » ignorée, présent : aucun fait", \
             exps("- reste à faire : saisie de l'amical [expérience=E1:A]")["faits"] == []
         yield "H7 ligne « reste à » ignorée, absent (ligne normale) : 1 fait", len(exps(*e1(1))["faits"]) == 1
@@ -939,6 +940,25 @@ def cas_composition_5j():
     yield "Y3 absent : un brief daté de la dernière capture en tient compte", \
         not a(lignes([spart("2026-11-08T08:00:00", "A,B,C"), spart("2026-11-09T02:00:00", "A,B,D")], {"tactique": [brief("2026-11-09")]}), "composition adverse changée")
     yield "Y5 plan complet avec composition et rappel : 8 lignes au plus", len(auj.rendre(deux, JOUR9).splitlines()) <= 8
+
+
+def cas_experience_e5():
+    """5j, Y4 : E5 « zone défensive » dans le vrai fichier des expériences, entre E1 et E2 ; E1 écrit ses constantes."""
+    exps = src.lire_experiences(ESSAI, JOUR)
+    ids = [e["id"] for e in exps["file"]]
+    e1, e5 = exps["file"][0], next((e for e in exps["file"] if e["id"] == "E5"), None)
+    yield "Y4 présent : E5 placée après E1 et avant E2", ids[:3] == ["E1", "E5", "E2"]
+    yield "Y4 présent : E5 alterne Perimeter, Middle, Rim, une zone par niveau, focus 3 constant", e5 is not None \
+        and e5["zone"] == {"A": "Perimeter", "B": "Middle", "C": "Rim"} and e5["ordre"] == ["A", "B", "C"] and e5["constants"] == {"focus": 3}
+    yield "Y4 présent : E1 écrit zone Perimeter et focus 3 comme constantes", e1["constants"] == {"zone": "Perimeter", "focus": 3}
+    termine = {"file": [{**e1, "amicaux_vises": 0}] + exps["file"][1:], "faits": [], "debut": None}
+    am = {"match": "Opper Cards", "date": dt.date(2026, 11, 10), "limite": dt.datetime(2026, 11, 10, 7, 45)}
+    t = auj.test_en_cours(termine, am, [])
+    yield "Y4 présent : E1 terminée, le test suivant est E5 niveau A (pas E2)", t is not None and t[0]["id"] == "E5" and t[1] == "A" \
+        and auj.texte_test(t[0], t[1]) == "test E5 niveau A : zone Perimeter (1) sur les adversaires"
+    yield "Y4 absent : aucune expérience ne teste le focus défensif par joueur adverse", \
+        not any("joueur adverse" in e["reglage"] or "focus défensif" in e["reglage"] for e in exps["file"])
+    yield "Y4 absent : fichier d'expériences illisible, aucune expérience (H4)", src.lire_experiences(ESSAI, JOUR, ESSAI / "absent.yaml") is None
 
 
 def cas_base():

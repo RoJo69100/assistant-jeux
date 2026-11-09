@@ -26,7 +26,26 @@ experiences:
       B: {agress_cran: 4}
     ordre: [A, B, A, B]
     amicaux_vises: 4
+    # 5j (Y4) : valeurs qui ne bougent pas pendant E1 ; pipelines/composition.py les écrit « constant pendant E1 » sous le tableau.
+    constants: {zone: Perimeter, focus: 3}
     lecons: [L-004, L-008, L-011#2, L-015, L-021]
+    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+  - id: E5
+    reglage: zone défensive (Perimeter, Middle, Rim), alternée par match
+    niveaux:
+      A: zone Perimeter (1) sur les adversaires
+      B: zone Middle (3) sur les adversaires
+      C: zone Rim (5) sur les adversaires
+    # `zone` : zone saisie par niveau ; `constants` : le focus défensif reste 3 (Normal) pour tous les adversaires.
+    # Aucun test du focus défensif par joueur adverse : aucun aperçu en amical (arbitrage 15).
+    # Limite : gold.bv_amical_reglage n'a pas de colonne zone, `joue` reste vide : E5 est vérifiée par le registre seul.
+    zone: {A: Perimeter, B: Middle, C: Rim}
+    constants: {focus: 3}
+    ordre: [A, B, C]
+    amicaux_vises: 3
+    # leçon à créer (proposée) : « La zone défensive change le pourcentage à 2 points adverse (Perimeter 45-55 %, Middle 64-66 %
+    #   en amical, L-027) » ; aucune leçon existante n'y répond.
+    lecons: []
     export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
   - id: E2
     reglage: focus de tir de deux tireurs
