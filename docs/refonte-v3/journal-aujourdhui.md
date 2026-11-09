@@ -300,6 +300,21 @@ Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligu
 
 **J6.** Rejeu avant (19,9 s) et après (22,0 s) : 8 lignes chacun ; mêmes heures (19:30, 19:45, 20:50) ; la ligne 19:45 de la ligue vient maintenant de `scheduled_at` ; « Dernier match exporté » passe du 08/11 (New York City Cyclones) au 09/11 (Garden City, L 104-120), effet du réexport de 15:33 Paris.
 
+## Plan du jour, étape 5d (critères écrits le 2026-11-09 16:10 Paris, avant le code)
+
+Étape 0 (`python -I pipelines/evaluer_decisions.py`, 15:53) : D-1075 `contradicted` (63,3), D-1099 `contradicted` (64,8) ; `learn.outcome` = 6 lignes (5 contredites, 1 confirmée).
+
+| # | Critère |
+|---|---|
+| H1 | `docs/attentes/experiences-amicales-basketvibe.yaml` : une entrée par expérience (id, réglage testé, niveaux A et B, ordre, nombre d'amicaux visé, export requis). E1 agressivité défensive uniforme sur les cinq, A = 2, B = 4, ordre A,B,A,B, au moins 4 amicaux ; E2 focus de tir de deux tireurs, niveau 4, 3 amicaux ; E3 focus offensif Primary à chaque quart-temps, 7 amicaux ; E4 aucun réglage, 16 amicaux de plus (réglage habituel). Elles passent dans cet ordre ; la suivante démarre quand la précédente a son nombre d'amicaux. |
+| H2 | Une expérience avance quand une ligne du registre `fait-<jour>.md` porte `[expérience=<id>:<niveau>]`, lue par `aujourdhui_sources.py` avec le même parseur que les clés R5 (ligne « reste à » ignorée). Aucune table. **Écart à la demande, tranché** : fenêtre = tout le registre, pas 7 jours (sur 7 jours E1 redémarrerait au 8e jour et E4, 16 amicaux à un par jour, ne finirait jamais). Une ligne qui porte aussi la clé du prochain amical (`[clé=Opper Cards 10/11]`) n'avance pas l'expérience pour ce match : elle le dit saisi à ce niveau. |
+| H3 | Pour le prochain amical à saisir (aujourd'hui ou demain, d'après `core.fixture`, verrou non passé), la ligne du plan porte : le réglage du test (« test E1 niveau A : agressivité 2 sur les cinq »), qui remplace l'agressivité du brief pour ce match ; l'heure limite lue dans `core.fixture` (verrou) ; les exports à faire après le match (aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour). Sans brief amical, la ligne est créée depuis `core.fixture` ; la ligne d'agenda du même amical n'est pas répétée. |
+| H4 | Aucune expérience en cours (toutes terminées ou fichier absent) : aucune ligne ajoutée, aucun plantage. |
+| H5 | Skill `deja-fait` : une phrase « quand la saisie d'un amical vient du réglage de test du plan, ajoute `[expérience=<id>:<niveau>]` à la ligne ». Rien d'autre ne change. |
+| H6 | `core.agenda_rule` : nouvelle colonne `decalage_min` (entier, minutes relatives au coup d'envoi de `core.fixture`), migration additive, aucun drop ; les règles de ligue à heure écrite (19:30, 19:45, 20:50) la reçoivent ; l'ancienne `heure` reste en repli. `aujourdhui.py` recale la ligne d'agenda (heure et heures citées dans le texte) quand le coup d'envoi du match de ligue du jour est connu. Liste avant/après collée. |
+| H7 | Tests figés, cas présent et cas absent pour chacun : alternance A,B,A,B de E1 ; passage à E2 quand E1 est complète ; fichier absent ; ligne « reste à » ignorée ; amical sans brief ; règle d'agenda avec décalage et sans coup d'envoi. Sortie ≤ 8 lignes, script ≤ 25 s, les 127 tests existants restent verts. |
+| H8 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée). L'amical du 10/11 contre Opper Cards (coup d'envoi 08:00 Paris, verrou 07:45) affiche E1 niveau A avec l'heure limite du calendrier. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
@@ -327,3 +342,4 @@ Ligue sans heure : 18 journées futures sans aperçu en bronze (la liste de ligu
 | 2026-11-09 12:39 | aujourd'hui | 16.1 | 18 |
 | 2026-11-09 15:34 | aujourd'hui | 19.8 | 18 |
 | 2026-11-09 15:46 | aujourd'hui | 21.9 | 19 |
+| 2026-11-09 15:54 | aujourd'hui | 22.2 | 19 |
