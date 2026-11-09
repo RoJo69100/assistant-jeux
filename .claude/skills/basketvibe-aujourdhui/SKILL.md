@@ -7,7 +7,18 @@ description: BasketVibe — que faire aujourd'hui : plan du jour depuis gold.bv_
 
 Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des agents (`outputs/basketvibe/briefs/`). Rythme de la semaine : skill basketvibe-saison [M§1.3]. Routine d'export de l'utilisateur : mémoire (après chaque match ; dimanche après 04:00 : Entraînement + Finances + Personnel).
 
-## Méthode (coût minimal : pas d'agent, quelques requêtes)
+## Méthode depuis le 09/11 : le script d'abord (Porte BasketVibe, critères PB1 à PB3 de `docs/refonte-v3/journal-aujourdhui.md`)
+1. **Première action, avant toute requête et tout autre outil** : `python -I pipelines/aujourdhui.py basketvibe`. Le script lit lui-même le registre du jour, les vues gold, les briefs et la décision d'achat ouverte. Affiche sa sortie **telle quelle** : sans reformulation, sans tableau, sans ajout dans ses lignes.
+2. **Complément, une ligne chacun, sous la sortie du script** (jusqu'à l'étape 5 du plan) :
+   - (a) matchs joués depuis le dernier passage, résultat par `my_result` : `gold.bv_match_report` ; pour un match de ligue joué et non exporté, `silver.bv_fixtures` ;
+   - (b) académie, seulement si un rapport est arrivé depuis le dernier passage ;
+   - (c) aperçu adverse et brief tactique du prochain match de ligue ou de coupe : `gold.bv_saisie_adversaires` et dernier `*-tactique.md` ; sinon la ligne « brief manquant » ;
+   - (d) ligne fixe : « Règle du 09/11 : pas de réserve fixe, solde jamais négatif ; le script utilise encore la réserve, sa ligne de capacité est à ignorer ».
+3. **Hooks** : la réponse passe `forme.py` et `controle.py` sans que leurs règles changent. Si un hook rejette, corrige seulement la ligne rejetée et note le rejet dans le tableau « Rejets de hooks » du journal.
+4. **Registre « déjà fait »** : ce que l'utilisateur déclare (export fait, réglage saisi) s'inscrit dans `outputs/basketvibe/fait-AAAA-MM-JJ.md` (skill `deja-fait`) ; le script le lit au passage suivant.
+5. **Porte** : chaque jour, demande à l'utilisateur ses quatre lignes (verdict, il manquait, en trop, faux) et inscris-les telles quelles dans le tableau « Retours de la Porte » du journal, sans les interpréter.
+
+## Ancienne méthode — remplacée par le script depuis le 09/11, utilisée seulement pour le complément ci-dessus (coût minimal : pas d'agent, quelques requêtes)
 0. **Avant toute requête et avant le premier rendu du plan** : charge le skill `deja-fait` et lis `outputs/basketvibe/fait-AAAA-MM-JJ.md` du jour ; ce qui est fait ne sort pas du plan.
 1. Heure actuelle (Paris) = la ligne « Heure de Paris » injectée à chaque message (hook `pipelines/heure_paris.py`) ou `python -I pipelines/heure_paris.py` ; jamais `date` du shell (UTC, 2026-11-07), ni `at time zone` par sql.py (bloqué par Cloudflare en https, 2026-11-07). Lis `select * from gold.bv_agenda where day <= current_date + 1` via `python -I pipelines/sql.py` (ou connecteur `Supabase`, `project_id = smkariminvfityondmmc`). Garde les actions d'aujourd'hui encore à venir ; après 18:00, ajoute celles de demain avant 10:00.
 2. Pour chaque action, ajoute **le détail concret** pris dans le dernier brief concerné (sans relancer d'agent) :
