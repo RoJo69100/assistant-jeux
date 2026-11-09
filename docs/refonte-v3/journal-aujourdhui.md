@@ -443,6 +443,18 @@ Après :
 - `fusion_main.py` : 4 commits ajoutés, `origin/main == HEAD` (f2cad2f). `fin_etape.py` : 0 commit d'avance, 22 suites vertes (dont `test_aujourdhui.py` 181/181).
 - Hors périmètre, non commité : `outputs/basketvibe/aujourdhui-2026-11-09.md`.
 
+## Plan du jour, étape 5h (critères écrits le 2026-11-09 16:50 Paris, avant le code)
+
+Contexte : main = c202605 ; playbook, étape 5, actions 7 et 8. `gold.bv_zone_jouee` lit la page d'avant-match (09/11 : Middle, zone jouée Perimeter). Écritures en base autorisées : une migration additive (`create or replace` de `gold.bv_zone_jouee` seulement ; autres vues nouvelles), rien d'autre.
+
+| # | Critère |
+|---|---|
+| N1 | Zone jouée : lister d'abord les lecteurs de `gold.bv_zone_jouee` (vues dépendantes, scripts, skills, cartes : grep et `pg_depend`) ; puis la vue lit la zone des réglages utilisés (`match-tactics-used`, `silver.bv_match_tactics`) quand le match est joué, la page d'avant-match seulement pour un match à venir. Mêmes colonnes en tête (aucune colonne retirée ni renommée). Preuve : amicaux des 07, 08, 09/11, avant et après (Perimeter pour les trois après). |
+| N2 | Entraînement : lire `gold.bv_saisie_entrainement` et la règle `entrainement_sam` (`core.agenda_rule`) ; le jour de la règle, une ligne du plan avec la fiche de saisie (joueur, focus attendu) et le contrôle focus attendu contre focus saisi : seulement les écarts ; zéro écart = zéro ligne. Dire ce que la vue sait faire et ce qui manque. |
+| N3 | Fatigue : lire `gold.bv_fatigue_plan` ; une ligne « sors X avant le match Y » seulement quand la fatigue projetée dépasse la zone verte de `core.alert_rule` (règle `fatigue`, `seuil_bas`) pour un joueur qui doit jouer (minutes > 0 dans la saisie du match de ligue ou de coupe à venir) ; aucun seuil écrit dans le code. |
+| N4 | Tests figés, un cas présent et un cas absent pour N2 et N3 ; sortie ≤ 8 lignes, durée ≤ 15 s ; les 181 tests existants restent verts. |
+| N5 | Rejeu `python -I pipelines/aujourdhui.py basketvibe` avant et après (sortie collée telle quelle). |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
