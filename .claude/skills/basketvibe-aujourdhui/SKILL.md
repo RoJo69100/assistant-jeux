@@ -12,8 +12,7 @@ Sources : `gold.bv_agenda` (calcul SQL de l'agenda) + les derniers briefs des ag
 2. **Complément, une ligne chacun, sous la sortie du script** (jusqu'à l'étape 5 du plan) :
    - (a) matchs joués depuis le dernier passage, résultat par `my_result` : `gold.bv_match_report` ; pour un match de ligue joué et non exporté, `silver.bv_fixtures` ;
    - (b) académie, seulement si un rapport est arrivé depuis le dernier passage ;
-   - (c) aperçu adverse et brief tactique du prochain match de ligue ou de coupe : `gold.bv_saisie_adversaires` et dernier `*-tactique.md` ; sinon la ligne « brief manquant » ;
-   - (d) ligne fixe : « Règle du 09/11 : pas de réserve fixe, solde jamais négatif ; le script utilise encore la réserve, sa ligne de capacité est à ignorer ».
+   - (c) aperçu adverse et brief tactique du prochain match de ligue ou de coupe : `gold.bv_saisie_adversaires` et dernier `*-tactique.md` ; sinon la ligne « brief manquant ».
 3. **Hooks** : la réponse passe `forme.py` et `controle.py` sans que leurs règles changent. Si un hook rejette, corrige seulement la ligne rejetée et note le rejet dans le tableau « Rejets de hooks » du journal.
 4. **Registre « déjà fait »** : ce que l'utilisateur déclare (export fait, réglage saisi) s'inscrit dans `outputs/basketvibe/fait-AAAA-MM-JJ.md` (skill `deja-fait`) ; le script le lit au passage suivant.
 5. **Porte** : chaque jour, demande à l'utilisateur ses quatre lignes (verdict, il manquait, en trop, faux) et inscris-les telles quelles dans le tableau « Retours de la Porte » du journal, sans les interpréter.
