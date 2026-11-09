@@ -205,7 +205,8 @@ def lire_sources(donnees, jour, base=BASE):
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
             "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour),
             "experiences": src.lire_experiences(base, jour), "refs_decisions": lire_refs_decisions(base, jour),
-            "fiche_entrainement": src.lire_fiche_entrainement(base, jour)}
+            "fiche_entrainement": src.lire_fiche_entrainement(base, jour),
+            "revue_hebdo": (Path(base) / f"revue-hebdo-{jour.isoformat()}.md").exists()}
 
 
 def lire_refs_decisions(base, jour):
@@ -777,6 +778,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     m = manque(donnees, erreurs, "gold.bv_agenda", "Équipe (aperçu, joueurs)")
     if m:
         ajoute(None, 2, m)
+    if jour.isoweekday() == 7:  # R8 (étape 6a) : revue hebdomadaire du modèle, le dimanche seulement
+        page = f"outputs/basketvibe/revue-hebdo-{jour.isoformat()}.md"
+        ajoute(None, 3, f"Revue de la semaine : à lire ({page})",
+               "" if S.get("revue_hebdo") else "page absente : python -I pipelines/revue_hebdo.py basketvibe",
+               "pipelines/revue_hebdo.py")
     ent = ligne_entrainement(donnees, S, jour, maintenant)  # N2 : contrôle de l'entraînement, remplace la ligne d'agenda
     if ent:
         ajoute(ent[0], 2, ent[1], ent[2], ent[3])

@@ -493,6 +493,25 @@ def cas_etape5a():
     yield from cas_boucle()
     yield from cas_entrainement()
     yield from cas_fatigue()
+    yield from cas_revue()
+
+
+def cas_revue():
+    """R8 (étape 6a) : ligne « Revue de la semaine : à lire (…) » le dimanche, rien les autres jours."""
+    DIM = dt.date(2026, 11, 15)
+
+    def revue(jour, existe=True):
+        p = auj.plan(figees(), {}, jour, dt.datetime.combine(jour, dt.time(10, 0)), "", {"revue_hebdo": existe})
+        return [a for a in p["actions"] if a[2].startswith("Revue de la semaine")]
+
+    l = revue(DIM)
+    yield "R8 dimanche, présent : une ligne « à lire » avec le chemin de la page", \
+        len(l) == 1 and l[0][2] == "Revue de la semaine : à lire (outputs/basketvibe/revue-hebdo-2026-11-15.md)" \
+        and l[0][3] == ""
+    yield "R8 dimanche, page absente : la ligne dit la commande", \
+        "python -I pipelines/revue_hebdo.py basketvibe" in revue(DIM, False)[0][3]
+    yield "R8 lundi, absent : aucune ligne de revue", revue(JOUR9) == []
+    yield "R8 samedi, absent : aucune ligne de revue", revue(dt.date(2026, 11, 14)) == []
 
 
 def cas_fatigue():
