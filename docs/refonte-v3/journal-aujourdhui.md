@@ -569,6 +569,18 @@ Changements proposés :
 - **S5** : `test_revue_hebdo.py` 28 → **34/34** (S2 : 2 cas, S3 : 4 cas) ; `test_aujourdhui.py` **197/197**.
 - `fusion_main.py` : 4 commits ajoutés, `origin/main == HEAD` (3eb37ed). `fin_etape.py` : 0 commit d'avance, 23 suites vertes.
 
+## Versions du moteur, étape 6c (critères écrits le 2026-11-09 17:13 Paris, avant le code)
+
+Contexte : aucune version du moteur en base ; l'étude des événements et la préanalyse la déduisent des dates (`preanalyse-matchs-basketvibe.md` § 1.1). v5 annoncé en ligue « vers le milieu de la saison », sans date. Écritures autorisées : une migration additive (une table, une vue, aucun drop) et les lignes de la table.
+
+| # | Critère |
+|---|---|
+| V1 | Table `core.engine_version` (`game`, `version`, `competition_kind`, `start_date`, `end_date` nullable, `source`, `statut` ∈ {annoncé, déduit}), lecture pour `assistant_ro`. Vocabulaire de `competition_kind` = celui de `core.fixture` (ligue, coupe, amical). Cinq lignes BasketVibe, exactement : ligue v3 du 07/09 au 26/10 ; ligue v4 depuis le 02/11 ; coupe v4 du 28/10 au 31/10 ; amical v4 du 11/10 au 27/10 ; amical v5 depuis le 28/10. Chaque ligne cite sa source (skill `basketvibe-communaute` 02-1, skill `basketvibe-saison`, préanalyse § 1.1, étude) et dit si sa date est annoncée ou déduite. Début de la ligue v3 = 07/09 (premier match de la saison 1, déduit) : le skill dit aussi « v3 en ligue depuis la journée 12 » (03/10) ; conflit écrit dans la source de la ligne, la règle de l'étude (v3 jusqu'au 26/10) est gardée. |
+| V2 | Vue `gold.bv_match_engine_version` : un match joué de `core.fixture` = une ligne (aucun doublon), version et statut de la ligne dont la compétition est la sienne et la période contient son jour ; aucune ligne → version « non attribuée ». Compte par version et compétition collé ; matchs « non attribuée » listés. Connu avant le code : coupe du 13/09, amical du 10/10 et coupe du 01/11 sont hors des cinq lignes. |
+| V3 | Contrôle sur les 78 matchs de `silver.bv_match_events` : version de la vue (nos matchs) ou, pour les matchs des autres équipes absents de `core.fixture`, la même jointure sur `core.engine_version` (competition `league/cup/friendly` → `ligue/coupe/amical`) ; comparée à `groupe()` de `etude_evenements_basketvibe.py` (fonction importée, script non modifié). Liste des écarts ; cible zéro. Connu avant le code : l'amical du 10/10 est « v3 amical » dans l'étude et hors des cinq lignes (écart attendu : 1). |
+| V4 | Revue hebdomadaire, une ligne sous l'en-tête : « Version du moteur : ligue v4, amical v5 ; décisions ouvertes d'une version antérieure : n » (version en cours = ligne dont la période contient le jour de la revue ; décision ouverte = `learn.decision` BasketVibe au statut `proposed` ou `done`, sans `learn.outcome` ; version antérieure = décidée, en jour de Paris, avant le `start_date` le plus récent). Nouvelle ligne de version = clé `jeu/compétition/version/début` absente de l'instantané précédent ; alors une ligne liste les identifiants de ces décisions ouvertes, sans rien marquer. Instantané précédent sans clé de versions : aucune liste. Lecture seule. |
+| V5 | Tests figés (`test_revue_hebdo.py`) : V4 présent et absent (ligne de version, liste après une nouvelle ligne, aucune liste sans nouvelle ligne) ; 197 tests du plan et 34 de la revue verts ; page réelle ≤ 60 lignes. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
