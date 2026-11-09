@@ -318,3 +318,58 @@ Contexte : le plan dit « Acheter un SF de note ≥ 61,0 » sans nom ni prix, et
 | accepted, expired | — | 0 |
 ```
 - 28 décisions d'achat : 7 suivies (25 %), 3 rejetées (11 %), 18 sans suite (64 %). Aucune n'a de leçon (`lesson_id` nul) : l'effet des 7 suivies n'est pas mesuré en base. Les 3 rejetées : Waleed Al-Anazi, Salvador Aquino (190 000), Fujita C / Stan… (07-08/11).
+
+### Étape 2b — X2, X3, X6, X8 (commit 1278104, `aujourdhui.py` et `test_aujourdhui.py` seulement)
+
+- **Requêtes** : `gold.bv_market_bargains` et `gold.bv_market_candidates` ne lisent plus que les annonces ouvertes (`ends_paris` nul ou futur) ; les candidats sont reliés à `gold.bv_price_ref_ps` (tranche de PS × tranche d'âge) pour le p75. Le garde « Marché de moins de 24 h » est supprimé : la ligne dit l'âge de la page.
+- **X2** : jusqu'à 3 lignes « Enchère maximale M sur NOM (POSTE, PS x) » + détail « plafond de revente (95 % du p25) ; prix à l'export … ; fin JJ/MM HH:MM ; marge de revente p25 … ; page du Marché de N h : le prix a pu monter ; fenêtre de mise non mesurée… ». Conditions inchangées (référence fiable, `ref_n` ≥ 5, marge p25 > 0, capacité), aucune nouvelle valeur seuil.
+- **X3** : « Acheter un PG de note ≥ X : NOM (PS) : prix à l'export, fin, plafond de besoin M, à valider ; … » (3 au plus) ; plafond = min(p75 PS/âge, capacité) ; une annonce déjà au-dessus de son plafond est écartée ; sans annonce : « aucune annonce au poste SF dans le Marché du JJ/MM (annonces encore ouvertes de l'export) ». Correction au passage : l'ancien code cherchait les noms au poste le plus faible alors que la ligne nommait le poste mince ; les noms viennent maintenant du poste de la cible.
+- **Écart au critère X3** (annoncé avant le code) : le p75 est celui de la tranche de PS et d'âge, `gold.bv_price_ref_ps` n'ayant pas de colonne poste.
+- **X6** : 11 cas ajoutés (X2 présent ×2 et absent ×2, X3 présent ×2 et absent ×2, X4, X8, X6) ; le cas « Marché périmé = pas d'enchère » (TRF-4) est remplacé : il affirmait l'ancienne règle de masquage à 24 h. Une enchère qui finit aujourd'hui passe en priorité 1 (horizon = aujourd'hui) : avec 7 autres actions, Martin et Dupuis restent et la sortie tient en 8 lignes.
+- Résultat : `python -I pipelines/test_aujourdhui.py` → **208/208** (197 + 11 ; TRF-4 réécrit en place, même nombre) ; `python -I pipelines/test_revue_hebdo.py` → **38/38**.
+
+### Étape 3 — rejeu, fusion et fin d'étape (2026-11-09 17:4x Paris)
+
+**X7 — `python -I pipelines/aujourdhui.py basketvibe`, avant (commit 018a921), 10,0 s :**
+```
+19:30 — Avant 19:45 si possible : exporter la page Preview du match J4 (effectif adverse à jour)
+    (gold.bv_agenda)
+19:45 — Ligue J4 contre Naked Spartans (lun. 09/11) : saisis la tactique maintenant — heure limite
+    du verrou 19:45 ; le test est perdu si : Faux si à J4 le Q3 est < 0 et le Q2 < −5, ou si
+    defense_tier n'est pas 0 pour tous (briefs/2026-11-08-tactique.md)
+20:50 — Après le match (~20:50) : exporter la page du match J4 (puis analyse de l'agent Match)
+    (gold.bv_agenda)
+07:45 — Amical contre Opper Cards (mar. 10/11) : saisis le test E1 niveau A : agressivité 3 à
+    l'écran (cran 2, équilibrée) sur tous les joueurs — heure limite du verrou 07:45 ; réglage du
+    test à la place de celui du brief ; après le match exporte : aperçu, box scores par quart-temps,
+    réglages utilisés, page Équipe du jour ; E1 : 0 vérifié sur 4
+    (docs/attentes/experiences-amicales-basketvibe.yaml, core.fixture)
+--:-- — Analyse : lance l'agent analyste ce soir — 2 défaites d'affilée en ligue ou coupe (dernière
+    : Póvoa Riptide, 07/11, ligue) ; dernier brief analyste du 05/11 (core.fixture,
+    gold.match_objective)
+Autres points (4) : Acheter un SF de note ≥ 61,0 ; Vendre Catalin Ungureanu : économie 19 030 par
+    semaine, remplaçant Maël Bernard au poste C, écart 0,7 ; Analyse : Dernier match exporté : 09/11
+    (amical, L 104-120 contre Garden City) ; Académie, rapport du 05/11 : 3 prospects ; valeur d'un
+    High inconnue
+Garder : effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin) ;
+    effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
+    ; effectif, jeunes : ni titre acquis ni rien à jouer sur les 7 prochains jours
+    (gold.match_objective) ; finances : seuil non atteint (résultat hebdo estimé +96 640, la
+    réduction de charges commence sous 0) ; transferts : pas d'enchère nouvelle, l'export du Marché
+    a plus de 24 h ; Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2,
+    semaine du 2026-11-02) : règle de personnel non tranchée, à valider
+Exports à faire aujourd'hui : Équipe (aperçu, joueurs) (30 h) ; Amical : tactique du match (30 h) ;
+    Marché (enchères) (30 h)
+```
+**Après (commit 1278104), 11,3 s (≤ 15 s) :** identique sauf deux entrées.
+```
+Autres points (4) : Acheter un SF de note ≥ 61,0 : aucune annonce au poste SF dans le Marché du
+    08/11 (annonces encore ouvertes de l'export) ; Vendre Catalin Ungureanu : … (inchangé)
+Garder : … ; transferts : aucune affaire fiable ouverte dans le Marché du 08/11 qui tienne dans le
+    solde moins les enchères encore ouvertes (capacité restante : 960 181) ; … (inchangé)
+```
+- Les lignes d'enchère ne s'affichent pas aujourd'hui : les 20 annonces de la page du 08/11 sont finies (X1). Le code X2/X3 n'est donc éprouvé que par les cas figés ; sur la base il rend les deux messages ci-dessus (nouveauté : le plan dit pourquoi, avec la date du Marché, au lieu de « plus de 24 h »).
+- La page du Marché exportée ne couvre que 20 annonces sur 145 (X1) : « aucune annonce » vaut pour l'export, pas pour tout le marché ; un export des pages 2 à 7 serait nécessaire pour trouver un SF.
+
+**`python -I pipelines/fusion_main.py`** (commits 29ad70a..1278104) : `Poussé : origin/main == HEAD.` (12781048f143).
+**`python -I pipelines/fin_etape.py`** : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, tests : aujourdhui 208/208, aujourdhui_hockeynation 45/45, contexte_budget 9/9, controle 43/43, decision 15/15, etude_evenements 24/24, evaluer 34/34, fin_etape 5/5, forme 38/38, fusion_main 5/5, garde_heredoc 26/26, garde_push 6/6, heure_paris 7/7, match_engine_etat 36/36, migrer 19/19, migrer_kb 17/17, palier5 15/15, police 24/24, preanalyse_scores 25/25, relier_faits 8/8, revue_hebdo 38/38, sql 23/23, agents 0 échec ; `HEAD dans origin/main : oui`.
