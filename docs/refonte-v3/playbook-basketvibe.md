@@ -176,7 +176,7 @@ Un seul réglage change à la fois ; les niveaux alternent A, B, A, B. Export re
 
 | # | Réglage testé | Niveaux | Pourquoi | n visé | Export requis | Statut |
 |---|---|---|---|---|---|---|
-| E1 | agressivité défensive, uniforme sur nos cinq | A = 2, B = 4 | chiffre 2 (fautes) : 3 tranches de 150 tirs adverses, 859 tirs disponibles, tous en tranche « soft » | au moins 4 amicaux (2 à 2, 2 à 4) | 4 pages du match et page Équipe | non commencé — non vérifié (aucune table de suivi) ; réglage qui change le jeu : à décider par l'utilisateur |
+| E1 | agressivité défensive, uniforme sur nos cinq | A = 2, B = 4 | chiffre 2 (fautes) : 3 tranches de 150 tirs adverses, 859 tirs disponibles, tous en tranche « soft » | au moins 4 amicaux (2 à 2, 2 à 4) | 4 pages du match et page Équipe | validé par l'utilisateur le 2026-11-09 : agressivité défensive uniforme 2 puis 4 en amical ; le résultat de ces amicaux lui est indifférent |
 | E2 | focus de tir de deux tireurs | A = niveau 4 ; B = niveau 2 (référence) | chiffre 5 (part de tirs à 3 points) : 15 joueurs-matchs au niveau 4 requis, 9 en v5 | 3 amicaux en A (6 joueurs-matchs de plus) | 4 pages du match et page Équipe | non commencé — non vérifié |
 | E3 | focus offensif Primary à chaque quart-temps | A = Primary ; B = Normal (référence) | chiffre 6 (focus offensif) : 30 joueurs-quarts Primary requis, 2 en v5 | 7 amicaux en A (4 joueurs-quarts par match) | 4 pages du match et page Équipe | non commencé — non vérifié |
 | E4 | aucun (réglage habituel) | — | chiffre 1, 3 points en v5 : 871 tirs requis, 347 disponibles | 16 amicaux de plus | 4 pages du match et page Équipe | non commencé — non vérifié |
