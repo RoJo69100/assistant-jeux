@@ -192,6 +192,18 @@ Constat : un Claude de cloud enfreint de façon répétée trois règles de form
 | T4 | `pipelines/fin_etape.py` (lecture seule, code retour 1 si HEAD n'est pas dans origin/main) : branche, HEAD, origin/main, commits d'avance sur main, `git status --short`, dernière ligne de chaque `pipelines/test_*.py`. Tests figés (`pipelines/test_fin_etape.py`). |
 | T5 | Aucun autre hook, aucune autre règle en prose ; `CLAUDE.md` reçoit une seule ligne : « fin d'étape = python -I pipelines/fusion_main.py puis python -I pipelines/fin_etape.py, sortie collée ». |
 
+## Boucle d'apprentissage, étape 5b-4 (critères écrits le 2026-11-09 15:20 Paris, avant toute requête)
+
+Réponses de l'utilisateur : 1076 = pas misé ; E1 = oui, agressivité défensive uniforme 2 puis 4 en amical, le résultat de ces amicaux lui est indifférent ; l'amical Knight Jays du 07/11 a été exporté, il peut le réexporter si besoin. Écriture autorisée sur la base : `python -I pipelines/decision.py statut 1076 rejected --note "1076 = rejeté (l'utilisateur n'a pas misé)"`. Aucun script, vue, règle ni skill modifié.
+
+| # | Critère |
+|---|---|
+| F1 | La décision 1076 passe en `rejected` avec la note ci-dessus ; aucun autre statut n'est touché. |
+| F2 | `docs/refonte-v3/playbook-basketvibe.md`, file d'expériences amicales, ligne E1 : statut « validé par l'utilisateur le 2026-11-09 : agressivité défensive uniforme 2 puis 4 en amical ; le résultat de ces amicaux lui est indifférent ». Cette ligne seule change. |
+| F3 | Diagnostic de l'amical Knight Jays du 07/11 (conseil 1075 ; `opp_fg2_pct` de `gold.bv_match_report`, `competition = 'friendly'`, valeur déjà bonne pour 1071). Cause choisie dans la liste fermée, écrite avant de regarder : (a) aucune page du match en bronze ; (b) pages en bronze mais aucune vue silver ne les lit ; (c) lues mais exclues par `gold.bv_match_report` ; (d) match absent de `core.fixture` ou non marqué joué ; (e) autre. Pour chaque hypothèse écartée, une requête collée (`bronze.raw_pages` par date et type de page autour du 07/11, `silver.bv_matches`, `core.fixture`, définition SQL de la vue). |
+| F4 | Pour chaque amical joué des 10 derniers jours (`core.fixture`) : présent ou non dans `gold.bv_match_report`, avec la date. Tableau collé. |
+| F5 | Cause (a) : liste exacte des pages à réexporter (box score, play-by-play, réglages utilisés, aperçu). Causes (b), (c), (e) : la plus petite correction, en une phrase, sans l'appliquer. |
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
