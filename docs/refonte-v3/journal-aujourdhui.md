@@ -357,3 +357,5 @@ Contexte : playbook, étape 5, actions 3 et 6 ; main = 9dc4365, plan en 22,5 s (
 | 2026-11-09 15:46 | aujourd'hui | 21.9 | 19 |
 | 2026-11-09 15:54 | aujourd'hui | 22.2 | 19 |
 | 2026-11-09 16:00 | aujourd'hui | 22.5 | 20 |
+| 2026-11-09 16:05 | aujourd'hui | 23.0 | 20 |
+| 2026-11-09 16:07 | aujourd'hui | 7.5 | 20 |

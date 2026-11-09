@@ -110,25 +110,40 @@ def charger_sql():
     return mod
 
 
+PARALLELE = 8  # requêtes simultanées (K1, étape 5e) : elles sont indépendantes ; l'ordre du résultat reste celui de REQUETES
+
+
 def lire_tout(executer, jour=None):
-    """{nom: (colonnes, lignes) | None | 'rejeu'} ; None = lecture impossible, message dans erreurs."""
-    donnees, erreurs, n = {}, {}, 0
+    """{nom: (colonnes, lignes) | None | 'rejeu'} ; None = lecture impossible, message dans erreurs.
+    Les requêtes partent en parallèle (K1) ; donnees et erreurs sont remplis dans l'ordre de REQUETES."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    def une(sql):
+        try:
+            return executer(sql), None
+        except SystemExit as e:  # sql.py termine par sys.exit(message)
+            return None, str(e)
+        except Exception as e:  # noqa: BLE001 - une vue en échec ne doit pas arrêter le plan
+            return None, f"{type(e).__name__}: {e}"
+
+    a_lire = {}
     for nom, sql in REQUETES.items():
         if jour:
             if nom not in REJEU:
-                donnees[nom] = "rejeu"
                 continue
             sql = REJEU[nom].format(jour=jour)
-        try:
-            donnees[nom] = executer(sql)
-            n += 1
-        except SystemExit as e:  # sql.py termine par sys.exit(message)
-            donnees[nom], erreurs[nom] = None, str(e)
-            n += 1
-        except Exception as e:  # noqa: BLE001 - une vue en échec ne doit pas arrêter le plan
-            donnees[nom], erreurs[nom] = None, f"{type(e).__name__}: {e}"
-            n += 1
-    return donnees, erreurs, n
+        a_lire[nom] = sql
+    with ThreadPoolExecutor(max_workers=PARALLELE) as pool:
+        futurs = {nom: pool.submit(une, sql) for nom, sql in a_lire.items()}
+    donnees, erreurs = {}, {}
+    for nom in REQUETES:
+        if nom not in futurs:
+            donnees[nom] = "rejeu"
+            continue
+        donnees[nom], err = futurs[nom].result()
+        if err is not None:
+            erreurs[nom] = err
+    return donnees, erreurs, len(futurs)
 
 
 def lignes_de(donnees, nom):
