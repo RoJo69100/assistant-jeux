@@ -285,3 +285,36 @@ Contexte : le plan dit « Acheter un SF de note ≥ 61,0 » sans nom ni prix, et
 - **X8 Deux plafonds distincts** : « plafond de revente » pour une affaire, « plafond de besoin » pour un joueur à jouer ; jamais le même mot pour les deux.
 
 Étapes : 1 critères (ce commit) ; 2a X1, X4, X5 (journal) ; 2b X2, X3, X6, X8 (code et tests) ; 3 `python -I pipelines/fusion_main.py` puis `python -I pipelines/fin_etape.py`, sorties, rejeu avant/après et résultats collés ici.
+
+### Étape 2a — X1, X4, X5 (lecture seule, 2026-11-09 17:28 Paris)
+
+**X1 Constat.**
+- Dernière page Marché en bronze (`api/v1/transfer-auctions?page=1&page_size=20`, id 38396) : **2026-11-08 10:10:05 UTC = 11:10 Paris**, soit environ 30 h avant la lecture. Une seule page de 20 annonces a été exportée sur `total` = 145 (capture du 08/11 : page 1 seulement) : l'export couvre 20 annonces sur 145.
+- `select count(*) filter (where ends_paris > now() at time zone 'Europe/Paris') ouvertes, count(*) filter (where ends_paris <= …) finies, count(*) total from gold.bv_market_bargains` → **0 ouvertes, 20 finies, 20** (fins du 08/11 13:16 au 08/11 21:10). Même résultat pour `gold.bv_market_candidates` : **0 ouvertes, 20 finies, 20 (10 avec `enters_top8`)**. `silver.bv_transfer_auctions` : 1 234 lignes, 0 avec `ends_at` futur.
+- `gold.bv_market_bargains` (5 premières lignes par marge p25, page telle quelle) :
+```
+| name | position | ps | price_now | bid_ceiling_resale | resale_margin_p25 | ref_n | ref_reliable | ends_paris |
+| Hyun-soo Zhang | PG | 55.1 | 190000 | 731500 | 541500 | 60 | True | 2026-11-08T19:55:44 |
+| Arjun Tan | PF | 59.9 | 360000 | 731500 | 371500 | 60 | True | 2026-11-08T19:56:38 |
+| Bogusław Grabiec | C | 55.3 | 450000 | 731500 | 281500 | 60 | True | 2026-11-08T19:12:17 |
+| Dev Tanaka | SF | 58.3 | 520000 | 731500 | 211500 | 60 | True | 2026-11-08T19:56:24 |
+| Gabriele Greco | PG | 46.8 | 251 | 950 | 699 | 33 | True | 2026-11-08T15:06:48 |
+```
+- `gold.bv_market_candidates` (5 premières par gain) : Dev Tanaka SF 58,3 à 520 000 (`would_rank_in_slot` 2) ; Bogusław Grabiec C 55,3 à 450 000 ; Cyprian Cieślak PG 58,5 à 2 650 000 ; Arjun Tan PF 59,9 à 360 000 ; Mohit Saxena SG 59,5 à 787 777 — toutes finies le 08/11 entre 19:12 et 19:56.
+- **Lecture** : toutes les annonces de la page sont finies. Avec la règle « ne montrer que les annonces ouvertes », X2 et X3 afficheront **zéro ligne de nom** sur cette page aujourd'hui ; la version codée ne se vérifie que sur des cas figés. Aucun SF au PS demandé n'est ouvert : le message « aucune annonce au poste SF dans le Marché du 08/11 » sera le rendu réel.
+
+**X4 Moment de miser : NON.** L'historique des mises (instants et montants) n'existe ni en bronze ni en gold.
+- `select source_url, count(*) n, max(captured_at) from bronze.raw_pages where game='basketvibe' and payload::text ~* '(bid_history|bidHistory|"bids"|bid_events|bidder|bid_at|placed_at|bid_amount|last_bid|highest_bid|bid_time)' group by 1` → 4 URL, toutes `api/v1/players/<id>/transfer-auction` (7 pages, 16/10 au 30/10). Elles portent seulement l'**état courant** : `bid_count`, `display_price`, `my_max_bid`, `min_max_bid`, `heat_level`, `leading_bidder_team_*`, `is_viewer_leading`, `ends_at`, `blind_ends_at`. Aucune liste de mises ni aucun horodatage de mise (page 25618 lue en entier).
+- Page `transfer-auctions` (id 38396) : mêmes champs d'état (`has_bids`, `bid_count`, `heat_level`, `display_price`, `ends_at`, `scheduled_end_at`, `blind_ends_at`), pas de mises.
+- `gold.bv_transfer_history` : colonnes `sold_on, fee, starting_price, from_team, to_team, …` — un prix final par vente, pas de mise intermédiaire ; `silver.bv_transfers` : `settled_at, fee`.
+- Conséquence : chaque ligne d'enchère dit « fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond ».
+
+**X5 Bilan des conseils d'achat** (`select status, count(*) from learn.decision where game='basketvibe' and domain='achat' group by 1`) :
+```
+| statut | correspondance | n |
+| done | suivies | 7 |
+| rejected | rejetées | 3 (2 avec note de l'utilisateur, 1 sans) |
+| proposed | sans suite | 18 (du 20/10 au 02/11) |
+| accepted, expired | — | 0 |
+```
+- 28 décisions d'achat : 7 suivies (25 %), 3 rejetées (11 %), 18 sans suite (64 %). Aucune n'a de leçon (`lesson_id` nul) : l'effet des 7 suivies n'est pas mesuré en base. Les 3 rejetées : Waleed Al-Anazi, Salvador Aquino (190 000), Fujita C / Stan… (07-08/11).
