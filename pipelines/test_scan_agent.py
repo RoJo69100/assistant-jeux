@@ -39,6 +39,11 @@ def nb_fuites(entrees):
 CAS = [
     ("bash sql lecture", not faute("Bash", {"command": 'python -I pipelines/sql.py "select 1" --max-rows 30'})),
     ("bash script d'étude", not faute("Bash", {"command": "python -I pipelines/etudes/t1.py"})),
+    ("bash sql chemin absolu", not faute("Bash", {"command": 'python -I /home/user/assistant-jeux/pipelines/sql.py "select 1" --max-rows 30'})),
+    ("bash script d'étude chemin absolu", not faute("Bash", {"command": "python -I /home/user/assistant-jeux/pipelines/etudes/t1.py"})),
+    ("bash chemin absolu hors dépôt", faute("Bash", {"command": 'python -I /home/user/autre/pipelines/sql.py "select 1"'})),
+    ("bash chemin absolu script hors dossier", faute("Bash", {"command": "python -I /home/user/assistant-jeux/pipelines/etude_evenements_calculs.py calculs"})),
+    ("bash chemin absolu table kb", faute("Bash", {"command": 'python -I /home/user/assistant-jeux/pipelines/sql.py "select * from kb.notes"'})),
     ("bash cat", faute("Bash", {"command": "cat x"})),
     ("bash composé", faute("Bash", {"command": 'python -I pipelines/sql.py "select 1" && cat x'})),
     ("bash script hors dossier", faute("Bash", {"command": "python -I pipelines/etude_evenements_calculs.py calculs"})),

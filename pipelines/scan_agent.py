@@ -60,6 +60,7 @@ def hors_bornes(appels_, fichiers_interdits: list[str], tables_interdites: tuple
     for nom, inp in appels_:
         if nom == "Bash":
             cmd = inp.get("command", "").strip()
+            cmd = re.sub(r"^(python -I )" + re.escape(RACINE), r"\1", cmd)  # chemin absolu du dépôt = chemin relatif
             if not (BASH_SQL.match(cmd) or BASH_ETUDE.match(cmd)):
                 fautes.append(f"Bash hors bornes : {cmd[:120]}")
             elif TABLE_INTERDITE.search(cmd):
