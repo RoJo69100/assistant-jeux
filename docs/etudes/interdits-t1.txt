@@ -1,0 +1,18 @@
+# Fichiers et dossiers interdits à l'agent data-scientist pendant T1 (un chemin par ligne, relatif au dépôt).
+# Recherche du 2026-11-10 11:58 (Paris), tout le dépôt hors .git, chaînes 6,81 6.81 4,02 4.02 9,01 9.01 bornées.
+.claude/skills/derbymanager-regles/references/03-joueurs-et-attributs.md
+docs/refonte-v3/etude-evenements-basketvibe-sortie.md
+docs/refonte-v3/etude-evenements-basketvibe.md
+docs/refonte-v3/journal-aujourdhui.md
+docs/refonte-v3/playbook-basketvibe.md
+docs/superpowers/plans/2026-11-10-data-scientist.md
+docs/superpowers/specs/2026-11-10-data-scientist-design.md
+outputs/derbymanager/dossier/2026-11-01-entrainement-discord-faible.txt
+outputs/derbymanager/dossier/2026-11-04-achat.md
+outputs/derbymanager/veille/connaissance.md
+outputs/derbymanager/veille/partie-A.md
+pipelines/test_scan_agent.py
+# Ajouts : méthode publiée, conception, protocole
+pipelines/etude_evenements_calculs.py
+docs/superpowers/
+docs/etudes/test-data-scientist-basketvibe.md
