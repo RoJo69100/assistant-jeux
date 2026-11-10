@@ -293,7 +293,7 @@ def verifier_j_moins_1(tableau: str, donnees) -> list:
     noms = []
     for cols, lignes in forme.tableaux(tableau):
         if cols and cols[0] == "joueur" and forme.idx(cols, "q1") >= 0:
-            noms = [l[0].replace("*", "").strip() for l in lignes if l and l[0].strip()]
+            noms = [re.sub(r"\s*\([^)]*\)", "", l[0].replace("*", "")).strip() for l in lignes if l and l[0].strip()]  # R10 : « Bernard (18 ans) » -> « Bernard »
             break
 
     def est(cellule, complet):

@@ -384,6 +384,11 @@ def cas_blocs_2_3():
             yield f"test_j_moins_1_signale_blesse_fatigue_vendu : {nom} : {joueur}", len(trouve) == 1 and motif in trouve[0]
         yield f"test_j_moins_1 : {nom} : ni Fournier acheté ni joueur absent du tableau", not any("Fournier" in x or "Inconnue" in x for x in ecarts)
         yield f"test_j_moins_1 : {nom} : écarts passent forme", forme.fautes_de("\n".join(l), "basketvibe") == []
+    # R10 : un nom annoté « (18 ans) » dans le tableau (brief d'amical de l'agent) est reconnu comme les autres
+    annote = JOUEURS.replace("| Richard |", "| Richard (25 ans) |").replace("| Gimenez |", "| **Gimenez (26 ans)** |")
+    ecarts_annote = qfb.verifier_j_moins_1(annote, dj)
+    yield "test_j_moins_1_nom_annote_age : vendu et blessé encore signalés", any("Richard" in x and "vendu" in x for x in ecarts_annote) \
+        and any("Gimenez" in x and "blessé" in x for x in ecarts_annote)
     yield "test_j_moins_1_aucun_ecart", qfb.verifier_j_moins_1(JOUEURS, donnees_t()) == []
     yield "test_j_moins_1_forme_basse", any("Gimenez" in x for x in qfb.verifier_j_moins_1(JOUEURS, donnees_t(**{"gold.bv_daily_alerts": T(
         ["priority", "category", "alert"], [(2, "forme", "Marc Gimenez : forme 2 (attaque −8 %)")])})))
