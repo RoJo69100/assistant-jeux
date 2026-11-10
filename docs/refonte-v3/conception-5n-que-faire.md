@@ -47,7 +47,7 @@ Règle de bloc vide (tous les blocs) : « donnée manquante : exporte <écran> �
   - une action reportée à demain au lieu d'être préparée aujourd'hui ;
   - une composition affichée sans la vérification à J-1 ;
   - un chiffre qui ne sort pas d'une requête du même passage ;
-  - une durée qui dépasse nettement les 15 s actuelles.
+  - une durée qui dépasse nettement le budget de 30 s (porté de 15 s à 30 s par A6 : 16,7 s mesurés).
 
 ## 5. Contraintes
 

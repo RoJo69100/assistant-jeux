@@ -795,6 +795,219 @@ Les quatre onglets de ligue ont leur dernière capture le 2026-10-16 (599 h). **
 
 **Durée mesurée : 16,7 s** pour lecture (40 requêtes en parallèle) + `plan()` + `rendre_blocs` ; le budget est de 15 s. Dépassement inscrit ici et non masqué : c'est la lecture qui domine (13,4 s pour 37 requêtes mesurés en T4, 4,6 s à 4,9 s pour chaque vue `bv_sell_*`). À traiter avant la réception (T8) : aucune optimisation n'est faite dans ce commit.
 
+### Ajustements A1 à A6 avant T7 (10/11, 15:31 à 15:50 Paris)
+
+#### Budget du script : 30 s (A6)
+
+Raison : la lecture parallèle de 40 requêtes mesure 13,4 s (T4) et le rendu complet 16,7 s (T6) ; chaque vue `bv_sell_*` coûte à elle seule 4,6 s à 4,9 s et les requêtes partent déjà 8 par 8 (`PARALLELE = 8`, inchangé). Le budget de 15 s datait d'un script à 13 requêtes (journal de durée du 06/11, 11 s à 14 s) ; 30 s laisse la marge d'une 41ᵉ à 50ᵉ requête sans réécrire la lecture. Le plan (« Contraintes globales »), la conception (§ risques) et la constante `BUDGET_SECONDES` disent 30 s ; T8 mesure le vrai script contre cette valeur.
+
+#### Vérifications en lecture seule demandées (10/11, 15:2x à 15:4x Paris, rien modifié)
+
+(a) **Amical du 29/10** (Chomelix Cow contre BC Statyba Telsiai) : `silver.bv_match_tactics` compte maintenant **54 lignes pour 54 matchs** (53 avant) ; la jointure `core.fixture` (jour 2026-10-29, amical) renvoie `dans_tactics = True`, `defensive_focus` et `player_directives` renseignés (`[{"focus": "normal", "position": "SG", "area_step": 3, …`) ; sur la table entière : 0 ligne sans `defensive_focus`, 0 sans `player_directives`. La coupe du même jour (Paris Saint-Germain) n'a pas de ligne de réglages (`dans_tactics = False`), ce qui est sans objet pour l'étude des amicaux.
+
+(b) **Page `/c/<club>` captée** (kk-uola, `bronze.raw_pages` id 40091, onglet `?tab=statistics`, capturée le 10/11 à 14:19 UTC) lue par `sql.py --page-id 40091 --payload-path` : `body.players` liste **10 joueurs** (indices 0 à 9 ; l'indice 10 est vide), avec les clés `age, avatar_id, avatar_race, experience, fatigue, first_name, form, friendly_season, has_player_avatar, height_cm, id, injury_return_on, is_academy_junior, is_former_roster, is_on_open_transfer_list, jersey_number, last_name, nationality_code, position, season, skill_brackets, skills_visibility, weight_kg`. Les compétences sont des **fourchettes**, pas des valeurs exactes : `skill_brackets` = pour chacune des 8 compétences un `{min, max}` d'amplitude 20 (exemple du joueur 0 : `defense 61-80`, `passing 41-60`, `two_point 61-80`, …) et `skills_visibility = "bracket"`. Sont exacts : `form` (4), `fatigue` (16,89), `age`, `height_cm`, `weight_kg`, `experience`, `position`, ainsi que les totaux et moyennes de saison (`season.totals`, `season.averages`, `games_played`). Les autres onglets `/c/kk-uola` : la page d'accueil porte `rows` (classement de ligue : `pa`, `pf`, `diff`, …) et un historique de saisons (`seasons`).
+Nombre de `/c/<club>` distincts (URL sans paramètre) : **39 clubs en base** (306 captures, première le 20/10, dernière le 10/11 à 14:23 UTC) ; **35 clubs capturés dans les 2 dernières heures** (l'export de clubs de tête de l'utilisateur) ; **34 clubs ont une page `?tab=statistics`** (effectif et fourchettes), 36 captures de cet onglet.
+
+#### Notes d'exécution des ajustements
+
+- A1 : trois lignes dans `docs/etudes/demandes-traitees.md` (deux écartées, une faite) ; l'export de l'amical du 29/10 est consigné dans `outputs/basketvibe/fait-2026-11-10.md` (« déclaré par l'utilisateur », vérifié par (a)).
+- A2 : le traitement de l'entraînement est le dimanche (skill `basketvibe-entrainement`, `references/01-fonctionnement.md` l. 2) ; le prochain est le 15/11, donc demandes le samedi 14/11 et le lundi 16/11.
+- A3 : sur les vraies données la requête `matchs_captes` renvoie 58 matchs (26 `match`, 3 `cup`, 29 `friendly`), dont 2 captés pour la première fois depuis hier (ligue 1, amical 1), en 4 s. Les `page_type` : `match`, `friendly`, et `unknown` pour la coupe et 8 pages d'amical.
+- A4 : `player_id` exposé par `gold.bv_sell_candidates` et `gold.bv_sell_replacement` (vérifié par requête).
+- Un merge de `origin/main` sans changement de contenu a dû être fait avant la fusion de A2 (main avait avancé de deux commits, PR n° 8).
+
+#### Sortie complète de `fin_etape.py` après chacun des cinq premiers commits (non filtrée)
+
+**A1 (f643027)**
+
+```
+branche : claude/nice-fermi-pczcs3
+HEAD : f64302781423
+origin/main : f64302781423
+commits d'avance sur origin/main : 0
+git status --short : (propre)
+tests :
+  test_agents.py : 0 échec(s)
+  test_aujourdhui.py : 227/227
+  test_aujourdhui_hockeynation.py : 45/45
+  test_composition.py : 21/21
+  test_contexte_budget.py : 9/9
+  test_controle.py : 43/43
+  test_decision.py : 15/15
+  test_etude_evenements.py : 24/24
+  test_evaluer.py : 34/34
+  test_fin_etape.py : 5/5
+  test_forme.py : 38/38
+  test_fusion_main.py : 5/5
+  test_garde_heredoc.py : 26/26
+  test_garde_push.py : 6/6
+  test_heure_paris.py : 7/7
+  test_match_engine_etat.py : 36/36
+  test_migrer.py : 19/19
+  test_migrer_kb.py : 17/17
+  test_palier5.py : 15/15
+  test_police.py : 24/24
+  test_preanalyse_scores_basketvibe.py : 25/25
+  test_que_faire_blocs.py : 447/447
+  test_relier_faits.py : 8/8
+  test_revue_hebdo.py : 38/38
+  test_scan_agent.py : 34/34
+  test_sql.py : 23/23
+HEAD dans origin/main : oui
+```
+
+**A2 (merge puis e1dfe69)**
+
+```
+branche : claude/nice-fermi-pczcs3
+HEAD : e1dfe6932c75
+origin/main : e1dfe6932c75
+commits d'avance sur origin/main : 0
+git status --short : (propre)
+tests :
+  test_agents.py : 0 échec(s)
+  test_aujourdhui.py : 227/227
+  test_aujourdhui_hockeynation.py : 45/45
+  test_composition.py : 21/21
+  test_contexte_budget.py : 9/9
+  test_controle.py : 43/43
+  test_decision.py : 15/15
+  test_etude_evenements.py : 24/24
+  test_evaluer.py : 34/34
+  test_fin_etape.py : 5/5
+  test_forme.py : 38/38
+  test_fusion_main.py : 5/5
+  test_garde_heredoc.py : 26/26
+  test_garde_push.py : 6/6
+  test_heure_paris.py : 7/7
+  test_match_engine_etat.py : 36/36
+  test_migrer.py : 19/19
+  test_migrer_kb.py : 17/17
+  test_palier5.py : 15/15
+  test_police.py : 24/24
+  test_preanalyse_scores_basketvibe.py : 25/25
+  test_que_faire_blocs.py : 457/457
+  test_relier_faits.py : 8/8
+  test_revue_hebdo.py : 38/38
+  test_scan_agent.py : 34/34
+  test_sql.py : 23/23
+HEAD dans origin/main : oui
+```
+
+**A3 (bdc07ab)**
+
+```
+branche : claude/nice-fermi-pczcs3
+HEAD : bdc07ab16436
+origin/main : bdc07ab16436
+commits d'avance sur origin/main : 0
+git status --short : (propre)
+tests :
+  test_agents.py : 0 échec(s)
+  test_aujourdhui.py : 227/227
+  test_aujourdhui_hockeynation.py : 45/45
+  test_composition.py : 21/21
+  test_contexte_budget.py : 9/9
+  test_controle.py : 43/43
+  test_decision.py : 15/15
+  test_etude_evenements.py : 24/24
+  test_evaluer.py : 34/34
+  test_fin_etape.py : 5/5
+  test_forme.py : 38/38
+  test_fusion_main.py : 5/5
+  test_garde_heredoc.py : 26/26
+  test_garde_push.py : 6/6
+  test_heure_paris.py : 7/7
+  test_match_engine_etat.py : 36/36
+  test_migrer.py : 19/19
+  test_migrer_kb.py : 17/17
+  test_palier5.py : 15/15
+  test_police.py : 24/24
+  test_preanalyse_scores_basketvibe.py : 25/25
+  test_que_faire_blocs.py : 462/462
+  test_relier_faits.py : 8/8
+  test_revue_hebdo.py : 38/38
+  test_scan_agent.py : 34/34
+  test_sql.py : 23/23
+HEAD dans origin/main : oui
+```
+
+**A4**
+
+```
+branche : claude/nice-fermi-pczcs3
+HEAD : 83377441aff3
+origin/main : 83377441aff3
+commits d'avance sur origin/main : 0
+git status --short : (propre)
+tests :
+  test_agents.py : 0 échec(s)
+  test_aujourdhui.py : 227/227
+  test_aujourdhui_hockeynation.py : 45/45
+  test_composition.py : 21/21
+  test_contexte_budget.py : 9/9
+  test_controle.py : 43/43
+  test_decision.py : 15/15
+  test_etude_evenements.py : 24/24
+  test_evaluer.py : 34/34
+  test_fin_etape.py : 5/5
+  test_forme.py : 38/38
+  test_fusion_main.py : 5/5
+  test_garde_heredoc.py : 26/26
+  test_garde_push.py : 6/6
+  test_heure_paris.py : 7/7
+  test_match_engine_etat.py : 36/36
+  test_migrer.py : 19/19
+  test_migrer_kb.py : 17/17
+  test_palier5.py : 15/15
+  test_police.py : 24/24
+  test_preanalyse_scores_basketvibe.py : 25/25
+  test_que_faire_blocs.py : 464/464
+  test_relier_faits.py : 8/8
+  test_revue_hebdo.py : 38/38
+  test_scan_agent.py : 34/34
+  test_sql.py : 23/23
+HEAD dans origin/main : oui
+```
+
+**A5**
+
+```
+branche : claude/nice-fermi-pczcs3
+HEAD : 0bac3a199681
+origin/main : 0bac3a199681
+commits d'avance sur origin/main : 0
+git status --short : (propre)
+tests :
+  test_agents.py : 0 échec(s)
+  test_aujourdhui.py : 227/227
+  test_aujourdhui_hockeynation.py : 45/45
+  test_composition.py : 21/21
+  test_contexte_budget.py : 9/9
+  test_controle.py : 43/43
+  test_decision.py : 15/15
+  test_etude_evenements.py : 24/24
+  test_evaluer.py : 34/34
+  test_fin_etape.py : 5/5
+  test_forme.py : 38/38
+  test_fusion_main.py : 5/5
+  test_garde_heredoc.py : 26/26
+  test_garde_push.py : 6/6
+  test_heure_paris.py : 7/7
+  test_match_engine_etat.py : 36/36
+  test_migrer.py : 19/19
+  test_migrer_kb.py : 17/17
+  test_palier5.py : 15/15
+  test_police.py : 24/24
+  test_preanalyse_scores_basketvibe.py : 25/25
+  test_que_faire_blocs.py : 468/468
+  test_relier_faits.py : 8/8
+  test_revue_hebdo.py : 38/38
+  test_scan_agent.py : 34/34
+  test_sql.py : 23/23
+HEAD dans origin/main : oui
+```
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |

@@ -157,6 +157,7 @@ def cas():
     yield from cas_t6()
     yield from cas_a1()
     yield from cas_a2()
+    yield from cas_a6()
 
 
 J = dt.date(2026, 11, 10)
@@ -974,6 +975,18 @@ def cas_a2():
     # la date du traitement est la même pour la veille et le lendemain (deux dates)
     yield "test_entrainement_les_deux_dates", sam[0].count("15/11") == 1 and lun[0].count("15/11") == 1 and "14/11" not in lun[0]
     yield "test_entrainement_sans_commande_ni_heure", all(qfb.INTERDITS.search(x) is None and re.search(r"\d\d:\d\d", x) is None for x in sam + lun)
+
+
+# ---- A6 : budget de durée du script ------------------------------------------------------------------------------
+def cas_a6():
+    racine = DOSSIER.parent
+    plan = (racine / "docs/refonte-v3/plan-5n-que-faire.md").read_text(encoding="utf-8")
+    conception = (racine / "docs/refonte-v3/conception-5n-que-faire.md").read_text(encoding="utf-8")
+    yield "test_budget_du_script_30_s", qfb.BUDGET_SECONDES == 30
+    yield "test_parallele_inchange", auj.PARALLELE == 8
+    yield "test_plan_dit_30_s", "Durée du script : au plus 30 s" in plan and "au plus 15 s" not in plan
+    yield "test_conception_dit_30_s", "30 s" in conception and "les 15 s actuelles" not in conception
+    yield "test_journal_donne_la_raison_du_budget", "Budget du script : 30 s" in (racine / "docs/refonte-v3/journal-aujourdhui.md").read_text(encoding="utf-8")
 
 
 def composition_lignes(texte):

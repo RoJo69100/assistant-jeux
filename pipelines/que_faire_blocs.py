@@ -16,6 +16,9 @@ import composition as comp  # noqa: E402
 import forme  # noqa: E402
 import heure_paris  # noqa: E402
 
+# Budget de durée du script complet (lecture + plan + rendu) : 30 s depuis A6 (16,7 s mesurés le 10/11 avec 40 requêtes) ; PARALLELE inchangé.
+BUDGET_SECONDES = 30
+
 # Mots entiers qui sont une commande à l'utilisateur ; un participe (« lancée dans ce passage ») n'en est pas une.
 INTERDITS = re.compile(r"(?<!\w)(?:lance|relance|exécute|lancer|relancer|exécuter|python)(?!\w)|pipelines/", re.IGNORECASE)
 
