@@ -155,6 +155,7 @@ def cas():
     yield from cas_bloc_4()
     yield from cas_t5()
     yield from cas_t6()
+    yield from cas_a1()
 
 
 J = dt.date(2026, 11, 10)
@@ -855,6 +856,50 @@ def cas_t6():
     t_ill2, _ = qfb.rendre_blocs(res_t6(), donnees_t6(prix_cases=None, matchs_ajoutes=None, exports_hebdo=None, dernier_officiel=None),
                                  {"prix_cases": "x", "matchs_ajoutes": "x", "exports_hebdo": "x", "dernier_officiel": "x"}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
     yield "test_vue_illisible_dans_chaque_bloc", all(f"donnée manquante : vue {v} illisible" in t_ill2 for v in ("prix_cases", "matchs_ajoutes", "exports_hebdo", "dernier_officiel"))
+
+
+# ---- A1 : demandes traitées (docs/etudes/demandes-traitees.md) -----------------------------------------------------
+PREFIXE_DEMANDE = "Pour comprendre le Match Engine, j'ai besoin de : "
+DEMANDES_REELLES = {
+    "effectif_ligue": PREFIXE_DEMANDE + "exporte la page Effectif les jours de ligue entre l'amical de 8 h et le match de 20 h, puis après le match de ligue, parce que les 4 intervalles manquent.",
+    "effectif_match": PREFIXE_DEMANDE + "exporte la page effectif (compétences des joueurs) chaque jour de match, avant le match, parce que les tirs à 3 points de v3 ligue n'ont pas de relevé.",
+    "reglages_29_10": PREFIXE_DEMANDE + "exporte la page des réglages utilisés de l'amical du 29/10 (Chomelix Cow contre BC Statyba Telsiai), parce que c'est le seul amical v5 sans réglages en base.",
+}
+DEMANDE_RESTANTE = PREFIXE_DEMANDE + "exporte la page Équipe des clubs de tête du classement, parce que leurs compétences manquent."
+TRAITEES = ("| début de la demande | statut | date | raison |\n|---|---|---|---|\n"
+            "| exporte la page Effectif les jours de ligue entre l'amical de 8 h | écartée | 2026-11-10 | fatigue d'amical déjà mesurée |\n"
+            "| exporte la page effectif (compétences des joueurs) chaque jour de match, avant le match | écartée | 2026-11-10 | demande sur des groupes v3 clos |\n"
+            "| exporte la page des réglages utilisés de l'amical du 29/10 | fait | 2026-11-10 | exporté par l'utilisateur |\n")
+
+
+def etude_avec(*demandes):
+    return "# Étude (2026-11-10)\n\n**Question** : x ?\n\n## Export demandé\n" + "".join(f"- {d}\n" for d in demandes)
+
+
+def cas_a1():
+    for cle, demande in DEMANDES_REELLES.items():
+        et = etudes_de({"2026-11-10-sujet.md": etude_avec(demande, DEMANDE_RESTANTE), "demandes-traitees.md": TRAITEES})
+        yield f"test_demande_traitee_ignoree : {cle}", len(et) == 1 and et[0]["demandes"] == [DEMANDE_RESTANTE]
+    et = etudes_de({"2026-11-10-sujet.md": etude_avec(*DEMANDES_REELLES.values(), DEMANDE_RESTANTE), "demandes-traitees.md": TRAITEES})
+    yield "test_demande_traitee_ignoree : les trois ensemble, une seule reste", et[0]["demandes"] == [DEMANDE_RESTANTE]
+    sans = etudes_de({"2026-11-10-sujet.md": etude_avec(*DEMANDES_REELLES.values())})
+    yield "test_demande_traitee_sans_fichier_rien_n_est_ignore", len(sans[0]["demandes"]) == 3
+    en_cours = TRAITEES.replace("| fait |", "| en cours |")
+    yield "test_demande_traitee_statut_inconnu_non_ignore", len(etudes_de({"2026-11-10-sujet.md": etude_avec(DEMANDES_REELLES["reglages_29_10"]),
+                                                                        "demandes-traitees.md": en_cours})[0]["demandes"]) == 1
+    yield "test_demandes_traitees_n_est_pas_une_etude", all(e["sujet"] != "demandes-traitees" for e in etudes_de({"demandes-traitees.md": TRAITEES}))
+    # bloc 0 et bloc 6 : la demande traitée n'est plus réclamée
+    t0 = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": [], "actions": []}, et, JOUR_T, MAINT))
+    l6, _ = qfb.bloc_6(donnees_t5(), et, dt.date(2026, 11, 10))
+    yield "test_demande_traitee_absente_des_blocs_0_et_6", DEMANDE_RESTANTE in t0 and "l'amical du 29/10" not in t0 + "\n".join(l6) \
+        and "les jours de ligue entre" not in t0 and "exporte la page effectif (compétences" not in t0
+    # fichier réel du dépôt
+    reel = qfb.lire_etudes()
+    toutes = [d for e in reel for d in e["demandes"]]
+    yield "test_fichier_reel_demandes_traitees_present", (qfb.DOSSIER_ETUDES / "demandes-traitees.md").is_file()
+    yield "test_etudes_reelles_sans_les_trois_demandes", not any(d.startswith(PREFIXE_DEMANDE + x) for d in toutes for x in (
+        "exporte la page Effectif les jours de ligue entre l'amical de 8 h", "exporte la page effectif (compétences des joueurs) chaque jour de match, avant le match",
+        "exporte la page des réglages utilisés de l'amical du 29/10")) and len(toutes) >= 3
 
 
 def composition_lignes(texte):

@@ -521,7 +521,26 @@ BLOC_DE = [("aperçu", 3), ("Équipe", 3), ("Effectif", 3), ("amical", 2), ("pag
            ("Mes enchères", 4), ("transferts", 4), ("Finances", 8), ("Personnel", 9), ("Académie", 9), ("Entraînement", 9)]
 
 
-def _etude(fichier: Path, date: dt.date, sujet: str, texte: str) -> dict:
+FICHIER_TRAITEES = "demandes-traitees.md"
+STATUTS_TRAITES = ("fait", "ecartee")  # normalisés (sans accent) ; tout autre statut laisse la demande active
+
+
+def demandes_traitees(dossier) -> list:
+    """Débuts normalisés des demandes d'export déjà traitées (fait ou écartée) dans demandes-traitees.md du dossier
+    (colonnes : début de la demande | statut | date | raison) ; liste vide sans fichier."""
+    f = Path(dossier) / FICHIER_TRAITEES
+    if not f.is_file():
+        return []
+    debuts = []
+    for cols, lignes in forme.tableaux(f.read_text(encoding="utf-8")):
+        ist = forme.idx(cols, "statut")
+        if ist < 0 or not cols or "debut" not in cols[0]:
+            continue
+        debuts += [forme.norm(l[0]) for l in lignes if len(l) > ist and forme.norm(l[ist]) in STATUTS_TRAITES and l[0].strip()]
+    return debuts
+
+
+def _etude(fichier: Path, date: dt.date, sujet: str, texte: str, traitees=()) -> dict:
     verdicts, lignes, resultat = [], [], None
     for cols, rangees in forme.tableaux(texte):
         iv, ie, ic = forme.idx(cols, "verdict"), forme.idx(cols, "estim", "pente"), forme.idx(cols, "ic 95")
@@ -536,7 +555,8 @@ def _etude(fichier: Path, date: dt.date, sujet: str, texte: str) -> dict:
     demandes = []
     for l in texte.splitlines():
         s = re.sub(r"^\s*[-*]\s+", "", l).strip()
-        if s.startswith(DEMANDE):
+        corps = forme.norm(s[len(DEMANDE):]).strip() if s.startswith(DEMANDE) else None
+        if corps is not None and not any(corps.startswith(t) for t in traitees):
             demandes.append(s)
     return {"fichier": fichier.name, "date": date, "sujet": sujet, "carte": sujet == SUJET_CARTE, "verdicts": verdicts,
             "lignes": lignes, "resultat": resultat, "demandes": demandes}
@@ -548,7 +568,7 @@ def lire_etudes(dossier=DOSSIER_ETUDES) -> list:
     dossier = Path(dossier)
     if not dossier.is_dir():
         return []
-    gardes = {}
+    gardes, traitees = {}, demandes_traitees(dossier)
     for f in sorted(dossier.glob("*.md")):
         m = ETUDE_NOM.match(f.name)
         if not m:
@@ -556,7 +576,7 @@ def lire_etudes(dossier=DOSSIER_ETUDES) -> list:
         texte = f.read_text(encoding="utf-8")
         if "invalid" in " ".join(texte.splitlines()[:6]).lower():
             continue
-        e = _etude(f, dt.date.fromisoformat(m.group(1)), m.group(2), texte)
+        e = _etude(f, dt.date.fromisoformat(m.group(1)), m.group(2), texte, traitees)
         if e["sujet"] not in gardes or e["date"] > gardes[e["sujet"]]["date"]:
             gardes[e["sujet"]] = e
     return sorted(gardes.values(), key=lambda e: (e["date"], e["sujet"]), reverse=True)
