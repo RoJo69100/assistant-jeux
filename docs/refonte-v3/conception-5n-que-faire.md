@@ -26,11 +26,11 @@ Le « que faire » du jour doit être le document du gabarit, bloc par bloc, et 
 |---|---|---|
 | 0 Exports | **5n** | Liste de ce qui manque, avec pour chaque export le bloc qu'il débloque (« → bloc 3 »). Contrôle par match et non par écran : aperçu du prochain match de ligue ou de coupe, page du match joué, amical. Marché : nombre de pages reçues depuis 24 h. Source : `bv_exports_state` et requêtes par match. |
 | 1 Aujourd'hui, puis demain | **5n** | Tableau Priorité \| Catégorie \| Action (format `plan` de `forme.py`), en deux sections « Aujourd'hui » et « Demain (préparé aujourd'hui) ». Sans heures. La seule heure permise est celle du verrou, dans la ligne de composition. |
-| 2 Composition de l'amical | **5n** | Tableau de `composition.py` (ordre de l'écran, valeurs d'écran 1–5), puis zone et focus défensif, test en cours nommé, heure limite du verrou. Sans brief : voir la question Q1. |
-| 3 Composition de la ligue ou de la coupe | **5n** | Même tableau, avec le tableau des adversaires (focus défensif par adversaire) dès que l'aperçu est en base. Vérification à J-1 : chaque joueur proposé est comparé à l'effectif du jour (blessé, forme ≤ 2, fatigue hors zone verte, joueur vendu). Chaque écart est signalé sur une ligne. |
-| 4 Transferts | **5n** (partie) | Cibles du Marché dont l'enchère se termine dans les 24 h : nom \| poste \| note \| prix \| plafond \| fin. Les enchères sont dédupliquées entre les pages du Marché. Les lignes actuelles de vente et d'enchères en cours sont gardées telles quelles. Les conseils sur les recrues sont reportés à l'étape suivante. |
+| 2 Composition de l'amical | **5n** | **Sans fiche, sans aperçu, sans agent** (décision Q1). Le script reprend les réglages du dernier amical joué (`gold.bv_saisie_joueurs`, jeunes et cinq de ligue à 0 minute, comme aujourd'hui) et y applique le niveau du test en cours (agressivité, zone, focus constants). Tableau poste par poste dans l'ordre de l'écran (colonnes du format `tactique`), puis zone et focus défensif, test nommé, heure limite du verrou. |
+| 3 Composition de la ligue ou de la coupe | **5n** | **Séparée de l'amical** : elle exige l'aperçu adverse. Aperçu en base → l'agent tactique est lancé dans le passage, puis tableau de saisie + tableau des adversaires (focus défensif par adversaire). Aperçu absent → « donnée manquante : exporte l'aperçu du match de ligue du JJ/MM » (je le demande à l'utilisateur, décision Q1). Vérification à J-1 : chaque joueur proposé est comparé à l'effectif du jour (blessé, forme ≤ 2, fatigue hors zone verte, joueur vendu) ; chaque écart tient en une ligne. |
+| 4 Transferts | **5n** (partie) | **Deux tableaux** (demande de l'utilisateur). (1) *Table des prix* : pour chaque tranche d'âge × niveau (note PS par paliers de 5) : nombre de ventes, prix bas (p25), médian, haut (p75), dernière vente — source `gold.bv_price_ref_ps`. (2) *Qui acheter* : annonces du Marché qui se terminent dans les 24 h, dédupliquées entre les pages, rangées dans leur case âge × niveau : nom \| poste \| âge \| note \| prix actuel \| case (p25 / médiane) \| plafond \| fin \| gain pour mon cinq. « Achetable » = prix actuel sous le seuil Q3 et dans la capacité restante (solde moins enchères ouvertes). Les lignes actuelles de vente et d'enchères en cours sont gardées. Les conseils sur les recrues sont reportés. |
 | 5 Les meilleurs et les failles | **plus tard** | Bloc présent avec une seule ligne : « reporté : étude des meilleurs prévue après l'étape suivante ». |
-| 6 Match Engine | **5n** | Une ligne : « matchs ajoutés depuis hier : n (ligue a, amical b), total en base N, étude relancée le JJ/MM ». Relance de l'étude : voir la question Q2. |
+| 6 Match Engine | **5n** | Une ligne : « matchs ajoutés depuis hier : n (ligue a, amical b), total en base N, étude relancée le JJ/MM ». **Relance de l'étude** (décision Q2) : après 3 défaites de suite en ligue ou en coupe, ou une fois par semaine (le dimanche, mon choix : le jour de l'analyse hebdomadaire du bloc 7) ; hors de ces cas, le bloc affiche la date de la dernière étude. Avancement des expériences et prochaine hypothèse en dessous. |
 | 7 Analyse | étape suivante | En 5n, la ligne actuelle « défaite → analyste » est rangée dans ce bloc, sans changement. |
 | 8 Économie | étape suivante | En 5n, les lignes actuelles de finances (solde projeté, seuil) sont rangées dans ce bloc, sans changement. |
 | 9 Académie, personnel, entraînement | étape suivante | En 5n, les lignes actuelles d'académie, de personnel et d'entraînement sont rangées dans ce bloc, sans changement. |
@@ -62,24 +62,22 @@ Règle de bloc vide (tous les blocs) : « donnée manquante : exporte <écran> �
 2. **Script pour les données, Claude de session pour les compositions**. Le script produit les blocs 0, 1, 4, 6 et 10. Claude assemble les blocs 2 et 3 à chaque passage. Avantage : moins de code. Inconvénients : la sortie n'est plus reproductible ni testable, et contredit la méthode « le script d'abord ».
 3. **Un module par bloc** (`pipelines/que_faire/bloc_*.py`), assemblé par un script court. Avantage : structure plus nette. Inconvénients : réécriture de l'essentiel de `aujourdhui.py` et de ses tests, gros risque de régression pour aucun gain visible.
 
-## 7. Questions à l'utilisateur (elles changent ce qui sera construit)
+## 7. Décisions de l'utilisateur (10/11 à 11:09) et question restante
 
-- **Q1 — Composition sans brief tactique valide pour ce match** (cas réel du 10/11 : aucun brief pour Opper Cards). Le gabarit interdit « lance l'agent tactique » dans la sortie. Que doit contenir le bloc ?
-  - (a) *Ma proposition* :
-    - pour l'**amical**, le script construit lui-même le tableau à partir du dernier brief valide (ligue ou amical) et des réglages du test en cours, sans agent ;
-    - pour la **ligue ou la coupe**, Claude lance l'agent tactique dans le même passage, avant le rendu, dès que l'aperçu est en base. Cet agent compte dans la limite de 3 par passage. Si l'aperçu manque, le bloc dit « donnée manquante : exporte l'aperçu du match ».
-  - (b) Le bloc dit seulement « donnée manquante : brief tactique du match X » et Claude lance l'agent ensuite, hors de la sortie.
-  - (c) Le script calcule toujours lui-même la composition de ligue, à partir des vues gold, sans brief. C'est un nouveau moteur de décision, hors du périmètre de 5n.
-- **Q2 — « étude relancée le JJ/MM »** (bloc 6). Qui relance l'étude, et quand ?
-  - (a) *Ma proposition* : le que faire relance lui-même `etude_evenements_basketvibe.py calculs` quand au moins un match de ligue ou de coupe a été ajouté depuis la dernière sortie, et affiche la date de la sortie. Je ne connais pas encore sa durée ; je la mesurerai. Si elle dépasse 15 s, la relance passe dans `rafraichir_avant_aujourdhui.py`.
-  - (b) Le bloc affiche seulement la date de la dernière étude et l'âge en matchs (« 3 matchs ajoutés depuis l'étude du 09/11 »). La relance reste manuelle.
+- **Q1 (décidée)** : l'amical n'a besoin ni de fiche ni d'aperçu : il sert à faire jouer les jeunes et à tester des tactiques. La ligue et la coupe sont séparées de l'amical : elles ont besoin de l'aperçu adverse, et s'il manque (ou toute autre information), je demande l'export. Cela remplace ma proposition (a) : le script ne cherche plus de brief pour l'amical.
+- **Q2 (décidée)** : l'étude du moteur est relancée après 3 défaites de suite, ou une fois par semaine, pour comprendre au mieux le moteur de match. Durée de l'étude non mesurée ; je la mesure en réception.
+- **Bloc 4 (demandé)** : une table qui dit, pour tel âge et tel niveau, quel est le prix, et d'où l'on voit qui on peut acheter. Intégré dans la ligne du bloc 4 ci-dessus. Les cases viennent de `gold.bv_price_ref_ps` (palier de note × tranche d'âge) ; la position n'entre pas dans les cases, elle reste une colonne de l'annonce.
+- **Q3 (restante)** : à partir de quel prix une annonce est-elle « achetable » dans sa case ?
+  - (a) *Ma proposition* : prix actuel ≤ médiane de la case, case fiable (n suffisant, comme `ref_reliable` aujourd'hui), et dans la capacité restante. La médiane laisse voir plus d'annonces ; le plafond reste calculé par la revente.
+  - (b) Prix actuel ≤ p25 de la case : moins d'annonces, uniquement de vraies affaires.
 
 ## 8. Choix que je fais sans attendre (à corriger si besoin)
 
 - Le bloc 5 reste présent, avec une ligne « reporté ».
 - Les blocs 7, 8 et 9 reprennent les lignes actuelles, déplacées et non refaites.
 - Le bloc 4 garde les lignes actuelles de vente et d'enchères. Les conseils sur les recrues sont reportés.
-- Le bloc 0 vérifie par match en plus du statut par écran. Cela corrige l'écart du 10/11.
+- Le bloc 0 vérifie par match en plus du statut par écran. Cela corrige l'écart du 10/11 : il faut y voir « exporte l'aperçu du match de ligue » dès qu'aucune ligne adverse n'est en base.
+- Les cinq de ligue restent à 0 minute à l'amical et les jeunes y jouent, comme la fiche du jeu l'écrit aujourd'hui (`docs/fiches/basketvibe/resume.md`) ; je ne change pas cette règle.
 - La sortie reste en texte ; les tableaux sont en Markdown pour `forme.py`.
 - Le skill `basketvibe-aujourdhui` est réécrit pour décrire les blocs, sans heures, et sans la limite de 8 lignes.
 - L'exécution se fait dans la session et non par des sous-agents, à la demande de l'utilisateur.
