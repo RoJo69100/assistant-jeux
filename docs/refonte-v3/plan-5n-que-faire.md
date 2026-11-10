@@ -189,6 +189,18 @@
 - [x] **Étape 4** : lancer `python pipelines/test_aujourdhui.py`, `python pipelines/test_composition.py`, `python pipelines/test_que_faire_blocs.py`, `python pipelines/test_forme.py` → tous verts, comptes collés.
 - [x] **Étape 5** : commit « 5n T7 : branchement du rendu en blocs, tests réécrits, skill du que faire ».
 
+### Ajustements de réception R1 à R9 (demande de l'utilisateur, 10/11 16:15 ; R8 et R9 trouvés à la réception) — un commit chacun, tests d'abord
+
+- [x] **R1 — bloc 1** : contient chaque ligne du bloc 0 (catégorie Export, texte et « → bloc N » repris à l'identique), une ligne « Composition : <match> » par match des blocs 2 et 3 (sauf si une action du plan nomme déjà le match), la ligne d'analyse du bloc 7 quand l'analyse n'est pas faite. `fautes_bloc_1(rendu)` liste les lignes du bloc 0 absentes du bloc 1 ; test sur la vraie sortie du journal (T8, première exécution : défaut détecté) et sur un rendu complet (aucune faute).
+- [x] **R2 — bloc 0** : demandes d'étude en forme courte (« exporte X (étude du JJ/MM) → bloc 6 »), le texte complet reste au bloc 6. Deux tests réécrits (texte complet attendu au bloc 0).
+- [x] **R3 — demandes traitées** : colonne « question liée » dans `demandes-traitees.md` ; deux lignes ajoutées (page Équipe des clubs de tête : fait, 3b, ingérée dans `silver.bv_club_roster` ; page Entraînement chaque semaine : écartée, 5a) ; `etat_etude` écrit « export reçu le JJ/MM, étude à lancer » pour une question dont la demande est « fait ».
+- [x] **R4 — Marché** : périmé (statut de `gold.bv_exports_state`), le bloc 0 écrit « donnée manquante : exporte le Marché (plusieurs pages) (dernier export il y a N h) → bloc 4 » ; « Acheter un X : aucune annonce » n'est plus écrit sur un Marché périmé (la demande d'export le remplace).
+- [x] **R5 — bloc 6** : « k de nos matchs pas encore étudiés ; c d'autres clubs ».
+- [x] **R6 — bloc 0** : onglet « Transferts de la ligue » (`standings_transfers`) retiré des exports hebdomadaires (dans l'historique global).
+- [x] **R7 — vérification en lecture seule** : l'historique global des transferts est complet depuis le 27/09 (0 trou sur 14 comparaisons), voir le journal.
+- [x] **R8 — brief de coupe** (trouvé à la réception) : ligue et coupe le même jour écrivaient le même fichier `AAAA-MM-JJ-tactique.md` et le script ne lit qu'un brief de ligue ou de coupe par jour ; la coupe a maintenant `AAAA-MM-JJ-tactique-coupe.md` (`BRIEF`, `dernier_brief`, `lire_tactique`, `contrat_brief`, `brief_du_jour`, `brief_pour`).
+- [x] **R9 — brief sans tableau des adversaires** (trouvé à la réception) : le brief d'amical écrit par l'agent n'était pas lu (« composition en préparation ») faute du tableau `Adversaire | Poste | Focus défensif (1-5) | Zone` ; la consigne le réclame avec ses colonnes exactes, et le helper de test ne fabrique plus ce tableau tout seul.
+
 ## Tâche 8 — Réception sur la vraie journée
 
 **Fichiers** : modifier `docs/refonte-v3/journal-aujourdhui.md`.
