@@ -154,6 +154,7 @@ def cas():
     yield from cas_produit_le()
     yield from cas_bloc_4()
     yield from cas_t5()
+    yield from cas_t6()
 
 
 J = dt.date(2026, 11, 10)
@@ -744,6 +745,116 @@ def cas_t5():
     l6g, _ = qfb.bloc_6(donnees_t5(), etu, jour, experiences=exp)
     t6g = "\n".join(l6g)
     yield "test_bloc_6_avancement_et_prochaine_hypothese", "E1 : 0 vérifié sur 4" in t6g and "prochaine hypothèse : E1" in t6g
+
+
+# ---- 5n T6 : blocs 5, 7 à 10 et assemblage ---------------------------------------------------------------------
+PHRASE_SANS_ETUDE = "étude pas encore commencée, carte de faisabilité à faire"
+OFFICIEL_COLS = ["day", "competition_kind", "opponent", "my_result"]
+RES_VIDE = {"actions": [], "exports": [], "garder": [], "infos": [], "capacite": None}
+
+
+def donnees_t6(**plus):
+    d = donnees_t5(**donnees_4())
+    d.update({"tolerance_vente": T(["value"], [("1.0",)]), "dernier_officiel": T(OFFICIEL_COLS, [("2026-11-09", "ligue", "Naked Spartans", "L")])})
+    d.update(plus)
+    return d
+
+
+def res_t6():
+    return {"actions": [(None, 1, "Composition J5 contre Naked Spartans : lance l'agent tactique (aperçu du 10/11 en base)", "", "s"),
+                        (None, 2, "Analyse : lance l'agent analyste ce soir", "", "s"),
+                        (None, 2, "Analyse : défaite du 09/11 contre Naked Spartans, 3 défaites d'affilée", "", "s"),
+                        (None, 1, "Finances : solde projeté au 30/11 de 100 000, sous une semaine de salaires (30 000)", "cause : charges", "s"),
+                        (None, 2, "Entraînement (fin du cycle dimanche 04:00) : corrige 2 écarts à l'écran", "", "s"),
+                        (None, 2, "Académie, rapport du 05/11 : 2 prospects ; cote inconnue", "", "s"),
+                        (None, 2, "Enchère maximale 100 000 sur Dupont (PG, PS 60)", "fin 11/11 09:30", "s"),
+                        (None, 2, "Vendre Maël Bernard : économie 17 303 par semaine", "", "s")],
+            "exports": ["Équipe (aperçu, joueurs) (30 h)"], "infos": [], "capacite": 300000,
+            "garder": ["effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)",
+                       "Personnel (Coach 1/1) : règle de personnel non tranchée, à valider", "finances : seuil non atteint (résultat hebdo estimé +9 000)"]}
+
+
+def cas_t6():
+    S = {"experiences": None, "analyste": None}
+    etu = etudes_de({"2026-11-08-trois-points.md": ETUDE_OK, "2026-11-10-carte-faisabilite.md": CARTE})
+
+    # --- états d'étude
+    yield "test_etat_etude_sans_etude", qfb.etat_etude([], 5) == PHRASE_SANS_ETUDE and qfb.etat_etude([], 8) == PHRASE_SANS_ETUDE \
+        and qfb.etat_etude([], 9) == PHRASE_SANS_ETUDE
+    e5 = qfb.etat_etude(etu, 5)
+    yield "test_etat_etude_lit_la_carte : faisable et bloquée", "3a force du club et victoires : faisable maintenant" in e5 \
+        and "3b pourquoi les premiers le sont : bloquée par : exporte la page Équipe des clubs de tête" in e5 and "10/11" in e5
+    yield "test_etat_etude_lit_la_carte : bloc sans question", "ne couvre pas ce bloc" in qfb.etat_etude(etu, 8) and "carte de faisabilité à faire" not in qfb.etat_etude(etu, 8)
+    reel = dict(qfb.SUJET_BLOC)
+    qfb.SUJET_BLOC["trois-points"] = 5
+    try:
+        e5r = qfb.etat_etude(etu, 5)
+    finally:
+        qfb.SUJET_BLOC.clear()
+        qfb.SUJET_BLOC.update(reel)
+    yield "test_etat_etude_dernier_resultat", e5r == "dernier résultat du 08/11 : +6,81 pts [+3,92 ; +8,88]"
+    yield "test_table_sujet_bloc_vide_en_5n", qfb.SUJET_BLOC == {}
+    yield "test_aucun_reporte", all("report" not in x.lower() for b in (qfb.bloc_5(etu), qfb.bloc_5([]), qfb.bloc_8([], etu), qfb.bloc_9([], []))
+                                    for x in b)
+    yield "test_bloc_5_une_ligne", qfb.bloc_5([]) == [PHRASE_SANS_ETUDE]
+
+    # --- bloc 7 : la ligne d'état est toujours là
+    defaite = donnees_t6()
+    l = qfb.bloc_7([], defaite)
+    yield "test_bloc_7_ligne_d_etat_toujours : défaite non analysée", l[0] == "défaite du 09/11 : analyse non faite, lancée dans ce passage"
+    yield "test_bloc_7_ligne_d_etat_toujours : défaite analysée", qfb.bloc_7([], defaite, analyste=dt.date(2026, 11, 9))[0] == "défaite du 09/11 : analyse faite"
+    gagne = donnees_t6(dernier_officiel=T(OFFICIEL_COLS, [("2026-11-09", "ligue", "Naked Spartans", "W")]))
+    yield "test_bloc_7_ligne_d_etat_toujours : aucune défaite", qfb.bloc_7([], gagne)[0] == "aucune défaite de ligue ou de coupe non analysée"
+    yield "test_bloc_7_ligne_d_etat_toujours : vue illisible", qfb.bloc_7([], donnees_t6(dernier_officiel=None))[0] == "donnée manquante : vue dernier_officiel illisible"
+    l7 = qfb.bloc_7(res_t6()["actions"], defaite)
+    yield "test_bloc_7_puis_les_lignes_du_plan", l7[0].startswith("défaite du") and any("défaite du 09/11 contre Naked Spartans, 3 défaites" in x for x in l7) \
+        and not any("lance l'agent" in x for x in l7)
+
+    # --- blocs 8 et 9
+    l8 = qfb.bloc_8(res_t6()["actions"], etu, res_t6()["garder"])
+    yield "test_bloc_8_etat_puis_lignes", l8[0] == qfb.etat_etude(etu, 8) and any("solde projeté au 30/11" in x for x in l8)
+    yield "test_bloc_8_sans_ligne_constat_ou_vide", any("finances : seuil non atteint" in x for x in qfb.bloc_8([], [], ["finances : seuil non atteint (résultat hebdo estimé +9 000)"])) \
+        and any("aucune règle de finances déclenchée" in x for x in qfb.bloc_8([], [], []))
+    l9 = qfb.bloc_9(res_t6()["actions"], etu)
+    yield "test_bloc_9_etat_puis_lignes", l9[0] == qfb.etat_etude(etu, 9) and any("corrige 2 écarts" in x for x in l9) and any("Académie, rapport" in x for x in l9) \
+        and re.search(r"\d\d:\d\d", "\n".join(l9)) is None
+    yield "test_bloc_9_sans_ligne", any("aucune règle d'académie, de personnel ou d'entraînement déclenchée" in x for x in qfb.bloc_9([], []))
+
+    # --- bloc 10
+    r = res_t6()
+    l10 = "\n".join(qfb.bloc_10(r["actions"], r["garder"]))
+    yield "test_bloc_10_propositions_a_valider_par_ecrit", "à valider par écrit : Enchère maximale 100 000 sur Dupont" in l10 and "à valider par écrit : Vendre Maël Bernard" in l10 \
+        and re.search(r"\d\d:\d\d", l10) is None
+    yield "test_bloc_10_regles_non_tranchees", "vendre pour profit" in l10 and "Personnel (Coach 1/1)" in l10 and "seuil non atteint" not in l10
+    yield "test_bloc_10_jamais_vide", qfb.bloc_10([], []) == ["- aucune décision n'attend ton accord écrit"]
+    besoin = [(None, 2, "Acheter un SF de note ≥ 61,0 : aucune annonce au poste SF dans le Marché du 09/11 (annonces encore ouvertes de l'export)", "", "s")]
+    cible = [(None, 2, "Acheter un PG de note ≥ 60 : Dupont (PS 61) : 50 000 à l'export, plafond de besoin 90 000, à valider", "", "s")]
+    yield "test_bloc_10_un_besoin_sans_annonce_n_est_pas_une_proposition", qfb.bloc_10(besoin, []) == ["- aucune décision n'attend ton accord écrit"] \
+        and "à valider par écrit : Acheter un PG" in "\n".join(qfb.bloc_10(cible, []))
+
+    # --- assemblage
+    texte, consignes = qfb.rendre_blocs(r, donnees_t6(), {}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
+    pos = [texte.find(f"## Bloc {n} — ") for n in range(11)]
+    yield "test_onze_blocs_dans_l_ordre", all(p >= 0 for p in pos) and pos == sorted(pos)
+    vide_texte, vide_cons = qfb.rendre_blocs(RES_VIDE, {}, {}, JOUR_T, MAINT, S, etudes=[], base=dossier())
+    yield "test_aucun_bloc_absent", all(f"## Bloc {n} — " in vide_texte for n in range(11)) and isinstance(vide_cons, list)
+    yield "test_aucun_bloc_vide : chaque bloc a au moins une ligne", all(len(b.split("\n", 1)[1].strip()) > 0 for b in vide_texte.split("## Bloc ")[1:])
+    yield "test_consignes_de_session_collectees", any("lancer l'agent tactique" in c or "lance l'agent tactique" in c for c in consignes) \
+        and any("lance l'agent analyste" in c for c in consignes) and not any(c in texte for c in consignes)
+    yield "test_aucun_mot_interdit_dans_tout_le_rendu", qfb.INTERDITS.search(texte) is None and qfb.INTERDITS.search(vide_texte) is None
+    yield "test_aucune_heure_dans_le_rendu_sauf_le_verrou", all(re.search(r"\d\d:\d\d", l) is None or "verrou" in l for l in texte.splitlines())
+    yield "test_rendu_passe_forme_et_controle", forme.fautes_de(texte, "basketvibe") == [] and forme.fautes_de(vide_texte, "basketvibe") == [] \
+        and __import__("controle").reports(texte) == []
+    yield "test_rendu_bloc_1_et_bloc_4_dedans", "→ bloc 4" in texte and "Table des prix" in texte and "Qui vendre" in texte
+
+    # revue ciblée 5 : vue illisible = ligne dans le bloc concerné, le script ne plante pas
+    r_ill = dict(res_t6(), actions=res_t6()["actions"] + [(None, 3, "il me manque gold.bv_finance_health (timeout) — export Finances", "", "s")])
+    t_ill, _ = qfb.rendre_blocs(r_ill, donnees_t6(**{"gold.bv_finance_health": None}), {"gold.bv_finance_health": "timeout"}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
+    bloc8 = t_ill.split("## Bloc 8 — ")[1].split("## Bloc 9 — ")[0]
+    yield "test_vue_illisible_ne_plante_pas", "donnée manquante : vue gold.bv_finance_health illisible" in bloc8 and "il me manque gold.bv_finance_health" not in bloc8
+    t_ill2, _ = qfb.rendre_blocs(res_t6(), donnees_t6(prix_cases=None, matchs_ajoutes=None, exports_hebdo=None, dernier_officiel=None),
+                                 {"prix_cases": "x", "matchs_ajoutes": "x", "exports_hebdo": "x", "dernier_officiel": "x"}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
+    yield "test_vue_illisible_dans_chaque_bloc", all(f"donnée manquante : vue {v} illisible" in t_ill2 for v in ("prix_cases", "matchs_ajoutes", "exports_hebdo", "dernier_officiel"))
 
 
 def composition_lignes(texte):

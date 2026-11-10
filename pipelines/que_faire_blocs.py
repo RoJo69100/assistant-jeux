@@ -684,3 +684,107 @@ def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
         consignes.append(f"lancer l'agent data-scientist (BasketVibe, horizon aujourd'hui) sur la question ouverte : {question} ; "
                          "ne demande un export que pour les groupes de moteur encore ouverts (v4 ligue, v5 amical)")
     return lignes, consignes
+
+
+# ---- Blocs 5, 7, 8, 9, 10 et assemblage ------------------------------------------------------------------------
+
+SUJET_BLOC: dict = {}  # sujet d'étude -> bloc (5, 8 ou 9) ; vide en 5n, remplie en 5o quand les études de ces blocs existent
+QUESTIONS_BLOC = {5: ("3",), 8: ("2", "4"), 9: ("5",)}  # chiffre initial des questions de la carte de faisabilité rattachées au bloc
+VUES_BLOC = {8: ("gold.bv_finance_health", "gold.bv_finance_projection"),
+             9: ("gold.bv_personnel_status", "prospects", "cote_potentiel", "gold.bv_saisie_entrainement")}
+TITRES = ["Exports d'abord", "À faire aujourd'hui, puis demain", "Composition de l'amical", "Composition de la ligue ou de la coupe",
+          "Transferts", "Les meilleurs et les failles du jeu", "Match Engine", "Analyse détaillée", "Économie",
+          "Académie, personnel, entraînement", "À valider par l'utilisateur"]
+PROPOSITION = re.compile(r"Vendre |Mets .+ en vente|Enchère (?:sur|maximale) |Acheter un ")
+
+
+def etat_etude(etudes, bloc: int) -> str:
+    """État de l'étude d'un bloc (5, 8 ou 9) : dernier résultat d'une étude rattachée au bloc (table SUJET_BLOC), sinon ce que la carte
+    de faisabilité dit des questions du bloc (faisable ou bloquée par : exporte X), sinon « étude pas encore commencée ». Jamais « reporté »."""
+    for e in etudes:
+        if not e["carte"] and SUJET_BLOC.get(e["sujet"]) == bloc and e["resultat"]:
+            return f"dernier résultat du {e['date']:%d/%m} : {e['resultat']['estime']} {e['resultat']['ic']}"
+    carte = next((e for e in etudes if e["carte"]), None)
+    if carte is None:
+        return "étude pas encore commencée, carte de faisabilité à faire"
+    questions = [(q, v) for q, v in carte["lignes"] if q[:1] in QUESTIONS_BLOC.get(bloc, ())]
+    if not questions:
+        return f"étude pas encore commencée (la carte de faisabilité du {carte['date']:%d/%m} ne couvre pas ce bloc)"
+    return f"carte de faisabilité du {carte['date']:%d/%m} : " + " ; ".join(f"{q} : {v}" for q, v in questions)
+
+
+def bloc_5(etudes) -> list:
+    return [etat_etude(etudes, 5)]
+
+
+def _lignes_plan(actions, n: int, erreurs=()) -> list:
+    """Lignes de plan() rangées dans le bloc n, inchangées (sans heure) ; une ligne « il me manque <vue> » dont la vue est
+    déjà signalée illisible par le bloc n'est pas répétée."""
+    affichables, _ = separer(list(actions))
+    return ["- " + sans_heure(a[2]) + (f" — {sans_heure(a[3])}" if a[3] else "") for a in affichables
+            if classer(a[2])[0] == n and not any(a[2].startswith(f"il me manque {v} ") for v in erreurs)]
+
+
+def bloc_7(actions, donnees, analyste=None) -> list:
+    """Bloc 7 : toujours une ligne d'état en tête (dernière défaite de ligue ou de coupe, analyse faite ou non), puis les lignes du plan."""
+    if donnees.get("dernier_officiel") in (None, "rejeu"):
+        etat = vue_illisible("dernier_officiel")
+    else:
+        o = auj.lignes_de(donnees, "dernier_officiel")
+        if o and str(o[0]["my_result"]) == "L":
+            d = auj.en_date(o[0]["day"])
+            etat = f"défaite du {d:%d/%m} : " + ("analyse faite" if analyste is not None and analyste >= d else "analyse non faite, lancée dans ce passage")
+        else:
+            etat = "aucune défaite de ligue ou de coupe non analysée"
+    return [etat] + _lignes_plan(actions, 7)
+
+
+def _bloc_economie_ou_vie(actions, etudes, bloc: int, constats, vide: str, erreurs) -> list:
+    illisibles = [vue_illisible(v) for v in VUES_BLOC[bloc] if v in erreurs]
+    lignes = _lignes_plan(actions, bloc, erreurs)
+    sortie = [etat_etude(etudes, bloc)] + [f"- {x}" for x in illisibles] + lignes
+    if not lignes and not illisibles:
+        sortie += [f"- {c}" for c in constats] or [f"- {vide}"]
+    return sortie
+
+
+def bloc_8(actions, etudes, garder=(), erreurs=()) -> list:
+    """Bloc 8 : état de l'étude, lignes de finances du plan inchangées ; sans ligne, le constat chiffré de `garder` (finances)."""
+    return _bloc_economie_ou_vie(actions, etudes, 8, [g for g in garder if g.lower().startswith("finances")],
+                                 "aucune règle de finances déclenchée", erreurs)
+
+
+def bloc_9(actions, etudes, garder=(), erreurs=()) -> list:
+    """Bloc 9 : état de l'étude, lignes d'académie, de personnel et d'entraînement du plan inchangées."""
+    return _bloc_economie_ou_vie(actions, etudes, 9, [], "aucune règle d'académie, de personnel ou d'entraînement déclenchée", erreurs)
+
+
+def bloc_10(actions, garder) -> list:
+    """Bloc 10 : propositions d'achat, de vente et d'enchère qui attendent l'accord écrit, puis les règles « à valider » du jour."""
+    affichables, _ = separer(list(actions))
+    sortie = [f"- à valider par écrit : {sans_heure(a[2])}" for a in affichables
+              if PROPOSITION.match(a[2]) and "aucune annonce" not in a[2]]  # « Acheter un X : aucune annonce » est un besoin, rien à valider
+    sortie += [f"- {g}" for g in garder if "à valider" in g or "non tranchée" in g]
+    return sortie or ["- aucune décision n'attend ton accord écrit"]
+
+
+def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, S, etudes=None, base=None) -> tuple:
+    """(texte des blocs 0 à 10, consignes de session). Les consignes (lancer un agent) ne sont jamais dans le texte. Une vue
+    illisible donne une ligne « donnée manquante : vue <nom> illisible » dans son bloc, sans faire échouer le rendu."""
+    S = S or {}
+    etudes = lire_etudes() if etudes is None else etudes
+    erreurs = erreurs or {}
+    actions, garder = res.get("actions", []), res.get("garder", [])
+    tol = next((r["value"] for r in auj.lignes_de(donnees, "tolerance_vente")), None)
+    tol = float(tol) if tol not in (None, "") else None
+    b2, c2 = bloc_2(donnees, S, jour, maintenant, base)
+    b3, c3 = bloc_3(donnees, S, jour, maintenant, base)
+    b6, c6 = bloc_6(donnees, etudes, jour, S.get("experiences"))
+    blocs = [bloc_0(donnees, res, etudes, jour, maintenant), bloc_1(actions, jour), b2, b3,
+             bloc_4(donnees, erreurs, res.get("capacite"), tol, actions), bloc_5(etudes), b6,
+             bloc_7(actions, donnees, S.get("analyste")), bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
+             bloc_10(actions, garder)]
+    texte = []
+    for n, (titre, lignes) in enumerate(zip(TITRES, blocs)):
+        texte += [f"## Bloc {n} — {titre}", ""] + list(lignes) + [""]
+    return "\n".join(texte).rstrip() + "\n", separer(actions)[1] + c2 + c3 + c6

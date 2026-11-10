@@ -780,6 +780,21 @@ Les quatre onglets de ligue ont leur dernière capture le 2026-10-16 (599 h). **
 - bloc 0 : « Amical : tactique du match (52 h) → bloc 2 », aperçus de ligue du 11/11 et de coupe du 12/11 absents (→ bloc 3), les 4 onglets de ligue à 599 h (→ blocs 5 et 6), Marché « 1 capture, 20 annonces vues depuis 24 h (dernière le 09/11) → bloc 4 », puis 6 demandes d'export recopiées mot pour mot (5 de la carte de faisabilité, 1 de l'étude des 3 points), chacune suivie de « (étude du 10/11) » ; la page `/c/<club>` n'est pas réclamée (capturée il y a moins d'une heure) ;
 - avancement : `E1 : 0 vérifié sur 4 ; E5 : 0 vérifié sur 3 ; E2 : 0 vérifié sur 3 ; E3 : 0 vérifié sur 7 ; E4 : 0 vérifié sur 16`, prochaine hypothèse `E1 — agressivité défensive, uniforme sur nos cinq`.
 
+### T6 — blocs 5, 7 à 10 et assemblage, contrôle sur les vraies données (mardi 10/11/2026, après-midi)
+
+`rendre_blocs` appelé sur les vraies données (`lire_tout` 40 requêtes, `plan()`, `lire_sources`, études lues dans `docs/etudes/`) :
+
+- 11 titres « Bloc 0 » à « Bloc 10 » présents dans l'ordre ; `INTERDITS.search(texte)` = `None` ; `forme.fautes_de(texte, "basketvibe")` = `[]` ; `controle.reports(texte)` = `[]` ;
+- consignes de session (2) hors du texte : « Analyse : lance l'agent analyste ce soir — 3 défaites d'affilée en ligue ou coupe … » et « lancer l'agent tactique (BasketVibe, amical du 11/11, horizon aujourd'hui) … » ;
+- bloc 5 : `carte de faisabilité du 10/11 : 3a force du club et victoires : faisable maintenant ; 3b pourquoi les premiers le sont (compétences, tactique) : bloquée par : exporte la page Équipe des clubs de tête` ;
+- bloc 7 : `défaite du 09/11 : analyse non faite, lancée dans ce passage` (cohérent avec `core.fixture` : dernier match officiel perdu le 09/11, aucun brief `analyste` du 09/11 ou après) ;
+- bloc 8 : l'état de la carte (questions 2 et 4) puis `finances : seuil non atteint (résultat hebdo estimé +98 367, …)` ; bloc 9 : l'état de la carte (question 5) puis la ligne d'académie existante ;
+- bloc 10 : une vente proposée (Catalin Ungureanu, remplaçant Maël Bernard, écart 0,8), la règle « vendre pour profit » et la règle de personnel « non tranchée, à valider ».
+
+**Défaut trouvé par ce contrôle et corrigé avant le commit** : « Acheter un SF de note ≥ 61,0 : aucune annonce au poste SF dans le Marché du 09/11 » figurait au bloc 10 comme « à valider par écrit » alors qu'il n'y a rien à acheter. `bloc_10` écarte maintenant les lignes « Acheter un … » qui disent « aucune annonce » (test `test_bloc_10_un_besoin_sans_annonce_n_est_pas_une_proposition`).
+
+**Durée mesurée : 16,7 s** pour lecture (40 requêtes en parallèle) + `plan()` + `rendre_blocs` ; le budget est de 15 s. Dépassement inscrit ici et non masqué : c'est la lecture qui domine (13,4 s pour 37 requêtes mesurés en T4, 4,6 s à 4,9 s pour chaque vue `bv_sell_*`). À traiter avant la réception (T8) : aucune optimisation n'est faite dans ce commit.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
