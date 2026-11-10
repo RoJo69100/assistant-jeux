@@ -834,9 +834,9 @@ def cas_marche_5i():
              [(8, "Marché (enchères)", "cibles", "2026-11-05T13:00:00", 30, "🟧 à refaire")])
     mince = (["position", "depth", "ps_avg", "ps_max"], [("PG", 2, 49.4, 56.2), ("SG", 4, 46.4, 51.6)])
 
-    def plan5i(bargains, candidates):
+    def plan5i(bargains, candidates, etat=None):
         d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_daily_alerts": (["priority", "category", "alert"], []),
-                      "gold.bv_exports_state": vieux, "gold.bv_position_summary": mince,
+                      "gold.bv_exports_state": etat or vieux, "gold.bv_position_summary": mince,
                       "gold.bv_market_bargains": (cb, bargains), "gold.bv_market_candidates": (cc, candidates)})
         return auj.plan(d, {}, JOUR, SOIR, "", {})
 
@@ -874,10 +874,20 @@ def cas_marche_5i():
     yield "X3 présent : plafond de besoin borné par la capacité (p75 400 000 → 279 666)", ach is not None and "Borne (PS 58.5) : 200 000 à l'export, fin 07/11 10:00, plafond de besoin 279 666, à valider" in ach[2]
     yield "X3 absent : note non atteinte, autre poste, fin passée, prix au-dessus du plafond", ach is not None \
         and not any(n in ach[2] for n in ("Bas", "Ailier", "Tard", "Cher"))
-    pa = plan5i([], [])
+    frais = (vieux[0], [(8, "Marché (enchères)", "cibles", "2026-11-06T13:00:00", 6, "🟩 à jour")])
+    pa = plan5i([], [], frais)
     aucun = next((a for a in pa["actions"] if a[2].startswith("Acheter un PG")), None)
-    yield "X3 absent : aucune annonce, le dit avec la date du Marché", aucun is not None \
-        and "aucune annonce au poste PG dans le Marché du 05/11" in aucun[2]
+    yield "X3 absent : aucune annonce, Marché à jour : le dit avec la date du Marché", aucun is not None \
+        and "aucune annonce au poste PG dans le Marché du 06/11" in aucun[2]
+    # R4 : Marché périmé (règle de gold.bv_exports_state) : « Acheter un X : aucune annonce » devient la demande d'export du Marché
+    pp = plan5i([], [])
+    yield "R4 Marché périmé, aucune annonce : plus de ligne « Acheter un PG », l'export du Marché est demandé", \
+        not any(a[2].startswith("Acheter un PG") for a in pp["actions"]) and "Marché (enchères) (30 h)" in pp["exports"]
+    pj = plan5i([], [], (vieux[0], [(8, "Marché (enchères)", "cibles", None, None, "🟥 jamais")]))
+    yield "R4 Marché jamais exporté, aucune annonce : même demande", not any(a[2].startswith("Acheter un PG") for a in pj["actions"]) \
+        and "Marché (enchères) (jamais exporté)" in pj["exports"]
+    yield "R4 Marché périmé, des annonces au poste : la ligne reste (annonces à l'export, âge de la page dit)", any(
+        a[2].startswith("Acheter un PG") and "Dupuis" in a[2] for a in plan5i([], [("Dupuis", "PG", 58.0, 1, True, 100000, 100000, "2026-11-06T21:00:00", 150000)])["actions"])
     # X4 et X8
     yield "X4 chaque ligne d'enchère dit « fenêtre de mise non mesurée »", all("fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond" in a[3]
                                                                             for a in p3["actions"] + p["actions"] if a[2].startswith(("Enchère maximale", "Acheter un PG")) and "annonce" not in a[2])

@@ -664,7 +664,10 @@ def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list
         a_faire.append(f"- {texte if texte.startswith(('il me manque', 'rejeu non', 'donnée manquante')) else manque(texte)} → bloc {bloc}")
 
     for t in res.get("exports", []):
-        if not t.startswith("aperçu du match de"):  # l'aperçu se contrôle match par match, ci-dessous
+        if t.startswith("Marché (enchères) ("):  # R4 : « exporte le Marché (plusieurs pages) (dernier export il y a N h) »
+            age = t[len("Marché (enchères) ("):-1]
+            export("le Marché (plusieurs pages) (" + (age if age == "jamais exporté" else f"dernier export il y a {age}") + ")", 4)
+        elif not t.startswith("aperçu du match de"):  # l'aperçu se contrôle match par match, ci-dessous
             export(t, bloc_de_export(t, 3))
     if donnees.get("apercus_matchs") in (None, "rejeu"):
         export("l'aperçu du prochain match de ligue ou de coupe", 3)

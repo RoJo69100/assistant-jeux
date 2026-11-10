@@ -1050,7 +1050,13 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                 continue  # le prix à l'export dépasse déjà le plafond de besoin ou la capacité
             offres.append((r, prix, plafond))
         offres = offres[:3]
-        if minces or offres:
+        # R4 : Marché périmé (statut de gold.bv_exports_state) et aucune annonce au poste : « aucune annonce » serait une affirmation sur une
+        # page trop vieille ; la demande d'export du Marché (ligne Exports ci-dessus) la remplace.
+        marche_perime = bool(marche) and not str(marche.get("statut", "")).endswith(("à jour", "optionnel")) \
+            and not declare(fait, cles, jour, "Marché (enchères)")
+        if (minces or offres) and marche_perime and not offres:
+            pass  # le besoin existe (poste mince) ; sa ligne attend un Marché à jour, la demande d'export est déjà dans la liste des exports
+        elif minces or offres:
             note = str(x).replace(".", ",")
             tete = f"Acheter un {cible['position']} de note ≥ {note}"
             if offres:

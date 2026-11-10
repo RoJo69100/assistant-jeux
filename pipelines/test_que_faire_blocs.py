@@ -720,6 +720,12 @@ def cas_t5():
     yield "test_bloc_0_marche_affiche_le_compte_sans_seuil", "Marché : 1 capture, 20 annonces vues depuis 24 h (dernière le 09/11) → bloc 4" in t0
     yield "test_bloc_0_exports_hebdomadaires : 100 h non réclamé", "Équipes de la ligue" not in t0 and "Transferts de la ligue" not in t0
     yield "test_bloc_0_exports_hebdomadaires : 170 h réclamé", "exporte l'onglet Joueurs de la ligue (dernier export il y a 170 h) → blocs 5 et 6" in t0
+    m51 = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": ["Marché (enchères) (51 h)"], "actions": []}, [], JOUR_T, MAINT))
+    yield "test_bloc_0_marche_perime (R4)", "- donnée manquante : exporte le Marché (plusieurs pages) (dernier export il y a 51 h) → bloc 4" in m51 \
+        and "Marché (enchères)" not in m51
+    mj = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": ["Marché (enchères) (jamais exporté)"], "actions": []}, [], JOUR_T, MAINT))
+    yield "test_bloc_0_marche_jamais_exporte (R4)", "- donnée manquante : exporte le Marché (plusieurs pages) (jamais exporté) → bloc 4" in mj
+    yield "test_bloc_0_marche_a_jour_pas_de_demande (R4)", "exporte le Marché" not in "\n".join(qfb.bloc_0(donnees_t5(), {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     vieux = "\n".join(qfb.bloc_0(donnees_t5(heb=[("standings_teams", (MAINT - dt.timedelta(hours=1)).isoformat()), ("standings_transfers", (MAINT - dt.timedelta(hours=900)).isoformat())]),
                                  {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     yield "test_bloc_0_onglet_transferts_jamais_reclame (déjà dans l'historique global)", "Transferts de la ligue" not in vieux \
