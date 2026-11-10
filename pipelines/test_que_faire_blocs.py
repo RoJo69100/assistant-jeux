@@ -158,6 +158,7 @@ def cas():
     yield from cas_a1()
     yield from cas_r3()
     yield from cas_r1()
+    yield from cas_r8()
     yield from cas_a2()
     yield from cas_a6()
 
@@ -456,10 +457,10 @@ def cas_contrat_brief():
     coupe = donnees_t(apercus_matchs=T(APERCU_COLS, [(8, "coupe", None, "2026-11-11", "Naked Spartans", "2026-11-10T09:00:00", "Zwolinski")]))
     _, cc = qfb.bloc_3(coupe, S, JOUR_T, MAINT, base=dossier())
     yield "test_contrat_brief : coupe : première ligne exacte", len(cc) == 1 and "première ligne exactement « Coupe contre Naked Spartans (11/11) »" in cc[0] \
-        and "outputs/basketvibe/briefs/2026-11-10-tactique.md" in cc[0]
+        and "outputs/basketvibe/briefs/2026-11-10-tactique-coupe.md" in cc[0]  # R8 (test réécrit : la coupe avait le fichier de la ligue)
     nomc, textec = brief_depuis_la_consigne(cc[0])
     basec = dossier((nomc, textec, datetime_paris(2026, 11, 10, 11))) if nomc else dossier()
-    fc = qfb.brief_du_jour(basec, JOUR_T, False, "Naked Spartans")
+    fc = qfb.brief_du_jour(basec, JOUR_T, False, "Naked Spartans", "coupe")
     yield "test_contrat_brief : coupe : brief_du_jour le trouve", fc is not None
     lc, c_c = qfb.bloc_3(coupe, S, JOUR_T, MAINT, base=basec)
     yield "test_contrat_brief : coupe : le bloc rend le brief", "| Gimenez |" in "\n".join(lc) and c_c == []
@@ -951,6 +952,28 @@ TRAITEES = ("| début de la demande | statut | date | raison |\n|---|---|---|---
 
 def etude_avec(*demandes):
     return "# Étude (2026-11-10)\n\n**Question** : x ?\n\n## Export demandé\n" + "".join(f"- {d}\n" for d in demandes)
+
+
+def cas_r8():
+    """R8 : une ligue et une coupe le même jour ont chacune leur fichier de brief (`-tactique.md` et `-tactique-coupe.md`) ; avant, les deux
+    agents écrivaient le même fichier et le second écrasait le premier (le script ne lit qu'un brief de ligue ou de coupe par jour)."""
+    d12 = dt.date(2026, 11, 12)
+    yield "test_r8_contrat_coupe : fichier et première ligne", qfb.contrat_brief(JOUR_T, False, "Stare Kotlety", d12, None, "coupe") \
+        == ("outputs/basketvibe/briefs/2026-11-10-tactique-coupe.md", "Coupe contre Stare Kotlety (12/11)")
+    yield "test_r8_contrat_ligue_inchange", qfb.contrat_brief(JOUR_T, False, "BC KIT", dt.date(2026, 11, 11), 5, "ligue") \
+        == ("outputs/basketvibe/briefs/2026-11-10-tactique.md", "J5 : BC KIT (11/11)")
+    base = dossier(("2026-11-10-tactique.md", "J5 : BC KIT (11/11)\n\nligue\n", None), ("2026-11-10-tactique-coupe.md", "Coupe contre Stare Kotlety (12/11)\n\ncoupe\n", None),
+                   ("2026-11-10-tactique-amical.md", "Amical contre Launceston Ligers (11/11)\n\namical\n", None))
+    fl, fc = qfb.brief_du_jour(base, JOUR_T, False, "BC KIT"), qfb.brief_du_jour(base, JOUR_T, False, "Stare Kotlety", "coupe")
+    yield "test_r8_brief_du_jour : ligue et coupe, chacun son fichier", fl is not None and fl.name == "2026-11-10-tactique.md" \
+        and fc is not None and fc.name == "2026-11-10-tactique-coupe.md"
+    yield "test_r8_brief_du_jour : jamais le fichier de l'autre match", qfb.brief_du_jour(base, JOUR_T, False, "Stare Kotlety") is None \
+        and qfb.brief_du_jour(base, JOUR_T, False, "BC KIT", "coupe") is None
+    lus = auj.src.lire_tactique(base, JOUR_T)
+    yield "test_r8_lire_tactique : trois briefs, types ligue, coupe, amical", sorted(t["type"] for t in lus) == ["amical", "coupe", "ligue"] \
+        and {t["match"] for t in lus if t["type"] == "coupe"} == {"Stare Kotlety"}
+    yield "test_r8_composition_brief_pour : le brief de coupe est trouvé par adversaire", qfb.comp.brief_pour(base, JOUR_T, "Stare Kotlety", False) is not None
+    yield "test_r8_brief_du_match : la coupe est retrouvée par aujourdhui", auj.brief_du_match({"tactique": lus}, "coupe", "Stare Kotlety", dt.date(2026, 11, 12)) is not None
 
 
 def cas_r1():

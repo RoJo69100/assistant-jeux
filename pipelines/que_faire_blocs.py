@@ -205,7 +205,7 @@ ANTICIPATION = ("anticipe les décisions de l'adversaire contre nous : pour chac
 def contrat_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.date, manche=None, genre: str = "ligue") -> tuple:
     """(chemin du brief, première ligne) que l'agent tactique doit écrire pour que le script le retrouve :
     `brief_du_jour` exige le nom daté du jour, `adversaire_du_titre` lit l'adversaire dans la première ligne."""
-    chemin = f"outputs/basketvibe/briefs/{jour.isoformat()}-tactique{'-amical' if amical else ''}.md"
+    chemin = f"outputs/basketvibe/briefs/{jour.isoformat()}-tactique{'-amical' if amical else '-coupe' if genre == 'coupe' else ''}.md"  # R8 : un fichier par genre
     jj = f"{date_match:%d/%m}"
     if amical:
         return chemin, f"Amical contre {adversaire} ({jj})"
@@ -251,10 +251,10 @@ def produit_le(fichier) -> dt.datetime:
     return heure_paris.paris(dt.datetime.fromtimestamp(ts, dt.timezone.utc)).replace(tzinfo=None)
 
 
-def brief_du_jour(base, jour: dt.date, amical: bool, adversaire: str):
-    """Chemin du brief tactique **daté du jour** (`AAAA-MM-JJ-tactique[-amical].md`) dont le titre nomme l'adversaire ; None sinon.
-    Un brief d'un autre jour n'est jamais renvoyé."""
-    f = Path(base or BASE) / "briefs" / f"{jour.isoformat()}-tactique{'-amical' if amical else ''}.md"
+def brief_du_jour(base, jour: dt.date, amical: bool, adversaire: str, genre: str = "ligue"):
+    """Chemin du brief tactique **daté du jour** (`AAAA-MM-JJ-tactique[-amical|-coupe].md`) dont le titre nomme l'adversaire ; None sinon.
+    Un brief d'un autre jour n'est jamais renvoyé ; ligue et coupe ont chacune leur fichier (R8)."""
+    f = Path(base or BASE) / "briefs" / f"{jour.isoformat()}-tactique{'-amical' if amical else '-coupe' if genre == 'coupe' else ''}.md"
     if not f.is_file() or f.stat().st_size == 0:
         return None
     lignes = f.read_text(encoding="utf-8").splitlines()
@@ -388,7 +388,7 @@ def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         if not m["captures"]:
             lignes += [manque(f"l'aperçu du match de {genre} du {jj}", "bloc 3"), ""]
             continue
-        f = brief_du_jour(base, jour, False, m["adv"])
+        f = brief_du_jour(base, jour, False, m["adv"], genre)
         tableau = comp.composer(m["adv"], base or BASE, jour, False) if f and fiche_a_jour(f, max(m["captures"]), dernier_export_equipe(donnees)) else comp.AUCUNE
         if tableau == comp.AUCUNE:
             lignes += ["composition en préparation", ""]

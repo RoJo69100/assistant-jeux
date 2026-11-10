@@ -40,7 +40,7 @@ def brief_pour(base, jour, adversaire, amical):
     trouves = []
     for f in (Path(base) / "briefs").glob("*.md"):
         m = src.BRIEF.match(f.name)
-        if not m or bool(m.group(2)) != amical or Path(f).stat().st_size == 0:
+        if not m or (m.group(2) == "-amical") != amical or Path(f).stat().st_size == 0:
             continue
         date = dt.date.fromisoformat(m.group(1))
         if date > jour:
@@ -112,7 +112,7 @@ def composer_amical(brief_du_jour, test=None):
         return None
     f = Path(brief_du_jour)
     m = src.BRIEF.match(f.name)
-    if not m or not m.group(2) or not f.is_file() or f.stat().st_size == 0:
+    if not m or m.group(2) != "-amical" or not f.is_file() or f.stat().st_size == 0:
         return None
     texte = f.read_text(encoding="utf-8")
     fiche = lire_fiche(texte)

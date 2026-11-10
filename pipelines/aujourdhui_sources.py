@@ -14,7 +14,7 @@ import datetime as dt
 import re
 from pathlib import Path
 
-BRIEF = re.compile(r"^(\d{4}-\d{2}-\d{2})-tactique(-amical)?\.md$")
+BRIEF = re.compile(r"^(\d{4}-\d{2}-\d{2})-tactique(-amical|-coupe)?\.md$")  # R8 : la coupe a son fichier
 SEUIL_VIEUX = 3  # jours : un brief plus ancien pour un match du jour est signalé (skill, étape 3)
 JOURS = ["lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim."]
 CLAUSE = re.compile(r"([A-Za-zÉé]+\.?\s?\d)\s+pour\s+(.+?)(?=,\s*[A-Za-zÉé]+\.?\s?\d\s+pour|\s*$)")
@@ -30,12 +30,17 @@ def _nettoie(s: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"\*\*|`", "", s)).strip()
 
 
-def dernier_brief(base, jour: dt.date, amical: bool):
-    """(date, chemin) du brief le plus récent du type demandé, daté d'au plus `jour` ; None s'il n'y en a pas."""
+SUFFIXE_BRIEF = {"ligue": None, "coupe": "-coupe", "amical": "-amical"}
+
+
+def dernier_brief(base, jour: dt.date, genre):
+    """(date, chemin) du brief le plus récent du genre demandé (« ligue », « coupe » ou « amical » ; True = amical, False = ligue), daté d'au
+    plus `jour` ; None s'il n'y en a pas."""
+    genre = "amical" if genre is True else "ligue" if genre is False else genre
     trouves = []
     for f in (Path(base) / "briefs").glob("*.md"):
         m = BRIEF.match(f.name)
-        if m and bool(m.group(2)) == amical and dt.date.fromisoformat(m.group(1)) <= jour:
+        if m and m.group(2) == SUFFIXE_BRIEF[genre] and dt.date.fromisoformat(m.group(1)) <= jour:
             trouves.append((dt.date.fromisoformat(m.group(1)), f))
     return max(trouves, key=lambda x: x[0]) if trouves else None
 
@@ -59,8 +64,9 @@ def preuves(texte: str) -> list[str]:
 def lire_tactique(base, jour: dt.date) -> list[dict]:
     """Un dict par match à venir : type, match, date, verrou, preuves, fichier, age (jours), vieux."""
     res = []
-    for amical in (False, True):
-        b = dernier_brief(base, jour, amical)
+    for genre in ("ligue", "coupe", "amical"):
+        amical = genre == "amical"
+        b = dernier_brief(base, jour, genre)
         if not b:
             continue
         date_brief, f = b
@@ -71,11 +77,11 @@ def lire_tactique(base, jour: dt.date) -> list[dict]:
         date = _jm(jour, d.group(1), d.group(2)) if d else None
         if date and date < jour:
             continue  # match déjà joué
-        m = re.search(r"contre ([^,]+)", titre) if amical else re.search(r"J\d+ : ([^(,]+)", titre)
+        m = re.search(r"contre ([^,]+)", titre) if amical else re.search(r"contre ([^(,]+)", titre) if genre == "coupe" else re.search(r"J\d+ : ([^(,]+)", titre)
         manche = re.search(r"\b(J\d+)\b", titre)
         age = (jour - date_brief).days
         res.append({
-            "type": "amical" if amical else "ligue", "match": (m.group(1).strip() if m else "match inconnu"),
+            "type": genre, "match": (m.group(1).strip() if m else "match inconnu"),
             "manche": manche.group(1) if manche and not amical else None,
             "lieu": "domicile" if re.search(r"domicile", titre, re.I) else "extérieur" if re.search(r"ext[ée]rieur", titre, re.I) else None,
             "date": date, "verrou": v.group(1) if v else None, "preuves": preuves(texte),
