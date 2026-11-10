@@ -523,7 +523,7 @@ SUJET_CARTE = "carte-faisabilite"  # ajustement b : lue par etat_etude, mais ni 
 SANS_VALEUR = ("", "-", "—")
 SEUIL_HEBDO_H = 168  # un export hebdomadaire n'est réclamé qu'au-delà d'une semaine
 HEBDO = [("standings_teams", "l'onglet Équipes de la ligue"), ("standings_players", "l'onglet Joueurs de la ligue"),
-         ("standings_injuries", "l'onglet Blessés de la ligue"), ("standings_transfers", "l'onglet Transferts de la ligue"),
+         ("standings_injuries", "l'onglet Blessés de la ligue"),
          ("club_adverse", "une page /c/<club> d'un club adverse")]
 # Mot d'un export -> bloc qu'il débloque ; le premier mot rencontré dans le texte décide.
 BLOC_DE = [("aperçu", 3), ("Équipe", 3), ("Effectif", 3), ("amical", 2), ("page du match", 7), ("Match de", 7), ("Marché", 4),

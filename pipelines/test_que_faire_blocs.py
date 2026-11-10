@@ -720,6 +720,10 @@ def cas_t5():
     yield "test_bloc_0_marche_affiche_le_compte_sans_seuil", "Marché : 1 capture, 20 annonces vues depuis 24 h (dernière le 09/11) → bloc 4" in t0
     yield "test_bloc_0_exports_hebdomadaires : 100 h non réclamé", "Équipes de la ligue" not in t0 and "Transferts de la ligue" not in t0
     yield "test_bloc_0_exports_hebdomadaires : 170 h réclamé", "exporte l'onglet Joueurs de la ligue (dernier export il y a 170 h) → blocs 5 et 6" in t0
+    vieux = "\n".join(qfb.bloc_0(donnees_t5(heb=[("standings_teams", (MAINT - dt.timedelta(hours=1)).isoformat()), ("standings_transfers", (MAINT - dt.timedelta(hours=900)).isoformat())]),
+                                 {"exports": [], "actions": []}, [], JOUR_T, MAINT))
+    yield "test_bloc_0_onglet_transferts_jamais_reclame (déjà dans l'historique global)", "Transferts de la ligue" not in vieux \
+        and all(pt != "standings_transfers" for pt, _ in qfb.HEBDO) and "standings_transfers" not in auj.REQUETES["exports_hebdo"]
     yield "test_bloc_0_exports_hebdomadaires : jamais capturé réclamé", "exporte l'onglet Blessés de la ligue (jamais exporté) → blocs 5 et 6" in t0
     yield "test_bloc_0_exports_hebdomadaires : pages club réclamées", "exporte une page /c/<club> d'un club adverse (dernier export il y a 200 h) → blocs 5 et 6" in t0
     yield "test_bloc_0_demandes_recopiees", f"{DEMANDE_B} (étude du 09/11) → bloc 6" in t0 and f"{DEMANDE_C} (étude du 10/11) → bloc 6" in t0 \

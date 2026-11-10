@@ -175,11 +175,10 @@ REQUETES = {
                      "from silver.bv_matches m where m.status = 'finished' and not exists "
                      "(select 1 from core.fixture f where f.game = 'basketvibe' and f.fixture_id = m.fixture_id::text)",
     # 5n T5 (bloc 0) : dernière capture des exports hebdomadaires de l'étude, mesurée par page_type (relevé à l'étape 0 du plan :
-    # onglets de ligue standings_teams / _players / _injuries / _transfers) ; les pages /c/<club> n'ont pas de page_type propre
+    # onglets de ligue standings_teams / _players / _injuries ; l'onglet Transferts est déjà dans l'historique global, R6) ; les pages /c/<club> n'ont pas de page_type propre
     # (« unknown » avec 308 autres pages) : mesurées par leur page_url.
     "exports_hebdo": "select page_type, max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
-                     "where game = 'basketvibe' and page_type in ('standings_teams', 'standings_players', 'standings_injuries', "
-                     "'standings_transfers') group by page_type union all "
+                     "where game = 'basketvibe' and page_type in ('standings_teams', 'standings_players', 'standings_injuries') group by page_type union all "
                      "select 'club_adverse', max(captured_at at time zone 'Europe/Paris') from bronze.raw_pages "
                      "where game = 'basketvibe' and page_url like '%/c/%'",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
