@@ -109,7 +109,7 @@ REQUETES = {
     "valeurs_academie": "select key, value from core.game_params where game = 'basketvibe' "
                         "and key in ('academie_valeur_high', 'academie_cout_test')",
     # L3 (étape 5f) : remplaçant au même poste (force fit), écart et salaire ; tolérance de force lue dans core.game_params
-    "gold.bv_sell_replacement": "select name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
+    "gold.bv_sell_replacement": "select player_id, name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
                                 "on_transfer_list, available, available_players from gold.bv_sell_replacement",
     "tolerance_vente": "select value from core.game_params where game = 'basketvibe' and key = 'vente_tolerance_force'",
     # N2 (étape 5h) : entraînement saisi (dernier export /club/training) et jour/heure de fin de cycle (règle d'agenda)
@@ -145,9 +145,9 @@ REQUETES = {
     # 5n T4 : nombre d'annonces du dernier export du Marché (phrase « aucune annonce ne se termine dans les 24 h »)
     "annonces_export": "select count(*) as n from gold.bv_market_candidates",
     # 5n T4 : mes joueurs vendables (gold.bv_sell_candidates). Les remplaçants viennent de la requête « gold.bv_sell_replacement » (déjà lue
-    # par plan()), jointes par nom dans le module : leur jointure en SQL dépasse le délai (mesuré le 10/11 : 4,7 s par vue, 18 s la jointure,
+    # par plan()), jointes par player_id dans le module (A4 : les deux vues l'exposent) : leur jointure en SQL dépasse le délai (mesuré le 10/11 : 4,7 s par vue, 18 s la jointure,
     # puis statement timeout).
-    "vendre": "select name, position, age, ps, salary, best_slot, rank_in_slot, league_min_last4, on_transfer_list "
+    "vendre": "select player_id, name, position, age, ps, salary, best_slot, rank_in_slot, league_min_last4, on_transfer_list "
               "from gold.bv_sell_candidates order by salary desc",
     # 5n T5 (bloc 0) : captures et annonces du Marché vues depuis 24 h (le compte est affiché, aucun seuil n'est inventé)
     "captures_marche": "select count(distinct seen_at) as captures, count(distinct listing_id) as annonces, "

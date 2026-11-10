@@ -516,16 +516,16 @@ ANN = T(ANN_COLS, [("a1", "Paul Aubert", "PG", 23, 47.0, 50000, "2026-11-11T09:0
                    ("a5", "Eli Ferrand", "SF", 31, 52.0, 1000, "2026-11-11T13:00:00", 9.5, 1.0, False)])
 # « vendre » (gold.bv_sell_candidates) et « gold.bv_sell_replacement » sont lues séparément (en parallèle) et jointes par nom dans le module :
 # leur jointure en SQL dépassait le délai (mesuré le 10/11 : chaque vue ~4,7 s, jointure 18 s puis statement timeout).
-VENTE = T(["name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"],
-          [("Maël Bernard", "C", 18, 47.8, 17303, "PF", 5, 0.0, False), ("Léo Lefebvre", "PF", 29, 63.1, 31803, "PF", 1, 35.1, False),
-           ("Nolan Baron", "PG", 17, 44.5, 16691, "PG", 7, 0.0, False), ("Sacha Leclerc", "SG", 17, 42.3, 13767, "SG", 11, 0.0, True),
-           ("Zoé Sansremplaçant", "C", 30, 49.0, 20000, "C", 6, 3.0, False)])
-REMPL = T(["name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary", "on_transfer_list", "available",
+VENTE = T(["player_id", "name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"],
+          [("p1", "Maël Bernard", "C", 18, 47.8, 17303, "PF", 5, 0.0, False), ("p2", "Léo Lefebvre", "PF", 29, 63.1, 31803, "PF", 1, 35.1, False),
+           ("p3", "Nolan Baron", "PG", 17, 44.5, 16691, "PG", 7, 0.0, False), ("p4", "Sacha Leclerc", "SG", 17, 42.3, 13767, "SG", 11, 0.0, True),
+           ("p5", "Zoé Sansremplaçant", "C", 30, 49.0, 20000, "C", 6, 3.0, False)])
+REMPL = T(["player_id", "name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary", "on_transfer_list", "available",
            "available_players"],
-          [("Maël Bernard", "PF", 47.6, "Anselmo Albano", 47.5, 0.1, 17303, False, True, 14),
-           ("Léo Lefebvre", "PF", 62.8, "Hadrien Gimenez", 58.6, 4.2, 31803, False, True, 14),
-           ("Nolan Baron", "PG", 44.2, "Jonathan Durand", 43.9, 0.3, 16691, False, True, 9),
-           ("Sacha Leclerc", "SG", 42.2, "Nolan Baron", 40.9, 0.2, 13767, True, True, 14)])
+          [("p1", "Maël Bernard", "PF", 47.6, "Anselmo Albano", 47.5, 0.1, 17303, False, True, 14),
+           ("p2", "Léo Lefebvre", "PF", 62.8, "Hadrien Gimenez", 58.6, 4.2, 31803, False, True, 14),
+           ("p3", "Nolan Baron", "PG", 44.2, "Jonathan Durand", 43.9, 0.3, 16691, False, True, 9),
+           ("p4", "Sacha Leclerc", "SG", 42.2, "Nolan Baron", 40.9, 0.2, 13767, True, True, 14)])
 JOUR_J = dt.date(2026, 11, 10)
 
 
@@ -592,6 +592,17 @@ def cas_bloc_4():
     yield "test_bloc_4_vue_illisible", all(f"donnée manquante : vue {v} illisible" in ill for v in ("prix_cases", "annonces_24h", "vendre"))
     ill2 = "\n".join(qfb.bloc_4(donnees_4(**{"gold.bv_sell_replacement": None}), {}, 300000, 1.0))
     yield "test_bloc_4_vue_illisible : remplaçants", "donnée manquante : vue gold.bv_sell_replacement illisible" in ill2 and "Maël Bernard" not in ill2.split("Qui vendre")[-1]
+    # A4 : jointure par player_id, deux homonymes ne se mélangent pas
+    hom_c = T(["player_id", "name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"],
+              [("h1", "Jean Dupont", "PG", 25, 50.0, 20000, "PG", 3, 10.0, False), ("h2", "Jean Dupont", "C", 25, 50.0, 21000, "C", 4, 5.0, False)])
+    hom_r = T(["player_id", "name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary", "on_transfer_list", "available", "available_players"],
+              [("h1", "Jean Dupont", "PG", 50.0, "Remplaçant Un", 49.5, 0.5, 20000, False, True, 14),
+               ("h2", "Jean Dupont", "C", 50.0, "Remplaçant Deux", 40.0, 10.0, 21000, False, True, 14)])
+    th = [l for l in qfb.bloc_4(donnees_4(vendre=hom_c, **{"gold.bv_sell_replacement": hom_r}), {}, 300000, 1.0) if "Jean Dupont" in l]
+    yield "test_vendre_jointure_par_player_id_homonymes", len(th) == 2 and "Remplaçant Un" in th[1 if "| PG |" in th[1] else 0] \
+        and any("| PG |" in l and "Remplaçant Un" in l and "vendable" in l and "nécessaire" not in l for l in th) \
+        and any("| C |" in l and "Remplaçant Deux" in l and "nécessaire (écart de force 10,0" in l for l in th)
+    yield "test_vendre_requetes_exposent_player_id", "player_id" in auj.REQUETES["vendre"] and "player_id" in auj.REQUETES["gold.bv_sell_replacement"]
     yield "test_vendre_sans_remplacant", "nécessaire (aucun remplaçant au poste)" in ligne_de(V, "Zoé Sansremplaçant")
 
     # lignes d'enchères et d'achats déjà produites par le plan : gardées, sans heure

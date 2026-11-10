@@ -465,10 +465,10 @@ def _table_vente(donnees, tolerance) -> list:
               "| Nom | Poste | Âge | Note | Salaire hebdomadaire | Rang au poste | Minutes (4 derniers matchs de ligue) | Remplaçant | "
               "Écart de force | Prix attendu (médiane de la case) | Verdict |", "|---|---|---|---|---|---|---|---|---|---|---|"]
     cases = _cases(donnees)
-    rempl = {forme.norm(r["name"]): r for r in auj.lignes_de(donnees, "gold.bv_sell_replacement")}
+    rempl = {str(r["player_id"]): r for r in auj.lignes_de(donnees, "gold.bv_sell_replacement")}  # A4 : par player_id, pas par nom (homonymes)
     rangees = []
     for c in auj.lignes_de(donnees, "vendre"):
-        r = dict(c, **{k: v for k, v in rempl.get(forme.norm(c["name"]), {}).items() if k not in c})  # remplaçant, écart, disponibles
+        r = dict(c, **{k: v for k, v in rempl.get(str(c["player_id"]), {}).items() if k not in c})  # remplaçant, écart, disponibles
         verdict = _verdict_vente(r, tolerance)
         case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
         if case is None:
