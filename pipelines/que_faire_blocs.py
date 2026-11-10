@@ -6,6 +6,7 @@ et rend le document. Règle commune : un bloc vide s'écrit « donnée manquante
 import datetime as dt
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -181,9 +182,25 @@ LIGNE_ANTICIPATION = re.compile(r"^[\s>*-]*\**\s*(Anticipation \(hypothèse\)\s*
 ABSENTE = "Anticipation (hypothèse) : absente du brief du jour"
 
 
+def _heure_commit(fichier):
+    """Horodatage (epoch) du dernier commit qui touche le fichier ; None si le fichier n'est pas suivi, hors dépôt git ou git absent."""
+    f = Path(fichier).resolve()
+    try:
+        r = subprocess.run(["git", "-C", str(f.parent), "log", "-1", "--format=%ct", "--", f.name],
+                           capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    sortie = r.stdout.strip()
+    return int(sortie) if r.returncode == 0 and sortie.isdigit() else None
+
+
 def produit_le(fichier) -> dt.datetime:
-    """Heure de Paris (naïve) de dernière écriture du fichier : le moment où le brief a été produit."""
-    return heure_paris.paris(dt.datetime.fromtimestamp(os.path.getmtime(fichier), dt.timezone.utc)).replace(tzinfo=None)
+    """Heure de Paris (naïve) à laquelle le brief a été produit : celle de son dernier commit (`git log -1 --format=%ct`, un
+    `git checkout` ne la change pas) ; la date de dernière écriture seulement si le fichier n'est pas suivi."""
+    ts = _heure_commit(fichier)
+    if ts is None:
+        ts = os.path.getmtime(fichier)
+    return heure_paris.paris(dt.datetime.fromtimestamp(ts, dt.timezone.utc)).replace(tzinfo=None)
 
 
 def brief_du_jour(base, jour: dt.date, amical: bool, adversaire: str):

@@ -151,6 +151,7 @@ def cas():
     yield from cas_bloc_1()
     yield from cas_blocs_2_3()
     yield from cas_contrat_brief()
+    yield from cas_produit_le()
 
 
 J = dt.date(2026, 11, 10)
