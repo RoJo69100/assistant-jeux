@@ -733,8 +733,14 @@ def cas_t5():
         and all(pt != "standings_transfers" for pt, _ in qfb.HEBDO) and "standings_transfers" not in auj.REQUETES["exports_hebdo"]
     yield "test_bloc_0_exports_hebdomadaires : jamais capturé réclamé", "exporte l'onglet Blessés de la ligue (jamais exporté) → blocs 5 et 6" in t0
     yield "test_bloc_0_exports_hebdomadaires : pages club réclamées", "exporte une page /c/<club> d'un club adverse (dernier export il y a 200 h) → blocs 5 et 6" in t0
-    yield "test_bloc_0_demandes_recopiees", f"{DEMANDE_B} (étude du 09/11) → bloc 6" in t0 and f"{DEMANDE_C} (étude du 10/11) → bloc 6" in t0 \
+    # R2 (test réécrit : l'ancien attendait le texte complet de la demande au bloc 0) : forme courte au bloc 0, texte complet au bloc 6 seulement
+    yield "test_bloc_0_demandes_courtes", "- exporte la page des réglages utilisés vue côté adversaire (étude du 09/11) → bloc 6" in t0 \
+        and "- exporte la page Équipe des clubs de tête (étude du 10/11) → bloc 6" in t0 and "parce que" not in t0 and "Pour comprendre" not in t0 \
         and DEMANDE_A not in t0 and DEMANDE_INVALIDE not in t0
+    yield "test_demande_courte : coupe avant « parce que », sans ponctuation finale", qfb.demande_courte(DEMANDE_B) == "exporte la page des réglages utilisés vue côté adversaire" \
+        and qfb.demande_courte("exporte X, parce que y") == "exporte X" and qfb.demande_courte("exporte X.") == "exporte X" \
+        and qfb.demande_courte(PREFIXE_DEMANDE + "exporte la page Z (si le jeu l'affiche), parce que a") == "exporte la page Z (si le jeu l'affiche)"
+    yield "test_bloc_6_garde_le_texte_complet_des_demandes", f"{DEMANDE_B} (étude du 09/11)" in "\n".join(qfb.bloc_6(donnees_t5(), et, JOUR_T)[0])
     yield "test_bloc_0_aucune_etude_aucune_demande", "Pour comprendre" not in "\n".join(qfb.bloc_0(donnees_t5(), {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     yield "test_bloc_0_sans_commande_ni_heure", qfb.INTERDITS.search(t0) is None and re.search(r"\d\d:\d\d", t0) is None
     toutes = "\n".join(qfb.bloc_0(donnees_t5(heb=[(p, (MAINT - dt.timedelta(hours=1)).isoformat()) for p in
@@ -992,7 +998,7 @@ def cas_a1():
     # bloc 0 et bloc 6 : la demande traitée n'est plus réclamée
     t0 = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": [], "actions": []}, et, JOUR_T, MAINT))
     l6, _ = qfb.bloc_6(donnees_t5(), et, dt.date(2026, 11, 10))
-    yield "test_demande_traitee_absente_des_blocs_0_et_6", DEMANDE_RESTANTE in t0 and "l'amical du 29/10" not in t0 + "\n".join(l6) \
+    yield "test_demande_traitee_absente_des_blocs_0_et_6", qfb.demande_courte(DEMANDE_RESTANTE) in t0 and "l'amical du 29/10" not in t0 + "\n".join(l6) \
         and "les jours de ligue entre" not in t0 and "exporte la page effectif (compétences" not in t0
     # fichier réel du dépôt
     reel = qfb.lire_etudes()

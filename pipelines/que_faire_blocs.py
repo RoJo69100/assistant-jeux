@@ -675,6 +675,13 @@ def bloc_de_export(texte: str, defaut: int = 0) -> int:
     return min(trouves)[1] if trouves else defaut
 
 
+def demande_courte(demande: str) -> str:
+    """Forme courte d'une demande d'étude pour le bloc 0 : sans « Pour comprendre le Match Engine, j'ai besoin de : », coupée avant
+    « , parce que », sans point final (R2). Le texte complet reste au bloc 6."""
+    t = demande[len(DEMANDE):] if demande.startswith(DEMANDE) else demande
+    return re.split(r",?\s+parce que\b", t.strip(), maxsplit=1)[0].strip().rstrip(".;")
+
+
 def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list:
     """Bloc 0 : ce qu'il faut exporter, chaque ligne avec le bloc qu'elle débloque. Contrôle par match (aperçu de ligue ou de coupe,
     page du match joué, amical), Marché (nombre de captures, sans seuil), exports hebdomadaires de l'étude (plus de 168 h, mesurés par
@@ -721,7 +728,7 @@ def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list
             if age is None or age > SEUIL_HEBDO_H:
                 a_faire.append(f"- {manque(libelle, 'jamais exporté' if age is None else f'dernier export il y a {int(age)} h')} → blocs 5 et 6")
 
-    demandes = [f"- {d} (étude du {date:%d/%m}) → bloc 6" for d, date in _demandes(etudes)]
+    demandes = [f"- {demande_courte(d)} (étude du {date:%d/%m}) → bloc 6" for d, date in _demandes(etudes)]  # R2 : forme courte ; le texte complet est au bloc 6
     sortie = list(dict.fromkeys(a_faire))
     if not sortie:
         sortie = ["- aucun export à refaire : toutes les pages suivies sont à jour"]
