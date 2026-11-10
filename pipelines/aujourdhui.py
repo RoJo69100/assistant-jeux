@@ -166,6 +166,14 @@ REQUETES = {
                      "from bronze.raw_pages p join core.fixture f on f.game = 'basketvibe' and f.played and f.fixture_id = right(p.page_url, 36) "
                      "where p.game = 'basketvibe' and p.page_url ~ '^https://www[.]basketvibe[.]com/(match|friendly|cup)/[0-9a-f-]{36}$' "
                      "group by right(p.page_url, 36), 1",
+    # 5n A7 (bloc 6) : matchs d'autres clubs (finis dans silver.bv_matches, sans fixture chez nous) avec le jour (Paris) de la première
+    # capture de leur page de match ; None si la page n'a jamais été captée. Comptés dans « N en base », jamais dans k ni dans le
+    # déclencheur de l'étude (nos matchs seulement).
+    "matchs_autres": "select (select (min(p.captured_at) at time zone 'Europe/Paris')::date from bronze.raw_pages p where p.game = 'basketvibe' "
+                     "and right(p.page_url, 36) = m.fixture_id::text "
+                     "and p.page_url ~ '^https://www[.]basketvibe[.]com/(match|friendly|cup)/[0-9a-f-]{36}$') as premiere_jour "
+                     "from silver.bv_matches m where m.status = 'finished' and not exists "
+                     "(select 1 from core.fixture f where f.game = 'basketvibe' and f.fixture_id = m.fixture_id::text)",
     # 5n T5 (bloc 0) : dernière capture des exports hebdomadaires de l'étude, mesurée par page_type (relevé à l'étape 0 du plan :
     # onglets de ligue standings_teams / _players / _injuries / _transfers) ; les pages /c/<club> n'ont pas de page_type propre
     # (« unknown » avec 308 autres pages) : mesurées par leur page_url.

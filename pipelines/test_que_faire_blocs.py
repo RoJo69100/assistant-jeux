@@ -656,6 +656,8 @@ MATCHS = T(["day", "competition_kind", "n"], [("2026-10-20", "ligue", 2), ("2026
                                               ("2026-11-09", "ligue", 1), ("2026-11-09", "amical", 1), ("2026-11-10", "amical", 1)])
 # A3 : « matchs ajoutés » = pages de match captées pour la première fois depuis hier (une ligne par match de chez nous, jour de première capture)
 CAPTES = T(["kind", "premiere_jour"], [("match", "2026-11-09"), ("friendly", "2026-11-09"), ("cup", "2026-11-10"), ("friendly", "2026-10-30")])
+# A7 : matchs d'autres clubs (finis, sans fixture chez nous) : jour de première capture de leur page (None si jamais captée)
+AUTRES = T(["premiere_jour"], [("2026-11-09",), ("2026-10-30",), ("2026-10-30",)])
 OBJ_COLS = ["day", "competition_kind", "opponent", "objectif", "raison", "rule_id", "defaites_d_affilee"]
 SERIE3 = T(OBJ_COLS, [("2026-11-11", "ligue", "BC KIT", "corriger", "serie", "serie", 3)])
 
@@ -666,7 +668,7 @@ def donnees_t5(heb=None, **plus):
                                        ("club_adverse", avant(200))]
     d = donnees_t(exports_hebdo=T(["page_type", "derniere_paris"], heb),
                   captures_marche=T(["captures", "annonces", "derniere_paris"], [(1, 20, "2026-11-09T23:18:35")]),
-                  matchs_ajoutes=MATCHS, matchs_captes=CAPTES, amical_reglage=T(["fixture_id", "match_day", "opponent", "agress_cran", "primary_quarts", "tir_cran4_joueurs"], []),
+                  matchs_ajoutes=MATCHS, matchs_captes=CAPTES, matchs_autres=AUTRES, amical_reglage=T(["fixture_id", "match_day", "opponent", "agress_cran", "primary_quarts", "tir_cran4_joueurs"], []),
                   objectifs=SERIE3)
     d.update(plus)
     return d
@@ -741,12 +743,12 @@ def cas_t5():
     etu = etudes_de({"2026-11-08-trois-points.md": ETUDE_OK, "2026-11-10-carte-faisabilite.md": CARTE})
     l6, c6 = qfb.bloc_6(donnees_t5(), etu, jour)
     t6 = "\n".join(l6)
-    yield "test_bloc_6_ligne_quotidienne", l6[0] == "matchs ajoutés : 3 (ligue 2, amical 1) · 7 en base · étude à jour au 08/11, 3 pas encore étudiés" \
+    yield "test_bloc_6_ligne_quotidienne", l6[0] == "matchs ajoutés : 4 (ligue 2, amical 1 ; autres clubs 1) · 10 en base · étude à jour au 08/11, 3 pas encore étudiés" \
         and "appris" not in t6 and "relancée" not in t6
     yield "test_bloc_6_la_carte_ne_compte_ni_pour_la_date_ni_pour_k", "étude à jour au 08/11, 3 pas encore étudiés" in l6[0]
-    yield "test_bloc_6_ligne_sans_etude", qfb.bloc_6(donnees_t5(), [], jour)[0][0] == "matchs ajoutés : 3 (ligue 2, amical 1) · 7 en base · aucune étude encore, 7 pas encore étudiés"
+    yield "test_bloc_6_ligne_sans_etude", qfb.bloc_6(donnees_t5(), [], jour)[0][0] == "matchs ajoutés : 4 (ligue 2, amical 1 ; autres clubs 1) · 10 en base · aucune étude encore, 7 pas encore étudiés"
     yield "test_bloc_6_ligue_comprend_la_coupe", qfb.bloc_6(donnees_t5(matchs_captes=T(["kind", "premiere_jour"], [("cup", "2026-11-09"), ("cup", "2026-11-10"), ("match", "2026-11-10")])),
-                                                           etu, jour)[0][0].startswith("matchs ajoutés : 3 (ligue 3, amical 0)")
+                                                           etu, jour)[0][0].startswith("matchs ajoutés : 4 (ligue 3, amical 0 ; autres clubs 1)")
     yield "test_demandes_recopiees_des_etudes : bloc 6", f"{DEMANDE_A} (étude du 08/11)" in t6 and f"{DEMANDE_C} (étude du 10/11)" in t6
     yield "test_demandes_recopiees_des_etudes : aucune étude", all("Pour comprendre" not in l for l in qfb.bloc_6(donnees_t5(), [], jour)[0])
     yield "test_bloc_6_consigne_session", len(c6) == 1 and "data-scientist" in c6[0] and "v4 ligue, v5 amical" in c6[0] and "horizon aujourd'hui" in c6[0]
@@ -770,13 +772,24 @@ def cas_t5():
     joues_hier = T(["day", "competition_kind", "n"], [("2026-11-09", "ligue", 1), ("2026-11-09", "amical", 1)])
     anciennes = T(["kind", "premiere_jour"], [("match", "2026-10-20"), ("friendly", "2026-10-20")])
     yield "test_matchs_ajoutes_page_captee_plus_tot_non_comptee", qfb.bloc_6(donnees_t5(matchs_ajoutes=joues_hier, matchs_captes=anciennes), etu, jour)[0][0] \
-        .startswith("matchs ajoutés : 0 (ligue 0, amical 0) · 2 en base")
+        .startswith("matchs ajoutés : 1 (ligue 0, amical 0 ; autres clubs 1) · 5 en base")
     yield "test_matchs_ajoutes_page_captee_hier_pour_un_match_ancien_comptee", qfb.bloc_6(donnees_t5(matchs_ajoutes=joues_hier, matchs_captes=T(["kind", "premiere_jour"], [("match", "2026-11-09")])),
-                                                                                         etu, jour)[0][0].startswith("matchs ajoutés : 1 (ligue 1, amical 0)")
+                                                                                         etu, jour)[0][0].startswith("matchs ajoutés : 2 (ligue 1, amical 0 ; autres clubs 1)")
     yield "test_matchs_ajoutes_fenetre_hier", qfb.bloc_6(donnees_t5(matchs_captes=T(["kind", "premiere_jour"], [("match", "2026-11-08"), ("friendly", "2026-11-09")])),
-                                                        etu, jour)[0][0].startswith("matchs ajoutés : 1 (ligue 0, amical 1)")
+                                                        etu, jour)[0][0].startswith("matchs ajoutés : 2 (ligue 0, amical 1 ; autres clubs 1)")
     l_ill = qfb.bloc_6(donnees_t5(matchs_captes=None), etu, jour)[0][0]
-    yield "test_matchs_ajoutes_vue_illisible", l_ill.startswith("matchs ajoutés : donnée manquante : vue matchs_captes illisible · 7 en base · étude à jour au 08/11, 3 pas encore étudiés")
+    yield "test_matchs_ajoutes_vue_illisible", l_ill.startswith("matchs ajoutés : donnée manquante : vue matchs_captes illisible · 10 en base · étude à jour au 08/11, 3 pas encore étudiés")
+    # A7 : autres clubs dans la ligne ; k et le déclencheur ne comptent que nos matchs
+    yield "test_matchs_autres_clubs_dans_la_ligne", qfb.bloc_6(donnees_t5(), etu, jour)[0][0] == "matchs ajoutés : 4 (ligue 2, amical 1 ; autres clubs 1) · 10 en base · étude à jour au 08/11, 3 pas encore étudiés"
+    yield "test_matchs_autres_clubs_zero", "autres clubs 0) · 7 en base" in qfb.bloc_6(donnees_t5(matchs_autres=T(["premiere_jour"], [])), etu, jour)[0][0]
+    yield "test_matchs_autres_clubs_jamais_captes_comptes_en_base_pas_ajoutes", "autres clubs 0) · 8 en base" in qfb.bloc_6(
+        donnees_t5(matchs_autres=T(["premiere_jour"], [(None,)])), etu, jour)[0][0]
+    yield "test_matchs_autres_clubs_vue_illisible", qfb.bloc_6(donnees_t5(matchs_autres=None), etu, jour)[0][0].startswith(
+        "matchs ajoutés : 3 (ligue 2, amical 1 ; autres clubs donnée manquante : vue matchs_autres illisible) · 7 en base · étude à jour au 08/11, 3 pas encore étudiés")
+    seuls_autres = donnees_t5(matchs_ajoutes=T(["day", "competition_kind", "n"], [("2026-11-08", "amical", 1)]), matchs_autres=T(["premiere_jour"], [("2026-11-10",)] * 5))
+    l_a, c_a = qfb.bloc_6(seuls_autres, etu, jour)
+    yield "test_matchs_autres_clubs_ne_declenchent_pas_l_etude_et_hors_de_k", c_a == [] and "0 pas encore étudiés" in l_a[0]
+    yield "test_requete_matchs_autres_existe", "matchs_autres" in auj.REQUETES and "silver.bv_matches" in auj.REQUETES["matchs_autres"] and "not exists" in auj.REQUETES["matchs_autres"]
     yield "test_bloc_6_vue_illisible", "donnée manquante : vue matchs_ajoutes illisible" in "\n".join(qfb.bloc_6(donnees_t5(matchs_ajoutes=None), etu, jour)[0])
 
     # avancement des expériences et prochaine hypothèse

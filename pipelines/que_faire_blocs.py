@@ -712,9 +712,10 @@ def defaites_suite(donnees) -> int:
 
 def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
     """Bloc 6 : Match Engine. (lignes affichées, consignes de session). Première ligne :
-    « matchs ajoutés : n (ligue a, amical b) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». n = matchs dont la page de match
-    a été captée pour la première fois depuis hier (A3, bronze.raw_pages) ; « ligue » comprend la coupe (même moteur). N et k comptent nos
-    matchs joués (core.fixture) ; k = joués après la dernière étude ; la carte de faisabilité ne compte ni pour la date ni pour k."""
+    « matchs ajoutés : n (ligue a, amical b ; autres clubs c) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». n = matchs dont la
+    page de match a été captée pour la première fois depuis hier (A3, bronze.raw_pages) ; a et b : nos matchs (« ligue » comprend la coupe) ;
+    c : matchs d'autres clubs (A7). N inclut les matchs d'autres clubs ; k (joués après la dernière étude) et le déclencheur de l'étude ne
+    comptent que nos matchs (core.fixture) ; la carte de faisabilité ne compte ni pour la date ni pour k."""
     lignes, consignes = [], []
     derniere, k = date_derniere_etude(etudes), None
     if donnees.get("matchs_ajoutes") in (None, "rejeu"):
@@ -723,13 +724,22 @@ def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
         rangees = [(auj.en_date(r["day"]), r["competition_kind"], int(float(r["n"]))) for r in auj.lignes_de(donnees, "matchs_ajoutes")]
         total = sum(n for _, _, n in rangees)
         k = sum(n for d, _, n in rangees if derniere is None or d > derniere)
-        suite = f"étude à jour au {derniere:%d/%m}, {k} pas encore étudiés" if derniere else f"aucune étude encore, {total} pas encore étudiés"
+        nos = total
+        suite = f"étude à jour au {derniere:%d/%m}, {k} pas encore étudiés" if derniere else f"aucune étude encore, {nos} pas encore étudiés"
+        veille = jour - dt.timedelta(days=1)
+        autres_ok = donnees.get("matchs_autres") not in (None, "rejeu")
+        autres = auj.lignes_de(donnees, "matchs_autres") if autres_ok else []
+        total += len(autres)  # A7 : N inclut les matchs d'autres clubs ; k (ci-dessus) et le déclencheur restent ceux de nos matchs
         if donnees.get("matchs_captes") in (None, "rejeu"):
             ajoutes = vue_illisible("matchs_captes")
         else:  # A3 : pages de match captées pour la première fois depuis hier (et non matchs joués depuis hier)
-            neuves = [r["kind"] for r in auj.lignes_de(donnees, "matchs_captes") if auj.en_date(r["premiere_jour"]) >= jour - dt.timedelta(days=1)]
+            neuves = [r["kind"] for r in auj.lignes_de(donnees, "matchs_captes") if auj.en_date(r["premiere_jour"]) >= veille]
             a, b = sum(1 for t in neuves if t != "friendly"), sum(1 for t in neuves if t == "friendly")
-            ajoutes = f"{a + b} (ligue {a}, amical {b})"
+            if autres_ok:
+                c = sum(1 for r in autres if r.get("premiere_jour") and auj.en_date(r["premiere_jour"]) >= veille)
+                ajoutes = f"{a + b + c} (ligue {a}, amical {b} ; autres clubs {c})"
+            else:
+                ajoutes = f"{a + b} (ligue {a}, amical {b} ; autres clubs {vue_illisible('matchs_autres')})"
         lignes.append(f"matchs ajoutés : {ajoutes} · {total} en base · {suite}")
     lignes += [f"{d} (étude du {date:%d/%m})" for d, date in _demandes(etudes)]
 
