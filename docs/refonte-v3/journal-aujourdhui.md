@@ -1866,6 +1866,72 @@ OK    bloc 7 : ligne d'état présente : défaite du 09/11 : analyse faite
 22/22
 ```
 
+#### Sortie complète de fusion_main.py puis de fin_etape.py après T8 (non filtrées)
+
+```
+branche : claude/nice-fermi-pczcs3
+avant : HEAD 1d1b903deb3c | origin/main d07e6bd3065b
+commits à ajouter à main (14) :
+1d1b903 Merge remote-tracking branch 'origin/main' into claude/nice-fermi-pczcs3
+33c1b2c 5n T8 : réception sur la vraie journée, tableau bloc par bloc, vérifications, briefs du jour
+fe5b9ed 5n R12 : contrôle J-1, « vendu » = vendu par mon équipe (plus les transferts entre autres clubs)
+953bab6 5n R11 : « étude à lancer » n'est pas une commande (INTERDITS)
+f98bfd5 5n R10 : contrôle J-1, noms annotés de l'âge reconnus
+80d31c6 5n R1 à R9 : ajustements de réception au plan
+f39f7bc 5n R9 : la consigne des briefs réclame le tableau des adversaires (colonnes exactes)
+8807d09 5n R8 : la coupe a son fichier de brief (-tactique-coupe.md), distinct de la ligue
+1977e2a 5n R1 : bloc 1 reprend chaque ligne du bloc 0, les compositions et le lancement de l'analyse
+d6db420 5n R5 : bloc 6, matchs pas encore étudiés chez nous et chez les autres clubs
+358a0af 5n R2 : bloc 0, demandes d'étude en forme courte
+1112e17 5n R3 : colonne « question liée » des demandes traitées, état « export reçu, étude à lancer »
+edc9d17 5n R4 : Marché périmé, la demande d'export remplace « Acheter un X : aucune annonce »
+664f60c 5n R6 : onglet Transferts de la ligue retiré des exports hebdomadaires du bloc 0
+To https://github.com/RoJo69100/assistant-jeux
+   d07e6bd..1d1b903  HEAD -> main
+From .
+   9fc196f..1d1b903  HEAD       -> main
+après : HEAD 1d1b903deb3c | origin/main 1d1b903deb3c
+ls-remote origin main : 1d1b903deb3c
+Poussé : origin/main == HEAD.
+```
+
+```
+branche : claude/nice-fermi-pczcs3
+HEAD : 1d1b903deb3c
+origin/main : 1d1b903deb3c
+commits d'avance sur origin/main : 0
+git status --short : (propre)
+tests :
+  test_agents.py : 0 échec(s)
+  test_aujourdhui.py : 236/236
+  test_aujourdhui_hockeynation.py : 45/45
+  test_bv_club_roster.py : 5/5
+  test_composition.py : 21/21
+  test_contexte_budget.py : 9/9
+  test_controle.py : 43/43
+  test_decision.py : 15/15
+  test_etude_evenements.py : 24/24
+  test_evaluer.py : 34/34
+  test_fin_etape.py : 5/5
+  test_forme.py : 38/38
+  test_fusion_main.py : 5/5
+  test_garde_heredoc.py : 26/26
+  test_garde_push.py : 6/6
+  test_heure_paris.py : 7/7
+  test_match_engine_etat.py : 36/36
+  test_migrer.py : 19/19
+  test_migrer_kb.py : 17/17
+  test_palier5.py : 15/15
+  test_police.py : 24/24
+  test_preanalyse_scores_basketvibe.py : 25/25
+  test_que_faire_blocs.py : 523/523
+  test_relier_faits.py : 8/8
+  test_revue_hebdo.py : 38/38
+  test_scan_agent.py : 34/34
+  test_sql.py : 23/23
+HEAD dans origin/main : oui
+```
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |

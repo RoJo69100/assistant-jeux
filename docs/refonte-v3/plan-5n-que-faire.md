@@ -215,7 +215,7 @@
   - bloc 7 : la ligne d'état est présente et correspond à la base (dernière défaite de ligue ou de coupe, brief `analyste` présent ou non) ;
   - blocs 2 et 3 : vérification J-1 présente ; ligne « Anticipation (hypothèse) : … » sous chaque tableau, plan B nommé ; bloc 2 : composition tirée du brief du jour, aucune mention « pas de blessure ».
   Un critère raté = un correctif et un nouveau commit, pas une réécriture du tableau.
-- [ ] **Étape 4** : `python -I pipelines/fusion_main.py` puis `python -I pipelines/fin_etape.py` ; coller les deux sorties dans le journal ; commit « 5n T8 : réception, comparaison bloc par bloc ».
+- [x] **Étape 4** : `python -I pipelines/fusion_main.py` puis `python -I pipelines/fin_etape.py` ; coller les deux sorties dans le journal ; commit « 5n T8 : réception, comparaison bloc par bloc ».
 
 ## Auto-relecture
 
