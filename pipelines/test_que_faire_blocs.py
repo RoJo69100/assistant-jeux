@@ -400,7 +400,9 @@ def brief_depuis_la_consigne(consigne):
     debut = re.search(r"commençant exactement par « (Anticipation \(hypothèse\) :) »", consigne)
     if not (nom and ligne and debut):
         return None, None
-    texte = (ligne.group(1) + "\n\n## Saisie\n" + JOUEURS + ADVERSAIRES
+    # R9 (helper réécrit) : le tableau des adversaires n'est écrit que si la consigne le demande avec ses colonnes exactes
+    adv = ADVERSAIRES if "« Adversaire | Poste | Focus défensif (1-5) | Zone »" in consigne else ""
+    texte = (ligne.group(1) + "\n\n## Saisie\n" + JOUEURS + adv
              + "\n" + debut.group(1) + " Gimenez porte 31 % des tirs à 3 points ; si le focus 5 tombe sur lui, plan B : Bonnet tireur principal.\n")
     return nom.group(1), texte
 
@@ -413,6 +415,8 @@ def cas_contrat_brief():
     yield "test_contrat_brief : bloc 2 lancement : première ligne exacte", "première ligne exactement « Amical contre Opper Cards (11/11) »" in c[0]
     yield "test_contrat_brief : bloc 2 lancement : formule de l'anticipation", "« Anticipation (hypothèse) : »" in c[0] and "plan B" in c[0]
     yield "test_contrat_brief : bloc 2 lancement : tableau de saisie", "tableau de saisie" in c[0]
+    yield "test_contrat_brief : bloc 2 lancement : tableau des adversaires, colonnes exactes (R9)", \
+        "puis le tableau des adversaires (colonnes « Adversaire | Poste | Focus défensif (1-5) | Zone », une ligne par adversaire" in c[0]
     yield "test_contrat_brief : constante ANTICIPATION", "« Anticipation (hypothèse) : »" in qfb.ANTICIPATION and "plan B" in qfb.ANTICIPATION
     # relance quand la ligne d'anticipation manque : même contrat
     b_sans = dossier(("2026-11-10-tactique-amical.md", brief_amical(anticipation=False), None))

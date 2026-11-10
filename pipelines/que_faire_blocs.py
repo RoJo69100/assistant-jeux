@@ -217,7 +217,9 @@ def contrat_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.d
 def consigne_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.date, manche=None, genre: str = "ligue") -> str:
     """Fin de consigne commune aux lancements et relances des blocs 2 et 3 : fichier, première ligne, tableau, anticipation."""
     chemin, ligne = contrat_brief(jour, amical, adversaire, date_match, manche, genre)
-    return f"écris le brief dans {chemin}, première ligne exactement « {ligne} », puis le tableau de saisie ; " + ANTICIPATION
+    return (f"écris le brief dans {chemin}, première ligne exactement « {ligne} », puis le tableau de saisie ; "
+            "puis le tableau des adversaires (colonnes « Adversaire | Poste | Focus défensif (1-5) | Zone », une ligne par adversaire de "
+            "gold.bv_saisie_adversaires ; sans ce tableau le script ne lit pas le brief) ; " + ANTICIPATION)
 
 
 LIGNE_ANTICIPATION = re.compile(r"^[\s>*-]*\**\s*(Anticipation \(hypothèse\)\s*:.*?)\**\s*$", re.M)
