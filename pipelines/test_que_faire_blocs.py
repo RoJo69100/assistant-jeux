@@ -157,6 +157,7 @@ def cas():
     yield from cas_t6()
     yield from cas_a1()
     yield from cas_r3()
+    yield from cas_r1()
     yield from cas_a2()
     yield from cas_a6()
 
@@ -950,6 +951,39 @@ TRAITEES = ("| début de la demande | statut | date | raison |\n|---|---|---|---
 
 def etude_avec(*demandes):
     return "# Étude (2026-11-10)\n\n**Question** : x ?\n\n## Export demandé\n" + "".join(f"- {d}\n" for d in demandes)
+
+
+def cas_r1():
+    """R1 : le bloc 1 contient chaque ligne du bloc 0, la préparation de chaque composition des blocs 2 et 3 et le lancement de l'analyse du
+    bloc 7, chacune avec « → bloc N » ; `fautes_bloc_1` le contrôle sur un rendu complet (utilisé en T8 sur la sortie réelle)."""
+    etu = etudes_de({"2026-11-10-carte-faisabilite.md": CARTE})
+    texte, _ = qfb.rendre_blocs(res_t6(), donnees_t6(), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
+    yield "test_r1_rendu_complet : aucune ligne du bloc 0 ne manque au bloc 1", qfb.fautes_bloc_1(texte) == []
+    b1 = qfb.section(texte, 1)
+    b0 = [l for l in qfb.section(texte, 0).splitlines() if l.startswith("- ")]
+    yield "test_r1_rendu_complet : le bloc 0 a des lignes et chacune garde son « → bloc N » dans le bloc 1", len(b0) >= 2 and all(
+        l[2:].replace("|", "/") in b1 for l in b0)
+    yield "test_r1_composition_amical_et_ligue : une ligne par match des blocs 2 et 3, avec son bloc", \
+        re.search(r"\| Composition \| Composition : Amical contre .*\(.+\d\d/\d\d\) → bloc 2 \|", b1) is not None \
+        and re.search(r"\| Composition \| Composition : (?:Ligue|Coupe) .*\(.+\d\d/\d\d\) → bloc 3 \|", b1) is not None
+    yield "test_r1_analyse_lancee_dans_ce_passage : ligne du bloc 7 quand l'analyse n'est pas faite", \
+        ("analyse non faite" not in qfb.section(texte, 7)) or re.search(r"\| Analyse \| Analyse : .*analyse non faite.* → bloc 7 \|", b1) is not None
+    # sans doublon : une action de plan() qui nomme déjà le match dans ce bloc n'est pas redoublée
+    deja = {"actions": [(dt.datetime(2026, 11, 11, 7, 45), 1, "Amical contre Launceston Ligers (mer. 11/11) : saisis le test E1", "", "s")], "exports": []}
+    ligne_am = [l for l in qfb.bloc_1(deja["actions"], JOUR_T, qfb.complements_bloc_1([], ["Amical contre Launceston Ligers (mer. 11/11), heure limite du verrou 07:45"], [], [], JOUR_T))
+                if "Launceston" in l]
+    yield "test_r1_pas_de_doublon_avec_une_action_du_plan", len(ligne_am) == 1
+    # complément seul : exports du bloc 0 en catégorie Export, jamais d'heure, aucun « | » cassant le tableau
+    comp = qfb.complements_bloc_1(["- donnée manquante : exporte X | Y → bloc 3", "- aucun export à refaire : toutes les pages suivies sont à jour"], [], [], [], JOUR_T)
+    tb = "\n".join(qfb.bloc_1([], JOUR_T, comp))
+    yield "test_r1_export_du_bloc_0 : catégorie Export, « | » remplacé, « aucun export » non repris", "| Export | donnée manquante : exporte X / Y → bloc 3 |" in tb \
+        and "aucun export à refaire" not in tb and forme.fautes_tableaux(tb, "basketvibe") == []
+    # défaut réel : la première sortie réelle (journal, T8, 10/11) a un bloc 1 sans les lignes du bloc 0
+    journal = (Path(__file__).resolve().parent.parent / "docs" / "refonte-v3" / "journal-aujourdhui.md").read_text(encoding="utf-8")
+    m = re.search(r"### T8 — réception sur la vraie journée, première exécution.*?```\n(.*?)\n```", journal, re.S)
+    fautes = qfb.fautes_bloc_1(m.group(1)) if m else []
+    yield "test_r1_sortie_reelle_du_journal : l'ancien défaut est détecté (lignes du bloc 0 absentes du bloc 1)", m is not None and len(fautes) >= 5 \
+        and any("Équipes de la ligue" in f for f in fautes)
 
 
 TRAITEES_Q = ("| début de la demande | statut | date | question liée | raison |\n|---|---|---|---|---|\n"
