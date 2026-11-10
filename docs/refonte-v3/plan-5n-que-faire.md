@@ -205,9 +205,9 @@
 
 **Fichiers** : modifier `docs/refonte-v3/journal-aujourdhui.md`.
 
-- [ ] **Étape 1** : exécuter `python -I pipelines/aujourdhui.py basketvibe` sur la journée réelle ; coller la sortie telle quelle dans le journal ; noter la durée (comparer aux 15 s).
-- [ ] **Étape 2** : tableau `Bloc | Attendu (gabarit) | Produit | Écart` : une ligne par bloc de 0 à 10 (les blocs 5, 8, 9 avec l'état de leur étude), chaque écart nommé.
-- [ ] **Étape 3** : vérifier à la main, dans le rendu réel :
+- [x] **Étape 1** : exécuter `python -I pipelines/aujourdhui.py basketvibe` sur la journée réelle ; coller la sortie telle quelle dans le journal ; noter la durée (comparer aux 15 s).
+- [x] **Étape 2** : tableau `Bloc | Attendu (gabarit) | Produit | Écart` : une ligne par bloc de 0 à 10 (les blocs 5, 8, 9 avec l'état de leur étude), chaque écart nommé.
+- [x] **Étape 3** : vérifier à la main, dans le rendu réel :
   - aucun mot de `INTERDITS`, aucun bloc absent, `forme.py` et `controle.py` passent ;
   - blocs 0 et 6 : chaque ligne « Pour comprendre le Match Engine, j'ai besoin de : » se retrouve mot pour mot dans l'étude de `docs/etudes/` qu'elle cite, à la date citée, et aucune ne vient d'une étude invalidée ;
   - bloc 6 : la ligne suit exactement `matchs ajoutés : n (ligue a, amical b) · N en base · étude à jour au JJ/MM, k pas encore étudiés`, JJ/MM = date du dernier fichier d'étude non invalidé, k recompté par `python -I pipelines/sql.py` ;
