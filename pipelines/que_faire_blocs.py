@@ -20,7 +20,7 @@ import heure_paris  # noqa: E402
 BUDGET_SECONDES = 30
 
 # Mots entiers qui sont une commande à l'utilisateur ; un participe (« lancée dans ce passage ») n'en est pas une.
-INTERDITS = re.compile(r"(?<!\w)(?:lance|relance|exécute|lancer|relancer|exécuter|python)(?!\w)|pipelines/", re.IGNORECASE)
+INTERDITS = re.compile(r"(?<!\w)(?:lance|relance|exécute|(?<!à )lancer|relancer|exécuter|python)(?!\w)|pipelines/", re.IGNORECASE)  # R11 : « étude à lancer » passe
 
 # Consignes destinées à Claude (pas à l'utilisateur) : elles sortent de l'affichage.
 CONSIGNE = re.compile(r"(?:lance|relance|lancer|relancer) l'agent|python -I", re.IGNORECASE)

@@ -98,6 +98,11 @@ def cas():
         yield f"test_interdits_attrape : {texte}", qfb.INTERDITS.search(texte) is not None
     for texte in ("lancer l'agent", "relancer le script", "exécuter la requête", "pour relancer"):
         yield f"test_interdits_attrape_les_infinitifs : {texte}", qfb.INTERDITS.search(texte) is not None
+    # R11 : « étude à lancer » est la formule demandée pour une question dont l'export est arrivé ; « à lancer » n'est pas une commande
+    for texte in ("export reçu le 10/11, étude à lancer", "étude à lancer"):
+        yield f"test_interdits_laisse_passer_a_lancer : {texte}", qfb.INTERDITS.search(texte) is None
+    for texte in ("lancer l'étude", "il faut lancer l'agent", "à relancer", "tu dois lancer"):
+        yield f"test_interdits_attrape_encore_lancer : {texte}", qfb.INTERDITS.search(texte) is not None
     for texte in ("défaite du 09/11 : analyse non faite, lancée dans ce passage", "étude à jour au 09/11", "exporté hier",
                   "le lancement de la saison", "les lanceurs"):
         yield f"test_interdits_laisse_passer : {texte}", qfb.INTERDITS.search(texte) is None
