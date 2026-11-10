@@ -4,9 +4,12 @@ Lancer : python -I pipelines/test_que_faire_blocs.py   (code 1 si un cas se trom
 import ast
 import datetime as dt
 import importlib.util
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 DOSSIER = Path(__file__).resolve().parent
 sys.path.insert(0, str(DOSSIER))
@@ -146,6 +149,7 @@ def cas():
     yield "test_separer_aucune_commande_dans_l_affichage", all(not qfb.INTERDITS.search(a[2] + " " + a[3]) for a in aff)
     yield "test_separer_liste_vide", qfb.separer([]) == ([], [])
     yield from cas_bloc_1()
+    yield from cas_blocs_2_3()
 
 
 J = dt.date(2026, 11, 10)
@@ -199,6 +203,190 @@ def cas_bloc_1():
     yield "test_bloc_1_sans_commande", qfb.INTERDITS.search(tc) is None and "Vendre Dupont" in tc
     barre = "\n".join(qfb.bloc_1([(None, 2, "Vendre A | B : économie", "", "s")], J))
     yield "test_bloc_1_barre_verticale_neutralisee", forme.fautes_tableaux(barre, "basketvibe") == [] and len([l for l in barre.splitlines() if "Vendre" in l][0].split("|")) == 5
+
+
+# ---- 5n T3 : blocs 2 et 3 --------------------------------------------------------------------------------------
+JOUR_T = dt.date(2026, 11, 10)
+MAINT = dt.datetime(2026, 11, 10, 14, 39)
+PARIS = ZoneInfo("Europe/Paris")
+EN_TETE = "| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Min | Off. focus | Rôle | Tir | Agress. |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n"
+JOUEURS = (EN_TETE + "| Richard | PG | PG | PG | PG | PG | — | 36 | 1 | 1 | 3 | 1 |\n| Bonnet | SG | SG | SG | — | — | — | 24 | 5 | 5 | 5 | 1 |\n"
+           "| Gimenez | SF | SF | — | SF | SF | SF | 36 | 4 | 3 | 3 | 1 |\n| Albano | PF | — | PF | PF | — | — | 24 | 3 | 3 | 3 | 1 |\n"
+           "| Fournier | C | C | — | — | — | — | 12 | 2 | 2 | 1 | 1 |\n")
+ANTICIP = ("\nAnticipation (hypothèse) : Gimenez porte 31 % des tirs à 3 points ; si le focus 5 tombe sur lui, plan B : Bonnet tireur principal.\n")
+
+
+def brief_amical(adv="Opper Cards", anticipation=True):
+    return (f"# Tactique AMICAL mer. 11/11 08:00 (verrou 07:45), DOMICILE contre {adv}\n\n## 2. Consignes\n" + JOUEURS
+            + "\n## 3. Adversaires\n| Adversaire | Poste | Focus (1-5) | Zone |\n|---|---|---|---|\n| Roze | PG | 3 Normal | Perimeter (1) |\n"
+            + (ANTICIP if anticipation else ""))
+
+
+def brief_ligue(adv="Naked Spartans", anticipation=True):
+    return (f"# Tactique ligue J5 : {adv} (domicile, mer. 11/11 20:00, verrou 19:45)\n\n## 1. Fiche\n" + JOUEURS
+            + "\n## 2. Adversaires\n| Adversaire | Poste | Focus (1-5) | Zone |\n|---|---|---|---|\n| Zwoliński | PF | 4 Intense | Middle (3) |\n"
+            + (ANTICIP if anticipation else ""))
+
+
+def dossier(*fichiers):
+    """Dossier de briefs temporaire ; chaque fichier = (nom, texte, heure de production à Paris | None)."""
+    d = Path(tempfile.mkdtemp())
+    (d / "briefs").mkdir()
+    for nom, texte, quand in fichiers:
+        f = d / "briefs" / nom
+        f.write_text(texte, encoding="utf-8")
+        if quand:
+            ts = quand.replace(tzinfo=PARIS).timestamp()
+            os.utime(f, (ts, ts))
+    return d
+
+
+def T(cols, rows):
+    return (cols, rows)
+
+
+CAL = ["day", "competition_kind", "opponent", "coup_envoi_paris", "verrou_paris"]
+AM_11 = ("2026-11-11", "amical", "Opper Cards", "2026-11-11T08:00:00", "2026-11-11T07:45:00")
+LG_11 = ("2026-11-11", "ligue", "Naked Spartans", "2026-11-11T20:00:00", "2026-11-11T19:45:00")
+APERCU_COLS = ["fixture_id", "competition_kind", "round_no", "day", "opponent", "capture_paris", "adverse"]
+
+
+def donnees_t(calendrier=(AM_11, LG_11), capture="2026-11-10T09:00:00", **plus):
+    d = {"calendrier": T(CAL, list(calendrier)),
+         "amical_reglage": T(["fixture_id", "match_day", "opponent", "agress_cran", "primary_quarts", "tir_cran4_joueurs"], []),
+         "apercus_matchs": T(APERCU_COLS, [(7, "ligue", 5, "2026-11-11", "Naked Spartans", capture, "Zwolinski,Buczek")]),
+         "gold.bv_exports_state": T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                    [(1, "Équipe (aperçu, joueurs)", "x", "2026-11-10T08:00:00", 6, "🟩 à jour")]),
+         "gold.bv_daily_alerts": T(["priority", "category", "alert"], []),
+         "fatigue_avant_match": T(["kind", "match_day", "opponent", "joueur", "minutes", "defense_tier", "sat_fatigue", "zone_verte"], []),
+         "transferts_recents": T(["name", "settled_at", "to_team", "achete"], []),
+         "fatigue_amical": T(["match_day", "joueur", "minutes_am", "agress", "stamina", "fatigue_ajoutee"],
+                             [("2026-11-11", "Gimenez", 36, 1, 53, 0.5), ("2026-11-11", "Bonnet", 24, 1, 52, 0.4)])}
+    d.update(plus)
+    return d
+
+
+def cas_blocs_2_3():
+    S = {"experiences": None}
+    sans_test = lambda *a, **k: None  # noqa: E731
+    yield "test_requete_fatigue_amical_existe", "fatigue_amical" in auj.REQUETES and "0.019" in auj.REQUETES["fatigue_amical"]
+
+    # --- bloc 2
+    l, c = qfb.bloc_2(donnees_t(calendrier=(LG_11,)), S, JOUR_T, MAINT, base=dossier())
+    yield "test_aucun_amical", l == ["aucun amical programmé aujourd'hui ni demain"] and c == []
+
+    b_jour = dossier(("2026-11-10-tactique-amical.md", brief_amical(), None))
+    l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_jour)
+    t2 = "\n".join(l)
+    yield "test_amical_rend_le_brief_du_jour", "| Gimenez |" in t2 and "Agress." in t2 and c == [] and "préparation" not in t2
+    yield "test_amical_verrou_et_heure_limite", "07:45" in t2
+    yield "test_amical_jamais_pas_de_blessure", "pas de blessure" not in t2.lower() and "sans blessure" not in t2.lower()
+    yield "test_anticipation_affichee_avec_brief_du_jour : bloc 2", "Anticipation (hypothèse) :" in t2 and "plan B" in t2
+    yield "test_amical_fatigue_ajoutee_jour_de_ligue : jour de ligue", "fatigue ajoutée" in t2.lower() and "Gimenez" in t2.lower().replace("gimenez", "Gimenez")
+    l_autre, _ = qfb.bloc_2(donnees_t(calendrier=(AM_11, ("2026-11-12", "ligue", "Naked Spartans", "2026-11-12T20:00:00", "2026-11-12T19:45:00"))),
+                            S, JOUR_T, MAINT, base=b_jour)
+    yield "test_amical_fatigue_ajoutee_jour_de_ligue : hors jour de ligue", "fatigue ajoutée" not in "\n".join(l_autre).lower()
+    yield "test_blocs_2_3_passent_forme : bloc 2", forme.fautes_tableaux(t2, "basketvibe") == [] and forme.fautes_de(t2, "basketvibe") == []
+    yield "test_bloc_2_sans_commande", qfb.INTERDITS.search(t2) is None
+
+    # test en cours nommé
+    E1 = {"id": "E1", "niveaux": {"A": "agressivité 3", "B": "agressivité 5"}, "joue": {"A": {"agress_cran": 2}, "B": {"agress_cran": 4}}}
+    reel = qfb.auj.test_en_cours
+    qfb.auj.test_en_cours = lambda *a, **k: (E1, "B", False)
+    try:
+        lt, _ = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_jour)
+    finally:
+        qfb.auj.test_en_cours = reel
+    tt = "\n".join(lt)
+    yield "test_amical_reglage_teste_nomme", "test E1 niveau B : agressivité 5" in tt and "{'5'}" not in tt \
+        and {x[11] for x in composition_lignes(tt)} == {"5"}
+
+    # brief d'hier seulement : jamais repris
+    b_hier = dossier(("2026-11-09-tactique-amical.md", brief_amical(), None))
+    l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_hier)
+    t = "\n".join(l)
+    yield "test_amical_jamais_le_dernier_amical", "| Gimenez |" not in t and "composition de l'amical en préparation" in t and len(c) == 1 \
+        and "lancer l'agent tactique" in c[0] and qfb.INTERDITS.search(t) is None
+    yield "test_amical_jamais_pas_de_blessure : en préparation", "pas de blessure" not in t.lower() and "sans blessure" not in t.lower()
+    for mot in ("21 ans", "un seul réglage", "titulaires protégés", "minutes réparties", "jamais reprise du dernier amical"):
+        yield f"test_amical_consigne_cite_la_regle : {mot}", mot in c[0]
+    yield "test_anticipation_dans_les_consignes : bloc 2", "décisions de l'adversaire" in c[0] and "hypothèse" in c[0]
+    yield "test_anticipation_dans_les_consignes : constante", "décisions de l'adversaire" in qfb.ANTICIPATION and "hypothèse" in qfb.ANTICIPATION
+
+    # brief du jour sans ligne d'anticipation : signalé, consigne pour la compléter
+    b_sans = dossier(("2026-11-10-tactique-amical.md", brief_amical(anticipation=False), None))
+    l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_sans)
+    yield "test_anticipation_absente_du_brief_signalee", "Anticipation (hypothèse) : absente du brief" in "\n".join(l) and len(c) == 1 \
+        and "décisions de l'adversaire" in c[0]
+
+    # --- bloc 3
+    l, c = qfb.bloc_3(donnees_t(capture=None), S, JOUR_T, MAINT, base=dossier())
+    t = "\n".join(l)
+    yield "test_ligue_apercu_absent", "donnée manquante : exporte l'aperçu du match de ligue du 11/11" in t and qfb.INTERDITS.search(t) is None and c == []
+
+    l, c = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=dossier())
+    t = "\n".join(l)
+    yield "test_ligue_apercu_sans_fiche_met_la_consigne_en_session", len(c) == 1 and "lancer l'agent tactique" in c[0] and "composition en préparation" in t \
+        and qfb.INTERDITS.search(t) is None
+    yield "test_anticipation_dans_les_consignes : bloc 3", "décisions de l'adversaire" in c[0] and "hypothèse" in c[0]
+
+    b_hier = dossier(("2026-11-09-tactique.md", brief_ligue(), datetime_paris(2026, 11, 9, 20)))
+    l, c = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=b_hier)
+    t = "\n".join(l)
+    yield "test_ligue_fiche_d_hier_pas_a_jour", "| Gimenez |" not in t and len(c) == 1 and "composition en préparation" in t
+
+    avant = dossier(("2026-11-10-tactique.md", brief_ligue(), datetime_paris(2026, 11, 10, 8, 30)))  # avant l'aperçu de 09:00
+    l, c = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=avant)
+    yield "test_ligue_fiche_du_jour_produite_avant_l_apercu_pas_a_jour", "| Gimenez |" not in "\n".join(l) and len(c) == 1
+
+    avant_equipe = dossier(("2026-11-10-tactique.md", brief_ligue(), datetime_paris(2026, 11, 10, 9, 30)))  # après l'aperçu, avant l'export Équipe de 10:00
+    d_eq = donnees_t(**{"gold.bv_exports_state": T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                                   [(1, "Équipe (aperçu, joueurs)", "x", "2026-11-10T10:00:00", 4, "🟩 à jour")])})
+    l, c = qfb.bloc_3(d_eq, S, JOUR_T, MAINT, base=avant_equipe)
+    yield "test_ligue_fiche_produite_avant_le_dernier_export_equipe_pas_a_jour", "| Gimenez |" not in "\n".join(l) and len(c) == 1
+
+    a_jour = dossier(("2026-11-10-tactique.md", brief_ligue(), datetime_paris(2026, 11, 10, 11)))
+    l, c = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=a_jour)
+    t3 = "\n".join(l)
+    yield "test_ligue_fiche_a_jour : tableaux et pas de consigne", "| Gimenez |" in t3 and "Zwoliński" in t3 and c == []
+    yield "test_anticipation_affichee_avec_brief_du_jour : bloc 3", "Anticipation (hypothèse) :" in t3 and "plan B" in t3
+    yield "test_blocs_2_3_passent_forme : bloc 3", forme.fautes_tableaux(t3, "basketvibe") == [] and forme.fautes_de(t3, "basketvibe") == []
+    yield "test_bloc_3_sans_commande", qfb.INTERDITS.search(t3) is None
+
+    l, c = qfb.bloc_3(donnees_t(apercus_matchs=T(APERCU_COLS, []), calendrier=(AM_11,)), S, JOUR_T, MAINT, base=dossier())
+    yield "test_bloc_3_aucun_match", "aucun match de ligue ou de coupe dans les trois prochains jours" in "\n".join(l) and c == []
+
+    # --- vérification J-1, blocs 2 et 3
+    alertes = T(["priority", "category", "alert"], [(1, "blessure", "Marc Gimenez blessé, retour le 12/11"),
+                                                  (2, "fatigue", "Paul Bonnet : fatigue 73 (hors zone verte)"),
+                                                  (2, "forme", "Zoé Inconnue : forme 1 (attaque −11 %)")])
+    ftg = T(["kind", "match_day", "opponent", "joueur", "minutes", "defense_tier", "sat_fatigue", "zone_verte"],
+            [("ligue", "2026-11-11", "Naked Spartans", "Albano", 24, 2, 31.0, 20)])
+    vendus = T(["name", "settled_at", "to_team", "achete"], [("Luc Richard", "2026-11-09T12:00:00", "Autre club", False),
+                                                           ("Marc Fournier", "2026-11-09T13:00:00", "Mon club", True)])
+    dj = donnees_t(**{"gold.bv_daily_alerts": alertes, "fatigue_avant_match": ftg, "transferts_recents": vendus})
+    for nom, fonction, base_ in (("bloc 2", qfb.bloc_2, b_jour), ("bloc 3", qfb.bloc_3, a_jour)):
+        l, _ = fonction(dj, S, JOUR_T, MAINT, base=base_)
+        ecarts = [x for x in l if x.startswith("Écart J-1")]
+        for joueur, motif in (("Gimenez", "blessé"), ("Bonnet", "fatigue"), ("Albano", "fatigue"), ("Richard", "vendu")):
+            trouve = [x for x in ecarts if joueur in x]
+            yield f"test_j_moins_1_signale_blesse_fatigue_vendu : {nom} : {joueur}", len(trouve) == 1 and motif in trouve[0]
+        yield f"test_j_moins_1 : {nom} : ni Fournier acheté ni joueur absent du tableau", not any("Fournier" in x or "Inconnue" in x for x in ecarts)
+        yield f"test_j_moins_1 : {nom} : écarts passent forme", forme.fautes_de("\n".join(l), "basketvibe") == []
+    yield "test_j_moins_1_aucun_ecart", qfb.verifier_j_moins_1(JOUEURS, donnees_t()) == []
+    yield "test_j_moins_1_forme_basse", any("Gimenez" in x for x in qfb.verifier_j_moins_1(JOUEURS, donnees_t(**{"gold.bv_daily_alerts": T(
+        ["priority", "category", "alert"], [(2, "forme", "Marc Gimenez : forme 2 (attaque −8 %)")])})))
+
+
+def composition_lignes(texte):
+    for cols, lignes in forme.tableaux(texte):
+        if cols and cols[0] == "joueur":
+            return lignes
+    return []
+
+
+def datetime_paris(a, m, j, h=0, mi=0):
+    return dt.datetime(a, m, j, h, mi)
 
 
 if __name__ == "__main__":

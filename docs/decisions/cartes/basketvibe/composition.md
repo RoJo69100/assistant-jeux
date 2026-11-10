@@ -53,7 +53,7 @@ Interdits : « preset inchangé », « si », seuil générique, joueur non nomm
 Preset « League Tactic », re-sélectionné sur chaque match planifié ; meilleure composition. Coupe : fatigue nulle, cinq à 48 min possible mais −20 % après 36 min (L-026).
 
 ## Amical (`docs/fiches/basketvibe/resume.md` § Rythme)
-Composition de **test**, jamais le cinq de ligue/coupe ; pas de preset ; un seul test à la fois, annoncé avec sa mesure (ex. zone Rim : 2P% adverse ; v5 : points de Q4 ; focus offensif 50 % : points du Primary). Réglages repris du dernier amical (`gold.bv_saisie_joueurs`, kind amical). Aucun export d'aperçu à demander.
+Composition de **test** choisie le jour même par l'agent tactique à partir des données du jour, chiffres cités et hypothèses signalées, selon la fiche tactique §2 bis, dans l'ordre : minutes aux jeunes de 21 ans ou moins ; un seul réglage testé à la fois (E1 à E5) ; titulaires de la ligue protégés les jours de ligue, fatigue ajoutée calculée en SQL ; minutes réparties entre les joueurs. Jamais reprise du dernier amical ni du dernier brief. Pas de preset. Aucun export d'aperçu à demander.
 
 ## Checks appris des matchs
 | L-nnn | Check | Ajouté le | Résultat depuis | Statut (base) |

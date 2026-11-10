@@ -121,6 +121,16 @@ REQUETES = {
     # dépasse la zone verte (seuil lu dans core.alert_rule par la vue)
     "fatigue_avant_match": "select kind, match_day, opponent, joueur, minutes, defense_tier, sat_fatigue, zone_verte "
                            "from gold.bv_fatigue_avant_match where depasse order by match_day, sat_fatigue desc",
+    # 5n T3 : fatigue ajoutée par l'amical du matin aux joueurs qui entament le match de ligue du même jour (fiche tactique §2 bis :
+    # minutes × 0.019 × multiplicateur d'agressivité × (1,5 − 0,008 × endurance) ; multiplicateurs de l'écran 1 à 5 : skill
+    # basketvibe-joueurs, 06-fatigue-0100.md [M§6.3]). Vide si l'amical saisi n'est pas encore exporté ou s'il n'y a pas de ligue ce jour-là.
+    "fatigue_amical": "select a.match_day, a.joueur, a.minutes_am, a.agress, r.stamina, round((a.minutes_am * 0.019 * (array[0.75, 0.875, 1.0, 1.325, 1.65])[a.agress] "
+                      "* (1.5 - 0.008 * r.stamina))::numeric, 1) as fatigue_ajoutee "
+                      "from (select match_day, joueur, nullif(substring(minutes from '^[0-9]+'), '')::int as minutes_am, agress from gold.bv_saisie_joueurs "
+                      "where kind = 'amical' and match_day >= current_date) a "
+                      "join (select match_day, joueur from gold.bv_saisie_joueurs where kind = 'ligue' and match_day >= current_date and q1 <> '—') l "
+                      "on l.joueur = a.joueur and l.match_day = a.match_day "
+                      "join gold.bv_roster_now r on r.name like '% ' || a.joueur where a.minutes_am > 0 order by a.match_day, 6 desc",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
                       "from gold.bv_amical_reglage where match_day >= current_date - 120",

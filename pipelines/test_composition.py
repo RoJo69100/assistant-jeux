@@ -85,6 +85,16 @@ def cas():
     sans_adv = base(("2026-11-08-tactique.md", LIGUE.split("## 2.")[0]))
     yield "Y1 absent : brief sans tableau des adversaires = pas de fiche valide", comp.composer("Naked Spartans", sans_adv, JOUR, False) == comp.AUCUNE
     yield "Y1 absent : dossier de briefs vide", comp.composer("Naked Spartans", base(), JOUR, False) == comp.AUCUNE
+    # 5n T3 : composer_amical lit le brief du jour qu'on lui donne, rien d'autre
+    ba = base(("2026-11-09-tactique-amical.md", AMICAL), ("2026-11-09-tactique.md", LIGUE))
+    pa = ba / "briefs" / "2026-11-09-tactique-amical.md"
+    ta = comp.composer_amical(pa, None)
+    yield "5n composer_amical : même tableau que composer sur le même brief", ta == comp.composer("Garden City", ba, JOUR, True, None)
+    yield "5n composer_amical : brief absent -> None", comp.composer_amical(None, None) is None
+    yield "5n composer_amical : un brief de ligue n'est pas un brief d'amical -> None", comp.composer_amical(ba / "briefs" / "2026-11-09-tactique.md", None) is None
+    yield "5n composer_amical : fichier inexistant -> None", comp.composer_amical(ba / "briefs" / "2026-11-10-tactique-amical.md", None) is None
+    tt = comp.composer_amical(pa, (E1, "B", False))
+    yield "5n composer_amical : réglage du test appliqué (agressivité 5)", {l[11] for l in lignes_tableau(tt, "joueur")[2]} == {"5"}
     reel = comp.composer("Naked Spartans", comp.BASE, JOUR, False)
     yield "Y1 brief réel du 08/11 : 14 joueurs, 13 adversaires, forme.py sans erreur", \
         len(lignes_tableau(reel, "joueur")[2]) == 14 and len(lignes_tableau(reel, "adversaire")[2]) == 13 and forme.fautes_de(reel, "basketvibe") == []

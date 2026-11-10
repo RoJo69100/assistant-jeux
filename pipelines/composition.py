@@ -101,6 +101,25 @@ def composer(adversaire, base, jour, amical, test=None) -> str:
     fiche = lire_fiche(b[2]) if b else None
     if not fiche:
         return AUCUNE
+    return _saisie(b, fiche, amical, test)
+
+
+def composer_amical(brief_du_jour, test=None):
+    """5n T3 : tableau de saisie lu dans le brief tactique d'amical qu'on lui donne (celui du jour, choisi par l'appelant) ;
+    None si le brief est absent, n'est pas un brief d'amical (`AAAA-MM-JJ-tactique-amical.md`) ou n'a pas de tableaux valides.
+    Ne lit jamais le dernier amical joué ni un brief d'un autre jour : il ne lit que le fichier reçu."""
+    if brief_du_jour is None:
+        return None
+    f = Path(brief_du_jour)
+    m = src.BRIEF.match(f.name)
+    if not m or not m.group(2) or not f.is_file() or f.stat().st_size == 0:
+        return None
+    texte = f.read_text(encoding="utf-8")
+    fiche = lire_fiche(texte)
+    return _saisie((dt.date.fromisoformat(m.group(1)), f, texte), fiche, True, test) if fiche else None
+
+
+def _saisie(b, fiche, amical, test):
     joueurs, adv = fiche
     notes = []
     if amical and test:
