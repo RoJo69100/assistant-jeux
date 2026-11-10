@@ -314,7 +314,8 @@ def verifier_j_moins_1(tableau: str, donnees) -> list:
                 sortie.append(f"Écart J-1 : {n} — fatigue projetée {_virgule(r['sat_fatigue'])} au match de {r['kind']} du "
                               f"{auj.en_date(r['match_day']):%d/%m} contre {r['opponent']} (zone verte {r['zone_verte']})")
     for r in auj.lignes_de(donnees, "transferts_recents"):
-        if auj.vrai(r.get("achete")):
+        # R12 : « vendu » = mon équipe est le vendeur (colonne `vendu`) ; sans cette colonne (anciens jeux de données) : tout transfert non acheté
+        if auj.vrai(r.get("achete")) or ("vendu" in r and not auj.vrai(r.get("vendu"))):
             continue
         for n in noms:
             if est(n, r["name"]):

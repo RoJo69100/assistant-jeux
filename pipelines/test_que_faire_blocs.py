@@ -389,6 +389,13 @@ def cas_blocs_2_3():
             yield f"test_j_moins_1_signale_blesse_fatigue_vendu : {nom} : {joueur}", len(trouve) == 1 and motif in trouve[0]
         yield f"test_j_moins_1 : {nom} : ni Fournier acheté ni joueur absent du tableau", not any("Fournier" in x or "Inconnue" in x for x in ecarts)
         yield f"test_j_moins_1 : {nom} : écarts passent forme", forme.fautes_de("\n".join(l), "basketvibe") == []
+    # R12 : « vendu » = transfert dont mon équipe est le vendeur ; le transfert d'un homonyme entre deux autres clubs n'est pas une vente de chez nous
+    ventes = T(["name", "settled_at", "to_team", "achete", "vendu"], [("Colton Richard", "2026-11-10T13:26:00", "Saile C.B.", False, False),
+                                                                  ("Luc Fournier", "2026-11-09T12:00:00", "Autre club", False, True)])
+    ec_v = qfb.verifier_j_moins_1(JOUEURS, donnees_t(**{"transferts_recents": ventes}))
+    yield "test_j_moins_1_vendu_par_un_autre_club_non_signale (R12)", not any("Richard" in x for x in ec_v)
+    yield "test_j_moins_1_vendu_par_mon_equipe_signale (R12)", any("Fournier" in x and "vendu le 09/11 (Autre club)" in x for x in ec_v)
+    yield "test_requete_transferts_recents_distingue_la_vente (R12)", "from_team_id = m.team_id) as vendu" in auj.REQUETES["transferts_recents"]
     # R10 : un nom annoté « (18 ans) » dans le tableau (brief d'amical de l'agent) est reconnu comme les autres
     annote = JOUEURS.replace("| Richard |", "| Richard (25 ans) |").replace("| Gimenez |", "| **Gimenez (26 ans)** |")
     ecarts_annote = qfb.verifier_j_moins_1(annote, dj)

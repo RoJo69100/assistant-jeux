@@ -78,7 +78,8 @@ REQUETES = {
     # enchères décidées : fin à venir (ouvertes) ou finie depuis moins de 4 jours (résultat à lire, PB7)
     "encheres_ouvertes": "select name, ends_at at time zone 'Europe/Paris' as fin_paris from core.market_listing "
                          "where game = 'basketvibe' and not is_mine and ends_at > now() - interval '4 days' and ends_at < now() + interval '4 days'",
-    "transferts_recents": "select t.name, t.settled_at, t.to_team, (t.to_team_id = m.team_id) as achete from silver.bv_transfers t "
+    "transferts_recents": "select t.name, t.settled_at, t.to_team, (t.to_team_id = m.team_id) as achete, (t.from_team_id = m.team_id) as vendu "
+                          "from silver.bv_transfers t "
                           "cross join silver.bv_my_team m where t.entry_type = 'transfer' and t.settled_at >= now() - interval '6 days' "
                           "order by t.settled_at desc limit 300",
     "apercus": "select distinct match_day from gold.bv_saisie_adversaires "
