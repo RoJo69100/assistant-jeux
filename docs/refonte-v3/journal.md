@@ -430,3 +430,9 @@ aucune fiche : lance l'agent tactique
 >     annonce … (inchangé)
 ```
 - **`python -I pipelines/fusion_main.py`** : `Poussé : origin/main == HEAD.` (4f27d7801194). **`python -I pipelines/fin_etape.py`** : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, `test_aujourdhui.py : 227/227`, `test_composition.py : 16/16`, `test_revue_hebdo.py : 38/38`, `test_agents.py : 0 échec(s)`, `HEAD dans origin/main : oui`.
+
+## Effectifs des clubs adverses en silver (2026-11-10 ~16:00 Paris)
+- **Étape 0** (306 captures `/c/<club>`, 39 clubs) : l'effectif vient du seul appel `/clubs/<slug>/season-roster` (onglet statistiques ; 37 captures, 35 clubs) ; sans onglet : `seasons`, `season-history` (team_id, nom, lignes ligue et coupe), `trophies` ; schedule et history : `schedule` ; headToHead : `head-to-head` + DOM ; skills : aucune compétence (2 captures). Une capture d'effectif (kk-bedex) est rangée sous `?tab=schedule` : classement par l'URL de l'appel API (`silver.bv_api.endpoint`), pas par `page_url`.
+- **Design** : `docs/superpowers/specs/2026-11-10-bv-club-roster-design.md`, approuvé avec trois ajustements (est_derniere ; test relatif aux appels d'effectif et chronométré ; commentaire de vue).
+- **Vue** `silver.bv_club_roster` (`sql/silver/054_bv_club_roster.sql`, appliquée par le connecteur) : 384 lignes, 35 clubs, 35 team_id, 364 lignes de dernière capture dont 356 joueurs actifs ; 375 lignes `bracket`, 9 `full` (min = max = valeur exacte, player_strength).
+- **Test** `pipelines/test_bv_club_roster.py` : 5/5 (clubs 35 = appels d'effectif 35 ; joueurs 384 = payloads 384 ; une dernière capture par club ; compétences complètes et team_id ; vue en 0,41 s, sous 3 s : pas de matérialisation).
