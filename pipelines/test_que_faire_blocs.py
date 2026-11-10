@@ -156,6 +156,7 @@ def cas():
     yield from cas_t5()
     yield from cas_t6()
     yield from cas_a1()
+    yield from cas_r3()
     yield from cas_a2()
     yield from cas_a6()
 
@@ -945,6 +946,37 @@ def etude_avec(*demandes):
     return "# Étude (2026-11-10)\n\n**Question** : x ?\n\n## Export demandé\n" + "".join(f"- {d}\n" for d in demandes)
 
 
+TRAITEES_Q = ("| début de la demande | statut | date | question liée | raison |\n|---|---|---|---|---|\n"
+              "| exporte la page Équipe (effectif) des clubs de tête du classement | fait | 2026-11-10 | 3b | ingérée dans silver.bv_club_roster |\n"
+              "| exporte la page Entraînement chaque semaine | écartée | 2026-11-10 | 5a | remplacée par les demandes du samedi et du lundi |\n")
+
+
+def cas_r3():
+    """R3 : colonne « question liée » de demandes-traitees.md ; une question dont la demande est « fait » : « export reçu le JJ/MM, étude à lancer »."""
+    et = etudes_de({"2026-11-10-carte-faisabilite.md": CARTE, "demandes-traitees.md": TRAITEES_Q})
+    e5 = qfb.etat_etude(et, 5)
+    yield "test_r3_question_fait : 3b affiche « export reçu le 10/11, étude à lancer »", "3b pourquoi les premiers le sont : export reçu le 10/11, étude à lancer" in e5 \
+        and "bloquée par" not in e5
+    yield "test_r3_question_fait : 3a, sans demande traitée, garde son verdict", "3a force du club et victoires : faisable maintenant" in e5
+    et2 = etudes_de({"2026-11-10-carte-faisabilite.md": CARTE, "demandes-traitees.md": TRAITEES_Q.replace("| fait |", "| écartée |")})
+    yield "test_r3_question_ecartee : le verdict de la carte reste", "bloquée par : exporte la page Équipe des clubs de tête" in qfb.etat_etude(et2, 5)
+    et3 = etudes_de({"2026-11-10-carte-faisabilite.md": CARTE, "demandes-traitees.md": TRAITEES_Q.replace("| 3b |", "| — |")})
+    yield "test_r3_sans_question_liee : verdict inchangé", "bloquée par" in qfb.etat_etude(et3, 5)
+    yield "test_r3_demande_toujours_ignoree_avec_la_nouvelle_colonne", etudes_de({"2026-11-10-sujet.md": etude_avec(
+        PREFIXE_DEMANDE + "exporte la page Équipe (effectif) des clubs de tête du classement, parce que x.", DEMANDE_RESTANTE),
+        "demandes-traitees.md": TRAITEES_Q})[0]["demandes"] == [DEMANDE_RESTANTE]
+    yield "test_r3_sans_fichier : verdict inchangé", "bloquée par" in qfb.etat_etude(etudes_de({"2026-11-10-carte-faisabilite.md": CARTE}), 5)
+    # fichier réel
+    reel = qfb.lire_etudes()
+    texte = (qfb.DOSSIER_ETUDES / "demandes-traitees.md").read_text(encoding="utf-8")
+    yield "test_r3_fichier_reel : colonne « question liée » et les deux lignes", "| question liée |" in texte \
+        and "exporte la page Équipe (effectif) des clubs de tête du classement | fait | 2026-11-10 | 3b |" in texte \
+        and "exporte la page Entraînement chaque semaine | écartée | 2026-11-10 | 5a |" in texte
+    yield "test_r3_fichier_reel : bloc 5, 3b « export reçu le 10/11, étude à lancer »", "3b pourquoi les premiers le sont (compétences, tactique) : export reçu le 10/11, étude à lancer" in qfb.etat_etude(reel, 5)
+    yield "test_r3_fichier_reel : plus de demande « page Équipe des clubs de tête » ni « Entraînement chaque semaine »", not any(
+        d.startswith(PREFIXE_DEMANDE + x) for e in reel for d in e["demandes"] for x in ("exporte la page Équipe (effectif) des clubs de tête", "exporte la page Entraînement chaque semaine"))
+
+
 def cas_a1():
     for cle, demande in DEMANDES_REELLES.items():
         et = etudes_de({"2026-11-10-sujet.md": etude_avec(demande, DEMANDE_RESTANTE), "demandes-traitees.md": TRAITEES})
@@ -968,7 +1000,7 @@ def cas_a1():
     yield "test_fichier_reel_demandes_traitees_present", (qfb.DOSSIER_ETUDES / "demandes-traitees.md").is_file()
     yield "test_etudes_reelles_sans_les_trois_demandes", not any(d.startswith(PREFIXE_DEMANDE + x) for d in toutes for x in (
         "exporte la page Effectif les jours de ligue entre l'amical de 8 h", "exporte la page effectif (compétences des joueurs) chaque jour de match, avant le match",
-        "exporte la page des réglages utilisés de l'amical du 29/10")) and len(toutes) >= 3
+        "exporte la page des réglages utilisés de l'amical du 29/10")) and len(toutes) >= 1
 
 
 # ---- A2 : bloc 0, page Entraînement la veille et le lendemain du traitement (dimanche) --------------------------

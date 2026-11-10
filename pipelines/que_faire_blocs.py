@@ -549,6 +549,26 @@ def demandes_traitees(dossier) -> list:
     return debuts
 
 
+def questions_exportees(dossier) -> dict:
+    """{identifiant de question de la carte (ex. « 3b ») : date de l'export} pour les lignes de demandes-traitees.md de statut `fait`
+    dont la colonne « question liée » n'est pas vide ni « — » (R3)."""
+    f = Path(dossier) / FICHIER_TRAITEES
+    if not f.is_file():
+        return {}
+    sortie = {}
+    for cols, lignes in forme.tableaux(f.read_text(encoding="utf-8")):
+        ist, iq, idate = forme.idx(cols, "statut"), forme.idx(cols, "question"), forme.idx(cols, "date")
+        if min(ist, iq, idate) < 0:
+            continue
+        for l in lignes:
+            if len(l) > max(ist, iq, idate) and forme.norm(l[ist]) == "fait" and l[iq].strip() not in SANS_VALEUR:
+                try:
+                    sortie[l[iq].strip().lower()] = dt.date.fromisoformat(l[idate].strip())
+                except ValueError:
+                    continue
+    return sortie
+
+
 def _etude(fichier: Path, date: dt.date, sujet: str, texte: str, traitees=()) -> dict:
     verdicts, lignes, resultat = [], [], None
     for cols, rangees in forme.tableaux(texte):
@@ -577,7 +597,7 @@ def lire_etudes(dossier=DOSSIER_ETUDES) -> list:
     dossier = Path(dossier)
     if not dossier.is_dir():
         return []
-    gardes, traitees = {}, demandes_traitees(dossier)
+    gardes, traitees, exportees = {}, demandes_traitees(dossier), questions_exportees(dossier)
     for f in sorted(dossier.glob("*.md")):
         m = ETUDE_NOM.match(f.name)
         if not m:
@@ -586,6 +606,7 @@ def lire_etudes(dossier=DOSSIER_ETUDES) -> list:
         if "invalid" in " ".join(texte.splitlines()[:6]).lower():
             continue
         e = _etude(f, dt.date.fromisoformat(m.group(1)), m.group(2), texte, traitees)
+        e["exportees"] = exportees
         if e["sujet"] not in gardes or e["date"] > gardes[e["sujet"]]["date"]:
             gardes[e["sujet"]] = e
     return sorted(gardes.values(), key=lambda e: (e["date"], e["sujet"]), reverse=True)
@@ -797,7 +818,12 @@ def etat_etude(etudes, bloc: int) -> str:
     questions = [(q, v) for q, v in carte["lignes"] if q[:1] in QUESTIONS_BLOC.get(bloc, ())]
     if not questions:
         return f"étude pas encore commencée (la carte de faisabilité du {carte['date']:%d/%m} ne couvre pas ce bloc)"
-    return f"carte de faisabilité du {carte['date']:%d/%m} : " + " ; ".join(f"{q} : {v}" for q, v in questions)
+    exportees = carte.get("exportees", {})  # R3 : demande « fait » liée à la question : l'export est arrivé, l'étude reste à lancer
+
+    def verdict(q, v):
+        d = exportees.get(q.split()[0].lower()) if q.split() else None
+        return f"export reçu le {d:%d/%m}, étude à lancer" if d else v
+    return f"carte de faisabilité du {carte['date']:%d/%m} : " + " ; ".join(f"{q} : {verdict(q, v)}" for q, v in questions)
 
 
 def bloc_5(etudes) -> list:
