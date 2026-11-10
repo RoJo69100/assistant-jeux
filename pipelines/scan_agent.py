@@ -19,6 +19,15 @@ BASH_ETUDE = re.compile(r"^python -I pipelines/etudes/[\w-]+\.py(\s+[\w.,=-]+)*\
 DOSSIERS_WRITE = ("docs/etudes/", "pipelines/etudes/")
 
 
+CHAINES_FUITE = ("6,81", "6.81", "4,02", "4.02", "9,01", "9.01")
+
+
+def chaines_dans(chemin) -> list[str]:
+    """Les chaînes de fuite que contient un fichier (la liste des interdits doit en être exempte : l'agent peut la lire)."""
+    texte = Path(chemin).read_text(encoding="utf-8")
+    return [c for c in CHAINES_FUITE if c in texte]
+
+
 def relatif(chemin: str) -> str:
     c = (chemin or "").replace("\\", "/")
     return c[len(RACINE):] if c.startswith(RACINE) else c.lstrip("./")
@@ -117,6 +126,10 @@ def main() -> int:
     entrees = [json.loads(l) for l in Path(args[0]).read_text(encoding="utf-8").splitlines() if l.strip()]
     interdits = []
     if "--interdits" in args:
+        trouvees = chaines_dans(args[args.index("--interdits") + 1])
+        if trouvees:
+            print(f"ÉCHEC : la liste des interdits contient {len(trouvees)} chaîne(s) de fuite : {', '.join(trouvees)}")
+            return 1
         interdits = [l.strip() for l in Path(args[args.index("--interdits") + 1]).read_text(encoding="utf-8").splitlines()
                      if l.strip() and not l.startswith("#")]
     a = appels(entrees)

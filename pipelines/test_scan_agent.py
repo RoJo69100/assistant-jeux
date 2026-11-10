@@ -24,6 +24,14 @@ def faute(nom, inp):
     return bool(scan_agent.hors_bornes(scan_agent.appels([outil(nom, inp)]), INTERDITS))
 
 
+def _fichier_avec(texte):
+    import tempfile
+    f = tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8")
+    f.write(texte)
+    f.close()
+    return f.name
+
+
 def nb_fuites(entrees):
     return len(scan_agent.fuites(entrees))
 
@@ -55,6 +63,8 @@ CAS = [
     ("pas de fuite 16.81 ni date", nb_fuites([outil("Bash", {"command": "c"}), resultat("16.81 2026-09-01 6.812")]) == 0),
     ("fuite en liste de blocs", nb_fuites([outil("Bash", {"command": "c"}), resultat([{"type": "text", "text": "6.81"}])]) == 1),
     ("fuite dans attachment", nb_fuites([{"type": "attachment", "attachment": {"content": "vu 4,02"}}]) == 1),
+    ("liste des interdits réelle sans chaîne de fuite", scan_agent.chaines_dans(Path(__file__).resolve().parent.parent / "docs/etudes/interdits-t1.txt") == []),
+    ("chaînes de fuite détectées dans un fichier", scan_agent.chaines_dans(_fichier_avec("# chaînes 6,81 et 9.01\na/b.md\n")) == ["6,81", "9.01"]),
     ("outil d'origine retrouvé", scan_agent.fuites([outil("Grep", {"pattern": "p"}, "k"), resultat("6.81", "k")])[0]["outil"] == "Grep"),
 ]
 

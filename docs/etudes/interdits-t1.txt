@@ -1,5 +1,5 @@
 # Fichiers et dossiers interdits à l'agent data-scientist pendant T1 (un chemin par ligne, relatif au dépôt).
-# Recherche du 2026-11-10 11:58 (Paris), tout le dépôt hors .git, chaînes 6,81 6.81 4,02 4.02 9,01 9.01 bornées.
+# Recherche du 2026-11-10 11:58 (Paris), tout le dépôt hors .git, six chaînes de fuite du protocole (non recopiées ici).
 .claude/skills/derbymanager-regles/references/03-joueurs-et-attributs.md
 docs/refonte-v3/etude-evenements-basketvibe-sortie.md
 docs/refonte-v3/etude-evenements-basketvibe.md
