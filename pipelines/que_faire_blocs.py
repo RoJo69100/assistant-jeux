@@ -710,7 +710,12 @@ def defaites_suite(donnees) -> int:
     return max(vals, default=0)
 
 
-def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
+# Phrase que Claude inscrit dans le registre du jour (fait-AAAA-MM-JJ.md) en lançant l'agent data-scientist en arrière-plan : le script
+# ne redemande pas le lancement et écrit « étude lancée, résultat attendu » (au plus un lancement par jour, résultat non attendu).
+MARQUEUR_ETUDE_LANCEE = "étude data-scientist lancée"
+
+
+def bloc_6(donnees, etudes, jour: dt.date, experiences=None, fait: str = "") -> tuple:
     """Bloc 6 : Match Engine. (lignes affichées, consignes de session). Première ligne :
     « matchs ajoutés : n (ligue a, amical b ; autres clubs c) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». n = matchs dont la
     page de match a été captée pour la première fois depuis hier (A3, bronze.raw_pages) ; a et b : nos matchs (« ligue » comprend la coupe) ;
@@ -754,8 +759,14 @@ def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
     if k is not None and etude_a_lancer(defaites_suite(donnees), jour, derniere, k):
         ouverte = next((e for e in etudes if not e["carte"] and any("indéterminé" in x or "donnée absente" in x for x in e["verdicts"])), None)
         question = f"{ouverte['sujet']} (étude du {ouverte['date']:%d/%m})" if ouverte else (prochaine or "prochaine hypothèse de la file d'expériences")
-        consignes.append(f"lancer l'agent data-scientist (BasketVibe, horizon aujourd'hui) sur la question ouverte : {question} ; "
-                         "ne demande un export que pour les groupes de moteur encore ouverts (v4 ligue, v5 amical)")
+        if MARQUEUR_ETUDE_LANCEE in fait.lower().replace("’", "'"):
+            lignes.append("étude lancée, résultat attendu")
+        else:
+            consignes.append(f"lancer l'agent data-scientist (BasketVibe, horizon aujourd'hui) en arrière-plan (un lancement a duré plus de 19 minutes) "
+                             f"sur la question ouverte : {question} ; n'attends pas son résultat ; au plus une fois par jour : inscris d'abord "
+                             f"« {MARQUEUR_ETUDE_LANCEE} à HH:MM » dans le registre du jour outputs/basketvibe/fait-AAAA-MM-JJ.md, puis affiche "
+                             "« étude lancée, résultat attendu » sous le bloc 6 ; "
+                             "ne demande un export que pour les groupes de moteur encore ouverts (v4 ligue, v5 amical)")
     return lignes, consignes
 
 
@@ -841,7 +852,7 @@ def bloc_10(actions, garder) -> list:
     return sortie or ["- aucune décision n'attend ton accord écrit"]
 
 
-def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, S, etudes=None, base=None) -> tuple:
+def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, S, etudes=None, base=None, fait: str = "") -> tuple:
     """(texte des blocs 0 à 10, consignes de session). Les consignes (lancer un agent) ne sont jamais dans le texte. Une vue
     illisible donne une ligne « donnée manquante : vue <nom> illisible » dans son bloc, sans faire échouer le rendu."""
     S = S or {}
@@ -852,7 +863,7 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
     tol = float(tol) if tol not in (None, "") else None
     b2, c2 = bloc_2(donnees, S, jour, maintenant, base)
     b3, c3 = bloc_3(donnees, S, jour, maintenant, base)
-    b6, c6 = bloc_6(donnees, etudes, jour, S.get("experiences"))
+    b6, c6 = bloc_6(donnees, etudes, jour, S.get("experiences"), fait)
     blocs = [bloc_0(donnees, res, etudes, jour, maintenant), bloc_1(actions, jour), b2, b3,
              bloc_4(donnees, erreurs, res.get("capacite"), tol, actions), bloc_5(etudes), b6,
              bloc_7(actions, donnees, S.get("analyste")), bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),

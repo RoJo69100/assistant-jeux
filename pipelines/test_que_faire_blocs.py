@@ -753,6 +753,13 @@ def cas_t5():
     yield "test_demandes_recopiees_des_etudes : aucune étude", all("Pour comprendre" not in l for l in qfb.bloc_6(donnees_t5(), [], jour)[0])
     yield "test_bloc_6_consigne_session", len(c6) == 1 and "data-scientist" in c6[0] and "v4 ligue, v5 amical" in c6[0] and "horizon aujourd'hui" in c6[0]
     yield "test_bloc_6_consigne_nomme_la_question_indeterminee", "trois-points" in c6[0]
+    yield "test_bloc_6_consigne_arriere_plan", "en arrière-plan" in c6[0] and "n'attends pas son résultat" in c6[0] \
+        and "au plus une fois par jour" in c6[0] and "étude lancée, résultat attendu" in c6[0] and qfb.MARQUEUR_ETUDE_LANCEE in c6[0]
+    l6d, c6d = qfb.bloc_6(donnees_t5(), etu, jour, None, f"- 15:55 {qfb.MARQUEUR_ETUDE_LANCEE} sur trois-points")
+    yield "test_bloc_6_etude_lancee_registre : plus de consigne, ligne « étude lancée, résultat attendu »", c6d == [] and "étude lancée, résultat attendu" in l6d
+    yield "test_bloc_6_etude_lancee_registre : la première ligne reste la ligne quotidienne", l6d[0].startswith("matchs ajoutés : ")
+    l6e, c6e = qfb.bloc_6(donnees_t5(), etu, jour, None, "- export fait")
+    yield "test_bloc_6_registre_sans_lancement : consigne maintenue, pas de ligne « étude lancée »", len(c6e) == 1 and "étude lancée, résultat attendu" not in l6e
     l6b, c6b = qfb.bloc_6(donnees_t5(matchs_ajoutes=T(["day", "competition_kind", "n"], [("2026-11-08", "amical", 1)])), etu, jour)
     yield "test_etude_pas_lancee_sans_nouveau_match : bloc 6", c6b == [] and "0 pas encore étudiés" in l6b[0]
     l6c, c6c = qfb.bloc_6(donnees_t5(objectifs=T(OBJ_COLS, [("2026-11-11", "ligue", "BC KIT", "corriger", "serie", "serie", 1)])), etu, jour)

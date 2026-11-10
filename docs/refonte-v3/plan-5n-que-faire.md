@@ -183,11 +183,11 @@
 
 **Fichiers** : modifier `pipelines/aujourdhui.py` (`rendre`, `main`), `pipelines/test_aujourdhui.py`, `.claude/skills/basketvibe-aujourdhui/SKILL.md`.
 
-- [ ] **Étape 1** : `aujourdhui.rendre()` appelle `que_faire_blocs.rendre_blocs`, imprime le rendu, puis un séparateur `--- session (à exécuter, ne pas afficher) ---` et les consignes ; l'instantané `aujourdhui-AAAA-MM-JJ.md` contient le rendu sans les consignes.
-- [ ] **Étape 2** : lancer `python pipelines/test_aujourdhui.py` ; les cas qui figeaient la forme de 8 lignes (par exemple autour de `auj.rendre(...)`, ligne 142) et les cas Y2/Y3 qui attendent « lance l'agent tactique » / « python -I pipelines/composition.py » (autour de la ligne 679) échouent : pour chacun, réécrire le test selon le nouveau format et écrire une ligne dans la table des tests réécrits du journal (ancien attendu, nouvel attendu, raison : bloc 3 et règle « jamais une commande »).
-- [ ] **Étape 3** : réécrire `SKILL.md` de `basketvibe-aujourdhui` : première action = le script ; afficher le rendu **avant** le séparateur tel quel ; exécuter les consignes de session après le séparateur (agents tactique et analyste, agent data-scientist au plus une fois par jour) puis relancer le script une fois ; demander à l'utilisateur les exports signalés « donnée manquante » ; supprimer « au plus 8 lignes `HH:MM` ».
-- [ ] **Étape 4** : lancer `python pipelines/test_aujourdhui.py`, `python pipelines/test_composition.py`, `python pipelines/test_que_faire_blocs.py`, `python pipelines/test_forme.py` → tous verts, comptes collés.
-- [ ] **Étape 5** : commit « 5n T7 : branchement du rendu en blocs, tests réécrits, skill du que faire ».
+- [x] **Étape 1** : `aujourdhui.rendre()` appelle `que_faire_blocs.rendre_blocs`, imprime le rendu, puis un séparateur `--- session (à exécuter, ne pas afficher) ---` et les consignes ; l'instantané `aujourdhui-AAAA-MM-JJ.md` contient le rendu sans les consignes.
+- [x] **Étape 2** : lancer `python pipelines/test_aujourdhui.py` ; les cas qui figeaient la forme de 8 lignes (par exemple autour de `auj.rendre(...)`, ligne 142) et les cas Y2/Y3 qui attendent « lance l'agent tactique » / « python -I pipelines/composition.py » (autour de la ligne 679) échouent : pour chacun, réécrire le test selon le nouveau format et écrire une ligne dans la table des tests réécrits du journal (ancien attendu, nouvel attendu, raison : bloc 3 et règle « jamais une commande »).
+- [x] **Étape 3** : réécrire `SKILL.md` de `basketvibe-aujourdhui` : première action = le script ; afficher le rendu **avant** le séparateur tel quel ; exécuter les consignes de session après le séparateur (agents tactique et analyste, agent data-scientist au plus une fois par jour) puis relancer le script une fois ; demander à l'utilisateur les exports signalés « donnée manquante » ; supprimer « au plus 8 lignes `HH:MM` ».
+- [x] **Étape 4** : lancer `python pipelines/test_aujourdhui.py`, `python pipelines/test_composition.py`, `python pipelines/test_que_faire_blocs.py`, `python pipelines/test_forme.py` → tous verts, comptes collés.
+- [x] **Étape 5** : commit « 5n T7 : branchement du rendu en blocs, tests réécrits, skill du que faire ».
 
 ## Tâche 8 — Réception sur la vraie journée
 

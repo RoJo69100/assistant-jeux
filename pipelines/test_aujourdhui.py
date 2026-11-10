@@ -977,10 +977,29 @@ def cas_base():
     yield "R4 base : toute ligne sans lecteur porte une alerte", all(v["alerte"] for v in par.values() if v["lu_par_silver"] == "non")
 
 
+def cas_t7():
+    """5n T7 : sortie du script = blocs 0 à 10, puis séparateur et consignes ; l'instantané n'a ni séparateur ni consigne."""
+    res = {"actions": [(None, 1, "Composition J5 contre Naked Spartans : lance l'agent tactique (aperçu du 10/11 en base)", "", "s")],
+           "exports": [], "garder": [], "infos": [], "capacite": None}
+    jour, maint = dt.date(2026, 11, 10), dt.datetime(2026, 11, 10, 15, 50)
+    affichage, instantane = auj.rendre_jour(res, {}, {}, jour, maint, {}, etudes=[], base=ESSAI)
+    avant, _, apres = affichage.partition(auj.SEPARATEUR)
+    yield "T7 sortie : les 11 blocs sont avant le séparateur", all(f"## Bloc {n} — " in avant for n in range(11))
+    yield "T7 sortie : le séparateur est exact", auj.SEPARATEUR == "--- session (à exécuter, ne pas afficher) ---" and affichage.count(auj.SEPARATEUR) == 1
+    yield "T7 sortie : la consigne de l'agent tactique est après le séparateur, jamais avant", "lance l'agent tactique" in apres and "lance l'agent tactique" not in avant
+    yield "T7 instantané : le rendu sans séparateur ni consigne", auj.SEPARATEUR not in instantane and "lance l'agent tactique" not in instantane \
+        and instantane.strip() == avant.strip()
+    sans = dict(res, actions=[(None, 1, "Export : page Effectif", "", "s")])
+    aff2, inst2 = auj.rendre_jour(sans, {}, {}, jour, maint, {}, etudes=[], base=ESSAI)
+    yield "T7 sortie : sans consigne, pas de séparateur", auj.SEPARATEUR not in aff2 and aff2.strip() == inst2.strip()
+    source = Path(auj.__file__).read_text(encoding="utf-8")
+    yield "T7 main : imprime le rendu en blocs (rendre_jour), plus rendre/plier", "rendre_jour(" in source.split("def main")[1] and "plier(rendre(" not in source
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
     echecs = 0
-    jeux = list(cas()) + (list(cas_base()) if "--base" in sys.argv else [])
+    jeux = list(cas()) + list(cas_t7()) + (list(cas_base()) if "--base" in sys.argv else [])
     for nom, ok in jeux:
         echecs += not ok
         print(("OK " if ok else "ECHEC "), nom)

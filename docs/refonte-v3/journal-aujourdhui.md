@@ -1008,6 +1008,14 @@ tests :
 HEAD dans origin/main : oui
 ```
 
+### T7 — branchement, skill (mardi 10/11/2026, après-midi)
+
+- **A7 vérifié avant T7** : déjà commité (HEAD b4cd1cf « 5n A7 : autres clubs dans la ligne du bloc 6 ») ; `test_que_faire_blocs.py` 479/479 avant T7, aucun travail refait.
+- **Branchement** : `aujourdhui.rendre_jour(res, donnees, erreurs, jour, maintenant, S, …)` (import différé de `que_faire_blocs`) renvoie (affichage, instantané) ; `main` imprime l'affichage (blocs 0 à 10, puis `--- session (à exécuter, ne pas afficher) ---` et les consignes, séparateur omis sans consigne) et écrit `aujourdhui-AAAA-MM-JJ.md` avec les blocs seuls. Pas de `plier()` : il casserait les tableaux des blocs.
+- **Écart au plan (étape 2)** : `aujourdhui.rendre()` n'a pas été remplacée ; elle reste le formateur d'actions (au plus 8 lignes) que 200 cas de `test_aujourdhui.py` appellent sur des actions seules, sans `donnees`. L'ancien format est donc toujours testé par ce qu'il formate encore ; aucun cas n'a échoué, aucun n'a été réécrit. Les cas Y2/Y3 (« lance l'agent tactique », `composition.py`) portent sur les actions de `plan()`, inchangées : `separer` les range en consignes (T2). Table des tests réécrits : vide. Six cas ajoutés (`cas_t7`) : blocs avant le séparateur, consignes après, instantané sans consigne, pas de séparateur sans consigne, `main` branché.
+- **Agent data-scientist (demande de l'utilisateur)** : la consigne dit « en arrière-plan », « n'attends pas son résultat », « au plus une fois par jour » ; elle fait inscrire « étude data-scientist lancée à HH:MM » dans `fait-AAAA-MM-JJ.md` ; `bloc_6(…, fait)` lit ce registre (`MARQUEUR_ETUDE_LANCEE`) : plus de consigne et la ligne « étude lancée, résultat attendu » (sinon la relance du script relancerait l'agent). 4 cas ajoutés à `test_que_faire_blocs.py`. **Durée d'un lancement : plus de 19 minutes** (mesure de l'utilisateur, lancement antérieur, en avant-plan) ; durée en arrière-plan à noter dès qu'un lancement a lieu (T8).
+- **Skill** `basketvibe-aujourdhui` réécrit : script d'abord, rendu affiché avant le séparateur, consignes après (tactique, analyste, data-scientist en arrière-plan), relance unique du script, exports « donnée manquante » demandés à l'utilisateur ; « au plus 8 lignes `HH:MM` » et l'ancienne méthode supprimés.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |

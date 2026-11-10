@@ -1,8 +1,8 @@
 """Que faire aujourd'hui BasketVibe, sans modèle ni agent (refonte v3, lots L2 et L3).
 
-Même plan que le skill basketvibe-aujourdhui : au plus 8 lignes `HH:MM — action — détail (source)` triées par heure
-limite, une ligne « Autres points », une ligne « Garder » (décisions « ne rien changer », en demi-ligne) et la ligne
-finale « Exports à faire aujourd'hui : … ». Lit en lecture seule les vues gold (executer() de sql.py), la décision
+Depuis 5n T7, la sortie est le rendu en 11 blocs de que_faire_blocs.py (`rendre_jour`), suivi d'un séparateur et des consignes de
+session (agents à lancer) ; `plan()` reste le calcul des actions (au plus 8 lignes `HH:MM — action — détail (source)` par `rendre`,
+utilisé par les tests et par le bloc 1). Lit en lecture seule les vues gold (executer() de sql.py), la décision
 d'achat ouverte (learn.decision) et les fichiers du jour (aujourdhui_sources.py : briefs tactique, registre fait,
 dossier, police, learnings). Critères : docs/refonte-v3/journal-aujourdhui.md.
 
@@ -1142,6 +1142,19 @@ def rendre(res, jour, erreurs=None):
     return "\n".join(lignes)
 
 
+SEPARATEUR = "--- session (à exécuter, ne pas afficher) ---"
+
+
+def rendre_jour(res, donnees, erreurs, jour, maintenant, S, etudes=None, base=None, fait=""):
+    """5n T7 : (affichage, instantané). Affichage = blocs 0 à 10 (que_faire_blocs.rendre_blocs), puis, s'il y en a, le séparateur et les
+    consignes de session ; instantané = les blocs seuls. Import différé : que_faire_blocs importe ce module."""
+    import que_faire_blocs as qfb
+    texte, consignes = qfb.rendre_blocs(res, donnees, erreurs, jour, maintenant, S, etudes=etudes, base=base, fait=fait)
+    if not consignes:
+        return texte, texte
+    return texte + "\n" + SEPARATEUR + "\n" + "\n".join(f"- {c}" for c in consignes) + "\n", texte
+
+
 def journaliser(jour, secondes, requetes, quand=None):
     if not JOURNAL.exists():
         JOURNAL.write_text("# Journal de durée de `aujourdhui.py` (une ligne par exécution)\n\n"
@@ -1182,8 +1195,10 @@ def main() -> int:
     sqlmod = charger_sql()
     donnees, erreurs, n = lire_tout(sqlmod.executer, a.jour)
     sys.stdout.reconfigure(encoding="utf-8")
-    rendu = plier(rendre(plan(donnees, erreurs, jour, maintenant, lire_fait(jour), lire_sources(donnees, jour)), jour, erreurs))
-    print(rendu)
+    fait = lire_fait(jour)
+    S = lire_sources(donnees, jour)
+    affichage, rendu = rendre_jour(plan(donnees, erreurs, jour, maintenant, fait, S), donnees, erreurs, jour, maintenant, S, fait=fait)
+    print(affichage)
     if not a.jour and not a.maintenant:  # instantané quotidien (écrasé si relancé le même jour) : ni rejeu ni simulation d'heure
         fichier = BASE / f"aujourdhui-{jour.isoformat()}.md"
         fichier.parent.mkdir(parents=True, exist_ok=True)
