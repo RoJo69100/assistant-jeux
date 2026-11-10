@@ -150,6 +150,7 @@ def cas():
     yield "test_separer_liste_vide", qfb.separer([]) == ([], [])
     yield from cas_bloc_1()
     yield from cas_blocs_2_3()
+    yield from cas_contrat_brief()
 
 
 J = dt.date(2026, 11, 10)
@@ -376,6 +377,125 @@ def cas_blocs_2_3():
     yield "test_j_moins_1_aucun_ecart", qfb.verifier_j_moins_1(JOUEURS, donnees_t()) == []
     yield "test_j_moins_1_forme_basse", any("Gimenez" in x for x in qfb.verifier_j_moins_1(JOUEURS, donnees_t(**{"gold.bv_daily_alerts": T(
         ["priority", "category", "alert"], [(2, "forme", "Marc Gimenez : forme 2 (attaque −8 %)")])})))
+
+
+ADVERSAIRES = "\n## Adversaires\n| Adversaire | Poste | Focus (1-5) | Zone |\n|---|---|---|---|\n| Roze | PG | 3 Normal | Perimeter (1) |\n"
+
+
+def brief_depuis_la_consigne(consigne):
+    """Fabrique un brief en ne suivant que le texte de la consigne : nom de fichier, première ligne exacte, tableau de saisie,
+    puis une ligne qui commence par la formule exacte donnée par la consigne. Renvoie (nom du fichier, texte)."""
+    nom = re.search(r"outputs/basketvibe/briefs/(\S+?\.md)", consigne)
+    ligne = re.search(r"première ligne exactement « ([^»]+) »", consigne)
+    debut = re.search(r"commençant exactement par « (Anticipation \(hypothèse\) :) »", consigne)
+    if not (nom and ligne and debut):
+        return None, None
+    texte = (ligne.group(1) + "\n\n## Saisie\n" + JOUEURS + ADVERSAIRES
+             + "\n" + debut.group(1) + " Gimenez porte 31 % des tirs à 3 points ; si le focus 5 tombe sur lui, plan B : Bonnet tireur principal.\n")
+    return nom.group(1), texte
+
+
+def cas_contrat_brief():
+    S = {"experiences": None}
+    # --- consignes : nom de fichier, première ligne, formule de l'anticipation (amical)
+    _, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=dossier())
+    yield "test_contrat_brief : bloc 2 lancement : nom du fichier amical", "outputs/basketvibe/briefs/2026-11-10-tactique-amical.md" in c[0]
+    yield "test_contrat_brief : bloc 2 lancement : première ligne exacte", "première ligne exactement « Amical contre Opper Cards (11/11) »" in c[0]
+    yield "test_contrat_brief : bloc 2 lancement : formule de l'anticipation", "« Anticipation (hypothèse) : »" in c[0] and "plan B" in c[0]
+    yield "test_contrat_brief : bloc 2 lancement : tableau de saisie", "tableau de saisie" in c[0]
+    yield "test_contrat_brief : constante ANTICIPATION", "« Anticipation (hypothèse) : »" in qfb.ANTICIPATION and "plan B" in qfb.ANTICIPATION
+    # relance quand la ligne d'anticipation manque : même contrat
+    b_sans = dossier(("2026-11-10-tactique-amical.md", brief_amical(anticipation=False), None))
+    _, c_rel = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_sans)
+    yield "test_contrat_brief : bloc 2 relance : nom du fichier et formule", len(c_rel) == 1 \
+        and "outputs/basketvibe/briefs/2026-11-10-tactique-amical.md" in c_rel[0] and "« Anticipation (hypothèse) : »" in c_rel[0]
+
+    # --- bloc 2 de bout en bout : un brief fabriqué à partir du texte de la consigne est lu par brief_du_jour, composer_amical, anticipation_du_brief
+    nom, texte = brief_depuis_la_consigne(c[0])
+    yield "test_contrat_brief : bloc 2 : la consigne se laisse lire", nom == "2026-11-10-tactique-amical.md" and texte is not None
+    base = dossier((nom, texte, None)) if nom else dossier()
+    f = qfb.brief_du_jour(base, JOUR_T, True, "Opper Cards")
+    yield "test_contrat_brief : bloc 2 : brief_du_jour le trouve", f is not None and f.name == nom
+    yield "test_contrat_brief : bloc 2 : adversaire_du_titre lit la première ligne", qfb.comp.adversaire_du_titre((texte or "\n").splitlines()[0]) == "Opper Cards"
+    tab = qfb.comp.composer_amical(f, None) if f else None
+    yield "test_contrat_brief : bloc 2 : composer_amical rend le tableau", tab is not None and "| Gimenez |" in tab
+    ant = qfb.anticipation_du_brief(f) if f else qfb.ABSENTE
+    yield "test_contrat_brief : bloc 2 : anticipation_du_brief la lit", ant != qfb.ABSENTE and ant.startswith("Anticipation (hypothèse) : ") and "plan B" in ant
+    l, c2 = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=base)
+    t = "\n".join(l)
+    yield "test_contrat_brief : bloc 2 : le bloc rend le brief, sans nouvelle consigne", "| Gimenez |" in t and "plan B" in t and c2 == []
+
+    # --- bloc 3, ligue de bout en bout (J<n> : <adversaire> (JJ/MM))
+    _, c3 = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=dossier())
+    yield "test_contrat_brief : bloc 3 lancement : nom du fichier ligue", "outputs/basketvibe/briefs/2026-11-10-tactique.md" in c3[0] \
+        and "tactique-amical" not in c3[0]
+    yield "test_contrat_brief : bloc 3 lancement : première ligne exacte", "première ligne exactement « J5 : Naked Spartans (11/11) »" in c3[0]
+    yield "test_contrat_brief : bloc 3 lancement : formule de l'anticipation", "« Anticipation (hypothèse) : »" in c3[0] and "plan B" in c3[0]
+    nom3, texte3 = brief_depuis_la_consigne(c3[0])
+    yield "test_contrat_brief : bloc 3 : la consigne se laisse lire", nom3 == "2026-11-10-tactique.md" and texte3 is not None
+    base3 = dossier((nom3, texte3, datetime_paris(2026, 11, 10, 11))) if nom3 else dossier()
+    f3 = qfb.brief_du_jour(base3, JOUR_T, False, "Naked Spartans")
+    yield "test_contrat_brief : bloc 3 : brief_du_jour le trouve", f3 is not None and f3.name == nom3
+    yield "test_contrat_brief : bloc 3 : adversaire_du_titre lit la première ligne", qfb.comp.adversaire_du_titre((texte3 or "\n").splitlines()[0]) == "Naked Spartans"
+    ant3 = qfb.anticipation_du_brief(f3) if f3 else qfb.ABSENTE
+    yield "test_contrat_brief : bloc 3 : anticipation_du_brief la lit", ant3 != qfb.ABSENTE and ant3.startswith("Anticipation (hypothèse) : ")
+    l3, c33 = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=base3)
+    t3 = "\n".join(l3)
+    yield "test_contrat_brief : bloc 3 : le bloc rend le brief, sans nouvelle consigne", "| Gimenez |" in t3 and "plan B" in t3 and c33 == []
+
+    # --- coupe sans numéro de manche : « Coupe contre <adversaire> (JJ/MM) », lue par adversaire_du_titre
+    coupe = donnees_t(apercus_matchs=T(APERCU_COLS, [(8, "coupe", None, "2026-11-11", "Naked Spartans", "2026-11-10T09:00:00", "Zwolinski")]))
+    _, cc = qfb.bloc_3(coupe, S, JOUR_T, MAINT, base=dossier())
+    yield "test_contrat_brief : coupe : première ligne exacte", len(cc) == 1 and "première ligne exactement « Coupe contre Naked Spartans (11/11) »" in cc[0] \
+        and "outputs/basketvibe/briefs/2026-11-10-tactique.md" in cc[0]
+    nomc, textec = brief_depuis_la_consigne(cc[0])
+    basec = dossier((nomc, textec, datetime_paris(2026, 11, 10, 11))) if nomc else dossier()
+    fc = qfb.brief_du_jour(basec, JOUR_T, False, "Naked Spartans")
+    yield "test_contrat_brief : coupe : brief_du_jour le trouve", fc is not None
+    lc, c_c = qfb.bloc_3(coupe, S, JOUR_T, MAINT, base=basec)
+    yield "test_contrat_brief : coupe : le bloc rend le brief", "| Gimenez |" in "\n".join(lc) and c_c == []
+
+    # --- relance du bloc 3 (ligne d'anticipation absente) : même contrat
+    b3_sans = dossier(("2026-11-10-tactique.md", brief_ligue(anticipation=False), datetime_paris(2026, 11, 10, 11)))
+    _, c3r = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=b3_sans)
+    yield "test_contrat_brief : bloc 3 relance : nom du fichier et formule", len(c3r) == 1 \
+        and "outputs/basketvibe/briefs/2026-11-10-tactique.md" in c3r[0] and "« Anticipation (hypothèse) : »" in c3r[0]
+
+
+def cas_produit_le():
+    """C2 : produit_le = heure de commit du brief (git log -1 --format=%ct), mtime seulement si le fichier n'est pas suivi."""
+    import subprocess
+    d = Path(tempfile.mkdtemp())
+    env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t",
+               GIT_COMMITTER_DATE="2026-11-09T20:00:00+01:00", GIT_AUTHOR_DATE="2026-11-09T20:00:00+01:00")
+
+    def git(*a):
+        return subprocess.run(["git", "-C", str(d), *a], env=env, capture_output=True, text=True)
+    git("init", "-q")
+    git("config", "commit.gpgsign", "false")
+    (d / "briefs").mkdir()
+    suivi = d / "briefs" / "2026-11-10-tactique.md"
+    suivi.write_text(brief_ligue(), encoding="utf-8")
+    git("add", "briefs/2026-11-10-tactique.md")
+    ok = git("commit", "-q", "-m", "brief").returncode == 0
+    yield "test_produit_le : le commit de test est créé", ok
+    maintenant = dt.datetime.now().timestamp()
+    os.utime(suivi, (maintenant, maintenant))  # mtime récent, commit ancien
+    yield "test_produit_le : fichier suivi = heure du commit (20:00 Paris le 09/11)", qfb.produit_le(suivi) == dt.datetime(2026, 11, 9, 20, 0)
+    yield "test_produit_le : mtime récent mais commit ancien : pas à jour", not qfb.fiche_a_jour(suivi, dt.datetime(2026, 11, 10, 9, 0), None)
+    yield "test_produit_le : commit postérieur à l'aperçu : à jour", qfb.fiche_a_jour(suivi, dt.datetime(2026, 11, 9, 19, 0), None)
+
+    libre = d / "briefs" / "2026-11-10-tactique-amical.md"
+    libre.write_text(brief_amical(), encoding="utf-8")
+    ts = datetime_paris(2026, 11, 10, 11).replace(tzinfo=PARIS).timestamp()
+    os.utime(libre, (ts, ts))
+    yield "test_produit_le : fichier non suivi = mtime (11:00 Paris)", qfb.produit_le(libre) == dt.datetime(2026, 11, 10, 11, 0)
+    yield "test_produit_le : fichier non suivi, mtime après l'aperçu : à jour", qfb.fiche_a_jour(libre, dt.datetime(2026, 11, 10, 9, 0), None)
+
+    hors = Path(tempfile.mkdtemp()) / "x.md"  # hors de tout dépôt git
+    hors.write_text("x", encoding="utf-8")
+    os.utime(hors, (ts, ts))
+    yield "test_produit_le : hors dépôt git = mtime", qfb.produit_le(hors) == dt.datetime(2026, 11, 10, 11, 0)
 
 
 def composition_lignes(texte):

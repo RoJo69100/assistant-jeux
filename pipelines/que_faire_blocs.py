@@ -155,7 +155,28 @@ BASE = comp.BASE
 ANTICIPATION = ("anticipe les décisions de l'adversaire contre nous : pour chacun de nos joueurs, le focus défensif et la zone qu'un adversaire "
                 "appliquerait selon la même règle que la nôtre (parts de tirs, 2P/3P de nos joueurs, gold.bv_match_player_lines) ; compose pour "
                 "rester solide si le focus tombe sur notre meilleur tireur (plan B) ; hypothèse signalée comme telle, aucune donnée sur les focus "
-                "adverses en base")
+                "adverses en base ; sous le tableau de saisie, écris une ligne commençant exactement par « Anticipation (hypothèse) : » "
+                "avec le plan B nommé")
+
+
+def contrat_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.date, manche=None, genre: str = "ligue") -> tuple:
+    """(chemin du brief, première ligne) que l'agent tactique doit écrire pour que le script le retrouve :
+    `brief_du_jour` exige le nom daté du jour, `adversaire_du_titre` lit l'adversaire dans la première ligne."""
+    chemin = f"outputs/basketvibe/briefs/{jour.isoformat()}-tactique{'-amical' if amical else ''}.md"
+    jj = f"{date_match:%d/%m}"
+    if amical:
+        return chemin, f"Amical contre {adversaire} ({jj})"
+    if manche and genre == "ligue":
+        return chemin, f"J{manche} : {adversaire} ({jj})"
+    return chemin, f"{genre.capitalize()} contre {adversaire} ({jj})"
+
+
+def consigne_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.date, manche=None, genre: str = "ligue") -> str:
+    """Fin de consigne commune aux lancements et relances des blocs 2 et 3 : fichier, première ligne, tableau, anticipation."""
+    chemin, ligne = contrat_brief(jour, amical, adversaire, date_match, manche, genre)
+    return f"écris le brief dans {chemin}, première ligne exactement « {ligne} », puis le tableau de saisie ; " + ANTICIPATION
+
+
 LIGNE_ANTICIPATION = re.compile(r"^[\s>*-]*\**\s*(Anticipation \(hypothèse\)\s*:.*?)\**\s*$", re.M)
 ABSENTE = "Anticipation (hypothèse) : absente du brief du jour"
 
@@ -249,14 +270,14 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
                     "fiche tactique §2 bis, dans l'ordre : minutes aux jeunes de 21 ans ou moins (21 ans), un seul réglage testé "
                     f"({auj.texte_test(*test[:2]) if test else 'aucun test en cours'}), titulaires protégés si ligue le soir "
                     "(fatigue ajoutée de fatigue_amical) ; minutes réparties entre les joueurs ; chiffres cités, hypothèses signalées ; "
-                    "jamais reprise du dernier amical ni du dernier brief ; minutes par joueur dans le tableau ; " + ANTICIPATION)
+                    "jamais reprise du dernier amical ni du dernier brief ; minutes par joueur dans le tableau ; " + consigne_brief(jour, True, am["match"], am["date"]))
         return [entete, "", "composition de l'amical en préparation"], [consigne]
     lignes, consignes = [entete, "", tableau, ""], []
     ant = anticipation_du_brief(f)
     lignes.append(ant)
     if ant == ABSENTE:
         consignes.append(f"relancer l'agent tactique (BasketVibe, amical du {am['date']:%d/%m}, horizon aujourd'hui) : ajouter au brief du jour "
-                         "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + ANTICIPATION)
+                         "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, True, am["match"], am["date"]))
     lignes.append(f"Test en cours (un seul réglage à la fois) : {auj.texte_test(*test[:2])}" if test else "Test en cours : aucun")
     if any(r["competition_kind"] == "ligue" and auj.en_date(r["day"]) == am["date"] for r in auj.lignes_de(donnees, "calendrier")):
         du_jour = [r for r in auj.lignes_de(donnees, "fatigue_amical") if auj.en_date(r["match_day"]) == am["date"]]
@@ -307,12 +328,12 @@ def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         if tableau == comp.AUCUNE:
             lignes += ["composition en préparation", ""]
             consignes.append(f"lancer l'agent tactique (BasketVibe, {genre} contre {m['adv']} du {jj}, horizon aujourd'hui) : composition et focus défensif "
-                             "par adversaire d'après l'aperçu adverse en base et l'effectif du jour ; chiffres cités, hypothèses signalées ; " + ANTICIPATION)
+                             "par adversaire d'après l'aperçu adverse en base et l'effectif du jour ; chiffres cités, hypothèses signalées ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
             continue
         ant = anticipation_du_brief(f)
         lignes += [tableau, "", ant]
         if ant == ABSENTE:
             consignes.append(f"relancer l'agent tactique (BasketVibe, {genre} contre {m['adv']} du {jj}, horizon aujourd'hui) : ajouter au brief du jour "
-                             "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + ANTICIPATION)
+                             "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
         lignes += verifier_j_moins_1(tableau, donnees) + [""]
     return lignes, consignes
