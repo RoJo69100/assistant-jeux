@@ -14,6 +14,9 @@ __pycache__/
 # Claude Code : réglages locaux
 .claude/settings.local.json
 
+# Skill brainstorming (superpowers) : maquettes et état du serveur visuel
+.superpowers/
+
 # OS / éditeurs
 .DS_Store
 Thumbs.db
