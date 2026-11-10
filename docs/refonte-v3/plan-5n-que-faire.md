@@ -29,7 +29,7 @@
 
 ## Contraintes globales (valeurs reprises de la conception)
 
-- Un bloc vide s'écrit exactement `donnée manquante : exporte <écran>`. Aucune commande dans le texte affiché : `INTERDITS` attrape les mots entiers « lance », « relance », « exécute », « python » et la chaîne « pipelines/ » ; un participe (« lancée dans ce passage ») n'est pas une commande et passe.
+- Un bloc vide s'écrit exactement `donnée manquante : exporte <écran>`. Aucune commande dans le texte affiché : `INTERDITS` attrape les mots entiers « lance », « relance », « exécute », « lancer », « relancer », « exécuter », « python » et la chaîne « pipelines/ » ; un participe (« lancée dans ce passage ») n'est pas une commande et passe.
 - Pas d'heure `HH:MM` dans l'affichage, sauf l'heure limite du verrou dans la ligne de composition.
 - Horizon = aujourd'hui : « Demain » liste ce qui se prépare aujourd'hui, jamais un report.
 - Catégories du tableau de plan : celles de `forme.CATEGORIES` ; pastilles `🟥 URGENT`, `🟧 IMPORTANT`, `🟩 SUIVI`. Aucune ligne « rien à faire ».
@@ -60,9 +60,9 @@
 - `INTERDITS: re.Pattern` : mots entiers interdits dans l'affichage (liste des contraintes globales).
 - `manque(export: str, debloque: str = "") -> str` : `"donnée manquante : exporte <export>"` + `" (<debloque>)"` si fourni.
 - `classer(action: str) -> tuple[int, str]` : (numéro de bloc, catégorie affichée) d'après le début du texte d'une action de `plan()`. Table explicite préfixe → (bloc, catégorie) couvrant chaque `ajoute(...)` de `aujourdhui.py` (lignes 413 à 1059 au 10/11) ; préfixe inconnu → `(10, "Question")`.
-- `separer(actions: list) -> tuple[list, list[str]]` : actions affichables, et consignes de session (texte contenant « lance l'agent », « relance l'agent », « python -I »).
+- `separer(actions: list) -> tuple[list, list[str]]` : actions affichables, et consignes de session (texte contenant « lance l'agent », « relance l'agent », « lancer l'agent », « relancer l'agent », « python -I »).
 
-- [ ] **Étape 1 : tests d'abord** dans `test_que_faire_blocs.py` : `test_manque_format` (`manque("l'aperçu du match de ligue du 11/11")` == `"donnée manquante : exporte l'aperçu du match de ligue du 11/11"`) ; `test_interdits_attrape_python_et_lance` ; `test_interdits_laisse_lancee_dans_ce_passage` (« analyse non faite, lancée dans ce passage » et « étude à jour au 09/11 » passent) ; `test_classer_couvre_chaque_ajoute` (lit `aujourdhui.py`, extrait chaque texte de premier argument f-string des appels `ajoute(`, vérifie qu'aucun ne tombe dans le défaut sauf liste blanche écrite dans le test) ; `test_separer_met_les_consignes_en_session`.
+- [ ] **Étape 1 : tests d'abord** dans `test_que_faire_blocs.py` : `test_manque_format` (`manque("l'aperçu du match de ligue du 11/11")` == `"donnée manquante : exporte l'aperçu du match de ligue du 11/11"`) ; `test_interdits_attrape_python_et_lance` ; `test_interdits_attrape_les_infinitifs` (« lancer », « relancer », « exécuter », mots entiers, sont attrapés) ; `test_interdits_laisse_lancee_dans_ce_passage` (« analyse non faite, lancée dans ce passage » et « étude à jour au 09/11 » passent) ; `test_classer_couvre_chaque_ajoute` (lit `aujourdhui.py`, extrait chaque texte de premier argument f-string des appels `ajoute(`, vérifie qu'aucun ne tombe dans le défaut sauf liste blanche écrite dans le test) ; `test_separer_met_les_consignes_en_session`.
 - [ ] **Étape 2** : `python pipelines/test_que_faire_blocs.py` → attendu : échec (module absent).
 - [ ] **Étape 3** : implémenter les trois fonctions ci-dessus dans `que_faire_blocs.py`. Les catégories affichées viennent de `forme.CATEGORIES` (accents et majuscule restitués par une table de 9 entrées).
 - [ ] **Étape 4** : relancer → attendu : tous les cas passent.
