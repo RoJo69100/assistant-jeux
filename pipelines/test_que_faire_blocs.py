@@ -2,7 +2,9 @@
 Lancer : python -I pipelines/test_que_faire_blocs.py   (code 1 si un cas se trompe)
 """
 import ast
+import datetime as dt
 import importlib.util
+import re
 import sys
 from pathlib import Path
 
@@ -143,6 +145,60 @@ def cas():
     yield "test_separer_garde_l_action_sans_la_commande_du_detail", any(a[2] == cmd[2] and a[3] == "" for a in aff) and "relance l'agent entraînement" in sess
     yield "test_separer_aucune_commande_dans_l_affichage", all(not qfb.INTERDITS.search(a[2] + " " + a[3]) for a in aff)
     yield "test_separer_liste_vide", qfb.separer([]) == ([], [])
+    yield from cas_bloc_1()
+
+
+J = dt.date(2026, 11, 10)
+# une action par bloc que classer() peut produire (les blocs 5 et 6 n'ont aucune action dans plan() : leurs lignes viennent de bloc_5 et bloc_6)
+PAR_BLOC = {
+    0: "Réexporte l'aperçu : l'effectif adverse a pu changer",
+    2: "Amical contre Opper Cards (mardi) : saisis la tactique maintenant",
+    3: "Ligue J5 contre Naked Spartans (mercredi) : saisis la tactique maintenant",
+    4: "Vendre Dupont : économie 5 000 par semaine",
+    7: "Analyse : défaite du 09/11",
+    8: "Finances : solde projeté au 30/11 de 100 000",
+    9: "Académie, rapport du 05/11 : 2 prospects ; cote inconnue",
+    10: "Un texte que personne ne connaît",
+}
+
+
+def cas_bloc_1():
+    auj_ = (dt.datetime(2026, 11, 10, 19, 45), 1, "Ligue J4 contre Naked Spartans (mardi) : saisis la tactique maintenant", "", "s")
+    dem = (dt.datetime(2026, 11, 11, 19, 45), 2, "Ligue J5 contre Brest (mercredi) : saisis la tactique maintenant", "", "s")
+    t = "\n".join(qfb.bloc_1([auj_, dem], J))
+    yield "test_bloc_1_deux_sections : titres", "Aujourd'hui" in t and "Demain (préparé aujourd'hui)" in t
+    i_dem = t.index("Demain (préparé aujourd'hui)")
+    yield "test_bloc_1_deux_sections : J en Aujourd'hui, J+1 en Demain", t.index("Naked Spartans") < i_dem < t.index("Brest")
+    yield "test_bloc_1_pastilles", "🟥 URGENT" in t and "🟧 IMPORTANT" in t
+
+    toutes = [(None, 2, texte, "", "s") for texte in PAR_BLOC.values()]
+    lignes = qfb.bloc_1(toutes, J)
+    for n, texte in PAR_BLOC.items():
+        cherche = [l for l in lignes if texte[:25] in l]
+        yield f"test_bloc_1_liste_toutes_les_actions : bloc {n}", len(cherche) == 1 and f"→ bloc {n}" in cherche[0]
+
+    vide = qfb.bloc_1([], J)
+    tv = "\n".join(vide)
+    yield "test_bloc_1_jamais_vide", "🟩 SUIVI" in tv and "→ bloc 0" in tv and "tout est traité" in tv
+    yield "test_bloc_1_vide_passe_forme", forme.fautes_tableaux(tv, "basketvibe") == []
+
+    horaires = [(dt.datetime(2026, 11, 10, 19, 45), 1, "Avant 19:45 : vérifier le preset de ligue et régler le focus", "", "s"),
+                (None, 2, "Avant 07:45 : preset amical sur le match contre Opper Cards", "", "s"),
+                (None, 2, "Après l'amical (~08:55) : exporter la page du match", "", "s"),
+                (None, 3, "Avant dimanche 04:00 : vérifier et sauvegarder les choix d'entraînement", "", "s")]
+    th = "\n".join(qfb.bloc_1(horaires, J))
+    yield "test_bloc_1_sans_heure", re.search(r"\d\d:\d\d", th) is None and "preset amical" in th and "exporter la page du match" in th
+    yield "test_bloc_1_passe_forme", forme.fautes_tableaux(t + "\n" + "\n".join(lignes) + "\n" + th, "basketvibe") == []
+
+    seul = "\n".join(qfb.bloc_1([auj_], J))
+    yield "test_bloc_1_section_vide_omise", "Demain" not in seul and "rien" not in seul.lower() and "Naked Spartans" in seul
+
+    avec_consigne = [(None, 1, "Composition J4 contre X : lance l'agent tactique (aperçu du 09/11 en base)", "", "s"),
+                     (None, 2, "Vendre Dupont : économie 5 000 par semaine", "", "s")]
+    tc = "\n".join(qfb.bloc_1(avec_consigne, J))
+    yield "test_bloc_1_sans_commande", qfb.INTERDITS.search(tc) is None and "Vendre Dupont" in tc
+    barre = "\n".join(qfb.bloc_1([(None, 2, "Vendre A | B : économie", "", "s")], J))
+    yield "test_bloc_1_barre_verticale_neutralisee", forme.fautes_tableaux(barre, "basketvibe") == [] and len([l for l in barre.splitlines() if "Vendre" in l][0].split("|")) == 5
 
 
 if __name__ == "__main__":

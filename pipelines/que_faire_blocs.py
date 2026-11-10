@@ -3,6 +3,7 @@
 Plan : docs/refonte-v3/plan-5n-que-faire.md. Ce module range les actions de aujourdhui.plan() dans les blocs 0 à 10
 et rend le document. Règle commune : un bloc vide s'écrit « donnée manquante : exporte <écran> », jamais une commande.
 """
+import datetime as dt
 import re
 import sys
 from pathlib import Path
@@ -99,3 +100,45 @@ def separer(actions: list) -> tuple:
         else:
             affichables.append(a)
     return affichables, consignes
+
+
+PASTILLE = {1: "🟥 URGENT", 2: "🟧 IMPORTANT", 3: "🟩 SUIVI"}
+PREFIXE_HEURE = re.compile(r"^(?:Avant|Après)\b.*? : ")
+HEURE = re.compile(r"\s*\(?~?\d{1,2}:\d{2}\)?")
+LIGNE_VIDE = "tout est traité côté actions ; détail des blocs 0 à 10 ci-dessous"
+
+
+def sans_heure(texte: str) -> str:
+    """Retire les heures HH:MM d'une action (le bloc 1 n'en porte aucune) ; « Avant 07:45 : » devient vide."""
+    return HEURE.sub("", PREFIXE_HEURE.sub("", texte)).replace("  ", " ").strip()
+
+
+def _ligne_plan(prio: int, texte: str) -> str:
+    bloc, cat = classer(texte)
+    court = sans_heure(texte).replace("|", "/")
+    court = court if len(court) <= 150 else court[:149].rstrip() + "…"
+    return f"| {PASTILLE.get(prio, PASTILLE[3])} | {cat} | {court} → bloc {bloc} |"
+
+
+def _tableau(titre: str, actions: list) -> list:
+    rangees = sorted(actions, key=lambda a: (a[1], a[0] is None, a[0] or dt.datetime.max))
+    return [f"**{titre}**", "", "| Priorité | Catégorie | Action |", "|---|---|---|"] \
+        + [_ligne_plan(a[1], a[2]) for a in rangees] + [""]
+
+
+def bloc_1(actions: list, jour: dt.date) -> list:
+    """Bloc 1 : « Aujourd'hui » puis « Demain (préparé aujourd'hui) », tableaux Priorité | Catégorie | Action, sans heures.
+
+    Toutes les actions affichables y figurent, chacune avec « → bloc N » (le détail reste dans son bloc). Une action dont
+    la limite tombe après `jour` va en « Demain » ; sinon en « Aujourd'hui ». Jamais vide."""
+    affichables, _ = separer(actions)
+    ajd = [a for a in affichables if not (a[0] is not None and a[0].date() > jour)]
+    dem = [a for a in affichables if a[0] is not None and a[0].date() > jour]
+    sortie = []
+    if ajd:
+        sortie += _tableau("Aujourd'hui", ajd)
+    if dem:
+        sortie += _tableau("Demain (préparé aujourd'hui)", dem)
+    if not sortie:
+        sortie = ["| Priorité | Catégorie | Action |", "|---|---|---|", f"| {PASTILLE[3]} | {AFFICHAGE['analyse']} | {LIGNE_VIDE} → bloc 0 |", ""]
+    return sortie

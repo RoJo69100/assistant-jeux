@@ -75,11 +75,12 @@
 **Consomme** : `classer`, `separer` (T1) ; `plan()` → `{"actions": [(limite|None, prio, action, détail, source)], ...}`.
 **Produit** : `bloc_1(actions: list, jour: dt.date) -> list[str]` : deux sections « Aujourd'hui » et « Demain (préparé aujourd'hui) », chacune en tableau `Priorité | Catégorie | Action` ; action = texte court + `→ bloc N` (N = bloc de `classer`), sans `HH:MM` ; pastille selon `prio` (1 🟥 URGENT, 2 🟧 IMPORTANT, 3 🟩 SUIVI). **Toutes** les actions affichables y figurent, y compris celles des blocs 0 et 2 à 10 (le détail reste dans leur bloc ; le bloc 1 est le sommaire). Une action avec `limite` datée du lendemain va en « Demain » ; `limite` None ou du jour va en « Aujourd'hui ». Le bloc 1 n'est jamais vide : sans aucune action affichable, une ligne `🟩 SUIVI | Analyse | aucune action ouverte, détail des blocs 0 à 10 ci-dessous → bloc 0`.
 
-- [ ] **Étape 1 : tests** : `test_bloc_1_deux_sections` (une action datée J et une J+1 → chacune dans sa section) ; `test_bloc_1_liste_toutes_les_actions` (une action de chaque bloc 0, 2 à 10 → toutes présentes, chacune avec son `→ bloc N` exact) ; `test_bloc_1_jamais_vide` (aucune action → la ligne de sommaire ci-dessus) ; `test_bloc_1_sans_heure` (aucune sous-chaîne `\d\d:\d\d` dans la sortie) ; `test_bloc_1_passe_forme` (`forme.fautes_tableaux(texte, "basketvibe") == []`) ; `test_bloc_1_section_vide_omise` (aucune action pour demain : la section « Demain » est omise, pas « rien à faire »).
-- [ ] **Étape 2** : lancer → échec.
-- [ ] **Étape 3** : implémenter `bloc_1`.
-- [ ] **Étape 4** : lancer → succès.
-- [ ] **Étape 5** : commit « 5n T2 : bloc 1, toutes les actions avec leur bloc, sans heures ».
+- [x] **Étape 1 : tests** : `test_bloc_1_deux_sections` (une action datée J et une J+1 → chacune dans sa section) ; `test_bloc_1_liste_toutes_les_actions` (une action de chaque bloc 0, 2 à 10 → toutes présentes, chacune avec son `→ bloc N` exact) ; `test_bloc_1_jamais_vide` (aucune action → la ligne de sommaire ci-dessus) ; `test_bloc_1_sans_heure` (aucune sous-chaîne `\d\d:\d\d` dans la sortie) ; `test_bloc_1_passe_forme` (`forme.fautes_tableaux(texte, "basketvibe") == []`) ; `test_bloc_1_section_vide_omise` (aucune action pour demain : la section « Demain » est omise, pas « rien à faire »).
+- [x] **Étape 2** : lancer → échec.
+- [x] **Étape 3** : implémenter `bloc_1`.
+- [x] **Étape 4** : lancer → succès.
+- [x] **Étape 5** : commit « 5n T2 : bloc 1, toutes les actions avec leur bloc, sans heures ».
+- **Écarts à l'exécution** : (1) la ligne de sommaire du bloc 1 sans action s'écrit « tout est traité côté actions ; détail des blocs 0 à 10 ci-dessous → bloc 0 » : « aucune action ouverte » est rejeté par `forme.VIDE` (« aucune action »). (2) `test_bloc_1_liste_toutes_les_actions` couvre les blocs 0, 2, 3, 4, 7, 8, 9, 10 : aucune action de `plan()` ne va aux blocs 5 et 6 (leurs lignes viennent de `bloc_5` et `bloc_6`). (3) `separer` garde une action dont seul le détail contient une consigne, avec un détail vide.
 
 ## Tâche 3 — Blocs 2 et 3 : compositions
 
