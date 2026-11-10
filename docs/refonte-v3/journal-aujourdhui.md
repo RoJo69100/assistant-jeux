@@ -689,6 +689,97 @@ Vérification à la main de Gimenez : 48 × 0,019 × 0,75 × (1,5 − 0,008 × 5
 
 **Lecture parallèle complète des 37 requêtes puis `bloc_4` sur les vraies données** (`aujourdhui.lire_tout`, solde 1 170 081, tolérance 1,0) : lecture **13,4 s** pour 37 requêtes, aucune erreur (la mesure du 10/11 09:43 était 12,4 s pour 32 requêtes ; le budget est 15 s : à surveiller en T8). Rendu : table des prix de 22 lignes ; « aucune annonce du Marché ne se termine dans les 24 h (export du 09/11, 20 annonces) » ; table « Qui vendre » de 14 joueurs : 4 vendables (Catalin Ungureanu, Anselmo Albano, Maël Bernard, Nolan Baron : écart 0,8 / 0,5 / 0,1 / 0,3, 14 joueurs disponibles) et 10 « nécessaire (écart de force … supérieur à la tolérance 1,0) » (Léo Lefebvre 4,2 ; Hadrien Gimenez 4,3 ; Oscar Richard 4,5 ; Armand Fournier 2,3 ; Min-jun Dang 2,5 ; Thibault Bonnet 1,7 ; Noé Legrand 1,4 ; Naël Boyer 3,9 ; Jonathan Durand 2,3 ; Sacha Leclerc 1,3). Cohérent avec les valeurs de `gold.bv_sell_replacement` lues à la main avant le code.
 
+### T5 — étape 0 : `page_type` des exports hebdomadaires (mardi 10/11/2026, 15:20 Paris)
+
+`python -I pipelines/sql.py "select page_type, count(*), max(captured_at) from bronze.raw_pages where game = 'basketvibe' group by page_type order by 1" --max-rows 60` (captured_at en UTC) :
+
+```
+| page_type | count | max |
+|---|---|---|
+| academy | 36 | 2026-11-09T22:18:22.812+00:00 |
+| club | 181 | 2026-11-09T19:29:22.101+00:00 |
+| cups | 2 | 2026-10-26T20:24:34.755+00:00 |
+| finance | 13 | 2026-11-04T10:37:40.774+00:00 |
+| finance_sponsor | 15 | 2026-11-01T07:38:48.326+00:00 |
+| friendly | 311 | 2026-11-10T14:14:07.081+00:00 |
+| match | 433 | 2026-11-09T22:16:51.495+00:00 |
+| news | 20 | 2026-11-04T10:35:20.714+00:00 |
+| notifications | 81 | 2026-11-10T14:17:13.268+00:00 |
+| personnel | 11 | 2026-11-08T10:10:48.361+00:00 |
+| player | 85 | 2026-11-09T22:17:54.81+00:00 |
+| player_career | 11 | 2026-10-25T08:18:10.314+00:00 |
+| player_training | 3 | 2026-10-22T13:33:57.125+00:00 |
+| roster | 50 | 2026-11-09T22:17:07.798+00:00 |
+| roster_injuries | 4 | 2026-10-25T07:44:23.521+00:00 |
+| roster_skills | 13 | 2026-10-19T21:08:54.8+00:00 |
+| roster_statistics | 1 | 2026-11-06T13:11:11.564+00:00 |
+| roster_tiles | 12 | 2026-10-16T14:31:32.216+00:00 |
+| schedule | 141 | 2026-11-10T14:13:59.641+00:00 |
+| standings | 135 | 2026-11-10T14:20:00.94+00:00 |
+| standings_chat | 16 | 2026-10-18T16:44:59.262+00:00 |
+| standings_clubs | 3 | 2026-10-16T13:47:03.218+00:00 |
+| standings_injuries | 1 | 2026-10-16T13:47:06.179+00:00 |
+| standings_players | 1 | 2026-10-16T13:47:05.454+00:00 |
+| standings_schedule | 1 | 2026-10-16T13:44:13.909+00:00 |
+| standings_teams | 1 | 2026-10-16T13:47:04.634+00:00 |
+| standings_transfers | 2 | 2026-10-16T13:47:08.123+00:00 |
+| tactics | 19 | 2026-11-06T13:11:19.318+00:00 |
+| tactics_depth | 1 | 2026-10-16T13:42:56.33+00:00 |
+| training | 33 | 2026-11-08T10:08:51.63+00:00 |
+| training_progress | 16 | 2026-11-01T07:38:36.653+00:00 |
+| training_recent | 5 | 2026-11-01T07:38:42.305+00:00 |
+| transfers | 150 | 2026-11-09T22:18:35.723+00:00 |
+| transfers_club-history | 7 | 2026-11-08T10:11:51.394+00:00 |
+| transfers_global-history | 126 | 2026-11-09T22:18:42.107+00:00 |
+| transfers_records | 2 | 2026-11-08T10:11:50.306+00:00 |
+| unknown | 426 | 2026-11-10T14:20:05.637+00:00 |
+| world | 3 | 2026-10-26T20:24:40.016+00:00 |
+
+38 lignes
+```
+
+Identification par `page_url` (un exemple par type candidat) :
+
+| page_type | page_url (exemple) | rôle |
+|---|---|---|
+| `standings_teams` | `https://www.basketvibe.com/league/table?tab=teams` | onglet Équipes de la ligue |
+| `standings_players` | `https://www.basketvibe.com/league/table?tab=players` | onglet Joueurs |
+| `standings_injuries` | `https://www.basketvibe.com/league/table?tab=injuries` | onglet Blessés |
+| `standings_transfers` | `https://www.basketvibe.com/league/table?tab=transfers` | onglet Transferts |
+| `unknown` | `https://www.basketvibe.com/c/kk-uola`, `…/c/kk-uola?tab=schedule`, `?tab=statistics`, `?tab=headToHead` | pages `/c/<club>` : **aucun `page_type` propre** (63 captures sur 308 `unknown`, dernières le 10/11 vers 15:19 Paris) |
+
+Les quatre onglets de ligue ont leur dernière capture le 2026-10-16 (599 h). **Écart au plan** : les pages `/c/<club>` n'ont pas de `page_type` (toutes `unknown`), mais elles existent et sont capturées ; au lieu du `manque(...)` permanent prévu, `exports_hebdo` les mesure par `page_url like '%/c/%'` (clé `club_adverse`).
+
+### T5 — requêtes de bloc 0 et du bloc 6 sur la vraie base
+
+`captures_marche` : `1 capture, 20 annonces, dernière 2026-11-09T23:18:35` (code 0). `exports_hebdo` (code 0) :
+
+```
+| page_type | derniere_paris |
+| standings_injuries | 2026-10-16T15:47:06.179 |
+| standings_players | 2026-10-16T15:47:05.454 |
+| standings_teams | 2026-10-16T15:47:04.634 |
+| standings_transfers | 2026-10-16T15:47:08.123 |
+| club_adverse | 2026-11-10T15:19:05.179 |
+```
+
+`matchs_ajoutes` (code 0) : 64 lignes (un jour × un type), somme `n` = 64 = ligue 26 + coupe 6 + amical 32 (même total que `select competition_kind, count(*) filter (where played) … from core.fixture`). Dernières lignes :
+
+```
+| 2026-11-07 | amical | 1 |      | 2026-11-08 | amical | 1 |
+| 2026-11-07 | ligue | 1 |       | 2026-11-09 | amical | 1 |
+| 2026-11-09 | ligue | 1 |       | 2026-11-10 | amical | 1 |
+```
+
+`core.fixture` n'a pas de colonne de date d'insertion : « ajoutés depuis la veille » = joués depuis la veille (jour ≥ J−1). Les 40 requêtes de `REQUETES` se lisent sans erreur en parallèle (`lire_tout`), `erreurs = {}`.
+
+**Rendu réel des blocs 0 et 6** (`bloc_0`, `bloc_6` sur ces données et sur `docs/etudes/` à 15:20 Paris) :
+
+- études lues : `trois-points-competence` (10/11), `reussite-cercle-deux-points-v4-amical` (10/11), `carte-faisabilite` (10/11, carte) ; `tirs-cercle-deux-points-v4-amical` ignorée (en-tête « T1 invalidé ») ; `test-data-scientist-basketvibe.md` et `interdits-t1.txt` ignorés (nom sans date ou pas `.md`) ;
+- bloc 6, ligne : `matchs ajoutés : 3 (ligue 1, amical 2) · 64 en base · étude à jour au 10/11, 0 pas encore étudiés` ; aucune consigne : 3 défaites de suite en base (04, 07 et 09/11) mais k = 0 (aucun match joué après le 10/11) ;
+- bloc 0 : « Amical : tactique du match (52 h) → bloc 2 », aperçus de ligue du 11/11 et de coupe du 12/11 absents (→ bloc 3), les 4 onglets de ligue à 599 h (→ blocs 5 et 6), Marché « 1 capture, 20 annonces vues depuis 24 h (dernière le 09/11) → bloc 4 », puis 6 demandes d'export recopiées mot pour mot (5 de la carte de faisabilité, 1 de l'étude des 3 points), chacune suivie de « (étude du 10/11) » ; la page `/c/<club>` n'est pas réclamée (capturée il y a moins d'une heure) ;
+- avancement : `E1 : 0 vérifié sur 4 ; E5 : 0 vérifié sur 3 ; E2 : 0 vérifié sur 3 ; E3 : 0 vérifié sur 7 ; E4 : 0 vérifié sur 16`, prochaine hypothèse `E1 — agressivité défensive, uniforme sur nos cinq`.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |

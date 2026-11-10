@@ -149,6 +149,22 @@ REQUETES = {
     # puis statement timeout).
     "vendre": "select name, position, age, ps, salary, best_slot, rank_in_slot, league_min_last4, on_transfer_list "
               "from gold.bv_sell_candidates order by salary desc",
+    # 5n T5 (bloc 0) : captures et annonces du Marché vues depuis 24 h (le compte est affiché, aucun seuil n'est inventé)
+    "captures_marche": "select count(distinct seen_at) as captures, count(distinct listing_id) as annonces, "
+                       "max(seen_at at time zone 'Europe/Paris') as derniere_paris from core.market_listing "
+                       "where game = 'basketvibe' and seen_at >= now() - interval '24 hours'",
+    # 5n T5 (bloc 6) : matchs joués en base par jour et par type ; le module en tire « ajoutés depuis la veille », le total et k
+    # (joués après la dernière étude). Aucune colonne de date d'insertion dans core.fixture : « ajoutés » = joués depuis la veille.
+    "matchs_ajoutes": "select day, competition_kind, count(*) as n from core.fixture where game = 'basketvibe' and played "
+                      "group by day, competition_kind order by day, competition_kind",
+    # 5n T5 (bloc 0) : dernière capture des exports hebdomadaires de l'étude, mesurée par page_type (relevé à l'étape 0 du plan :
+    # onglets de ligue standings_teams / _players / _injuries / _transfers) ; les pages /c/<club> n'ont pas de page_type propre
+    # (« unknown » avec 308 autres pages) : mesurées par leur page_url.
+    "exports_hebdo": "select page_type, max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
+                     "where game = 'basketvibe' and page_type in ('standings_teams', 'standings_players', 'standings_injuries', "
+                     "'standings_transfers') group by page_type union all "
+                     "select 'club_adverse', max(captured_at at time zone 'Europe/Paris') from bronze.raw_pages "
+                     "where game = 'basketvibe' and page_url like '%/c/%'",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
                       "from gold.bv_amical_reglage where match_day >= current_date - 120",

@@ -503,3 +503,184 @@ def bloc_4(donnees, erreurs, capacite, tolerance, actions=()) -> list:
         sortie += ["**Enchères, achats et ventes déjà proposés**", ""]
         sortie += ["- " + sans_heure(a[2]) + (f" — {sans_heure(a[3])}" if a[3] else "") for a in deja] + [""]
     return sortie
+
+
+# ---- Blocs 0 et 6 : exports et Match Engine -------------------------------------------------------------------
+
+DOSSIER_ETUDES = Path(__file__).resolve().parent.parent / "docs" / "etudes"
+ETUDE_NOM = re.compile(r"^(\d{4}-\d{2}-\d{2})-(.+)\.md$")
+DEMANDE = "Pour comprendre le Match Engine, j'ai besoin de :"
+SUJET_CARTE = "carte-faisabilite"  # ajustement b : lue par etat_etude, mais ni date de dernière étude ni k
+SANS_VALEUR = ("", "-", "—")
+SEUIL_HEBDO_H = 168  # un export hebdomadaire n'est réclamé qu'au-delà d'une semaine
+HEBDO = [("standings_teams", "l'onglet Équipes de la ligue"), ("standings_players", "l'onglet Joueurs de la ligue"),
+         ("standings_injuries", "l'onglet Blessés de la ligue"), ("standings_transfers", "l'onglet Transferts de la ligue"),
+         ("club_adverse", "une page /c/<club> d'un club adverse")]
+# Mot d'un export -> bloc qu'il débloque ; le premier mot rencontré dans le texte décide.
+BLOC_DE = [("aperçu", 3), ("Équipe", 3), ("Effectif", 3), ("amical", 2), ("page du match", 7), ("Match de", 7), ("Marché", 4),
+           ("Mes enchères", 4), ("transferts", 4), ("Finances", 8), ("Personnel", 9), ("Académie", 9), ("Entraînement", 9)]
+
+
+def _etude(fichier: Path, date: dt.date, sujet: str, texte: str) -> dict:
+    verdicts, lignes, resultat = [], [], None
+    for cols, rangees in forme.tableaux(texte):
+        iv, ie, ic = forme.idx(cols, "verdict"), forme.idx(cols, "estim", "pente"), forme.idx(cols, "ic 95")
+        if iv < 0:
+            continue
+        for r in rangees:
+            if len(r) > iv:
+                verdicts.append(r[iv])
+                lignes.append((r[0], r[iv]))
+                if resultat is None and ie >= 0 and ic >= 0 and len(r) > max(ie, ic) and r[ic] not in SANS_VALEUR:
+                    resultat = {"estime": r[ie], "ic": r[ic]}
+    demandes = []
+    for l in texte.splitlines():
+        s = re.sub(r"^\s*[-*]\s+", "", l).strip()
+        if s.startswith(DEMANDE):
+            demandes.append(s)
+    return {"fichier": fichier.name, "date": date, "sujet": sujet, "carte": sujet == SUJET_CARTE, "verdicts": verdicts,
+            "lignes": lignes, "resultat": resultat, "demandes": demandes}
+
+
+def lire_etudes(dossier=DOSSIER_ETUDES) -> list:
+    """Une entrée par fichier `AAAA-MM-JJ-<sujet>.md` de docs/etudes/ dont l'en-tête (6 premières lignes) ne dit pas « invalidé » ;
+    le plus récent par sujet. Triées de la plus récente à la plus ancienne. Dossier absent : liste vide."""
+    dossier = Path(dossier)
+    if not dossier.is_dir():
+        return []
+    gardes = {}
+    for f in sorted(dossier.glob("*.md")):
+        m = ETUDE_NOM.match(f.name)
+        if not m:
+            continue
+        texte = f.read_text(encoding="utf-8")
+        if "invalid" in " ".join(texte.splitlines()[:6]).lower():
+            continue
+        e = _etude(f, dt.date.fromisoformat(m.group(1)), m.group(2), texte)
+        if e["sujet"] not in gardes or e["date"] > gardes[e["sujet"]]["date"]:
+            gardes[e["sujet"]] = e
+    return sorted(gardes.values(), key=lambda e: (e["date"], e["sujet"]), reverse=True)
+
+
+def date_derniere_etude(etudes):
+    """Date du dernier fichier d'étude, hors carte de faisabilité (jamais `git log`) ; None sans étude."""
+    return max((e["date"] for e in etudes if not e["carte"]), default=None)
+
+
+def etude_a_lancer(defaites_d_affilee: int, jour: dt.date, derniere_etude, k: int, etude_du_jour=None) -> bool:
+    """3 défaites de suite en ligue ou en coupe, ou dimanche avec une dernière étude de plus de 6 jours, et dans les deux cas au moins
+    un match en base joué après la dernière étude (k >= 1) ; jamais deux fois le même jour (dernière étude datée du jour ; la carte de faisabilité ne compte pas)."""
+    if etude_du_jour is None:
+        etude_du_jour = derniere_etude == jour
+    if etude_du_jour or k < 1:
+        return False
+    if defaites_d_affilee >= 3:
+        return True
+    return jour.weekday() == 6 and (derniere_etude is None or (jour - derniere_etude).days > 6)
+
+
+def _demandes(etudes) -> list:
+    """(demande, date de l'étude), recopiées telles quelles, la plus récente d'abord, sans doublon."""
+    vues, sortie = set(), []
+    for e in etudes:
+        for d in e["demandes"]:
+            if d not in vues:
+                vues.add(d)
+                sortie.append((d, e["date"]))
+    return sortie
+
+
+def bloc_de_export(texte: str, defaut: int = 0) -> int:
+    bas = texte.lower()
+    trouves = [(bas.find(mot.lower()), bloc) for mot, bloc in BLOC_DE if mot.lower() in bas]
+    return min(trouves)[1] if trouves else defaut
+
+
+def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list:
+    """Bloc 0 : ce qu'il faut exporter, chaque ligne avec le bloc qu'elle débloque. Contrôle par match (aperçu de ligue ou de coupe,
+    page du match joué, amical), Marché (nombre de captures, sans seuil), exports hebdomadaires de l'étude (plus de 168 h, mesurés par
+    page_type), puis les demandes des études, recopiées telles quelles. Jamais une commande."""
+    lignes, a_faire = [], []
+
+    def export(texte, bloc):
+        a_faire.append(f"- {texte if texte.startswith(('il me manque', 'rejeu non', 'donnée manquante')) else manque(texte)} → bloc {bloc}")
+
+    for t in res.get("exports", []):
+        if not t.startswith("aperçu du match de"):  # l'aperçu se contrôle match par match, ci-dessous
+            export(t, bloc_de_export(t, 3))
+    if donnees.get("apercus_matchs") in (None, "rejeu"):
+        export("l'aperçu du prochain match de ligue ou de coupe", 3)
+    else:
+        for m in _matchs_ligue_coupe(donnees, jour, maintenant):
+            if not m["captures"]:
+                export(f"l'aperçu du match de {'ligue' if m['kind'] == 'ligue' else 'coupe'} du {m['jour']:%d/%m}", 3)
+    affichables, _ = separer(res.get("actions", []))
+    for a in affichables:
+        if classer(a[2])[0] == 0:
+            export(sans_heure(a[2]), bloc_de_export(a[2], 0))
+
+    if donnees.get("captures_marche") in (None, "rejeu"):
+        lignes.append(vue_illisible("captures_marche"))
+    else:
+        r = next(iter(auj.lignes_de(donnees, "captures_marche")), {})
+        c, m = int(float(r.get("captures") or 0)), int(float(r.get("annonces") or 0))
+        quand = f" (dernière le {auj.en_heure(r['derniere_paris']):%d/%m})" if r.get("derniere_paris") else ""
+        lignes.append(f"- Marché : {c} capture{'s' if c > 1 else ''}, {m} annonce{'s' if m > 1 else ''} "
+                      f"vue{'s' if m > 1 else ''} depuis 24 h{quand} → bloc 4")
+
+    if donnees.get("exports_hebdo") in (None, "rejeu"):
+        lignes.append(vue_illisible("exports_hebdo"))
+    else:
+        derniers = {r["page_type"]: r.get("derniere_paris") for r in auj.lignes_de(donnees, "exports_hebdo")}
+        for pt, libelle in HEBDO:
+            d = derniers.get(pt)
+            age = (maintenant - auj.en_heure(d)).total_seconds() / 3600 if d else None
+            if age is None or age > SEUIL_HEBDO_H:
+                a_faire.append(f"- {manque(libelle, 'jamais exporté' if age is None else f'dernier export il y a {int(age)} h')} → blocs 5 et 6")
+
+    demandes = [f"- {d} (étude du {date:%d/%m}) → bloc 6" for d, date in _demandes(etudes)]
+    sortie = list(dict.fromkeys(a_faire))
+    if not sortie:
+        sortie = ["- aucun export à refaire : toutes les pages suivies sont à jour"]
+    return sortie + lignes + demandes
+
+
+def defaites_suite(donnees) -> int:
+    """Défaites d'affilée en ligue ou en coupe (gold.match_objective, même valeur sur chaque ligne)."""
+    vals = [int(float(r["defaites_d_affilee"])) for r in auj.lignes_de(donnees, "objectifs") if r.get("defaites_d_affilee") is not None]
+    return max(vals, default=0)
+
+
+def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
+    """Bloc 6 : Match Engine. (lignes affichées, consignes de session). Première ligne :
+    « matchs ajoutés : n (ligue a, amical b) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». « ligue » comprend la coupe
+    (même moteur). k = matchs en base joués après la dernière étude ; la carte de faisabilité ne compte ni pour la date ni pour k."""
+    lignes, consignes = [], []
+    derniere, k = date_derniere_etude(etudes), None
+    if donnees.get("matchs_ajoutes") in (None, "rejeu"):
+        lignes.append(vue_illisible("matchs_ajoutes"))
+    else:
+        rangees = [(auj.en_date(r["day"]), r["competition_kind"], int(float(r["n"]))) for r in auj.lignes_de(donnees, "matchs_ajoutes")]
+        total = sum(n for _, _, n in rangees)
+        recents = [(t, n) for d, t, n in rangees if d >= jour - dt.timedelta(days=1)]
+        a = sum(n for t, n in recents if t != "amical")
+        b = sum(n for t, n in recents if t == "amical")
+        k = sum(n for d, _, n in rangees if derniere is None or d > derniere)
+        suite = f"étude à jour au {derniere:%d/%m}, {k} pas encore étudiés" if derniere else f"aucune étude encore, {total} pas encore étudiés"
+        lignes.append(f"matchs ajoutés : {a + b} (ligue {a}, amical {b}) · {total} en base · {suite}")
+    lignes += [f"{d} (étude du {date:%d/%m})" for d, date in _demandes(etudes)]
+
+    prochaine = None
+    if experiences and experiences.get("file"):
+        v = auj.verifier(experiences, auj.lignes_de(donnees, "amical_reglage"))
+        lignes.append("Avancement des expériences : " + " ; ".join(auj.texte_avancement(e, v[e["id"]]) for e in experiences["file"]))
+        e = next((e for e in experiences["file"] if v[e["id"]]["verifies"] < int(e["amicaux_vises"])), None)
+        prochaine = f"{e['id']} — {e['reglage']}" if e else None
+        lignes.append(f"prochaine hypothèse : {prochaine}" if prochaine else "prochaine hypothèse : file d'expériences terminée")
+
+    if k is not None and etude_a_lancer(defaites_suite(donnees), jour, derniere, k):
+        ouverte = next((e for e in etudes if not e["carte"] and any("indéterminé" in x or "donnée absente" in x for x in e["verdicts"])), None)
+        question = f"{ouverte['sujet']} (étude du {ouverte['date']:%d/%m})" if ouverte else (prochaine or "prochaine hypothèse de la file d'expériences")
+        consignes.append(f"lancer l'agent data-scientist (BasketVibe, horizon aujourd'hui) sur la question ouverte : {question} ; "
+                         "ne demande un export que pour les groupes de moteur encore ouverts (v4 ligue, v5 amical)")
+    return lignes, consignes
