@@ -610,6 +610,35 @@ def _demandes(etudes) -> list:
     return sortie
 
 
+# Entraînement : traité une fois par semaine le dimanche à minuit sur le calendrier mondial, soit 04:00 à Paris
+# (skill basketvibe-entrainement, references/01-fonctionnement.md l. 2) ; weekday() : lundi = 0, dimanche = 6.
+JOUR_TRAITEMENT_ENTRAINEMENT = 6
+HEURE_TRAITEMENT_ENTRAINEMENT = dt.time(4, 0)
+
+
+def demande_entrainement(donnees, jour: dt.date) -> list:
+    """Demande d'exporter la page Entraînement la veille (samedi) et le lendemain (lundi) du traitement du dimanche. Chaque demande
+    n'est écrite que le jour même (horizon = aujourd'hui) : le samedi si la page n'a pas été exportée aujourd'hui, le lundi si le
+    dernier export précède le traitement (dimanche 04:00). Écran absent de gold.bv_exports_state : jamais exporté."""
+    if donnees.get("gold.bv_exports_state") in (None, "rejeu"):
+        return []
+    dernier = next((auj.en_heure(r["dernier_paris"]) for r in auj.lignes_de(donnees, "gold.bv_exports_state")
+                    if forme.norm(str(r["ecran"])).startswith("entrainement") and r.get("dernier_paris")), None)
+    veille, lendemain = (JOUR_TRAITEMENT_ENTRAINEMENT - 1) % 7, (JOUR_TRAITEMENT_ENTRAINEMENT + 1) % 7
+    quand = None
+    if jour.weekday() == veille and (dernier is None or dernier.date() < jour):
+        quand = ("veille", jour + dt.timedelta(days=1))
+    elif jour.weekday() == lendemain:
+        traitement = jour - dt.timedelta(days=1)
+        if dernier is None or dernier < dt.datetime.combine(traitement, HEURE_TRAITEMENT_ENTRAINEMENT):
+            quand = ("lendemain", traitement)
+    if quand is None:
+        return []
+    precision = f"{quand[0]} du traitement du dimanche {quand[1]:%d/%m}"
+    ecran = "la page Entraînement aujourd'hui"
+    return [f"- {manque(ecran, precision)} → blocs 9 et 6"]
+
+
 def bloc_de_export(texte: str, defaut: int = 0) -> int:
     bas = texte.lower()
     trouves = [(bas.find(mot.lower()), bloc) for mot, bloc in BLOC_DE if mot.lower() in bas]
@@ -638,6 +667,7 @@ def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list
     for a in affichables:
         if classer(a[2])[0] == 0:
             export(sans_heure(a[2]), bloc_de_export(a[2], 0))
+    a_faire += demande_entrainement(donnees, jour)
 
     if donnees.get("captures_marche") in (None, "rejeu"):
         lignes.append(vue_illisible("captures_marche"))

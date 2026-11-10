@@ -156,6 +156,7 @@ def cas():
     yield from cas_t5()
     yield from cas_t6()
     yield from cas_a1()
+    yield from cas_a2()
 
 
 J = dt.date(2026, 11, 10)
@@ -900,6 +901,42 @@ def cas_a1():
     yield "test_etudes_reelles_sans_les_trois_demandes", not any(d.startswith(PREFIXE_DEMANDE + x) for d in toutes for x in (
         "exporte la page Effectif les jours de ligue entre l'amical de 8 h", "exporte la page effectif (compétences des joueurs) chaque jour de match, avant le match",
         "exporte la page des réglages utilisés de l'amical du 29/10")) and len(toutes) >= 3
+
+
+# ---- A2 : bloc 0, page Entraînement la veille et le lendemain du traitement (dimanche) --------------------------
+def etat_entrainement(dernier):
+    """gold.bv_exports_state avec l'écran Entraînement exporté à `dernier` (None : jamais)."""
+    lignes = [(11, "Entraînement", "x", dernier, 52, "🟩 à jour")] if dernier else []
+    return T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], lignes)
+
+
+def demande_entrainement(jour, dernier, heure=(15, 0)):
+    maint = dt.datetime.combine(jour, dt.time(*heure))
+    d = donnees_t5(**{"gold.bv_exports_state": etat_entrainement(dernier)})
+    return [l for l in qfb.bloc_0(d, {"exports": [], "actions": []}, [], jour, maint) if "Entraînement" in l]
+
+
+def cas_a2():
+    skill = (DOSSIER.parent / ".claude/skills/basketvibe-entrainement/references/01-fonctionnement.md").read_text(encoding="utf-8")
+    yield "test_entrainement_jour_de_traitement_lu_dans_le_skill", "le **dimanche à minuit" in skill and qfb.JOUR_TRAITEMENT_ENTRAINEMENT == 6
+    # veille (samedi 14/11) : dernier export le 08/11
+    sam = demande_entrainement(dt.date(2026, 11, 14), "2026-11-08T11:08:00")
+    yield "test_entrainement_veille_du_traitement", len(sam) == 1 and "veille du traitement" in sam[0] and "dimanche 15/11" in sam[0] \
+        and sam[0].startswith("- donnée manquante : exporte la page Entraînement aujourd'hui") and sam[0].endswith("→ blocs 9 et 6")
+    yield "test_entrainement_veille_deja_exportee_aujourd_hui", demande_entrainement(dt.date(2026, 11, 14), "2026-11-14T09:00:00") == []
+    # lendemain (lundi 16/11) : dernier export avant le traitement de dimanche 04:00
+    lun = demande_entrainement(dt.date(2026, 11, 16), "2026-11-14T18:00:00")
+    yield "test_entrainement_lendemain_du_traitement", len(lun) == 1 and "lendemain du traitement" in lun[0] and "dimanche 15/11" in lun[0] \
+        and lun[0].endswith("→ blocs 9 et 6")
+    yield "test_entrainement_lendemain_export_apres_le_traitement", demande_entrainement(dt.date(2026, 11, 16), "2026-11-15T10:00:00") == []
+    yield "test_entrainement_lendemain_export_pile_avant_le_traitement", len(demande_entrainement(dt.date(2026, 11, 16), "2026-11-15T03:59:00")) == 1
+    # les autres jours : rien
+    yield "test_entrainement_autres_jours_rien", all(demande_entrainement(dt.date(2026, 11, j), "2026-11-08T11:08:00") == [] for j in (10, 11, 12, 13, 15, 17))
+    # jamais exporté : réclamé la veille et le lendemain
+    yield "test_entrainement_jamais_exporte", len(demande_entrainement(dt.date(2026, 11, 14), None)) == 1 and len(demande_entrainement(dt.date(2026, 11, 16), None)) == 1
+    # la date du traitement est la même pour la veille et le lendemain (deux dates)
+    yield "test_entrainement_les_deux_dates", sam[0].count("15/11") == 1 and lun[0].count("15/11") == 1 and "14/11" not in lun[0]
+    yield "test_entrainement_sans_commande_ni_heure", all(qfb.INTERDITS.search(x) is None and re.search(r"\d\d:\d\d", x) is None for x in sam + lun)
 
 
 def composition_lignes(texte):
