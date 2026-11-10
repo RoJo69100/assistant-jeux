@@ -17,6 +17,7 @@ Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/jour
 10. **Secrets dans `.env`** (jamais commités). Discord et chat : importés en base, jamais dans Git (`data/discord/`, `data/chat/` ignorés).
 11. **Deux ordinateurs** : ma mémoire est copiée dans `docs/memoire-claude/` ; chaque mémoire écrite est recopiée, commitée et poussée. Début de session : si la mémoire locale est absente ou plus ancienne, je la recopie depuis le dépôt.
 12. **Conflit entre deux règles** : la règle globale de ce fichier l'emporte sur un résumé de jeu ; je corrige le résumé dans le tour. Arbitrages : `docs/regles/arbitrages.md`.
+13. Avant tout travail de conception : skill brainstorming ; avant de dire terminé : skill verification-before-completion ; le plan doit citer chaque bloc du gabarit docs/attentes/gabarit-que-faire-basketvibe.md ou le reporter explicitement.
 
 ## Rendu
 - Un tableau par jeu : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI, pastille + mot) | catégorie | action ; catégories fixes : Composition · Tactique · Entraînement · Transferts · Académie/Draft · Finances · Export · Question · Analyse. Aucune ligne « rien à faire ». Puis 1 à 3 lignes de commentaire.
