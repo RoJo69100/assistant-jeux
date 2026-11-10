@@ -1,5 +1,7 @@
 # Réussite au cercle selon la compétence Deux points, v4 amical (2026-11-10)
 
+> **T1 invalidé, fuite.** Produit par le premier lancement de T1 de l'agent data-scientist, qui a lu `docs/etudes/interdits-t1.txt` dont le commentaire recopiait les six chaînes de fuite. Ce chiffre ne prouve rien sur l'agent et ne sert à aucune décision. Fichier listé dans les interdits du T1 refait.
+
 **Question** : dans le groupe v4 amical, de combien de points de pourcentage la réussite des tirs au cercle de nos joueurs varie-t-elle pour +10 points de Deux points ? Modèle de probabilité linéaire (réussite 0/1 ~ Deux points / 10).
 
 | groupe | n tirs | n matchs | Y0 (exactitude) | pente (pts de % / +10 DP) | IC 95 % | méthode | verdict |

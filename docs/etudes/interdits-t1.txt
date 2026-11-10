@@ -13,6 +13,9 @@ outputs/derbymanager/veille/connaissance.md
 outputs/derbymanager/veille/partie-A.md
 pipelines/test_scan_agent.py
 # Ajouts : méthode publiée, conception, protocole
+# Ajouts après la fuite du premier T1 : étude et script qu'il a produits
+docs/etudes/2026-11-10-tirs-cercle-deux-points-v4-amical.md
+pipelines/etudes/tirs_cercle_deux_points_v4_amical.py
 pipelines/etude_evenements_calculs.py
 docs/superpowers/
 docs/etudes/test-data-scientist-basketvibe.md

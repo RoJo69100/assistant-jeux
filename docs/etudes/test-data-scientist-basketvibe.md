@@ -39,4 +39,6 @@ Vérifié avant le test : `silver.bv_match_tactics` ne contient que nos tactique
 **Attendu** : il établit (requête) que le focus défensif adverse n'est pas en base, **refuse de conclure** et nomme l'export sous la forme « Pour comprendre le Match Engine, j'ai besoin de : exporte X, parce que Y » ; aucun substitut (ex. déduire le focus adverse de nos statistiques) présenté comme résultat ; bornes respectées.
 
 ## Résultats
-(rempli après les lancements)
+**Lancement 1 (T1) : invalidé, fuite.** L'agent a lu `docs/etudes/interdits-t1.txt` (autorisé par la question), dont le commentaire d'en-tête recopiait les six chaînes de fuite ; le scan y trouve 6 occurrences (une par chaîne), plus 1 calcul propre dans la sortie de son script. Étude et script produits conservés, marqués « T1 invalidé, fuite » et ajoutés aux interdits. Corrections avant le T1 refait : chaînes retirées de la liste et contrôle qui échoue si elle en contient ; scanner qui accepte le chemin absolu du dépôt (7 faux « hors bornes » au premier scan). Autorisation de l'utilisateur : 4 lancements en tout, T1 refait, T2, T3, scan de chaque transcription avant le suivant.
+
+(tableau des lancements suivants rempli ci-dessous)

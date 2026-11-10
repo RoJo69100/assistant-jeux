@@ -1,5 +1,6 @@
 """Réussite des tirs au cercle de nos joueurs selon la compétence Deux points, groupe v4 amical.
 
+T1 invalidé, fuite : produit par le premier lancement de T1 (liste des interdits qui recopiait les chaînes de fuite).
 Usage : python -I pipelines/etudes/tirs_cercle_deux_points_v4_amical.py
 Lecture seule. Probabilité linéaire (réussite 0/1 ~ Deux points / 10), IC 95 % bootstrap par grappes de matchs.
 """
