@@ -491,6 +491,17 @@ def cas_produit_le():
     yield "test_produit_le : mtime récent mais commit ancien : pas à jour", not qfb.fiche_a_jour(suivi, dt.datetime(2026, 11, 10, 9, 0), None)
     yield "test_produit_le : commit postérieur à l'aperçu : à jour", qfb.fiche_a_jour(suivi, dt.datetime(2026, 11, 9, 19, 0), None)
 
+    # A5 : suivi mais modifié sans commit = mtime (le brief réécrit dans la journée est « produit » à sa dernière écriture)
+    suivi.write_text(brief_ligue() + "\nAnticipation (hypothèse) : ajoutée après le commit.\n", encoding="utf-8")
+    ts_m = datetime_paris(2026, 11, 10, 11).replace(tzinfo=PARIS).timestamp()
+    os.utime(suivi, (ts_m, ts_m))
+    yield "test_produit_le : suivi mais modifié sans commit = mtime (11:00 Paris)", qfb.produit_le(suivi) == dt.datetime(2026, 11, 10, 11, 0)
+    yield "test_produit_le : suivi modifié sans commit, mtime après l'aperçu : à jour", qfb.fiche_a_jour(suivi, dt.datetime(2026, 11, 10, 9, 0), None)
+    git("add", "briefs/2026-11-10-tactique.md")
+    yield "test_produit_le : suivi, modification indexée mais non commitée = mtime", qfb.produit_le(suivi) == dt.datetime(2026, 11, 10, 11, 0)
+    git("commit", "-q", "-m", "brief réécrit")
+    yield "test_produit_le : modification commitée = heure du nouveau commit", qfb.produit_le(suivi) == dt.datetime(2026, 11, 9, 20, 0)
+
     libre = d / "briefs" / "2026-11-10-tactique-amical.md"
     libre.write_text(brief_amical(), encoding="utf-8")
     ts = datetime_paris(2026, 11, 10, 11).replace(tzinfo=PARIS).timestamp()

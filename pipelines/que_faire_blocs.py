@@ -183,7 +183,7 @@ ABSENTE = "Anticipation (hypothèse) : absente du brief du jour"
 
 
 def _heure_commit(fichier):
-    """Horodatage (epoch) du dernier commit qui touche le fichier ; None si le fichier n'est pas suivi, hors dépôt git ou git absent."""
+    """Horodatage (epoch) du dernier commit qui touche le fichier ; None si le fichier n'est pas suivi, modifié sans commit (A5), hors dépôt git ou git absent."""
     f = Path(fichier).resolve()
     try:
         r = subprocess.run(["git", "-C", str(f.parent), "log", "-1", "--format=%ct", "--", f.name],
@@ -191,7 +191,13 @@ def _heure_commit(fichier):
     except (OSError, subprocess.SubprocessError):
         return None
     sortie = r.stdout.strip()
-    return int(sortie) if r.returncode == 0 and sortie.isdigit() else None
+    if r.returncode != 0 or not sortie.isdigit():
+        return None
+    try:  # A5 : suivi mais modifié (ou indexé) sans commit : le contenu lu n'est pas celui du commit, on prend la date d'écriture
+        etat = subprocess.run(["git", "-C", str(f.parent), "status", "--porcelain", "--", f.name], capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return None if etat.returncode != 0 or etat.stdout.strip() else int(sortie)
 
 
 def produit_le(fichier) -> dt.datetime:
