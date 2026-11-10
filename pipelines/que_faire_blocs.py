@@ -748,7 +748,7 @@ MARQUEUR_ETUDE_LANCEE = "étude data-scientist lancée"
 
 def bloc_6(donnees, etudes, jour: dt.date, experiences=None, fait: str = "") -> tuple:
     """Bloc 6 : Match Engine. (lignes affichées, consignes de session). Première ligne :
-    « matchs ajoutés : n (ligue a, amical b ; autres clubs c) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». n = matchs dont la
+    « matchs ajoutés : n (ligue a, amical b ; autres clubs c) · N en base · étude à jour au JJ/MM, k de nos matchs pas encore étudiés ; c d'autres clubs » (R5). n = matchs dont la
     page de match a été captée pour la première fois depuis hier (A3, bronze.raw_pages) ; a et b : nos matchs (« ligue » comprend la coupe) ;
     c : matchs d'autres clubs (A7). N inclut les matchs d'autres clubs ; k (joués après la dernière étude) et le déclencheur de l'étude ne
     comptent que nos matchs (core.fixture) ; la carte de faisabilité ne compte ni pour la date ni pour k."""
@@ -761,10 +761,14 @@ def bloc_6(donnees, etudes, jour: dt.date, experiences=None, fait: str = "") -> 
         total = sum(n for _, _, n in rangees)
         k = sum(n for d, _, n in rangees if derniere is None or d > derniere)
         nos = total
-        suite = f"étude à jour au {derniere:%d/%m}, {k} pas encore étudiés" if derniere else f"aucune étude encore, {nos} pas encore étudiés"
         veille = jour - dt.timedelta(days=1)
         autres_ok = donnees.get("matchs_autres") not in (None, "rejeu")
         autres = auj.lignes_de(donnees, "matchs_autres") if autres_ok else []
+        # R5 : « k de nos matchs pas encore étudiés ; c d'autres clubs » (c = matchs d'autres clubs dont la page a été captée pour la première
+        # fois après la dernière étude, ou jamais étudiés s'il n'y a pas d'étude) ; vue illisible : déjà dite dans la première partie de la ligne
+        c_etude = sum(1 for r in autres if r.get("premiere_jour") and (derniere is None or auj.en_date(r["premiere_jour"]) > derniere))
+        reste = f"{k if derniere else nos} de nos matchs pas encore étudiés" + (f" ; {c_etude} d'autres clubs" if autres_ok else "")
+        suite = f"étude à jour au {derniere:%d/%m}, {reste}" if derniere else f"aucune étude encore, {reste}"
         total += len(autres)  # A7 : N inclut les matchs d'autres clubs ; k (ci-dessus) et le déclencheur restent ceux de nos matchs
         if donnees.get("matchs_captes") in (None, "rejeu"):
             ajoutes = vue_illisible("matchs_captes")
