@@ -703,8 +703,9 @@ def defaites_suite(donnees) -> int:
 
 def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
     """Bloc 6 : Match Engine. (lignes affichées, consignes de session). Première ligne :
-    « matchs ajoutés : n (ligue a, amical b) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». « ligue » comprend la coupe
-    (même moteur). k = matchs en base joués après la dernière étude ; la carte de faisabilité ne compte ni pour la date ni pour k."""
+    « matchs ajoutés : n (ligue a, amical b) · N en base · étude à jour au JJ/MM, k pas encore étudiés ». n = matchs dont la page de match
+    a été captée pour la première fois depuis hier (A3, bronze.raw_pages) ; « ligue » comprend la coupe (même moteur). N et k comptent nos
+    matchs joués (core.fixture) ; k = joués après la dernière étude ; la carte de faisabilité ne compte ni pour la date ni pour k."""
     lignes, consignes = [], []
     derniere, k = date_derniere_etude(etudes), None
     if donnees.get("matchs_ajoutes") in (None, "rejeu"):
@@ -712,12 +713,15 @@ def bloc_6(donnees, etudes, jour: dt.date, experiences=None) -> tuple:
     else:
         rangees = [(auj.en_date(r["day"]), r["competition_kind"], int(float(r["n"]))) for r in auj.lignes_de(donnees, "matchs_ajoutes")]
         total = sum(n for _, _, n in rangees)
-        recents = [(t, n) for d, t, n in rangees if d >= jour - dt.timedelta(days=1)]
-        a = sum(n for t, n in recents if t != "amical")
-        b = sum(n for t, n in recents if t == "amical")
         k = sum(n for d, _, n in rangees if derniere is None or d > derniere)
         suite = f"étude à jour au {derniere:%d/%m}, {k} pas encore étudiés" if derniere else f"aucune étude encore, {total} pas encore étudiés"
-        lignes.append(f"matchs ajoutés : {a + b} (ligue {a}, amical {b}) · {total} en base · {suite}")
+        if donnees.get("matchs_captes") in (None, "rejeu"):
+            ajoutes = vue_illisible("matchs_captes")
+        else:  # A3 : pages de match captées pour la première fois depuis hier (et non matchs joués depuis hier)
+            neuves = [r["kind"] for r in auj.lignes_de(donnees, "matchs_captes") if auj.en_date(r["premiere_jour"]) >= jour - dt.timedelta(days=1)]
+            a, b = sum(1 for t in neuves if t != "friendly"), sum(1 for t in neuves if t == "friendly")
+            ajoutes = f"{a + b} (ligue {a}, amical {b})"
+        lignes.append(f"matchs ajoutés : {ajoutes} · {total} en base · {suite}")
     lignes += [f"{d} (étude du {date:%d/%m})" for d, date in _demandes(etudes)]
 
     prochaine = None

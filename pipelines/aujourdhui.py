@@ -157,6 +157,15 @@ REQUETES = {
     # (joués après la dernière étude). Aucune colonne de date d'insertion dans core.fixture : « ajoutés » = joués depuis la veille.
     "matchs_ajoutes": "select day, competition_kind, count(*) as n from core.fixture where game = 'basketvibe' and played "
                       "group by day, competition_kind order by day, competition_kind",
+    # 5n A3 (bloc 6) : pour chacun de nos matchs joués, jour (Paris) de la première capture de sa page de match dans bronze.raw_pages
+    # (min(captured_at) par page_url ; l'id de l'URL est le fixture_id). Les pages de match n'ont pas toutes le même page_type :
+    # `match` (ligue), `friendly` (amical) mais aussi `unknown` (coupe /cup/<id> et 8 pages /friendly/<id>) ; la requête se fonde donc
+    # sur le modèle de l'URL, sans la variante ?view=preview (aperçu). Les pages de matchs d'autres clubs (sans fixture chez nous) sont exclues.
+    "matchs_captes": "select split_part(regexp_replace(p.page_url, '^https://www[.]basketvibe[.]com/', ''), '/', 1) as kind, "
+                     "(min(p.captured_at) at time zone 'Europe/Paris')::date as premiere_jour "
+                     "from bronze.raw_pages p join core.fixture f on f.game = 'basketvibe' and f.played and f.fixture_id = right(p.page_url, 36) "
+                     "where p.game = 'basketvibe' and p.page_url ~ '^https://www[.]basketvibe[.]com/(match|friendly|cup)/[0-9a-f-]{36}$' "
+                     "group by right(p.page_url, 36), 1",
     # 5n T5 (bloc 0) : dernière capture des exports hebdomadaires de l'étude, mesurée par page_type (relevé à l'étape 0 du plan :
     # onglets de ligue standings_teams / _players / _injuries / _transfers) ; les pages /c/<club> n'ont pas de page_type propre
     # (« unknown » avec 308 autres pages) : mesurées par leur page_url.

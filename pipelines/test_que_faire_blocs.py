@@ -631,6 +631,8 @@ def etudes_de(textes):
 
 MATCHS = T(["day", "competition_kind", "n"], [("2026-10-20", "ligue", 2), ("2026-11-01", "coupe", 1), ("2026-11-08", "amical", 1),
                                               ("2026-11-09", "ligue", 1), ("2026-11-09", "amical", 1), ("2026-11-10", "amical", 1)])
+# A3 : « matchs ajoutés » = pages de match captées pour la première fois depuis hier (une ligne par match de chez nous, jour de première capture)
+CAPTES = T(["kind", "premiere_jour"], [("match", "2026-11-09"), ("friendly", "2026-11-09"), ("cup", "2026-11-10"), ("friendly", "2026-10-30")])
 OBJ_COLS = ["day", "competition_kind", "opponent", "objectif", "raison", "rule_id", "defaites_d_affilee"]
 SERIE3 = T(OBJ_COLS, [("2026-11-11", "ligue", "BC KIT", "corriger", "serie", "serie", 3)])
 
@@ -641,7 +643,7 @@ def donnees_t5(heb=None, **plus):
                                        ("club_adverse", avant(200))]
     d = donnees_t(exports_hebdo=T(["page_type", "derniere_paris"], heb),
                   captures_marche=T(["captures", "annonces", "derniere_paris"], [(1, 20, "2026-11-09T23:18:35")]),
-                  matchs_ajoutes=MATCHS, amical_reglage=T(["fixture_id", "match_day", "opponent", "agress_cran", "primary_quarts", "tir_cran4_joueurs"], []),
+                  matchs_ajoutes=MATCHS, matchs_captes=CAPTES, amical_reglage=T(["fixture_id", "match_day", "opponent", "agress_cran", "primary_quarts", "tir_cran4_joueurs"], []),
                   objectifs=SERIE3)
     d.update(plus)
     return d
@@ -707,6 +709,8 @@ def cas_t5():
         qfb.bloc_0(donnees_t5(exports_hebdo=None, captures_marche=None), {"exports": [], "actions": []}, [], JOUR_T, MAINT)) \
         and "donnée manquante : vue captures_marche illisible" in "\n".join(
         qfb.bloc_0(donnees_t5(exports_hebdo=None, captures_marche=None), {"exports": [], "actions": []}, [], JOUR_T, MAINT))
+    yield "test_requete_matchs_captes_existe", "matchs_captes" in auj.REQUETES and "min(p.captured_at)" in auj.REQUETES["matchs_captes"] \
+        and "bronze.raw_pages" in auj.REQUETES["matchs_captes"]
     yield "test_requetes_t5_existent", all(k in auj.REQUETES for k in ("captures_marche", "matchs_ajoutes", "exports_hebdo"))
 
     # --- bloc 6
@@ -714,11 +718,11 @@ def cas_t5():
     etu = etudes_de({"2026-11-08-trois-points.md": ETUDE_OK, "2026-11-10-carte-faisabilite.md": CARTE})
     l6, c6 = qfb.bloc_6(donnees_t5(), etu, jour)
     t6 = "\n".join(l6)
-    yield "test_bloc_6_ligne_quotidienne", l6[0] == "matchs ajoutés : 3 (ligue 1, amical 2) · 7 en base · étude à jour au 08/11, 3 pas encore étudiés" \
+    yield "test_bloc_6_ligne_quotidienne", l6[0] == "matchs ajoutés : 3 (ligue 2, amical 1) · 7 en base · étude à jour au 08/11, 3 pas encore étudiés" \
         and "appris" not in t6 and "relancée" not in t6
     yield "test_bloc_6_la_carte_ne_compte_ni_pour_la_date_ni_pour_k", "étude à jour au 08/11, 3 pas encore étudiés" in l6[0]
-    yield "test_bloc_6_ligne_sans_etude", qfb.bloc_6(donnees_t5(), [], jour)[0][0] == "matchs ajoutés : 3 (ligue 1, amical 2) · 7 en base · aucune étude encore, 7 pas encore étudiés"
-    yield "test_bloc_6_ligue_comprend_la_coupe", qfb.bloc_6(donnees_t5(matchs_ajoutes=T(["day", "competition_kind", "n"], [("2026-11-09", "coupe", 2), ("2026-11-10", "ligue", 1)])),
+    yield "test_bloc_6_ligne_sans_etude", qfb.bloc_6(donnees_t5(), [], jour)[0][0] == "matchs ajoutés : 3 (ligue 2, amical 1) · 7 en base · aucune étude encore, 7 pas encore étudiés"
+    yield "test_bloc_6_ligue_comprend_la_coupe", qfb.bloc_6(donnees_t5(matchs_captes=T(["kind", "premiere_jour"], [("cup", "2026-11-09"), ("cup", "2026-11-10"), ("match", "2026-11-10")])),
                                                            etu, jour)[0][0].startswith("matchs ajoutés : 3 (ligue 3, amical 0)")
     yield "test_demandes_recopiees_des_etudes : bloc 6", f"{DEMANDE_A} (étude du 08/11)" in t6 and f"{DEMANDE_C} (étude du 10/11)" in t6
     yield "test_demandes_recopiees_des_etudes : aucune étude", all("Pour comprendre" not in l for l in qfb.bloc_6(donnees_t5(), [], jour)[0])
@@ -739,6 +743,17 @@ def cas_t5():
     yield "test_bloc_6_la_carte_du_jour_ne_bloque_pas_le_lancement", len(c6f) == 1
     yield "test_bloc_6_sans_commande_ni_heure", qfb.INTERDITS.search(t6) is None and re.search(r"\d\d:\d\d", t6) is None
     yield "test_bloc_6_passe_forme", forme.fautes_tableaux(t6, "basketvibe") == [] and forme.fautes_de(t6, "basketvibe") == []
+    # A3 : ce qui compte est la première capture de la page, pas le jour du match ; une page captée plus tôt n'est pas « ajoutée »
+    joues_hier = T(["day", "competition_kind", "n"], [("2026-11-09", "ligue", 1), ("2026-11-09", "amical", 1)])
+    anciennes = T(["kind", "premiere_jour"], [("match", "2026-10-20"), ("friendly", "2026-10-20")])
+    yield "test_matchs_ajoutes_page_captee_plus_tot_non_comptee", qfb.bloc_6(donnees_t5(matchs_ajoutes=joues_hier, matchs_captes=anciennes), etu, jour)[0][0] \
+        .startswith("matchs ajoutés : 0 (ligue 0, amical 0) · 2 en base")
+    yield "test_matchs_ajoutes_page_captee_hier_pour_un_match_ancien_comptee", qfb.bloc_6(donnees_t5(matchs_ajoutes=joues_hier, matchs_captes=T(["kind", "premiere_jour"], [("match", "2026-11-09")])),
+                                                                                         etu, jour)[0][0].startswith("matchs ajoutés : 1 (ligue 1, amical 0)")
+    yield "test_matchs_ajoutes_fenetre_hier", qfb.bloc_6(donnees_t5(matchs_captes=T(["kind", "premiere_jour"], [("match", "2026-11-08"), ("friendly", "2026-11-09")])),
+                                                        etu, jour)[0][0].startswith("matchs ajoutés : 1 (ligue 0, amical 1)")
+    l_ill = qfb.bloc_6(donnees_t5(matchs_captes=None), etu, jour)[0][0]
+    yield "test_matchs_ajoutes_vue_illisible", l_ill.startswith("matchs ajoutés : donnée manquante : vue matchs_captes illisible · 7 en base · étude à jour au 08/11, 3 pas encore étudiés")
     yield "test_bloc_6_vue_illisible", "donnée manquante : vue matchs_ajoutes illisible" in "\n".join(qfb.bloc_6(donnees_t5(matchs_ajoutes=None), etu, jour)[0])
 
     # avancement des expériences et prochaine hypothèse
