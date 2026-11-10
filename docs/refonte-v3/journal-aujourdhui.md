@@ -616,6 +616,34 @@ Contexte : main = 4f41967. Écart du contrôle V3 de 6c = amical du 10/10 (non a
 - **W4** : `test_aujourdhui.py` **197/197** ; `test_revue_hebdo.py` **38/38**.
 - `fusion_main.py` : `commits à ajouter à main (2)` (6297183, 1db0dc1) ; `Poussé : origin/main == HEAD.` (1db0dc1). `fin_etape.py` : `commits d'avance sur origin/main : 0`, `git status --short : (propre)`, 23 suites vertes, `HEAD dans origin/main : oui`.
 
+## Étape 5n — journal d'exécution (plan : `docs/refonte-v3/plan-5n-que-faire.md`, exécution du 10/11 après-midi)
+
+### C3 — requêtes ajoutées à `REQUETES` depuis 5n, exécutées sur la vraie base (mardi 10/11/2026 15:05 Paris)
+
+Seule `fatigue_amical` a été ajoutée à `REQUETES` par T1 à T3 (`git diff 88f48b8^ HEAD -- pipelines/aujourdhui.py` : une clé). `python -I pipelines/sql.py "<requête de REQUETES['fatigue_amical']>" --max-rows 30` :
+
+```
+|  |
+|
+
+0 lignes          (code 0, aucune erreur SQL)
+```
+
+Zéro ligne attendu : l'amical du 11/11 n'est pas encore saisi ni exporté, donc `gold.bv_saisie_joueurs` n'a aucune ligne `amical` avec `match_day >= current_date`. Une requête vide ne prouvant ni la syntaxe des jointures ni les valeurs, rejouée avec `match_day = date '2026-11-09'` (le seul jour qui a un amical et une ligue saisis ; 14 lignes de saisie amical et 14 de ligue ce jour-là) :
+
+```
+| match_day | joueur | minutes_am | agress | stamina | fatigue_ajoutee |
+|---|---|---|---|---|---|
+| 2026-11-09 | Gimenez | 48 | 1 | 53 | 0.7 |
+| 2026-11-09 | Bonnet | 12 | 1 | 52 | 0.2 |
+| 2026-11-09 | Fournier | 12 | 1 | 59 | 0.2 |
+| 2026-11-09 | Lefebvre | 12 | 1 | 58 | 0.2 |
+
+4 lignes
+```
+
+Vérification à la main de Gimenez : 48 × 0,019 × 0,75 × (1,5 − 0,008 × 53) = 0,684 × 1,076 = 0,736 → 0,7. Aucune erreur SQL : pas de correctif avant T4.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |
