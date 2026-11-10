@@ -131,6 +131,24 @@ REQUETES = {
                       "join (select match_day, joueur from gold.bv_saisie_joueurs where kind = 'ligue' and match_day >= current_date and q1 <> '—') l "
                       "on l.joueur = a.joueur and l.match_day = a.match_day "
                       "join gold.bv_roster_now r on r.name like '% ' || a.joueur where a.minutes_am > 0 order by a.match_day, 6 desc",
+    # 5n T4 (bloc 4) : table des prix, une ligne par case âge × palier de note de 5 (ventes conclues, gold.bv_price_ref_ps)
+    "prix_cases": "select ps_band, age_band, n, p25, median, p75, last_sale from gold.bv_price_ref_ps "
+                  "order by case age_band when '≤21' then 1 when '22-25' then 2 when '26-29' then 3 else 4 end, ps_band",
+    # 5n T4 : annonces du Marché qui se terminent dans les 24 h, dédupliquées par auction_id ; la médiane de leur case est jointe
+    # depuis prix_cases dans le module (la colonne ref_median_age_pos de la vue est par poste, pas par palier de note)
+    "annonces_24h": "select distinct on (c.auction_id) c.auction_id, c.name, c.position, c.age, c.ps, "
+                    "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, "
+                    "round((extract(epoch from (c.ends_paris - (now() at time zone 'Europe/Paris'))) / 3600)::numeric, 1) as heures, "
+                    "c.gain_vs_my_second, c.enters_top8 from gold.bv_market_candidates c "
+                    "where c.ends_paris > now() at time zone 'Europe/Paris' "
+                    "and c.ends_paris <= (now() at time zone 'Europe/Paris') + interval '24 hours' order by c.auction_id, c.ends_paris",
+    # 5n T4 : nombre d'annonces du dernier export du Marché (phrase « aucune annonce ne se termine dans les 24 h »)
+    "annonces_export": "select count(*) as n from gold.bv_market_candidates",
+    # 5n T4 : mes joueurs vendables (gold.bv_sell_candidates). Les remplaçants viennent de la requête « gold.bv_sell_replacement » (déjà lue
+    # par plan()), jointes par nom dans le module : leur jointure en SQL dépasse le délai (mesuré le 10/11 : 4,7 s par vue, 18 s la jointure,
+    # puis statement timeout).
+    "vendre": "select name, position, age, ps, salary, best_slot, rank_in_slot, league_min_last4, on_transfer_list "
+              "from gold.bv_sell_candidates order by salary desc",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
                       "from gold.bv_amical_reglage where match_day >= current_date - 120",
@@ -1070,7 +1088,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     elif pers:
         garder.append("Personnel (" + ", ".join(f"{r['role']} {r['hired']}/{r['slots']}" for r in pers)
                       + ", semaine du " + str(pers[0].get("week", "?"))[:10] + ") : règle de personnel non tranchée, à valider")
-    return {"actions": A, "exports": exports, "garder": garder, "infos": infos}
+    return {"actions": A, "exports": exports, "garder": garder, "infos": infos, "capacite": reste_cap}
 
 
 def rendre(res, jour, erreurs=None):

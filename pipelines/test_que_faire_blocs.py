@@ -152,6 +152,7 @@ def cas():
     yield from cas_blocs_2_3()
     yield from cas_contrat_brief()
     yield from cas_produit_le()
+    yield from cas_bloc_4()
 
 
 J = dt.date(2026, 11, 10)
@@ -497,6 +498,107 @@ def cas_produit_le():
     hors.write_text("x", encoding="utf-8")
     os.utime(hors, (ts, ts))
     yield "test_produit_le : hors dépôt git = mtime", qfb.produit_le(hors) == dt.datetime(2026, 11, 10, 11, 0)
+
+
+# ---- 5n T4 : bloc 4 -------------------------------------------------------------------------------------------
+PRIX_COLS = ["ps_band", "age_band", "n", "p25", "median", "p75", "last_sale"]
+PRIX = T(PRIX_COLS, [(45, "22-25", 32, 10187.5, 93888.5, 201249.75, "2026-11-08"), (40, "22-25", 20, 251, 4375.5, 31000.25, "2026-11-07"),
+                     (35, "22-25", 2, 1050, 1100, 1150, "2026-11-08"), (45, "≤21", 37, 440000, 721000, 1543500, "2026-11-08")])
+ANN_COLS = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris", "heures", "gain_vs_my_second", "enters_top8"]
+ANN = T(ANN_COLS, [("a1", "Paul Aubert", "PG", 23, 47.0, 50000, "2026-11-11T09:00:00", 5.5, 2.1, True),
+                   ("a2", "Luc Brun", "SG", 24, 46.0, 120000, "2026-11-11T10:00:00", 6.5, -1.0, False),
+                   ("a3", "Marc Cler", "PF", 22, 36.0, 500, "2026-11-11T11:00:00", 7.5, -3.0, False),
+                   ("a4", "Yan Dole", "C", 25, 47.0, 60000, "2026-11-11T12:00:00", 8.5, 0.4, False),
+                   ("a5", "Eli Ferrand", "SF", 31, 52.0, 1000, "2026-11-11T13:00:00", 9.5, 1.0, False)])
+# « vendre » (gold.bv_sell_candidates) et « gold.bv_sell_replacement » sont lues séparément (en parallèle) et jointes par nom dans le module :
+# leur jointure en SQL dépassait le délai (mesuré le 10/11 : chaque vue ~4,7 s, jointure 18 s puis statement timeout).
+VENTE = T(["name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"],
+          [("Maël Bernard", "C", 18, 47.8, 17303, "PF", 5, 0.0, False), ("Léo Lefebvre", "PF", 29, 63.1, 31803, "PF", 1, 35.1, False),
+           ("Nolan Baron", "PG", 17, 44.5, 16691, "PG", 7, 0.0, False), ("Sacha Leclerc", "SG", 17, 42.3, 13767, "SG", 11, 0.0, True),
+           ("Zoé Sansremplaçant", "C", 30, 49.0, 20000, "C", 6, 3.0, False)])
+REMPL = T(["name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary", "on_transfer_list", "available",
+           "available_players"],
+          [("Maël Bernard", "PF", 47.6, "Anselmo Albano", 47.5, 0.1, 17303, False, True, 14),
+           ("Léo Lefebvre", "PF", 62.8, "Hadrien Gimenez", 58.6, 4.2, 31803, False, True, 14),
+           ("Nolan Baron", "PG", 44.2, "Jonathan Durand", 43.9, 0.3, 16691, False, True, 9),
+           ("Sacha Leclerc", "SG", 42.2, "Nolan Baron", 40.9, 0.2, 13767, True, True, 14)])
+JOUR_J = dt.date(2026, 11, 10)
+
+
+def donnees_4(**plus):
+    d = {"prix_cases": PRIX, "annonces_24h": ANN, "vendre": VENTE, "gold.bv_sell_replacement": REMPL,
+         "annonces_export": T(["n"], [(20,)]),
+         "gold.bv_exports_state": T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                    [(3, "Marché (enchères)", "x", "2026-11-10T10:13:00", 5, "🟩 à jour")])}
+    d.update(plus)
+    return d
+
+
+def ligne_de(lignes, nom):
+    return next((l for l in lignes if l.startswith("|") and nom in l), "")
+
+
+def cas_bloc_4():
+    t = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, 1.0))
+    # table des prix : une ligne par case
+    cases = [l for l in t.splitlines() if re.match(r"\| (≤21|22-25|26-29|30\+) \| \d\d ", l)]
+    yield "test_table_prix_une_ligne_par_case", len(cases) == 4
+    yield "test_table_prix_colonnes", all(x in t for x in ("Prix bas", "Médian", "Prix haut", "Dernière vente", "93 888", "08/11"))
+    yield "test_requetes_bloc_4_existent", all(k in auj.REQUETES for k in ("prix_cases", "annonces_24h", "vendre", "annonces_export"))
+
+    # achetable : prix <= médiane de la case, case fiable, dans la capacité restante
+    L = t.splitlines()
+    yield "test_achetable_sous_la_mediane : oui", re.search(r"\| oui \|\s*$", ligne_de(L, "Paul Aubert")) is not None
+    yield "test_achetable_sous_la_mediane : au-dessus de la médiane = non", "non (prix au-dessus de la médiane" in ligne_de(L, "Luc Brun")
+    yield "test_achetable_sous_la_mediane : case non fiable = non", "non (case peu fiable" in ligne_de(L, "Marc Cler")
+    yield "test_achetable_sous_la_mediane : case sans référence = non", "non (case sans référence" in ligne_de(L, "Eli Ferrand")
+    petit = "\n".join(qfb.bloc_4(donnees_4(), {}, 40000, 1.0)).splitlines()
+    yield "test_achetable_sous_la_mediane : capacité insuffisante = non", "non (au-dessus de la capacité restante" in ligne_de(petit, "Paul Aubert")
+    inconnue = "\n".join(qfb.bloc_4(donnees_4(), {}, None, 1.0)).splitlines()
+    yield "test_achetable : capacité illisible = non", "non (capacité restante illisible" in ligne_de(inconnue, "Paul Aubert")
+    yield "test_annonces_colonnes", all(x in t for x in ("Prix actuel", "Médiane de la case", "Plafond", "Gain pour mon cinq", "Achetable", "dans 5,5 h"))
+    yield "test_annonces_triees_par_fin", t.index("Paul Aubert") < t.index("Luc Brun") < t.index("Yan Dole")
+
+    # aucune annonce dans les 24 h : phrase exacte de la revue ciblée 1
+    vide = "\n".join(qfb.bloc_4(donnees_4(annonces_24h=T(ANN_COLS, [])), {}, 300000, 1.0))
+    yield "test_aucune_annonce_24h", "aucune annonce du Marché ne se termine dans les 24 h (export du 10/11, 20 annonces)" in vide \
+        and "donnée manquante" not in vide.split("Qui vendre")[0]
+
+    # déduplication entre les pages
+    doublon = T(ANN_COLS, list(ANN[1][:1]) * 2 + [ANN[1][1]])
+    td = "\n".join(qfb.bloc_4(donnees_4(annonces_24h=doublon), {}, 300000, 1.0))
+    yield "test_deduplication_des_pages", td.count("Paul Aubert") == 1 and td.count("Luc Brun") == 1
+
+    # qui vendre
+    V = t.splitlines()
+    yield "test_vendre_vendable_et_necessaire : écart dans la tolérance = vendable", "vendable" in ligne_de(V, "Maël Bernard") \
+        and "nécessaire" not in ligne_de(V, "Maël Bernard")
+    yield "test_vendre_vendable_et_necessaire : écart > tolérance = nécessaire avec la raison", \
+        "nécessaire (écart de force 4,2 supérieur à la tolérance 1,0)" in ligne_de(V, "Léo Lefebvre")
+    yield "test_vendre_vendable_et_necessaire : 8 disponibles après la vente = nécessaire", \
+        "nécessaire (il ne resterait que 8 joueurs disponibles, 9 requis)" in ligne_de(V, "Nolan Baron")
+    yield "test_vendre_deja_en_vente", "déjà en vente" in ligne_de(V, "Sacha Leclerc")
+    yield "test_vendre_prix_attendu_de_la_case", "721 000" in ligne_de(V, "Maël Bernard") and "—" in ligne_de(V, "Léo Lefebvre")
+    yield "test_vendre_colonnes", all(x in t for x in ("Salaire", "Rang au poste", "Minutes", "Remplaçant", "Écart", "Verdict"))
+    sans_tol = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, None))
+    yield "test_vendre_tolerance_inconnue", "tolérance de vente inconnue" in sans_tol and "| vendable" not in sans_tol
+
+    # vue illisible : le bloc ne plante pas, la ligne dit laquelle
+    ill = "\n".join(qfb.bloc_4(donnees_4(prix_cases=None, annonces_24h=None, vendre=None), {}, 300000, 1.0))
+    yield "test_bloc_4_vue_illisible", all(f"donnée manquante : vue {v} illisible" in ill for v in ("prix_cases", "annonces_24h", "vendre"))
+    ill2 = "\n".join(qfb.bloc_4(donnees_4(**{"gold.bv_sell_replacement": None}), {}, 300000, 1.0))
+    yield "test_bloc_4_vue_illisible : remplaçants", "donnée manquante : vue gold.bv_sell_replacement illisible" in ill2 and "Maël Bernard" not in ill2.split("Qui vendre")[-1]
+    yield "test_vendre_sans_remplacant", "nécessaire (aucun remplaçant au poste)" in ligne_de(V, "Zoé Sansremplaçant")
+
+    # lignes d'enchères et d'achats déjà produites par le plan : gardées, sans heure
+    plan = [(None, 2, "Enchère maximale 100 000 sur Dupont (PG, PS 60)", "plafond de revente ; fin 11/11 09:30", "s")]
+    tp = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, 1.0, actions=plan))
+    yield "test_bloc_4_garde_les_lignes_du_plan", "Enchère maximale 100 000 sur Dupont" in tp and re.search(r"\d\d:\d\d", tp) is None
+
+    yield "test_bloc_4_sans_commande", qfb.INTERDITS.search(t) is None and qfb.INTERDITS.search(tp) is None
+    yield "test_bloc_4_passe_forme", forme.fautes_tableaux(t, "basketvibe") == [] and forme.fautes_de(t, "basketvibe") == [] \
+        and forme.fautes_de(vide, "basketvibe") == []
+    yield "test_bloc_4_sans_heure", re.search(r"\d\d:\d\d", t) is None
 
 
 def composition_lignes(texte):

@@ -644,6 +644,51 @@ Zéro ligne attendu : l'amical du 11/11 n'est pas encore saisi ni exporté, donc
 
 Vérification à la main de Gimenez : 48 × 0,019 × 0,75 × (1,5 − 0,008 × 53) = 0,684 × 1,076 = 0,736 → 0,7. Aucune erreur SQL : pas de correctif avant T4.
 
+### T4 — requêtes du bloc 4 sur la vraie base (mardi 10/11/2026, après-midi)
+
+`python -I pipelines/sql.py "<REQUETES[clé]>" --max-rows 30`, une clé après l'autre.
+
+**Erreur SQL trouvée, corrigée dans T4** : la première version de `vendre` joignait `gold.bv_sell_candidates` et `gold.bv_sell_replacement` en SQL et a rendu `erreur SQL (https 500) : canceling statement due to statement timeout`. Mesure : chaque vue seule met 4,6 s et 4,9 s (`select count(*)`), leur jointure 17,9 s avec CTE `materialized`. Correctif : `vendre` ne lit plus que `gold.bv_sell_candidates` (7 s) ; les remplaçants viennent de la requête `gold.bv_sell_replacement`, déjà lue en parallèle par `plan()`, et sont joints par nom dans `bloc_4`. Test ajouté : `test_bloc_4_vue_illisible : remplaçants`, `test_vendre_sans_remplacant`.
+
+`prix_cases` (code 0) :
+
+```
+| ps_band | age_band | n | p25 | median | p75 | last_sale |
+|---|---|---|---|---|---|---|
+| 25 | ≤21 | 3 | 1625 | 1750 | 5875 | 2026-11-07 |
+| 30 | ≤21 | 6 | 438.25 | 1875 | 14188.25 | 2026-11-07 |
+| 35 | ≤21 | 37 | 1500 | 13500 | 77000 | 2026-11-08 |
+| 40 | ≤21 | 66 | 64500 | 277500 | 841250 | 2026-11-08 |
+| 45 | ≤21 | 37 | 440000 | 721000 | 1543500 | 2026-11-08 |
+| 50 | ≤21 | 9 | 1680000 | 3675000 | 5788125 | 2026-11-07 |
+| 35 | 22-25 | 2 | 1050 | 1100 | 1150 | 2026-11-08 |
+| 40 | 22-25 | 20 | 251 | 4375.5 | 31000.25 | 2026-11-07 |
+| 45 | 22-25 | 32 | 10187.5 | 93888.5 | 201249.75 | 2026-11-08 |
+| 50 | 22-25 | 17 | 500000 | 700000 | 910000 | 2026-11-07 |
+| 55 | 22-25 | 22 | 1151875 | 1462043 | 1831580.5 | 2026-11-07 |
+| 60 | 22-25 | 5 | 2333333 | 2500000 | 2635500 | 2026-11-07 |
+| 35 | 26-29 | 8 | 75.25 | 625.5 | 3250 | 2026-11-04 |
+| 40 | 26-29 | 20 | 1 | 875.5 | 13813.25 | 2026-11-08 |
+| 45 | 26-29 | 43 | 751 | 10000 | 70000 | 2026-11-08 |
+| 50 | 26-29 | 54 | 250000 | 507502.5 | 707500 | 2026-11-07 |
+| 55 | 26-29 | 65 | 770000 | 999000 | 1300000 | 2026-11-08 |
+| 60 | 26-29 | 21 | 1113525 | 1500000 | 1818390 | 2026-11-07 |
+| 35 | 30+ | 1 | 1 | 1 | 1 | 2026-11-05 |
+| 40 | 30+ | 7 | 376 | 1000 | 1000 | 2026-11-08 |
+| 45 | 30+ | 35 | 1000 | 10250 | 32500 | 2026-11-08 |
+| 50 | 30+ | 16 | 27750 | 61000 | 85750 | 2026-11-04 |
+
+22 lignes
+```
+
+`annonces_24h` : `0 lignes` (code 0). Attendu : les 20 annonces du dernier export (celui du 09/11) ont toutes une fin passée (de 09/11 23:31 à 10/11 10:12) ; c'est le cas de la revue ciblée 1. Fenêtre élargie à `ends_paris > now() - 20 h` pour vérifier colonnes, `heures` et unicité : 6 lignes lues, colonnes `auction_id, name, position, age, ps, price_now, ends_paris, heures, gain_vs_my_second, enters_top8` présentes, `heures` négative (annonce finie) comme attendu.
+
+`annonces_export` : `n = 20` (code 0).
+
+`vendre` (version corrigée, 7 s) : 14 lignes, de Léo Lefebvre (salaire 31 803, rang 1 au PF, 35,1 minutes) à Sacha Leclerc (13 767, rang 11 au SG, 0,0 minute), colonnes `name, position, age, ps, salary, best_slot, rank_in_slot, league_min_last4, on_transfer_list`.
+
+**Lecture parallèle complète des 37 requêtes puis `bloc_4` sur les vraies données** (`aujourdhui.lire_tout`, solde 1 170 081, tolérance 1,0) : lecture **13,4 s** pour 37 requêtes, aucune erreur (la mesure du 10/11 09:43 était 12,4 s pour 32 requêtes ; le budget est 15 s : à surveiller en T8). Rendu : table des prix de 22 lignes ; « aucune annonce du Marché ne se termine dans les 24 h (export du 09/11, 20 annonces) » ; table « Qui vendre » de 14 joueurs : 4 vendables (Catalin Ungureanu, Anselmo Albano, Maël Bernard, Nolan Baron : écart 0,8 / 0,5 / 0,1 / 0,3, 14 joueurs disponibles) et 10 « nécessaire (écart de force … supérieur à la tolérance 1,0) » (Léo Lefebvre 4,2 ; Hadrien Gimenez 4,3 ; Oscar Richard 4,5 ; Armand Fournier 2,3 ; Min-jun Dang 2,5 ; Thibault Bonnet 1,7 ; Noé Legrand 1,4 ; Naël Boyer 3,9 ; Jonathan Durand 2,3 ; Sacha Leclerc 1,3). Cohérent avec les valeurs de `gold.bv_sell_replacement` lues à la main avant le code.
+
 ## Journal de durée (une ligne par exécution)
 
 | Date | Jour du plan | Durée (s) | Requêtes |

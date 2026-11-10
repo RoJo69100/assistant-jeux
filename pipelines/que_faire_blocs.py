@@ -354,3 +354,152 @@ def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
                              "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
         lignes += verifier_j_moins_1(tableau, donnees) + [""]
     return lignes, consignes
+
+
+# ---- Bloc 4 : transferts (prix, qui acheter, qui vendre) ------------------------------------------------------
+
+TRANCHES = ["≤21", "22-25", "26-29", "30+"]
+CASE_FIABLE_N = 5  # même seuil que le reste du script (ref_n >= 5, aujourdhui.py)
+
+
+def vue_illisible(nom: str) -> str:
+    """Ligne d'un bloc dont la vue n'a pas pu être lue (revue ciblée 5)."""
+    return f"donnée manquante : vue {nom} illisible"
+
+
+def tranche_age(age) -> str:
+    a = int(float(age))
+    return "≤21" if a <= 21 else "22-25" if a <= 25 else "26-29" if a <= 29 else "30+"
+
+
+def palier_note(ps) -> int:
+    return int(float(ps) // 5 * 5)
+
+
+def _virg(x, d: int = 1) -> str:
+    return f"{float(x):.{d}f}".replace(".", ",")
+
+
+def _cases(donnees) -> dict:
+    return {(int(float(r["ps_band"])), r["age_band"]): r for r in auj.lignes_de(donnees, "prix_cases")}
+
+
+def _table_prix(donnees) -> list:
+    lignes = ["**Table des prix (ventes conclues, par tranche d'âge et palier de note de 5)**", "",
+              "| Âge | Note (dès) | Ventes | Prix bas (p25) | Médian | Prix haut (p75) | Dernière vente |", "|---|---|---|---|---|---|---|"]
+    for r in sorted(auj.lignes_de(donnees, "prix_cases"), key=lambda r: (TRANCHES.index(r["age_band"]) if r["age_band"] in TRANCHES else 9,
+                                                                         int(float(r["ps_band"])))):
+        lignes.append(f"| {r['age_band']} | {int(float(r['ps_band']))} | {int(float(r['n']))} | {auj.montant(r['p25'])} | {auj.montant(r['median'])} | "
+                      f"{auj.montant(r['p75'])} | {auj.en_date(r['last_sale']):%d/%m} |")
+    return lignes + [""]
+
+
+def _export_marche(donnees):
+    for r in auj.lignes_de(donnees, "gold.bv_exports_state"):
+        if forme.norm(str(r["ecran"])).startswith("marche") and r.get("dernier_paris"):
+            return auj.en_heure(r["dernier_paris"])
+    return None
+
+
+def _achetable(r, cases, capacite):
+    """(plafond, achetable) d'une annonce : prix <= médiane de sa case (case fiable) et <= capacité restante."""
+    prix = float(r["price_now"])
+    case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
+    if case is None:
+        return None, "non (case sans référence de prix)"
+    mediane = float(case["median"])
+    plafond = mediane if capacite is None else min(mediane, float(capacite))
+    if int(float(case["n"])) < CASE_FIABLE_N:
+        return plafond, f"non (case peu fiable : {int(float(case['n']))} ventes)"
+    if prix > mediane:
+        return plafond, "non (prix au-dessus de la médiane de la case)"
+    if capacite is None:
+        return plafond, "non (capacité restante illisible)"
+    if prix > float(capacite):
+        return plafond, "non (au-dessus de la capacité restante)"
+    return plafond, "oui"
+
+
+def _table_annonces(donnees, capacite) -> list:
+    titre = ["**Qui acheter (annonces du Marché qui se terminent dans les 24 h)**", ""]
+    vues, annonces = set(), []
+    for r in auj.lignes_de(donnees, "annonces_24h"):
+        if r["auction_id"] not in vues:  # la même annonce vue sur deux pages compte une fois
+            vues.add(r["auction_id"])
+            annonces.append(r)
+    if not annonces:
+        quand = _export_marche(donnees)
+        n = next((int(float(r["n"])) for r in auj.lignes_de(donnees, "annonces_export")), None)
+        precis = ", ".join(x for x in ((f"export du {quand:%d/%m}" if quand else ""), (f"{n} annonces" if n is not None else "")) if x)
+        return titre + ["aucune annonce du Marché ne se termine dans les 24 h" + (f" ({precis})" if precis else ""), ""]
+    cases = _cases(donnees)
+    lignes = titre + ["| Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |",
+                      "|---|---|---|---|---|---|---|---|---|---|"]
+    for r in sorted(annonces, key=lambda r: float(r["heures"])):
+        plafond, verdict = _achetable(r, cases, capacite)
+        case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
+        gain = r.get("gain_vs_my_second")
+        lignes.append(f"| {r['name']} | {r['position']} | {int(float(r['age']))} | {_virg(r['ps'])} | {auj.montant(r['price_now'])} | "
+                      f"{auj.montant(case['median']) if case else '—'} | {auj.montant(plafond) if plafond is not None else '—'} | "
+                      f"dans {_virg(r['heures'])} h | {('+' if float(gain) > 0 else '') + _virg(gain) if gain is not None else '—'} | {verdict} |")
+    return lignes + [""]
+
+
+def _verdict_vente(r, tolerance):
+    if auj.vrai(r.get("on_transfer_list")):
+        return "déjà en vente"
+    if tolerance is None:
+        return "inconnu (tolérance de vente inconnue)"
+    if r.get("gap") is None:
+        return "nécessaire (aucun remplaçant au poste)"
+    if float(r["gap"]) > float(tolerance):
+        return f"nécessaire (écart de force {_virg(r['gap'])} supérieur à la tolérance {_virg(tolerance)})"
+    restent = int(float(r["available_players"])) - (1 if auj.vrai(r.get("available")) else 0)
+    if restent < auj.DISPONIBLES_APRES_VENTE:
+        return f"nécessaire (il ne resterait que {restent} joueurs disponibles, {auj.DISPONIBLES_APRES_VENTE} requis)"
+    return "vendable"
+
+
+def _table_vente(donnees, tolerance) -> list:
+    lignes = ["**Qui vendre (joueurs vendables et s'ils sont nécessaires)**", "",
+              "| Nom | Poste | Âge | Note | Salaire hebdomadaire | Rang au poste | Minutes (4 derniers matchs de ligue) | Remplaçant | "
+              "Écart de force | Prix attendu (médiane de la case) | Verdict |", "|---|---|---|---|---|---|---|---|---|---|---|"]
+    cases = _cases(donnees)
+    rempl = {forme.norm(r["name"]): r for r in auj.lignes_de(donnees, "gold.bv_sell_replacement")}
+    rangees = []
+    for c in auj.lignes_de(donnees, "vendre"):
+        r = dict(c, **{k: v for k, v in rempl.get(forme.norm(c["name"]), {}).items() if k not in c})  # remplaçant, écart, disponibles
+        verdict = _verdict_vente(r, tolerance)
+        case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
+        if case is None:
+            prix = "—"
+        elif int(float(case["n"])) < CASE_FIABLE_N:
+            prix = "— (case peu fiable)"
+        else:
+            prix = auj.montant(case["median"])
+        minutes = _virg(r["league_min_last4"]) if r.get("league_min_last4") is not None else "—"
+        rangees.append((verdict != "vendable", -float(r["salary"]),
+                        f"| {r['name']} | {r['position']} | {int(float(r['age']))} | {_virg(r['ps'])} | {auj.montant(r['salary'])} | "
+                        f"{int(float(r['rank_in_slot']))} ({r['best_slot']}) | {minutes} | {r.get('replacement_name') or '—'} | "
+                        f"{_virg(r['gap']) if r.get('gap') is not None else '—'} | {prix} | {verdict} |"))
+    return lignes + [l for _, _, l in sorted(rangees)] + [""]
+
+
+def bloc_4(donnees, erreurs, capacite, tolerance, actions=()) -> list:
+    """Bloc 4 : table des prix, annonces des 24 h avec « achetable », qui vendre avec « vendable » / « nécessaire »,
+    puis les lignes de transferts déjà produites par plan() (enchères, achats, mises en vente), sans heure.
+    Une proposition reste une proposition : rien n'est acheté ni vendu sans l'accord écrit de l'utilisateur (bloc 10)."""
+    sortie = []
+    for noms, fabrique in ((("prix_cases",), lambda: _table_prix(donnees)),
+                           (("annonces_24h",), lambda: _table_annonces(donnees, capacite)),
+                           (("vendre", "gold.bv_sell_replacement"), lambda: _table_vente(donnees, tolerance))):
+        illisibles = [n for n in noms if donnees.get(n) in (None, "rejeu")]
+        sortie += [vue_illisible(n) for n in illisibles] + [""] if illisibles else fabrique()
+    if tolerance is None and donnees.get("vendre") not in (None, "rejeu"):
+        sortie += ["tolérance de vente inconnue (core.game_params.vente_tolerance_force) : aucun joueur n'est déclaré vendable", ""]
+    affichables, _ = separer(list(actions))
+    deja = [a for a in affichables if classer(a[2])[0] == 4]
+    if deja:
+        sortie += ["**Enchères, achats et ventes déjà proposés**", ""]
+        sortie += ["- " + sans_heure(a[2]) + (f" — {sans_heure(a[3])}" if a[3] else "") for a in deja] + [""]
+    return sortie
