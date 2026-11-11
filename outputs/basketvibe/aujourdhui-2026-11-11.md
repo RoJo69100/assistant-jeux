@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-11 09:38 -->
+<!-- généré le 2026-11-11 09:41 -->
 ## Bloc 0 — Exports d'abord
 
 - donnée manquante : exporte exporter la page du match → bloc 2
@@ -32,7 +32,7 @@
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Composition | Amical contre San Junipero Bytes (jeu. 12/11) : saisis le test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs → bloc 2 |
+| 🟥 URGENT | Composition | Amical contre San Junipero Bytes (12/11) (jeu. 12/11) : saisis la tactique maintenant → bloc 2 |
 | 🟥 URGENT | Composition | Coupe contre Stare Kotlety (jeu. 12/11) : saisis la tactique maintenant → bloc 3 |
 | 🟧 IMPORTANT | Transferts | Enchère maximale 724 375 sur Oliver Bui (PF, PS 58.9) → bloc 4 |
 | 🟧 IMPORTANT | Transferts | Enchère maximale 1 003 438 sur Felipe Correia (SG, PS 55) → bloc 4 |
@@ -44,17 +44,125 @@
 
 Amical contre San Junipero Bytes (jeu. 12/11), heure limite du verrou 07:45
 
-composition de l'amical en préparation
+Fiche : briefs/2026-11-11-tactique-amical.md (brief du 11/11).
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Baron (17 ans) | PG | PG | — | PG | PG | PG | 36 (+5) | 2 | 1 | 3 | 3 |
+| Boyer (20 ans) | PG | SF | — | SF | SF | — | 36 | 3 | 2 | 3 | 3 |
+| Richard | PG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Bonnet | SG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Dang | SG | — | PG | SG | — | SG | 24 (+5) | 3 | 3 | 2 | 3 |
+| Leclerc (17 ans) | SG | SG | SG | — | SG | — | 36 | 3 | 3 | 3 | 3 |
+| Durand | SF | — | SF | — | — | SF | 12 (+5) | 3 | 3 | 2 | 3 |
+| Gimenez | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Albano | PF | PF | — | PF | — | PF | 24 (+5) | 4 | 4 | 1 | 3 |
+| Lefebvre | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Legrand | PF | — | PF | — | PF | — | 24 | 3 | 4 | 1 | 3 |
+| Bernard (18 ans) | C | C | C | C | — | — | 36 | 3 | 3 | 1 | 3 |
+| Fournier | C | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Ungureanu | C | — | — | — | C | C | 12 (+5) | 3 | 3 | 3 | 3 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Les 12 (noms inconnus, export à faire) | tous | 3 | Perimeter |
+
+agressivité 3 à l'écran sur tous les joueurs : réglage du test E1 niveau A, à la place de celui du brief
+zone Perimeter : constant pendant E1 ; focus défensif 3 (Normal) : constant pendant E1
+
+Anticipation (hypothèse) : un adversaire appliquant notre règle (Intense sur le plus gros tireur, zone selon 2P/3P) mettrait Intense (4) + Perimeter (1) sur Leclerc ; plan B nommé : Leclerc Off. focus 3 (au lieu de 4), le jeu passe par Albano (Off. focus 4, Rôle 4) puis Bernard, Legrand et Boyer, qui sont sur le terrain à chaque quart de Leclerc ; aucun focus adverse en base, c'est une supposition.
+Test en cours (un seul réglage à la fois) : test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs
+Écart J-1 : Bonnet — fatigue projetée 29,0 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Gimenez — fatigue projetée 28,7 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Richard — fatigue projetée 27,7 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Lefebvre — fatigue projetée 27,5 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Fournier — fatigue projetée 27,2 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
 
 ## Bloc 3 — Composition de la ligue ou de la coupe
 
 Ligue J5 contre BC KIT (mer. 11/11), heure limite du verrou 19:45
 
-composition en préparation
+Fiche : briefs/2026-11-11-tactique.md (brief du 11/11).
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Baron | PG | — | — | — | — | — | 0 | 1 | 1 | 3 | 1 |
+| Boyer | PG | — | — | PG | — | PG | 12 (+5) | 2 | 2 | 3 | 1 |
+| Richard | PG | PG | PG | — | PG | — | 36 | 1 | 1 | 3 | 1 |
+| Bonnet | SG | SG | SG | — | SG | — | 36 | 5 | 5 | 3 | 1 |
+| Dang | SG | — | — | SG | — | SG | 12 (+5) | 3 | 3 | 3 | 1 |
+| Leclerc | SG | — | — | — | — | — | 0 | 4 | 4 | 5 | 1 |
+| Durand | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 1 |
+| Gimenez | SF | SF | SF | — | SF | SF | 36 (+5) | 4 | 3 | 3 | 1 |
+| Albano | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 1 |
+| Lefebvre | PF | PF | — | PF | PF | PF | 36 (+5) | 4 | 4 | 1 | 1 |
+| Legrand | PF | — | PF | SF | — | — | 24 | 3 | 3 | 1 | 1 |
+| Bernard | C | — | — | — | — | — | 0 | 2 | 2 | 1 | 1 |
+| Fournier | C | C | C | — | C | — | 36 | 2 | 2 | 1 | 1 |
+| Ungureanu | C | — | — | C | — | C | 12 (+5) | 3 | 3 | 3 | 1 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Dudko | PG | 3 | Perimeter |
+| Moroz | PG | 3 | Perimeter |
+| Koval | SG | 3 | Perimeter |
+| Panenko | SG | 3 | Perimeter |
+| Bondar | SF | 3 | Middle |
+| Danylenko | SF | 4 | Middle |
+| Yaremchuk | SF | 3 | Perimeter |
+| Zakharchenko | PF | 2 | Middle |
+| Polishchuk | C | 4 | Middle |
+
+Anticipation (hypothèse) : plan B « Bonnet muselé » : si BC KIT applique notre règle, Bonnet (17,0 % des tirs, 80 % à 3 pts, `gold.bv_match_player_lines` ligue depuis le 02/11) passe en Intense Perimeter ; la fiche tient sans lui comme tireur unique : Gimenez (14,0 % des tirs, 41 % à 3 pts) et Lefebvre (13,7 %, 74 % à 2 pts) en off. focus 4 prennent les tirs, Legrand (50 % à 2 et à 3 pts) au Q2 et Q3 ; aucune donnée sur les focus adverses en base (détail section 4).
+Écart J-1 : Bonnet — fatigue projetée 29,0 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Gimenez — fatigue projetée 28,7 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Richard — fatigue projetée 27,7 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Lefebvre — fatigue projetée 27,5 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Fournier — fatigue projetée 27,2 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
 
 Coupe contre Stare Kotlety (jeu. 12/11), heure limite du verrou 19:00
 
-composition en préparation
+Fiche : briefs/2026-11-11-tactique-coupe.md (brief du 11/11).
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Baron | PG | — | — | — | — | — | 0 | 1 | 1 | 3 | 1 |
+| Boyer | PG | — | — | PG | — | PG | 12 (+5) | 2 | 2 | 1 | 1 |
+| Richard | PG | PG | PG | — | PG | — | 36 | 1 | 1 | 3 | 1 |
+| Bonnet | SG | SG | SG | — | SG | — | 36 | 5 | 5 | 3 | 1 |
+| Dang | SG | — | — | SG | — | SG | 12 (+5) | 3 | 3 | 1 | 1 |
+| Leclerc | SG | — | — | — | — | — | 0 | 4 | 4 | 3 | 1 |
+| Durand | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 1 |
+| Gimenez | SF | SF | SF | — | SF | SF | 36 (+5) | 4 | 3 | 3 | 1 |
+| Albano | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 1 |
+| Lefebvre | PF | PF | — | PF | PF | PF | 36 (+5) | 4 | 4 | 1 | 1 |
+| Legrand | PF | — | PF | SF | — | — | 24 | 3 | 3 | 1 | 1 |
+| Bernard | C | — | — | — | — | — | 0 | 2 | 2 | 1 | 1 |
+| Fournier | C | C | C | — | C | — | 36 | 2 | 2 | 1 | 1 |
+| Ungureanu | C | — | — | C | — | C | 12 (+5) | 3 | 3 | 1 | 1 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Bartosik | PG | 3 | Middle |
+| Cieślak | PG | 3 | Middle |
+| Kowalik | PG | 3 | Middle |
+| Przybylski | SG | 3 | Middle |
+| Sienkiewicz | SG | 3 | Middle |
+| Marciniak | SF | 3 | Middle |
+| Nowakowski | SF | 3 | Middle |
+| Wysocki | SF | 3 | Middle |
+| Krzyżanowski | PF | 3 | Middle |
+| Lis | PF | 3 | Middle |
+| Kowalski | C | 3 | Middle |
+| Krajewski | C | 3 | Middle |
+| Sikora | C | 3 | Middle |
+
+Anticipation (hypothèse) : plan B « Bonnet muselé » : si Stare Kotlety applique notre règle (Intense sur ≥ 13,5 % des tirs), Bonnet (17,0 % des tirs, 80 % à 3 pts) prend un Intense Perimeter ; la fiche tient sans lui : Gimenez (off. focus 4, 41 % à 3 pts) et Lefebvre (off. focus 4, 74 % à 2 pts) en relais, Fournier et Legrand à 2 pts, Richard passeur ; aucun focus adverse en base, à ne pas lire comme un fait.
+Écart J-1 : Bonnet — fatigue projetée 29,0 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Gimenez — fatigue projetée 28,7 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Richard — fatigue projetée 27,7 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Lefebvre — fatigue projetée 27,5 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
+Écart J-1 : Fournier — fatigue projetée 27,2 au match de coupe du 12/11 contre Stare Kotlety (zone verte 20)
 
 
 ## Bloc 4 — Transferts
@@ -90,93 +198,93 @@ composition en préparation
 
 | Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |
 |---|---|---|---|---|---|---|---|---|---|
-| Dainoras Mockus | SF | 19 | 41,9 | 100 000 | 290 000 | 290 000 | dans 0,2 h | -18,1 | oui |
-| Nedim Pirić | PG | 25 | 51,5 | 1 | 700 000 | 700 000 | dans 0,8 h | -4,7 | oui |
-| Gabriel Abella | C | 31 | 41,8 | 8 000 | 750 | 750 | dans 0,9 h | -12,0 | non (prix au-dessus de la médiane de la case) |
-| Antonio Guerrero | C | 17 | 35,8 | 460 000 | 14 250 | 14 250 | dans 0,9 h | -22,8 | non (prix au-dessus de la médiane de la case) |
-| Sedat Erdoğan | SF | 29 | 54,1 | 1 250 000 | 500 005 | 500 005 | dans 1,3 h | -5,8 | non (prix au-dessus de la médiane de la case) |
+| Dainoras Mockus | SF | 19 | 41,9 | 100 000 | 290 000 | 290 000 | dans 0,1 h | -18,1 | oui |
+| Nedim Pirić | PG | 25 | 51,5 | 1 | 700 000 | 700 000 | dans 0,7 h | -4,7 | oui |
+| Gabriel Abella | C | 31 | 41,8 | 8 000 | 750 | 750 | dans 0,8 h | -12,0 | non (prix au-dessus de la médiane de la case) |
+| Antonio Guerrero | C | 17 | 35,8 | 460 000 | 14 250 | 14 250 | dans 0,8 h | -22,8 | non (prix au-dessus de la médiane de la case) |
+| Sedat Erdoğan | SF | 29 | 54,1 | 1 250 000 | 500 005 | 500 005 | dans 1,2 h | -5,8 | non (prix au-dessus de la médiane de la case) |
 | Časlav Jović | PG | 31 | 50,2 | 400 000 | 61 000 | 61 000 | dans 2,0 h | -6,7 | non (prix au-dessus de la médiane de la case) |
+| Jérémy Colin | PG | 25 | 42,7 | 1 | 4 375 | 4 375 | dans 2,2 h | -13,7 | oui |
 | Tobias Haas | SG | 17 | 41,8 | 200 000 | 290 000 | 290 000 | dans 2,2 h | -14,4 | oui |
-| Jérémy Colin | PG | 25 | 42,7 | 1 | 4 375 | 4 375 | dans 2,3 h | -13,7 | oui |
-| Aivis Roze | PG | 26 | 60,2 | 1 000 000 | 1 500 000 | 1 186 981 | dans 2,3 h | +4,0 | oui |
-| Arjun Tan | SG | 28 | 47,0 | 0 | 10 000 | 10 000 | dans 2,8 h | -9,5 | oui |
+| Aivis Roze | PG | 26 | 60,2 | 1 000 000 | 1 500 000 | 1 186 981 | dans 2,2 h | +4,0 | oui |
+| Arjun Tan | SG | 28 | 47,0 | 0 | 10 000 | 10 000 | dans 2,7 h | -9,5 | oui |
 | Zenon Mazur | SG | 29 | 46,7 | 50 000 | 10 000 | 10 000 | dans 3,2 h | -9,2 | non (prix au-dessus de la médiane de la case) |
 | Emmanuel Blanco | PF | 29 | 51,7 | 28 000 | 500 005 | 500 005 | dans 4,5 h | -1,4 | oui |
 | Māris Grīnbergs | C | 25 | 53,4 | 1 289 047 | 700 000 | 700 000 | dans 4,5 h | +0,3 | non (prix au-dessus de la médiane de la case) |
-| Andrés Cabral | PG | 30 | 39,3 | 0 | 1 | 1 | dans 5,0 h | -17,9 | non (case peu fiable : 1 ventes) |
-| Jan Słowiński | SG | 25 | 60,5 | 3 000 000 | 2 500 000 | 1 186 981 | dans 5,1 h | +4,5 | non (prix au-dessus de la médiane de la case) |
-| Cyprian Cieślak | PG | 26 | 58,5 | 2 800 000 | 982 000 | 982 000 | dans 5,1 h | +2,2 | non (prix au-dessus de la médiane de la case) |
-| Manuel Vega | SG | 24 | 39,7 | 0 | 1 100 | 1 100 | dans 5,4 h | -15,7 | non (case peu fiable : 2 ventes) |
+| Andrés Cabral | PG | 30 | 39,3 | 0 | 1 | 1 | dans 4,9 h | -17,9 | non (case peu fiable : 1 ventes) |
+| Jan Słowiński | SG | 25 | 60,5 | 3 000 000 | 2 500 000 | 1 186 981 | dans 5,0 h | +4,5 | non (prix au-dessus de la médiane de la case) |
+| Cyprian Cieślak | PG | 26 | 58,5 | 2 800 000 | 982 000 | 982 000 | dans 5,0 h | +2,2 | non (prix au-dessus de la médiane de la case) |
+| Manuel Vega | SG | 24 | 39,7 | 0 | 1 100 | 1 100 | dans 5,3 h | -15,7 | non (case peu fiable : 2 ventes) |
+| Jed Santos | PG | 22 | 35,8 | 1 | 1 100 | 1 100 | dans 5,6 h | -19,1 | non (case peu fiable : 2 ventes) |
 | Camilo Pereira | PF | 16 | 35,2 | 10 000 | 14 250 | 14 250 | dans 5,6 h | -20,2 | oui |
-| Jed Santos | PG | 22 | 35,8 | 1 | 1 100 | 1 100 | dans 5,7 h | -19,1 | non (case peu fiable : 2 ventes) |
-| Kryspin Walczak | PG | 27 | 43,3 | 1 000 | 1 000 | 1 000 | dans 5,8 h | -12,8 | oui |
+| Kryspin Walczak | PG | 27 | 43,3 | 1 000 | 1 000 | 1 000 | dans 5,7 h | -12,8 | oui |
 | Władysław Dudziak | PF | 17 | 48,1 | 2 000 000 | 721 000 | 721 000 | dans 5,8 h | -10,6 | non (prix au-dessus de la médiane de la case) |
 | Fabian Wieczorek | PF | 23 | 44,3 | 50 000 | 4 375 | 4 375 | dans 5,8 h | -14,4 | non (prix au-dessus de la médiane de la case) |
 | Vidas Pakštas | PG | 16 | 40,9 | 450 000 | 290 000 | 290 000 | dans 5,8 h | -16,6 | non (prix au-dessus de la médiane de la case) |
 | Aleksander Michalak | SF | 29 | 42,0 | 0 | 1 000 | 1 000 | dans 5,8 h | -13,4 | oui |
-| Rúben Pinto | SG | 19 | 41,7 | 1 000 | 290 000 | 290 000 | dans 6,1 h | -14,6 | oui |
+| Rúben Pinto | SG | 19 | 41,7 | 1 000 | 290 000 | 290 000 | dans 6,0 h | -14,6 | oui |
+| Mindaugas Bielskis | SF | 25 | 47,2 | 1 000 | 99 000 | 99 000 | dans 6,1 h | -12,7 | oui |
 | Cristiano Silva | SF | 19 | 40,4 | 2 500 | 290 000 | 290 000 | dans 6,2 h | -15,7 | oui |
-| Mindaugas Bielskis | SF | 25 | 47,2 | 1 000 | 99 000 | 99 000 | dans 6,2 h | -12,7 | oui |
-| Roberto Carmona | SF | 23 | 49,6 | 695 000 | 99 000 | 99 000 | dans 7,7 h | -11,1 | non (prix au-dessus de la médiane de la case) |
+| Roberto Carmona | SF | 23 | 49,6 | 695 000 | 99 000 | 99 000 | dans 7,6 h | -11,1 | non (prix au-dessus de la médiane de la case) |
+| Damon Booth | PF | 18 | 45,8 | 500 000 | 721 000 | 721 000 | dans 7,7 h | -13,5 | oui |
+| Max Bauer | SF | 26 | 51,8 | 300 000 | 500 005 | 500 005 | dans 7,7 h | -8,1 | oui |
+| Edwin Fleming | SG | 29 | 53,8 | 700 000 | 500 005 | 500 005 | dans 7,7 h | -2,1 | non (prix au-dessus de la médiane de la case) |
 | Orlando Rinaldi | C | 18 | 44,0 | 1 000 000 | 290 000 | 290 000 | dans 7,8 h | -9,1 | non (prix au-dessus de la médiane de la case) |
-| Damon Booth | PF | 18 | 45,8 | 500 000 | 721 000 | 721 000 | dans 7,8 h | -13,5 | oui |
-| Max Bauer | SF | 26 | 51,8 | 300 000 | 500 005 | 500 005 | dans 7,8 h | -8,1 | oui |
-| Edwin Fleming | SG | 29 | 53,8 | 700 000 | 500 005 | 500 005 | dans 7,8 h | -2,1 | non (prix au-dessus de la médiane de la case) |
+| Aristide Mugabe | SG | 25 | 52,8 | 500 000 | 700 000 | 700 000 | dans 8,1 h | -3,4 | oui |
 | Abdoul Owusu | PG | 25 | 55,1 | 900 000 | 1 446 736 | 1 186 981 | dans 8,1 h | -1,2 | oui |
-| Aristide Mugabe | SG | 25 | 52,8 | 500 000 | 700 000 | 700 000 | dans 8,2 h | -3,4 | oui |
 | Ojārs Grauds | PG | 25 | 50,3 | 74 999 | 700 000 | 700 000 | dans 8,3 h | -6,0 | oui |
 | Urmas Rebane | C | 29 | 43,7 | 1 000 | 1 000 | 1 000 | dans 8,3 h | -15,0 | oui |
-| Jared Barrett | PF | 22 | 46,6 | 18 000 | 99 000 | 99 000 | dans 8,5 h | -12,2 | oui |
+| Jared Barrett | PF | 22 | 46,6 | 18 000 | 99 000 | 99 000 | dans 8,4 h | -12,2 | oui |
 | Jacinto Barrios | PG | 31 | 49,3 | 5 000 | 10 250 | 10 250 | dans 8,6 h | -7,6 | oui |
 | Dylan Baker | SG | 25 | 55,7 | 1 900 000 | 1 446 736 | 1 186 981 | dans 8,6 h | -4,0 | non (prix au-dessus de la médiane de la case) |
-| Chase Blair | SG | 17 | 46,3 | 999 999 | 721 000 | 721 000 | dans 9,8 h | -10,3 | non (prix au-dessus de la médiane de la case) |
+| Chase Blair | SG | 17 | 46,3 | 999 999 | 721 000 | 721 000 | dans 9,7 h | -10,3 | non (prix au-dessus de la médiane de la case) |
 | Juliusz Jasiński | SG | 20 | 41,7 | 0 | 290 000 | 290 000 | dans 9,9 h | -14,2 | oui |
 | Thierry Reuter | SG | 29 | 45,4 | 0 | 10 000 | 10 000 | dans 9,9 h | -10,9 | oui |
+| Gildo Amato | SG | 25 | 47,5 | 120 000 | 99 000 | 99 000 | dans 10,0 h | -8,6 | non (prix au-dessus de la médiane de la case) |
 | Patrick Beekman | C | 25 | 47,0 | 250 000 | 99 000 | 99 000 | dans 10,0 h | -11,9 | non (prix au-dessus de la médiane de la case) |
-| Gildo Amato | SG | 25 | 47,5 | 120 000 | 99 000 | 99 000 | dans 10,1 h | -8,6 | non (prix au-dessus de la médiane de la case) |
-| Samir Gavrić | SF | 27 | 48,1 | 150 000 | 10 000 | 10 000 | dans 10,1 h | -11,9 | non (prix au-dessus de la médiane de la case) |
-| Quinn Gagnon | PG | 27 | 53,1 | 650 000 | 500 005 | 500 005 | dans 10,2 h | -3,2 | non (prix au-dessus de la médiane de la case) |
-| Fabian Cichy | PG | 31 | 46,5 | 100 000 | 10 250 | 10 250 | dans 10,2 h | -10,4 | non (prix au-dessus de la médiane de la case) |
-| Cveto Kolar | C | 17 | 41,6 | 360 000 | 290 000 | 290 000 | dans 10,5 h | -11,5 | non (prix au-dessus de la médiane de la case) |
-| Grayson Blake | PG | 17 | 44,1 | 955 500 | 290 000 | 290 000 | dans 10,5 h | -12,7 | non (prix au-dessus de la médiane de la case) |
+| Samir Gavrić | SF | 27 | 48,1 | 150 000 | 10 000 | 10 000 | dans 10,0 h | -11,9 | non (prix au-dessus de la médiane de la case) |
+| Quinn Gagnon | PG | 27 | 53,1 | 650 000 | 500 005 | 500 005 | dans 10,1 h | -3,2 | non (prix au-dessus de la médiane de la case) |
+| Fabian Cichy | PG | 31 | 46,5 | 100 000 | 10 250 | 10 250 | dans 10,1 h | -10,4 | non (prix au-dessus de la médiane de la case) |
+| Cveto Kolar | C | 17 | 41,6 | 360 000 | 290 000 | 290 000 | dans 10,4 h | -11,5 | non (prix au-dessus de la médiane de la case) |
+| Grayson Blake | PG | 17 | 44,1 | 955 500 | 290 000 | 290 000 | dans 10,4 h | -12,7 | non (prix au-dessus de la médiane de la case) |
+| Cristiano Russo | C | 23 | 42,8 | 888 888 | 4 375 | 4 375 | dans 10,9 h | -10,4 | non (prix au-dessus de la médiane de la case) |
 | Teodoro Mancini | PF | 18 | 41,6 | 444 444 | 290 000 | 290 000 | dans 11,0 h | -18,2 | non (prix au-dessus de la médiane de la case) |
 | Baldo Cremonesi | PF | 20 | 46,7 | 666 666 | 721 000 | 721 000 | dans 11,0 h | -12,7 | oui |
 | Gino Martino | SF | 23 | 48,1 | 333 333 | 99 000 | 99 000 | dans 11,0 h | -5,0 | non (prix au-dessus de la médiane de la case) |
-| Cristiano Russo | C | 23 | 42,8 | 888 888 | 4 375 | 4 375 | dans 11,0 h | -10,4 | non (prix au-dessus de la médiane de la case) |
 | Normunds Vītols | SG | 28 | 62,9 | 1 010 000 | 1 500 000 | 1 186 981 | dans 11,0 h | +6,9 | oui |
 | Rafał Kozak | PF | 29 | 60,1 | 1 000 000 | 1 500 000 | 1 186 981 | dans 11,2 h | +1,4 | oui |
 | Ambroży Biernacki | SF | 28 | 60,0 | 1 000 000 | 1 500 000 | 1 186 981 | dans 11,2 h | +4,0 | oui |
+| Hyun-soo Bae | PG | 27 | 47,2 | 99 000 | 10 000 | 10 000 | dans 11,2 h | -9,2 | non (prix au-dessus de la médiane de la case) |
+| Łukasz Sułkowski | PF | 17 | 39,9 | 1 | 14 250 | 14 250 | dans 11,3 h | -20,1 | oui |
 | Batu Karaaslan | PG | 29 | 57,2 | 425 000 | 982 000 | 982 000 | dans 11,3 h | +0,9 | oui |
-| Hyun-soo Bae | PG | 27 | 47,2 | 99 000 | 10 000 | 10 000 | dans 11,3 h | -9,2 | non (prix au-dessus de la médiane de la case) |
 | Hilary Cichy | C | 27 | 47,3 | 300 000 | 10 000 | 10 000 | dans 11,3 h | -5,8 | non (prix au-dessus de la médiane de la case) |
-| Łukasz Sułkowski | PF | 17 | 39,9 | 1 | 14 250 | 14 250 | dans 11,4 h | -20,1 | oui |
 | Slavoljub Trajković | SG | 26 | 58,9 | 2 000 000 | 982 000 | 982 000 | dans 11,5 h | +2,7 | non (prix au-dessus de la médiane de la case) |
+| Marco Gupta | SF | 24 | 42,6 | 0 | 4 375 | 4 375 | dans 11,7 h | -12,4 | oui |
 | Frederick Taylor | PG | 17 | 40,0 | 249 999 | 290 000 | 290 000 | dans 11,8 h | -16,4 | oui |
-| Marco Gupta | SF | 24 | 42,6 | 0 | 4 375 | 4 375 | dans 11,8 h | -12,4 | oui |
+| Arturo Cipriani | C | 17 | 49,1 | 2 200 000 | 721 000 | 721 000 | dans 12,0 h | -9,5 | non (prix au-dessus de la médiane de la case) |
 | Gianni Greco | C | 19 | 49,5 | 1 999 999 | 721 000 | 721 000 | dans 12,1 h | -9,3 | non (prix au-dessus de la médiane de la case) |
-| Arturo Cipriani | C | 17 | 49,1 | 2 200 000 | 721 000 | 721 000 | dans 12,1 h | -9,5 | non (prix au-dessus de la médiane de la case) |
-| Trevon Moore | C | 30 | 38,1 | 0 | 1 | 1 | dans 12,2 h | -14,9 | non (case peu fiable : 1 ventes) |
-| Edwin Beck | PF | 28 | 45,8 | 0 | 10 000 | 10 000 | dans 12,2 h | -12,9 | oui |
-| Jason Reed | SG | 26 | 43,6 | 0 | 1 000 | 1 000 | dans 12,2 h | -12,2 | oui |
+| Trevon Moore | C | 30 | 38,1 | 0 | 1 | 1 | dans 12,1 h | -14,9 | non (case peu fiable : 1 ventes) |
+| Edwin Beck | PF | 28 | 45,8 | 0 | 10 000 | 10 000 | dans 12,1 h | -12,9 | oui |
+| Jason Reed | SG | 26 | 43,6 | 0 | 1 000 | 1 000 | dans 12,1 h | -12,2 | oui |
 | Nerijus Valiulis | PG | 27 | 43,8 | 0 | 1 000 | 1 000 | dans 12,8 h | -12,5 | oui |
-| Herbert Zieliński | SG | 29 | 41,0 | 0 | 1 000 | 1 000 | dans 13,0 h | -15,3 | oui |
+| Herbert Zieliński | SG | 29 | 41,0 | 0 | 1 000 | 1 000 | dans 12,9 h | -15,3 | oui |
+| Günter Horn | SF | 17 | 37,7 | 199 000 | 14 250 | 14 250 | dans 13,8 h | -20,1 | non (prix au-dessus de la médiane de la case) |
+| Jeremiah Ferguson | SG | 17 | 38,0 | 190 000 | 14 250 | 14 250 | dans 13,8 h | -18,7 | non (prix au-dessus de la médiane de la case) |
+| Miles Girard | C | 17 | 35,1 | 190 000 | 14 250 | 14 250 | dans 13,8 h | -23,7 | non (prix au-dessus de la médiane de la case) |
 | Gino Pellegrini | PG | 26 | 52,8 | 1 400 000 | 500 005 | 500 005 | dans 13,8 h | -3,4 | non (prix au-dessus de la médiane de la case) |
-| Günter Horn | SF | 17 | 37,7 | 199 000 | 14 250 | 14 250 | dans 13,9 h | -20,1 | non (prix au-dessus de la médiane de la case) |
-| Jeremiah Ferguson | SG | 17 | 38,0 | 190 000 | 14 250 | 14 250 | dans 13,9 h | -18,7 | non (prix au-dessus de la médiane de la case) |
-| Miles Girard | C | 17 | 35,1 | 190 000 | 14 250 | 14 250 | dans 13,9 h | -23,7 | non (prix au-dessus de la médiane de la case) |
+| Arturo Greco | SF | 29 | 47,1 | 5 000 | 10 000 | 10 000 | dans 13,8 h | -11,7 | oui |
+| Colton Couture | PG | 25 | 47,3 | 5 000 | 99 000 | 99 000 | dans 13,8 h | -9,0 | oui |
 | Željko Lončar | PG | 25 | 46,8 | 350 000 | 99 000 | 99 000 | dans 13,9 h | -9,4 | non (prix au-dessus de la médiane de la case) |
-| Arturo Greco | SF | 29 | 47,1 | 5 000 | 10 000 | 10 000 | dans 13,9 h | -11,7 | oui |
-| Colton Couture | PG | 25 | 47,3 | 5 000 | 99 000 | 99 000 | dans 13,9 h | -9,0 | oui |
-| Andreas Charalambidis | SG | 29 | 57,6 | 750 000 | 982 000 | 982 000 | dans 14,3 h | +1,7 | oui |
+| Andreas Charalambidis | SG | 29 | 57,6 | 750 000 | 982 000 | 982 000 | dans 14,2 h | +1,7 | oui |
 | Manuel Schmidt | PF | 29 | 58,0 | 1 500 000 | 982 000 | 982 000 | dans 14,3 h | -0,8 | non (prix au-dessus de la médiane de la case) |
-| Neville Khupe | PG | 26 | 50,0 | 10 000 | 500 005 | 500 005 | dans 14,8 h | -6,1 | oui |
-| Peter Kolar | C | 27 | 43,8 | 2 000 | 1 000 | 1 000 | dans 17,0 h | -9,4 | non (prix au-dessus de la médiane de la case) |
-| Francis Villanueva | PG | 23 | 49,8 | 525 000 | 99 000 | 99 000 | dans 17,1 h | -6,4 | non (prix au-dessus de la médiane de la case) |
-| Kenji Wu | PG | 24 | 46,8 | 10 000 | 99 000 | 99 000 | dans 21,1 h | -7,0 | oui |
+| Neville Khupe | PG | 26 | 50,0 | 10 000 | 500 005 | 500 005 | dans 14,7 h | -6,1 | oui |
+| Peter Kolar | C | 27 | 43,8 | 2 000 | 1 000 | 1 000 | dans 16,9 h | -9,4 | non (prix au-dessus de la médiane de la case) |
+| Francis Villanueva | PG | 23 | 49,8 | 525 000 | 99 000 | 99 000 | dans 17,0 h | -6,4 | non (prix au-dessus de la médiane de la case) |
+| Kenji Wu | PG | 24 | 46,8 | 10 000 | 99 000 | 99 000 | dans 21,0 h | -7,0 | oui |
 | Qing Sun | SG | 25 | 45,3 | 44 000 | 99 000 | 99 000 | dans 21,1 h | -9,7 | oui |
 | Horacy Nawrocki | SF | 19 | 45,3 | 40 000 | 721 000 | 721 000 | dans 22,0 h | -10,4 | oui |
-| Bernardo Godoy | SG | 29 | 59,1 | 240 001 | 982 000 | 982 000 | dans 22,5 h | +3,2 | oui |
-| Teodor Chojnacki | PG | 29 | 52,2 | 10 000 | 500 005 | 500 005 | dans 22,6 h | -4,2 | oui |
+| Bernardo Godoy | SG | 29 | 59,1 | 240 001 | 982 000 | 982 000 | dans 22,4 h | +3,2 | oui |
+| Teodor Chojnacki | PG | 29 | 52,2 | 10 000 | 500 005 | 500 005 | dans 22,5 h | -4,2 | oui |
 | Kaito Ueda | SG | 31 | 47,3 | 3 000 | 10 250 | 10 250 | dans 22,9 h | -9,3 | oui |
 | Vicente Bacalso | SF | 26 | 38,1 | 0 | 251 | 251 | dans 23,4 h | -17,0 | oui |
 | Ben Abordo | C | 22 | 42,1 | 0 | 4 375 | 4 375 | dans 23,4 h | -17,0 | oui |
