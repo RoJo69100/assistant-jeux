@@ -2,10 +2,8 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
-## Nouvelles (2026-11-10)
+## Nouvelles (2026-11-10 et 2026-11-07)
 N18. Quand je vais lancer `fusion_main.py` → `git fetch origin main && git rebase origin/main` juste avant, tant que mes commits ne sont pas poussés ; jamais de rebase d'une branche déjà poussée (tous les jeux). RÉCIDIVE (2 refus le 2026-11-10) : `hook à écrire` (rebase dans `fusion_main.py`, conception Opus).
-
-## Nouvelles (2026-11-07)
 N15. Quand une vue gold dit « export à refaire » → `select max(captured_at)` sur `bronze.raw_pages` par page_type dans le même tour ; si l'export existe après le calendrier, aucune demande. RÉCIDIVE de l'erreur 83 : `hook à écrire`.
 N16. Quand je recommande un recruté → il figure dans la dernière Prospect Search/Recruiting de la base, date citée dans la ligne ; sinon « à vérifier » (Hardwood).
 N17. Quand je cite une série (« n victoires ») → je la compte par requête (`count`), jamais à l'œil.
