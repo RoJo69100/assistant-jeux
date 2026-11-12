@@ -61,6 +61,9 @@ Constat avant le branchement : `basketvibe-aujourdhui` ne citait pas `pipelines/
 ### Rejets de hooks pendant la Porte
 | Jour | Hook | Ligne rejetée | Correction |
 |---|---|---|---|
+| 2026-11-11 | controle (f) | commentaire « je refais la coupe quand tu auras exporté » | action reportée retirée |
+| 2026-11-11 | forme | adversaires amical « Les 12 (noms inconnus…) \| tous » | ligne retirée, remplacée par « il me manque … cherché dans … » |
+| 2026-11-11 | police H1/H2/H3 | enchères Bui, Correia, Azevedo sans dossier ni police ; achat, composition, vente absents du journal | dossier + police (abandon des 3) ; D-1105, D-1106, D-1107 |
 
 ## Registre d'état (critères écrits le 2026-11-09, avant le code ; jour 1 = 2026-11-09)
 
@@ -1980,4 +1983,6 @@ HEAD dans origin/main : oui
 | 2026-11-10 16:33 | aujourd'hui | 19.5 | 42 |
 | 2026-11-10 16:34 | aujourd'hui | 19.8 | 42 |
 | 2026-11-10 16:37 | aujourd'hui | 18.2 | 42 |
+| 2026-11-11 09:38 | aujourd'hui | 20.1 | 42 |
+| 2026-11-11 09:41 | aujourd'hui | 19.8 | 42 |
 | 2026-11-12 14:51 | aujourd'hui | 20.0 | 42 |
