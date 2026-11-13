@@ -75,8 +75,8 @@ def lire_tactique(base, jour: dt.date) -> list[dict]:
         v = re.search(r"verrou (\d{2}:\d{2})", titre) or re.search(r"(\d{2}:\d{2}) \(verrou\)", titre)
         d = DATE_JM.search(titre)
         date = _jm(jour, d.group(1), d.group(2)) if d else None
-        if date and date < jour:
-            continue  # match déjà joué
+        if date is None or date < jour:
+            continue  # match déjà joué, ou titre sans date : rien ne prouve que c'est ce match (phase 0 : jamais la fiche du match précédent)
         m = re.search(r"contre ([^,]+)", titre) if amical else re.search(r"contre ([^(,]+)", titre) if genre == "coupe" else re.search(r"J\d+ : ([^(,]+)", titre)
         manche = re.search(r"\b(J\d+)\b", titre)
         age = (jour - date_brief).days

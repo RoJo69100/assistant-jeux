@@ -318,8 +318,8 @@ def cas_blocs_2_3():
     yield "test_amical_reglage_teste_nomme", "test E1 niveau B : agressivité 5" in tt and "{'5'}" not in tt \
         and {x[11] for x in composition_lignes(tt)} == {"5"}
 
-    # brief d'hier seulement : jamais repris
-    b_hier = dossier(("2026-11-09-tactique-amical.md", brief_amical(), None))
+    # brief d'hier pour le match précédent (amical du 09/11 contre le même club) : jamais repris
+    b_hier = dossier(("2026-11-09-tactique-amical.md", brief_amical().replace("mer. 11/11", "lun. 09/11"), None))
     l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_hier)
     t = "\n".join(l)
     yield "test_amical_jamais_le_dernier_amical", "| Gimenez |" not in t and "composition de l'amical en préparation" in t and len(c) == 1 \
@@ -335,6 +335,25 @@ def cas_blocs_2_3():
     l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_sans)
     yield "test_anticipation_absente_du_brief_signalee", "Anticipation (hypothèse) : absente du brief" in "\n".join(l) and len(c) == 1 \
         and "décisions de l'adversaire" in c[0]
+
+    # fiche écrite la veille pour ce même match (même adversaire, même date) : reprise si l'aperçu n'a pas changé et si le contrôle V1 passe
+    # (instantané du 12/11 : coupe contre Stare Kotlety du 12/11, fiche du 10/11 « Coupe contre Stare Kotlety (12/11) » en préparation)
+    veille_am = dossier(("2026-11-09-tactique-amical.md", brief_amical(), None))
+    l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=veille_am)
+    yield "test_fiche_de_la_veille_meme_amical_reprise", "| Gimenez |" in "\n".join(l) and c == [] \
+        and any(x.startswith("Fiche du 09/11 reprise") for x in l)
+    hier_lg = lambda quand: dossier(("2026-11-09-tactique.md", brief_ligue(), quand))  # noqa: E731
+    l, c = qfb.bloc_3(donnees_t(capture="2026-11-09T10:00:00"), S, JOUR_T, MAINT, base=hier_lg(datetime_paris(2026, 11, 9, 22)))
+    yield "test_fiche_de_la_veille_meme_match_reprise : aperçu antérieur", "| Gimenez |" in "\n".join(l) and c == [] \
+        and any(x.startswith("Fiche du 09/11 reprise") for x in l)
+    l, c = qfb.bloc_3(donnees_t(capture="2026-11-10T09:00:00"), S, JOUR_T, MAINT, base=hier_lg(datetime_paris(2026, 11, 9, 8)))
+    yield "test_fiche_de_la_veille_refusee : aperçu changé depuis", "composition en préparation" in "\n".join(l) and len(c) == 1
+    bl = {"blesses": T(["name", "injury_return_on"], [("Hadrien Gimenez", "2026-11-15")])}
+    l, c = qfb.bloc_3(donnees_t(capture="2026-11-09T10:00:00", **bl), S, JOUR_T, MAINT, base=hier_lg(datetime_paris(2026, 11, 9, 22)))
+    yield "test_fiche_de_la_veille_refusee : contrôle V1 en échec", "composition en préparation" in "\n".join(l) and len(c) == 1
+    precedent = dossier(("2026-11-09-tactique.md", brief_ligue().replace("mer. 11/11", "lun. 09/11"), datetime_paris(2026, 11, 9, 22)))
+    l, c = qfb.bloc_3(donnees_t(capture="2026-11-09T10:00:00"), S, JOUR_T, MAINT, base=precedent)
+    yield "test_fiche_du_match_precedent_jamais_reprise", "composition en préparation" in "\n".join(l) and len(c) == 1
 
     # --- bloc 3
     l, c = qfb.bloc_3(donnees_t(capture=None), S, JOUR_T, MAINT, base=dossier())

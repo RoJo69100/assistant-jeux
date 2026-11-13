@@ -104,6 +104,9 @@ def cas():
         yield "L1 brief de 5 jours pour un match du jour : signalé", len(tv) == 1 and tv[0]["vieux"] and tv[0]["age"] == 5 \
             and "vieux de 5 jours" in texte(figees(), sources={"tactique": tv})
         yield "L1 brief absent : lecteur vide", src.lire_tactique(tmp + "/inexistant", JOUR) == []
+        # phase 0 : un titre sans date ne prouve pas qu'il s'agit de ce match (jamais la fiche du match précédent)
+        (Path(tmp) / "briefs" / "2026-11-01-tactique.md").write_text(re.sub(r"\d{2}/\d{2}", "", vieux), encoding="utf-8")
+        yield "L1 brief sans date dans le titre : jamais repris", src.lire_tactique(tmp, JOUR) == []
     # L2 : cibles d'achat
     yield "L2 Fujita 150 000", any("Fujita" in l and "150 000" in l for l in lignes)
     yield "L2 Stankevičius 100 000", any("Stankevičius" in l and "100 000" in l for l in lignes)

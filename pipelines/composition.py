@@ -119,6 +119,18 @@ def composer_amical(brief_du_jour, test=None):
     return _saisie((dt.date.fromisoformat(m.group(1)), f, texte), fiche, True, test) if fiche else None
 
 
+def composer_fiche(fichier):
+    """Phase 0 : tableau de saisie de ligue ou de coupe lu dans le brief qu'on lui donne (fiche de la veille pour ce même match) ;
+    None si le fichier n'est pas un brief daté de ligue ou de coupe ou n'a pas de tableaux valides. Ne cherche aucun autre brief."""
+    f = Path(fichier)
+    m = src.BRIEF.match(f.name)
+    if not m or m.group(2) == "-amical" or not f.is_file() or f.stat().st_size == 0:
+        return None
+    texte = f.read_text(encoding="utf-8")
+    fiche = lire_fiche(texte)
+    return _saisie((dt.date.fromisoformat(m.group(1)), f, texte), fiche, False, None) if fiche else None
+
+
 def _saisie(b, fiche, amical, test):
     joueurs, adv = fiche
     notes = []

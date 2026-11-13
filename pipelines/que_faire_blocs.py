@@ -268,6 +268,24 @@ def brief_du_jour(base, jour: dt.date, amical: bool, adversaire: str, genre: str
     return f if lignes and auj.meme_match(comp.adversaire_du_titre(lignes[0]), adversaire) else None
 
 
+def fiche_de_la_veille(base, jour: dt.date, amical: bool, adversaire: str, date_match: dt.date, genre: str = "ligue"):
+    """Brief tactique écrit la veille (`jour` − 1) pour ce même match : son titre nomme l'adversaire et la date du match (« (JJ/MM) »
+    ou « JJ/MM »). Une fiche d'un autre match (même club, autre date) n'est jamais renvoyée. None sinon. Les conditions de reprise
+    (aperçu inchangé, contrôle V1) sont vérifiées par l'appelant."""
+    veille = jour - dt.timedelta(days=1)
+    f = Path(base or BASE) / "briefs" / f"{veille.isoformat()}-tactique{'-amical' if amical else '-coupe' if genre == 'coupe' else ''}.md"
+    if not f.is_file() or f.stat().st_size == 0:
+        return None
+    lignes = f.read_text(encoding="utf-8").splitlines()
+    if not lignes or not auj.meme_match(comp.adversaire_du_titre(lignes[0]), adversaire):
+        return None
+    return f if re.search(rf"(?<!\d){date_match:%d/%m}(?!\d)", lignes[0]) else None
+
+
+def reprise(fichier) -> str:
+    return f"Fiche du {dt.date.fromisoformat(Path(fichier).name[:10]):%d/%m} reprise : même match, aperçu adverse inchangé, contrôle V1 passé"
+
+
 def dernier_export_equipe(donnees):
     """Heure de Paris du dernier export de l'écran Équipe (gold.bv_exports_state) ; None si inconnue."""
     for r in auj.lignes_de(donnees, "gold.bv_exports_state"):
@@ -384,6 +402,12 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
     entete = f"Amical contre {am['match']} ({quand}), heure limite du verrou {am['limite']:%H:%M}"
     f = brief_du_jour(base, jour, True, am["match"])
     tableau = comp.composer_amical(f, test)
+    repris = None
+    if tableau is None:  # phase 0 : fiche de la veille pour ce même amical, reprise si le contrôle V1 passe
+        fv = fiche_de_la_veille(base, jour, True, am["match"], am["date"])
+        tv = comp.composer_amical(fv, test) if fv else None
+        if tv is not None and v1_passe(controle_v1(tv, fv.read_text(encoding="utf-8"), donnees, am["date"])):
+            f, tableau, repris = fv, tv, reprise(fv)
     if tableau is None:
         consigne = (f"lancer l'agent tactique (BasketVibe, amical du {am['date']:%d/%m}, horizon aujourd'hui) : composition de l'amical selon la "
                     "fiche tactique §2 bis, dans l'ordre : minutes aux jeunes de 21 ans ou moins (21 ans), un seul réglage testé "
@@ -391,7 +415,7 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
                     "(fatigue ajoutée de fatigue_amical) ; minutes réparties entre les joueurs ; chiffres cités, hypothèses signalées ; "
                     "jamais reprise du dernier amical ni du dernier brief ; minutes par joueur dans le tableau ; " + consigne_brief(jour, True, am["match"], am["date"]))
         return [entete, "", "composition de l'amical en préparation"], [consigne]
-    lignes, consignes = [entete, "", tableau, ""], []
+    lignes, consignes = [entete, ""] + ([repris] if repris else []) + [tableau, ""], []
     ant = anticipation_du_brief(f)
     lignes.append(ant)
     if ant == ABSENTE:
@@ -445,13 +469,19 @@ def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
             continue
         f = brief_du_jour(base, jour, False, m["adv"], genre)
         tableau = comp.composer(m["adv"], base or BASE, jour, False) if f and fiche_a_jour(f, max(m["captures"]), dernier_export_equipe(donnees)) else comp.AUCUNE
+        repris = None
+        if tableau == comp.AUCUNE:  # phase 0 : fiche de la veille pour ce même match, aperçu adverse inchangé depuis, contrôle V1 passé
+            fv = fiche_de_la_veille(base, jour, False, m["adv"], m["jour"], genre)
+            tv = comp.composer_fiche(fv) if fv and produit_le(fv) >= max(m["captures"]) else None
+            if tv is not None and v1_passe(controle_v1(tv, fv.read_text(encoding="utf-8"), donnees, m["jour"])):
+                f, tableau, repris = fv, tv, reprise(fv)
         if tableau == comp.AUCUNE:
             lignes += ["composition en préparation", ""]
             consignes.append(f"lancer l'agent tactique (BasketVibe, {genre} contre {m['adv']} du {jj}, horizon aujourd'hui) : composition et focus défensif "
                              "par adversaire d'après l'aperçu adverse en base et l'effectif du jour ; chiffres cités, hypothèses signalées ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
             continue
         ant = anticipation_du_brief(f)
-        lignes += [tableau, "", ant]
+        lignes += ([repris] if repris else []) + [tableau, "", ant]
         if ant == ABSENTE:
             consignes.append(f"relancer l'agent tactique (BasketVibe, {genre} contre {m['adv']} du {jj}, horizon aujourd'hui) : ajouter au brief du jour "
                              "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
