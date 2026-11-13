@@ -2,7 +2,7 @@
 
 Ce que l'utilisateur attend de la réponse du jour. Document en blocs, organisé par jour (aujourd'hui, demain), sans heures, sauf l'heure limite du verrou dans la ligne de composition.
 
-**Règle générale** : un bloc contient des données réelles ou une ligne « donnée manquante : exporte X pour l'obtenir ». Jamais un bloc absent. Jamais une commande à lancer par l'utilisateur.
+**Règle générale** : un bloc contient des données réelles ou une ligne « export à faire : X » (phase 0 du 13/11 : « donnée manquante » est refusé par les hooks). Jamais un bloc absent. Jamais une commande à lancer par l'utilisateur.
 
 Producteurs possibles : **script** (pipelines/), **agent** (.claude/agents/), **Claude de session** (requête + raisonnement du tour), **export** (page ouverte par l'utilisateur, collecte passive).
 

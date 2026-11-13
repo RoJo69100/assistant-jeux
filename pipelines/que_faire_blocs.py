@@ -1,7 +1,7 @@
 """Le « que faire » BasketVibe en 11 blocs (étape 5n), gabarit : docs/attentes/gabarit-que-faire-basketvibe.md.
 
 Plan : docs/refonte-v3/plan-5n-que-faire.md. Ce module range les actions de aujourdhui.plan() dans les blocs 0 à 10
-et rend le document. Règle commune : un bloc vide s'écrit « donnée manquante : exporte <écran> », jamais une commande.
+et rend le document. Règle commune : un bloc vide s'écrit « export à faire : <écran> » (phase 0 : « donnée manquante » est refusé par les hooks), jamais une commande.
 """
 import datetime as dt
 import os
@@ -72,10 +72,10 @@ REGLES = [
 
 
 def manque(export: str, debloque: str = "") -> str:
-    """Ligne d'un bloc vide : « donnée manquante : exporte <écran> » (+ « (<ce que ça débloque>) »).
+    """Ligne d'un bloc vide : « export à faire : <écran> » (+ « (<ce que ça débloque>) »).
     Un texte qui porte déjà le verbe (« exporter la page du match ») n'est pas doublé (instantané du 12/11 : « exporte exporter »)."""
     export = re.sub(r"^export(?:er|e)\s+", "", export.strip(), flags=re.IGNORECASE)
-    return f"donnée manquante : exporte {export}" + (f" ({debloque})" if debloque else "")
+    return f"export à faire : {export}" + (f" ({debloque})" if debloque else "")
 
 
 def classer(action: str) -> tuple:
@@ -450,7 +450,7 @@ def _matchs_ligue_coupe(donnees, jour, maintenant):
 
 def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tuple:
     """Bloc 3 : composition de la ligue ou de la coupe, séparée de l'amical (elle exige l'aperçu adverse).
-    Aperçu absent -> « donnée manquante » ; aperçu sans fiche à jour -> consigne de session ; fiche à jour -> tableaux + J-1."""
+    Aperçu absent -> « export à faire » ; aperçu sans fiche à jour -> consigne de session ; fiche à jour -> tableaux + J-1."""
     if donnees.get("apercus_matchs") in (None, "rejeu"):
         return [manque("l'aperçu du prochain match de ligue ou de coupe", "bloc 3")], []
     matchs = _matchs_ligue_coupe(donnees, jour, maintenant)
@@ -498,7 +498,7 @@ CASE_FIABLE_N = 5  # même seuil que le reste du script (ref_n >= 5, aujourdhui.
 
 def vue_illisible(nom: str) -> str:
     """Ligne d'un bloc dont la vue n'a pas pu être lue (revue ciblée 5)."""
-    return f"donnée manquante : vue {nom} illisible"
+    return f"vue {nom} illisible"
 
 
 def tranche_age(age) -> str:
@@ -829,7 +829,7 @@ def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list
     lignes, a_faire = [], []
 
     def export(texte, bloc):
-        a_faire.append(f"- {texte if texte.startswith(('il me manque', 'rejeu non', 'donnée manquante')) else manque(texte)} → bloc {bloc}")
+        a_faire.append(f"- {texte if texte.startswith(('il me manque', 'rejeu non', 'export à faire', 'vue ')) else manque(texte)} → bloc {bloc}")
 
     for t in res.get("exports", []):
         if t.startswith("Marché (enchères) ("):  # R4 : « exporte le Marché (plusieurs pages) (dernier export il y a N h) »
@@ -1051,7 +1051,7 @@ def fautes_bloc_1(rendu: str) -> list:
 
 def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, S, etudes=None, base=None, fait: str = "") -> tuple:
     """(texte des blocs 0 à 10, consignes de session). Les consignes (lancer un agent) ne sont jamais dans le texte. Une vue
-    illisible donne une ligne « donnée manquante : vue <nom> illisible » dans son bloc, sans faire échouer le rendu."""
+    illisible donne une ligne « vue <nom> illisible » dans son bloc, sans faire échouer le rendu."""
     S = S or {}
     etudes = lire_etudes() if etudes is None else etudes
     erreurs = erreurs or {}

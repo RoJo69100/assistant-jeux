@@ -216,6 +216,7 @@ def charger_sql():
     return mod
 
 
+ECHEANCE_CONSEIL = "Conseil {id} à juger, échéance le {jj}"  # phase 0 : « au plus tard » est refusé par le contrôle d'horizon (« plus tard »)
 JOUR_RAPPORT_ACADEMIE = 3  # jeudi (weekday) : rapport du scout, 09:00 heure de la ligue (basketvibe-academie, 01-cycle-hebdomadaire.md l. 2)
 PRIX_NON_SIGNIFICATIF = 1  # phase 0 : un prix de départ ≤ 1 ne permet pas de calculer une marge de revente
 MARCHE_FRAIS_H = 24  # phase 0 : page du Marché « fraîche » (même fenêtre que le compte des captures du bloc 0, 24 h)
@@ -785,7 +786,7 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
             + [t for k, t in INCONNUES_ACADEMIE.items() if vals.get(k) in (None, "")]
         n = len(pros)
         ajoute(None, 3, f"Académie, rapport du {rapport:%d/%m} : {n} prospect{'s' if n > 1 else ''} ; {', '.join(inconnues)}",
-               f"donnée manquante : {', '.join(manquants)}", "gold.bv_academy_prospects")
+               f"valeurs à renseigner : {', '.join(manquants)}", "gold.bv_academy_prospects")
         return
     for p in pros:
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({p['position']}, {p['age']} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
@@ -933,7 +934,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
 
     # 3. Conseils arrivant à échéance
     for c in S.get("conseils", []):
-        ajoute(None, 3, f"Conseil {c['id']} à juger au plus tard le {c['echeance']:%d/%m}", propre(c["conseil"]), "learnings.md")
+        ajoute(None, 3, ECHEANCE_CONSEIL.format(id=c["id"], jj=f"{c['echeance']:%d/%m}"), propre(c["conseil"]), "learnings.md")
 
     # 4. Agenda (aujourd'hui, et demain avant 10:00 après 18:00) : ce que les briefs ne couvrent pas déjà
     m = manque(donnees, erreurs, "gold.bv_agenda", "Équipe (aperçu, joueurs)")

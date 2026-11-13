@@ -29,6 +29,7 @@ ECHANTILLONS = {
     "titre": ["Ligue J4 contre Naked Spartans", "Ligue J4 à Naked Spartans", "Coupe contre Naked Spartans", "Amical contre Opper Cards"],
     "r['match'] or 'Match'": ["Naked Spartans", "Match"],
     "'Ligue' if kind == 'ligue' else 'Coupe'": ["Ligue", "Coupe"],
+    "ECHEANCE_CONSEIL.format(id=c['id'], jj=f\"{c['echeance']:%d/%m}\")": [auj.ECHEANCE_CONSEIL.format(id="C-115", jj="12/11")],
     "tete": ["Académie, rapport du 05/11 : Dupont (PG, 17 ans, TSP 40-60)", "Acheter un PG de note ≥ 60"],
     "ent[1]": ["Entraînement (fin du cycle dimanche 04:00) : corrige 2 écarts à l'écran",
                "Entraînement (fin du cycle dimanche 04:00) : il me manque la fiche de l'agent Entraînement",
@@ -91,8 +92,8 @@ def textes_des_appels():
 
 
 def cas():
-    yield "test_manque_format", qfb.manque("l'aperçu du match de ligue du 11/11") == "donnée manquante : exporte l'aperçu du match de ligue du 11/11"
-    yield "test_manque_avec_deblocage", qfb.manque("Marché", "bloc 4") == "donnée manquante : exporte Marché (bloc 4)"
+    yield "test_manque_format", qfb.manque("l'aperçu du match de ligue du 11/11") == "export à faire : l'aperçu du match de ligue du 11/11"
+    yield "test_manque_avec_deblocage", qfb.manque("Marché", "bloc 4") == "export à faire : Marché (bloc 4)"
 
     for texte in ("lance l'agent tactique", "relance l'agent analyste", "puis python -I pipelines/sql.py", "exécute le script",
                   "voir pipelines/aujourdhui.py", "Python"):
@@ -358,7 +359,7 @@ def cas_blocs_2_3():
     # --- bloc 3
     l, c = qfb.bloc_3(donnees_t(capture=None), S, JOUR_T, MAINT, base=dossier())
     t = "\n".join(l)
-    yield "test_ligue_apercu_absent", "donnée manquante : exporte l'aperçu du match de ligue du 11/11" in t and qfb.INTERDITS.search(t) is None and c == []
+    yield "test_ligue_apercu_absent", "export à faire : l'aperçu du match de ligue du 11/11" in t and qfb.INTERDITS.search(t) is None and c == []
 
     l, c = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=dossier())
     t = "\n".join(l)
@@ -681,9 +682,9 @@ def cas_bloc_4():
 
     # vue illisible : le bloc ne plante pas, la ligne dit laquelle
     ill = "\n".join(qfb.bloc_4(donnees_4(prix_cases=None, annonces_24h=None, vendre=None), {}, 300000, 1.0))
-    yield "test_bloc_4_vue_illisible", all(f"donnée manquante : vue {v} illisible" in ill for v in ("prix_cases", "annonces_24h", "vendre"))
+    yield "test_bloc_4_vue_illisible", all(f"vue {v} illisible" in ill for v in ("prix_cases", "annonces_24h", "vendre"))
     ill2 = "\n".join(qfb.bloc_4(donnees_4(**{"gold.bv_sell_replacement": None}), {}, 300000, 1.0))
-    yield "test_bloc_4_vue_illisible : remplaçants", "donnée manquante : vue gold.bv_sell_replacement illisible" in ill2 and "Maël Bernard" not in ill2.split("Qui vendre")[-1]
+    yield "test_bloc_4_vue_illisible : remplaçants", "vue gold.bv_sell_replacement illisible" in ill2 and "Maël Bernard" not in ill2.split("Qui vendre")[-1]
     # A4 : jointure par player_id, deux homonymes ne se mélangent pas
     hom_c = T(["player_id", "name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"],
               [("h1", "Jean Dupont", "PG", 25, 50.0, 20000, "PG", 3, 10.0, False), ("h2", "Jean Dupont", "C", 25, 50.0, 21000, "C", 4, 5.0, False)])
@@ -790,33 +791,33 @@ def cas_t5():
     t0 = "\n".join(qfb.bloc_0(donnees_t5(), res, et, JOUR_T, MAINT))
     L0 = t0.splitlines()
     yield "test_bloc_0_cite_le_bloc_debloque", all("→ bloc" in l for l in L0 if l.startswith("- ")) and len(L0) >= 6
-    yield "test_bloc_0_cite_le_bloc_debloque : valeurs", "exporte Équipe (aperçu, joueurs) (30 h) → bloc 3" in t0 \
-        and "exporte historique global des transferts depuis 2026-11-05 → bloc 4" in t0 and "- donnée manquante : exporte Entraînement, Finances et Personnel → bloc 9" in t0
-    # instantané du 12/11 : « donnée manquante : exporte exporter la page du match → bloc 2 »
+    yield "test_bloc_0_cite_le_bloc_debloque : valeurs", "export à faire : Équipe (aperçu, joueurs) (30 h) → bloc 3" in t0 \
+        and "export à faire : historique global des transferts depuis 2026-11-05 → bloc 4" in t0 and "- export à faire : Entraînement, Finances et Personnel → bloc 9" in t0
+    # instantané du 12/11 : « export à faire : exporter la page du match → bloc 2 »
     r12 = {"exports": [], "actions": [(None, 2, "Après l'amical (~08:55) : exporter la page du match", "", "s")]}
     t12 = "\n".join(qfb.bloc_0(donnees_t5(), r12, et, JOUR_T, MAINT))
-    yield "test_bloc_0_pas_exporte_exporter", "exporte exporter" not in t0 + t12 and "exporte la page du match →" in t12 \
-        and qfb.manque("exporter la page Académie") == "donnée manquante : exporte la page Académie"
+    yield "test_bloc_0_pas_exporte_exporter", "exporte exporter" not in t0 + t12 and "export à faire : la page du match →" in t12 \
+        and qfb.manque("exporter la page Académie") == "export à faire : la page Académie"
     yield "test_bloc_0_une_action_hors_export_absente", "Vendre Dupont" not in t0
-    yield "test_bloc_0_apercu_absent_par_match", "donnée manquante : exporte l'aperçu du match de ligue du 11/11 → bloc 3" in "\n".join(
+    yield "test_bloc_0_apercu_absent_par_match", "export à faire : l'aperçu du match de ligue du 11/11 → bloc 3" in "\n".join(
         qfb.bloc_0(donnees_t5(**donnees_t(capture=None)), {"exports": [], "actions": []}, [], JOUR_T, MAINT)) and t0.count("l'aperçu du match de ligue du 11/11") == 0
     ill = "\n".join(qfb.bloc_0(donnees_t5(apercus_matchs=None), {"exports": [], "actions": []}, [], JOUR_T, MAINT))
-    yield "test_bloc_0_apercu_illisible", "donnée manquante : exporte l'aperçu du prochain match de ligue ou de coupe → bloc 3" in ill
+    yield "test_bloc_0_apercu_illisible", "export à faire : l'aperçu du prochain match de ligue ou de coupe → bloc 3" in ill
     yield "test_bloc_0_marche_affiche_le_compte_sans_seuil", "Marché : 1 capture, 20 annonces vues depuis 24 h (dernière le 09/11) → bloc 4" in t0
     yield "test_bloc_0_exports_hebdomadaires : 100 h non réclamé", "Équipes de la ligue" not in t0 and "Transferts de la ligue" not in t0
-    yield "test_bloc_0_exports_hebdomadaires : 170 h réclamé", "exporte l'onglet Joueurs de la ligue (dernier export il y a 170 h) → blocs 5 et 6" in t0
+    yield "test_bloc_0_exports_hebdomadaires : 170 h réclamé", "export à faire : l'onglet Joueurs de la ligue (dernier export il y a 170 h) → blocs 5 et 6" in t0
     m51 = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": ["Marché (enchères) (51 h)"], "actions": []}, [], JOUR_T, MAINT))
-    yield "test_bloc_0_marche_perime (R4)", "- donnée manquante : exporte le Marché (plusieurs pages) (dernier export il y a 51 h) → bloc 4" in m51 \
+    yield "test_bloc_0_marche_perime (R4)", "- export à faire : le Marché (plusieurs pages) (dernier export il y a 51 h) → bloc 4" in m51 \
         and "Marché (enchères)" not in m51
     mj = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": ["Marché (enchères) (jamais exporté)"], "actions": []}, [], JOUR_T, MAINT))
-    yield "test_bloc_0_marche_jamais_exporte (R4)", "- donnée manquante : exporte le Marché (plusieurs pages) (jamais exporté) → bloc 4" in mj
+    yield "test_bloc_0_marche_jamais_exporte (R4)", "- export à faire : le Marché (plusieurs pages) (jamais exporté) → bloc 4" in mj
     yield "test_bloc_0_marche_a_jour_pas_de_demande (R4)", "exporte le Marché" not in "\n".join(qfb.bloc_0(donnees_t5(), {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     vieux = "\n".join(qfb.bloc_0(donnees_t5(heb=[("standings_teams", (MAINT - dt.timedelta(hours=1)).isoformat()), ("standings_transfers", (MAINT - dt.timedelta(hours=900)).isoformat())]),
                                  {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     yield "test_bloc_0_onglet_transferts_jamais_reclame (déjà dans l'historique global)", "Transferts de la ligue" not in vieux \
         and all(pt != "standings_transfers" for pt, _ in qfb.HEBDO) and "standings_transfers" not in auj.REQUETES["exports_hebdo"]
-    yield "test_bloc_0_exports_hebdomadaires : jamais capturé réclamé", "exporte l'onglet Blessés de la ligue (jamais exporté) → blocs 5 et 6" in t0
-    yield "test_bloc_0_exports_hebdomadaires : pages club réclamées", "exporte une page /c/<club> d'un club adverse (dernier export il y a 200 h) → blocs 5 et 6" in t0
+    yield "test_bloc_0_exports_hebdomadaires : jamais capturé réclamé", "export à faire : l'onglet Blessés de la ligue (jamais exporté) → blocs 5 et 6" in t0
+    yield "test_bloc_0_exports_hebdomadaires : pages club réclamées", "export à faire : une page /c/<club> d'un club adverse (dernier export il y a 200 h) → blocs 5 et 6" in t0
     # R2 (test réécrit : l'ancien attendait le texte complet de la demande au bloc 0) : forme courte au bloc 0, texte complet au bloc 6 seulement
     yield "test_bloc_0_demandes_courtes", "- exporte la page des réglages utilisés vue côté adversaire (étude du 09/11) → bloc 6" in t0 \
         and "- exporte la page Équipe des clubs de tête (étude du 10/11) → bloc 6" in t0 and "parce que" not in t0 and "Pour comprendre" not in t0 \
@@ -831,9 +832,9 @@ def cas_t5():
                                                   ("standings_teams", "standings_players", "standings_injuries", "standings_transfers", "club_adverse")]),
                                   {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     yield "test_bloc_0_tout_a_jour_n_est_pas_vide", "aucun export à refaire" in toutes and "donnée manquante" not in toutes
-    yield "test_bloc_0_vue_illisible", "donnée manquante : vue exports_hebdo illisible" in "\n".join(
+    yield "test_bloc_0_vue_illisible", "vue exports_hebdo illisible" in "\n".join(
         qfb.bloc_0(donnees_t5(exports_hebdo=None, captures_marche=None), {"exports": [], "actions": []}, [], JOUR_T, MAINT)) \
-        and "donnée manquante : vue captures_marche illisible" in "\n".join(
+        and "vue captures_marche illisible" in "\n".join(
         qfb.bloc_0(donnees_t5(exports_hebdo=None, captures_marche=None), {"exports": [], "actions": []}, [], JOUR_T, MAINT))
     yield "test_requete_matchs_captes_existe", "matchs_captes" in auj.REQUETES and "min(p.captured_at)" in auj.REQUETES["matchs_captes"] \
         and "bronze.raw_pages" in auj.REQUETES["matchs_captes"]
@@ -886,19 +887,19 @@ def cas_t5():
     yield "test_matchs_ajoutes_fenetre_hier", qfb.bloc_6(donnees_t5(matchs_captes=T(["kind", "premiere_jour"], [("match", "2026-11-08"), ("friendly", "2026-11-09")])),
                                                         etu, jour)[0][0].startswith("matchs ajoutés : 2 (ligue 0, amical 1 ; autres clubs 1)")
     l_ill = qfb.bloc_6(donnees_t5(matchs_captes=None), etu, jour)[0][0]
-    yield "test_matchs_ajoutes_vue_illisible", l_ill.startswith("matchs ajoutés : donnée manquante : vue matchs_captes illisible · 10 en base · étude à jour au 08/11, 3 de nos matchs pas encore étudiés ; 1 d'autres clubs")
+    yield "test_matchs_ajoutes_vue_illisible", l_ill.startswith("matchs ajoutés : vue matchs_captes illisible · 10 en base · étude à jour au 08/11, 3 de nos matchs pas encore étudiés ; 1 d'autres clubs")
     # A7 : autres clubs dans la ligne ; k et le déclencheur ne comptent que nos matchs
     yield "test_matchs_autres_clubs_dans_la_ligne", qfb.bloc_6(donnees_t5(), etu, jour)[0][0] == "matchs ajoutés : 4 (ligue 2, amical 1 ; autres clubs 1) · 10 en base · étude à jour au 08/11, 3 de nos matchs pas encore étudiés ; 1 d'autres clubs"
     yield "test_matchs_autres_clubs_zero", "autres clubs 0) · 7 en base" in qfb.bloc_6(donnees_t5(matchs_autres=T(["premiere_jour"], [])), etu, jour)[0][0]
     yield "test_matchs_autres_clubs_jamais_captes_comptes_en_base_pas_ajoutes", "autres clubs 0) · 8 en base" in qfb.bloc_6(
         donnees_t5(matchs_autres=T(["premiere_jour"], [(None,)])), etu, jour)[0][0]
     yield "test_matchs_autres_clubs_vue_illisible", qfb.bloc_6(donnees_t5(matchs_autres=None), etu, jour)[0][0].startswith(
-        "matchs ajoutés : 3 (ligue 2, amical 1 ; autres clubs donnée manquante : vue matchs_autres illisible) · 7 en base · étude à jour au 08/11, 3 de nos matchs pas encore étudiés")
+        "matchs ajoutés : 3 (ligue 2, amical 1 ; autres clubs vue matchs_autres illisible) · 7 en base · étude à jour au 08/11, 3 de nos matchs pas encore étudiés")
     seuls_autres = donnees_t5(matchs_ajoutes=T(["day", "competition_kind", "n"], [("2026-11-08", "amical", 1)]), matchs_autres=T(["premiere_jour"], [("2026-11-10",)] * 5))
     l_a, c_a = qfb.bloc_6(seuls_autres, etu, jour)
     yield "test_matchs_autres_clubs_ne_declenchent_pas_l_etude_et_hors_de_k", c_a == [] and "0 de nos matchs pas encore étudiés ; 5 d'autres clubs" in l_a[0]
     yield "test_requete_matchs_autres_existe", "matchs_autres" in auj.REQUETES and "silver.bv_matches" in auj.REQUETES["matchs_autres"] and "not exists" in auj.REQUETES["matchs_autres"]
-    yield "test_bloc_6_vue_illisible", "donnée manquante : vue matchs_ajoutes illisible" in "\n".join(qfb.bloc_6(donnees_t5(matchs_ajoutes=None), etu, jour)[0])
+    yield "test_bloc_6_vue_illisible", "vue matchs_ajoutes illisible" in "\n".join(qfb.bloc_6(donnees_t5(matchs_ajoutes=None), etu, jour)[0])
 
     # avancement des expériences et prochaine hypothèse
     exp = {"debut": "2026-11-10", "faits": [], "file": [{"id": "E1", "reglage": "agressivité défensive", "niveaux": {"A": "agressivité 3", "B": "agressivité 5"},
@@ -966,7 +967,7 @@ def cas_t6():
     yield "test_bloc_7_ligne_d_etat_toujours : défaite analysée", qfb.bloc_7([], defaite, analyste=dt.date(2026, 11, 9))[0] == "défaite du 09/11 : analyse faite"
     gagne = donnees_t6(dernier_officiel=T(OFFICIEL_COLS, [("2026-11-09", "ligue", "Naked Spartans", "W")]))
     yield "test_bloc_7_ligne_d_etat_toujours : aucune défaite", qfb.bloc_7([], gagne)[0] == "aucune défaite de ligue ou de coupe non analysée"
-    yield "test_bloc_7_ligne_d_etat_toujours : vue illisible", qfb.bloc_7([], donnees_t6(dernier_officiel=None))[0] == "donnée manquante : vue dernier_officiel illisible"
+    yield "test_bloc_7_ligne_d_etat_toujours : vue illisible", qfb.bloc_7([], donnees_t6(dernier_officiel=None))[0] == "vue dernier_officiel illisible"
     l7 = qfb.bloc_7(res_t6()["actions"], defaite)
     yield "test_bloc_7_puis_les_lignes_du_plan", l7[0].startswith("défaite du") and any("défaite du 09/11 contre Naked Spartans, 3 défaites" in x for x in l7) \
         and not any("lance l'agent" in x for x in l7)
@@ -1012,10 +1013,10 @@ def cas_t6():
     r_ill = dict(res_t6(), actions=res_t6()["actions"] + [(None, 3, "il me manque gold.bv_finance_health (timeout) — export Finances", "", "s")])
     t_ill, _ = qfb.rendre_blocs(r_ill, donnees_t6(**{"gold.bv_finance_health": None}), {"gold.bv_finance_health": "timeout"}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
     bloc8 = t_ill.split("## Bloc 8 — ")[1].split("## Bloc 9 — ")[0]
-    yield "test_vue_illisible_ne_plante_pas", "donnée manquante : vue gold.bv_finance_health illisible" in bloc8 and "il me manque gold.bv_finance_health" not in bloc8
+    yield "test_vue_illisible_ne_plante_pas", "vue gold.bv_finance_health illisible" in bloc8 and "il me manque gold.bv_finance_health" not in bloc8
     t_ill2, _ = qfb.rendre_blocs(res_t6(), donnees_t6(prix_cases=None, matchs_ajoutes=None, exports_hebdo=None, dernier_officiel=None),
                                  {"prix_cases": "x", "matchs_ajoutes": "x", "exports_hebdo": "x", "dernier_officiel": "x"}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
-    yield "test_vue_illisible_dans_chaque_bloc", all(f"donnée manquante : vue {v} illisible" in t_ill2 for v in ("prix_cases", "matchs_ajoutes", "exports_hebdo", "dernier_officiel"))
+    yield "test_vue_illisible_dans_chaque_bloc", all(f"vue {v} illisible" in t_ill2 for v in ("prix_cases", "matchs_ajoutes", "exports_hebdo", "dernier_officiel"))
 
 
 # ---- A1 : demandes traitées (docs/etudes/demandes-traitees.md) -----------------------------------------------------
@@ -1064,6 +1065,17 @@ def cas_r1():
     etu = etudes_de({"2026-11-10-carte-faisabilite.md": CARTE})
     texte, _ = qfb.rendre_blocs(res_t6(), donnees_t6(), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
     yield "test_r1_rendu_complet : aucune ligne du bloc 0 ne manque au bloc 1", qfb.fautes_bloc_1(texte) == []
+    # instantané du 12/11 : « donnée manquante : exporte … » et « Conseil C-115 à juger au plus tard le 12/11 » refusés par les hooks
+    import controle  # noqa: E402
+    import police  # noqa: E402
+    conseil = [(None, 3, "Conseil C-115 à juger au plus tard le 12/11", "", "learnings.md")]
+    r9 = res_t6()
+    t9, _ = qfb.rendre_blocs(r9, donnees_t6(prix_cases=None), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
+    yield "test_mots_acceptes_par_les_hooks : rendu complet", not police.MANQUE.search(police.norm(t9)) \
+        and "donnée manquante" not in t9 and "export à faire : " in t9
+    yield "test_mots_acceptes_par_les_hooks : conseil à échéance", "plus tard" not in auj.__dict__["ECHEANCE_CONSEIL"].format(id="C-115", jj="12/11") \
+        and not controle.reports("| Priorité | Catégorie | Action |\n|---|---|---|\n| 🟩 SUIVI | Analyse | "
+                                 + auj.ECHEANCE_CONSEIL.format(id="C-115", jj="12/11") + " |\n") and conseil
     b1 = qfb.section(texte, 1)
     b0 = [l for l in qfb.section(texte, 0).splitlines() if l.startswith("- ")]
     yield "test_r1_rendu_complet : le bloc 0 a des lignes et chacune renvoie au bloc 0 dans le bloc 1", len(b0) >= 2 and all(
@@ -1074,7 +1086,7 @@ def cas_r1():
     t12, _ = qfb.rendre_blocs(r12, donnees_t6(), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
     b1_12 = qfb.section(t12, 1)
     yield "test_r1_un_libelle_par_export : une seule ligne, renvoi au bloc 0", b1_12.count("la page du match") == 1 \
-        and "exporte la page du match → bloc 0 |" in b1_12 and qfb.fautes_bloc_1(t12) == [] \
+        and "export à faire : la page du match → bloc 0 |" in b1_12 and qfb.fautes_bloc_1(t12) == [] \
         and not re.search(r"\| Export \|[^\n]*→ bloc [1-9]", b1_12)
     yield "test_r1_composition_amical_et_ligue : une ligne par match des blocs 2 et 3, avec son bloc", \
         re.search(r"\| Composition \| Composition : Amical contre .*\(.+\d\d/\d\d\) → bloc 2 \|", b1) is not None \
@@ -1087,9 +1099,9 @@ def cas_r1():
                 if "Launceston" in l]
     yield "test_r1_pas_de_doublon_avec_une_action_du_plan", len(ligne_am) == 1
     # complément seul : exports du bloc 0 en catégorie Export, jamais d'heure, aucun « | » cassant le tableau
-    comp = qfb.complements_bloc_1(["- donnée manquante : exporte X | Y → bloc 3", "- aucun export à refaire : toutes les pages suivies sont à jour"], [], [], [], JOUR_T)
+    comp = qfb.complements_bloc_1(["- export à faire : X | Y → bloc 3", "- aucun export à refaire : toutes les pages suivies sont à jour"], [], [], [], JOUR_T)
     tb = "\n".join(qfb.bloc_1([], JOUR_T, comp))
-    yield "test_r1_export_du_bloc_0 : catégorie Export, « | » remplacé, « aucun export » non repris", "| Export | donnée manquante : exporte X / Y → bloc 0 |" in tb \
+    yield "test_r1_export_du_bloc_0 : catégorie Export, « | » remplacé, « aucun export » non repris", "| Export | export à faire : X / Y → bloc 0 |" in tb \
         and "aucun export à refaire" not in tb and forme.fautes_tableaux(tb, "basketvibe") == []
     # défaut réel : la première sortie réelle (journal, T8, 10/11) a un bloc 1 sans les lignes du bloc 0
     journal = (Path(__file__).resolve().parent.parent / "docs" / "refonte-v3" / "journal-aujourdhui.md").read_text(encoding="utf-8")
@@ -1175,7 +1187,7 @@ def cas_a2():
     # veille (samedi 14/11) : dernier export le 08/11
     sam = demande_entrainement(dt.date(2026, 11, 14), "2026-11-08T11:08:00")
     yield "test_entrainement_veille_du_traitement", len(sam) == 1 and "veille du traitement" in sam[0] and "dimanche 15/11" in sam[0] \
-        and sam[0].startswith("- donnée manquante : exporte la page Entraînement aujourd'hui") and sam[0].endswith("→ blocs 9 et 6")
+        and sam[0].startswith("- export à faire : la page Entraînement aujourd'hui") and sam[0].endswith("→ blocs 9 et 6")
     yield "test_entrainement_veille_deja_exportee_aujourd_hui", demande_entrainement(dt.date(2026, 11, 14), "2026-11-14T09:00:00") == []
     # lendemain (lundi 16/11) : dernier export avant le traitement de dimanche 04:00
     lun = demande_entrainement(dt.date(2026, 11, 16), "2026-11-14T18:00:00")

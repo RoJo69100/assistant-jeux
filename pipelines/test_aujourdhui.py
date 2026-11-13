@@ -779,7 +779,7 @@ def cas_academie():
     manque = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": (["key", "value"], [])})
     yield "L5 (remplace K3) deux données manquantes : UNE ligne pour le rapport, qui nomme les deux", \
         len(manque) == 1 and manque[0][2] == "Académie, rapport du 05/11 : 3 prospects ; valeur d'un High inconnue, coût du test inconnu" \
-        and manque[0][3] == "donnée manquante : core.game_params.academie_valeur_high, core.game_params.academie_cout_test"
+        and manque[0][3] == "valeurs à renseigner : core.game_params.academie_valeur_high, core.game_params.academie_cout_test"
     une = lignes({"prospects": PROS, "cote_potentiel": COTE, "valeurs_academie": (["key", "value"], [("academie_cout_test", 25000)])})
     yield "L5 présent : coût du test en base, valeur d'un High absente → « 3 prospects ; valeur d'un High inconnue »", \
         len(une) == 1 and une[0][2] == "Académie, rapport du 05/11 : 3 prospects ; valeur d'un High inconnue" \
