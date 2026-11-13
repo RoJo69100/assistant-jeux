@@ -291,10 +291,11 @@ def _virgule(x) -> str:
     return f"{float(x):.1f}".replace(".", ",")
 
 
-def verifier_j_moins_1(tableau: str, donnees) -> list:
+def verifier_j_moins_1(tableau: str, donnees, genre: str = None, jour_match: dt.date = None, adversaire: str = None) -> list:
     """Une ligne « Écart J-1 » par joueur du tableau de saisie signalé blessé, en forme basse ou hors zone verte de fatigue
     (gold.bv_daily_alerts), dont la fatigue projetée dépasse la zone verte (fatigue_avant_match) ou vendu depuis
-    (transferts_recents où achete est faux). Compare à l'effectif du jour."""
+    (transferts_recents où achete est faux). Compare à l'effectif du jour. La fatigue projetée ne compte que pour le match du
+    tableau (genre, date, adversaire) ; sans match donné, aucune (instantané du 12/11 : fatigue d'un autre match affichée)."""
     noms = []
     for cols, lignes in forme.tableaux(tableau):
         if cols and cols[0] == "joueur" and forme.idx(cols, "q1") >= 0:
@@ -314,6 +315,9 @@ def verifier_j_moins_1(tableau: str, donnees) -> list:
             if m and est(n, m.group(1)):
                 sortie.append(f"Écart J-1 : {n} — {r['alert']}")
     for r in auj.lignes_de(donnees, "fatigue_avant_match"):
+        if genre is None or r["kind"] != genre or auj.en_date(r["match_day"]) != jour_match \
+                or not auj.meme_match(str(r["opponent"]), adversaire or ""):
+            continue
         for n in noms:
             if est(n, r["joueur"]):
                 sortie.append(f"Écart J-1 : {n} — fatigue projetée {_virgule(r['sat_fatigue'])} au match de {r['kind']} du "
@@ -357,7 +361,7 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         lignes.append("Fatigue ajoutée aux titulaires de la ligue du soir : "
                       + " ; ".join(f"{r['joueur']} +{_virgule(r['fatigue_ajoutee'])}" for r in du_jour) if du_jour
                       else manque("l'amical saisi (page du match)", "fatigue ajoutée aux titulaires de la ligue du soir"))
-    lignes += verifier_j_moins_1(tableau, donnees)
+    lignes += verifier_j_moins_1(tableau, donnees, "amical", am["date"], am["match"])
     return lignes, consignes
 
 
@@ -408,7 +412,7 @@ def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         if ant == ABSENTE:
             consignes.append(f"relancer l'agent tactique (BasketVibe, {genre} contre {m['adv']} du {jj}, horizon aujourd'hui) : ajouter au brief du jour "
                              "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
-        lignes += verifier_j_moins_1(tableau, donnees) + [""]
+        lignes += verifier_j_moins_1(tableau, donnees, genre, m["jour"], m["adv"]) + [""]
     return lignes, consignes
 
 

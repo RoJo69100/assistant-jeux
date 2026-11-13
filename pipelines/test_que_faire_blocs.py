@@ -386,6 +386,9 @@ def cas_blocs_2_3():
         ecarts = [x for x in l if x.startswith("Écart J-1")]
         for joueur, motif in (("Gimenez", "blessé"), ("Bonnet", "fatigue"), ("Albano", "fatigue"), ("Richard", "vendu")):
             trouve = [x for x in ecarts if joueur in x]
+            if nom == "bloc 2" and joueur == "Albano":  # fatigue projetée du match de ligue : pas sous la composition de l'amical
+                yield f"test_j_moins_1_signale_blesse_fatigue_vendu : {nom} : {joueur} absent", trouve == []
+                continue
             yield f"test_j_moins_1_signale_blesse_fatigue_vendu : {nom} : {joueur}", len(trouve) == 1 and motif in trouve[0]
         yield f"test_j_moins_1 : {nom} : ni Fournier acheté ni joueur absent du tableau", not any("Fournier" in x or "Inconnue" in x for x in ecarts)
         yield f"test_j_moins_1 : {nom} : écarts passent forme", forme.fautes_de("\n".join(l), "basketvibe") == []
@@ -402,6 +405,18 @@ def cas_blocs_2_3():
     yield "test_j_moins_1_nom_annote_age : vendu et blessé encore signalés", any("Richard" in x and "vendu" in x for x in ecarts_annote) \
         and any("Gimenez" in x and "blessé" in x for x in ecarts_annote)
     yield "test_j_moins_1_aucun_ecart", qfb.verifier_j_moins_1(JOUEURS, donnees_t()) == []
+    # instantané du 12/11 : coupe du 12/11 contre Stare Kotlety et ligue du 14/11 contre BC Gelrode ; la fatigue projetée d'un match
+    # ne s'affiche que sous la composition de ce match
+    fam = T(["kind", "match_day", "opponent", "joueur", "minutes", "defense_tier", "sat_fatigue", "zone_verte"],
+            [("coupe", "2026-11-12", "Stare Kotlety", "Bonnet", 36, 2, 24.5, 20), ("ligue", "2026-11-14", "BC Gelrode", "Fournier", 36, 2, 22.0, 20)])
+    dfm = donnees_t(**{"fatigue_avant_match": fam})
+    e_lg = qfb.verifier_j_moins_1(JOUEURS, dfm, "ligue", dt.date(2026, 11, 14), "BC Gelrode")
+    e_cp = qfb.verifier_j_moins_1(JOUEURS, dfm, "coupe", dt.date(2026, 11, 12), "Stare Kotlety")
+    e_am = qfb.verifier_j_moins_1(JOUEURS, dfm, "amical", dt.date(2026, 11, 13), "Hapoel Nehamia(Galil)")
+    yield "test_j_moins_1_filtre_par_match_et_adversaire", [x for x in e_lg if "fatigue projetée" in x] == [
+        "Écart J-1 : Fournier — fatigue projetée 22,0 au match de ligue du 14/11 contre BC Gelrode (zone verte 20)"] \
+        and all("Stare Kotlety" in x for x in e_cp if "fatigue projetée" in x) and len([x for x in e_cp if "fatigue projetée" in x]) == 1 \
+        and not any("fatigue projetée" in x for x in e_am)
     yield "test_j_moins_1_forme_basse", any("Gimenez" in x for x in qfb.verifier_j_moins_1(JOUEURS, donnees_t(**{"gold.bv_daily_alerts": T(
         ["priority", "category", "alert"], [(2, "forme", "Marc Gimenez : forme 2 (attaque −8 %)")])})))
 
