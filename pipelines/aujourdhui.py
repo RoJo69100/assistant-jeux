@@ -216,6 +216,7 @@ def charger_sql():
     return mod
 
 
+JOUR_RAPPORT_ACADEMIE = 3  # jeudi (weekday) : rapport du scout, 09:00 heure de la ligue (basketvibe-academie, 01-cycle-hebdomadaire.md l. 2)
 PRIX_NON_SIGNIFICATIF = 1  # phase 0 : un prix de départ ≤ 1 ne permet pas de calculer une marge de revente
 MARCHE_FRAIS_H = 24  # phase 0 : page du Marché « fraîche » (même fenêtre que le compte des captures du bloc 0, 24 h)
 PARALLELE = 8  # requêtes simultanées (K1, étape 5e) : elles sont indépendantes ; l'ordre du résultat reste celui de REQUETES
@@ -760,6 +761,14 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
     manque → UNE ligne pour tout le rapport (« n prospects ; valeur d'un High inconnue »), pas une par prospect.
     « signer » demande le résultat d'un test, absent de la base : jamais rendu. Vue absente ou rapport ancien : rien."""
     pros = lignes_de(donnees, "prospects")
+    du_jour = bool(pros) and en_heure(pros[0]["rapport_paris"]).date() == maintenant.date()
+    if maintenant.weekday() == JOUR_RAPPORT_ACADEMIE and not du_jour \
+            and not any(norm(c["nom"]) == "academie" and c["jour"] >= maintenant.date() for c in cles):
+        # phase 0 (jeudi 12/11) : le rapport du scout du jour appelle une décision, même avant son export
+        ajoute(None, 2, f"Académie, rapport du jeudi {maintenant:%d/%m} : décision requise",
+               "exporte la page Académie (nouveau rapport du scout du jeudi), puis tester, signer ou ignorer chaque prospect",
+               "skill basketvibe-academie, references/01-cycle-hebdomadaire.md l. 2")
+        return
     if not pros:
         return
     rapport = en_heure(pros[0]["rapport_paris"])

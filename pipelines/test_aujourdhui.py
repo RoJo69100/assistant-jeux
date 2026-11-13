@@ -801,6 +801,18 @@ def cas_academie():
         lignes({"prospects": PROS, "cote_potentiel": COTE}, [cle]) == []
     ancien = dict(cle, jour=dt.date(2026, 11, 4))
     yield "K3 présent : clé Académie antérieure au rapport, la ligne reste (une seule, L5)", len(lignes({"prospects": PROS}, [ancien])) == 1
+    # instantané du jeudi 12/11 : rapport du 05/11 en base, nouveau rapport du jour pas encore exporté : aucune ligne d'académie
+    def jeudi(donnees, cles=(), quand=dt.datetime(2026, 11, 12, 14, 51)):
+        A = []
+        auj.academie(donnees, {}, list(cles), quand, lambda *a: A.append(a))
+        return A
+    j12 = jeudi({"prospects": PROS, "cote_potentiel": COTE})
+    yield "Académie jeudi 12/11 : une ligne priorité 2 « décision requise »", len(j12) == 1 and j12[0][1] == 2 \
+        and j12[0][2] == "Académie, rapport du jeudi 12/11 : décision requise"
+    yield "Académie jeudi sans aucun rapport en base : la ligne reste", len(jeudi({})) == 1
+    yield "Académie vendredi 13/11 : aucune ligne", jeudi({"prospects": PROS}, quand=dt.datetime(2026, 11, 13, 9, 0)) == []
+    yield "Académie jeudi, décision déclarée au registre du jour : aucune ligne", \
+        jeudi({"prospects": PROS}, [dict(cle, jour=dt.date(2026, 11, 12))]) == []
 
 
 COLS_REMP = ["name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary",
