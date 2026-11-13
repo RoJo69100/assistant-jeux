@@ -616,6 +616,11 @@ def cas_bloc_4():
     cases = [l for l in t.splitlines() if re.match(r"\| (≤21|22-25|26-29|30\+) \| \d\d ", l)]
     yield "test_table_prix_une_ligne_par_case", len(cases) == 4
     yield "test_table_prix_colonnes", all(x in t for x in ("Prix bas", "Médian", "Prix haut", "Dernière vente", "93 888", "08/11"))
+    # instantané du 12/11 : Bērziņš à 726 750 dans l'action et 999 000 dans le tableau ; un seul plafond, celui de l'action
+    act = [(None, 2, "Enchère maximale 80 000 sur Paul Aubert (PG, PS 47.0)", "plafond de revente (95 % du p25)", "s")]
+    t_pl = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, 1.0, act))
+    ligne_aubert = next((l for l in t_pl.splitlines() if l.startswith("| Paul Aubert")), "")
+    yield "test_bloc_4_un_seul_plafond", "| 80 000 |" in ligne_aubert and "93 888" not in ligne_aubert.split("|")[7]
     yield "test_requetes_bloc_4_existent", all(k in auj.REQUETES for k in ("prix_cases", "annonces_24h", "vendre", "annonces_export"))
 
     # achetable : prix <= médiane de la case, case fiable, dans la capacité restante

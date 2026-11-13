@@ -216,6 +216,8 @@ def charger_sql():
     return mod
 
 
+PRIX_NON_SIGNIFICATIF = 1  # phase 0 : un prix de départ ≤ 1 ne permet pas de calculer une marge de revente
+MARCHE_FRAIS_H = 24  # phase 0 : page du Marché « fraîche » (même fenêtre que le compte des captures du bloc 0, 24 h)
 PARALLELE = 8  # requêtes simultanées (K1, étape 5e) : elles sont indépendantes ; l'ordre du résultat reste celui de REQUETES
 
 
@@ -1116,13 +1118,24 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     if m:
         ajoute(None, 2, m)
     else:
-        bonnes = [r for r in lignes_de(donnees, "gold.bv_market_bargains")
+        bargains = lignes_de(donnees, "gold.bv_market_bargains")
+        for r in bargains:  # phase 0 (12/11) : prix de départ ≤ 1 : la marge p25 est le p25 lui-même, rien de calculable
+            if r.get("price_now") is not None and float(r["price_now"]) <= PRIX_NON_SIGNIFICATIF and pas_finie(r):
+                garder.append(f"transferts : {r['name']} ({r['position']}, PS {r['ps']}), prix de départ "
+                              f"{montant(float(r['price_now']))} : marge non calculable")
+        bonnes = [r for r in bargains
                   if vrai(r["ref_reliable"]) and float(r["resale_margin_p25"] or 0) > 0 and int(r["ref_n"] or 0) >= 5 and libre(r)
-                  and finance(r["bid_ceiling_resale"]) and pas_finie(r)][:3]
+                  and finance(r["bid_ceiling_resale"]) and pas_finie(r)
+                  and not (r.get("price_now") is not None and float(r["price_now"]) <= PRIX_NON_SIGNIFICATIF)][:3]
+        gains = {norm(a["name"]): a.get("gain_vs_my_second") for a in lignes_de(donnees, "annonces_24h")}
+        frais = age_h is not None and float(age_h) <= MARCHE_FRAIS_H
         for r in bonnes:  # X2 : affaire ouverte, même sur une page ancienne ; X8 : « plafond de revente »
             fin = fin_de(r)
             prix = r.get("price_now")
-            ajoute(fin, prio_fin(fin), f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
+            gain = gains.get(norm(r["name"]))
+            # phase 0 (12/11) : URGENT seulement si l'achat renforce mon cinq (gain > 0) et si la page du Marché est fraîche
+            prio = prio_fin(fin) if frais and gain not in (None, "") and float(gain) > 0 else max(prio_fin(fin), 2)
+            ajoute(fin, prio, f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
                    "plafond de revente (95 % du p25) ; prix à l'export " + (montant(prix) if prix is not None else "inconnu")
                    + f" ; {fin_txt(fin)} ; marge de revente p25 {montant(r['resale_margin_p25'])} ; {page} ; {MISE}",
                    "gold.bv_market_bargains")

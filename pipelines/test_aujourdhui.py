@@ -272,6 +272,26 @@ def cas():
         "Enchère maximale 120 000 sur Martin" in t8_finies
     yield "PB8 enchères ouvertes (250 000) : capacité 29 666, l'affaire de 120 000 est écartée", \
         "Martin" not in t8_ouvertes and "(capacité restante : 29 666)" in t8_ouvertes
+    # instantané du 12/11 : Bērziņš en URGENT avec un gain de -1,8 sur une page du Marché de 28 h ; Torres à 1 de prix de départ avec une
+    # « marge » de 1 003 436 ; deux plafonds (726 750 dans l'action, 999 000 dans le tableau du bloc 4)
+    cb12 = ["name", "position", "ps", "ref_n", "ref_reliable", "bid_ceiling_resale", "resale_margin_p25", "ends_paris", "price_now"]
+    b12 = [("Edgars Bērziņš", "PF", 56.8, 67, True, 726750, 126750, "2026-11-12T22:33:00", 600000),
+           ("Hilario Torres", "SG", 55.4, 23, True, 1003438, 1003436, "2026-11-13T09:33:00", 1)]
+    ca = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris", "heures", "gain_vs_my_second", "enters_top8"]
+
+    def plan12(age_h, gain):
+        d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_market_bargains": (cb12, b12),
+                      "gold.bv_finance_health": (["balance", "weekly_result_est", "weekly_personnel", "weekly_academy"], [(5000000, 98227, 60000, 100000)]),
+                      "gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], [(8, "Marché (enchères)", "cibles", None, age_h, "")]),
+                      "annonces_24h": (ca, [(1, "Edgars Bērziņš", "PF", 29, 56.8, 600000, "2026-11-12T22:33:00", 7.7, gain, False)])})
+        return auj.plan(d, {}, dt.date(2026, 11, 12), dt.datetime(2026, 11, 12, 14, 51), "", {})
+    r12 = plan12(28, -1.8)
+    berz = [a for a in r12["actions"] if "Bērziņš" in a[2]]
+    yield "X 12/11 gain négatif et page de 28 h : Bērziņš pas URGENT", len(berz) == 1 and berz[0][1] == 2
+    yield "X 12/11 gain positif mais page de 28 h : pas URGENT", [a[1] for a in plan12(28, 1.0)["actions"] if "Bērziņš" in a[2]] == [2]
+    yield "X 12/11 gain positif et page fraîche, fin aujourd'hui : URGENT", [a[1] for a in plan12(3, 1.0)["actions"] if "Bērziņš" in a[2]] == [1]
+    yield "X 12/11 prix de départ ≤ 1 : aucune enchère, « marge non calculable »", not any("Torres" in a[2] for a in r12["actions"]) \
+        and any("Hilario Torres" in g and "marge non calculable" in g for g in r12["garder"])
     sans_solde = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_finance_health": (
         ["weekly_result_est", "weekly_personnel", "weekly_academy"], [(108847, 60000, 100000)])})
     yield "PB8 solde illisible : capacité dite illisible, affaire non écartée", "(capacité restante illisible)" in auj.rendre(

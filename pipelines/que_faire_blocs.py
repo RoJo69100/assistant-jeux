@@ -524,7 +524,20 @@ def _achetable(r, cases, capacite):
     return plafond, "oui"
 
 
-def _table_annonces(donnees, capacite) -> list:
+PLAFOND_ACTION = re.compile(r"^Enchère maximale ([\d\s ]+) sur (.+?) \(")
+
+
+def plafonds_des_actions(actions) -> dict:
+    """{nom normalisé: plafond} des actions « Enchère maximale N sur X (…) » : le tableau du bloc 4 reprend ce plafond (un seul par joueur)."""
+    res = {}
+    for a in actions or ():
+        m = PLAFOND_ACTION.match(sans_heure(a[2]))
+        if m:
+            res[forme.norm(m.group(2))] = float(re.sub(r"\D", "", m.group(1)))
+    return res
+
+
+def _table_annonces(donnees, capacite, actions=()) -> list:
     titre = ["**Qui acheter (annonces du Marché qui se terminent dans les 24 h)**", ""]
     vues, annonces = set(), []
     for r in auj.lignes_de(donnees, "annonces_24h"):
@@ -537,10 +550,12 @@ def _table_annonces(donnees, capacite) -> list:
         precis = ", ".join(x for x in ((f"export du {quand:%d/%m}" if quand else ""), (f"{n} annonces" if n is not None else "")) if x)
         return titre + ["aucune annonce du Marché ne se termine dans les 24 h" + (f" ({precis})" if precis else ""), ""]
     cases = _cases(donnees)
+    decides = plafonds_des_actions(actions)
     lignes = titre + ["| Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |",
                       "|---|---|---|---|---|---|---|---|---|---|"]
     for r in sorted(annonces, key=lambda r: float(r["heures"])):
         plafond, verdict = _achetable(r, cases, capacite)
+        plafond = decides.get(forme.norm(r["name"]), plafond)  # phase 0 (12/11) : le plafond de l'action d'enchère, pas un second
         case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
         gain = r.get("gain_vs_my_second")
         lignes.append(f"| {r['name']} | {r['position']} | {int(float(r['age']))} | {_virg(r['ps'])} | {auj.montant(r['price_now'])} | "
@@ -595,7 +610,7 @@ def bloc_4(donnees, erreurs, capacite, tolerance, actions=()) -> list:
     Une proposition reste une proposition : rien n'est acheté ni vendu sans l'accord écrit de l'utilisateur (bloc 10)."""
     sortie = []
     for noms, fabrique in ((("prix_cases",), lambda: _table_prix(donnees)),
-                           (("annonces_24h",), lambda: _table_annonces(donnees, capacite)),
+                           (("annonces_24h",), lambda: _table_annonces(donnees, capacite, actions)),
                            (("vendre", "gold.bv_sell_replacement"), lambda: _table_vente(donnees, tolerance))):
         illisibles = [n for n in noms if donnees.get(n) in (None, "rejeu")]
         sortie += [vue_illisible(n) for n in illisibles] + [""] if illisibles else fabrique()
