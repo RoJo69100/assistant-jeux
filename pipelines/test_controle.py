@@ -69,7 +69,7 @@ CAS = [
     ("a session opus avec retour sonnet", "Fait, /model sonnet après le commit.",
      [demande("ajoute la vue"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], True),
     ("a voie courte, rappel déclaré une fois", "Fait.",
-     [demande("ce plan approuvé tient lieu de conception"), dit("/model opus avant, /model sonnet après le commit", "claude-sonnet"),
+     [demande("ce plan approuvé tient lieu de conception"), dit("/model opus avant", "claude-sonnet"),
       outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], True),
     ("a voie courte sans aucun rappel", "Fait.",
      [demande("ce plan approuvé tient lieu de conception"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], False),
