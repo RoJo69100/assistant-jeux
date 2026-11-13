@@ -85,6 +85,14 @@ def modele(ents: list[dict]) -> str:
     return ""
 
 
+VOIE_COURTE = re.compile(r"tient lieu de conception")
+
+
+def voie_courte(ents: list[dict]) -> bool:
+    """Voie courte (CLAUDE.md règle 13) : l'utilisateur a écrit que son plan approuvé tient lieu de conception."""
+    return any(VOIE_COURTE.search(police.norm(d)) for d in police.demandes(ents))
+
+
 def conception_modifiee(ops: list[tuple[str, dict]]) -> bool:
     return any(nom in ("Edit", "Write", "MultiEdit", "NotebookEdit")
                and CHEMINS_CONCEPTION.search(str(inp.get("file_path", "")).replace("\\", "/"))
@@ -198,7 +206,8 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
     if conception_modifiee(ops_session):
         dit = police.norm(textes(ents) + "\n" + text)
         attendu = "/model sonnet" if "opus" in modele(ents) else "/model opus"
-        if attendu not in dit:
+        # voie courte : la déclaration « opus avant, sonnet après » faite une fois dans la session suffit
+        if attendu not in dit and not (voie_courte(ents) and ("/model opus" in dit or "/model sonnet" in dit)):
             f.append(f"a : fichiers de conception modifiés sans rappel « {attendu} » — dis-le en une ligne "
                      "(« /model opus avant, /model sonnet après le commit »)")
     if chiffre(text) and not source(ops_tour):

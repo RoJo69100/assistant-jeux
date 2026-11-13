@@ -68,6 +68,11 @@ CAS = [
     ("a session opus sans retour sonnet", "Fait.", [demande("ajoute la vue"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], False),
     ("a session opus avec retour sonnet", "Fait, /model sonnet après le commit.",
      [demande("ajoute la vue"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], True),
+    ("a voie courte, rappel déclaré une fois", "Fait.",
+     [demande("ce plan approuvé tient lieu de conception"), dit("/model opus avant, /model sonnet après le commit", "claude-sonnet"),
+      outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], True),
+    ("a voie courte sans aucun rappel", "Fait.",
+     [demande("ce plan approuvé tient lieu de conception"), outil("Edit", {"file_path": "pipelines/x.py"}, "claude-opus")], False),
     ("a fichier hors conception", "Noté.", [demande("j'ai fait l'export"), EDIT_OUT], True),
     # b : retiré en S1 (deja-fait chargé avant le plan, plus de blocage après)
     ("b plan sans deja-fait ne bloque plus", PLAN, [demande("la suite"), SQL], True),
