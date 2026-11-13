@@ -332,6 +332,48 @@ def verifier_j_moins_1(tableau: str, donnees, genre: str = None, jour_match: dt.
     return sortie
 
 
+REMPLACANTS = re.compile(r"Si un titulaire manque au verrou\s*:\s*([^;\n]+)")
+PAIRE = re.compile(r"([^,;()]+?) pour ([^,;()]+?) \((PG|SG|SF|PF|C)\)")
+ECHEC_V1 = "aucun remplaçant dans la fiche"
+
+
+def _noms_du_tableau(tableau: str) -> list:
+    for cols, lignes in forme.tableaux(tableau):
+        if cols and cols[0] == "joueur" and forme.idx(cols, "q1") >= 0:
+            return [re.sub(r"\s*\([^)]*\)", "", l[0].replace("*", "")).strip() for l in lignes if l and l[0].strip()]
+    return []
+
+
+def _meme_joueur(cellule, complet) -> bool:
+    c, p = forme.norm(cellule), forme.norm(complet)
+    return bool(c) and bool(p) and (c == p or c == p.split()[-1] or p == c.split()[-1])
+
+
+def controle_v1(tableau: str, brief: str, donnees, jour_match: dt.date) -> list:
+    """Contrôle V1 : un joueur du tableau de saisie blessé à la date du match (`blesses` : retour après le jour du match ; hypothèse :
+    le joueur rejoue le jour de son retour) est remplacé par celui que nomme la ligne « Si un titulaire manque au verrou : X pour Y (poste) »
+    du brief ; sans remplaçant, la ligne dit « aucun remplaçant dans la fiche » et le contrôle échoue (`v1_passe`)."""
+    m = REMPLACANTS.search(brief or "")
+    paires = [(r.strip(), t.strip(), p) for r, t, p in PAIRE.findall(m.group(1))] if m else []
+    sortie = []
+    for b in auj.lignes_de(donnees, "blesses"):
+        retour = auj.en_date(b["injury_return_on"]) if b.get("injury_return_on") else None
+        if retour is None or retour <= jour_match:
+            continue
+        for n in _noms_du_tableau(tableau):
+            if not _meme_joueur(n, b["name"]):
+                continue
+            debut = f"Contrôle V1 : {n} blessé le {jour_match:%d/%m} (retour le {retour:%d/%m})"
+            rempl = next(((r, p) for r, t, p in paires if _meme_joueur(t, n)), None)
+            sortie.append(f"{debut} → {rempl[0]} à sa place ({rempl[1]}), remplaçant prévu par la fiche" if rempl
+                          else f"{debut}, {ECHEC_V1} : fiche à refaire")
+    return sortie
+
+
+def v1_passe(lignes: list) -> bool:
+    return not any(ECHEC_V1 in l for l in lignes)
+
+
 def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tuple:
     """Bloc 2 : composition de l'amical, choisie le jour même (brief tactique du jour). (lignes affichées, consignes de session)."""
     am = auj.prochain_amical(donnees, jour, maintenant)
@@ -361,6 +403,7 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         lignes.append("Fatigue ajoutée aux titulaires de la ligue du soir : "
                       + " ; ".join(f"{r['joueur']} +{_virgule(r['fatigue_ajoutee'])}" for r in du_jour) if du_jour
                       else manque("l'amical saisi (page du match)", "fatigue ajoutée aux titulaires de la ligue du soir"))
+    lignes += controle_v1(tableau, Path(f).read_text(encoding="utf-8"), donnees, am["date"])
     lignes += verifier_j_moins_1(tableau, donnees, "amical", am["date"], am["match"])
     return lignes, consignes
 
@@ -412,6 +455,7 @@ def bloc_3(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         if ant == ABSENTE:
             consignes.append(f"relancer l'agent tactique (BasketVibe, {genre} contre {m['adv']} du {jj}, horizon aujourd'hui) : ajouter au brief du jour "
                              "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, False, m["adv"], m["jour"], m["manche"], genre))
+        lignes += controle_v1(tableau, Path(f).read_text(encoding="utf-8"), donnees, m["jour"])
         lignes += verifier_j_moins_1(tableau, donnees, genre, m["jour"], m["adv"]) + [""]
     return lignes, consignes
 

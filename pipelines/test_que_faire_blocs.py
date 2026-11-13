@@ -414,6 +414,22 @@ def cas_blocs_2_3():
     e_lg = qfb.verifier_j_moins_1(JOUEURS, dfm, "ligue", dt.date(2026, 11, 14), "BC Gelrode")
     e_cp = qfb.verifier_j_moins_1(JOUEURS, dfm, "coupe", dt.date(2026, 11, 12), "Stare Kotlety")
     e_am = qfb.verifier_j_moins_1(JOUEURS, dfm, "amical", dt.date(2026, 11, 13), "Hapoel Nehamia(Galil)")
+    # contrôle V1 : Hadrien Gimenez blessé, retour le 15/11 (base du 13/11) ; ligne du brief de coupe du 10/11 (§4) comme modèle
+    l88 = ("Aucun blessé ; pas de blessure en coupe. Si un titulaire manque au verrou : Durand pour Gimenez (SF), Albano pour Lefebvre (PF), "
+           "Bernard pour Fournier (C), Baron pour Richard (PG), Leclerc pour Bonnet (SG) ; `fit_with_form` des remplaçants non recalculé ici (signalé).")
+    bl = donnees_t(**{"blesses": T(["name", "injury_return_on"], [("Hadrien Gimenez", "2026-11-15")])})
+    v_14 = qfb.controle_v1(JOUEURS, l88, bl, dt.date(2026, 11, 14))
+    yield "test_controle_v1_blesse_remplace_par_le_brief", v_14 == [
+        "Contrôle V1 : Gimenez blessé le 14/11 (retour le 15/11) → Durand à sa place (SF), remplaçant prévu par la fiche"] \
+        and qfb.v1_passe(v_14)
+    v_sans = qfb.controle_v1(JOUEURS, "Aucun blessé.", bl, dt.date(2026, 11, 14))
+    yield "test_controle_v1_blesse_sans_remplacant : échec", len(v_sans) == 1 and "aucun remplaçant dans la fiche" in v_sans[0] \
+        and not qfb.v1_passe(v_sans)
+    yield "test_controle_v1_retour_avant_le_match : rien", qfb.controle_v1(JOUEURS, l88, bl, dt.date(2026, 11, 15)) == []
+    yield "test_requete_blesses", "injury_return_on" in auj.REQUETES["blesses"]
+    for nom, fonction, base_ in (("bloc 2", qfb.bloc_2, b_jour), ("bloc 3", qfb.bloc_3, a_jour)):
+        l, _ = fonction(donnees_t(**{"blesses": T(["name", "injury_return_on"], [("Hadrien Gimenez", "2026-11-15")])}), S, JOUR_T, MAINT, base=base_)
+        yield f"test_controle_v1_affiche : {nom}", any(x.startswith("Contrôle V1 : Gimenez blessé le 11/11") for x in l)
     yield "test_j_moins_1_filtre_par_match_et_adversaire", [x for x in e_lg if "fatigue projetée" in x] == [
         "Écart J-1 : Fournier — fatigue projetée 22,0 au match de ligue du 14/11 contre BC Gelrode (zone verte 20)"] \
         and all("Stare Kotlety" in x for x in e_cp if "fatigue projetée" in x) and len([x for x in e_cp if "fatigue projetée" in x]) == 1 \

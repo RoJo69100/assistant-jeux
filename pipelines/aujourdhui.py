@@ -120,7 +120,9 @@ REQUETES = {
                           "where game = 'basketvibe' and rule_id = 'entrainement_sam' and actif",
     # N3 (étape 5h) : joueurs qui doivent jouer un match de ligue ou de coupe à venir et dont la fatigue projetée
     # dépasse la zone verte (seuil lu dans core.alert_rule par la vue)
-    "fatigue_avant_match": "select kind, match_day, opponent, joueur, minutes, defense_tier, sat_fatigue, zone_verte, "
+    # contrôle V1 (phase 0) : joueurs blessés et date de retour, pour la fiche du match
+    "blesses": "select name, injury_return_on from gold.bv_roster_now where injury_return_on is not null",
+    "fatigue_avant_match":"select kind, match_day, opponent, joueur, minutes, defense_tier, sat_fatigue, zone_verte, "
                            "sauvegarde_match, ecran_par_defaut from gold.bv_fatigue_avant_match where depasse order by match_day, sat_fatigue desc",
     # 5n T3 : fatigue ajoutée par l'amical du matin aux joueurs qui entament le match de ligue du même jour (fiche tactique §2 bis :
     # minutes × 0.019 × multiplicateur d'agressivité × (1,5 − 0,008 × endurance) ; multiplicateurs de l'écran 1 à 5 : skill
