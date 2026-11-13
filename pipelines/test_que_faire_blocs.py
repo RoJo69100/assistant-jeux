@@ -28,6 +28,7 @@ LISTE_BLANCHE: tuple = ()
 ECHANTILLONS = {
     "titre": ["Ligue J4 contre Naked Spartans", "Ligue J4 à Naked Spartans", "Coupe contre Naked Spartans", "Amical contre Opper Cards"],
     "r['match'] or 'Match'": ["Naked Spartans", "Match"],
+    "'Ligue' if kind == 'ligue' else 'Coupe'": ["Ligue", "Coupe"],
     "tete": ["Académie, rapport du 05/11 : Dupont (PG, 17 ans, TSP 40-60)", "Acheter un PG de note ≥ 60"],
     "ent[1]": ["Entraînement (fin du cycle dimanche 04:00) : corrige 2 écarts à l'écran",
                "Entraînement (fin du cycle dimanche 04:00) : il me manque la fiche de l'agent Entraînement",

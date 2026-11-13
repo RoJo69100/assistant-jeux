@@ -541,6 +541,23 @@ def cas_fatigue():
     yield "N3 verrou passé, absent : aucune ligne « Sors »", lignes(deux, dt.datetime(2026, 11, 9, 20, 0)) == []
     yield "N3 aucun seuil dans le code : la zone verte affichée vient de la vue", \
         "zone verte jusqu'à 25" in lignes([deux[0][:7] + (25,)])[0][3]
+    # instantané du 12/11 : « Sors Bonnet, Gimenez, Richard, Lefebvre, Fournier avant le match de coupe contre Stare Kotlety » calculé
+    # depuis l'écran non sauvegardé (48 min, agressivité 3 pour tous) ; aucune ligne « Sors », « écran non sauvegardé » à la place
+    COLS2 = COLS + ["sauvegarde_match", "ecran_par_defaut"]
+    CAL2 = (CAL[0], [("2026-11-12", "coupe", "Stare Kotlety", "2026-11-12T19:15:00", "2026-11-12T19:00:00")])
+    coupe = [("coupe", "2026-11-12", "Stare Kotlety", n, 48, 2, 27.0, 20) for n in ("Bonnet", "Gimenez", "Richard", "Lefebvre", "Fournier")]
+
+    def plan12(rows):
+        d = figees(**{"fatigue_avant_match": (COLS2, rows), "calendrier": CAL2})
+        return auj.plan(d, {}, dt.date(2026, 11, 12), dt.datetime(2026, 11, 12, 14, 51), "", {})["actions"]
+    for nom, rows in (("indicateur faux", [r + (False, False) for r in coupe]), ("indicateur absent, écran par défaut", [r + (None, True) for r in coupe])):
+        acts = plan12(rows)
+        yield f"N3 écran non sauvegardé ({nom}) : aucune ligne « Sors », « écran non sauvegardé » affiché", \
+            not any(a[2].startswith("Sors ") for a in acts) \
+            and any(a[2] == "Coupe contre Stare Kotlety (jeu. 12/11) : écran non sauvegardé, fatigue projetée non calculée" for a in acts)
+    yield "N3 écran sauvegardé : ligne « Sors » gardée", any(a[2].startswith("Sors Bonnet") for a in plan12([r + (True, False) for r in coupe]))
+    yield "N3 requête : lit l'indicateur de sauvegarde", "sauvegarde_match" in auj.REQUETES["fatigue_avant_match"] \
+        and "ecran_par_defaut" in auj.REQUETES["fatigue_avant_match"]
 
 
 def cas_entrainement():

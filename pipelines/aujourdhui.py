@@ -120,8 +120,8 @@ REQUETES = {
                           "where game = 'basketvibe' and rule_id = 'entrainement_sam' and actif",
     # N3 (étape 5h) : joueurs qui doivent jouer un match de ligue ou de coupe à venir et dont la fatigue projetée
     # dépasse la zone verte (seuil lu dans core.alert_rule par la vue)
-    "fatigue_avant_match": "select kind, match_day, opponent, joueur, minutes, defense_tier, sat_fatigue, zone_verte "
-                           "from gold.bv_fatigue_avant_match where depasse order by match_day, sat_fatigue desc",
+    "fatigue_avant_match": "select kind, match_day, opponent, joueur, minutes, defense_tier, sat_fatigue, zone_verte, "
+                           "sauvegarde_match, ecran_par_defaut from gold.bv_fatigue_avant_match where depasse order by match_day, sat_fatigue desc",
     # 5n T3 : fatigue ajoutée par l'amical du matin aux joueurs qui entament le match de ligue du même jour (fiche tactique §2 bis :
     # minutes × 0.019 × multiplicateur d'agressivité × (1,5 − 0,008 × endurance) ; multiplicateurs de l'écran 1 à 5 : skill
     # basketvibe-joueurs, 06-fatigue-0100.md [M§6.3]). Vide si l'amical saisi n'est pas encore exporté ou s'il n'y a pas de ligue ce jour-là.
@@ -889,6 +889,14 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     for (kind, d, adv), rs in lignes_fatigue(donnees).items():
         limite = verrou_calendrier(donnees, d, adv)
         if (limite is not None and limite < maintenant) or d < jour:
+            continue
+        # écran non sauvegardé (indicateur faux ; sans indicateur : écran par défaut, 48 min et agressivité 3 pour les 14) :
+        # la fatigue projetée vient de réglages que le jeu n'utilisera pas, aucune ligne « Sors » (instantané du 12/11)
+        sauve = [r.get("sauvegarde_match") for r in rs if r.get("sauvegarde_match") not in (None, "")]
+        if (sauve and not any(vrai(x) for x in sauve)) or (not sauve and any(vrai(r.get("ecran_par_defaut")) for r in rs)):
+            ajoute(limite, 2, f"{'Ligue' if kind == 'ligue' else 'Coupe'} contre {adv} ({jour_fr(d)}) : écran non sauvegardé, "
+                              "fatigue projetée non calculée", "saisis et sauvegarde la tactique du match à l'écran",
+                   "gold.bv_fatigue_avant_match (sauvegarde_match, ecran_par_defaut)")
             continue
         noms = ", ".join(r["joueur"] for r in rs)
         detail = " ; ".join(f"{r['joueur']} {str(r['sat_fatigue']).replace('.', ',')} ({r['minutes']} min, agressivité "
