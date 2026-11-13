@@ -1010,8 +1010,16 @@ def cas_r1():
     yield "test_r1_rendu_complet : aucune ligne du bloc 0 ne manque au bloc 1", qfb.fautes_bloc_1(texte) == []
     b1 = qfb.section(texte, 1)
     b0 = [l for l in qfb.section(texte, 0).splitlines() if l.startswith("- ")]
-    yield "test_r1_rendu_complet : le bloc 0 a des lignes et chacune garde son « → bloc N » dans le bloc 1", len(b0) >= 2 and all(
-        l[2:].replace("|", "/") in b1 for l in b0)
+    yield "test_r1_rendu_complet : le bloc 0 a des lignes et chacune renvoie au bloc 0 dans le bloc 1", len(b0) >= 2 and all(
+        qfb.FIN_FLECHE.match(l[2:]).group(1).replace("|", "/") + " → bloc 0 |" in b1 for l in b0 if qfb.FIN_FLECHE.match(l[2:]))
+    # instantané du 12/11 : « exporter la page du match » deux fois au bloc 1 (→ bloc 2 et → bloc 0) ; un seul libellé, renvoi au bloc 0
+    r12 = res_t6()
+    r12["actions"] = r12["actions"] + [(None, 3, "Après l'amical (~08:55) : exporter la page du match", "", "s")]
+    t12, _ = qfb.rendre_blocs(r12, donnees_t6(), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
+    b1_12 = qfb.section(t12, 1)
+    yield "test_r1_un_libelle_par_export : une seule ligne, renvoi au bloc 0", b1_12.count("la page du match") == 1 \
+        and "exporte la page du match → bloc 0 |" in b1_12 and qfb.fautes_bloc_1(t12) == [] \
+        and not re.search(r"\| Export \|[^\n]*→ bloc [1-9]", b1_12)
     yield "test_r1_composition_amical_et_ligue : une ligne par match des blocs 2 et 3, avec son bloc", \
         re.search(r"\| Composition \| Composition : Amical contre .*\(.+\d\d/\d\d\) → bloc 2 \|", b1) is not None \
         and re.search(r"\| Composition \| Composition : (?:Ligue|Coupe) .*\(.+\d\d/\d\d\) → bloc 3 \|", b1) is not None
@@ -1025,7 +1033,7 @@ def cas_r1():
     # complément seul : exports du bloc 0 en catégorie Export, jamais d'heure, aucun « | » cassant le tableau
     comp = qfb.complements_bloc_1(["- donnée manquante : exporte X | Y → bloc 3", "- aucun export à refaire : toutes les pages suivies sont à jour"], [], [], [], JOUR_T)
     tb = "\n".join(qfb.bloc_1([], JOUR_T, comp))
-    yield "test_r1_export_du_bloc_0 : catégorie Export, « | » remplacé, « aucun export » non repris", "| Export | donnée manquante : exporte X / Y → bloc 3 |" in tb \
+    yield "test_r1_export_du_bloc_0 : catégorie Export, « | » remplacé, « aucun export » non repris", "| Export | donnée manquante : exporte X / Y → bloc 0 |" in tb \
         and "aucun export à refaire" not in tb and forme.fautes_tableaux(tb, "basketvibe") == []
     # défaut réel : la première sortie réelle (journal, T8, 10/11) a un bloc 1 sans les lignes du bloc 0
     journal = (Path(__file__).resolve().parent.parent / "docs" / "refonte-v3" / "journal-aujourdhui.md").read_text(encoding="utf-8")
