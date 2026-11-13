@@ -417,12 +417,13 @@ def cas_etape5a():
     # A1 : alertes de domaine « match »
     dernier = (2, "Dernier match exporté : 08/11 (amical, L 94-96 contre New York City Cyclones)")
     t = plan5a(alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
-    yield "A1 dernier match : ligne « Analyse : » (présent)", "Analyse : Dernier match exporté : 08/11" in t
+    # phase 0 (instantanés des 10 et 11/11 : « Dernier match exporté : 10/11 (amical, W 141-117 contre Opper Cards) ») : la règle lit
+    # core.fixture (calendrier), pas les pages de match exportées ; le libellé est faux et l'amical n'appelle aucune analyse : ligne retirée
+    yield "A1 dernier match : plus de ligne « Dernier match exporté »", "Dernier match exporté" not in t
     d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_exports_state": ETAT_VIDE,
                   "gold.bv_daily_alerts": (["priority", "category", "alert"], [])}, alertes_match=(COLS_AM, [("dernier_match",) + dernier]))
     a = auj.plan(d, {}, JOUR9, TOT, "", {})["actions"]
-    yield "A1/A6 « Dernier match » en priorité 3 (constat, ne chasse pas une action)", \
-        [x[1] for x in a if x[2].startswith("Analyse : Dernier")] == [3]
+    yield "A1/A6 « Dernier match » : aucune action", [x for x in a if x[2].startswith("Analyse : Dernier")] == []
     t = plan5a(alertes_match=(COLS_AM, [("coupe_sans_resultat", 2, "Match de coupe joué non exporté : J2 du 08/11")]))
     yield "A1 coupe jouée non exportée : dans la ligne Exports (présent)", \
         "Match de coupe joué non exporté : J2 du 08/11" in t.splitlines()[-1]

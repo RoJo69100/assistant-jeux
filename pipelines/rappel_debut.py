@@ -63,8 +63,9 @@ def main():
     if (b := alerte_branches_cloud()):
         print(b)
     print("RAPPEL DE DÉBUT DE SESSION")
-    print("Décision (achat, vente, enchère, composition, défaite, entraînement, académie, finances) : "
-          "`python pipelines/dossier.py <jeu> <type>` d'abord.")    print("MCP Supabase : requête d'abord avant « pas de base » ; non authentifié = à autoriser (claude.ai).")
+    print("Gros achat, vente ou enchère (au-dessus du seuil de gros montant) : "
+          "`python pipelines/dossier.py <jeu> <type>` d'abord, puis l'agent police.")
+    print("MCP Supabase : requête d'abord avant « pas de base » ; non authentifié = à autoriser (claude.ai).")
     print("Règles actives (docs/regles/actives.md) :")
     for t in titres():
         print("- " + t)
