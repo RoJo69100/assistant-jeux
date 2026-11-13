@@ -51,9 +51,12 @@ MOTS_FAIT = {
     "amical": ("saisie de l'amical",),
 }
 
+# Phase 0 : jour de Paris dans les requêtes ; le serveur tourne en UTC, current_date se trompe de jour après minuit à Paris
+JOUR_PARIS_SQL = "(now() at time zone 'Europe/Paris')::date"
+
 REQUETES = {
     "gold.bv_agenda": "select day, at_time, priority, category, action from gold.bv_agenda "
-                      "where day <= current_date + 1 order by day, at_time, priority",
+                      "where day <= (now() at time zone 'Europe/Paris')::date + 1 order by day, at_time, priority",
     "gold.bv_exports_state": "select ordre, ecran, pour_quoi, dernier_paris, age_h, statut from gold.bv_exports_state order by ordre",
     "gold.bv_daily_alerts": "select priority, category, alert from gold.bv_daily_alerts order by priority limit 30",
     "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde ; capacité = solde − enchères ouvertes
@@ -83,7 +86,7 @@ REQUETES = {
                           "cross join silver.bv_my_team m where t.entry_type = 'transfer' and t.settled_at >= now() - interval '6 days' "
                           "order by t.settled_at desc limit 300",
     "apercus": "select distinct match_day from gold.bv_saisie_adversaires "
-               "where kind in ('ligue', 'coupe') and match_day >= current_date",
+               "where kind in ('ligue', 'coupe') and match_day >= (now() at time zone 'Europe/Paris')::date",
     "derniere_vente": "select max(sold_on) as derniere from gold.bv_transfer_history",
     # A1 : alertes de domaine « match » (dernier match, ligue ou coupe jouée non exportée) ; coupe_sans_resultat
     # n'existe que dans gold.daily_alerts (core.alert_rule), pas dans gold.bv_daily_alerts
@@ -98,7 +101,7 @@ REQUETES = {
     "calendrier": "select day, competition_kind, opponent, scheduled_at at time zone 'Europe/Paris' as coup_envoi_paris, "
                   "(extras ->> 'verrou_at')::timestamptz at time zone 'Europe/Paris' as verrou_paris from core.fixture "
                   "where game = 'basketvibe' and not played and scheduled_at is not null "
-                  "and day between current_date - 1 and current_date + 7 order by scheduled_at",
+                  "and day between (now() at time zone 'Europe/Paris')::date - 1 and (now() at time zone 'Europe/Paris')::date + 7 order by scheduled_at",
     # H6 (étape 5d) : règles d'agenda de ligue à heure écrite, avec leur décalage relatif au coup d'envoi
     "regles_agenda": "select rule_id, category, to_char(heure, 'HH24:MI') as heure, decalage_min from core.agenda_rule "
                      "where game = 'basketvibe' and competition_kind = 'ligue' and actif and heure is not null "
@@ -130,8 +133,8 @@ REQUETES = {
     "fatigue_amical": "select a.match_day, a.joueur, a.minutes_am, a.agress, r.stamina, round((a.minutes_am * 0.019 * (array[0.75, 0.875, 1.0, 1.325, 1.65])[a.agress] "
                       "* (1.5 - 0.008 * r.stamina))::numeric, 1) as fatigue_ajoutee "
                       "from (select match_day, joueur, nullif(substring(minutes from '^[0-9]+'), '')::int as minutes_am, agress from gold.bv_saisie_joueurs "
-                      "where kind = 'amical' and match_day >= current_date) a "
-                      "join (select match_day, joueur from gold.bv_saisie_joueurs where kind = 'ligue' and match_day >= current_date and q1 <> '—') l "
+                      "where kind = 'amical' and match_day >= (now() at time zone 'Europe/Paris')::date) a "
+                      "join (select match_day, joueur from gold.bv_saisie_joueurs where kind = 'ligue' and match_day >= (now() at time zone 'Europe/Paris')::date and q1 <> '—') l "
                       "on l.joueur = a.joueur and l.match_day = a.match_day "
                       "join gold.bv_roster_now r on r.name like '% ' || a.joueur where a.minutes_am > 0 order by a.match_day, 6 desc",
     # 5n T4 (bloc 4) : table des prix, une ligne par case âge × palier de note de 5 (ventes conclues, gold.bv_price_ref_ps)
@@ -186,7 +189,7 @@ REQUETES = {
                      "where game = 'basketvibe' and page_url like '%/c/%'",
     # M3 (étape 5g) : réglage réellement joué par amical (page « réglages utilisés »), pour vérifier les expériences
     "amical_reglage": "select fixture_id, match_day, opponent, agress_cran, primary_quarts, tir_cran4_joueurs "
-                      "from gold.bv_amical_reglage where match_day >= current_date - 120",
+                      "from gold.bv_amical_reglage where match_day >= (now() at time zone 'Europe/Paris')::date - 120",
     # 5j (Y2, Y3) : aperçus (une ligne par capture de match-tactics, historique de silver) des matchs de ligue et de coupe des 3 jours
     "apercus_matchs": "select f.fixture_id, f.competition_kind, f.round_no, f.day, f.opponent, "
                       "a.captured_at at time zone 'Europe/Paris' as capture_paris, "
@@ -195,7 +198,7 @@ REQUETES = {
                       "else a.body -> 'preview' -> 'home_players' end) p) as adverse "
                       "from core.fixture f left join silver.bv_fixture_api a on a.fixture_id::text = f.fixture_id::text and a.part = 'match-tactics' "
                       "where f.game = 'basketvibe' and not f.played and f.competition_kind in ('ligue', 'coupe') "
-                      "and f.day between current_date and current_date + 2 order by f.day, f.fixture_id, a.captured_at",
+                      "and f.day between (now() at time zone 'Europe/Paris')::date and (now() at time zone 'Europe/Paris')::date + 2 order by f.day, f.fixture_id, a.captured_at",
     # K4 (étape 5e) : décisions échues à mesurer, et décisions encore « proposed » (faits du registre à relier)
     "a_evaluer": "select count(*) as n from gold.decisions_a_evaluer where game = 'basketvibe'",
     "decisions_proposees": "select id, status, game from learn.decision where game = 'basketvibe' and status = 'proposed'",
@@ -221,6 +224,24 @@ JOUR_RAPPORT_ACADEMIE = 3  # jeudi (weekday) : rapport du scout, 09:00 heure de 
 PRIX_NON_SIGNIFICATIF = 1  # phase 0 : un prix de départ ≤ 1 ne permet pas de calculer une marge de revente
 MARCHE_FRAIS_H = 24  # phase 0 : page du Marché « fraîche » (même fenêtre que le compte des captures du bloc 0, 24 h)
 PARALLELE = 8  # requêtes simultanées (K1, étape 5e) : elles sont indépendantes ; l'ordre du résultat reste celui de REQUETES
+
+
+SEUIL_ECHEC = 0.5  # phase 0 : au-delà de la moitié des requêtes en échec, le plan est faux ; on le dit et on garde l'instantané
+
+
+def echec_massif(erreurs, n) -> bool:
+    return n > 0 and len(erreurs) / n > SEUIL_ECHEC
+
+
+def ecrire_instantane(fichier, texte, erreurs, n) -> int:
+    """Écrit l'instantané du jour, sauf échec massif : l'ancien fichier est conservé et le code retour vaut 2 (échec bruyant)."""
+    if echec_massif(erreurs, n):
+        print(f"aujourdhui.py : {len(erreurs)} requêtes sur {n} en échec ; instantané {Path(fichier).name} conservé, plan non fiable",
+              file=sys.stderr)
+        return 2
+    Path(fichier).parent.mkdir(parents=True, exist_ok=True)
+    Path(fichier).write_text(texte, encoding="utf-8")
+    return 0
 
 
 def lire_tout(executer, jour=None):
@@ -1238,16 +1259,18 @@ def main() -> int:
     S = lire_sources(donnees, jour)
     affichage, rendu = rendre_jour(plan(donnees, erreurs, jour, maintenant, fait, S), donnees, erreurs, jour, maintenant, S, fait=fait)
     print(affichage)
+    code = 2 if echec_massif(erreurs, n) else 0
     if not a.jour and not a.maintenant:  # instantané quotidien (écrasé si relancé le même jour) : ni rejeu ni simulation d'heure
-        fichier = BASE / f"aujourdhui-{jour.isoformat()}.md"
-        fichier.parent.mkdir(parents=True, exist_ok=True)
-        fichier.write_text(f"<!-- généré le {maintenant.strftime('%Y-%m-%d %H:%M')} -->\n{rendu}\n", encoding="utf-8")
+        code = ecrire_instantane(BASE / f"aujourdhui-{jour.isoformat()}.md",
+                                 f"<!-- généré le {maintenant.strftime('%Y-%m-%d %H:%M')} -->\n{rendu}\n", erreurs, n)
+    elif code:
+        print(f"aujourdhui.py : {len(erreurs)} requêtes sur {n} en échec, plan non fiable", file=sys.stderr)
     nonrej = [k for k, v in donnees.items() if v == "rejeu"]
     if nonrej:
         print("\n" + "\n".join(f"rejeu non disponible pour {k}" for k in nonrej))
     if not a.maintenant:
         journaliser(a.jour or "aujourd'hui", time.time() - debut, n, ref)
-    return 0
+    return code
 
 
 if __name__ == "__main__":

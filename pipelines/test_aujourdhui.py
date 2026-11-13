@@ -522,6 +522,29 @@ def cas_etape5a():
     yield from cas_entrainement()
     yield from cas_fatigue()
     yield from cas_revue()
+    yield from cas_echec_bruyant()
+
+
+def cas_echec_bruyant():
+    """Phase 0 : plus de la moitié des requêtes en échec → code retour ≠ 0, l'instantané de la veille est conservé ; PyYAML installé ;
+    jour de Paris dans les requêtes (le serveur tourne en UTC : current_date se trompe de jour entre minuit et 1 h ou 2 h à Paris)."""
+    yield "phase 0 : 3 échecs sur 4 = échec massif", auj.echec_massif({"a": "x", "b": "x", "c": "x"}, 4) is True
+    yield "phase 0 : 2 échecs sur 4 = pas d'échec massif", auj.echec_massif({"a": "x", "b": "x"}, 4) is False
+    yield "phase 0 : aucune requête = pas d'échec massif", auj.echec_massif({}, 0) is False
+    with tempfile.TemporaryDirectory() as tmp:
+        f = Path(tmp) / "aujourdhui-2026-11-13.md"
+        f.write_text("ancien", encoding="utf-8")
+        code = auj.ecrire_instantane(f, "nouveau", {"a": "x", "b": "x", "c": "x"}, 4)
+        garde = f.read_text(encoding="utf-8")
+        code_ok = auj.ecrire_instantane(f, "nouveau", {}, 4)
+        yield "phase 0 : échec massif, instantané conservé, code ≠ 0", code != 0 and garde == "ancien"
+        yield "phase 0 : lecture normale, instantané écrit, code 0", code_ok == 0 and f.read_text(encoding="utf-8") == "nouveau"
+    racine = Path(auj.__file__).resolve().parent.parent
+    yield "phase 0 : PyYAML dans requirements.txt", "pyyaml" in (racine / "requirements.txt").read_text(encoding="utf-8").lower()
+    dc = (racine / "pipelines" / "deps_cloud.py").read_text(encoding="utf-8")
+    yield "phase 0 : deps_cloud installe si yaml manque", '"yaml"' in dc
+    yield "phase 0 : aucune requête sur current_date (jour de Paris)", not any("current_date" in q for q in auj.REQUETES.values()) \
+        and sum(auj.JOUR_PARIS_SQL in q for q in auj.REQUETES.values()) >= 6
 
 
 def cas_revue():

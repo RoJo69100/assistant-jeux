@@ -1,4 +1,4 @@
-"""Hook SessionStart : en session cloud (CLAUDE_CODE_REMOTE=true), installe requirements.txt si psycopg manque.
+"""Hook SessionStart : en session cloud (CLAUDE_CODE_REMOTE=true), installe requirements.txt si psycopg ou yaml (PyYAML) manque.
 
 Sur les PC locaux : ne fait rien. N'échoue jamais (code 0) pour ne pas bloquer le démarrage.
 """
@@ -12,8 +12,11 @@ from pathlib import Path
 RACINE = Path(__file__).resolve().parent.parent
 
 
+MODULES = ("psycopg", "yaml")  # yaml : PyYAML, lu par le plan du jour (expériences, config du jeu)
+
+
 def main() -> int:
-    if os.environ.get("CLAUDE_CODE_REMOTE") != "true" or importlib.util.find_spec("psycopg"):
+    if os.environ.get("CLAUDE_CODE_REMOTE") != "true" or all(importlib.util.find_spec(m) for m in MODULES):
         return 0
     r = subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", str(RACINE / "requirements.txt")],
                        capture_output=True, text=True)
