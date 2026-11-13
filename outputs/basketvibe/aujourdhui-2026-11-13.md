@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-13 09:43 -->
+<!-- généré le 2026-11-13 09:47 -->
 ## Bloc 0 — Exports d'abord
 
 - export à faire : Amical : tactique du match (66 h) → bloc 2
@@ -33,7 +33,7 @@
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Composition | Amical contre Artificial Instinct (sam. 14/11) : saisis le test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs → bloc 2 |
+| 🟥 URGENT | Composition | Amical contre Artificial Instinct (14/11) (sam. 14/11) : saisis la tactique maintenant → bloc 2 |
 | 🟥 URGENT | Composition | Composition : Ligue J6 contre BC Gelrode (sam. 14/11) → bloc 3 |
 
 
@@ -41,7 +41,36 @@
 
 Amical contre Artificial Instinct (sam. 14/11), heure limite du verrou 07:45
 
-composition de l'amical en préparation
+Fiche : briefs/2026-11-13-tactique-amical.md (brief du 13/11).
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Baron (17 ans) | PG | PG | — | PG | PG | PG | 36 (+5) | 2 | 1 | 2 | 3 |
+| Boyer (20 ans) | PG | SF | PG | SF | — | — | 36 | 4 | 3 | 3 | 3 |
+| Richard | PG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Bonnet | SG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Dang | SG | — | SG | — | — | SG | 12 (+5) | 3 | 3 | 2 | 3 |
+| Leclerc (17 ans) | SG | SG | — | SG | SG | — | 36 | 3 | 3 | 2 | 3 |
+| Durand | SF | — | SF | — | SF | SF | 24 (+5) | 3 | 3 | 2 | 3 |
+| Gimenez (blessé) | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Albano | PF | — | PF | PF | — | PF | 24 (+5) | 3 | 4 | 1 | 3 |
+| Lefebvre | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Legrand | PF | PF | — | — | PF | — | 24 | 4 | 4 | 1 | 3 |
+| Bernard (18 ans) | C | C | C | — | C | — | 36 | 3 | 3 | 1 | 3 |
+| Fournier | C | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Ungureanu | C | — | — | C | — | C | 12 (+5) | 3 | 3 | 3 | 3 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Les 12 (noms inconnus, export à faire) | tous | 3 | Perimeter |
+
+agressivité 3 à l'écran sur tous les joueurs : réglage du test E1 niveau A, à la place de celui du brief
+zone Perimeter : constant pendant E1 ; focus défensif 3 (Normal) : constant pendant E1
+
+Anticipation (hypothèse) : un adversaire appliquant notre règle mettrait Intense (4) + Perimeter (1) sur Leclerc (15,9 % des tirs, 63 % de 3P tentés à 25 %) ; plan B nommé : Leclerc Off. focus 3, Tir 2, le jeu passe par Boyer (Off. focus 4, 2P 66 %, présent en Q1-Q2-Q3), Legrand (Off. focus 4, Rôle 4, 2P 57 %) et Bernard (2P 53 %), avec au moins un de ces trois sur le terrain à chacun des 3 quarts de Leclerc ; aucun focus adverse en base, c'est une supposition.
+Test en cours (un seul réglage à la fois) : test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs
+Contrôle V1 : Gimenez blessé le 14/11 (retour le 15/11), aucun remplaçant dans la fiche : fiche à refaire
+Écart J-1 : Gimenez — Hadrien Gimenez blessé, retour le 15/11
 
 ## Bloc 3 — Composition de la ligue ou de la coupe
 
