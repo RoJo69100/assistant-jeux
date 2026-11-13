@@ -72,7 +72,9 @@ REGLES = [
 
 
 def manque(export: str, debloque: str = "") -> str:
-    """Ligne d'un bloc vide : « donnée manquante : exporte <écran> » (+ « (<ce que ça débloque>) »)."""
+    """Ligne d'un bloc vide : « donnée manquante : exporte <écran> » (+ « (<ce que ça débloque>) »).
+    Un texte qui porte déjà le verbe (« exporter la page du match ») n'est pas doublé (instantané du 12/11 : « exporte exporter »)."""
+    export = re.sub(r"^export(?:er|e)\s+", "", export.strip(), flags=re.IGNORECASE)
     return f"donnée manquante : exporte {export}" + (f" ({debloque})" if debloque else "")
 
 

@@ -735,7 +735,12 @@ def cas_t5():
     L0 = t0.splitlines()
     yield "test_bloc_0_cite_le_bloc_debloque", all("→ bloc" in l for l in L0 if l.startswith("- ")) and len(L0) >= 6
     yield "test_bloc_0_cite_le_bloc_debloque : valeurs", "exporte Équipe (aperçu, joueurs) (30 h) → bloc 3" in t0 \
-        and "exporte historique global des transferts depuis 2026-11-05 → bloc 4" in t0 and "exporter Entraînement, Finances et Personnel → bloc 9" in t0
+        and "exporte historique global des transferts depuis 2026-11-05 → bloc 4" in t0 and "- donnée manquante : exporte Entraînement, Finances et Personnel → bloc 9" in t0
+    # instantané du 12/11 : « donnée manquante : exporte exporter la page du match → bloc 2 »
+    r12 = {"exports": [], "actions": [(None, 2, "Après l'amical (~08:55) : exporter la page du match", "", "s")]}
+    t12 = "\n".join(qfb.bloc_0(donnees_t5(), r12, et, JOUR_T, MAINT))
+    yield "test_bloc_0_pas_exporte_exporter", "exporte exporter" not in t0 + t12 and "exporte la page du match →" in t12 \
+        and qfb.manque("exporter la page Académie") == "donnée manquante : exporte la page Académie"
     yield "test_bloc_0_une_action_hors_export_absente", "Vendre Dupont" not in t0
     yield "test_bloc_0_apercu_absent_par_match", "donnée manquante : exporte l'aperçu du match de ligue du 11/11 → bloc 3" in "\n".join(
         qfb.bloc_0(donnees_t5(**donnees_t(capture=None)), {"exports": [], "actions": []}, [], JOUR_T, MAINT)) and t0.count("l'aperçu du match de ligue du 11/11") == 0
