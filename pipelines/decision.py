@@ -13,6 +13,7 @@ Usage :
                                        --evaluer-le AAAA-MM-JJ [--equipe ID] [--preuve '<json liste>']
                                        [--lecon L-nnn] [--sujet NOM]   (refus si la leçon est retirée)
   python -I pipelines/decision.py statut <id> accepted|rejected|done|expired [--note …]
+  python -I pipelines/decision.py critere <id> --prediction '<json>'   (critère migré en prose → mesurable)
   python -I pipelines/decision.py liste [<jeu>]
 """
 
@@ -65,6 +66,13 @@ def valider_prediction(pred: object) -> str | None:
             return "attendu doit être un opérateur et un nombre (ex. >= 10)"
         return None
     return "metric doit être my_result ou sql"
+
+
+def valider_critere(metric_actuel: str | None, pred: object) -> str | None:
+    """Commande `critere` : seul un critère migré en prose (metric = migre) est remplacé, par une prédiction mesurable."""
+    if metric_actuel != "migre":
+        return f"critère déjà mesurable ({metric_actuel}) : non remplacé"
+    return valider_prediction(pred)
 
 
 def valider_date(texte: str, aujourdhui: dt.date) -> str | None:
@@ -193,6 +201,29 @@ def cmd_statut(a) -> int:
     return 0
 
 
+def cmd_critere(a) -> int:
+    """Remplace le critère en prose d'une décision migrée ; l'ancien est gardé dans prediction.ancien (côté base)."""
+    try:
+        pred = json.loads(a.prediction)
+    except json.JSONDecodeError as e:
+        print(f"❌ prédiction illisible : {e}")
+        return 1
+    _, lignes = executer("select prediction->>'metric' from learn.decision where id = %s", (a.id,))
+    if not lignes:
+        print(f"❌ décision D-{a.id} introuvable")
+        return 1
+    erreur = valider_critere(lignes[0][0], pred)
+    if erreur:
+        print(f"❌ D-{a.id} : {erreur}")
+        return 1
+    rep = rpc_post("decision_ecrire", {"p": {"op": "critere", "id": a.id, "prediction": pred}})
+    if not rep.get("ok"):
+        print(f"❌ D-{a.id} : {rep.get('erreur')}")
+        return 1
+    print(f"✅ D-{a.id} : critère {pred['metric']} {pred['attendu']}")
+    return 0
+
+
 def cmd_liste(a) -> int:
     _, lignes = executer("select id, game, domain, status, eval_after::date, label from learn.decision"
                          " where %s::text is null or game = %s order by id desc limit 30", (a.jeu, a.jeu))
@@ -220,10 +251,13 @@ def main(argv=None) -> int:
     s.add_argument("id", type=int)
     s.add_argument("statut", choices=STATUTS)
     s.add_argument("--note")
+    c = sp.add_parser("critere", epilog=SCHEMA_PREDICTION, formatter_class=argparse.RawDescriptionHelpFormatter)
+    c.add_argument("id", type=int)
+    c.add_argument("--prediction", required=True, help="objet JSON mesurable qui remplace le critère migré")
     li = sp.add_parser("liste")
     li.add_argument("jeu", nargs="?")
     a = p.parse_args(argv)
-    return {"new": cmd_new, "statut": cmd_statut, "liste": cmd_liste}[a.cmd](a)
+    return {"new": cmd_new, "statut": cmd_statut, "critere": cmd_critere, "liste": cmd_liste}[a.cmd](a)
 
 
 if __name__ == "__main__":
