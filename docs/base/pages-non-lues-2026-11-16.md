@@ -5,7 +5,8 @@ Registre : `core.page_reader` semé le 16/11 depuis les littéraux (route ou `pa
 **Limite connue** : une vue qui lit une page par motif d'URL, par texte ou par filtre non littéral n'est pas détectée. Les types `dom:` de DerbyManager, Hardwood et Team Soccer (ex. `dom:teams_id_squad-tab`, `dom:dashboard_squad`) sont probablement lus à tort « non lus ». À confirmer au tri.
 Pour ignorer exprès : `insert into core.page_ignore (game, motif, raison) values ('<jeu>', '^<regex du type>$', '<raison>')`. Rien n'est décidé ici.
 
-Totaux (types non lus / types reçus ; captures non lues / captures) : derbymanager 39/47 ; 286/426 · hardwood 27/38 ; 109/923 · hockeynation 177/216 ; 2264/3260 · sixzeroleague 45/60 ; 1035/1474 · teamsoccer 93/112 ; 1013/3205 · basketvibe 94/128 ; 1600/3241.
+Bilan après les lecteurs gold de l'étape 4 (types avec décision / types reçus ; captures avec décision / captures ; décision = lecteur silver ou gold, ou motif ignoré exprès, aucun ignoré pour l'instant) : basketvibe 34/128 ; 1641/3241 · derbymanager 27/47 ; 250/426 · hardwood 12/38 ; 829/923 · hockeynation 39/216 ; 996/3260 · sixzeroleague 17/60 ; 464/1474 · teamsoccer 20/112 ; 2212/3205.
+Les tableaux ci-dessous datent d'avant l'étape 4 : ne sont plus « non lus » les `setpiece` de DerbyManager, `dom:players_id`, `dom:schedule_id` (Hardwood), `/api/infrastructure/mine` et `/api/teams/mine/transfers` (SixZero League), `dom:dashboard_match-viewer_id` (Team Soccer).
 
 Clés (premier niveau de la charge utile) :
 - **A** DM dom : `club, club_from, club_name, fields, html, tables, team_id, text, title`
@@ -163,3 +164,33 @@ Clés (premier niveau de la charge utile) :
 | `dom:dashboard_forums` | 16 | 27/10 | D |
 | `dom:dashboard_stadium` | 14 | 04/11 | D |
 | `/rest/v1/forum_translations` | 13 | 31/10 | E (body non objet) |
+
+## basketvibe (ajouté à l'étape 4 ; clés : **E** pour l'API, **F** = `tables, text, title` pour le DOM)
+
+| type de page | n | dernier | clés |
+|---|---:|---|---|
+| `/api/v1/leagues/<id>` | 110 | 16/11 | E ; body: country_code, last_round_number, league_id, league_name, league_short_code, le… |
+| `dom:unknown` | 106 | 16/11 | F |
+| `dom:match` | 95 | 16/11 | F |
+| `/api/v1/clubs/<slug>/schedule` | 78 | 16/11 | E ; body: active_enrollments, cup_fixtures, fixtures, friendlies, from_ymd, league_timez… |
+| `/api/v1/clubs/<slug>/season-history` | 77 | 16/11 | E ; body: league_id, league_name, league_short_code, rows, team_id, team_name |
+| `/api/v1/clubs/<slug>/season-roster` | 70 | 16/11 | E ; body: players, season_id, season_index |
+| `/api/v1/leagues/<id>/seasons/<id>/fixtures/round/<n>` | 68 | 16/11 | E ; body: fixtures, match_day, round_number, season_id, team_country_codes, team_kits, te… |
+| `/api/v1/clubs/<slug>/head-to-head` | 67 | 16/11 | E ; body: filters, league_timezone, matches, opponent_country_code, opponent_kit, oppone… |
+| `/api/v1/teams/<id>/tactics` | 66 | 16/11 | E ; body: active_cup_preset_id, active_friendly_preset_id, active_league_preset_id, ac… |
+| `/api/v1/teams/<id>/notifications` | 56 | 16/11 | E ; body: notifications, total |
+| `/api/v1/leagues/<id>/seasons` | 55 | 16/11 | E ; body: seasons |
+| `/api/v1/leagues/<id>/chat/sync` | 53 | 10/11 | E ; body: messages, server_time, unread_count |
+| `dom:friendly` | 44 | 16/11 | F |
+| `/api/v1/clubs/<slug>/seasons` | 41 | 16/11 | E ; body: current_season_id, seasons |
+| `/api/v1/teams/<id>/notifications/unread-count` | 39 | 16/11 | E ; body: unread_count |
+| `/api/v1/clubs/<slug>/trophies` | 38 | 16/11 | E ; body: cup_rows, rows, team_id, team_name |
+| `/api/v1/watchlist/clubs` | 38 | 16/11 | E ; body: clubs |
+| `/api/v1/teams/<id>/league-fixtures` | 33 | 16/11 | E ; body: fixtures, team_labels |
+| `/api/v1/teams/<id>` | 25 | 11/11 | E ; body: arena_name, away_kit_text_color, country_code, home_kit_text_color, kit_logo_… |
+| `/api/v1/leagues/<id>/seasons/<id>/rounds/<n>/best-five` | 23 | 16/11 | E ; body: mvp_player_id, round_complete, round_number, season_id, slots |
+| `/api/v1/teams/<id>/cup-fixtures` | 20 | 13/11 | E ; body: active_enrollments, cup_fixtures |
+| `/api/v1/teams/<id>/friendlies/invites` | 20 | 16/11 | E ; body: booked, invite |
+| `/api/v1/news/has-new` | 18 | 12/11 | E ; body: has_new |
+| `/api/v1/onboarding/status` | 17 | 11/11 | E ; body: completed_task_count, eligible, journey_active, journey_skipped, levels, next_… |
+| `/api/v1/players/<id>/season-profile` | 17 | 16/11 | E ; body: achievements, averages, bests, career, friendly_statistics, games_played, lates… |
