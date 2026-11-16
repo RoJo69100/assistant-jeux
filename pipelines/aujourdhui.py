@@ -56,6 +56,7 @@ JOUR_PARIS_SQL = "(now() at time zone 'Europe/Paris')::date"
 
 REQUETES = {
     "gold.derniere_capture": "select ligne from gold.derniere_capture where game = 'basketvibe'",
+    "gold.base_taille": "select ligne from gold.base_taille",  # brique base (migration gold 078)
     "gold.bv_captures_manquantes": "select kind, ref, libelle, day, manque, age_j from gold.bv_captures_manquantes "
                                    "order by day desc nulls last, age_j desc",
     "gold.bv_agenda": "select day, at_time, priority, category, action from gold.bv_agenda "
@@ -992,6 +993,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     # 4 bis. Brique collecte (migration 077) : fraîcheur de la collecte, matchs et clubs que la collecte n'a pas reçus.
     # Vue illisible : signalée par « vue illisible » (erreurs) ; absente des données (tests anciens) : aucune ligne.
     for r in lignes_de(donnees, "gold.derniere_capture")[:1]:
+        infos.append(r["ligne"])
+    for r in lignes_de(donnees, "gold.base_taille")[:1]:  # « Base : X Mo sur 500 (plan gratuit), croissance … »
         infos.append(r["ligne"])
     manquants = lignes_de(donnees, "gold.bv_captures_manquantes")
     for r in [x for x in manquants if x["kind"] == "match"][:5]:

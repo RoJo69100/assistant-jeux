@@ -44,6 +44,12 @@ def main() -> int:
     p0 = auj.plan(ta.figees(), {}, ta.JOUR, ta.SOIR)
     controle("BV : sans les vues, aucune ligne ajoutée", not any("Dernière capture" in i for i in p0["infos"]) and not any("manquent" in e for e in p0["exports"]))
     controle("BV : requêtes déclarées", "gold.derniere_capture" in auj.REQUETES and "gold.bv_captures_manquantes" in auj.REQUETES)
+    d["gold.base_taille"] = (["ligne"], [("Base : 287 Mo sur 500 (plan gratuit), croissance ~1,7 Mo/jour sur 7 jours",)])
+    pb = auj.plan(d, {}, ta.JOUR, ta.SOIR)
+    controle("BV : ligne « Base : X Mo sur 500 » dans les autres points",
+             any(i.startswith("Base : 287 Mo sur 500") for i in pb["infos"]), str(pb["infos"][:3]))
+    controle("BV : sans la vue base, aucune ligne Base", not any(i.startswith("Base :") for i in p0["infos"]))
+    controle("BV : requête base_taille déclarée", "gold.base_taille" in auj.REQUETES)
 
     # --- A. plan Hockey Nation ---
     donnees = ta.charger() if hasattr(ta, "charger") else None
