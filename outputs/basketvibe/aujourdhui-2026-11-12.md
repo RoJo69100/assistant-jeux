@@ -1,16 +1,12 @@
-<!-- généré le 2026-11-12 14:51 -->
+<!-- généré le 2026-11-12 17:54 -->
 ## Bloc 0 — Exports d'abord
 
-- donnée manquante : exporte Équipe (aperçu, joueurs) (47 h) → bloc 3
-- donnée manquante : exporte Tactique (25 h) → bloc 3
-- donnée manquante : exporte Amicaux (liste) (28 h) → bloc 3
-- donnée manquante : exporte Amical : tactique du match (47 h) → bloc 2
-- donnée manquante : exporte le Marché (plusieurs pages) (dernier export il y a 28 h) → bloc 4
-- donnée manquante : exporte News (devlog) (196 h) → bloc 3
+- donnée manquante : exporte Amical : tactique du match (50 h) → bloc 2
 - donnée manquante : exporte l'aperçu du match de ligue du 14/11 → bloc 3
-- donnée manquante : exporte exporter la page du match → bloc 2
 - donnée manquante : exporte exporter la page Académie (nouveau rapport du scout) ; Finances en option → bloc 9
-- Marché : 0 capture, 0 annonce vue depuis 24 h → bloc 4
+- Marché : 1 capture, 20 annonces vues depuis 24 h (dernière le 12/11) → bloc 4
+- exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte (étude du 11/11) → bloc 6
+- exporte la page Classement des trois ligues après chaque journée (étude du 11/11) → bloc 6
 - exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche) (étude du 10/11) → bloc 6
 
 ## Bloc 1 — À faire aujourd'hui, puis demain
@@ -20,23 +16,23 @@
 | Priorité | Catégorie | Action |
 |---|---|---|
 | 🟥 URGENT | Composition | Coupe contre Stare Kotlety (jeu. 12/11) : saisis la tactique maintenant → bloc 3 |
+| 🟥 URGENT | Transferts | Enchère maximale 298 sur Omer Friedman (PG, PS 40.8) → bloc 4 |
 | 🟥 URGENT | Transferts | Enchère maximale 726 750 sur Edgars Bērziņš (PF, PS 56.8) → bloc 4 |
-| 🟥 URGENT | Export | donnée manquante : exporte Équipe (aperçu, joueurs) (47 h) → bloc 3 |
-| 🟥 URGENT | Export | donnée manquante : exporte Amical : tactique du match (47 h) → bloc 2 |
+| 🟥 URGENT | Composition | Amical contre San Junipero Bytes (12/11) (jeu. 12/11) : saisis la tactique maintenant → bloc 2 |
+| 🟥 URGENT | Composition | Hadrien Gimenez blessé, retour le 15/11 → bloc 3 |
+| 🟥 URGENT | Export | donnée manquante : exporte Amical : tactique du match (50 h) → bloc 2 |
 | 🟥 URGENT | Export | donnée manquante : exporte l'aperçu du match de ligue du 14/11 → bloc 3 |
 | 🟧 IMPORTANT | Composition | Sors Bonnet, Gimenez, Richard, Lefebvre, Fournier avant le match de coupe contre Stare Kotlety (jeu. 12/11) → bloc 3 |
-| 🟧 IMPORTANT | Transferts | Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,8 → bloc 4 |
-| 🟧 IMPORTANT | Export | donnée manquante : exporte Tactique (25 h) → bloc 3 |
-| 🟧 IMPORTANT | Export | donnée manquante : exporte Amicaux (liste) (28 h) → bloc 3 |
-| 🟧 IMPORTANT | Export | donnée manquante : exporte le Marché (plusieurs pages) (dernier export il y a 28 h) → bloc 4 |
-| 🟧 IMPORTANT | Export | donnée manquante : exporte News (devlog) (196 h) → bloc 3 |
-| 🟧 IMPORTANT | Export | donnée manquante : exporte exporter la page du match → bloc 2 |
+| 🟧 IMPORTANT | Transferts | Acheter un SF de note ≥ 61,0 : aucune annonce au poste SF dans le Marché du 12/11 (annonces encore ouvertes de l'export) → bloc 4 |
+| 🟧 IMPORTANT | Transferts | Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,7 → bloc 4 |
 | 🟧 IMPORTANT | Export | donnée manquante : exporte exporter la page Académie (nouveau rapport du scout) ; Finances en option → bloc 9 |
-| 🟩 SUIVI | Export | exporter la page du match → bloc 0 |
 | 🟩 SUIVI | Export | exporter la page Académie (nouveau rapport du scout) ; Finances en option → bloc 0 |
 | 🟩 SUIVI | Analyse | Conseil C-115 à juger au plus tard le 12/11 → bloc 7 |
 | 🟩 SUIVI | Analyse | Analyse : Dernier match exporté : 11/11 (amical, L 90-132 contre Launceston Ligers) → bloc 7 |
-| 🟩 SUIVI | Export | Marché : 0 capture, 0 annonce vue depuis 24 h → bloc 4 |
+| 🟩 SUIVI | Académie/Draft | Académie, rapport du 12/11 : 3 prospects ; valeur d'un High inconnue → bloc 9 |
+| 🟩 SUIVI | Export | Marché : 1 capture, 20 annonces vues depuis 24 h (dernière le 12/11) → bloc 4 |
+| 🟩 SUIVI | Export | exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte (étude du 11/11) → bloc 6 |
+| 🟩 SUIVI | Export | exporte la page Classement des trois ligues après chaque journée (étude du 11/11) → bloc 6 |
 | 🟩 SUIVI | Export | exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche) (étude du 10/11) → bloc 6 |
 
 **Demain (préparé aujourd'hui)**
@@ -44,8 +40,6 @@
 | Priorité | Catégorie | Action |
 |---|---|---|
 | 🟥 URGENT | Composition | Amical contre Hapoel Nehamia(Galil) (ven. 13/11) : saisis le test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs → bloc 2 |
-| 🟧 IMPORTANT | Transferts | Enchère maximale 726 750 sur Theodore Pelletier (SF, PS 56.7) → bloc 4 |
-| 🟧 IMPORTANT | Transferts | Enchère maximale 1 003 438 sur Hilario Torres (SG, PS 55.4) → bloc 4 |
 | 🟧 IMPORTANT | Composition | Composition : Ligue J6 contre BC Gelrode (sam. 14/11) → bloc 3 |
 
 
@@ -99,49 +93,52 @@ donnée manquante : exporte l'aperçu du match de ligue du 14/11 (bloc 3)
 
 | Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |
 |---|---|---|---|---|---|---|---|---|---|
-| Edgars Bērziņš | PF | 29 | 56,8 | 600 000 | 999 000 | 999 000 | dans 7,7 h | -1,8 | oui |
-| Jetmir Osmani | C | 17 | 44,6 | 1 390 000 | 290 000 | 290 000 | dans 8,1 h | -14,0 | non (prix au-dessus de la médiane de la case) |
-| Pascal Gnassingbé | PG | 27 | 47,8 | 10 000 | 10 000 | 10 000 | dans 9,3 h | -8,3 | oui |
-| Dominick Montenegro | PG | 23 | 39,4 | 3 535 | 626 | 626 | dans 9,4 h | -16,8 | non (case peu fiable : 4 ventes) |
-| Gabriele Leone | C | 29 | 52,0 | 700 000 | 500 000 | 500 000 | dans 9,5 h | -1,1 | non (prix au-dessus de la médiane de la case) |
-| Blerim Kurti | SG | 26 | 44,7 | 10 000 | 1 000 | 1 000 | dans 10,3 h | -11,4 | non (prix au-dessus de la médiane de la case) |
-| Stanislav Sokolov | SG | 28 | 61,1 | 1 256 000 | 1 500 000 | 1 204 381 | dans 10,4 h | +5,1 | non (au-dessus de la capacité restante) |
-| Sergey Golubev | PG | 18 | 46,9 | 1 000 000 | 730 000 | 730 000 | dans 10,5 h | -9,4 | non (prix au-dessus de la médiane de la case) |
-| António Tavares | PG | 17 | 39,2 | 25 000 | 15 000 | 15 000 | dans 11,2 h | -17,0 | non (prix au-dessus de la médiane de la case) |
-| Theodore Pelletier | SF | 26 | 56,7 | 700 000 | 999 000 | 999 000 | dans 17,2 h | -3,3 | oui |
-| Burak Dağ | SG | 18 | 43,7 | 299 999 | 290 000 | 290 000 | dans 17,2 h | -12,0 | non (prix au-dessus de la médiane de la case) |
-| Hilario Torres | SG | 25 | 55,4 | 1 | 1 446 736 | 1 204 381 | dans 18,7 h | -0,5 | oui |
-| Joaquim Jesus | PG | 17 | 40,5 | 300 000 | 290 000 | 290 000 | dans 18,8 h | -15,7 | non (prix au-dessus de la médiane de la case) |
-| Víctor Aragón | SG | 24 | 48,6 | 5 000 | 99 500 | 99 500 | dans 18,8 h | -7,8 | oui |
-| Dainoras Mockus | SF | 19 | 41,9 | 90 000 | 290 000 | 290 000 | dans 19,2 h | -18,1 | oui |
-| Pedro Vieira | PG | 19 | 40,1 | 300 000 | 290 000 | 290 000 | dans 19,3 h | -16,3 | non (prix au-dessus de la médiane de la case) |
-| Jae-won Ahn | PG | 26 | 57,1 | 3 100 000 | 999 000 | 999 000 | dans 19,5 h | +1,0 | non (prix au-dessus de la médiane de la case) |
+| Vladimír Gallo | PG | 31 | 51,6 | 360 000 | 61 000 | 61 000 | dans 0,1 h | -5,6 | non (prix au-dessus de la médiane de la case) |
+| Fortunat Walczak | C | 25 | 39,1 | 13 000 | 626 | 626 | dans 0,9 h | -14,2 | non (case peu fiable : 4 ventes) |
+| Omer Friedman | PG | 30 | 40,8 | 0 | 750 | 750 | dans 1,5 h | -15,6 | oui |
+| Loris Lecomte | SF | 17 | 38,4 | 100 000 | 15 000 | 15 000 | dans 1,7 h | -17,7 | non (prix au-dessus de la médiane de la case) |
+| Fernando Araújo | C | 16 | 34,4 | 150 000 | 1 875 | 1 875 | dans 2,5 h | -18,8 | non (prix au-dessus de la médiane de la case) |
+| Seo-jun Bui | PF | 28 | 60,0 | 1 500 000 | 1 500 000 | 1 377 031 | dans 2,8 h | +6,8 | non (au-dessus de la capacité restante) |
+| Ulisse Serra | SG | 26 | 57,7 | 1 999 999 | 999 000 | 999 000 | dans 3,6 h | +1,5 | non (prix au-dessus de la médiane de la case) |
+| Gabriel Dawson | PF | 17 | 32,9 | 99 999 | 1 875 | 1 875 | dans 3,8 h | -25,9 | non (prix au-dessus de la médiane de la case) |
+| Francis Panganiban | PF | 17 | 42,0 | 999 999 | 290 000 | 290 000 | dans 3,8 h | -18,8 | non (prix au-dessus de la médiane de la case) |
+| Mees Berg | PF | 23 | 44,8 | 751 | 3 751 | 3 751 | dans 4,1 h | -15,5 | oui |
+| Arkadiusz Błaszczyk | C | 23 | 46,6 | 85 000 | 99 500 | 99 500 | dans 4,1 h | -12,7 | oui |
+| Edgars Bērziņš | PF | 29 | 56,8 | 600 000 | 999 000 | 999 000 | dans 4,7 h | -2,0 | oui |
+| Jetmir Osmani | C | 17 | 44,6 | 1 390 000 | 290 000 | 290 000 | dans 5,1 h | -8,6 | non (prix au-dessus de la médiane de la case) |
+| Pascal Gnassingbé | PG | 27 | 47,8 | 85 000 | 10 000 | 10 000 | dans 6,2 h | -8,6 | non (prix au-dessus de la médiane de la case) |
+| Dominick Montenegro | PG | 23 | 39,4 | 3 535 | 626 | 626 | dans 6,4 h | -17,1 | non (case peu fiable : 4 ventes) |
+| Gabriele Leone | C | 29 | 52,0 | 700 000 | 500 000 | 500 000 | dans 6,5 h | -1,3 | non (prix au-dessus de la médiane de la case) |
+| Blerim Kurti | SG | 26 | 44,7 | 10 000 | 1 000 | 1 000 | dans 7,2 h | -11,3 | non (prix au-dessus de la médiane de la case) |
+| Stanislav Sokolov | SG | 28 | 61,1 | 1 256 000 | 1 500 000 | 1 377 031 | dans 7,4 h | +4,9 | oui |
+| Sergey Golubev | PG | 18 | 46,9 | 1 010 000 | 730 000 | 730 000 | dans 7,4 h | -9,7 | non (prix au-dessus de la médiane de la case) |
+| António Tavares | PG | 17 | 39,2 | 25 000 | 15 000 | 15 000 | dans 8,1 h | -17,3 | non (prix au-dessus de la médiane de la case) |
 
 **Qui vendre (joueurs vendables et s'ils sont nécessaires)**
 
 | Nom | Poste | Âge | Note | Salaire hebdomadaire | Rang au poste | Minutes (4 derniers matchs de ligue) | Remplaçant | Écart de force | Prix attendu (médiane de la case) | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Catalin Ungureanu | C | 27 | 48,5 | 19 030 | 6 (C) | 12,0 | Maël Bernard | 0,8 | 10 000 | vendable |
-| Anselmo Albano | PF | 27 | 47,8 | 17 668 | 10 (PF) | 3,0 | Min-jun Dang | 0,5 | 10 000 | vendable |
-| Maël Bernard | C | 18 | 47,8 | 17 303 | 5 (C) | 0,0 | Anselmo Albano | 0,1 | 730 000 | vendable |
-| Nolan Baron | PG | 17 | 44,5 | 16 691 | 7 (PG) | 0,0 | Jonathan Durand | 0,3 | 290 000 | vendable |
-| Léo Lefebvre | PF | 29 | 63,1 | 31 803 | 1 (PF) | 35,1 | Hadrien Gimenez | 4,2 | 1 500 000 | nécessaire (écart de force 4,2 supérieur à la tolérance 1,0) |
-| Hadrien Gimenez | SF | 26 | 60,0 | 28 328 | 1 (SG) | 36,0 | Oscar Richard | 4,3 | 1 500 000 | nécessaire (écart de force 4,3 supérieur à la tolérance 1,0) |
-| Oscar Richard | PG | 25 | 56,4 | 25 605 | 2 (PG) | 36,0 | Léo Lefebvre | 4,5 | 1 446 736 | nécessaire (écart de force 4,5 supérieur à la tolérance 1,0) |
-| Armand Fournier | C | 28 | 52,5 | 22 846 | 3 (C) | 36,0 | Oscar Richard | 2,3 | 500 000 | nécessaire (écart de force 2,3 supérieur à la tolérance 1,0) |
-| Min-jun Dang | SG | 30 | 49,9 | 20 663 | 5 (SG) | 12,0 | Naël Boyer | 2,5 | 10 250 | nécessaire (écart de force 2,5 supérieur à la tolérance 1,0) |
-| Thibault Bonnet | SG | 26 | 51,8 | 20 330 | 4 (SG) | 36,0 | Min-jun Dang | 1,7 | 500 000 | nécessaire (écart de force 1,7 supérieur à la tolérance 1,0) |
-| Noé Legrand | PF | 23 | 49,4 | 19 227 | 4 (C) | 19,0 | Catalin Ungureanu | 1,4 | 99 500 | nécessaire (écart de force 1,4 supérieur à la tolérance 1,0) |
-| Naël Boyer | PG | 20 | 48,2 | 18 252 | 5 (PG) | 12,0 | Nolan Baron | 3,9 | 730 000 | nécessaire (écart de force 3,9 supérieur à la tolérance 1,0) |
-| Jonathan Durand | SF | 25 | 43,6 | 15 928 | 10 (SG) | 3,0 | Sacha Leclerc | 2,3 | 3 751 | nécessaire (écart de force 2,3 supérieur à la tolérance 1,0) |
-| Sacha Leclerc | SG | 17 | 42,3 | 13 767 | 11 (SG) | 0,0 | Nolan Baron | 1,3 | 290 000 | nécessaire (écart de force 1,3 supérieur à la tolérance 1,0) |
+| Catalin Ungureanu | C | 27 | 48,5 | 19 030 | 6 (C) | 12,0 | Maël Bernard | 0,7 | 10 000 | vendable |
+| Anselmo Albano | PF | 27 | 47,8 | 17 668 | 10 (PF) | 3,0 | Maël Bernard | 0,0 | 10 000 | vendable |
+| Maël Bernard | C | 18 | 47,8 | 17 303 | 5 (C) | 0,0 | Anselmo Albano | 0,0 | 730 000 | vendable |
+| Nolan Baron | PG | 17 | 44,5 | 16 691 | 7 (PG) | 0,0 | Jonathan Durand | 0,4 | 290 000 | vendable |
+| Léo Lefebvre | PF | 29 | 63,1 | 31 803 | 1 (PF) | 36,0 | Armand Fournier | 10,6 | 1 500 000 | nécessaire (écart de force 10,6 supérieur à la tolérance 1,0) |
+| Hadrien Gimenez | SF | 26 | 60,0 | 28 328 | 1 (SG) | 34,4 | Oscar Richard | 4,4 | 1 500 000 | nécessaire (écart de force 4,4 supérieur à la tolérance 1,0) |
+| Oscar Richard | PG | 25 | 56,4 | 25 605 | 2 (PG) | 36,0 | Léo Lefebvre | 4,7 | 1 446 736 | nécessaire (écart de force 4,7 supérieur à la tolérance 1,0) |
+| Armand Fournier | C | 28 | 52,5 | 22 846 | 3 (C) | 36,0 | Oscar Richard | 2,2 | 500 000 | nécessaire (écart de force 2,2 supérieur à la tolérance 1,0) |
+| Min-jun Dang | SG | 30 | 49,9 | 20 663 | 5 (SG) | 12,0 | Naël Boyer | 2,4 | 10 250 | nécessaire (écart de force 2,4 supérieur à la tolérance 1,0) |
+| Thibault Bonnet | SG | 26 | 51,8 | 20 330 | 4 (SG) | 36,0 | Min-jun Dang | 1,9 | 500 000 | nécessaire (écart de force 1,9 supérieur à la tolérance 1,0) |
+| Noé Legrand | PF | 23 | 49,4 | 19 227 | 4 (C) | 21,0 | Catalin Ungureanu | 1,5 | 99 500 | nécessaire (écart de force 1,5 supérieur à la tolérance 1,0) |
+| Naël Boyer | PG | 20 | 48,2 | 18 252 | 5 (PG) | 12,0 | Nolan Baron | 3,7 | 730 000 | nécessaire (écart de force 3,7 supérieur à la tolérance 1,0) |
+| Jonathan Durand | SF | 25 | 43,6 | 15 928 | 10 (SG) | 1,6 | Sacha Leclerc | 2,4 | 3 751 | nécessaire (écart de force 2,4 supérieur à la tolérance 1,0) |
+| Sacha Leclerc | SG | 17 | 42,3 | 13 767 | 11 (SG) | 0,0 | Nolan Baron | 1,2 | 290 000 | nécessaire (écart de force 1,2 supérieur à la tolérance 1,0) |
 
 **Enchères, achats et ventes déjà proposés**
 
-- Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,8 — force au poste 48,4 contre 47,6, tolérance 1,0 (core.game_params.vente_tolerance_force)
-- Enchère maximale 1 003 438 sur Hilario Torres (SG, PS 55.4) — plafond de revente (95 % du p25) ; prix à l'export 1 ; fin 13/11 ; marge de revente p25 1 003 436 ; page du Marché de 28 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 726 750 sur Edgars Bērziņš (PF, PS 56.8) — plafond de revente (95 % du p25) ; prix à l'export 600 000 ; fin 12/11 ; marge de revente p25 126 750 ; page du Marché de 28 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 726 750 sur Theodore Pelletier (SF, PS 56.7) — plafond de revente (95 % du p25) ; prix à l'export 700 000 ; fin 13/11 ; marge de revente p25 26 750 ; page du Marché de 28 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Acheter un SF de note ≥ 61,0 : aucune annonce au poste SF dans le Marché du 12/11 (annonces encore ouvertes de l'export) — poste SF : profondeur 2, PS moyen 51.8
+- Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,7 — force au poste 48,5 contre 47,8, tolérance 1,0 (core.game_params.vente_tolerance_force)
+- Enchère maximale 726 750 sur Edgars Bērziņš (PF, PS 56.8) — plafond de revente (95 % du p25) ; prix à l'export 600 000 ; fin 12/11 ; marge de revente p25 126 750 ; page du Marché de 0 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 298 sur Omer Friedman (PG, PS 40.8) — plafond de revente (95 % du p25) ; prix à l'export 0 ; fin 12/11 ; marge de revente p25 298 ; page du Marché de 0 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
 
 
 ## Bloc 5 — Les meilleurs et les failles du jeu
@@ -150,33 +147,34 @@ carte de faisabilité du 10/11 : 3a force du club et victoires : faisable mainte
 
 ## Bloc 6 — Match Engine
 
-matchs ajoutés : 0 (ligue 0, amical 0 ; autres clubs 0) · 89 en base · étude à jour au 10/11, 1 de nos matchs pas encore étudiés ; 0 d'autres clubs
+matchs ajoutés : 1 (ligue 0, amical 1 ; autres clubs 0) · 91 en base · étude à jour au 11/11, 1 de nos matchs pas encore étudiés ; 0 d'autres clubs
+Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte. (étude du 11/11)
+Pour comprendre le Match Engine, j'ai besoin de : exporte la page Classement des trois ligues après chaque journée, parce que le vainqueur de chaque match entre deux autres clubs manque hors score brut. L'écart de victoires d'un relevé à l'autre, croisé avec `silver.bv_fixtures`, donnerait qui a battu qui, sans utiliser de score. Aujourd'hui, le classement n'est relevé jour par jour que pour notre ligue. (étude du 11/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche), parce que le `defensive_focus` adverse est absent : 0 ligne adverse sur 53 dans `silver.bv_match_tactics`, toutes les captures `match-tactics-used` ont `viewer_is_primary` = true. Hypothèse : cette page existe. Si le jeu ne la montre pas, la question 1c est hors d'atteinte. (étude du 10/11)
 Avancement des expériences : E1 : 0 vérifié sur 4 ; E5 : 0 vérifié sur 3 ; E2 : 0 vérifié sur 3 ; E3 : 0 vérifié sur 7 ; E4 : 0 vérifié sur 16
 prochaine hypothèse : E1 — agressivité défensive, uniforme sur nos cinq
 
 ## Bloc 7 — Analyse détaillée
 
-défaite du 09/11 : analyse faite
+aucune défaite de ligue ou de coupe non analysée
 - Conseil C-115 à juger au plus tard le 12/11 — Académie (rapport 05/11, jauge 79 %) : ignorer Lopez (PG, PS 36,6), Vidal (PF, 37,5), Aubert (C, 40,8), sans test ni signature ; garder 100 000/sem. (86,4 % le 12/11, 92,1 % le 19/11) [M§4.2, M§10.1.3] — agent Académie
 - Analyse : Dernier match exporté : 11/11 (amical, L 90-132 contre Launceston Ligers)
 
 ## Bloc 8 — Économie
 
 carte de faisabilité du 10/11 : 2 prix : PS et âge : faisable maintenant ; 2 prix : poste : dans 334 jours ; 4a rendement d'un achat-revente (marché) : faisable maintenant ; 4b usage de notre argent et rendement : bloquée par : une seule équipe observée (aucun export connu ne la lève)
-- finances : seuil non atteint (résultat hebdo estimé +98 227, la réduction de charges commence sous 0)
+- finances : seuil non atteint (résultat hebdo estimé +98 187, la réduction de charges commence sous 0)
 
 ## Bloc 9 — Académie, personnel, entraînement
 
 carte de faisabilité du 10/11 : 5a entraînement principal contre secondaire : faisable maintenant ; 5b personnel : bloquée par : une seule configuration observée (aucun export ne la lève) ; 5c académie : bloquée par : un seul niveau d'investissement observé (aucun export ne la lève)
-- aucune règle d'académie, de personnel ou d'entraînement déclenchée
+- Académie, rapport du 12/11 : 3 prospects ; valeur d'un High inconnue — donnée manquante : core.game_params.academie_valeur_high
 
 ## Bloc 10 — À valider par l'utilisateur
 
-- à valider par écrit : Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,8
-- à valider par écrit : Enchère maximale 1 003 438 sur Hilario Torres (SG, PS 55.4)
+- à valider par écrit : Vendre Catalin Ungureanu : économie 19 030 par semaine, remplaçant Maël Bernard au poste C, écart 0,7
 - à valider par écrit : Enchère maximale 726 750 sur Edgars Bērziņš (PF, PS 56.8)
-- à valider par écrit : Enchère maximale 726 750 sur Theodore Pelletier (SF, PS 56.7)
+- à valider par écrit : Enchère maximale 298 sur Omer Friedman (PG, PS 40.8)
 - effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
 - Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2, semaine du 2026-11-02) : règle de personnel non tranchée, à valider
 
