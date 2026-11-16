@@ -436,3 +436,9 @@ aucune fiche : lance l'agent tactique
 - **Design** : `docs/superpowers/specs/2026-11-10-bv-club-roster-design.md`, approuvé avec trois ajustements (est_derniere ; test relatif aux appels d'effectif et chronométré ; commentaire de vue).
 - **Vue** `silver.bv_club_roster` (`sql/silver/054_bv_club_roster.sql`, appliquée par le connecteur) : 384 lignes, 35 clubs, 35 team_id, 364 lignes de dernière capture dont 356 joueurs actifs ; 375 lignes `bracket`, 9 `full` (min = max = valeur exacte, player_strength).
 - **Test** `pipelines/test_bv_club_roster.py` : 5/5 (clubs 35 = appels d'effectif 35 ; joueurs 384 = payloads 384 ; une dernière capture par club ; compétences complètes et team_id ; vue en 0,41 s, sous 3 s : pas de matérialisation).
+
+## Boucle d'apprentissage : critères migrés mesurés (2026-11-16 ~20:30 Paris)
+- **Constat** : `learn.decision` basketvibe = 108 proposed, 38 done, 10 rejected, 1 expired ; `learn.outcome` = 6 (D-1070 à 1099, écrits le 09/11) ; `gold.decisions_a_evaluer` = 0. B5 point 2 (HTTPS, leçon, fenêtre) déjà en place. Reste K3 : 32 faits avec `metric = migre`.
+- **Code** : `decision.py critere <id> --prediction '<json>'` + opération `critere` de `public.decision_ecrire` (`sql/learn/007_decision_critere.sql`, appliquée). Refus en base vérifiés : critère déjà mesurable, décision introuvable, prédiction en prose. `test_decision.py` : 20/20.
+- **Données** : critères `sql` écrits pour D-1, 3, 13, 14, 15, 19, 21, 22, 24, 25 (ceux évalués à la main en B3) ; ancien critère gardé dans `prediction.ancien`. `evaluer_decisions.py` : 8 confirmés, 2 contredits (D-1 : 1 `over_36` en ligue ; D-19 : Al-Anazi parti à Padova), identique à B3. `learn.outcome` : 6 → 16 (9 confirmed, 7 contradicted).
+- **Reste** : 16 faits migrés traduisibles (B3), 6 non mesurables (10, 17, 63, 64, 133, 136) ; 98 proposés migrés échus jamais marqués appliqués (K2).
