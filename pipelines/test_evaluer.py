@@ -8,7 +8,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evaluer_decisions import (SEUILS_DEFAUT as S, a_ecrire, charge_ecriture, dans_fenetre,  # noqa: E402
-                               fenetre_resultats, issue_valeur, statut_lecon, verdict_resultats, verdict_valeur)
+                               fenetre_resultats, issue_valeur, mesure_sure, statut_lecon, verdict_resultats,
+                               verdict_valeur)
 from garde import revirement  # noqa: E402
 
 D = {"id": 1070, "decided_at": "2026-11-04T10:54:06+00:00"}
@@ -58,6 +59,12 @@ CAS = [
     ("vente après achat accepté", revirement("vente", [("achat", "accepted")]), True),
     ("vente après achat refusé", revirement("vente", [("achat", "rejected")]), False),
     ("composition sans opposé", revirement("composition", [("composition", "done")]), False),
+    # une lecture refusée (sql.py sort par sys.exit, ex. Cloudflare 403) laisse la décision en attente sans arrêter le passage
+    ("lecture refusée → en attente", mesure_sure(D, lambda d: sys.exit("erreur SQL (https 403) : <!DOCTYPE html>"))[0], None),
+    ("lecture refusée → raison courte", len(mesure_sure(D, lambda d: sys.exit("x" * 500))[1]["erreur"]) <= 120, True),
+    ("lecture refusée → raison gardée", mesure_sure(D, lambda d: sys.exit("erreur SQL (https 403)"))[1]["erreur"],
+     "erreur SQL (https 403)"),
+    ("lecture normale inchangée", mesure_sure(D, lambda d: ("confirmed", {"valeur": 1.0})), ("confirmed", {"valeur": 1.0})),
 ]
 
 if __name__ == "__main__":

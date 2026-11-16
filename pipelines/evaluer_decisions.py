@@ -127,6 +127,15 @@ def mesurer(d: dict) -> tuple[str | None, dict]:
     return issue_valeur(valeur, pred["attendu"], pred["requete"])
 
 
+def mesure_sure(d: dict, mesure=None) -> tuple[str | None, dict]:
+    """Une lecture refusée (sql.py sort par sys.exit, ex. pare-feu Cloudflare 403 en HTTPS) laisse la décision en attente
+    avec la raison (tronquée à 120 caractères), sans arrêter l'évaluation des suivantes."""
+    try:
+        return (mesure or mesurer)(d)
+    except (SystemExit, Exception) as e:  # noqa: BLE001
+        return None, {"erreur": " ".join(str(e).split())[:120]}
+
+
 def issue_valeur(valeur, attendu: str, requete: str) -> tuple[str | None, dict]:
     """D1 (étape 5b-3) : une valeur vide n'est pas un verdict ; la décision reste en attente avec la donnée qui manque."""
     if valeur is None:
@@ -150,7 +159,7 @@ def main(argv=None) -> int:
     erreurs = 0
     for d in decisions:
         d["prediction"] = json_de(d["prediction"])
-        verdict, observe = mesurer(d)
+        verdict, observe = mesure_sure(d)
         if not a_ecrire(verdict):
             print(f"⏳ D-{d['id']} en attente : {observe}")
             continue
