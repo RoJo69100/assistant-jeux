@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from decision import valider_date, valider_prediction  # noqa: E402
+from decision import valider_critere, valider_date, valider_prediction  # noqa: E402
 
 CAS = [
     ("résultat W>=2 sur 3", {"metric": "my_result", "fenetre_matchs": 3, "attendu": "W>=2"}, True),
@@ -25,6 +25,15 @@ CAS = [
 ]
 J = dt.date(2026, 11, 4)
 DATES = [("demain", "2026-11-05", True), ("aujourd'hui", "2026-11-04", False), ("illisible", "05/11", False)]
+# critère réécrit (commande `critere`) : seulement un critère migré en prose, remplacé par une prédiction mesurable
+SQL_OK = {"metric": "sql", "requete": "select count(*) from gold.bv_roster_now", "attendu": ">= 1"}
+CRITERES = [
+    ("migré → sql", "migre", SQL_OK, True),
+    ("migré → my_result", "migre", {"metric": "my_result", "fenetre_matchs": 1, "attendu": "W>=1"}, True),
+    ("migré → prose", "migre", {"metric": "migre", "attendu": "Fontaine absent"}, False),
+    ("déjà sql : pas d'écrasement", "sql", SQL_OK, False),
+    ("déjà my_result : pas d'écrasement", "my_result", SQL_OK, False),
+]
 
 if __name__ == "__main__":
     echecs = 0
@@ -36,6 +45,10 @@ if __name__ == "__main__":
         ok = (valider_date(d, J) is None) == attendu
         echecs += not ok
         print(f"{'OK ' if ok else 'ÉCHEC'} date {nom}")
-    total = len(CAS) + len(DATES)
+    for nom, metric, pred, attendu in CRITERES:
+        ok = (valider_critere(metric, pred) is None) == attendu
+        echecs += not ok
+        print(f"{'OK ' if ok else 'ÉCHEC'} critère {nom}")
+    total = len(CAS) + len(DATES) + len(CRITERES)
     print(f"{total - echecs}/{total}")
     sys.exit(1 if echecs else 0)
