@@ -14,7 +14,21 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # python -I n'ajoute pas le dossier du script
 from build_core import CONTRAT, branchements  # noqa: E402
-from sql import url_ro  # noqa: E402
+from sql import executer  # noqa: E402
+
+
+class Curseur:
+    """Curseur minimal sur le transport de sql.py (HTTPS public.sql_ro en cloud, Postgres direct sinon) : lecture seule.
+    Les requêtes multi-colonnes doivent nommer chaque colonne (sql_ro renvoie du JSON : des noms en double s'écrasent)."""
+
+    def execute(self, sql, params=None):
+        self._lignes = executer(sql, params)[1]
+
+    def fetchone(self):
+        return self._lignes[0] if self._lignes else None
+
+    def fetchall(self):
+        return self._lignes
 
 # entité -> contrôles de plage : (libellé, condition SQL qui doit être vraie pour chaque ligne)
 PLAGES = {
@@ -92,7 +106,7 @@ def controle(cur, jeu: str, entite: str, limites: list[str], fraicheur: int) -> 
         return res
 
     nn = [c for c, _t, obligatoire in colonnes if obligatoire]
-    cur.execute(f"select {', '.join(f'count(*) filter (where {c} is null)' for c in nn)} from {vue}")
+    cur.execute(f"select {', '.join(f'count(*) filter (where {c} is null) as n{i}' for i, c in enumerate(nn))} from {vue}")
     nuls = [f"{c} : {k}" for c, k in zip(nn, cur.fetchone()) if k]
     res.append(("❌" if nuls else "✅", "clés non nulles", "; ".join(nuls)))
 
@@ -106,7 +120,7 @@ def controle(cur, jeu: str, entite: str, limites: list[str], fraicheur: int) -> 
         res.append(("❌" if k else "✅", libelle, f"{k} lignes hors plage" if k else ""))
 
     facultatives = [c for c, _t, obligatoire in colonnes if not obligatoire]
-    cur.execute(f"select {', '.join(f'count({c})' for c in facultatives)} from {vue}")
+    cur.execute(f"select {', '.join(f'count({c}) as n{i}' for i, c in enumerate(facultatives))} from {vue}")
     vides = {c for c, k in zip(facultatives, cur.fetchone()) if k == 0}
     non_declarees = sorted(vides - set(limites))
     declarees_pleines = sorted(set(limites) - vides)
@@ -120,13 +134,15 @@ def controle(cur, jeu: str, entite: str, limites: list[str], fraicheur: int) -> 
     if "day" in attendu:  # entité sans jour de relevé (season) : pas de fraîcheur
         cur.execute(f"select max(day) from {vue} where day <= current_date")
         dernier = cur.fetchone()[0]
+        if isinstance(dernier, str):  # HTTPS : la date arrive en texte ISO
+            dernier = dt.date.fromisoformat(dernier[:10])
         age = (dt.date.today() - dernier).days if dernier else None
         res.append(("❌" if age is None or age > fraicheur else "✅", "fraîcheur",
                     f"dernier jour {dernier} ({age} j)" if dernier else "aucun jour passé"))
 
     if entite in CONSTATS:
         libelle, cond = CONSTATS[entite]
-        cur.execute(f"select count(*), string_agg(distinct day::text, ', ') from {vue} where {cond}")
+        cur.execute(f"select count(*) as n, string_agg(distinct day::text, ', ') as jours from {vue} where {cond}")
         k, jours = cur.fetchone()
         if k:
             res.append(("⚪", libelle, f"{k} : {jours}"))
@@ -139,28 +155,26 @@ def main() -> int:
     ap.add_argument("--fraicheur", type=int, default=8, help="jours au-delà desquels une entité est périmée")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
-    import psycopg
-
     jeux = branchements()
     if a.jeu:
         jeux = {a.jeu: jeux.get(a.jeu, {})}
     echec, nb_ko = False, 0
-    with psycopg.connect(url_ro(), connect_timeout=15) as c, c.cursor() as cur:
-        for jeu, entites in jeux.items():
-            print(f"\n## {jeu}")
-            if not entites:
-                print("❌ aucune entité core déclarée")
-                echec = True
+    cur = Curseur()
+    for jeu, entites in jeux.items():
+        print(f"\n## {jeu}")
+        if not entites:
+            print("❌ aucune entité core déclarée")
+            echec = True
+            continue
+        print("| entité | | contrôle | détail |\n|---|---|---|---|")
+        for entite in CONTRAT:
+            if entite not in entites:
+                print(f"| {entite} | ⚪ | non branchée | |")
                 continue
-            print("| entité | | contrôle | détail |\n|---|---|---|---|")
-            for entite in CONTRAT:
-                if entite not in entites:
-                    print(f"| {entite} | ⚪ | non branchée | |")
-                    continue
-                for marque, nom, detail in controle(cur, jeu, entite, entites[entite], a.fraicheur):
-                    echec |= marque == "❌"
-                    nb_ko += marque == "❌"
-                    print(f"| {entite} | {marque} | {nom} | {detail} |")
+            for marque, nom, detail in controle(cur, jeu, entite, entites[entite], a.fraicheur):
+                echec |= marque == "❌"
+                nb_ko += marque == "❌"
+                print(f"| {entite} | {marque} | {nom} | {detail} |")
     print(f"\n{'❌' if echec else '✅'} contrat core : {', '.join(jeux)} ; {nb_ko} contrôle(s) en échec")
     return 1 if echec else 0
 
