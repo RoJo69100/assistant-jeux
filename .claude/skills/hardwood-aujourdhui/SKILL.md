@@ -16,4 +16,4 @@ Sources : `gold.hw_today`, `gold.daily_alerts` (vue matérialisée, rafraîchie 
 6. Un export 🟧/🟥 dans `gold.hw_exports_state` : recouper d'abord avec `select page_type, max(captured_at) from bronze.raw_pages where game = 'hardwood' and captured_at > now() - interval '1 day' group by 1` (règle N15), puis une ligne « fais l'export X » pour ceux qui manquent vraiment. Les walk-ons ne s'exportent jamais.
 
 ## Format
-Un tableau : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI) · catégorie · action « fais X » (joueur, coach ou recrue nommé). Puis une ligne « Prochain match : <adversaire>, <heure Paris> ». Aucune heure dans les actions, rien pour demain.
+Un tableau : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI) · catégorie · action « fais X » (joueur, coach ou recrue nommé). Puis une ligne « Prochain match : <adversaire>, <heure Paris> », puis la ligne `select ligne from gold.derniere_capture where game = 'hardwood'` (« Dernière capture il y a X h », migration gold 077) recopiée telle quelle. Aucune heure dans les actions, rien pour demain.

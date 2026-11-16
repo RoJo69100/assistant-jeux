@@ -26,5 +26,5 @@ Sources : `gold.sz_agenda` et `gold.sz_daily_alerts` (`sql/gold/015_sz_agenda.sq
 ## Format de réponse
 - **Pas d'heures** : l'utilisateur fait tout quand il peut ; un match raté n'est pas grave. Écris « Aujourd'hui : » puis **au plus 6 puces simples** dans l'ordre logique (exports, tactique des prochains matchs, agents), sans `HH:MM`, sans « avant », « après » ni « il est … ».
 - Puis les alertes de priorité 1, une ligne chacune.
-- Termine par « Exports du jour : … ».
+- Termine par « Exports du jour : … », puis la ligne `select ligne from gold.derniere_capture where game = 'sixzeroleague'` (« Dernière capture il y a X h », migration gold 077) recopiée telle quelle.
 - Pas de règle de jeu sans source ; pas de recommandation nouvelle : seulement ce que les briefs ont validé. Si une décision manque, propose l'agent.

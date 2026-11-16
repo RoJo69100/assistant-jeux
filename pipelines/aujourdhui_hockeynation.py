@@ -41,7 +41,8 @@ union all select 'cap', to_jsonb(c) from silver.hn_cap_now c
 union all select 'controle', to_jsonb(x) from gold.hn_tactique_controle x
 union all select 'case', to_jsonb(l) from gold.hn_saisie_lignes l where l.controle <> 'ok'
 union all select 'training', jsonb_build_object('team_level', team_level, 'dernier', max(captured_at), 'joueurs', count(*)) from silver.hn_training_log group by team_level
-union all select 'declare', to_jsonb(d) from silver.hn_declared d where d.detail ilike '%déjà scouté%'"""
+union all select 'declare', to_jsonb(d) from silver.hn_declared d where d.detail ilike '%déjà scouté%'
+union all select 'capture', to_jsonb(c) from gold.derniere_capture c where c.game = 'hockeynation'"""
 Q_SCOUTS = "select scout, nb_total from gold.hn_scout_liste order by scout"
 Q_CIBLES = "select scout, categorie, rang, joueur, poste, nation, rapports from gold.hn_scout_targets order by scout, categorie, rang"
 Q_BOARD = "select scout, poste, nation from gold.hn_scout_board where statut = 'embauché' order by scout"
@@ -393,6 +394,8 @@ def plan_du_jour(donnees, jour, fait, learnings="", depuis=None):
     t1 = [f"# Hockey Nation — temps 1 : Lire (jour de saison {jour_saison}, {jour})", ""]
     if urgent:
         t1 += table(["Priorité", "Catégorie", "Action"], urgent) + [""]
+    capture = divers(donnees, "capture")   # brique collecte (migration 077)
+    t1 += ([capture[0]["ligne"], ""] if capture else [])
     t1 += ["## 1. Exports", ""]
     t1 += table(["Priorité", "Catégorie", "Action"], [(p, "Export", a) for p, a in actions1]) + [""] if actions1 else ["Aucun export en retard parmi Roster, pages de match et Scouting.", ""]
     t1 += ["## 2. Scouts", ""] + table(["Scout", "Cible", "Poste", "Nation", "Catégorie", "Rapports"], scouts) + ["", "## 3. Matchs joués des 4 équipes", ""]

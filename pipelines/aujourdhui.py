@@ -55,6 +55,9 @@ MOTS_FAIT = {
 JOUR_PARIS_SQL = "(now() at time zone 'Europe/Paris')::date"
 
 REQUETES = {
+    "gold.derniere_capture": "select ligne from gold.derniere_capture where game = 'basketvibe'",
+    "gold.bv_captures_manquantes": "select kind, ref, libelle, day, manque, age_j from gold.bv_captures_manquantes "
+                                   "order by day desc nulls last, age_j desc",
     "gold.bv_agenda": "select day, at_time, priority, category, action from gold.bv_agenda "
                       "where day <= (now() at time zone 'Europe/Paris')::date + 1 order by day, at_time, priority",
     "gold.bv_exports_state": "select ordre, ecran, pour_quoi, dernier_paris, age_h, statut from gold.bv_exports_state order by ordre",
@@ -985,6 +988,18 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         if declare(fait, cles, jour, r["category"]):
             continue
         ajoute(dt.datetime.combine(d, dt.time.fromisoformat(h)) if h else None, int(r["priority"]), r["action"], "", "gold.bv_agenda")
+
+    # 4 bis. Brique collecte (migration 077) : fraîcheur de la collecte, matchs et clubs que la collecte n'a pas reçus.
+    # Vue illisible : signalée par « vue illisible » (erreurs) ; absente des données (tests anciens) : aucune ligne.
+    for r in lignes_de(donnees, "gold.derniere_capture")[:1]:
+        infos.append(r["ligne"])
+    manquants = lignes_de(donnees, "gold.bv_captures_manquantes")
+    for r in [x for x in manquants if x["kind"] == "match"][:5]:
+        exports.append(f"Page du match contre {r['libelle']} ({en_date(r['day']):%d/%m}) : {r['manque']} manquent")
+    clubs_vieux = [x for x in manquants if x["kind"] == "club"]
+    if clubs_vieux:
+        exemples = ", ".join(str(x["libelle"] or x["ref"]) for x in clubs_vieux[:3])
+        exports.append(f"Effectif de {len(clubs_vieux)} club(s) adverse(s) vieux de plus de 7 jours (ex. {exemples}) : page /c/<club>, onglet statistiques")
 
     # 5. Exports en retard + aperçu + historique des transferts (ligne finale)
     m = manque(donnees, erreurs, "gold.bv_exports_state", "tous les écrans")
