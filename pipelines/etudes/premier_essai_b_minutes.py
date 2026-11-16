@@ -45,6 +45,63 @@ def pente(x, y, w=None):
     return np.nan if vx <= 1e-12 else float((w * (x - xb) * (y - yb)).sum() / vx)
 
 
+def ols(X, y, w=None):
+    """Coefficients OLS pondérés (constante ajoutée en tête) ; NaN si trop peu de lignes."""
+    X, y = np.asarray(X, float), np.asarray(y, float)
+    w = np.ones(len(y)) if w is None else np.asarray(w, float)
+    m = (w > 0) & np.isfinite(y) & np.isfinite(X).all(axis=1)
+    if m.sum() < X.shape[1] + 3:
+        return np.full(X.shape[1] + 1, np.nan)
+    A = np.column_stack([np.ones(m.sum()), X[m]]) * np.sqrt(w[m])[:, None]
+    return np.linalg.lstsq(A, y[m] * np.sqrt(w[m]), rcond=None)[0]
+
+
+def ajoute_forces(tmm, P, S):
+    """Force du club et de l'adversaire : dernier club_strength du classement au plus tard le jour du match
+    (sinon le premier connu après)."""
+    d = tmm.merge(P[["fixture_id", "match_day"]], on="fixture_id")
+    d["jour"] = pd.to_datetime(d.match_day)
+    out = []
+    for r in d.itertuples():
+        s = S[S.team_id == r.team_id]
+        if s.empty:
+            out.append(np.nan)
+            continue
+        av = s[s.day <= r.jour]
+        out.append(float((av.iloc[-1] if len(av) else s.iloc[0]).club_strength))
+    d["force"] = out
+    adv = d[["fixture_id", "team_side", "force"]].copy()
+    adv["team_side"] = adv.team_side.map({"home": "away", "away": "home"})
+    return d.merge(adv.rename(columns={"force": "force_adv"}), on=["fixture_id", "team_side"])
+
+
+def b2_forces(tmm, P, S, fidx, nM, nb, rng):
+    tf = ajoute_forces(tmm, P, S)
+    ok = tf.force.notna() & tf.force_adv.notna()
+    print(f"\n### B2 bis. Avec force du club et de l'adversaire (club_strength du classement) : "
+          f"{int(ok.sum())} équipes-matchs sur {len(tf)} ont les deux forces")
+    tf = tf[ok]
+    fi = tf.fixture_id.map(fidx).to_numpy()
+    print("| variable | modèle | n équipes-matchs | n matchs | pente de la marge | IC 95 % | verdict |")
+    print("|---|---|---|---|---|---|---|")
+    for var, u in (("part5", 10.0), ("n36", 1.0)):
+        lab = "+10 pts de part des 5 premiers" if var == "part5" else "+1 joueur au-delà de 36 min"
+        for nom, cols in (("sans force", [var]), ("avec force club + adversaire", [var, "force", "force_adv"])):
+            X = tf[cols].to_numpy(float)
+            e = ols(X, tf.marge)[1] * u
+            bts = []
+            for _ in range(nb):
+                wm = rng.multinomial(nM, np.ones(nM) / nM).astype(float)
+                bts.append(ols(X, tf.marge, wm[fi])[1] * u)
+            ic = C.intervalle(bts)
+            print(f"| {lab} | {nom} | {len(tf)} | {tf.fixture_id.nunique()} | {C.fmt(e, 2)} | {C.fic(ic, 2)} | "
+                  f"{C.verdict(e, ic, tf.fixture_id.nunique())} |")
+    co = ols(tf[["part5", "force", "force_adv"]].to_numpy(float), tf.marge)
+    print(f"Modèle complet (part5) : force du club {co[2]:+.2f} pt de marge par point de force, adversaire {co[3]:+.2f}")
+    print(f"Corrélation part5 - force du club : {np.corrcoef(tf.part5, tf.force)[0, 1]:+.2f} ; "
+          f"force : min {tf.force.min():.1f}, max {tf.force.max():.1f}")
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     nb = int(sys.argv[1]) if len(sys.argv) > 1 else 2000
@@ -55,6 +112,7 @@ def main():
     M = C.matchs()
     P = C.resume_perimetre(M)
     B = C.box()
+    S = C.forces()
     B = B[B.fixture_id.isin(P.fixture_id) & (B.minutes > 0)].merge(P[["fixture_id", "groupe", "overtime_periods"]], on="fixture_id")
     for g in C.GROUPES:
         bg = B[B.groupe == g]
@@ -154,6 +212,7 @@ def main():
             print(f"Niveau équipe-match (n = {len(tmm)} équipes-matchs, {tmm.fixture_id.nunique()} matchs) : marge pour {lab} = "
                   f"{C.fmt(e, 2)} {C.fic(ic, 2)} ; grappes de matchs ; {vd}"
                   + (f" ; n matchs requis {C.n_requis(tmm.fixture_id.nunique(), e, ic)}" if vd != 'association présente' else ""))
+        b2_forces(tmm, P, S, fidx, nM, nb, rng)
     print(f"\nRequêtes exécutées par ce script : {C.NB_REQUETES[0]}")
 
 

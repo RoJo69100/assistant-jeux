@@ -60,6 +60,30 @@ def box():
     return B
 
 
+def box_toutes_saisons():
+    """Box period 0 de tous les matchs en base (toutes saisons, toutes compétitions), avec groupe de moteur."""
+    q = ("select s.fixture_id, s.player_id, s.team_side, s.team_id, s.\"min\" as minutes, s.fga, s.is_mine, "
+         "m.competition, m.match_day from silver.bv_match_player_stats s join silver.bv_matches m on m.fixture_id = s.fixture_id "
+         "where s.period = 0")
+    B = lire(q)
+    for c in ("minutes", "fga"):
+        B[c] = pd.to_numeric(B[c], errors="coerce")
+    B["match_day"] = B.match_day.astype(str).str[:10]
+    B["is_mine"] = B.is_mine.astype(str).str.lower().isin(["true", "t", "1"])
+    B["groupe"] = [groupe(c, j) for c, j in zip(B.competition, B.match_day)]
+    return B
+
+
+def forces():
+    """Force du club (club_strength du classement) par équipe et par jour, saison SAISON."""
+    q = ("select team_id, day, club_strength from silver.bv_standings_weekly "
+         f"where season_id = '{SAISON}' and club_strength is not null")
+    S = lire(q)
+    S["day"] = pd.to_datetime(S.day.astype(str).str[:10])
+    S["club_strength"] = pd.to_numeric(S.club_strength, errors="coerce")
+    return S.drop_duplicates(["team_id", "day"]).sort_values("day")
+
+
 def effectifs():
     cols = ", ".join(f"{c}_min, {c}_max" for c in COMPETENCES)
     q = ("select player_id, day, captured_at, club_slug, team_id, skills_visibility, position, height_cm, weight_kg, age, "
