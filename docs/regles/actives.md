@@ -2,6 +2,11 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
+## Nouvelles (2026-11-16)
+N19. Quand une invite d'autorisation revient (Supabase ou autre) → je lis la config réelle (settings, connecteur claude.ai) avant d'en nommer l'origine, je n'élargis jamais moi-même `.claude/settings.json`, et j'indique à l'utilisateur l'endroit exact où régler (tous les jeux).
+N20. Quand je lance une commande Bash → commande seule, chemin absolu, jamais `cd … && …` (casse les règles allow) (tous les jeux ; non bloqué).
+N21. Quand je commite → message via `git commit -m` simple ou fichier écrit avec Write, jamais heredoc ; je lis la sortie d'un hook refusé avant de relancer. RÉCIDIVE de l'erreur 40 : `hook à écrire` (heredoc dans `git commit`, conception Opus).
+
 ## Nouvelles (2026-11-10 et 2026-11-07)
 N18. Quand je vais lancer `fusion_main.py` → `git fetch origin main && git rebase origin/main` juste avant, tant que mes commits ne sont pas poussés ; jamais de rebase d'une branche déjà poussée (tous les jeux). RÉCIDIVE (2 refus le 2026-11-10) : `hook à écrire` (rebase dans `fusion_main.py`, conception Opus).
 N15. Quand une vue gold dit « export à refaire » → `select max(captured_at)` sur `bronze.raw_pages` par page_type dans le même tour ; si l'export existe après le calendrier, aucune demande. RÉCIDIVE de l'erreur 83 : `hook à écrire`.
