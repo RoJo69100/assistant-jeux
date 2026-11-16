@@ -119,7 +119,8 @@ select
   l.seen_at                                     as seen_at,
   null::timestamptz                             as ends_at,      -- réglé après la journée settle_after_round (extras)
   'vu'::text                                    as status,
-  l.player_id::text                             as player_id,
+  -- Un joueur libre (isFreeAgent) arrive avec playerId = null dans l'API : clé de substitution « libre-<annonce> » (2026-11-16)
+  coalesce(l.player_id::text, 'libre-' || l.listing_id::text) as player_id,
   l.name, l.role                                as position,
   l.age,
   l.overall::numeric                            as rating,
