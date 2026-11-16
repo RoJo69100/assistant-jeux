@@ -2,7 +2,10 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
-## Nouvelles (2026-11-10 et 2026-11-07)
+## Nouvelles (2026-11-16, 2026-11-10 et 2026-11-07)
+N19. Quand je teste un plafond, une RPC ou une sauvegarde → `count(*)` et taille moyenne lus avant, jamais de limite géante sur la base ; un chiffre estimé n'est pas présenté comme chiffre ; un YAML/JSON écrit est parsé (`yaml.safe_load`) avant « fait » (tous les jeux ; non bloqué par code).
+N20. Quand je veux lire plusieurs `pg_get_viewdef` ou copier du SQL → un script l'écrit (jamais recopié à la main) ; requêtes `jsonb_each`/`jsonb_path_query` sur payload, motif `like 'zz\_%'` ou colonne nommée `t` → connecteur Supabase d'emblée (pare-feu Cloudflare, piège de `sql.py`).
+N21. Quand l'ordre demandé par l'utilisateur change (ex. fusion en premier) → je le dis avant d'agir et j'attends son accord ; quand `fin_etape` imprime un échec → je lis la sortie complète avant de conclure (le message ne montre que la dernière ligne ; `fin_etape.py` à corriger, conception Opus).
 N18. Quand je vais lancer `fusion_main.py` → `git fetch origin main && git rebase origin/main` juste avant, tant que mes commits ne sont pas poussés ; jamais de rebase d'une branche déjà poussée (tous les jeux). RÉCIDIVE (2 refus le 2026-11-10) : `hook à écrire` (rebase dans `fusion_main.py`, conception Opus).
 N15. Quand une vue gold dit « export à refaire » → `select max(captured_at)` sur `bronze.raw_pages` par page_type dans le même tour ; si l'export existe après le calendrier, aucune demande. RÉCIDIVE de l'erreur 83 : `hook à écrire`.
 N16. Quand je recommande un recruté → il figure dans la dernière Prospect Search/Recruiting de la base, date citée dans la ligne ; sinon « à vérifier » (Hardwood).
@@ -10,8 +13,6 @@ N17. Quand je cite une série (« n victoires ») → je la compte par requête 
 N13. Quand un hook rejette une réponse → je corrige seulement la ligne ou le tableau fautif, sans réécrire ni répéter le plan (tous les jeux ; non bloqué par code).
 
 ## Nouvelles (2026-11-06, 2026-11-05 et 2026-11-04)
-N11. Quand un agent est « introuvable » → je compare les en-têtes YAML (`name`, `description` entre guillemets) dans le même tour ; jamais une commande donnée sans l'avoir vérifiée (tous les jeux ; en-têtes contrôlés au pre-commit par `pipelines/test_agents.py`).
-N12. Quand je recopie un réglage d'un autre jour → je cite la règle ou le skill qui le justifie, sinon la règle uniforme de la ligue (BasketVibe).
 N4. Quand je rends une saisie de ligue BasketVibe → je demande d'abord l'aperçu du match (jamais déduit des confrontations passées) ; « pas de Preview » vaut pour les amicaux seulement.
 N5. Quand je prépare le plan BasketVibe → `gold.bv_exports_state` lu dans le même tour que l'agenda ; chaque « à refaire » devient une ligne Export.
 N6. Quand je propose une règle → « BasketVibe seulement » ou « tous les jeux » dans la même phrase ; une action d'export = catégorie Export, jamais le domaine (évite H3 police).
@@ -21,7 +22,7 @@ N3. DDL par le connecteur Supabase → jamais de `drop policy` (confirmation inv
 
 ## K — gardées en prose
 K1. Quand je réponds → français, court ; une règle de jeu non sourcée n'est jamais affirmée : je cite le skill ou la source.
-K5. Quand une tâche est commitée, que l'utilisateur change de jeu ou que le contexte atteint ~15 % → je dis `/clear` ou `/compact` en première ligne.
+K5. Quand une tâche est commitée, que l'utilisateur change de jeu ou que le contexte atteint ~15 % → je dis `/clear` ou `/compact` en première ligne. RÉCIDIVE (2026-11-16 : 2 demandes à 202 %) : `hook à écrire` (seuil sur `mesure_session.py`, conception Opus).
 K6. Quand une donnée est en base → je la lis et je nomme joueur par joueur ; une donnée absente = « il me manque X, fais l'export Y ».
 K7. Quand l'utilisateur donne une consigne → je l'applique ; je ne la refuse qu'avec une preuve citée (règle, source, chiffre).
 K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau levier nommé (jusqu'à `learn.lesson`, phase 3).
@@ -30,7 +31,6 @@ K10. Quand un conseil a échoué deux fois → je le réécris avec un nouveau l
 S3. Défaite de ligue ou de coupe en base → `analyste` dans le même tour (hook à écrire) ; amical BasketVibe perdu = test jugé à son échéance (arbitrage 15).
 S4. `police` > 3 min ou 12 appels → brouillon « police partielle » ; pas de 2e passe (`.claude/agents/police.md`, S1 du 2026-11-05 ; aucun hook).
 S5. « Mon équipe » pour recrues ou scouts → cible = besoin de MON effectif.
-
 ## E sans code encore — les plus violées (à remplacer par du code)
 E6. Quand je dis « absent » ou « aucune source » → d'abord une requête sur `bronze.raw_pages` et les sources Discord/chat du jeu. (`controle.py` j, `kb.py` 4.4)
 E7. Quand je prépare un plan du jour → calendrier de moins de 12 h et registre `fait-…` lus dans le même tour, sinon première ligne « exporte le calendrier ». (`gold.agenda`, 1.4)
