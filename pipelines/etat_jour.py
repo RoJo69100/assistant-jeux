@@ -53,7 +53,7 @@ def _match_ok(ev, etat, maintenant, cfg) -> bool:
     if etat == "calendrier":
         return ev.get("jour") is not None
     if etat == "apercu":
-        return ev.get("apercu_at") is not None
+        return ev.get("apercu_at") is not None and ev.get("adv_connus") is not False  # phase A : joueurs adverses vus (preset fait)
     if etat == "fiche":
         return bool(ev.get("fiche")) and ev["fiche"].get("ok", True) and not ev["fiche"].get("defauts")
     if etat == "ecran":
@@ -75,7 +75,10 @@ def _match_gabarit(ev, etat, maintenant, cfg):
     if etat == "calendrier":
         return None, f"ouvre la page des matchs : le {quoi} n'a pas de date en base", True
     if etat == "apercu":
-        return ev.get("verrou"), f"exporte l'aperçu du {quoi}", True
+        etape = f"fais le preset de l'adversaire (pour voir ses joueurs) puis exporte l'aperçu du {quoi}"  # aucun nom de preset en dur
+        if ev.get("apercu_at") is not None and ev.get("adv_connus") is False:
+            return ev.get("verrou"), f"preset de l'adversaire à faire : ses joueurs ne sont pas connus ; {etape}", True
+        return ev.get("verrou"), etape, True
     if etat == "fiche":
         defauts = (ev.get("fiche") or {}).get("defauts")
         if defauts:
@@ -445,6 +448,8 @@ REQUETES = {
     "blessures_match": "select player_id, name, injury_return_on, fixture_id, competition_kind, day, indisponible from gold.bv_blessures_match",
     "ecran_joueurs": "select fixture_id, joueur, minutes, off_focus, role, tir, agress from gold.bv_saisie_joueurs "
                      "where match_day >= (now() at time zone 'Europe/Paris')::date - 1",
+    "adversaires_connus": "select fixture_id, count(*) as n from gold.bv_saisie_adversaires "
+                          "where match_day >= (now() at time zone 'Europe/Paris')::date - 1 and fixture_id is not null group by fixture_id",
     "fatigue_roster": "select name, fatigue from gold.bv_roster_now",
     "seuil_fatigue": "select seuil_bas from core.alert_rule where game = 'basketvibe' and rule_id = 'fatigue' and actif",
     "historique_global": "select max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
@@ -558,6 +563,7 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
     matchs = _rows(donnees, "etat_match")
     officiels = [r for r in matchs if r["played"] and r["competition_kind"] != "amical"]
     dernier = max(officiels, key=lambda r: (str(r["day"]), str(r["coup_envoi_paris"] or "")))["fixture_id"] if officiels else None
+    connus = None if donnees.get("adversaires_connus") in (None, "rejeu") else {str(r["fixture_id"]) for r in _rows(donnees, "adversaires_connus")}
     for r in matchs:
         genre, d = r["competition_kind"], _date(r["day"])
         regle = cfg["matchs"].get(genre)
@@ -572,6 +578,7 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
               "apercu_at": _dt(r["apercu_paris"]), "page_at": page if page and (ce is None or page >= ce) else None,
               "ecran": ({"sauvegarde": bool(r["sauvegarde"]), "joueurs": ecran.get(r["fixture_id"], [])} if r["sauvegarde"] is not None else None),
               "analyse": S.get("analyste") is not None and d is not None and S["analyste"] >= d,
+              "adv_connus": None if connus is None else str(r["fixture_id"]) in connus,
               "juge_requis": r["fixture_id"] == dernier, "juge": a_evaluer == 0, "maj_at": max(dates) if dates else None}
         ev["fiche"] = lire_fiche(base, jour, ev) if d and d >= jour else None
         evs.append(appliquer_controles(ev, {"blessures": blessures.get(r["fixture_id"], {}), "fatigue": fatigue, "seuil_fatigue": seuil}, cfg))

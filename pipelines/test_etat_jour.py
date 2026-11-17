@@ -542,7 +542,25 @@ def cas_lien_fiche():
     yield "lien : sans fiche, la ligne ne dit pas « selon la fiche »", "selon la fiche" not in sans["consigne"] and "aucune fiche" in sans["consigne"]
 
 
-CAS = [cas_config, cas_agents, cas_lien_fiche, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_preset_adversaire():
+    """Phase A, point 1 : ligue et coupe demandent le preset de l'adversaire avant l'aperçu ; l'amical n'en parle jamais."""
+    for genre in ("ligue", "coupe"):
+        l = ej.etat_evenement(match(genre=genre), CFG, MAINT)
+        yield f"preset : {genre}, aperçu à faire → preset puis aperçu", l["prochain"] == "apercu" \
+            and l["consigne"].startswith("fais le preset de l'adversaire (pour voir ses joueurs) puis exporte l'aperçu du ")
+        l = ej.etat_evenement(match(genre=genre, apercu_at=T_APERCU, adv_connus=False), CFG, MAINT)
+        yield f"preset : {genre}, aperçu exporté sans joueurs adverses → « preset de l'adversaire à faire »", l["prochain"] == "apercu" \
+            and l["consigne"].startswith("preset de l'adversaire à faire")
+        l = ej.etat_evenement(match(genre=genre, apercu_at=T_APERCU, adv_connus=True), CFG, MAINT)
+        yield f"preset : {genre}, joueurs adverses connus → fiche", l["prochain"] == "fiche"
+    for kw in ({}, {"fiche": FICHE}, {"fiche": FICHE, "ecran": ECRAN}, {"adv_connus": False}):
+        l = ej.etat_evenement(match(genre="amical", **kw), CFG, MAINT)
+        yield f"preset : amical ({', '.join(kw) or 'rien'}) → aucune mention de preset", "preset" not in l["consigne"].lower()
+    rows = ej._rows({"adversaires_connus": (["fixture_id", "n"], [["m1", 12]])}, "adversaires_connus")
+    yield "preset : requête des adversaires connus déclarée", "adversaires_connus" in ej.REQUETES and rows[0]["fixture_id"] == "m1"
+
+
+CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
