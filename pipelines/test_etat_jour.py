@@ -404,7 +404,8 @@ def cas_branchement():
         lignes, consignes = qfb.bloc_etat(d, S, tmp, maint.date(), maint)
         texte, cons = qfb.rendre_blocs({"actions": [], "exports": [], "garder": [], "infos": [], "capacite": None}, d, {}, maint.date(), maint,
                                        S, etudes=[], base=tmp)
-        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]] + ej.exports_periodiques(d, CFG, maint)
+        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]] + ej.exports_periodiques(d, CFG, maint) \
+            + qfb.lignes_transferts_du_jour(d, None, S, maint)
     t = "\n".join(lignes)
     rangs = [l for l in lignes if l.startswith("| ") and not l.startswith("| Priorité")]
     yield "branchement : une rangée par transition à faire, aucune pour une attente", len(rangs) == len(attendu)
@@ -628,7 +629,36 @@ def cas_ventes():
         marche(rotation=rot, cases=[[50, "22-25", 2, 40000, 60000, 80000, "2026-11-10"]], **effectif()), O, 1.0) == []
 
 
-CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_affichage_transferts():
+    import que_faire_blocs as qfb
+    rot = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 51, 2, 1], ["p3", "Luc Absent", "SF", 50, 0, 0]]
+    am = ["a1", "Tom Gain", "SF", 23, 52, 55000, "2026-11-18T09:00:00"]
+    rv = ["a2", "Yan Bas", "PG", 24, 51, 38000, "2026-11-18T10:00:00"]
+    d = dict(marche(annonces=[am, rv], rotation=rot, **effectif()), tolerance_vente=(["value"], [[1.0]]))
+    ls = ej.lignes_transferts(d, 300000, 1.0)
+    yield "affichage : offres et vente, triées par gain attendu", [l["id"] for l in ls] == ["vente-Paul Banc", "revente-Yan Bas", "amélioration-Tom Gain"]
+    yield "affichage : catégorie Transferts", all(qfb.AFFICHAGE[qfb.CAT_ETAT[l["prochain"]]] == "Transferts" for l in ls)
+    t = ls[1]["consigne"]
+    yield "affichage : la ligne porte nom, poste, âge, note, prix, médiane, type, fin, règle 2", all(x in t for x in (
+        "revente : Yan Bas (PG, 24 ans, note 51)", "à 38 000", "médiane de la case 60 000", "fin 18/11 10:00", "proposition seulement (règle 2)"))
+    yield "affichage : les seuils du yaml sont dans la ligne", "1,25 × prix" in t and "≥ 3" in t and "sur 4 matchs de ligue" in ls[2]["consigne"]
+    yield "affichage : petite somme sans police", "police d'abord" not in t
+    gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00"]]),
+                prix_cases=(CASE_COLS, [[50, "22-25", 4, 300000, 400000, 500000, "2026-11-10"]]))
+    yield "affichage : somme > 250 000 → police d'abord", any("police d'abord : dossier.py puis agent police" in l["consigne"]
+                                                             for l in ej.lignes_transferts(gros, 1000000, 1.0))
+    sans = dict(d, annonces_actives=(ANN, []), vendre=(VEN, []))
+    yield "affichage : sans offre ni vente → aucune ligne", ej.lignes_transferts(sans, 300000, 1.0) == []
+    p = ej.lignes_transferts(dict(d, **{"gold.bv_exports_state": marche(age_h=100)["gold.bv_exports_state"]}), 300000, 1.0)
+    yield "affichage : Marché périmé → ligne « inconnu », pas d'offre", p[0]["consigne"].startswith("offres du Marché : inconnu : export de 100 h") \
+        and not any(l["id"].startswith(("revente", "amélioration")) for l in p)
+    yield "affichage : max_offres du yaml à 1 → une seule offre", len([l for l in ej.lignes_transferts(d, 300000, 1.0, o=dict(O, max_offres=1))
+                                                                     if l["prochain"] == "offre"]) == 1
+    yield "affichage : revente_marge du yaml à 1,6 → Yan Bas disparaît", "revente-Yan Bas" not in [
+        l["id"] for l in ej.lignes_transferts(d, 300000, 1.0, o=dict(O, revente_marge=1.6))]
+
+
+CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

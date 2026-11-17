@@ -584,49 +584,24 @@ def _table_annonces(donnees, capacite, actions=()) -> list:
 
 
 MARCHE = "Marché (enchères)"
-CASE_MIN_OFFRES = 3  # consigne du 17/11 : une case à moins de 3 ventes ne classe pas (« pas de case »)
-N_OFFRES = 5
 
 
-def _offres(donnees) -> list:
-    """5 annonces actives les moins chères par rapport à la médiane de leur case (âge × palier de note). Aucun seuil ni verdict :
-    l'utilisateur juge. Appelée seulement quand l'export du Marché est frais (bloc_4)."""
-    titre = ["**Offres à regarder (les 5 annonces actives les moins chères par rapport à la médiane de leur case ; aucun seuil, à toi de juger)**", ""]
-    vues, rows = set(), []
-    for r in auj.lignes_de(donnees, "annonces_actives"):
-        if r["auction_id"] not in vues:
-            vues.add(r["auction_id"])
-            rows.append(r)
-    if not rows:
-        return titre + ["aucune annonce active dans l'export du Marché", ""]
-    manquent = [lib for col, lib in (("price_now", "le prix actuel"), ("ps", "la note")) if all(r.get(col) is None for r in rows)]
-    if manquent:
-        return titre + [f"la vue du Marché n'a pas {' ni '.join(manquent)} : classement impossible", ""]
-    cases = _cases(donnees)
-    classees, sans_case, incompletes = [], 0, 0
-    for r in rows:
-        if r.get("price_now") is None or r.get("ps") is None or r.get("age") is None:
-            incompletes += 1
-            continue
-        case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
-        if case is None or int(float(case["n"])) < CASE_MIN_OFFRES or float(case["median"]) <= 0:
-            sans_case += 1
-            continue
-        classees.append((float(r["price_now"]) / float(case["median"]), r, case))
-    classees.sort(key=lambda x: x[0])
-    lignes = list(titre)
-    if classees:
-        lignes += ["| Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Prix / médiane | Fin |", "|---|---|---|---|---|---|---|---|"]
-        for rap, r, case in classees[:N_OFFRES]:
-            fin = f"{auj.en_heure(r['ends_paris']):%d/%m %H:%M}" if r.get("ends_paris") else "inconnue"
-            lignes.append(f"| {r['name']} | {r['position']} | {int(float(r['age']))} | {_virg(r['ps'])} | {auj.montant(r['price_now'])} | "
-                          f"{auj.montant(case['median'])} | {_virg(rap, 2)} | {fin} |")
-        lignes.append("")
-    if sans_case:
-        lignes += [f"pas de case : {sans_case} annonce(s) dont la case a moins de {CASE_MIN_OFFRES} ventes, non classée(s)", ""]
-    if incompletes:
-        lignes += [f"{incompletes} annonce(s) sans prix actuel, note ou âge dans la vue du Marché, non classée(s)", ""]
-    return lignes
+def _tolerance(donnees):
+    t = next((r["value"] for r in auj.lignes_de(donnees, "tolerance_vente")), None)
+    return None if t in (None, "") else float(t)
+
+
+def lignes_transferts_du_jour(donnees, capacite, S, maintenant=None) -> list:
+    """Phase A : lignes Transferts (offres, ventes) de pipelines/etat_jour.py, seuils de la section offres du yaml. Une seule source :
+    l'état par événement et le bloc 4 lisent ces lignes."""
+    import etat_jour as ej
+    return ej.lignes_transferts(donnees, capacite, _tolerance(donnees), (S or {}).get("police", ""), maintenant)
+
+
+def _offres_et_ventes(donnees, capacite, police="") -> list:
+    ls = lignes_transferts_du_jour(donnees, capacite, {"police": police})
+    titre = ["**Offres et ventes du jour (mêmes lignes que l'état par événement)**", ""]
+    return titre + (["- " + l["consigne"] for l in ls] or ["aucune offre ni vente selon les règles du jour (section offres du yaml)"]) + [""]
 
 
 def _verdict_vente(r, tolerance):
@@ -681,8 +656,7 @@ def bloc_4(donnees, erreurs, capacite, tolerance, actions=(), police="") -> list
     sortie = []
     for noms, fabrique in ((("prix_cases",), lambda: _table_prix(donnees)),
                            (("annonces_24h",), lambda: _table_annonces(donnees, capacite, actions)),
-                           (("annonces_actives",) if auj.inconnu_si_perime(donnees, MARCHE) is None else (),
-                            lambda: _offres(donnees) if auj.inconnu_si_perime(donnees, MARCHE) is None else []),
+                           ((), lambda: _offres_et_ventes(donnees, capacite, police)),
                            (("vendre", "gold.bv_sell_replacement"), lambda: _table_vente(donnees, tolerance, police))):
         illisibles = [n for n in noms if donnees.get(n) in (None, "rejeu")]
         sortie += [vue_illisible(n) for n in illisibles] + [""] if illisibles else fabrique()
@@ -1034,17 +1008,18 @@ def section(rendu: str, n: int) -> str:
 # P2 (plan v4) : catégorie affichée d'une ligne de etat_jour, par type d'événement et prochaine transition
 CAT_ETAT = {"export_periodique": "export", "apercu": "export","joue": "export", "calendrier": "export", "rapport_exporte": "export", "page_exportee": "export",
             "fiche": "composition", "ecran": "composition", "analyse": "analyse", "juge": "analyse", "decide": "academie/draft",
-            "saisi": "entrainement", "police": "transferts", "resultat": "transferts"}
+            "saisi": "entrainement", "police": "transferts", "resultat": "transferts", "offre": "transferts", "vente": "transferts"}
 TITRE_ETAT = "## Aujourd'hui — état par événement"
 
 
-def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime) -> tuple:
+def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime, capacite=None) -> tuple:
     """(lignes, consignes) : une rangée par événement des 48 h (ou match joué non analysé) dont la prochaine transition est à faire
     (pipelines/etat_jour.py) ; les attentes n'ont pas de rangée. Une consigne d'agent ou de commande part dans les consignes de
     session et la rangée dit seulement ce qui est à lancer. Les blocs 0 à 10 restent (doublons supprimés seulement à parité prouvée)."""
     import etat_jour as ej
     cfg = ej.charger_config()
     ls = [l for l in ej.lignes(ej.construire(donnees, S, base, jour, maintenant, cfg), cfg, maintenant) if l["action"]]
+    ls += lignes_transferts_du_jour(donnees, capacite, S, maintenant)  # phase A : offres et ventes (mêmes lignes que le bloc 4)
     ls = sorted(ls + ej.exports_periodiques(donnees, cfg, maintenant), key=lambda l: l["priorite"])  # 17/11 : Marché, historique, Personnel
     rangs, consignes = [], []
     for l in ls:
@@ -1083,7 +1058,7 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
              bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), bloc_5(etudes), b6,
              b7, bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
              bloc_10(actions, garder)]
-    be, ce = bloc_etat(donnees, S, base or BASE, jour, maintenant)  # P2 : en tête du plan, à côté des blocs actuels
+    be, ce = bloc_etat(donnees, S, base or BASE, jour, maintenant, res.get("capacite"))  # P2 : en tête du plan, à côté des blocs actuels
     texte = [TITRE_ETAT, ""] + be
     for n, (titre, lignes) in enumerate(zip(TITRES[2:], blocs), start=2):
         texte += [f"## Bloc {n} — {titre}", ""] + list(lignes) + [""]

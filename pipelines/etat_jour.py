@@ -482,6 +482,46 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     return sorted(res, key=lambda x: -x["gain"])[:places]
 
 
+def _m(x) -> str:
+    return f"{x:,.0f}".replace(",", " ")
+
+
+def texte_transfert(x, o) -> str:
+    """Ligne d'une offre ou d'une vente : nom, poste, âge, note, prix, médiane de la case, type, fin, seuils du yaml, règle 2, police."""
+    from police import SEUIL_GROS_MONTANT
+    qui = f"{x['nom']} ({x['poste']}, {x['age']} ans, note {_virg(x['note'])})"
+    if x["type"] == "vente":
+        t = (f"vente : {qui}, prix attendu {_m(x['prix'])}, médiane de la case {_m(x['mediane'])} ({x['n_case']} ventes ≥ {o['case_min_ventes']}) ; "
+             f"{_virg(x['min_moy'])} min en moyenne sur {o['matchs_rotation']} matchs de ligue (≤ {_virg(o['minutes_hors_rotation'])}), "
+             f"écart avec {x['remplacant']} {_virg(x['ecart'])} (tolérance {_virg(x['tolerance'])}) ; fin : annonce à créer")
+    else:
+        if x["type"] == "amélioration":
+            seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre plus faible utilisé au poste sur {o['matchs_rotation']} matchs "
+                     f"de ligue), prix ≤ médiane, budget {_m(x['capacite'])}")
+        else:
+            seuil = f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix"
+        fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
+        t = f"{x['type']} : {qui} à {_m(x['prix'])}, médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
+    t += " — proposition seulement (règle 2)"
+    if x["prix"] > SEUIL_GROS_MONTANT["basketvibe"]:
+        t += " — police d'abord : dossier.py puis agent police"
+    return t
+
+
+def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None) -> list:
+    """Lignes « Transferts » de l'état par événement : `max_offres` offres et `max_ventes` ventes au plus, triées par gain attendu ;
+    Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes."""
+    o = o or charger_offres()
+    of = offres_du_jour(donnees, o, capacite, maintenant)
+    choix = of["offres"][:int(o["max_offres"])] + ventes_du_jour(donnees, o, tolerance, police)[:int(o["max_ventes"])]
+    ligne = lambda i, prochain, consigne: {"id": i, "type": "transfert", "evenement": "transferts", "etat": None, "prochain": prochain,
+                                           "rates": [], "echeance": None, "consigne": consigne, "age_h": None, "priorite": 2,
+                                           "action": True, "defauts": []}
+    res = [ligne("offres-inconnu", "offre", f"offres du Marché : {of['inconnu']}")] if of["inconnu"] else []
+    return res + [ligne(f"{x['type']}-{x['nom']}", x["type"] if x["type"] == "vente" else "offre", texte_transfert(x, o))
+                  for x in sorted(choix, key=lambda x: -x["gain"])]
+
+
 class _Champs(dict):
     def __missing__(self, k):
         return "{" + k + "}"
