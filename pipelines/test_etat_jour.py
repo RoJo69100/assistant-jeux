@@ -560,7 +560,46 @@ def cas_preset_adversaire():
     yield "preset : requête des adversaires connus déclarée", "adversaires_connus" in ej.REQUETES and rows[0]["fixture_id"] == "m1"
 
 
-CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+O = ej.charger_offres()
+CASE_COLS = ["ps_band", "age_band", "n", "p25", "median", "p75", "last_sale"]
+ANN = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris"]
+ROT = ["player_id", "name", "position", "ps", "min_moy", "matchs_joues"]
+
+
+def marche(age_h=2, annonces=(), cases=None, rotation=None, **plus):
+    d = {"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                   [[3, "Marché (enchères)", "x", "2026-11-17T10:00:00", age_h, "s"]]),
+         "prix_cases": (CASE_COLS, cases if cases is not None else [[50, "22-25", 4, 40000, 60000, 80000, "2026-11-10"],
+                                                                    [55, "22-25", 2, 50000, 90000, 100000, "2026-11-10"]]),
+         "annonces_actives": (ANN, list(annonces)),
+         "rotation": (ROT, rotation if rotation is not None else [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 40, 2, 1],
+                                                                 ["p3", "Luc Absent", "SF", 30, 0, 0]])}
+    d.update(plus)
+    return d
+
+
+def cas_offres():
+    yield "offres : seuils lus dans le yaml", O["revente_marge"] == 1.25 and O["case_min_ventes"] == 3 and O["matchs_rotation"] == 4 \
+        and O["minimum_effectif"] == 8
+    yield "offres : la requête de rotation prend N du yaml", "limit 4)" in ej.REQUETES["rotation"] and "limit 6)" in ej.requete_rotation(6)
+    am = ["a1", "Tom Gain", "SF", 23, 52, 55000, "2026-11-18T09:00:00"]   # note 52 > 40 (Paul Banc, utilisé le plus faible), 55 000 ≤ médiane 60 000
+    rv = ["a2", "Yan Bas", "PG", 24, 51, 38000, "2026-11-18T10:00:00"]   # PG : aucun utilisé ; 38 000 ≤ p25 40 000 et 60 000 ≥ 1,25 × 38 000
+    rien = ["a3", "Max Cher", "C", 24, 50, 70000, "2026-11-18T11:00:00"]
+    petite = ["a4", "Eli Rare", "SF", 23, 57, 10000, "2026-11-18T11:00:00"]  # case de 2 ventes < 3
+    r = ej.offres_du_jour(marche(annonces=[am, rv, rien, petite]), O, 300000)
+    yield "offres : amélioration et revente trouvées, triées par gain", [(x["nom"], x["type"]) for x in r["offres"]] == \
+        [("Yan Bas", "revente"), ("Tom Gain", "amélioration")] and r["inconnu"] is None
+    yield "offres : l'amélioration nomme notre plus faible utilisé (Luc Absent n'a pas joué)", r["offres"][1]["faible"] == "Paul Banc"
+    yield "offres : hors budget → pas d'amélioration", [x["nom"] for x in ej.offres_du_jour(marche(annonces=[am]), O, 50000)["offres"]] == []
+    yield "offres : aucune annonce intéressante → aucune offre", ej.offres_du_jour(marche(annonces=[rien, petite]), O, 300000)["offres"] == []
+    p = ej.offres_du_jour(marche(age_h=100, annonces=[am, rv]), O, 300000)
+    yield "offres : Marché périmé → inconnu, aucune offre", p["offres"] == [] and p["inconnu"].startswith("inconnu : export de 100 h")
+    yield "offres : marge du yaml à 1,6 → plus de revente", ej.offres_du_jour(marche(annonces=[rv]), dict(O, revente_marge=1.6), 300000)["offres"] == []
+    yield "offres : case_min_ventes du yaml à 2 → la petite case compte", "Eli Rare" in [
+        x["nom"] for x in ej.offres_du_jour(marche(annonces=[petite]), dict(O, case_min_ventes=2), 300000)["offres"]]
+
+
+CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

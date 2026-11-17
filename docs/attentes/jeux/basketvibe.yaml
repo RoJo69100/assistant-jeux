@@ -84,6 +84,17 @@ domaines:
   jeunes:          { present: oui, depense_suivie: oui, specificites: "jauge 0–100 %, investissement hebdo jusqu'à 100 000, test de potentiel 25 000, recrutement −50 % de jauge" }
   transferts:      { present: oui, taxe: "5 %", delai_revente: "1 semaine", minimum_effectif: 8, base_historique: transfers_global-history }   # 8 = règle du jeu ; 9 = notre marge de sécurité
   finances:        { present: oui, sponsor: "un contrat par saison" }
+
+# Phase A (17/11, règles de l'utilisateur) : offres et ventes du jour, lues par pipelines/etat_jour.py (jamais en dur dans le code).
+# Case = tranche d'âge × palier de note de 5 (table des prix du bloc 4, gold.bv_price_ref_ps). Utilisé = a joué sur les
+# `matchs_rotation` derniers matchs de ligue ; hors rotation = moyenne de minutes ≤ `minutes_hors_rotation` sur ces matchs.
+offres:
+  matchs_rotation: 4
+  case_min_ventes: 3
+  revente_marge: 1.25
+  minutes_hors_rotation: 6
+  max_offres: 3
+  max_ventes: 2
   personnel:       { present: oui, postes: [médecins, kinés, psychologues, marketing], facturation: "maximum atteint dans la semaine (dev 2026-09-14 ; 85 000 contre 60 000 le 25/10, à confirmer le 01/11)" }
   infrastructures: { present: non }
 

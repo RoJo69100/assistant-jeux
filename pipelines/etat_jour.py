@@ -389,6 +389,66 @@ def exports_periodiques(donnees, cfg, maintenant) -> list:
     return res
 
 
+# ---- Phase A (17/11) : offres et ventes du jour, seuils lus dans la section `offres` du yaml -------------------------------
+
+MARCHE = "Marché (enchères)"
+
+
+def charger_offres(jeu: str = "basketvibe", chemin=None) -> dict:
+    """Section `offres` de docs/attentes/jeux/<jeu>.yaml (seuils de l'utilisateur) et `domaines.transferts.minimum_effectif`."""
+    import yaml
+    y = yaml.safe_load(Path(chemin or CONFIG / f"{jeu}.yaml").read_text(encoding="utf-8"))
+    return dict(y["offres"], minimum_effectif=y["domaines"]["transferts"]["minimum_effectif"])
+
+
+def requete_rotation(n: int) -> str:
+    """Minutes de chaque joueur de l'effectif sur les `n` derniers matchs de ligue (0 s'il n'a pas joué) : moyenne et matchs joués."""
+    n = int(n)
+    return ("select r.player_id, r.name, r.position, r.ps, round(coalesce(sum(l.min), 0)::numeric / " + str(n) + ", 1) as min_moy, "
+            "count(l.fixture_id) filter (where l.min > 0) as matchs_joues from gold.bv_roster_now r "
+            "left join gold.bv_match_player_lines l on l.player_id = r.player_id and l.fixture_id in ("
+            "select fixture_id from (select distinct fixture_id, match_day from gold.bv_match_player_lines where competition = 'league') x "
+            "order by match_day desc limit " + str(n) + ") group by r.player_id, r.name, r.position, r.ps")
+
+
+def _f(v):
+    return None if v in (None, "") else float(v)
+
+
+def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
+    """{"inconnu": texte ou None, "offres": [...]} : annonces actives du Marché de type « amélioration » (note au poste > celle de
+    notre joueur utilisé le plus faible à ce poste, prix ≤ médiane de la case, prix ≤ capacité) ou « revente » (case ≥ case_min_ventes
+    ventes, prix ≤ p25, médiane ≥ revente_marge × prix), triées par gain attendu (médiane − prix). Marché périmé : « inconnu »."""
+    import aujourdhui as auj
+    import que_faire_blocs as qfb
+    perime = auj.inconnu_si_perime(donnees, MARCHE, maintenant)
+    if perime is not None:
+        return {"inconnu": perime, "offres": []}
+    cases = qfb._cases(donnees)
+    faibles = {}
+    for r in _rows(donnees, "rotation"):
+        if int(float(r["matchs_joues"] or 0)) > 0 and r.get("ps") is not None:
+            if r["position"] not in faibles or float(r["ps"]) < float(faibles[r["position"]]["ps"]):
+                faibles[r["position"]] = r
+    vues, res = set(), []
+    for r in _rows(donnees, "annonces_actives"):
+        if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))):
+            continue
+        vues.add(r["auction_id"])
+        case = cases.get((qfb.palier_note(r["ps"]), auj.tranche_age(r["age"])))
+        if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
+            continue
+        prix, med, p25 = float(r["price_now"]), float(case["median"]), float(case["p25"])
+        f = faibles.get(r["position"])
+        base = {"nom": r["name"], "poste": r["position"], "age": int(float(r["age"])), "note": float(r["ps"]), "prix": prix, "mediane": med,
+                "p25": p25, "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")), "gain": med - prix}
+        if f is not None and float(r["ps"]) > float(f["ps"]) and prix <= med and capacite is not None and prix <= float(capacite):
+            res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), capacite=float(capacite)))
+        elif prix <= p25 and med >= float(o["revente_marge"]) * prix:
+            res.append(dict(base, type="revente"))
+    return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"])}
+
+
 class _Champs(dict):
     def __missing__(self, k):
         return "{" + k + "}"
@@ -455,6 +515,7 @@ REQUETES = {
     "historique_global": "select max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
                          "where page_type = 'transfers_global-history'",
 }
+REQUETES["rotation"] = requete_rotation(charger_offres()["matchs_rotation"])  # phase A : N lu dans le yaml
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
 
