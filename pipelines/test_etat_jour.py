@@ -183,7 +183,65 @@ def cas_exports():
     yield "export : chaque export porte l'état qu'il débloque", all(x["prochain"] in ej.ETATS_EXPORT for x in ex([match(id="a"), ac], dt.datetime(2026, 11, 19, 10, 0)))
 
 
-CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports]
+def joueur(nom, minutes, agress=3, off=3, role=3, tir=3):
+    return {"nom": nom, "minutes": minutes, "agress": agress, "off": off, "role": role, "tir": tir}
+
+
+def cas_controles():
+    """P2.3 : contrôles fiche contre réalité ; un défaut = ❌ + correction exacte."""
+    fj = [joueur("Alpha", 30), joueur("Beta", 24), joueur("Gamma", 0)]
+    d = ej.controle_blessures(fj, {"Joueur Alpha": dt.date(2026, 11, 19)}, J)
+    yield "blessure : joueur de la fiche blessé jusqu'après le match → ❌ + correction", len(d) == 1 and d[0]["texte"].startswith("❌") \
+        and "Alpha" in d[0]["texte"] and "19/11" in d[0]["texte"] and "Alpha à 0 min" in d[0]["correction"]
+    yield "blessure : retour le jour du match = disponible", ej.controle_blessures(fj, {"Joueur Alpha": J}, J) == []
+    yield "blessure : joueur à 0 min dans la fiche, blessé : pas de défaut", ej.controle_blessures(fj, {"Joueur Gamma": dt.date(2026, 11, 30)}, J) == []
+    yield "blessure : homonyme de prénom seul non confondu", ej.controle_blessures(fj, {"Alphabet Zed": dt.date(2026, 11, 30)}, J) == []
+    d = ej.controle_minutes([joueur("Alpha", 40), joueur("Beta", 36)], 36)
+    yield "minutes : plus de 36 → ❌, 36 accepté", len(d) == 1 and "Alpha" in d[0]["texte"] and "40" in d[0]["texte"] and "36 min" in d[0]["correction"]
+    d = ej.controle_fatigue(fj, {"Joueur Beta": 23.5, "Joueur Gamma": 40.0}, 20)
+    yield "fatigue : joueur qui joue au-dessus du seuil → ❌ ; au repos : rien", len(d) == 1 and "Beta" in d[0]["texte"] and "23,5" in d[0]["texte"] \
+        and "20" in d[0]["texte"]
+    ecran = [joueur("Alpha", 24), joueur("Beta", 24, agress=4), joueur("Gamma", 0)]
+    d = ej.controle_ecran(fj, ecran)
+    yield "écran contre fiche : chaque écart nommé, avec la valeur de la fiche", len(d) == 2 \
+        and any("Alpha" in x["texte"] and "minutes 24" in x["texte"] and "30" in x["correction"] for x in d) \
+        and any("Beta" in x["texte"] and "agressivité 4" in x["texte"] for x in d)
+    yield "écran contre fiche : identique → aucun défaut", ej.controle_ecran(fj, [dict(j) for j in fj]) == []
+    yield "écran contre fiche : joueur de la fiche absent de l'écran → ❌", \
+        any("Beta" in x["texte"] and "absent" in x["texte"] for x in ej.controle_ecran(fj, [joueur("Alpha", 30), joueur("Gamma", 0)])) \
+        and not any("Gamma" in x["texte"] for x in ej.controle_ecran(fj, [joueur("Alpha", 30), joueur("Beta", 24)]))
+    d = ej.controle_e1([joueur("Alpha", 20, agress=3), joueur("Beta", 20, agress=4), joueur("Gamma", 0, agress=1)], 3)
+    yield "E1 amical : agressivité non uniforme → ❌, correction à la valeur du test", len(d) == 1 and "agressivité 3" in d[0]["correction"] \
+        and "Beta" in d[0]["texte"]
+    yield "E1 amical : uniforme (les joueurs à 0 min ne comptent pas) → rien", \
+        ej.controle_e1([joueur("Alpha", 20, agress=3), joueur("Gamma", 0, agress=1)], 3) == []
+    d = ej.controle_adversaire("Adv A", "Adv C")
+    yield "adversaire changé depuis la fiche → ❌ + relance de la fiche", len(d) == 1 and "Adv A" in d[0]["texte"] and "Adv C" in d[0]["texte"] \
+        and "agent tactique" in d[0]["correction"]
+    yield "adversaire identique → rien", ej.controle_adversaire("Adv A", "Adv A") == []
+    # branchement : un défaut de fiche empêche l'état « fiche valide », un écart d'écran l'état « écran conforme »
+    reel = {"blessures": {"Joueur Alpha": dt.date(2026, 11, 20)}, "fatigue": {}, "seuil_fatigue": 20}
+    ev = ej.appliquer_controles(match(apercu_at=T_APERCU, fiche=dict(FICHE, joueurs=fj), ecran={"sauvegarde": True, "joueurs": fj}), reel, CFG)
+    l = ej.etat_evenement(ev, CFG, MAINT)
+    yield "branchement : fiche avec un blessé → prochaine transition « fiche », consigne = la correction", \
+        l["prochain"] == "fiche" and "Alpha à 0 min" in l["consigne"] and any(x["texte"].startswith("❌") for x in l["defauts"])
+    ev = ej.appliquer_controles(match(apercu_at=T_APERCU, fiche=dict(FICHE, joueurs=fj), ecran={"sauvegarde": True, "joueurs": ecran}),
+                                {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG)
+    l = ej.etat_evenement(ev, CFG, MAINT)
+    yield "branchement : écran différent de la fiche → « ecran », consigne = corrections", l["prochain"] == "ecran" and "30" in l["consigne"]
+    am = match(genre="amical", coup_envoi=dt.datetime(2026, 11, 18, 8, 0), verrou=dt.datetime(2026, 11, 18, 7, 45),
+               fiche=dict(FICHE, joueurs=fj, agress_test=3), ecran={"sauvegarde": True, "joueurs": [joueur("Alpha", 30, agress=2), joueur("Beta", 24)]})
+    l = ej.etat_evenement(ej.appliquer_controles(am, {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG), CFG, MAINT)
+    yield "branchement amical : E1 non uniforme à l'écran → « ecran », pas de contrôle écran contre fiche", \
+        l["prochain"] == "ecran" and "agressivité 3" in l["consigne"] and not any("minutes" in x["texte"] for x in l["defauts"])
+    ok = ej.appliquer_controles(match(apercu_at=T_APERCU, fiche=dict(FICHE, joueurs=fj), ecran={"sauvegarde": True, "joueurs": fj}),
+                                {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG)
+    yield "branchement : aucun défaut → l'écran est conforme (« verrou »)", ej.etat_evenement(ok, CFG, MAINT)["prochain"] == "verrou"
+    yield "branchement : adversaire du match différent de celui de la fiche → « fiche »", ej.etat_evenement(
+        ej.appliquer_controles(dict(ok, adversaire="Adv C"), {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG), CFG, MAINT)["prochain"] == "fiche"
+
+
+CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

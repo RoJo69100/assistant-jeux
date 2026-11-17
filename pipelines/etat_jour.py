@@ -41,7 +41,7 @@ def _match_ok(ev, etat, maintenant, cfg) -> bool:
     if etat == "apercu":
         return ev.get("apercu_at") is not None
     if etat == "fiche":
-        return bool(ev.get("fiche")) and ev["fiche"].get("ok", True)
+        return bool(ev.get("fiche")) and ev["fiche"].get("ok", True) and not ev["fiche"].get("defauts")
     if etat == "ecran":
         return bool(ev.get("ecran")) and ev["ecran"].get("sauvegarde") is True and not ev["ecran"].get("defauts")
     if etat == "verrou":
@@ -62,8 +62,14 @@ def _match_gabarit(ev, etat, maintenant):
     if etat == "apercu":
         return ev.get("verrou"), f"exporte l'aperçu du {quoi}", True
     if etat == "fiche":
+        defauts = (ev.get("fiche") or {}).get("defauts")
+        if defauts:
+            return ev.get("verrou"), f"corrige la fiche du {quoi} : " + " ; ".join(d["correction"] for d in defauts), True
         return ev.get("verrou"), f"lance l'agent tactique : fiche du {quoi}", True
     if etat == "ecran":
+        defauts = (ev.get("ecran") or {}).get("defauts")
+        if defauts:
+            return ev.get("verrou"), f"corrige l'écran du {quoi} puis sauvegarde : " + " ; ".join(d["correction"] for d in defauts), True
         return ev.get("verrou"), f"saisis et sauvegarde l'écran du {quoi} selon la fiche", True
     if etat == "verrou":
         return ev.get("verrou"), f"rien avant le verrou {_hh(ev.get('verrou'))} : écran du {quoi} sauvegardé", False
@@ -162,8 +168,9 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
     prio = 3 if not action else 1 if echeance is not None and echeance - maintenant <= dt.timedelta(hours=cfg["urgent_h"]) else 2
     if age is not None and age > cfg["donnee_perimee_h"]:
         prio = min(3, prio + 1)
+    defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
-            "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action}
+            "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts}
 
 
 def _repere(ev):
@@ -190,6 +197,112 @@ def lignes(evenements, cfg, maintenant) -> list:
     """Une ligne par événement retenu (`dans_horizon`), dans l'ordre : action d'abord, puis priorité, puis échéance."""
     res = [etat_evenement(ev, cfg, maintenant) for ev in evenements if dans_horizon(ev, cfg, maintenant)]
     return sorted(res, key=lambda l: (not l["action"], l["priorite"], l["echeance"] or dt.datetime.max))
+
+
+# ---- P2.3 : contrôles fiche contre réalité (fonctions pures) ; un défaut = {"texte": "❌ …", "correction": "…"} ---------
+
+CHAMPS_ECRAN = (("minutes", "minutes"), ("off", "focus offensif"), ("role", "rôle"), ("tir", "tir"), ("agress", "agressivité"))
+
+
+def _meme(court: str, complet: str) -> bool:
+    """Nom de la fiche (souvent le nom de famille) contre nom complet en base : égal, ou fin du nom complet après une espace."""
+    c, n = str(court).strip().lower(), str(complet).strip().lower()
+    return c == n or n.endswith(" " + c)
+
+
+def _virg(x) -> str:
+    return (f"{float(x):g}").replace(".", ",")
+
+
+def _joue(j) -> bool:
+    return int(j.get("minutes") or 0) > 0
+
+
+def controle_blessures(joueurs, blessures, jour_match) -> list:
+    """Joueur de la fiche qui joue alors qu'il est blessé à la date du match (date de retour postérieure au jour du match)."""
+    res = []
+    for j in joueurs:
+        for nom, retour in blessures.items():
+            if _joue(j) and _meme(j["nom"], nom) and retour is not None and retour > jour_match:
+                res.append({"texte": f"❌ {j['nom']} blessé jusqu'au {_jj(retour)}, indisponible le {_jj(jour_match)}",
+                            "correction": f"mets {j['nom']} à 0 min et redistribue ses {j['minutes']} min"})
+    return res
+
+
+def controle_minutes(joueurs, maximum) -> list:
+    return [{"texte": f"❌ {j['nom']} à {j['minutes']} min (maximum {maximum})", "correction": f"ramène {j['nom']} à {maximum} min"}
+            for j in joueurs if int(j.get("minutes") or 0) > maximum]
+
+
+def controle_fatigue(joueurs, fatigue, seuil) -> list:
+    """Joueur qui joue dont la fatigue actuelle dépasse le seuil (zone verte de core.alert_rule)."""
+    res = []
+    for j in joueurs:
+        for nom, f in fatigue.items():
+            if _joue(j) and _meme(j["nom"], nom) and f is not None and float(f) > float(seuil):
+                res.append({"texte": f"❌ {j['nom']} fatigue {_virg(f)} au-dessus de {_virg(seuil)}",
+                            "correction": f"réduis les minutes de {j['nom']} (fatigue {_virg(f)})"})
+    return res
+
+
+def controle_ecran(fiche, ecran) -> list:
+    """Ligue et coupe : chaque réglage de l'écran sauvegardé contre la fiche, joueur par joueur."""
+    res = []
+    for j in fiche:
+        e = next((x for x in ecran if _meme(j["nom"], x["nom"]) or _meme(x["nom"], j["nom"])), None)
+        if e is None:
+            if _joue(j):
+                res.append({"texte": f"❌ {j['nom']} absent de l'écran", "correction": f"ajoute {j['nom']} à {j['minutes']} min"})
+            continue
+        for cle, libelle in CHAMPS_ECRAN:
+            if j.get(cle) is not None and e.get(cle) is not None and str(e[cle]) != str(j[cle]):
+                res.append({"texte": f"❌ écran : {j['nom']} {libelle} {e[cle]} (fiche {j[cle]})",
+                            "correction": f"mets {libelle} de {j['nom']} à {j[cle]}"})
+    return res
+
+
+def controle_e1(joueurs, valeur) -> list:
+    """Amical, test E1 : même agressivité pour tous les joueurs qui jouent ; `valeur` = celle du test (None : la plus fréquente)."""
+    jouent = [j for j in joueurs if _joue(j)]
+    vals = [j["agress"] for j in jouent]
+    if not vals or len(set(vals)) == 1 and (valeur is None or vals[0] == valeur):
+        return []
+    cible = valeur if valeur is not None else max(set(vals), key=vals.count)
+    ecarts = [j["nom"] for j in jouent if j["agress"] != cible]
+    return [{"texte": f"❌ E1 non uniforme : {', '.join(ecarts)} hors de l'agressivité {cible}",
+             "correction": f"mets l'agressivité {cible} à tous les joueurs qui jouent"}]
+
+
+def controle_adversaire(fiche_adversaire, adversaire) -> list:
+    if not fiche_adversaire or _meme(fiche_adversaire, adversaire) or _meme(adversaire, fiche_adversaire):
+        return []
+    return [{"texte": f"❌ adversaire changé : fiche contre {fiche_adversaire}, match contre {adversaire}",
+             "correction": f"relance l'agent tactique pour le match contre {adversaire}"}]
+
+
+def appliquer_controles(ev, reel, cfg) -> dict:
+    """Copie du match avec fiche["defauts"] (blessure, minutes, fatigue, adversaire) et ecran["defauts"] (écran contre fiche en
+    ligue et coupe, E1 uniforme en amical) ; `reel` = {"blessures": {nom: retour}, "fatigue": {nom: valeur}, "seuil_fatigue": x}."""
+    if ev["type"] != "match":
+        return ev
+    ev = dict(ev)
+    regle = cfg["matchs"][ev["genre"]]
+    fiche = dict(ev["fiche"]) if ev.get("fiche") else None
+    if fiche:
+        fj = fiche.get("joueurs", [])
+        fiche["defauts"] = controle_adversaire(fiche.get("adversaire"), ev["adversaire"]) \
+            + (controle_blessures(fj, reel.get("blessures", {}), ev["jour"]) if ev.get("jour") else []) \
+            + controle_minutes(fj, cfg["minutes_max"]) \
+            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"]) if reel.get("seuil_fatigue") is not None else [])
+        ev["fiche"] = fiche
+    if ev.get("ecran") and ev["ecran"].get("joueurs"):
+        ecran = dict(ev["ecran"])
+        if regle.get("e1_uniforme"):
+            ecran["defauts"] = controle_e1(ecran["joueurs"], (fiche or {}).get("agress_test"))
+        elif regle.get("ecran_contre_fiche") and fiche and fiche.get("joueurs"):
+            ecran["defauts"] = controle_ecran(fiche["joueurs"], ecran["joueurs"])
+        ev["ecran"] = ecran
+    return ev
 
 
 # P2.2 : états dont la transition est un export (la capture passive de la page fait passer l'état)
