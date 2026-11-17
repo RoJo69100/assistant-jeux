@@ -2,6 +2,12 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
+## Nouvelles (2026-11-17)
+N25. Quand j'écris « lancé », « fait », « appliqué » dans un plan → l'outil a déjà rendu sa sortie dans le même tour, sinon « à lancer » (tous les jeux ; `etat_jour.py` pour l'état des événements).
+N26. Quand une ligne vendre/acheter dépasse 250 000 → `dossier.py` puis `police` avant la réponse, vente comprise. RÉCIDIVE de l'erreur 10 : vérifier que `pipelines/police.py` bloque la vente, sinon `hook à écrire`.
+N27. Quand je rends un verdict académie/draft → il cite la règle de l'utilisateur (`docs/attentes/`) ou le skill ; un seuil sans source n'est jamais inventé, j'écris « règle à confirmer » (BasketVibe).
+RÉCIDIVES du jour : N21 (heredoc, 3e fois : monter dans `CLAUDE.md`, hook à écrire) ; erreur 55 (limite de lignes, identifiants internes : relire la limite avant d'envoyer).
+
 ## Nouvelles (2026-11-16)
 N19. Quand une invite d'autorisation revient (Supabase ou autre) → je lis la config réelle (settings, connecteur claude.ai) avant d'en nommer l'origine, je n'élargis jamais moi-même `.claude/settings.json`, et j'indique à l'utilisateur l'endroit exact où régler (tous les jeux).
 N20. Quand je lance une commande Bash → commande seule, chemin absolu, jamais `cd … && …` (casse les règles allow) (tous les jeux ; non bloqué).
