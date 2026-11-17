@@ -147,16 +147,7 @@ def complements_bloc_1(l0: list, l2: list, l3: list, l7: list, jour: dt.date) ->
     """Compléments du bloc 1 (R1), que `plan()` ne porte pas : chaque ligne du bloc 0 (catégorie Export, texte et « → bloc N » repris à
     l'identique), une ligne « Composition : <match> » par match des blocs 2 et 3 (en « Demain » si le match n'est pas aujourd'hui) et la
     ligne d'analyse du bloc 7 quand l'analyse n'est pas faite. Dict : prio, cat, texte, bloc (« bloc N »), date (ou None), dedup (bloc, adversaire)."""
-    sortie = []
-    for l in l0:
-        if not l.startswith("- ") or l.startswith("- aucun export"):
-            continue
-        m = FIN_FLECHE.match(l[2:])
-        t = m.group(1) if m else l[2:]
-        urgent = "aperçu" in t or "amical" in t.lower()
-        info = t.startswith("Marché :") or "(étude du" in t
-        # un libellé par besoin d'export : le bloc 1 renvoie au bloc 0, qui porte le bloc débloqué (instantané du 12/11)
-        sortie.append({"prio": 1 if urgent else 3 if info else 2, "cat": "export", "texte": t, "bloc": "bloc 0", "date": None, "dedup": None})
+    sortie = []  # 13/11 (audit) : les lignes du bloc 0 (`l0`) ne sont plus reprises ici, un export = une ligne, au bloc 0
     for n, lignes in ((2, l2), (3, l3)):
         for l in lignes:
             m = ENTETE_MATCH.match(l)
@@ -179,8 +170,8 @@ def bloc_1(actions: list, jour: dt.date, complements: list = ()) -> list:
     `complements_bloc_1`) sauf ceux dont le match est déjà nommé par une action du plan classée dans le même bloc. Une action dont
     la limite tombe après `jour` va en « Demain » ; sinon en « Aujourd'hui ». Jamais vide."""
     affichables, _ = separer(actions)
-    if any(c["cat"] == "export" for c in complements):  # les actions d'export du plan sont déjà au bloc 0, repris par les compléments
-        affichables = [a for a in affichables if classer(a[2])[0] != 0]
+    # 13/11 (audit) : un export est porté par le bloc 0 seulement ; jamais de ligne Export au bloc 1
+    affichables = [a for a in affichables if classer(a[2])[0] != 0 and classer(a[2])[1] != AFFICHAGE["export"]]
     ajd = [a for a in affichables if not (a[0] is not None and a[0].date() > jour)]
     dem = [a for a in affichables if a[0] is not None and a[0].date() > jour]
     nouveaux = [c for c in complements if not (c["dedup"] and any(classer(a[2])[0] == c["dedup"][0] and c["dedup"][1] in a[2] for a in affichables))]
@@ -868,11 +859,10 @@ def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list
             if age is None or age > SEUIL_HEBDO_H:
                 a_faire.append(f"- {manque(libelle, 'jamais exporté' if age is None else f'dernier export il y a {int(age)} h')} → blocs 5 et 6")
 
-    demandes = [f"- {demande_courte(d)} (étude du {date:%d/%m}) → bloc 6" for d, date in _demandes(etudes)]  # R2 : forme courte ; le texte complet est au bloc 6
-    sortie = list(dict.fromkeys(a_faire))
+    sortie = list(dict.fromkeys(a_faire))  # 13/11 (audit) : les demandes des études restent au bloc 6 seulement
     if not sortie:
         sortie = ["- aucun export à refaire : toutes les pages suivies sont à jour"]
-    return sortie + lignes + demandes
+    return sortie + lignes
 
 
 def defaites_suite(donnees) -> int:
@@ -1039,14 +1029,18 @@ def section(rendu: str, n: int) -> str:
 
 
 def fautes_bloc_1(rendu: str) -> list:
-    """R1 : lignes du bloc 0 (sans « - ») qui ne figurent pas dans le bloc 1 d'un rendu complet ; « aucun export à refaire » n'est pas une action."""
+    """13/11 (audit, remplace R1) : lignes du bloc 0 (sans « - » ni flèche) qui reparaissent dans le bloc 1 d'un rendu complet ;
+    un export n'est écrit qu'une fois. « aucun export à refaire » n'est pas une action."""
     b1 = section(rendu, 1)
-
-    def renvoi(l):  # texte du bloc 0 sans sa flèche, suivi de « → bloc 0 » au bloc 1
-        m = FIN_FLECHE.match(l)
-        return (m.group(1) if m else l).replace("|", "/") + " → bloc 0"
-    return [l[2:] for l in section(rendu, 0).splitlines()
-            if l.startswith("- ") and not l.startswith("- aucun export") and renvoi(l[2:]) not in b1]
+    fautes = []
+    for l in section(rendu, 0).splitlines():
+        if not l.startswith("- ") or l.startswith("- aucun export"):
+            continue
+        m = FIN_FLECHE.match(l[2:])
+        t = (m.group(1) if m else l[2:]).replace("|", "/")
+        if t in b1:
+            fautes.append(t)
+    return fautes
 
 
 def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, S, etudes=None, base=None, fait: str = "") -> tuple:

@@ -197,6 +197,9 @@ def cas_bloc_1():
     lignes = qfb.bloc_1(toutes, J)
     for n, texte in PAR_BLOC.items():
         cherche = [l for l in lignes if texte[:25] in l]
+        if n == 0:  # 13/11 (audit) : un export est porté par le bloc 0 seulement, jamais répété au bloc 1
+            yield "test_bloc_1_un_export_n_est_qu_au_bloc_0", cherche == []
+            continue
         yield f"test_bloc_1_liste_toutes_les_actions : bloc {n}", len(cherche) == 1 and f"→ bloc {n}" in cherche[0]
 
     vide = qfb.bloc_1([], J)
@@ -209,7 +212,7 @@ def cas_bloc_1():
                 (None, 2, "Après l'amical (~08:55) : exporter la page du match", "", "s"),
                 (None, 3, "Avant dimanche 04:00 : vérifier et sauvegarder les choix d'entraînement", "", "s")]
     th = "\n".join(qfb.bloc_1(horaires, J))
-    yield "test_bloc_1_sans_heure", re.search(r"\d\d:\d\d", th) is None and "preset amical" in th and "exporter la page du match" in th
+    yield "test_bloc_1_sans_heure", re.search(r"\d\d:\d\d", th) is None and "preset amical" in th and "exporter la page du match" not in th  # l'export est au bloc 0 seulement (13/11)
     yield "test_bloc_1_passe_forme", forme.fautes_tableaux(t + "\n" + "\n".join(lignes) + "\n" + th, "basketvibe") == []
 
     seul = "\n".join(qfb.bloc_1([auj_], J))
@@ -818,9 +821,9 @@ def cas_t5():
         and all(pt != "standings_transfers" for pt, _ in qfb.HEBDO) and "standings_transfers" not in auj.REQUETES["exports_hebdo"]
     yield "test_bloc_0_exports_hebdomadaires : jamais capturé réclamé", "export à faire : l'onglet Blessés de la ligue (jamais exporté) → blocs 5 et 6" in t0
     yield "test_bloc_0_exports_hebdomadaires : pages club réclamées", "export à faire : une page /c/<club> d'un club adverse (dernier export il y a 200 h) → blocs 5 et 6" in t0
-    # R2 (test réécrit : l'ancien attendait le texte complet de la demande au bloc 0) : forme courte au bloc 0, texte complet au bloc 6 seulement
-    yield "test_bloc_0_demandes_courtes", "- exporte la page des réglages utilisés vue côté adversaire (étude du 09/11) → bloc 6" in t0 \
-        and "- exporte la page Équipe des clubs de tête (étude du 10/11) → bloc 6" in t0 and "parce que" not in t0 and "Pour comprendre" not in t0 \
+    # 13/11 (audit, réécrit : R2 mettait une forme courte au bloc 0) : les demandes des études sont au bloc 6 seulement
+    yield "test_bloc_0_demandes_des_etudes_au_bloc_6_seulement", "(étude du" not in t0 and "exporte la page des réglages utilisés vue côté adversaire" not in t0 \
+        and "exporte la page Équipe des clubs de tête" not in t0 and "parce que" not in t0 and "Pour comprendre" not in t0 \
         and DEMANDE_A not in t0 and DEMANDE_INVALIDE not in t0
     yield "test_demande_courte : coupe avant « parce que », sans ponctuation finale", qfb.demande_courte(DEMANDE_B) == "exporte la page des réglages utilisés vue côté adversaire" \
         and qfb.demande_courte("exporte X, parce que y") == "exporte X" and qfb.demande_courte("exporte X.") == "exporte X" \
@@ -1064,7 +1067,7 @@ def cas_r1():
     bloc 7, chacune avec « → bloc N » ; `fautes_bloc_1` le contrôle sur un rendu complet (utilisé en T8 sur la sortie réelle)."""
     etu = etudes_de({"2026-11-10-carte-faisabilite.md": CARTE})
     texte, _ = qfb.rendre_blocs(res_t6(), donnees_t6(), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
-    yield "test_r1_rendu_complet : aucune ligne du bloc 0 ne manque au bloc 1", qfb.fautes_bloc_1(texte) == []
+    yield "test_r1_rendu_complet : aucune ligne du bloc 0 ne reparaît au bloc 1 (un export = une ligne)", qfb.fautes_bloc_1(texte) == []
     # instantané du 12/11 : « donnée manquante : exporte … » et « Conseil C-115 à juger au plus tard le 12/11 » refusés par les hooks
     import controle  # noqa: E402
     import police  # noqa: E402
@@ -1078,16 +1081,16 @@ def cas_r1():
                                  + auj.ECHEANCE_CONSEIL.format(id="C-115", jj="12/11") + " |\n") and conseil
     b1 = qfb.section(texte, 1)
     b0 = [l for l in qfb.section(texte, 0).splitlines() if l.startswith("- ")]
-    yield "test_r1_rendu_complet : le bloc 0 a des lignes et chacune renvoie au bloc 0 dans le bloc 1", len(b0) >= 2 and all(
-        qfb.FIN_FLECHE.match(l[2:]).group(1).replace("|", "/") + " → bloc 0 |" in b1 for l in b0 if qfb.FIN_FLECHE.match(l[2:]))
+    yield "test_r1_rendu_complet : le bloc 0 a des lignes, aucune n'est au bloc 1, qui n'a aucune ligne Export", len(b0) >= 2 and not any(
+        qfb.FIN_FLECHE.match(l[2:]).group(1).replace("|", "/") in b1 for l in b0 if qfb.FIN_FLECHE.match(l[2:])) \
+        and not re.search(r"\| Export \|", b1)
     # instantané du 12/11 : « exporter la page du match » deux fois au bloc 1 (→ bloc 2 et → bloc 0) ; un seul libellé, renvoi au bloc 0
     r12 = res_t6()
     r12["actions"] = r12["actions"] + [(None, 3, "Après l'amical (~08:55) : exporter la page du match", "", "s")]
     t12, _ = qfb.rendre_blocs(r12, donnees_t6(), {}, JOUR_T, MAINT, {}, etudes=etu, base=dossier())
     b1_12 = qfb.section(t12, 1)
-    yield "test_r1_un_libelle_par_export : une seule ligne, renvoi au bloc 0", b1_12.count("la page du match") == 1 \
-        and "export à faire : la page du match → bloc 0 |" in b1_12 and qfb.fautes_bloc_1(t12) == [] \
-        and not re.search(r"\| Export \|[^\n]*→ bloc [1-9]", b1_12)
+    yield "test_r1_un_libelle_par_export : une seule ligne, au bloc 0, aucune au bloc 1", b1_12.count("la page du match") == 0 \
+        and qfb.section(t12, 0).count("la page du match") == 1 and qfb.fautes_bloc_1(t12) == []
     yield "test_r1_composition_amical_et_ligue : une ligne par match des blocs 2 et 3, avec son bloc", \
         re.search(r"\| Composition \| Composition : Amical contre .*\(.+\d\d/\d\d\) → bloc 2 \|", b1) is not None \
         and re.search(r"\| Composition \| Composition : (?:Ligue|Coupe) .*\(.+\d\d/\d\d\) → bloc 3 \|", b1) is not None
@@ -1098,17 +1101,18 @@ def cas_r1():
     ligne_am = [l for l in qfb.bloc_1(deja["actions"], JOUR_T, qfb.complements_bloc_1([], ["Amical contre Launceston Ligers (mer. 11/11), heure limite du verrou 07:45"], [], [], JOUR_T))
                 if "Launceston" in l]
     yield "test_r1_pas_de_doublon_avec_une_action_du_plan", len(ligne_am) == 1
-    # complément seul : exports du bloc 0 en catégorie Export, jamais d'heure, aucun « | » cassant le tableau
+    # 13/11 (audit) : les lignes du bloc 0 ne sont plus des compléments du bloc 1
     comp = qfb.complements_bloc_1(["- export à faire : X | Y → bloc 3", "- aucun export à refaire : toutes les pages suivies sont à jour"], [], [], [], JOUR_T)
     tb = "\n".join(qfb.bloc_1([], JOUR_T, comp))
-    yield "test_r1_export_du_bloc_0 : catégorie Export, « | » remplacé, « aucun export » non repris", "| Export | export à faire : X / Y → bloc 0 |" in tb \
-        and "aucun export à refaire" not in tb and forme.fautes_tableaux(tb, "basketvibe") == []
-    # défaut réel : la première sortie réelle (journal, T8, 10/11) a un bloc 1 sans les lignes du bloc 0
-    journal = (Path(__file__).resolve().parent.parent / "docs" / "refonte-v3" / "journal-aujourdhui.md").read_text(encoding="utf-8")
-    m = re.search(r"### T8 — réception sur la vraie journée, première exécution.*?```\n(.*?)\n```", journal, re.S)
-    fautes = qfb.fautes_bloc_1(m.group(1)) if m else []
-    yield "test_r1_sortie_reelle_du_journal : l'ancien défaut est détecté (lignes du bloc 0 absentes du bloc 1)", m is not None and len(fautes) >= 5 \
-        and any("Équipes de la ligue" in f for f in fautes)
+    yield "test_r1_export_du_bloc_0 : aucun complément, aucune ligne Export au bloc 1", comp == [] and "| Export |" not in tb \
+        and "export à faire" not in tb and forme.fautes_tableaux(tb, "basketvibe") == []
+    # défaut réel : la sortie du 17/11 répète les exports au bloc 1 et les demandes du Match Engine aux blocs 0 et 1
+    reel = (Path(__file__).resolve().parent.parent / "outputs" / "basketvibe" / "aujourdhui-2026-11-17.md").read_text(encoding="utf-8")
+    fautes = qfb.fautes_bloc_1(reel)
+    yield "test_r1_sortie_reelle_du_17_11 : le défaut est détecté (exports du bloc 0 repris au bloc 1)", len(fautes) >= 5 \
+        and any("Personnel" in f for f in fautes)
+    yield "test_r1_exports_jamais_urgents : sauf l'aperçu du prochain match de ligue, aucun export en 🟥 au bloc 1", \
+        not re.search(r"🟥 URGENT \| Export \|", b1) and not re.search(r"🟥 URGENT \| Export \|", qfb.section(t12, 1))
 
 
 TRAITEES_Q = ("| début de la demande | statut | date | question liée | raison |\n|---|---|---|---|---|\n"
@@ -1157,7 +1161,7 @@ def cas_a1():
     # bloc 0 et bloc 6 : la demande traitée n'est plus réclamée
     t0 = "\n".join(qfb.bloc_0(donnees_t5(), {"exports": [], "actions": []}, et, JOUR_T, MAINT))
     l6, _ = qfb.bloc_6(donnees_t5(), et, dt.date(2026, 11, 10))
-    yield "test_demande_traitee_absente_des_blocs_0_et_6", qfb.demande_courte(DEMANDE_RESTANTE) in t0 and "l'amical du 29/10" not in t0 + "\n".join(l6) \
+    yield "test_demande_traitee_absente_des_blocs_0_et_6", DEMANDE_RESTANTE in "\n".join(l6) and "(étude du" not in t0 and "l'amical du 29/10" not in t0 + "\n".join(l6) \
         and "les jours de ligue entre" not in t0 and "exporte la page effectif (compétences" not in t0
     # fichier réel du dépôt
     reel = qfb.lire_etudes()
