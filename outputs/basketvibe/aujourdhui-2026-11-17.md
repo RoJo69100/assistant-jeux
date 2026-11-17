@@ -1,10 +1,21 @@
-<!-- généré le 2026-11-17 10:17 -->
+<!-- généré le 2026-11-17 10:49 -->
+## Aujourd'hui — état par événement
+
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | agent tactique à lancer : fiche du match de amical contre Union Heidelberg (18/11) — échéance 18/11 07:45 |
+| 🟧 IMPORTANT | Export | exporte l'aperçu du match de ligue contre C.B.Granada (18/11) — échéance 18/11 19:45 |
+| 🟧 IMPORTANT | Composition | agent tactique à lancer : fiche du match de amical contre BG Bangers (19/11) — échéance 19/11 07:45 |
+| 🟧 IMPORTANT | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 23,8 h |
+| 🟧 IMPORTANT | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 23,8 h |
+| 🟧 IMPORTANT | Export | exporte la page du match de amical contre Union Heidelberg (17/11) |
+
 ## Bloc 0 — Exports d'abord
 
 - export à faire : Page du match contre Opper Cards (10/11) : box, quarts, play-by-play manquent → bloc 7
 - export à faire : Amical : tactique du match (96 h) → bloc 2
 - export à faire : le Marché (plusieurs pages) (dernier export il y a 96 h) → bloc 4
-- export à faire : Personnel (215 h) → bloc 9
+- export à faire : Personnel (216 h) → bloc 9
 - export à faire : historique global des transferts depuis 2026-11-13 → bloc 4
 - export à faire : l'aperçu du match de ligue du 18/11 → bloc 3
 - export à faire : la page du match → bloc 2
