@@ -105,7 +105,7 @@ def cas():
         yield f"test_interdits_laisse_passer_a_lancer : {texte}", qfb.INTERDITS.search(texte) is None
     for texte in ("lancer l'étude", "il faut lancer l'agent", "à relancer", "tu dois lancer"):
         yield f"test_interdits_attrape_encore_lancer : {texte}", qfb.INTERDITS.search(texte) is not None
-    for texte in ("défaite du 09/11 : analyse non faite, lancée dans ce passage", "étude à jour au 09/11", "exporté hier",
+    for texte in ("défaite du 09/11 : analyse non faite : à lancer", "étude à jour au 09/11", "exporté hier",
                   "le lancement de la saison", "les lanceurs"):
         yield f"test_interdits_laisse_passer : {texte}", qfb.INTERDITS.search(texte) is None
 
@@ -966,7 +966,7 @@ def cas_t6():
     # --- bloc 7 : la ligne d'état est toujours là
     defaite = donnees_t6()
     l = qfb.bloc_7([], defaite)
-    yield "test_bloc_7_ligne_d_etat_toujours : défaite non analysée", l[0] == "défaite du 09/11 : analyse non faite, lancée dans ce passage"
+    yield "test_bloc_7_ligne_d_etat_toujours : défaite non analysée", l[0] == "défaite du 09/11 : analyse non faite : à lancer" and "lancée" not in l[0]
     yield "test_bloc_7_ligne_d_etat_toujours : défaite analysée", qfb.bloc_7([], defaite, analyste=dt.date(2026, 11, 9))[0] == "défaite du 09/11 : analyse faite"
     gagne = donnees_t6(dernier_officiel=T(OFFICIEL_COLS, [("2026-11-09", "ligue", "Naked Spartans", "W")]))
     yield "test_bloc_7_ligne_d_etat_toujours : aucune défaite", qfb.bloc_7([], gagne)[0] == "aucune défaite de ligue ou de coupe non analysée"

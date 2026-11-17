@@ -19,7 +19,7 @@ import heure_paris  # noqa: E402
 # Budget de durée du script complet (lecture + plan + rendu) : 30 s depuis A6 (16,7 s mesurés le 10/11 avec 40 requêtes) ; PARALLELE inchangé.
 BUDGET_SECONDES = 30
 
-# Mots entiers qui sont une commande à l'utilisateur ; un participe (« lancée dans ce passage ») n'en est pas une.
+# Mots entiers qui sont une commande à l'utilisateur ; un participe (« lancée ») n'en est pas une.
 INTERDITS = re.compile(r"(?<!\w)(?:lance|relance|exécute|(?<!à )lancer|relancer|exécuter|python)(?!\w)|pipelines/", re.IGNORECASE)  # R11 : « étude à lancer » passe
 
 # Consignes destinées à Claude (pas à l'utilisateur) : elles sortent de l'affichage.
@@ -987,7 +987,7 @@ def bloc_7(actions, donnees, analyste=None) -> list:
         o = auj.lignes_de(donnees, "dernier_officiel")
         if o and str(o[0]["my_result"]) == "L":
             d = auj.en_date(o[0]["day"])
-            etat = f"défaite du {d:%d/%m} : " + ("analyse faite" if analyste is not None and analyste >= d else "analyse non faite, lancée dans ce passage")
+            etat = f"défaite du {d:%d/%m} : " + ("analyse faite" if analyste is not None and analyste >= d else "analyse non faite : à lancer")
         else:
             etat = "aucune défaite de ligue ou de coupe non analysée"
     return [etat] + _lignes_plan(actions, 7)
