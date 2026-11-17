@@ -77,8 +77,8 @@ def manque(export: str, debloque: str = "") -> str:
     return f"export à faire : {export}" + (f" ({debloque})" if debloque else "")
 
 
-# 17/11 : l'amical est un test sans preset (basketvibe.yaml : amical, preset non) ; gold.bv_agenda émet encore « Avant … : preset amical … »,
-# ignorée ici (la vue n'est pas modifiée).
+# 17/11 : l'amical est un test sans preset (basketvibe.yaml : amical, preset non) ; gold.bv_agenda ne l'émet plus (sql/gold/086),
+# garde-fou si un instantané ancien de la vue revient.
 IGNOREES = [r"Avant .+? : preset amical"]
 
 
