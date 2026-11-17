@@ -22,6 +22,6 @@ Plafond : 15 appels d'outil. Aucun texte entre les appels d'outil.
 3. Interdits : aucun achat, aucune vente, aucune enchère (règle 2) ; aucune somme au-dessus de 250 000 sans `python pipelines/dossier.py
    basketvibe achat` puis l'agent police ; ne lance aucun agent hors du script ; ne modifie aucun fichier à la main.
 
-Réponse finale, 5 lignes au plus : la ligne « Agents : … » du script, chaque ligne « agent X non lancé : raison », la ligne « git : … »,
-puis le chemin du que-faire du jour.
+Réponse finale : la section « Aujourd'hui — état par événement » du que-faire du jour, en entier (c'est le livrable de l'utilisateur,
+sans limite de lignes), puis la ligne « Agents : … », chaque ligne « agent X non lancé : raison », la ligne « git : … ».
 ```
