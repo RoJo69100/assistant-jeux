@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-17 11:32 -->
+<!-- généré le 2026-11-17 14:06 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
@@ -8,11 +8,11 @@
 | 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre BG Bangers (19/11) selon la fiche — échéance 19/11 07:45 |
 | 🟧 IMPORTANT | Export | exporte la page du match amical contre Union Heidelberg (17/11) |
 | 🟧 IMPORTANT | Académie/Draft | décision attendue : tester 3 prospects (75 000), rapport du 12/11 |
-| 🟧 IMPORTANT | Export | exporte le Marché (toutes les pages) — export de 97 h |
-| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 97 h |
-| 🟧 IMPORTANT | Export | exporte la page Personnel — export de 216 h |
-| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 24,5 h |
-| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 24,5 h |
+| 🟧 IMPORTANT | Export | exporte le Marché (toutes les pages) — export de 100 h |
+| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 99 h |
+| 🟧 IMPORTANT | Export | exporte la page Personnel — export de 219 h |
+| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 27,1 h |
+| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 27,1 h |
 
 ## Bloc 2 — Composition de l'amical
 
