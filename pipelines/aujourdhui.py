@@ -754,6 +754,37 @@ def solde_projete(donnees, erreurs, fh, ajoute):
 DISPONIBLES_APRES_VENTE = 9  # L3 (étape 5f, règle de l'utilisateur) : joueurs disponibles qui doivent rester après une vente
 
 
+CASE_FIABLE_N = 5  # ventes minimum d'une case de prix (âge × palier de note) pour s'y fier
+
+
+def tranche_age(age) -> str:
+    a = int(float(age))
+    return "≤21" if a <= 21 else "22-25" if a <= 25 else "26-29" if a <= 29 else "30+"
+
+
+def palier_note(ps) -> int:
+    return int(float(ps) // 5 * 5)
+
+
+def prix_attendu(donnees, nom):
+    """Médiane de la case de prix (palier de note × tranche d'âge) du joueur `nom` (gold.bv_sell_candidates, gold.bv_price_ref_ps) ;
+    None si le joueur ou sa case est absent, ou si la case compte moins de CASE_FIABLE_N ventes."""
+    j = next((r for r in lignes_de(donnees, "vendre") if r["name"] == nom), None)
+    if j is None:
+        return None
+    case = next((r for r in lignes_de(donnees, "prix_cases")
+                 if int(float(r["ps_band"])) == palier_note(j["ps"]) and r["age_band"] == tranche_age(j["age"])), None)
+    if case is None or int(float(case["n"])) < CASE_FIABLE_N:
+        return None
+    return float(case["median"])
+
+
+def police_d_abord(nom, montant, police) -> bool:
+    """17/11, règle 6 générale : le montant dépasse SEUIL_GROS_MONTANT et la trace de la police du jour (`police`) ne nomme pas `nom`."""
+    from police import SEUIL_GROS_MONTANT
+    return montant is not None and float(montant) > SEUIL_GROS_MONTANT["basketvibe"] and str(nom).lower() not in str(police).lower()
+
+
 def vendre_remplacable(donnees, ajoute, police=""):
     """L3 (étape 5f) : « Vendre X » si un joueur a au même poste un remplaçant d'écart de force (fit) au plus égal à la
     tolérance de core.game_params.vente_tolerance_force, n'est pas déjà en vente et laisse au moins 9 joueurs disponibles ;
@@ -770,6 +801,10 @@ def vendre_remplacable(donnees, ajoute, police=""):
     if not ok:
         return
     r = max(ok, key=lambda r: float(r["weekly_salary"]))
+    if police_d_abord(r["name"], prix_attendu(donnees, r["name"]), police):  # règle 6 : aucune action avant la police
+        ajoute(None, 2, f"Vendre {r['name']} : police d'abord : python pipelines/dossier.py basketvibe vente", "",
+               "gold.bv_sell_replacement, gold.bv_price_ref_ps")
+        return
     fr = lambda x: str(round(float(x), 1)).replace(".", ",")
     ajoute(None, 2, f"Vendre {r['name']} : économie {montant(r['weekly_salary'])} par semaine, remplaçant {r['replacement_name']} "
                     f"au poste {r['best_slot']}, écart {fr(r['gap'])}",
@@ -974,6 +1009,10 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             continue
         detail = (f"fin {jour_fr(fin.date())} {fin:%H:%M}" if fin
                   else "fin d'enchère absente de la base : export Marché (enchères)")
+        if police_d_abord(c["nom"], c["max"], S.get("police", "")):  # règle 6 : maximum non proposé avant la police sur ce joueur
+            ajoute(fin, 1, f"Enchère sur {c['nom']} ({c['poste']}) : police d'abord : python pipelines/dossier.py basketvibe achat",
+                   detail, "décision d'achat ouverte")
+            continue
         ajoute(fin, 1, f"Enchère sur {c['nom']} ({c['poste']}) : maximum {montant(c['max'])}, {pol}", detail,
                "décision d'achat ouverte, " + ("dossier du jour" if c["dossier"] else "dossier absent : python pipelines/dossier.py basketvibe achat"))
 
@@ -1209,6 +1248,10 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
             gain = gains.get(norm(r["name"]))
             # phase 0 (12/11) : URGENT seulement si l'achat renforce mon cinq (gain > 0) et si la page du Marché est fraîche
             prio = prio_fin(fin) if frais and gain not in (None, "") and float(gain) > 0 else max(prio_fin(fin), 2)
+            if police_d_abord(r["name"], r["bid_ceiling_resale"], S.get("police", "")):  # règle 6 : pas de plafond avant la police
+                ajoute(fin, prio, f"Enchère sur {r['name']} ({r['position']}, PS {r['ps']}) : police d'abord : "
+                                  "python pipelines/dossier.py basketvibe achat", f"{fin_txt(fin)} ; {page}", "gold.bv_market_bargains")
+                continue
             ajoute(fin, prio, f"Enchère maximale {montant(r['bid_ceiling_resale'])} sur {r['name']} ({r['position']}, PS {r['ps']})",
                    "plafond de revente (95 % du p25) ; prix à l'export " + (montant(prix) if prix is not None else "inconnu")
                    + f" ; {fin_txt(fin)} ; marge de revente p25 {montant(r['resale_margin_p25'])} ; {page} ; {MISE}",

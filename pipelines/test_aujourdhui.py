@@ -17,6 +17,7 @@ spec = importlib.util.spec_from_file_location("aujourdhui", DOSSIER / "aujourdhu
 auj = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(auj)
 src = auj.src
+import que_faire_blocs as qfb  # noqa: E402  (tableau « Qui vendre » du bloc 4)
 
 JOUR = dt.date(2026, 11, 6)
 SOIR = dt.datetime(2026, 11, 6, 19, 0)
@@ -965,6 +966,56 @@ def cas_vente():
         yield "Audit4 la police lue retire la ligne", avec_police(src.lire_police(tmp, JOUR)) == []
     yield "L3 absent : dernier du poste (aucun remplaçant, écart nul), aucune ligne", \
         lignes([("X", "C", 30.0, None, None, None, 10000, False, True, 14)]) == []
+    yield from cas_regle6_generale()
+
+
+def cas_regle6_generale():
+    """17/11, règle 6 générale : une ligne « Vendre » ou « Enchère » dont le prix attendu dépasse SEUIL_GROS_MONTANT (250 000)
+    n'apparaît que si police-<jour>.md couvre le joueur ; sinon « police d'abord » et aucune action."""
+    baron = ("Nolan Baron", "PG", 44.7, "Jonathan Durand", 44.1, 0.6, 16691, False, True, 12)
+    cases = lambda med, n=78: (["ps_band", "age_band", "n", "median"], [(40, "≤21", n, med)])
+    vendre = (["name", "age", "ps"], [("Nolan Baron", 17, 44.9)])
+
+    def ligne(police="", med=294999, **plus):
+        A = []
+        d = {"gold.bv_sell_replacement": (COLS_REMP, [baron]), "tolerance_vente": TOL, "vendre": vendre, "prix_cases": cases(med)}
+        d.update(plus)
+        auj.vendre_remplacable(d, lambda *a: A.append(a), police)
+        return A
+    sans = ligne()
+    yield "Règle6 vente > 250 000 sans police : « police d'abord », aucune action ni économie ni remplaçant", \
+        len(sans) == 1 and sans[0][2] == "Vendre Nolan Baron : police d'abord : python pipelines/dossier.py basketvibe vente" \
+        and "économie" not in sans[0][2] + sans[0][3] and "remplaçant" not in sans[0][2] + sans[0][3]
+    yield "Règle6 la police couvre le joueur (sans « ne pas vendre ») : la ligne normale", \
+        ligne("- décision : vendre nolan baron")[0][2].startswith("Vendre Nolan Baron : économie 16 691")
+    yield "Règle6 la police couvre un autre joueur : toujours « police d'abord »", \
+        "police d'abord" in ligne("- décision : vendre léo lefebvre")[0][2]
+    yield "Règle6 prix attendu sous 250 000 : ligne normale sans police", ligne(med=200000)[0][2].startswith("Vendre Nolan Baron : économie")
+    yield "Règle6 prix attendu pile 250 000 : pas au-dessus du seuil", ligne(med=250000)[0][2].startswith("Vendre Nolan Baron : économie")
+    yield "Règle6 case peu fiable (n < 5) : prix inconnu, ligne normale", \
+        ligne(**{"prix_cases": cases(294999, n=3)})[0][2].startswith("Vendre Nolan Baron : économie")
+    yield "Règle6 « ne pas vendre » : toujours retirée", ligne("- décision : ne pas vendre nolan baron") == []
+    # enchère décidée (cibles) : maximum > 250 000
+    cible = {"nom": "Yuma Fujita", "poste": "C", "max": 300000, "police": True, "dossier": True, "fin": None}
+    t = lambda police: [a[2] for a in auj.plan(figees(), {}, JOUR, SOIR, "", {"cibles": [cible], "police": police})["actions"] if "Fujita" in a[2]]
+    yield "Règle6 enchère > 250 000 sans police sur ce joueur : « police d'abord », pas de maximum", \
+        t("") == ["Enchère sur Yuma Fujita (C) : police d'abord : python pipelines/dossier.py basketvibe achat"]
+    yield "Règle6 enchère > 250 000 couverte par la police : maximum affiché", \
+        any("maximum 300 000" in x for x in t("- décision : acheter yuma fujita"))
+    # tableau « Qui vendre » du bloc 4 : plus de « vendable » pour un joueur que la police interdit ou que personne n'a contrôlé
+    lig = ["Maël Bernard"]
+    row = {"player_id": "b", "name": "Maël Bernard", "position": "C", "age": 18, "ps": 48.3, "salary": 17303, "best_slot": "C",
+           "rank_in_slot": 5, "league_min_last4": 6.0, "on_transfer_list": False, "replacement_name": "Anselmo Albano", "gap": 0.4,
+           "available": True, "available_players": 12}
+    cols = list(row)
+    donnees = {"vendre": (cols, [tuple(row.values())]), "gold.bv_sell_replacement": (cols, [tuple(row.values())]),
+               "prix_cases": (["ps_band", "age_band", "n", "median", "p25", "p75", "last_sale"], [(45, "≤21", 47, 795000, 525000, 1568897, "2026-11-13")])}
+    tab = lambda police: "\n".join(qfb.bloc_4(donnees, {}, 300000, 1.0, (), police))
+    rangee = lambda police: next(l for l in tab(police).splitlines() if l.startswith("| Maël Bernard"))
+    yield "Règle6 tableau Qui vendre : Bernard « ne pas vendre » après la police, plus « vendable »", \
+        rangee("- décision : ne pas vendre maël bernard").endswith("| ne pas vendre (police du jour) |")
+    yield "Règle6 tableau Qui vendre : > 250 000 sans police : « police d'abord », jamais « vendable »", \
+        rangee("").endswith("| police d'abord (prix attendu au-dessus de 250 000) |")
 
 
 def cas_boucle():

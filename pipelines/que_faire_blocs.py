@@ -600,7 +600,7 @@ def _verdict_vente(r, tolerance):
     return "vendable"
 
 
-def _table_vente(donnees, tolerance) -> list:
+def _table_vente(donnees, tolerance, police="") -> list:
     lignes = ["**Qui vendre (joueurs vendables et s'ils sont nécessaires)**", "",
               "| Nom | Poste | Âge | Note | Salaire hebdomadaire | Rang au poste | Minutes (4 derniers matchs de ligue) | Remplaçant | "
               "Écart de force | Prix attendu (médiane de la case) | Verdict |", "|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -610,6 +610,11 @@ def _table_vente(donnees, tolerance) -> list:
     for c in auj.lignes_de(donnees, "vendre"):
         r = dict(c, **{k: v for k, v in rempl.get(str(c["player_id"]), {}).items() if k not in c})  # remplaçant, écart, disponibles
         verdict = _verdict_vente(r, tolerance)
+        if verdict == "vendable":  # 17/11, règle 6 : la police du jour décide des ventes de gros montant
+            if f"ne pas vendre {str(r['name']).lower()}" in police.lower():
+                verdict = "ne pas vendre (police du jour)"
+            elif auj.police_d_abord(r["name"], auj.prix_attendu(donnees, r["name"]), police):
+                verdict = "police d'abord (prix attendu au-dessus de 250 000)"
         case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
         if case is None:
             prix = "—"
@@ -625,14 +630,14 @@ def _table_vente(donnees, tolerance) -> list:
     return lignes + [l for _, _, l in sorted(rangees)] + [""]
 
 
-def bloc_4(donnees, erreurs, capacite, tolerance, actions=()) -> list:
+def bloc_4(donnees, erreurs, capacite, tolerance, actions=(), police="") -> list:
     """Bloc 4 : table des prix, annonces des 24 h avec « achetable », qui vendre avec « vendable » / « nécessaire »,
     puis les lignes de transferts déjà produites par plan() (enchères, achats, mises en vente), sans heure.
     Une proposition reste une proposition : rien n'est acheté ni vendu sans l'accord écrit de l'utilisateur (bloc 10)."""
     sortie = []
     for noms, fabrique in ((("prix_cases",), lambda: _table_prix(donnees)),
                            (("annonces_24h",), lambda: _table_annonces(donnees, capacite, actions)),
-                           (("vendre", "gold.bv_sell_replacement"), lambda: _table_vente(donnees, tolerance))):
+                           (("vendre", "gold.bv_sell_replacement"), lambda: _table_vente(donnees, tolerance, police))):
         illisibles = [n for n in noms if donnees.get(n) in (None, "rejeu")]
         sortie += [vue_illisible(n) for n in illisibles] + [""] if illisibles else fabrique()
     if tolerance is None and donnees.get("vendre") not in (None, "rejeu"):
@@ -1058,7 +1063,7 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
     b0 = bloc_0(donnees, res, etudes, jour, maintenant)
     b7 = bloc_7(actions, donnees, S.get("analyste"))
     blocs = [b0, bloc_1(actions, jour, complements_bloc_1(b0, b2, b3, b7, jour)), b2, b3,
-             bloc_4(donnees, erreurs, res.get("capacite"), tol, actions), bloc_5(etudes), b6,
+             bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), bloc_5(etudes), b6,
              b7, bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
              bloc_10(actions, garder)]
     texte = []

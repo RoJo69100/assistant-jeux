@@ -634,7 +634,7 @@ def ligne_de(lignes, nom):
 
 
 def cas_bloc_4():
-    t = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, 1.0))
+    t = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, 1.0, (), "maël bernard"))  # 17/11 : vente de gros montant couverte par la police
     # table des prix : une ligne par case
     cases = [l for l in t.splitlines() if re.match(r"\| (≤21|22-25|26-29|30\+) \| \d\d ", l)]
     yield "test_table_prix_une_ligne_par_case", len(cases) == 4
@@ -1107,7 +1107,7 @@ def cas_r1():
     yield "test_r1_export_du_bloc_0 : aucun complément, aucune ligne Export au bloc 1", comp == [] and "| Export |" not in tb \
         and "export à faire" not in tb and forme.fautes_tableaux(tb, "basketvibe") == []
     # défaut réel : la sortie du 17/11 répète les exports au bloc 1 et les demandes du Match Engine aux blocs 0 et 1
-    reel = (Path(__file__).resolve().parent.parent / "outputs" / "basketvibe" / "aujourdhui-2026-11-17.md").read_text(encoding="utf-8")
+    reel = (Path(__file__).resolve().parent / "jeu_essai" / "2026-11-17" / "aujourdhui-avant-correction.md").read_text(encoding="utf-8")
     fautes = qfb.fautes_bloc_1(reel)
     yield "test_r1_sortie_reelle_du_17_11 : le défaut est détecté (exports du bloc 0 repris au bloc 1)", len(fautes) >= 5 \
         and any("Personnel" in f for f in fautes)
