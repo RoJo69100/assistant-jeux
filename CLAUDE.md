@@ -23,6 +23,8 @@ Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/jour
 - Un tableau par jeu : priorité (🟥 URGENT / 🟧 IMPORTANT / 🟩 SUIVI, pastille + mot) | catégorie | action ; catégories fixes : Composition · Tactique · Entraînement · Transferts · Académie/Draft · Finances · Export · Question · Analyse. Aucune ligne « rien à faire ». Puis 1 à 3 lignes de commentaire.
 - Saisie d'équipe complète, poste par poste, dans l'ordre de l'écran du jeu. Formats contrôlés par `pipelines/forme.py` (jamais contournés).
 - Détail des attentes R-1 à R-12 et A-1 à A-11 : `docs/attentes/attentes.md`. Réponse de conception : 5 lignes au plus, aucun identifiant interne.
+- Session : aucun texte entre les appels d'outil ; réponse finale de 5 lignes au plus (fait / faux / prochaine action) ; contrôles de sortie des hooks en une ligne.
+- Prompt d'exécution : plafond d'appels d'outil donné par l'utilisateur, sessions d'exécution en `/model sonnet` et `/effort medium`, Opus et extra-high pour la conception.
 
 ## Agents (en attendant l'orchestrateur, phase 5 du plan)
 - Types propres dans `.claude/agents/` (match, tactique, entrainement, academie, transferts, veille, analyste, decideur, police, synthese, retro, data-scientist) ; jamais `general-purpose`. Donner le jeu et la règle d'horizon dans chaque demande.
