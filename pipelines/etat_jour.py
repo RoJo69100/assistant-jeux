@@ -401,6 +401,31 @@ def charger_offres(jeu: str = "basketvibe", chemin=None) -> dict:
     return dict(y["offres"], minimum_effectif=y["domaines"]["transferts"]["minimum_effectif"])
 
 
+def charger_personnel(jeu: str = "basketvibe", chemin=None) -> dict:
+    """Section `personnel_propose` du yaml (règle proposée, à valider) ; {} si absente."""
+    import yaml
+    return yaml.safe_load(Path(chemin or CONFIG / f"{jeu}.yaml").read_text(encoding="utf-8")).get("personnel_propose") or {}
+
+
+def texte_personnel(p: dict, actuel=()) -> str:
+    """« proposition de règle Personnel : … à valider » (jamais une action) ; `actuel` = lignes de gold.bv_personnel_status."""
+    if not p.get("roles"):
+        return "règle de personnel non tranchée, à valider"
+    emb = {forme_role(r["role"]): r for r in actuel}
+    parts = []
+    for r in p["roles"]:
+        a = emb.get(forme_role(r["role"]))
+        parts.append(f"{r['role']} {r['garder']}" + (f" (aujourd'hui {a['hired']}/{a['slots']})" if a else "") + f" : {r['raison']}")
+    cout = sum(int(r["garder"]) * int(r["cout_unitaire"]) for r in p["roles"])
+    return (f"proposition de règle Personnel : {' ; '.join(parts)} ; coût {_m(cout)} par semaine (plafond {_m(p['plafond_semaine'])}) "
+            f"— à valider")
+
+
+def forme_role(x) -> str:
+    import unicodedata
+    return unicodedata.normalize("NFKD", str(x)).encode("ascii", "ignore").decode().lower().strip()
+
+
 def requete_rotation(n: int) -> str:
     """Minutes de chaque joueur de l'effectif sur les `n` derniers matchs de ligue (0 s'il n'a pas joué) : moyenne et matchs joués."""
     n = int(n)

@@ -1323,7 +1323,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         ajoute(None, 3, m)
     elif pers:
         garder.append("Personnel (" + ", ".join(f"{r['role']} {r['hired']}/{r['slots']}" for r in pers)
-                      + ", semaine du " + str(pers[0].get("week", "?"))[:10] + ") : règle de personnel non tranchée, à valider")
+                      + ", semaine du " + str(pers[0].get("week", "?"))[:10] + ") : "
+                      + etat_jour.texte_personnel(etat_jour.charger_personnel(), pers))  # phase A.5 : règle proposée, jamais une action
     return {"actions": A, "exports": exports, "garder": garder, "infos": infos, "capacite": reste_cap}
 
 
