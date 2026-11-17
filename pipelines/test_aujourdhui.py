@@ -146,7 +146,14 @@ def cas():
     tb = auj.rendre({"actions": beaucoup, "exports": [], "garder": []}, JOUR).splitlines()
     yield "F1 surplus dans « Autres points », toujours 8 lignes au plus", len(tb) <= 8 and tb[-2].startswith("Autres points (2)")
     # F2 : Personnel
-    yield "F2 Personnel étiqueté Personnel", "Personnel (médecin 2/2" in t
+    import etat_jour as ej_p
+    yield "F2 personnel conforme à la règle : aucune ligne Personnel", "personnel :" not in t and "Personnel (médecin" not in t
+    regle = {"roles": [{"role": "médecin", "garder": 2, "cout_unitaire": 10000, "raison": "r1"},
+                       {"role": "psychologue", "garder": 0, "cout_unitaire": 10000, "raison": "forme 8,1 ≥ 8"}]}
+    ecart = ej_p.texte_personnel(regle, [{"role": "médecin", "hired": 2, "slots": 2}, {"role": "psychologue", "hired": 2, "slots": 2}])
+    yield "F2 écart : « personnel : action (±coût par semaine) : raison »", ecart.startswith("personnel : licencie 2 psychologue (2 → 0) (−") \
+        and "par semaine) : psychologue : forme 8,1 ≥ 8" in ecart and "médecin" not in ecart
+    yield "F2 conforme : aucune ligne", ej_p.texte_personnel(regle, [{"role": "médecin", "hired": 2, "slots": 2}]) == ""
     # D1 : décisions par secteur
     yield "D1 poste le plus faible : garder en demi-ligne, pas en ligne", \
         "Garder : effectif, acheter : seuil non atteint (le poste le plus faible, SG" in t \

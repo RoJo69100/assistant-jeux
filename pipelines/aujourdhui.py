@@ -1322,9 +1322,9 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     if m:
         ajoute(None, 3, m)
     elif pers:
-        garder.append("Personnel (" + ", ".join(f"{r['role']} {r['hired']}/{r['slots']}" for r in pers)
-                      + ", semaine du " + str(pers[0].get("week", "?"))[:10] + ") : "
-                      + etat_jour.texte_personnel(etat_jour.charger_personnel(), pers))  # phase A.5 : règle proposée, jamais une action
+        t_pers = etat_jour.texte_personnel(etat_jour.charger_personnel(), pers)  # 17/11 : ligne seulement si écart à la règle
+        if t_pers:
+            ajoute(None, 3, t_pers)
     return {"actions": A, "exports": exports, "garder": garder, "infos": infos, "capacite": reste_cap}
 
 

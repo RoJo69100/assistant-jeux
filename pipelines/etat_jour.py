@@ -408,17 +408,24 @@ def charger_personnel(jeu: str = "basketvibe", chemin=None) -> dict:
 
 
 def texte_personnel(p: dict, actuel=()) -> str:
-    """« proposition de règle Personnel : … à valider » (jamais une action) ; `actuel` = lignes de gold.bv_personnel_status."""
-    if not p.get("roles"):
-        return "règle de personnel non tranchée, à valider"
+    """Règle `personnel_propose` décidée le 17/11 : « personnel : <action> (<±coût> par semaine) : <raison chiffrée> » si
+    gold.bv_personnel_status (`actuel`) s'en écarte ; "" si conforme ou sans règle (un rôle absent du relevé n'est pas un écart)."""
     emb = {forme_role(r["role"]): r for r in actuel}
-    parts = []
-    for r in p["roles"]:
+    actions, raisons, delta = [], [], 0
+    for r in p.get("roles") or []:
         a = emb.get(forme_role(r["role"]))
-        parts.append(f"{r['role']} {r['garder']}" + (f" (aujourd'hui {a['hired']}/{a['slots']})" if a else "") + f" : {r['raison']}")
-    cout = sum(int(r["garder"]) * int(r["cout_unitaire"]) for r in p["roles"])
-    return (f"proposition de règle Personnel : {' ; '.join(parts)} ; coût {_m(cout)} par semaine (plafond {_m(p['plafond_semaine'])}) "
-            f"— à valider")
+        if a is None or a.get("hired") is None:
+            continue
+        ecart = int(r["garder"]) - int(float(a["hired"]))
+        if ecart == 0:
+            continue
+        actions.append(f"{'embauche' if ecart > 0 else 'licencie'} {abs(ecart)} {r['role']} ({int(float(a['hired']))} → {r['garder']})")
+        raisons.append(f"{r['role']} : {r['raison']}")
+        delta += ecart * int(r["cout_unitaire"])
+    if not actions:
+        return ""
+    signe = "+" if delta > 0 else ("−" if delta < 0 else "±")
+    return f"personnel : {', '.join(actions)} ({signe}{_m(abs(delta))} par semaine) : {' ; '.join(raisons)}"
 
 
 def forme_role(x) -> str:

@@ -670,13 +670,10 @@ def cas_affichage_transferts():
 
 def cas_personnel():
     p = ej.charger_personnel()
-    yield "personnel : règle proposée dans le yaml, 4 rôles", p.get("statut") == "proposée" \
-        and [r["role"] for r in p["roles"]] == ["médecin", "kinésithérapeute", "psychologue", "marketing"]
-    t = ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}])
-    yield "personnel : affichée comme proposition à valider", t.startswith("proposition de règle Personnel : ") and t.endswith("— à valider") \
-        and "marketing 0 (aujourd'hui 0/2)" in t and "coût 60 000 par semaine (plafond 85 000)" in t
-    yield "personnel : jamais une action (aucun verbe d'action en tête)", not t.lower().startswith(("embauche", "licencie", "fais"))
-    yield "personnel : sans règle → non tranchée", ej.texte_personnel({}) == "règle de personnel non tranchée, à valider"
+    yield "personnel : règle décidée dans le yaml, 4 rôles", p.get("statut", "").startswith("décidée") and len(p["roles"]) == 4
+    t = ej.texte_personnel(p, [{"role": "marketing", "hired": 2, "slots": 2}])
+    yield "personnel : écart → ligne d'action chiffrée", t.startswith("personnel : licencie 2 marketing (2 → 0) (−") and "par semaine) : marketing : 1 %" in t
+    yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
 CAS = [cas_config, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
