@@ -241,7 +241,89 @@ def cas_controles():
         ej.appliquer_controles(dict(ok, adversaire="Adv C"), {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG), CFG, MAINT)["prochain"] == "fiche"
 
 
-CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles]
+COLS_EM = ["fixture_id", "competition_kind", "day", "opponent", "home", "played", "my_result", "coup_envoi_paris", "verrou_paris",
+           "apercu_paris", "page_paris", "sauvegarde", "saisie_export_paris", "joueurs_saisis"]
+BRIEF = """# Tactique — Ligue J8 contre Adv A (mer. 18/11 20:00, verrou 19:45)
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Alpha | PG | PG | — | PG | PG | — | 36 | 3 | 3 | 3 | 3 |
+| Beta | SG | SG | SG | — | — | — | 24 (+2) | 2 | 2 | 3 | 3 |
+| Gamma | C | — | — | — | — | — | 0 | 1 | 1 | 1 | 1 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Opp Un | PG | 3 | Rim |
+"""
+
+
+def donnees(**plus):
+    d = {"etat_match": (COLS_EM, [
+            ("f1", "ligue", "2026-11-18", "Adv A", True, False, None, None, None, None, None, None, None, None),
+            ("f2", "amical", "2026-11-18", "Adv B", True, False, None, "2026-11-18T08:00:00", "2026-11-18T07:45:00", None, None, None, None, None),
+            ("f3", "ligue", "2026-11-16", "Adv C", False, False, None, "2026-11-16T20:00:00", "2026-11-16T19:45:00",
+             "2026-11-16T11:02:02", None, False, "2026-11-16T11:02:03", 9),
+            ("f4", "ligue", "2026-11-14", "Adv D", False, True, "L", "2026-11-14T20:00:00", "2026-11-14T19:45:00",
+             "2026-11-13T10:00:00", "2026-11-16T11:01:38", False, "2026-11-13T10:27:06", 10)]),
+         "ecran_joueurs": (["fixture_id", "joueur", "minutes", "off_focus", "role", "tir", "agress"], []),
+         "blessures_match": (["player_id", "name", "injury_return_on", "fixture_id", "competition_kind", "day", "indisponible"], []),
+         "fatigue_roster": (["name", "fatigue"], []), "seuil_fatigue": (["seuil_bas"], [(20,)]),
+         "prospects": (["rapport_paris"], [("2026-11-12T09:00:01",)]),
+         "gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                   [(11, "Entraînement", "x", "2026-11-15T10:00:00", 48, "🟩 à jour")]),
+         "a_evaluer": (["n"], [(2,)]), "transferts_recents": (["name"], [])}
+    d.update(plus)
+    return d
+
+
+def cas_construire():
+    """P2.4 : événements construits depuis la base (gold.bv_etat_match, gold.bv_blessures_match, saisie, fatigue) et les fichiers."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        (Path(tmp) / "briefs" / "2026-11-17-tactique.md").write_text(BRIEF, encoding="utf-8")
+        S = {"analyste": dt.date(2026, 11, 10), "cles": [], "cibles": [], "police": ""}
+        evs = ej.construire(donnees(), S, tmp, dt.date(2026, 11, 17), MAINT, CFG)
+        m = {e["id"]: e for e in evs if e["type"] == "match"}
+        yield "construire : un événement par match de la vue", set(m) == {"f1", "f2", "f3", "f4"}
+        yield "construire : ligue sans heure en base → coup d'envoi et verrou de la config (20:00, 19:45)", \
+            m["f1"]["coup_envoi"] == dt.datetime(2026, 11, 18, 20, 0) and m["f1"]["verrou"] == dt.datetime(2026, 11, 18, 19, 45)
+        yield "construire : la fiche du match est lue (adversaire, joueurs, minutes)", m["f1"]["fiche"] is not None \
+            and m["f1"]["fiche"]["adversaire"] == "Adv A" and [j["minutes"] for j in m["f1"]["fiche"]["joueurs"]] == [36, 24, 0]
+        yield "construire : pas de fiche pour un autre adversaire", m["f2"]["fiche"] is None
+        yield "construire : page capturée avant le coup d'envoi = pas la page du match", m["f3"]["page_at"] is None
+        yield "construire : défaite jouée, analyse du 10/11 antérieure → non analysée", m["f4"]["joue"] and not m["f4"]["analyse"]
+        yield "construire : juger seulement le dernier match officiel joué, décisions à mesurer > 0", \
+            m["f4"]["juge_requis"] and not m["f4"]["juge"] and not m["f3"]["juge_requis"]
+        yield "construire : âge des données = dernière capture du match", m["f3"]["maj_at"] == dt.datetime(2026, 11, 16, 11, 2, 3)
+        ls = {l["id"]: l for l in ej.lignes(evs, CFG, MAINT)}
+        yield "construire : match passé non marqué joué → exporte sa page", ls["f3"]["prochain"] == "joue" and ls["f3"]["action"] \
+            and "exporte la page du match de ligue contre Adv C (16/11)" == ls["f3"]["consigne"]
+        yield "construire : défaite non analysée → l'agent analyste", ls["f4"]["prochain"] == "analyse"
+        yield "construire : ligue de demain, aperçu absent → aperçu", ls["f1"]["prochain"] == "apercu"
+        yield "construire : amical de demain sans fiche → fiche, jamais d'aperçu", ls["f2"]["prochain"] == "fiche"
+        ac = [e for e in evs if e["type"] == "academie"]
+        yield "construire : académie, le rapport du jeudi 19/11 09:00", any(e["quand"] == dt.datetime(2026, 11, 19, 9, 0) for e in ac)
+        en = [e for e in evs if e["type"] == "entrainement"]
+        yield "construire : entraînement, traitement du dimanche 04:00 et page lue dans l'état des exports", \
+            any(e["quand"] == dt.datetime(2026, 11, 22, 4, 0) for e in en) and all(e["page_at"] == dt.datetime(2026, 11, 15, 10, 0) for e in en)
+        blesse = donnees(blessures_match=(["player_id", "name", "injury_return_on", "fixture_id", "competition_kind", "day", "indisponible"],
+                                          [("p1", "Prénom Alpha", "2026-11-20", "f1", "ligue", "2026-11-18", True)]))
+        l1 = {l["id"]: l for l in ej.lignes(ej.construire(blesse, S, tmp, dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT)}["f1"]
+        yield "construire : blessé à la date du match (par la vue) → ❌ et correction dans la ligne", \
+            any("Alpha" in d["texte"] and d["texte"].startswith("❌") for d in l1["defauts"])
+        cible = {"nom": "Cible A", "fin": dt.datetime(2026, 11, 18, 4, 0), "max": 300000, "police": False}
+        e = [x for x in ej.construire(donnees(), dict(S, cibles=[cible]), tmp, dt.date(2026, 11, 17), MAINT, CFG) if x["type"] == "enchere"]
+        yield "construire : enchère décidée au-dessus du seuil → police requise", len(e) == 1 and e[0]["gros"] and not e[0]["police"]
+        e = [x for x in ej.construire(donnees(), dict(S, cibles=[cible], police="- décision : acheter cible a"), tmp, dt.date(2026, 11, 17),
+                                      MAINT, CFG) if x["type"] == "enchere"]
+        yield "construire : police du jour qui nomme la cible → police faite", e[0]["police"]
+    yield "requêtes : lecture seule, vues de P2", all(q.lstrip().lower().startswith("select") for q in ej.REQUETES.values()) \
+        and "gold.bv_etat_match" in ej.REQUETES["etat_match"] and "gold.bv_blessures_match" in ej.REQUETES["blessures_match"]
+
+
+CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+       cas_construire]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

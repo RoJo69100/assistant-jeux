@@ -118,8 +118,10 @@ etat_jour:
   donnee_perimee_h: 24         # donnée plus vieille = priorité dégradée d'un cran
   jours_non_analyses: 7        # un match joué non analysé garde sa ligne pendant cette fenêtre
   minutes_max: 36              # contrôle fiche : minutes par joueur (règle de l'utilisateur, plan v4)
+  duree_match_h: 2             # après le coup d'envoi + cette durée, un match non marqué joué demande sa page
   matchs:
-    ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
+    ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui,
+              coup_envoi_defaut: "20:00", verrou_defaut: "19:45" }   # heures de la section rythme quand core.fixture n'en a pas
     coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
     amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui }   # jamais d'aperçu ni d'export avant le match
   evenements:

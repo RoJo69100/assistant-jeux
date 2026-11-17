@@ -55,7 +55,7 @@ def _match_ok(ev, etat, maintenant, cfg) -> bool:
     raise ValueError(f"état de match inconnu : {etat}")
 
 
-def _match_gabarit(ev, etat, maintenant):
+def _match_gabarit(ev, etat, maintenant, cfg):
     quoi = f"match de {ev['genre']} contre {ev['adversaire']} ({_jj(ev.get('jour'))})"
     if etat == "calendrier":
         return None, f"ouvre la page des matchs : le {quoi} n'a pas de date en base", True
@@ -74,8 +74,9 @@ def _match_gabarit(ev, etat, maintenant):
     if etat == "verrou":
         return ev.get("verrou"), f"rien avant le verrou {_hh(ev.get('verrou'))} : écran du {quoi} sauvegardé", False
     if etat == "joue":
-        if not ev.get("joue"):
-            return ev.get("coup_envoi"), f"rien avant la fin du {quoi} (coup d'envoi {_hh(ev.get('coup_envoi'))})", False
+        fini = ev.get("coup_envoi") is not None and maintenant >= ev["coup_envoi"] + dt.timedelta(hours=cfg.get("duree_match_h", 2))
+        if not ev.get("joue") and not fini:
+            return ev.get("coup_envoi"),f"rien avant la fin du {quoi} (coup d'envoi {_hh(ev.get('coup_envoi'))})", False
         return None, f"exporte la page du {quoi}", True
     if etat == "analyse":
         return None, f"lance l'agent analyste : défaite, {quoi}", True
@@ -107,7 +108,7 @@ def _autre_ok(ev, etat, maintenant, cfg) -> bool:
     raise ValueError(f"état inconnu : {t} / {etat}")
 
 
-def _autre_gabarit(ev, etat, maintenant):
+def _autre_gabarit(ev, etat, maintenant, cfg):
     t = ev["type"]
     if etat == "rapport_attendu":
         return ev["quand"], f"rien avant le rapport du scout ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
@@ -163,7 +164,7 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
             continue
         prochain = e
         break
-    echeance, consigne, action = gabarit(ev, prochain, maintenant) if prochain else (None, "rien à faire", False)
+    echeance, consigne, action = gabarit(ev, prochain, maintenant, cfg) if prochain else (None, "rien à faire", False)
     age = round((maintenant - ev["maj_at"]).total_seconds() / 3600, 1) if ev.get("maj_at") else None
     prio = 3 if not action else 1 if echeance is not None and echeance - maintenant <= dt.timedelta(hours=cfg["urgent_h"]) else 2
     if age is not None and age > cfg["donnee_perimee_h"]:
@@ -190,7 +191,9 @@ def dans_horizon(ev, cfg, maintenant) -> bool:
         return False
     if r >= maintenant:
         return True
-    return r >= maintenant - dt.timedelta(days=cfg["jours_non_analyses"]) and etat_evenement(ev, cfg, maintenant)["prochain"] is not None
+    # passé : un match garde sa ligne `jours_non_analyses` jours, un autre événement `horizon_h` heures, tant qu'il reste une transition
+    recul = dt.timedelta(days=cfg["jours_non_analyses"]) if ev["type"] == "match" else dt.timedelta(hours=cfg["horizon_h"])
+    return r >= maintenant - recul and etat_evenement(ev, cfg, maintenant)["prochain"] is not None
 
 
 def lignes(evenements, cfg, maintenant) -> list:
@@ -320,3 +323,141 @@ def sans_ligne(evenements, ls, cfg, maintenant) -> list:
     """Complétude : événements retenus qui n'ont pas de ligne dans `ls` (doit être vide)."""
     ids = {l["id"] for l in ls}
     return [ev for ev in evenements if dans_horizon(ev, cfg, maintenant) and ev.get("id") not in ids]
+
+
+# ---- P2.4 : la lecture (vues gold de sql/gold/085_bv_etat_jour.sql) et la construction des événements ------------------
+# Lues avec les autres requêtes de aujourdhui.py (même lecteur, mêmes erreurs « vue illisible ») ; les clés « prospects »,
+# « gold.bv_exports_state », « a_evaluer » et « transferts_recents » viennent de aujourdhui.REQUETES.
+REQUETES = {
+    "etat_match": "select fixture_id, competition_kind, day, opponent, home, played, my_result, coup_envoi_paris, verrou_paris, "
+                  "apercu_paris, page_paris, sauvegarde, saisie_export_paris, joueurs_saisis from gold.bv_etat_match "
+                  "order by day, coup_envoi_paris",
+    "blessures_match": "select player_id, name, injury_return_on, fixture_id, competition_kind, day, indisponible from gold.bv_blessures_match",
+    "ecran_joueurs": "select fixture_id, joueur, minutes, off_focus, role, tir, agress from gold.bv_saisie_joueurs "
+                     "where match_day >= (now() at time zone 'Europe/Paris')::date - 1",
+    "fatigue_roster": "select name, fatigue from gold.bv_roster_now",
+    "seuil_fatigue": "select seuil_bas from core.alert_rule where game = 'basketvibe' and rule_id = 'fatigue' and actif",
+}
+JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
+
+
+def _rows(donnees, nom) -> list:
+    d = donnees.get(nom)
+    if not d or d == "rejeu":
+        return []
+    cols, lignes = d
+    return [dict(zip(cols, l)) for l in lignes]
+
+
+def _dt(v):
+    if v in (None, ""):
+        return None
+    return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v)[:19])
+
+
+def _date(v):
+    if v in (None, ""):
+        return None
+    return v if isinstance(v, dt.date) and not isinstance(v, dt.datetime) else dt.date.fromisoformat(str(v)[:10])
+
+
+def _entier(v):
+    import re
+    m = re.match(r"\s*(\d+)", str(v or ""))
+    return int(m.group(1)) if m else None
+
+
+def occurrences(quand: str, maintenant) -> list:
+    """« jeudi 09:00 » → [dernière occurrence passée, suivante] (heure de Paris)."""
+    jour, heure = quand.split()
+    h = dt.time.fromisoformat(heure)
+    d = maintenant.date() - dt.timedelta(days=(maintenant.weekday() - JOURS.index(jour)) % 7)
+    prec = dt.datetime.combine(d, h)
+    if prec > maintenant:
+        prec -= dt.timedelta(days=7)
+    return [prec, prec + dt.timedelta(days=7)]
+
+
+def _cle(S, mot, depuis) -> bool:
+    """Déclaration au registre (`[clé=<mot>]`, skill deja-fait) datée d'au moins `depuis`."""
+    import unicodedata
+    n = lambda s: unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().lower()
+    return any(n(c["nom"]).startswith(mot) and c["jour"] >= depuis for c in S.get("cles", []))
+
+
+def lire_fiche(base, jour, ev):
+    """Fiche du match : brief tactique le plus récent (≤ `jour`) qui nomme l'adversaire et, s'il porte une date, celle du match."""
+    import re
+    import composition as comp
+    b = comp.brief_pour(base, jour, ev["adversaire"], ev["genre"] == "amical")
+    if not b:
+        return None
+    _, f, texte = b
+    titre = texte.splitlines()[0] if texte else ""
+    d = re.search(r"\b(\d{2})/(\d{2})\b", titre)
+    if d and ev.get("jour") and (int(d.group(1)), int(d.group(2))) != (ev["jour"].day, ev["jour"].month):
+        return None  # fiche d'un autre match contre le même adversaire
+    lue = comp.lire_fiche(texte)
+    fiche = {"ok": lue is not None, "adversaire": comp.adversaire_du_titre(titre), "fichier": f"briefs/{Path(f).name}", "joueurs": []}
+    for c in (lue[0] if lue else []):  # joueur, poste, q1, q2, q3, q4, prol, min, off, role, tir, agress
+        fiche["joueurs"].append({"nom": c[0], "minutes": _entier(c[7]) or 0, "off": _entier(c[8]), "role": _entier(c[9]),
+                                 "tir": _entier(c[10]), "agress": _entier(c[11])})
+    agr = {j["agress"] for j in fiche["joueurs"] if j["minutes"] > 0}
+    fiche["agress_test"] = agr.pop() if len(agr) == 1 else None
+    return fiche
+
+
+def construire(donnees, S, base, jour, maintenant, cfg) -> list:
+    """Événements du jour depuis les lignes lues (`donnees`, format de aujourdhui.lignes_de), les sources (S : analyste, cles,
+    cibles, police) et les briefs de `base` ; les contrôles fiche contre réalité sont appliqués à chaque match."""
+    from police import SEUIL_GROS_MONTANT
+    S = S or {}
+    evs = []
+    ecran = {}
+    for r in _rows(donnees, "ecran_joueurs"):
+        ecran.setdefault(r["fixture_id"], []).append({"nom": r["joueur"], "minutes": _entier(r["minutes"]) or 0, "off": _entier(r["off_focus"]),
+                                                      "role": _entier(r["role"]), "tir": _entier(r["tir"]), "agress": _entier(r["agress"])})
+    blessures = {}
+    for r in _rows(donnees, "blessures_match"):
+        blessures.setdefault(r["fixture_id"], {})[r["name"]] = _date(r["injury_return_on"])
+    seuil = next((r["seuil_bas"] for r in _rows(donnees, "seuil_fatigue")), None)
+    fatigue = {r["name"]: r["fatigue"] for r in _rows(donnees, "fatigue_roster")}
+    a_evaluer = sum(int(r["n"]) for r in _rows(donnees, "a_evaluer"))
+    matchs = _rows(donnees, "etat_match")
+    officiels = [r for r in matchs if r["played"] and r["competition_kind"] != "amical"]
+    dernier = max(officiels, key=lambda r: (str(r["day"]), str(r["coup_envoi_paris"] or "")))["fixture_id"] if officiels else None
+    for r in matchs:
+        genre, d = r["competition_kind"], _date(r["day"])
+        regle = cfg["matchs"].get(genre)
+        if regle is None:
+            continue
+        defaut = lambda cle: dt.datetime.combine(d, dt.time.fromisoformat(regle[cle])) if d and regle.get(cle) else None
+        ce = _dt(r["coup_envoi_paris"]) or defaut("coup_envoi_defaut")
+        page = _dt(r["page_paris"])
+        dates = [x for x in (_dt(r["apercu_paris"]), _dt(r["saisie_export_paris"]), page) if x]
+        ev = {"type": "match", "genre": genre, "id": r["fixture_id"], "adversaire": r["opponent"], "jour": d, "coup_envoi": ce,
+              "verrou": _dt(r["verrou_paris"]) or defaut("verrou_defaut"), "joue": bool(r["played"]), "resultat": r["my_result"],
+              "apercu_at": _dt(r["apercu_paris"]), "page_at": page if page and (ce is None or page >= ce) else None,
+              "ecran": ({"sauvegarde": bool(r["sauvegarde"]), "joueurs": ecran.get(r["fixture_id"], [])} if r["sauvegarde"] is not None else None),
+              "analyse": S.get("analyste") is not None and d is not None and S["analyste"] >= d,
+              "juge_requis": r["fixture_id"] == dernier, "juge": a_evaluer == 0, "maj_at": max(dates) if dates else None}
+        ev["fiche"] = lire_fiche(base, jour, ev) if d and d >= jour else None
+        evs.append(appliquer_controles(ev, {"blessures": blessures.get(r["fixture_id"], {}), "fatigue": fatigue, "seuil_fatigue": seuil}, cfg))
+    rapport = max((_dt(r["rapport_paris"]) for r in _rows(donnees, "prospects")), default=None)
+    page_entr = next((_dt(r["dernier_paris"]) for r in _rows(donnees, "gold.bv_exports_state") if r["ecran"] == "Entraînement"), None)
+    for t, c in cfg["evenements"].items():
+        if t == "enchere":
+            continue
+        for q in occurrences(c["quand"], maintenant):
+            ev = {"type": t, "id": f"{t}-{q:%Y-%m-%d}", "quand": q, "maj_at": None}
+            if t == "academie":
+                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()))
+            else:
+                ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()))
+            evs.append(ev)
+    vendus = {str(r["name"]).lower() for r in _rows(donnees, "transferts_recents")}
+    for c in S.get("cibles", []):
+        evs.append({"type": "enchere", "id": f"enchere-{c['nom']}", "nom": c["nom"], "fin": c.get("fin"),
+                    "gros": c.get("max") is not None and float(c["max"]) > SEUIL_GROS_MONTANT["basketvibe"],
+                    "police": c["nom"].lower() in str(S.get("police", "")).lower(), "resultat": c["nom"].lower() in vendus, "maj_at": None})
+    return evs
