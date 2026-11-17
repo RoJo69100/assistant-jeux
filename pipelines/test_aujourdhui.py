@@ -522,6 +522,7 @@ def cas_etape5a():
     yield from cas_experience_e5()
     yield from cas_entrainement()
     yield from cas_fatigue()
+    yield from cas_amical_export()
     yield from cas_revue()
     yield from cas_echec_bruyant()
 
@@ -605,6 +606,29 @@ def cas_fatigue():
     yield "N3 écran sauvegardé : ligne « Sors » gardée", any(a[2].startswith("Sors Bonnet") for a in plan12([r + (True, False) for r in coupe]))
     yield "N3 requête : lit l'indicateur de sauvegarde", "sauvegarde_match" in auj.REQUETES["fatigue_avant_match"] \
         and "ecran_par_defaut" in auj.REQUETES["fatigue_avant_match"]
+
+
+def cas_amical_export():
+    """Audit du 13/11, défaut 1 : un export amical (liste, tactique du match) n'est demandé que si un amical est à l'agenda
+    aujourd'hui ou demain (règle d'expiration 24 h : sql/core/005_export_rule.sql, ordres 3 et 4)."""
+    etat = (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], [
+        (3, "Amicaux (liste)", "amical du jour", None, 30, "🟧 à refaire"),
+        (4, "Amical : tactique du match", "saisie de l'amical", None, 30, "🟧 à refaire"),
+        (13, "Personnel", "staff", None, 80, "🟧 à refaire")])
+
+    def exports(lignes_agenda):
+        d = figees(**{"gold.bv_exports_state": etat, "gold.bv_agenda": (AGENDA[0], lignes_agenda)})
+        return auj.rendre(auj.plan(d, {}, JOUR, SOIR, "", {}), JOUR)
+    sans = exports([])
+    yield "Audit1 aucun amical à l'agenda : ni la liste ni la tactique de l'amical redemandées", \
+        "Amicaux (liste)" not in sans and "Amical : tactique du match" not in sans
+    yield "Audit1 les autres exports en retard restent demandés", "Personnel (80 h)" in sans
+    demain = [(JOUR + dt.timedelta(days=1), "07:45", 1, "amical", "Avant 07:45 : preset sur le match contre Knight Jays")]
+    avec = exports(demain)
+    yield "Audit1 amical demain à l'agenda : les deux exports sont demandés", \
+        "Amicaux (liste) (30 h)" in avec and "Amical : tactique du match (30 h)" in avec
+    loin = [(JOUR + dt.timedelta(days=3), "07:45", 1, "amical", "Avant 07:45 : preset sur le match contre Knight Jays")]
+    yield "Audit1 amical dans 3 jours : pas encore redemandé", "Amicaux (liste)" not in exports(loin)
 
 
 def cas_entrainement():

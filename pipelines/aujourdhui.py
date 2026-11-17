@@ -33,7 +33,8 @@ RACINE = Path(__file__).resolve().parent.parent
 BASE = RACINE / "outputs/basketvibe"
 JOURNAL = RACINE / "docs/refonte-v3/journal-aujourdhui.md"
 FENETRE = 7  # jours : durée de validité d'une clé de match sans date (R5)
-ACTIONS_MAX = 5  # + « Autres points » + « Garder » + « Exports » = 8 lignes au plus
+ECRANS_AMICAL = ("Amicaux (liste)", "Amical : tactique du match")  # core.export_rule ordres 3 et 4 (24 h)
+ACTIONS_MAX = 5 # + « Autres points » + « Garder » + « Exports » = 8 lignes au plus
 CAT_ALERTE = {"blessure": "Composition", "fatigue": "Composition", "forme": "Composition",
               "finances": "Finances", "transferts": "Transferts", "export": "Exports"}
 # Registre outputs/basketvibe/fait-<jour>.md (skill deja-fait) : écran de bv_exports_state ou catégorie
@@ -1011,8 +1012,13 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
     etat = {r["ecran"]: r for r in lignes_de(donnees, "gold.bv_exports_state")}
     # Mes enchères : la page est vide (et jamais envoyée) sans enchère d'achat en cours ; fin inconnue = peut-être en cours (PB6)
     encheres_en_cours = any(c["fin"] is None or c["fin"] > maintenant for c in S.get("cibles", []))
+    # Amicaux : liste et tactique du match ne servent que s'il y a un amical à l'agenda aujourd'hui ou demain (audit du 13/11)
+    amical_proche = any(r["category"] == "amical" and jour <= en_date(r["day"]) <= jour + dt.timedelta(days=1)
+                        for r in lignes_de(donnees, "gold.bv_agenda"))
     for r in etat.values():
         if r["ecran"] == "Mes enchères" and not encheres_en_cours:
+            continue
+        if r["ecran"] in ECRANS_AMICAL and not amical_proche:
             continue
         statut = str(r["statut"])
         if r["ecran"] == "Mes enchères" and statut.endswith("optionnel"):
