@@ -212,6 +212,8 @@ REQUETES = {
     "gold.bv_finance_projection": "select season_end, balance_end_projected, tickets_left, sponsor_left, costs_left "
                                   "from gold.bv_finance_projection limit 1",
 }
+import etat_jour  # noqa: E402  (P2 : état par événement ; aucune dépendance vers ce module)
+REQUETES.update(etat_jour.REQUETES)
 # Vues rejouables sur un jour passé : requête de remplacement avec le paramètre {jour}.
 REJEU = {
     "derniere_vente": "select max(sold_on) as derniere from gold.bv_transfer_history where sold_on <= '{jour}'",

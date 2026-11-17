@@ -1,0 +1,23 @@
+{
+  "source": "gold.bv_etat_match lue le 2026-11-17 vers 10:45 (heure de Paris), 16 lignes",
+  "colonnes": ["fixture_id", "competition_kind", "day", "opponent", "home", "played", "my_result", "coup_envoi_paris", "verrou_paris",
+               "apercu_paris", "page_paris", "sauvegarde", "saisie_export_paris", "joueurs_saisis"],
+  "lignes": [
+    ["m01", "amical", "2026-11-10", "Opper Cards", null, true, "W", "2026-11-10T08:00:00", "2026-11-10T07:45:00", null, null, null, null, null],
+    ["m02", "amical", "2026-11-11", "Launceston Ligers", null, true, "L", "2026-11-11T08:00:00", "2026-11-11T07:45:00", "2026-11-11T13:43:46", "2026-11-11T13:43:46", false, "2026-11-10T16:11:09", 9],
+    ["m03", "ligue", "2026-11-11", "BC KIT", null, true, "W", "2026-11-11T20:00:00", "2026-11-11T19:45:00", "2026-11-12T17:52:26", "2026-11-12T17:52:26", false, "2026-11-11T10:33:30", 10],
+    ["m04", "amical", "2026-11-12", "San Junipero Bytes", null, true, "W", "2026-11-12T08:00:00", "2026-11-12T07:45:00", "2026-11-12T17:52:40", "2026-11-12T17:52:40", null, null, null],
+    ["m05", "coupe", "2026-11-12", "Stare Kotlety", null, true, "L", "2026-11-12T20:00:00", "2026-11-12T20:00:00", "2026-11-13T10:23:15", "2026-11-13T10:23:15", false, "2026-11-11T13:43:35", 5],
+    ["m06", "amical", "2026-11-13", "Hapoel Nehamia(Galil)", null, true, "W", "2026-11-13T08:00:00", "2026-11-13T07:45:00", "2026-11-16T11:01:29", "2026-11-16T11:01:29", null, null, null],
+    ["m07", "amical", "2026-11-14", "Artificial Instinct", null, true, "W", "2026-11-14T08:00:00", "2026-11-14T07:45:00", "2026-11-16T11:01:15", "2026-11-16T11:01:16", true, "2026-11-13T10:27:03", 9],
+    ["m08", "ligue", "2026-11-14", "BC Gelrode", null, true, "L", "2026-11-14T20:00:00", "2026-11-14T19:45:00", "2026-11-16T11:01:37", "2026-11-16T11:01:38", false, "2026-11-13T10:27:06", 10],
+    ["m09", "amical", "2026-11-15", "Hapoel Nehamia(Galil)", null, true, "W", "2026-11-15T08:00:00", "2026-11-15T07:45:00", "2026-11-16T11:01:46", "2026-11-16T11:01:46", null, null, null],
+    ["m10", "amical", "2026-11-16", "Hapoel Nehamia(Galil)", null, true, "W", "2026-11-16T08:00:00", "2026-11-16T07:45:00", "2026-11-16T11:01:52", "2026-11-16T11:01:53", null, null, null],
+    ["m11", "ligue", "2026-11-16", "Astur Hoops", null, false, null, "2026-11-16T20:00:00", "2026-11-16T19:45:00", "2026-11-16T11:02:02", null, false, "2026-11-16T11:02:03", 9],
+    ["m12", "amical", "2026-11-17", "Union Heidelberg", null, false, null, "2026-11-17T08:00:00", "2026-11-17T07:45:00", null, null, null, null, null],
+    ["m13", "amical", "2026-11-18", "Union Heidelberg", null, false, null, "2026-11-18T08:00:00", "2026-11-18T07:45:00", null, null, null, null, null],
+    ["m14", "ligue", "2026-11-18", "C.B.Granada", null, false, null, null, null, null, null, null, null, null],
+    ["m15", "amical", "2026-11-19", "BG Bangers", null, false, null, "2026-11-19T08:00:00", "2026-11-19T07:45:00", null, null, null, null, null],
+    ["m16", "amical", "2026-11-20", "FuzzyTeam", null, false, null, "2026-11-20T08:00:00", "2026-11-20T07:45:00", null, null, null, null, null]
+  ]
+}

@@ -1056,6 +1056,39 @@ def fautes_bloc_1(rendu: str) -> list:
     return fautes
 
 
+# P2 (plan v4) : catégorie affichée d'une ligne de etat_jour, par type d'événement et prochaine transition
+CAT_ETAT = {"apercu": "export", "joue": "export", "calendrier": "export", "rapport_exporte": "export", "page_exportee": "export",
+            "fiche": "composition", "ecran": "composition", "analyse": "analyse", "juge": "analyse", "decide": "academie/draft",
+            "saisi": "entrainement", "police": "transferts", "resultat": "transferts"}
+TITRE_ETAT = "## Aujourd'hui — état par événement"
+
+
+def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime) -> tuple:
+    """(lignes, consignes) : une rangée par événement des 48 h (ou match joué non analysé) dont la prochaine transition est à faire
+    (pipelines/etat_jour.py) ; les attentes n'ont pas de rangée. Une consigne d'agent ou de commande part dans les consignes de
+    session et la rangée dit seulement ce qui est à lancer. Les blocs 0 à 10 restent (doublons supprimés seulement à parité prouvée)."""
+    import etat_jour as ej
+    cfg = ej.charger_config()
+    ls = [l for l in ej.lignes(ej.construire(donnees, S, base, jour, maintenant, cfg), cfg, maintenant) if l["action"]]
+    rangs, consignes = [], []
+    for l in ls:
+        texte = l["consigne"]
+        if CONSIGNE.search(texte):
+            consignes.append(f"{l['evenement']} : {texte}")
+            texte = re.sub(r"\s*:\s*python -I \S+", "", texte)
+            texte = re.sub(r"\b(?:re)?lance l'agent (\w+)", r"agent \1 à lancer", texte)
+        if l["defauts"]:
+            texte += " — " + " ; ".join(d["texte"] for d in l["defauts"])
+        if l["echeance"]:
+            texte += f" — échéance {l['echeance']:%d/%m %H:%M}"
+        if l["age_h"] is not None:
+            texte += f" — données de {l['age_h']:g} h".replace(".", ",")
+        rangs.append(f"| {PASTILLE[l['priorite']]} | {AFFICHAGE[CAT_ETAT.get(l['prochain'], 'question')]} | {texte.replace('|', '/')} |")
+    if not rangs:
+        return ["toutes les transitions des 48 h sont faites ou attendent leur échéance", ""], consignes
+    return ["| Priorité | Catégorie | Action |", "|---|---|---|"] + rangs + [""], consignes
+
+
 def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, S, etudes=None, base=None, fait: str = "") -> tuple:
     """(texte des blocs 0 à 10, consignes de session). Les consignes (lancer un agent) ne sont jamais dans le texte. Une vue
     illisible donne une ligne « vue <nom> illisible » dans son bloc, sans faire échouer le rendu."""
@@ -1075,7 +1108,8 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
              bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), bloc_5(etudes), b6,
              b7, bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
              bloc_10(actions, garder)]
-    texte = []
+    be, ce = bloc_etat(donnees, S, base or BASE, jour, maintenant)  # P2 : en tête du plan, à côté des blocs actuels
+    texte = [TITRE_ETAT, ""] + be
     for n, (titre, lignes) in enumerate(zip(TITRES, blocs)):
         texte += [f"## Bloc {n} — {titre}", ""] + list(lignes) + [""]
-    return "\n".join(texte).rstrip() + "\n", separer(actions)[1] + c2 + c3 + c6
+    return "\n".join(texte).rstrip() + "\n", separer(actions)[1] + c2 + c3 + c6 + ce

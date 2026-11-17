@@ -322,8 +322,100 @@ def cas_construire():
         and "gold.bv_etat_match" in ej.REQUETES["etat_match"] and "gold.bv_blessures_match" in ej.REQUETES["blessures_match"]
 
 
+INSTANTANE = ICI / "jeu_essai" / "2026-11-17" / "etat_match.json"
+
+
+def a_la_date(maintenant):
+    """gold.bv_etat_match telle que la base la voyait à `maintenant`, reconstruite depuis l'extrait du 17/11 : fenêtre J-7 à J+3,
+    captures postérieures effacées, match « joué » seulement si sa fin (coup d'envoi + 2 h) est passée."""
+    import json
+    snap = json.loads(INSTANTANE.read_text(encoding="utf-8"))
+    cols, res = snap["colonnes"], []
+    for l in snap["lignes"]:
+        r = dict(zip(cols, l))
+        d = dt.date.fromisoformat(r["day"])
+        if not (maintenant.date() - dt.timedelta(days=7) <= d <= maintenant.date() + dt.timedelta(days=3)):
+            continue
+        for k in ("apercu_paris", "page_paris", "saisie_export_paris"):
+            if r[k] and dt.datetime.fromisoformat(r[k]) > maintenant:
+                r[k] = None
+        if r["saisie_export_paris"] is None:
+            r["sauvegarde"], r["joueurs_saisis"] = None, None
+        if r["coup_envoi_paris"] and dt.datetime.fromisoformat(r["coup_envoi_paris"]) + dt.timedelta(hours=2) > maintenant:
+            r["played"], r["my_result"] = False, None
+        res.append(tuple(r[c] for c in cols))
+    return cols, res
+
+
+def rejeu(maintenant, analyste):
+    import tempfile
+    d = donnees(etat_match=a_la_date(maintenant), prospects=(["rapport_paris"], []))
+    with tempfile.TemporaryDirectory() as tmp:
+        S = {"analyste": analyste, "cles": [], "cibles": [], "police": ""}
+        evs = ej.construire(d, S, tmp, maintenant.date(), maintenant, CFG)
+    return evs, ej.lignes(evs, CFG, maintenant)
+
+
+def cas_rejeu():
+    """P2.6 : rejeu sur les entrées du 12/11 (14:51) et du 17/11 (10:00) ; aucun libellé n'est écrit pour un cas."""
+    import json
+    snap = json.loads(INSTANTANE.read_text(encoding="utf-8"))
+    noms = {l[3] for l in snap["lignes"]}
+    code = (ICI / "etat_jour.py").read_text(encoding="utf-8")
+    yield "rejeu : aucun adversaire de l'extrait n'est écrit dans etat_jour.py", not any(n in code for n in noms)
+    for maint, analyste in ((dt.datetime(2026, 11, 12, 14, 51), dt.date(2026, 11, 10)), (dt.datetime(2026, 11, 17, 10, 0), dt.date(2026, 11, 17))):
+        evs, ls = rejeu(maint, analyste)
+        tag = f"{maint:%d/%m}"
+        yield f"rejeu {tag} : complétude, chaque événement retenu a sa ligne", ej.sans_ligne(evs, ls, CFG, maint) == []
+        yield f"rejeu {tag} : une seule ligne par événement", len({l["id"] for l in ls}) == len(ls)
+        par = {e["id"]: e for e in evs}
+        yield f"rejeu {tag} : chaque consigne de match nomme son adversaire et sa date (gabarit rempli par la base)", \
+            all(par[l["id"]]["adversaire"] in l["consigne"] and f"{par[l['id']]['jour']:%d/%m}" in l["consigne"]
+                for l in ls if l["type"] == "match" and l["action"])
+    _, l12 = rejeu(dt.datetime(2026, 11, 12, 14, 51), dt.date(2026, 11, 10))
+    p = {l["id"]: l for l in l12}
+    yield "rejeu 12/11 14:51 : coupe du soir, aperçu pas encore en base → aperçu demandé avant le verrou 20:00", \
+        p["m05"]["prochain"] == "apercu" and p["m05"]["echeance"] == dt.datetime(2026, 11, 12, 20, 0)
+    yield "rejeu 12/11 14:51 : ligue du 11/11 jouée, page capturée seulement à 17:52 → page à exporter", \
+        p["m03"]["prochain"] == "joue" and p["m03"]["action"]
+    yield "rejeu 12/11 14:51 : amical du 13/11 (08:00) → fiche à faire, jamais d'aperçu", p["m06"]["prochain"] == "fiche"
+    _, l17 = rejeu(dt.datetime(2026, 11, 17, 10, 0), dt.date(2026, 11, 17))
+    p = {l["id"]: l for l in l17}
+    yield "rejeu 17/11 10:00 : ligue du 16/11 non marquée jouée → page du match contre son adversaire", \
+        p["m11"]["prochain"] == "joue" and p["m11"]["consigne"].startswith("exporte la page du match de ligue")
+    yield "rejeu 17/11 10:00 : amical de 08:00 passé → page du match", p["m12"]["prochain"] == "joue" and p["m12"]["action"]
+    yield "rejeu 17/11 10:00 : défaite du 14/11 analysée le 17/11, décisions à mesurer → juger", p["m08"]["prochain"] == "juge"
+    yield "rejeu 17/11 10:00 : ligue du 18/11 sans heure en base → aperçu, échéance 19:45 de la config", \
+        p["m14"]["prochain"] == "apercu" and p["m14"]["echeance"] == dt.datetime(2026, 11, 18, 19, 45)
+    yield "rejeu 17/11 10:00 : amical du 20/11 hors des 48 h", "m16" not in p
+
+
+def cas_branchement():
+    """P2.5 : section « Aujourd'hui — état par événement » en tête du plan, à côté des blocs actuels."""
+    import tempfile
+    import forme
+    import que_faire_blocs as qfb
+    maint = dt.datetime(2026, 11, 17, 10, 0)
+    d = donnees(etat_match=a_la_date(maint))
+    S = {"analyste": dt.date(2026, 11, 17), "cles": [], "cibles": [], "police": ""}
+    with tempfile.TemporaryDirectory() as tmp:
+        lignes, consignes = qfb.bloc_etat(d, S, tmp, maint.date(), maint)
+        texte, cons = qfb.rendre_blocs({"actions": [], "exports": [], "garder": [], "infos": [], "capacite": None}, d, {}, maint.date(), maint,
+                                       S, etudes=[], base=tmp)
+        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]]
+    t = "\n".join(lignes)
+    rangs = [l for l in lignes if l.startswith("| ") and not l.startswith("| Priorité")]
+    yield "branchement : une rangée par transition à faire, aucune pour une attente", len(rangs) == len(attendu)
+    yield "branchement : tableau au format du plan (forme)", t.count("| Priorité | Catégorie | Action |") == 1 and forme.fautes_tableaux(t, "basketvibe") == []
+    yield "branchement : aucune commande d'agent affichée, elle part dans les consignes de session", \
+        "lance l'agent" not in t and any("lance l'agent tactique" in c for c in consignes)
+    yield "branchement : la section est en tête, avant le bloc 0", texte.index("## Aujourd'hui — état par événement") < texte.index("## Bloc 0")
+    yield "branchement : les blocs 0 à 10 restent là", all(f"## Bloc {n} — " in texte for n in range(11))
+    yield "branchement : consignes de la section dans les consignes de session", any("lance l'agent tactique" in c for c in cons)
+
+
 CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
-       cas_construire]
+       cas_construire, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
