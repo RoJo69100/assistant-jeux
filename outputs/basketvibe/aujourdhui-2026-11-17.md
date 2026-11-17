@@ -1,18 +1,19 @@
-<!-- généré le 2026-11-17 16:13 -->
+<!-- généré le 2026-11-17 16:36 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
 | 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match amical contre Union Heidelberg (18/11) selon la fiche (outputs/basketvibe/briefs/2026-11-17-tactique-amical.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-17-tactique-amical.md) — échéance 18/11 07:45 |
-| 🟧 IMPORTANT | Export | exporte l'aperçu du match de ligue contre C.B.Granada (18/11) — échéance 18/11 19:45 |
+| 🟧 IMPORTANT | Export | fais le preset de l'adversaire (pour voir ses joueurs) puis exporte l'aperçu du match de ligue contre C.B.Granada (18/11) — échéance 18/11 19:45 |
 | 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre BG Bangers (19/11) selon la fiche (outputs/basketvibe/briefs/2026-11-17-tactique-amical-bg-bangers.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-17-tactique-amical-bg-bangers.md) — échéance 19/11 07:45 |
 | 🟧 IMPORTANT | Export | exporte la page du match amical contre Union Heidelberg (17/11) |
 | 🟧 IMPORTANT | Académie/Draft | décision attendue : tester 3 prospects (75 000), rapport du 12/11 |
+| 🟧 IMPORTANT | Transferts | offres du Marché : inconnu : export de 102 h, à refaire |
 | 🟧 IMPORTANT | Export | exporte le Marché (toutes les pages) — export de 102 h |
-| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 101 h |
+| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 102 h |
 | 🟧 IMPORTANT | Export | exporte la page Personnel — export de 221 h |
-| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 29,2 h |
-| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 29,2 h |
+| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 29,6 h |
+| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 29,6 h |
 
 ## Bloc 2 — Composition de l'amical
 
@@ -42,7 +43,6 @@ Fiche : briefs/2026-11-17-tactique-amical.md (brief du 17/11).
 agressivité 3 à l'écran sur tous les joueurs : réglage du test E1 niveau A, à la place de celui du brief
 zone Perimeter : constant pendant E1 ; focus défensif 3 (Normal) : constant pendant E1
 
-Anticipation (hypothèse) : absente du brief du jour
 Test en cours (un seul réglage à la fois) : test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs
 
 ## Bloc 3 — Composition de la ligue ou de la coupe
@@ -84,6 +84,10 @@ export à faire : l'aperçu du match de ligue du 18/11 (bloc 3)
 **Qui acheter (annonces du Marché qui se terminent dans les 24 h)**
 
 inconnu : export de 102 h, à refaire
+
+**Offres et ventes du jour (mêmes lignes que l'état par événement)**
+
+- offres du Marché : inconnu : export de 102 h, à refaire
 
 **Qui vendre (joueurs vendables et s'ils sont nécessaires)**
 
@@ -138,5 +142,5 @@ carte de faisabilité du 10/11 : 5a entraînement principal contre secondaire : 
 ## Bloc 10 — À valider par l'utilisateur
 
 - effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
-- Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2, semaine du 2026-11-02) : règle de personnel non tranchée, à valider
+- Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2, semaine du 2026-11-02) : proposition de règle Personnel : médecin 2 (aujourd'hui 2/2) : −25 % de durée de blessure chacun ; 36 blessures en base, en ligue seulement ; kinésithérapeute 4 (aujourd'hui 4/4) : −12,5 % de risque chacun, compté au coup d'envoi ; le moins cher par effet ; psychologue 2 (aujourd'hui 2/2) : +5 pts vers la hausse de forme du dimanche chacun ; la forme pèse sur chaque match ; marketing 0 (aujourd'hui 0/2) : −1 pt de popularité perdue par défaite à domicile ; 2 embauches (25 000) seulement après 2 défaites à domicile de suite en ligue ; coût 60 000 par semaine (plafond 85 000) — à valider
 
