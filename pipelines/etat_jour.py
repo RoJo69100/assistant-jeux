@@ -449,6 +449,39 @@ def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
     return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"])}
 
 
+def ventes_du_jour(donnees, o, tolerance, police="") -> list:
+    """Joueurs à vendre pour profit : hors rotation (moyenne ≤ minutes_hors_rotation sur les matchs_rotation derniers matchs de
+    ligue), écart de force avec son remplaçant ≤ tolérance du bloc 4, prix attendu (médiane de sa case, case ≥ case_min_ventes
+    ventes) ≥ médiane de la case ; jamais « ne pas vendre <nom> » de la police du jour, jamais déjà en vente ; l'effectif reste
+    ≥ minimum_effectif. Triés par prix attendu décroissant."""
+    import aujourdhui as auj
+    import que_faire_blocs as qfb
+    if tolerance is None:
+        return []
+    cases = qfb._cases(donnees)
+    rot = {str(r["player_id"]): r for r in _rows(donnees, "rotation")}
+    rempl = {str(r["player_id"]): r for r in _rows(donnees, "gold.bv_sell_replacement")}
+    joueurs = _rows(donnees, "vendre")
+    res = []
+    for j in joueurs:
+        r, m = rempl.get(str(j["player_id"]), {}), rot.get(str(j["player_id"]))
+        if auj.vrai(j.get("on_transfer_list")) or m is None or float(m["min_moy"]) > float(o["minutes_hors_rotation"]):
+            continue
+        if r.get("gap") is None or float(r["gap"]) > float(tolerance):
+            continue
+        if f"ne pas vendre {str(j['name']).lower()}" in str(police).lower():
+            continue
+        case = cases.get((qfb.palier_note(j["ps"]), auj.tranche_age(j["age"])))
+        if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
+            continue
+        prix = float(case["median"])  # prix attendu = médiane de la case : la condition « ≥ médiane » tient par construction
+        res.append({"type": "vente", "nom": j["name"], "poste": j["position"], "age": int(float(j["age"])), "note": float(j["ps"]),
+                    "prix": prix, "mediane": prix, "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
+                    "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix})
+    places = max(0, len(joueurs) - int(o["minimum_effectif"]))
+    return sorted(res, key=lambda x: -x["gain"])[:places]
+
+
 class _Champs(dict):
     def __missing__(self, k):
         return "{" + k + "}"

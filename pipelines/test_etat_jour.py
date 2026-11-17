@@ -599,7 +599,36 @@ def cas_offres():
         x["nom"] for x in ej.offres_du_jour(marche(annonces=[petite]), dict(O, case_min_ventes=2), 300000)["offres"]]
 
 
-CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+VEN = ["player_id", "name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"]
+REM = ["player_id", "name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary", "on_transfer_list",
+       "available", "available_players"]
+
+
+def effectif(n=10, police_nom=None):
+    """`n` joueurs ; p2 (Paul Banc, 2 min, écart 0,5) vendable ; p3 (Luc Absent, 0 min) sans remplaçant ; p1 en rotation."""
+    v = [["p1", "Jean Moyen", "SF", 24, 48, 20000, "SF", 1, 30, False], ["p2", "Paul Banc", "SF", 23, 51, 15000, "SF", 2, 2, False],
+         ["p3", "Luc Absent", "SF", 24, 50, 15000, "SF", 3, 0, False]]
+    v += [[f"x{i}", f"Autre {i}", "PG", 30, 45, 10000, "PG", 1, 30, False] for i in range(n - 3)]
+    r = [["p1", "Jean Moyen", "SF", 50, "Paul Banc", 49, 1.0, 20000, False, True, n], ["p2", "Paul Banc", "SF", 50, "Jean Moyen", 49.5, 0.5, 15000, False, True, n],
+         ["p3", "Luc Absent", "SF", 50, None, None, None, 15000, False, True, n]]
+    return {"vendre": (VEN, v), "gold.bv_sell_replacement": (REM, r)}
+
+
+def cas_ventes():
+    rot = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 51, 2, 1], ["p3", "Luc Absent", "SF", 50, 0, 0]]
+    d = marche(rotation=rot, **effectif())
+    v = ej.ventes_du_jour(d, O, 1.0)
+    yield "ventes : hors rotation, remplaçable, case fiable → vendable", [x["nom"] for x in v] == ["Paul Banc"] and v[0]["prix"] == 60000
+    yield "ventes : jamais « ne pas vendre » de la police", ej.ventes_du_jour(d, O, 1.0, "ne pas vendre Paul Banc (police du jour)") == []
+    yield "ventes : tolérance dépassée → rien", ej.ventes_du_jour(d, O, 0.4) == []
+    yield "ventes : tolérance inconnue → rien", ej.ventes_du_jour(d, O, None) == []
+    yield "ventes : minimum d'effectif de 8 respecté", ej.ventes_du_jour(marche(rotation=rot, **effectif(8)), O, 1.0) == []
+    yield "ventes : minutes_hors_rotation du yaml à 1 → Paul Banc (2 min) reste", ej.ventes_du_jour(d, dict(O, minutes_hors_rotation=1), 1.0) == []
+    yield "ventes : case_min_ventes du yaml à 3 → case de 2 ventes refusée", ej.ventes_du_jour(
+        marche(rotation=rot, cases=[[50, "22-25", 2, 40000, 60000, 80000, "2026-11-10"]], **effectif()), O, 1.0) == []
+
+
+CAS = [cas_config, cas_agents, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
