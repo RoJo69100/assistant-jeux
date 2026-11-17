@@ -325,6 +325,28 @@ def exports(ls) -> list:
     return [l for l in ls if l["action"] and l["prochain"] in ETATS_EXPORT]
 
 
+def exports_periodiques(donnees, cfg, maintenant) -> list:
+    """Exports périodiques de la config (`exports_periodiques`, décision de l'utilisateur du 17/11) : une ligne par écran dont l'export a
+    plus de `perime_h` heures, avec l'âge de l'export ; dès que la base voit la capture, la ligne disparaît. Âge lu dans
+    gold.bv_exports_state (règles core.export_rule) ou, sans écran dédié, dans la dernière page de `page_type` (bronze.raw_pages)."""
+    etat = {r["ecran"]: r for r in _rows(donnees, "gold.bv_exports_state")}
+    page = next((_dt(r["derniere_paris"]) for r in _rows(donnees, "historique_global")), None)
+    res = []
+    for p in cfg.get("exports_periodiques", []):
+        if p["source"] == "exports_state":
+            age = (etat.get(p["ecran"]) or {}).get("age_h")
+            age = None if age in (None, "") else float(age)
+        else:
+            age = None if page is None else (maintenant - page).total_seconds() / 3600
+        if age is not None and age <= p["perime_h"]:
+            continue
+        quoi = "jamais exporté" if age is None else f"export de {int(age)} h"
+        res.append({"id": f"export-{p['ecran']}", "type": "export_periodique", "evenement": p["ecran"], "ecran": p["ecran"], "etat": None,
+                    "prochain": "export_periodique", "rates": [], "echeance": None, "consigne": f"exporte {p['libelle']} — {quoi}", "age_h": None,
+                    "priorite": 2, "action": True, "defauts": []})
+    return res
+
+
 def sans_ligne(evenements, ls, cfg, maintenant) -> list:
     """Complétude : événements retenus qui n'ont pas de ligne dans `ls` (doit être vide)."""
     ids = {l["id"] for l in ls}
@@ -343,6 +365,8 @@ REQUETES = {
                      "where match_day >= (now() at time zone 'Europe/Paris')::date - 1",
     "fatigue_roster": "select name, fatigue from gold.bv_roster_now",
     "seuil_fatigue": "select seuil_bas from core.alert_rule where game = 'basketvibe' and rule_id = 'fatigue' and actif",
+    "historique_global": "select max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
+                         "where page_type = 'transfers_global-history'",
 }
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 

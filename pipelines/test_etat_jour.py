@@ -404,7 +404,7 @@ def cas_branchement():
         lignes, consignes = qfb.bloc_etat(d, S, tmp, maint.date(), maint)
         texte, cons = qfb.rendre_blocs({"actions": [], "exports": [], "garder": [], "infos": [], "capacite": None}, d, {}, maint.date(), maint,
                                        S, etudes=[], base=tmp)
-        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]]
+        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]] + ej.exports_periodiques(d, CFG, maint)
     t = "\n".join(lignes)
     rangs = [l for l in lignes if l.startswith("| ") and not l.startswith("| Priorité")]
     yield "branchement : une rangée par transition à faire, aucune pour une attente", len(rangs) == len(attendu)
@@ -430,6 +430,26 @@ def cas_deux_amicaux_meme_jour():
     yield "deux amicaux le même jour : le second (suffixe adversaire) est retrouvé", b is not None and b[1].name == "2026-11-17-tactique-amical-bg-bangers.md"
 
 
+def cas_exports_periodiques():
+    """17/11 (décision de l'utilisateur) : Marché et historique global des transferts chaque jour (périmés après 24 h), Personnel chaque semaine ;
+    une ligne par écran avec l'âge de l'export, qui disparaît quand la base voit la capture."""
+    cols = ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"]
+    vieux = (cols, [(8, "Marché (enchères)", "x", "2026-11-13T10:26:30", 97, "🟧 à refaire"), (13, "Personnel", "x", "2026-11-08T11:10:48", 216, "🟧 à refaire")])
+    frais = (cols, [(8, "Marché (enchères)", "x", "2026-11-17T09:00:00", 1, "🟩 à jour"), (13, "Personnel", "x", "2026-11-14T09:00:00", 73, "🟩 à jour")])
+    h_vieux = (["derniere_paris"], [("2026-11-13T10:24:16",)])
+    h_frais = (["derniere_paris"], [("2026-11-17T08:00:00",)])
+    a = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": vieux, "historique_global": h_vieux}), CFG, MAINT)
+    yield "périodiques : trois lignes quand les trois exports sont périmés", [l["ecran"] for l in a] == ["Marché (enchères)", "Historique global des transferts", "Personnel"]
+    yield "périodiques : l'âge de l'export est dans la ligne", "export de 97 h" in a[0]["consigne"] and "export de 216 h" in a[2]["consigne"] and "export de 95 h" in a[1]["consigne"]
+    yield "périodiques : action, priorité 2, jamais une attente", all(l["action"] and l["priorite"] == 2 for l in a)
+    b = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": frais, "historique_global": h_frais}), CFG, MAINT)
+    yield "périodiques : les captures vues en base font disparaître les lignes", b == []
+    c = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": (cols, []), "historique_global": (["derniere_paris"], [(None,)])}), CFG, MAINT)
+    yield "périodiques : jamais exporté", len(c) == 3 and all("jamais exporté" in l["consigne"] for l in c)
+    d = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": (cols, [(8, "Marché (enchères)", "x", "2026-11-16T11:00:00", 23, "🟩 à jour"), (13, "Personnel", "x", "2026-11-10T10:00:00", 120, "🟩 à jour")]), "historique_global": h_frais}), CFG, MAINT)
+    yield "périodiques : Marché 23 h et Personnel 120 h ne sont pas périmés", d == []
+
+
 def cas_academie_decision():
     """17/11 : rapport du 12/11 non décidé, 5 jours après : une ligne « décision attendue : tester N prospects (N × 25 000) »."""
     cols = ["rapport_paris", "slot", "name", "position", "age", "tsp_min", "tsp_max", "ps_mid", "height_cm"]
@@ -445,7 +465,7 @@ def cas_academie_decision():
 
 
 CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
-       cas_construire, cas_deux_amicaux_meme_jour, cas_academie_decision, cas_rejeu, cas_branchement]
+       cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

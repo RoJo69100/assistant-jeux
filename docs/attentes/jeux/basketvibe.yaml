@@ -124,7 +124,14 @@ etat_jour:
               coup_envoi_defaut: "20:00", verrou_defaut: "19:45" }   # heures de la section rythme quand core.fixture n'en a pas
     coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
     amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui, libelle: "match amical" }   # jamais d'aperçu ni d'export avant le match
+  # Décision de l'utilisateur du 17/11 : le plan demande TOUJOURS le Marché (toutes les pages) et l'historique global des transferts
+  # (bonnes offres), et le Personnel une fois par semaine. Âge : gold.bv_exports_state (core.export_rule, 24 h / 168 h) ou, pour
+  # l'historique (aucun écran dédié), la dernière page `transfers_global-history` de bronze.raw_pages.
+  exports_periodiques:
+    - { ecran: "Marché (enchères)", libelle: "le Marché (toutes les pages)", source: exports_state, periode: quotidien, perime_h: 24 }
+    - { ecran: "Historique global des transferts", libelle: "l'historique global des transferts", source: page_type, page_type: transfers_global-history, periode: quotidien, perime_h: 24 }
+    - { ecran: "Personnel", libelle: "la page Personnel", source: exports_state, periode: hebdomadaire, perime_h: 168 }
   evenements:
-    academie:     { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
+    academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
     enchere:      { etats: [police, fin, resultat] }

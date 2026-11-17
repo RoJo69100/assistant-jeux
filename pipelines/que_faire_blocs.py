@@ -934,7 +934,7 @@ def section(rendu: str, n: int) -> str:
 
 
 # P2 (plan v4) : catégorie affichée d'une ligne de etat_jour, par type d'événement et prochaine transition
-CAT_ETAT = {"apercu": "export", "joue": "export", "calendrier": "export", "rapport_exporte": "export", "page_exportee": "export",
+CAT_ETAT = {"export_periodique": "export", "apercu": "export","joue": "export", "calendrier": "export", "rapport_exporte": "export", "page_exportee": "export",
             "fiche": "composition", "ecran": "composition", "analyse": "analyse", "juge": "analyse", "decide": "academie/draft",
             "saisi": "entrainement", "police": "transferts", "resultat": "transferts"}
 TITRE_ETAT = "## Aujourd'hui — état par événement"
@@ -947,6 +947,7 @@ def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime) -> tuple
     import etat_jour as ej
     cfg = ej.charger_config()
     ls = [l for l in ej.lignes(ej.construire(donnees, S, base, jour, maintenant, cfg), cfg, maintenant) if l["action"]]
+    ls = sorted(ls + ej.exports_periodiques(donnees, cfg, maintenant), key=lambda l: l["priorite"])  # 17/11 : Marché, historique, Personnel
     rangs, consignes = [], []
     for l in ls:
         texte = l["consigne"]
