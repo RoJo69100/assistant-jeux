@@ -316,7 +316,7 @@ def lire_sources(donnees, jour, base=BASE):
     return {"tactique": src.lire_tactique(base, jour), "restes": src.lire_restes(base, jour),
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
-            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour),
+            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour), "police": src.lire_police(base, jour),
             "experiences": src.lire_experiences(base, jour), "refs_decisions": lire_refs_decisions(base, jour),
             "fiche_entrainement": src.lire_fiche_entrainement(base, jour),
             "revue_hebdo": (Path(base) / f"revue-hebdo-{jour.isoformat()}.md").exists()}
@@ -755,17 +755,18 @@ def solde_projete(donnees, erreurs, fh, ajoute):
 DISPONIBLES_APRES_VENTE = 9  # L3 (étape 5f, règle de l'utilisateur) : joueurs disponibles qui doivent rester après une vente
 
 
-def vendre_remplacable(donnees, ajoute):
+def vendre_remplacable(donnees, ajoute, police=""):
     """L3 (étape 5f) : « Vendre X » si un joueur a au même poste un remplaçant d'écart de force (fit) au plus égal à la
     tolérance de core.game_params.vente_tolerance_force, n'est pas déjà en vente et laisse au moins 9 joueurs disponibles ;
-    plusieurs candidats : le plus gros salaire. Tolérance absente ou aucun candidat : aucune ligne."""
+    plusieurs candidats : le plus gros salaire. Tolérance absente ou aucun candidat : aucune ligne.
+    17/11 (règle 6) : `police` = trace de l'agent police du jour (en minuscules) ; « ne pas vendre <nom> » retire le joueur."""
     tol = next((r["value"] for r in lignes_de(donnees, "tolerance_vente")), None)
     if tol in (None, ""):
         return
     tol = float(tol)
     ok = [r for r in lignes_de(donnees, "gold.bv_sell_replacement")
           if r.get("gap") is not None and r.get("weekly_salary") is not None and not vrai(r.get("on_transfer_list"))
-          and float(r["gap"]) <= tol
+          and float(r["gap"]) <= tol and f"ne pas vendre {str(r['name']).lower()}" not in police.lower()
           and int(r["available_players"]) - (1 if vrai(r.get("available")) else 0) >= DISPONIBLES_APRES_VENTE]
     if not ok:
         return
@@ -1168,7 +1169,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    "31 ans ou plus", "gold.bv_roster_now")
         else:
             garder.append("effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin)")
-        vendre_remplacable(donnees, ajoute)
+        vendre_remplacable(donnees, ajoute, (S or {}).get("police", ""))
         garder.append("effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)")
         if "objectifs" not in donnees:  # A3 : sans gold.match_objective (anciens jeux de données), l'ancienne demi-ligne
             garder.append("effectif, jeunes : règle non écrite — à valider (le script ne sait pas dire si un match de ligue est gagné d'avance)")

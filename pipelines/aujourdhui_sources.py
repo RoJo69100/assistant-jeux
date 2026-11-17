@@ -206,6 +206,12 @@ def lire_experiences(base, jour: dt.date, fichier=FICHIER_EXPERIENCES):
     return {"file": file, "faits": faits, "debut": debut}
 
 
+def lire_police(base, jour: dt.date) -> str:
+    """Texte (en minuscules) de outputs/<jeu>/police-<jour>.md, trace de l'agent police du jour ; fichier absent : chaîne vide."""
+    f = Path(base) / f"police-{jour.isoformat()}.md"
+    return f.read_text(encoding="utf-8").lower() if f.is_file() else ""
+
+
 def lire_cibles(decisions: list[dict], encheres: list[dict], base, jour: dt.date) -> list[dict]:
     """Une cible par « Nom POSTE (max N) » des décisions d'achat ouvertes ; fin d'enchère lue dans `encheres`."""
     base = Path(base)

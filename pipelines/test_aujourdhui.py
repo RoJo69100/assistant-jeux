@@ -949,6 +949,20 @@ def cas_vente():
     yield "L3 absent : aucun écart sous la tolérance, aucune ligne", lignes(REMP[2:]) == []
     yield "L3 absent : tolérance absente de core.game_params, aucune ligne", lignes(REMP, (["value"], [])) == [] \
         and (lambda A: (auj.vendre_remplacable({"gold.bv_sell_replacement": (COLS_REMP, REMP)}, lambda *a: A.append(a)), A)[1])([]) == []
+    # 17/11 (règle 6) : vente de gros montant contrôlée par la police du jour ; « ne pas vendre X » retire la ligne
+    def avec_police(texte, remp=REMP[:1]):
+        A = []
+        auj.vendre_remplacable({"gold.bv_sell_replacement": (COLS_REMP, remp), "tolerance_vente": TOL}, lambda *a: A.append(a), texte)
+        return A
+    yield "Audit4 police du jour absente : la ligne reste", len(avec_police("")) == 1
+    yield "Audit4 police du jour « ne pas vendre Maël Bernard » : ligne retirée", \
+        avec_police("- Décision : ne pas vendre Maël Bernard ; si vente, minimum 525 000") == []
+    yield "Audit4 la police d'un autre joueur ne retire pas la ligne", len(avec_police("- Décision : ne pas vendre Léo Lefebvre")) == 1
+    with tempfile.TemporaryDirectory() as tmp:
+        yield "Audit4 lire_police : fichier absent = texte vide", src.lire_police(tmp, JOUR) == ""
+        (Path(tmp) / f"police-{JOUR.isoformat()}.md").write_text("- Décision : Ne pas vendre Maël Bernard", encoding="utf-8")
+        yield "Audit4 lire_police : texte du jour, en minuscules", src.lire_police(tmp, JOUR) == "- décision : ne pas vendre maël bernard"
+        yield "Audit4 la police lue retire la ligne", avec_police(src.lire_police(tmp, JOUR)) == []
     neuf = [r[:9] + (9,) for r in REMP]
     yield "L3 absent : 9 disponibles, 8 après la vente, aucune ligne", lignes(neuf) == []
     dix = [r[:9] + (10,) for r in REMP]
