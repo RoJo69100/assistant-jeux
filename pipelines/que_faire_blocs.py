@@ -940,7 +940,7 @@ def bloc_6(donnees, etudes, jour: dt.date, experiences=None, fait: str = "") -> 
 SUJET_BLOC: dict = {}  # sujet d'étude -> bloc (5, 8 ou 9) ; vide en 5n, remplie en 5o quand les études de ces blocs existent
 QUESTIONS_BLOC = {5: ("3",), 8: ("2", "4"), 9: ("5",)}  # chiffre initial des questions de la carte de faisabilité rattachées au bloc
 VUES_BLOC = {8: ("gold.bv_finance_health", "gold.bv_finance_projection"),
-             9: ("gold.bv_personnel_status", "prospects", "cote_potentiel", "gold.bv_saisie_entrainement")}
+             9: ("gold.bv_personnel_status", "prospects", "ps_poste", "gold.bv_saisie_entrainement")}
 TITRES = ["Exports d'abord", "À faire aujourd'hui, puis demain", "Composition de l'amical", "Composition de la ligue ou de la coupe",
           "Transferts", "Les meilleurs et les failles du jeu", "Match Engine", "Analyse détaillée", "Économie",
           "Académie, personnel, entraînement", "À valider par l'utilisateur"]
