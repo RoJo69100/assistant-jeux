@@ -112,7 +112,7 @@ REQUETES = {
                      "where game = 'basketvibe' and competition_kind = 'ligue' and actif and heure is not null "
                      "and decalage_min is not null",
     # K3 (étape 5e) : dernier rapport du scout, cote du potentiel à la jauge actuelle, valeur d'un High et coût du test
-    "prospects": "select scout_report_at at time zone 'Europe/Paris' as rapport_paris, slot, name, position, age, tsp_min, tsp_max "
+    "prospects": "select scout_report_at at time zone 'Europe/Paris' as rapport_paris, slot, name, position, age, tsp_min, tsp_max, ps_mid "
                  "from gold.bv_academy_prospects order by slot",
     "cote_potentiel": "select academy_score, p_high_8_10 from gold.bv_academy_potential_odds where label = 'jauge actuelle'",
     "valeurs_academie": "select key, value from core.game_params where game = 'basketvibe' "
@@ -777,6 +777,7 @@ def vendre_remplacable(donnees, ajoute):
            f"(core.game_params.vente_tolerance_force)", "gold.bv_sell_replacement")
 
 
+SEUIL_PROFONDEUR_SIGNER = 2  # joueurs au poste ou moins : prospect de ce poste signable (carte academie.md, variable 7)
 VALEURS_ACADEMIE = {"academie_valeur_high": "valeur d'un High", "academie_cout_test": "coût du test"}
 INCONNUES_ACADEMIE = {"academie_valeur_high": "valeur d'un High inconnue", "academie_cout_test": "coût du test inconnu"}
 
@@ -786,7 +787,9 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
     par prospect, même sous 100 % de jauge. Verdict « tester » si P(High) × valeur d'un High dépasse le coût du test, sinon
     « ignorer » (espérance, à valider) ; les deux montants viennent de core.game_params. L5 (étape 5f) : une donnée
     manque → UNE ligne pour tout le rapport (« n prospects ; valeur d'un High inconnue »), pas une par prospect.
-    « signer » demande le résultat d'un test, absent de la base : jamais rendu. Vue absente ou rapport ancien : rien."""
+    « signer » (audit du 13/11) : l'espérance couvre le test ET le poste du prospect est peu profond (gold.bv_position_summary) ;
+    un seul par rapport (le meilleur PS estimé), les autres « tester ». Effectif absent : jamais « signer ».
+    Vue absente ou rapport ancien : rien."""
     pros = lignes_de(donnees, "prospects")
     du_jour = bool(pros) and en_heure(pros[0]["rapport_paris"]).date() == maintenant.date()
     if maintenant.weekday() == JOUR_RAPPORT_ACADEMIE and not du_jour \
@@ -814,14 +817,25 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
         ajoute(None, 3, f"Académie, rapport du {rapport:%d/%m} : {n} prospect{'s' if n > 1 else ''} ; {', '.join(inconnues)}",
                f"valeurs à renseigner : {', '.join(manquants)}", "gold.bv_academy_prospects")
         return
+    ph = float(cote[0]["p_high_8_10"])
+    gain, cout = ph / 100 * float(vals["academie_valeur_high"]), float(vals["academie_cout_test"])
+    # carte academie.md, variable 7 : « poste à faible profondeur = priorité » ; un seul prospect signable par rapport
+    # (skill basketvibe-academie, 01-cycle-hebdomadaire). Seuil de profondeur : lecture de la carte, à valider.
+    profondeur = {r["position"]: int(r["depth"]) for r in lignes_de(donnees, "gold.bv_position_summary")}
+    a_signer = None
+    if gain > cout:
+        candidats = [p for p in pros if profondeur.get(p["position"], SEUIL_PROFONDEUR_SIGNER + 1) <= SEUIL_PROFONDEUR_SIGNER]
+        if candidats:
+            a_signer = max(candidats, key=lambda p: float(p.get("ps_mid") or 0))["slot"]
     for p in pros:
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({p['position']}, {p['age']} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
-        ph = float(cote[0]["p_high_8_10"])
-        gain, cout = ph / 100 * float(vals["academie_valeur_high"]), float(vals["academie_cout_test"])
-        verdict = "tester" if gain > cout else "ignorer"
+        verdict = "ignorer" if gain <= cout else "signer" if p["slot"] == a_signer else "tester"
+        besoin = f" ; poste {p['position']} à {profondeur[p['position']]} joueurs (faible profondeur), un seul signable par rapport" \
+            if verdict == "signer" else ""
         ajoute(None, 2, f"{tete} : {verdict}",
                f"P(High) {str(ph).replace('.', ',')} % × valeur d'un High {montant(vals['academie_valeur_high'])} = {montant(gain)} "
-               f"contre test {montant(cout)} (règle d'espérance, à valider)", "gold.bv_academy_potential_odds, core.game_params")
+               f"contre test {montant(cout)}{besoin} (règle d'espérance et de besoin, à valider)",
+               "gold.bv_academy_potential_odds, core.game_params, gold.bv_position_summary")
 
 
 def boucle(donnees, refs, ajoute):

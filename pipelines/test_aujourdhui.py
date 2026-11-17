@@ -524,6 +524,7 @@ def cas_etape5a():
     yield from cas_fatigue()
     yield from cas_amical_export()
     yield from cas_ecran_non_sauvegarde()
+    yield from cas_academie_verdict()
     yield from cas_revue()
     yield from cas_echec_bruyant()
 
@@ -890,6 +891,36 @@ def cas_academie():
     yield "Académie vendredi 13/11 : aucune ligne", jeudi({"prospects": PROS}, quand=dt.datetime(2026, 11, 13, 9, 0)) == []
     yield "Académie jeudi, décision déclarée au registre du jour : aucune ligne", \
         jeudi({"prospects": PROS}, [dict(cle, jour=dt.date(2026, 11, 12))]) == []
+
+
+def cas_academie_verdict():
+    """Audit du 13/11, défaut 3 : verdict signer / tester / ignorer par prospect (carte academie.md, variables 4 et 7) :
+    ignorer si l'espérance ne couvre pas le test ; signer le prospect du poste le moins profond (un seul par rapport) ;
+    tester les autres."""
+    MIDI9 = dt.datetime(2026, 11, 9, 12, 0)
+    cols = COLS_PROS + ["ps_mid"]
+    pros = (cols, [("2026-11-05T09:00:00.849", 0, "Nael Lopez", "PG", 16, 207, 367, 40.0),
+                   ("2026-11-05T09:00:00.849", 1, "Nathan Vidal", "PF", 16, 219, 379, 38.0),
+                   ("2026-11-05T09:00:00.849", 2, "Sacha Aubert", "C", 17, 244, 404, 42.0)])
+    vals = lambda h: (["key", "value"], [("academie_valeur_high", h), ("academie_cout_test", 25000)])
+    resume = lambda *d: (["position", "depth", "ps_avg"], [(p, n, 50.0) for p, n in d])
+
+    def verdicts(h, synthese, prospects=pros):
+        A = []
+        auj.academie({"prospects": prospects, "cote_potentiel": COTE, "valeurs_academie": vals(h),
+                      "gold.bv_position_summary": synthese}, {}, [], MIDI9, lambda *a: A.append(a))
+        return {a[2].split(" : ")[1].split(" (")[0]: a[2].rsplit(": ", 1)[1] for a in A}, A
+    v, A = verdicts(200000, resume(("PG", 3), ("PF", 3), ("C", 2)))
+    yield "Audit3 un poste à faible profondeur : signer ce prospect, tester les autres", \
+        v == {"Nael Lopez": "tester", "Nathan Vidal": "tester", "Sacha Aubert": "signer"}
+    yield "Audit3 signer : la profondeur du poste est dans le détail", "C à 2 joueurs" in next(a[3] for a in A if "Aubert" in a[2])
+    v, _ = verdicts(200000, resume(("PG", 2), ("PF", 3), ("C", 2)))
+    yield "Audit3 deux postes peu profonds : un seul signer (meilleur PS estimé), l'autre testé", \
+        v == {"Nael Lopez": "tester", "Nathan Vidal": "tester", "Sacha Aubert": "signer"}
+    v, _ = verdicts(100000, resume(("PG", 3), ("PF", 3), ("C", 2)))
+    yield "Audit3 espérance sous le coût du test : ignorer même au poste le moins profond", set(v.values()) == {"ignorer"}
+    v, _ = verdicts(200000, (["position", "depth", "ps_avg"], []))
+    yield "Audit3 effectif absent : jamais signer, tester", set(v.values()) == {"tester"}
 
 
 COLS_REMP = ["name", "best_slot", "fit_best", "replacement_name", "replacement_fit", "gap", "weekly_salary",
