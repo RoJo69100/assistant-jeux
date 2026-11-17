@@ -64,7 +64,6 @@ REGLES = [
     (r".+ : forme \d", 3, "composition"),
     (r"Match de ligue joué non exporté", 0, "export"),
     # actions de gold.bv_agenda
-    (r"Avant .+? : preset amical", 2, "composition"),
     (r"Avant .+? : vérifier le preset de ligue", 3, "composition"),
     (r"Avant .+? : vérifier et sauvegarder les choix d'entraînement", 9, "entrainement"),
     (r"(?:Avant|Après) .+ : exporter ", 0, "export"),
@@ -78,9 +77,16 @@ def manque(export: str, debloque: str = "") -> str:
     return f"export à faire : {export}" + (f" ({debloque})" if debloque else "")
 
 
+# 17/11 : l'amical est un test sans preset (basketvibe.yaml : amical, preset non) ; gold.bv_agenda émet encore « Avant … : preset amical … »,
+# ignorée ici (la vue n'est pas modifiée).
+IGNOREES = [r"Avant .+? : preset amical"]
+
+
 def classer(action: str) -> tuple:
     """(numéro de bloc, catégorie affichée) d'après le début du texte d'une action de aujourdhui.plan()."""
     texte = action.strip()
+    if any(re.match(m, texte) for m in IGNOREES):
+        return None, None  # aucune ligne : jamais égal à un numéro de bloc
     if texte.startswith("il me manque"):
         ecran = texte.rsplit("export ", 1)[-1]
         for mot, bloc, cat in MANQUE_ECRAN:
@@ -207,7 +213,8 @@ def consigne_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.
     chemin, ligne = contrat_brief(jour, amical, adversaire, date_match, manche, genre)
     return (f"écris le brief dans {chemin}, première ligne exactement « {ligne} », puis le tableau de saisie ; "
             "puis le tableau des adversaires (colonnes « Adversaire | Poste | Focus défensif (1-5) | Zone », une ligne par adversaire de "
-            "gold.bv_saisie_adversaires ; sans ce tableau le script ne lit pas le brief) ; " + FORME_FICHE + " ; " + ANTICIPATION)
+            "gold.bv_saisie_adversaires ; sans ce tableau le script ne lit pas le brief) ; " + FORME_FICHE
+            + ("" if amical else " ; " + ANTICIPATION))  # 17/11 : anticipation exigée pour ligue et coupe, jamais pour un amical
 
 
 LIGNE_ANTICIPATION = re.compile(r"^[\s>*-]*\**\s*(Anticipation \(hypothèse\)\s*:.*?)\**\s*$", re.M)
@@ -400,10 +407,8 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
         return [entete, "", "composition de l'amical en préparation"], [consigne]
     lignes, consignes = [entete, ""] + ([repris] if repris else []) + [tableau, ""], []
     ant = anticipation_du_brief(f)
-    lignes.append(ant)
-    if ant == ABSENTE:
-        consignes.append(f"relancer l'agent tactique (BasketVibe, amical du {am['date']:%d/%m}, horizon aujourd'hui) : ajouter au brief du jour "
-                         "la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; " + consigne_brief(jour, True, am["match"], am["date"]))
+    if ant != ABSENTE:  # 17/11 : jamais exigée pour un amical (test sans adversaire connu) : ni ligne « absente », ni relance
+        lignes.append(ant)
     lignes.append(f"Test en cours (un seul réglage à la fois) : {auj.texte_test(*test[:2])}" if test else "Test en cours : aucun")
     if any(r["competition_kind"] == "ligue" and auj.en_date(r["day"]) == am["date"] for r in auj.lignes_de(donnees, "calendrier")):
         du_jour = [r for r in auj.lignes_de(donnees, "fatigue_amical") if auj.en_date(r["match_day"]) == am["date"]]

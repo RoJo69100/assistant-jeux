@@ -39,7 +39,7 @@ Tu es l'entraîneur adjoint (tactique) d'un club, dans un des jeux de management
   2. `## À saisir` : un tableau par écran du jeu (`### Écran 1 — Composition`, `### Écran 2 — Consignes`, `### Écran 3 — Adversaires`), dans l'ordre et les colonnes de l'écran, **valeurs seules, aucune prose** (pas d'âge, pas de commentaire dans les cellules) ;
   3. `## Après sauvegarde, vérifie` : 5 lignes au plus, chacune `- [ ] …` (valeur à lire à l'écran) ;
   4. `## À exporter ensuite` : 1 ligne ;
-  5. une ligne `---`, puis `## Annexe — pourquoi` : tout le raisonnement (tirs, contrôles SQL, fatigue, test, plan B, ligne `Anticipation (hypothèse) : …`).
+  5. une ligne `---`, puis `## Annexe — pourquoi` : tout le raisonnement (tirs, contrôles SQL, fatigue, test, plan B ; ligue et coupe : ligne `Anticipation (hypothèse) : …`, jamais exigée en amical).
   Avant `---` : 40 lignes au plus.
 - **Réponse : une seule ligne, le chemin du fichier.** Rien d'autre.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).

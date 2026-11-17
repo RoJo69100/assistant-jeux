@@ -118,7 +118,7 @@ def cas():
                 continue
             bloc, cat = qfb.classer(t)
             ok = (bloc, cat) != (10, "Question") or t in LISTE_BLANCHE
-            yield f"test_classer_couvre_chaque_ajoute : ligne {ligne} : {t[:60]} -> {bloc} {cat}", ok and 0 <= bloc <= 10
+            yield f"test_classer_couvre_chaque_ajoute : ligne {ligne} : {t[:60]} -> {bloc} {cat}", ok and (bloc is None or 0 <= bloc <= 10)
 
     attendus = {
         "Composition J4 contre Naked Spartans : lance l'agent tactique (aperçu du 09/11 en base)": (3, "Composition"),
@@ -139,6 +139,9 @@ def cas():
     }
     for texte, attendu in attendus.items():
         yield f"test_classer_attendu : {texte[:60]}", qfb.classer(texte) == attendu
+    yield "test_preset_amical_ignore : aucune ligne pour « Avant … : preset amical » (amical sans preset)", \
+        qfb.classer("Avant 07:45 : preset amical sur le match contre Opper Cards (saisir la tactique)") == (None, None)
+    yield "test_preset_de_ligue_garde", qfb.classer("Avant 19:45 : vérifier le preset de ligue et régler le focus défensif") == (3, "Composition")
     yield "test_classer_inconnu_va_en_question", qfb.classer("Un texte que personne ne connaît") == (10, "Question")
     yield "test_classer_categories_de_forme", all(
         forme.norm(qfb.classer(t)[1]) in forme.CATEGORIES for t in attendus)
@@ -289,14 +292,17 @@ def cas_blocs_2_3():
     yield "test_amical_jamais_pas_de_blessure : en préparation", "pas de blessure" not in t.lower() and "sans blessure" not in t.lower()
     for mot in ("21 ans", "un seul réglage", "titulaires protégés", "minutes réparties", "jamais reprise du dernier amical"):
         yield f"test_amical_consigne_cite_la_regle : {mot}", mot in c[0]
-    yield "test_anticipation_dans_les_consignes : bloc 2", "décisions de l'adversaire" in c[0] and "hypothèse" in c[0]
+    yield "test_amical_sans_anticipation_dans_la_consigne : bloc 2", "décisions de l'adversaire" not in c[0] and "Anticipation (hypothèse)" not in c[0]
     yield "test_anticipation_dans_les_consignes : constante", "décisions de l'adversaire" in qfb.ANTICIPATION and "hypothèse" in qfb.ANTICIPATION
 
-    # brief du jour sans ligne d'anticipation : signalé, consigne pour la compléter
+    # 17/11 : amical sans ligne d'anticipation : ni ligne « absente », ni consigne de relance (exigée pour ligue et coupe seulement)
     b_sans = dossier(("2026-11-10-tactique-amical.md", brief_amical(anticipation=False), None))
     l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_sans)
-    yield "test_anticipation_absente_du_brief_signalee", "Anticipation (hypothèse) : absente du brief" in "\n".join(l) and len(c) == 1 \
-        and "décisions de l'adversaire" in c[0]
+    yield "test_amical_sans_anticipation : aucune consigne de relance", c == [] and "absente du brief" not in "\n".join(l) and "| Gimenez |" in "\n".join(l)
+    b_lsans = dossier(("2026-11-10-tactique.md", brief_ligue(anticipation=False), None))
+    l3, c3 = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=b_lsans)
+    yield "test_ligue_sans_anticipation : consigne de relance gardée", len(c3) == 1 and "relancer l'agent tactique" in c3[0] \
+        and "Anticipation (hypothèse)" in c3[0] and "absente du brief" in "\n".join(l3)
 
     # fiche écrite la veille pour ce même match (même adversaire, même date) : reprise si l'aperçu n'a pas changé et si le contrôle V1 passe
     # (instantané du 12/11 : coupe contre Stare Kotlety du 12/11, fiche du 10/11 « Coupe contre Stare Kotlety (12/11) » en préparation)
@@ -428,12 +434,12 @@ def brief_depuis_la_consigne(consigne):
     nom = re.search(r"outputs/basketvibe/briefs/(\S+?\.md)", consigne)
     ligne = re.search(r"première ligne exactement « ([^»]+) »", consigne)
     debut = re.search(r"commençant exactement par « (Anticipation \(hypothèse\) :) »", consigne)
-    if not (nom and ligne and debut):
+    if not (nom and ligne):
         return None, None
     # R9 (helper réécrit) : le tableau des adversaires n'est écrit que si la consigne le demande avec ses colonnes exactes
     adv = ADVERSAIRES if "« Adversaire | Poste | Focus défensif (1-5) | Zone »" in consigne else ""
     texte = (ligne.group(1) + "\n\n## Saisie\n" + JOUEURS + adv
-             + "\n" + debut.group(1) + " Gimenez porte 31 % des tirs à 3 points ; si le focus 5 tombe sur lui, plan B : Bonnet tireur principal.\n")
+             + "\n" + (debut.group(1) if debut else "Note :") + " Gimenez porte 31 % des tirs à 3 points ; si le focus 5 tombe sur lui, plan B : Bonnet tireur principal.\n")
     return nom.group(1), texte
 
 
@@ -474,7 +480,7 @@ def cas_contrat_brief():
     _, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=dossier())
     yield "test_contrat_brief : bloc 2 lancement : nom du fichier amical", "outputs/basketvibe/briefs/2026-11-10-tactique-amical.md" in c[0]
     yield "test_contrat_brief : bloc 2 lancement : première ligne exacte", "première ligne exactement « Amical contre Opper Cards (11/11) »" in c[0]
-    yield "test_contrat_brief : bloc 2 lancement : formule de l'anticipation", "« Anticipation (hypothèse) : »" in c[0] and "plan B" in c[0]
+    yield "test_contrat_brief : bloc 2 lancement : pas d'anticipation exigée (amical)", "« Anticipation (hypothèse) : »" not in c[0]
     yield "test_contrat_brief : bloc 2 lancement : tableau de saisie", "tableau de saisie" in c[0]
     yield "test_contrat_brief : bloc 2 lancement : tableau des adversaires, colonnes exactes (R9)", \
         "puis le tableau des adversaires (colonnes « Adversaire | Poste | Focus défensif (1-5) | Zone », une ligne par adversaire" in c[0]
@@ -482,8 +488,7 @@ def cas_contrat_brief():
     # relance quand la ligne d'anticipation manque : même contrat
     b_sans = dossier(("2026-11-10-tactique-amical.md", brief_amical(anticipation=False), None))
     _, c_rel = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_sans)
-    yield "test_contrat_brief : bloc 2 relance : nom du fichier et formule", len(c_rel) == 1 \
-        and "outputs/basketvibe/briefs/2026-11-10-tactique-amical.md" in c_rel[0] and "« Anticipation (hypothèse) : »" in c_rel[0]
+    yield "test_contrat_brief : bloc 2 : pas de relance pour l'anticipation (amical)", c_rel == []
 
     # --- bloc 2 de bout en bout : un brief fabriqué à partir du texte de la consigne est lu par brief_du_jour, composer_amical, anticipation_du_brief
     nom, texte = brief_depuis_la_consigne(c[0])
@@ -495,10 +500,10 @@ def cas_contrat_brief():
     tab = qfb.comp.composer_amical(f, None) if f else None
     yield "test_contrat_brief : bloc 2 : composer_amical rend le tableau", tab is not None and "| Gimenez |" in tab
     ant = qfb.anticipation_du_brief(f) if f else qfb.ABSENTE
-    yield "test_contrat_brief : bloc 2 : anticipation_du_brief la lit", ant != qfb.ABSENTE and ant.startswith("Anticipation (hypothèse) : ") and "plan B" in ant
+    yield "test_contrat_brief : bloc 2 : aucune anticipation demandée, aucune écrite", ant == qfb.ABSENTE
     l, c2 = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=base)
     t = "\n".join(l)
-    yield "test_contrat_brief : bloc 2 : le bloc rend le brief, sans nouvelle consigne", "| Gimenez |" in t and "plan B" in t and c2 == []
+    yield "test_contrat_brief : bloc 2 : le bloc rend le brief, sans nouvelle consigne", "| Gimenez |" in t and c2 == []
 
     # --- bloc 3, ligue de bout en bout (J<n> : <adversaire> (JJ/MM))
     _, c3 = qfb.bloc_3(donnees_t(), S, JOUR_T, MAINT, base=dossier())
