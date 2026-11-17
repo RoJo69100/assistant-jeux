@@ -109,3 +109,20 @@ specificites:
   - { regle: "Ligue et amicaux non comparables : fatigue et expérience d'un amical ≈ 1/10", source: "manuel M§1.2", statut: confirmé }
   - { regle: "Ne pas mélanger v3 et v4 dans les tendances", source: "news 2026-10-19", statut: confirmé }
   - { regle: "Re-sélectionner le preset sur chaque match de ligue déjà planifié", source: "fiche tactique", statut: confirmé }
+
+# P2 du plan v4 (13/11) : état calculé par événement (pipelines/etat_jour.py). Le moteur lit ces types et ces états ;
+# aucun nom de joueur, de match ou d'adversaire n'est écrit dans le code.
+etat_jour:
+  horizon_h: 48                # événements à venir pris en compte
+  urgent_h: 24                 # échéance plus proche = priorité 1
+  donnee_perimee_h: 24         # donnée plus vieille = priorité dégradée d'un cran
+  jours_non_analyses: 7        # un match joué non analysé garde sa ligne pendant cette fenêtre
+  minutes_max: 36              # contrôle fiche : minutes par joueur (règle de l'utilisateur, plan v4)
+  matchs:
+    ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
+    coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
+    amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui }   # jamais d'aperçu ni d'export avant le match
+  evenements:
+    academie:     { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide] }
+    entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
+    enchere:      { etats: [police, fin, resultat] }
