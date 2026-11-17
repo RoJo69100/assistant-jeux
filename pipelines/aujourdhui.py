@@ -825,10 +825,10 @@ def _fr1(x):
 def academie(donnees, erreurs, cles, maintenant, ajoute):
     """K3 : à l'arrivée d'un rapport du scout (moins de 7 jours, aucune clé `[clé=Académie]` au registre depuis), une ligne
     par prospect, même sous 100 % de jauge. Verdicts d'après la règle de l'utilisateur du 17/11 (seuils à valider) :
-    « ignorer » = taille hors plage du poste ou PS estimé (ps_mid) sous le plus faible du poste ; « signer » = résultat de
-    test lu = High (8-10), taille correcte et ps_mid au moins égal au meilleur du poste ; « tester » = taille et PS corrects,
-    test non fait. Le résultat d'un test n'est lisible dans aucune vue (champ `test_potentiel` absent) : jamais « signer »
-    en production. L5 : une donnée manque (PS des postes, taille, PS estimé) → UNE ligne pour tout le rapport.
+    « ignorer » = taille hors plage du poste seulement ; « tester » = taille correcte, test non lu ; « signer » = test lu
+    High (8-10) et taille correcte. PS estimé (ps_mid), plus faible et meilleur du poste : affichés, ils ne décident pas.
+    Le résultat d'un test n'est lisible dans aucune vue (champ `test_potentiel` absent) : jamais « signer » en production.
+    L5 : la taille manque → UNE ligne pour tout le rapport.
     Vue absente ou rapport ancien : rien."""
     pros = lignes_de(donnees, "prospects")
     du_jour = bool(pros) and en_heure(pros[0]["rapport_paris"]).date() == maintenant.date()
@@ -848,30 +848,30 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
         return
     postes = {r["position"]: (float(r["ps_min"]), float(r["ps_max"])) for r in lignes_de(donnees, "ps_poste")}
     n = len(pros)
-    if not postes or any(p["position"] not in postes or p.get("ps_mid") in (None, "") or p.get("height_cm") in (None, "")
-                         for p in pros):
-        ajoute(None, 3, f"Académie, rapport du {rapport:%d/%m} : {n} prospect{'s' if n > 1 else ''} ; "
-                        "PS des postes de l'effectif inconnu", "vue à lire : gold.bv_roster_now", "gold.bv_academy_prospects")
+    if any(p["position"] not in PLAGE_TAILLE or p.get("height_cm") in (None, "") for p in pros):
+        ajoute(None, 3, f"Académie, rapport du {rapport:%d/%m} : {n} prospect{'s' if n > 1 else ''} ; taille inconnue",
+               "vue à lire : gold.bv_academy_prospects (height_cm)", "gold.bv_academy_prospects")
         return
     for p in pros:
-        pos, age, taille, ps = p["position"], int(p["age"]), float(p["height_cm"]), float(p["ps_mid"])
+        pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
         bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
-        faible, meilleur = postes[pos]
         test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
-        taille_ok, ps_ok = bas <= taille <= haut, ps >= faible
-        if not (taille_ok and ps_ok):
+        if not bas <= taille <= haut:
             verdict = "ignorer"
         elif not test:
             verdict = "tester"
-        elif test == "high" and ps >= meilleur:
+        elif test == "high":
             verdict = "signer"
         else:
-            verdict = "ignorer"  # test lu mais hors règle de signature : à valider
+            verdict = "ignorer"  # test lu, pas High : hors règle de signature, à valider
+        ps = f"{_fr1(p['ps_mid'])}" if p.get("ps_mid") not in (None, "") else "—"
+        faible, meilleur = (_fr1(postes[pos][0]), _fr1(postes[pos][1])) if pos in postes else ("—", "—")
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({pos}, {age} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
         ajoute(None, 2, f"{tete} : {verdict}",
-               f"PS estimé {_fr1(ps)} ; taille {int(taille)} cm (plage du poste {bas}-{haut}) ; poste {pos} : plus faible {_fr1(faible)}, "
-               f"meilleur {_fr1(meilleur)} ; test : "
-               + (f"{test}" if test else "non lu (aucune vue ne porte le résultat d'un test)") + " (seuils à valider)",
+               f"taille {int(taille)} cm (plage du poste {bas}-{haut}) ; test : "
+               + (f"{test}" if test else "non lu (aucune vue ne porte le résultat d'un test)")
+               + f" ; à titre d'information, sans décider : PS estimé {ps}, poste {pos} : plus faible {faible}, meilleur {meilleur}"
+               " (seuils à valider)",
                "gold.bv_academy_prospects, gold.bv_roster_now, skill basketvibe-academie 07")
 
 

@@ -192,8 +192,15 @@ def cas_bloc_1():
     i_dem = t.index("Demain (préparé aujourd'hui)")
     yield "test_bloc_1_deux_sections : J en Aujourd'hui, J+1 en Demain", t.index("Naked Spartans") < i_dem < t.index("Brest")
     yield "test_bloc_1_pastilles", "🟥 URGENT" in t and "🟧 IMPORTANT" in t
+    # 17/11 : un prospect « ignorer » n'est jamais une ligne du bloc 1 ; il reste au bloc 9
+    ac = [(None, 2, "Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : ignorer", "PS estimé 42,8", "s"),
+          (None, 2, "Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : tester", "PS estimé 39,4", "s")]
+    b1ac = "\n".join(qfb.bloc_1(ac, J))
+    yield "test_bloc_1_prospect_ignorer_absent_tester_present", "Bertrand" not in b1ac and "Noé Deschamps" in b1ac and "→ bloc 9" in b1ac
+    b9 = "\n".join(qfb.bloc_9(ac, [], [], {}))
+    yield "test_bloc_9_garde_les_ignorer", "Bertrand" in b9 and "ignorer" in b9 and "Noé Deschamps" in b9
 
-    toutes = [(None, 2, texte, "", "s") for texte in PAR_BLOC.values()]
+    toutes =[(None, 2, texte, "", "s") for texte in PAR_BLOC.values()]
     lignes = qfb.bloc_1(toutes, J)
     for n, texte in PAR_BLOC.items():
         cherche = [l for l in lignes if texte[:25] in l]

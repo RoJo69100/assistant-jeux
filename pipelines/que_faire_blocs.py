@@ -171,7 +171,8 @@ def bloc_1(actions: list, jour: dt.date, complements: list = ()) -> list:
     la limite tombe après `jour` va en « Demain » ; sinon en « Aujourd'hui ». Jamais vide."""
     affichables, _ = separer(actions)
     # 13/11 (audit) : un export est porté par le bloc 0 seulement ; jamais de ligne Export au bloc 1
-    affichables = [a for a in affichables if classer(a[2])[0] != 0 and classer(a[2])[1] != AFFICHAGE["export"]]
+    affichables = [a for a in affichables if classer(a[2])[0] != 0 and classer(a[2])[1] != AFFICHAGE["export"]
+                   and not (classer(a[2])[0] == 9 and a[2].endswith(": ignorer"))]  # 17/11 : un prospect « ignorer » reste au bloc 9
     ajd = [a for a in affichables if not (a[0] is not None and a[0].date() > jour)]
     dem = [a for a in affichables if a[0] is not None and a[0].date() > jour]
     nouveaux = [c for c in complements if not (c["dedup"] and any(classer(a[2])[0] == c["dedup"][0] and c["dedup"][1] in a[2] for a in affichables))]

@@ -850,13 +850,13 @@ def cas_academie():
         auj.academie(donnees, {}, list(cles), MIDI9, lambda *a: A.append(a))
         return A
 
-    # 17/11 : plus aucune dépendance à academie_valeur_high ; données manquantes (PS des postes, taille, PS estimé) : UNE ligne (L5)
+    # 17/11 : plus aucune dépendance à academie_valeur_high ; la taille manque : UNE ligne pour le rapport (L5)
     manque = lignes({"prospects": PROS})
-    yield "L5 (remplace K3) PS des postes inconnus : UNE ligne pour le rapport", \
-        len(manque) == 1 and manque[0][2] == "Académie, rapport du 05/11 : 3 prospects ; PS des postes de l'effectif inconnu" \
-        and manque[0][3] == "vue à lire : gold.bv_roster_now" and manque[0][1] == 3
+    yield "L5 (remplace K3) taille inconnue : UNE ligne pour le rapport", \
+        len(manque) == 1 and manque[0][2] == "Académie, rapport du 05/11 : 3 prospects ; taille inconnue" \
+        and manque[0][3] == "vue à lire : gold.bv_academy_prospects (height_cm)" and manque[0][1] == 3
     un_seul = lignes({"prospects": (COLS_PROS, PROS[1][:1])})
-    yield "L5 un seul prospect : « 1 prospect » au singulier", len(un_seul) == 1 and "1 prospect ; PS des postes" in un_seul[0][2]
+    yield "L5 un seul prospect : « 1 prospect » au singulier", len(un_seul) == 1 and "1 prospect ; taille inconnue" in un_seul[0][2]
     yield "K3 absent : aucun rapport en base, aucune ligne", lignes({"prospects": (COLS_PROS, [])}) == [] and lignes({}) == []
     vieux = (COLS_PROS, [("2026-10-29T09:00:00", 0, "X", "PG", 16, 200, 300)])
     yield "K3 absent : rapport de plus de 7 jours, aucune ligne", lignes({"prospects": vieux, "cote_potentiel": COTE}) == []
@@ -881,9 +881,9 @@ def cas_academie():
 
 
 def cas_academie_verdict():
-    """17/11 : verdict signer / tester / ignorer d'après la règle de l'utilisateur (seuils à valider) :
-    ignorer = taille hors plage du poste (skill basketvibe-academie 07) ou PS estimé sous le plus faible du poste ;
-    tester = taille et PS corrects, test non fait ; signer = test lu High, taille correcte, PS estimé >= meilleur du poste."""
+    """17/11 (règle révisée à 10:11) : ignorer = taille hors plage du poste seulement (skill basketvibe-academie 07) ;
+    tester = taille correcte, test non lu ; signer = test lu High (8-10) et taille correcte. PS estimé, plus faible et meilleur
+    du poste : affichés à titre d'information, ils ne décident pas. Seuils à valider."""
     MIDI9 = dt.datetime(2026, 11, 9, 12, 0)
     cols = COLS_PROS + ["ps_mid", "height_cm", "test_potentiel"]
     postes = (["position", "ps_min", "ps_max"], [("PG", 44.9, 56.6), ("PF", 47.9, 63.2), ("C", 48.3, 52.6)])
@@ -898,19 +898,20 @@ def cas_academie_verdict():
     yield "Audit5 taille hors plage (PG 190 > 187, 16 ans) : ignorer", v("PG", 16, 50.0, 190) == "ignorer"
     yield "Audit5 17 ans : borne haute +4 (PG 190 <= 191) : tester", v("PG", 17, 50.0, 190) == "tester"
     yield "Audit5 taille sous la plage (C 195 < 200) : ignorer", v("C", 16, 50.0, 195) == "ignorer"
-    yield "Audit5 PS estimé sous le plus faible du poste (44,0 < 44,9) : ignorer", v("PG", 16, 44.0, 180) == "ignorer"
-    yield "Audit5 PS estimé égal au plus faible : tester (pas sous)", v("PG", 16, 44.9, 180) == "tester"
-    yield "Audit5 test lu High, taille correcte, PS >= meilleur du poste : signer", v("C", 16, 53.0, 205, "High") == "signer"
-    yield "Audit5 test lu High mais PS sous le meilleur du poste : pas signer", v("C", 16, 50.0, 205, "High") != "signer"
-    yield "Audit5 test lu Decent : pas signer", v("C", 16, 53.0, 205, "Decent") != "signer"
+    yield "Audit5 PS estimé sous le plus faible du poste (44,0 < 44,9) : ne décide pas, tester", v("PG", 16, 44.0, 180) == "tester"
+    yield "Audit5 test lu High, taille correcte : signer, même si le PS estimé est sous le meilleur du poste", \
+        v("C", 16, 40.0, 205, "High") == "signer"
+    yield "Audit5 test lu Decent, taille correcte : hors règle de signature, pas signer", v("C", 16, 53.0, 205, "Decent") != "signer"
     yield "Audit5 test High mais taille hors plage : ignorer", v("C", 16, 53.0, 190, "High") == "ignorer"
     yield "Audit5 sans résultat de test lisible : jamais signer (même PS >= meilleur)", v("C", 16, 60.0, 205) == "tester"
     d = verdict("PG", 16, 46.0, 180)[0][3]
     yield "Audit5 détail : PS estimé, plage de taille, plus faible, meilleur, test", \
         "PS estimé 46,0" in d and "taille 180 cm (plage du poste 172-187)" in d and "plus faible 44,9" in d \
-        and "meilleur 56,6" in d and "test : non lu" in d and "seuils à valider" in d
+        and "meilleur 56,6" in d and "test : non lu" in d and "seuils à valider" in d and "information" in d
     yield "Audit5 détail avec résultat de test lu", "test : high" in verdict("C", 16, 53.0, 205, "High")[0][3]
-    yield "Audit5 effectif absent : une ligne, aucun verdict", len(verdict("PG", 16, 46.0, 180, ps_poste=(["position", "ps_min", "ps_max"], []))) == 1
+    sans_effectif = verdict("PG", 16, 46.0, 180, ps_poste=(["position", "ps_min", "ps_max"], []))
+    yield "Audit5 effectif absent : le verdict est rendu (le PS du poste est une information), poste « — »", \
+        len(sans_effectif) == 1 and sans_effectif[0][2].endswith(": tester") and "plus faible —, meilleur —" in sans_effectif[0][3]
     src_code = Path(auj.__file__).read_text(encoding="utf-8")
     yield "Audit5 plus aucune dépendance à academie_valeur_high ni au seuil de profondeur", \
         "academie_valeur_high" not in src_code and "SEUIL_PROFONDEUR_SIGNER" not in src_code \
