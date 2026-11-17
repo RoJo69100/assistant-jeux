@@ -1,6 +1,7 @@
 """Tests de pipelines/passage_quotidien.py (P1, 17/11) : sans réseau, sans base, sans CLI claude ni git (exécuteurs simulés).
 Lancer : python -I pipelines/test_passage_quotidien.py   (code 1 si un cas se trompe)"""
 import datetime as dt
+import os
 import subprocess
 import sys
 import tempfile
@@ -94,17 +95,61 @@ def cas_git():
     ok, msg = pq.commit_push(["x"], JOUR, executer=run, branche="b", attente=lambda s: None)
     yield "git : rien à commiter → pas d'échec, pas de push", ok and not any(c[:2] == ["git", "push"] for c in run.appels)
 
+    run = executeur([0, 1, 0, 0])
+    ok, msg = pq.commit_push(["outputs"], JOUR, executer=run, attente=lambda s: None, base_sha="abc")
+    push = next(c for c in run.appels if c[:2] == ["git", "push"])
+    yield "git : push sur claude/passage-quotidien, jamais sur main", ok and msg == "poussé sur claude/passage-quotidien" \
+        and push[-1] == "HEAD:refs/heads/claude/passage-quotidien" and not any("main" in x for c in run.appels for x in c) \
+        and "--force-with-lease=refs/heads/claude/passage-quotidien:abc" in push
+
+    pushes = []
+
     def refus(c, **kw):  # add, diff (changements), commit : ok ; chaque push : 403
         push = c[:2] == ["git", "push"]
+        pushes.append(push)
         code = 1 if push or c[:3] == ["git", "diff", "--cached"] else 0
         err = "remote: Permission denied\nfatal: unable to access 'https://github.com/x/y/': The requested URL returned error: 403" if push else ""
         return types.SimpleNamespace(returncode=code, stdout="", stderr=err)
-    ok, msg = pq.commit_push(["x"], JOUR, executer=refus, branche="b", attente=lambda s: None)
-    yield "git : push refusé (403) → « NON POUSSÉ (403) — les fiches du jour seront perdues »", not ok \
-        and msg == "NON POUSSÉ (403) — les fiches du jour seront perdues à la fin de cette session"
+    ok, msg = pq.commit_push(["x"], JOUR, executer=refus, attente=lambda s: None)
+    yield "git : push refusé (403) sur claude/ → « 403 même sur claude/ — droits d'écriture… », sans nouvelle tentative", not ok \
+        and msg == "403 même sur claude/ — droits d'écriture de l'application GitHub à donner" and sum(pushes) == 1
 
 
-CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git]
+def _git(d, *a):
+    env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+    return subprocess.run(["git", *a], cwd=d, capture_output=True, text=True, env=env, check=True)
+
+
+def cas_restauration():
+    with tempfile.TemporaryDirectory() as t:
+        t = Path(t)
+        _git(t, "init", "-q", "--bare", "-b", "main", "origine.git")
+        _git(t, "clone", "-q", "origine.git", "a")
+        a = t / "a"
+        (a / "outputs" / "basketvibe").mkdir(parents=True)
+        (a / "outputs" / "basketvibe" / "commun.md").write_text("main", encoding="utf-8")
+        _git(a, "add", ".")
+        _git(a, "commit", "-q", "-m", "main")
+        _git(a, "push", "-q", "origin", "main")
+        sans = pq.restaurer(racine=a)
+        yield "restauration : branche absente → rien, sans erreur", sans[0] is None and "absente" in sans[1]
+        _git(a, "checkout", "-q", "-b", "claude/passage-quotidien")
+        (a / "outputs" / "basketvibe" / "commun.md").write_text("branche", encoding="utf-8")
+        (a / "outputs" / "basketvibe" / "brief-tactique-2026-11-16.md").write_text("brief", encoding="utf-8")
+        (a / "outputs" / "basketvibe" / "que-faire-2026-11-16.md").write_text("qf", encoding="utf-8")
+        _git(a, "add", ".")
+        _git(a, "commit", "-q", "-m", "passage")
+        _git(a, "push", "-q", "origin", "claude/passage-quotidien")
+        _git(t, "clone", "-q", "-b", "main", "origine.git", "b")
+        b = t / "b"
+        sha, msg = pq.restaurer(racine=b)
+        o = b / "outputs" / "basketvibe"
+        yield "restauration : fichiers absents de main repris depuis la branche", sha and "2 fichier(s)" in msg \
+            and (o / "brief-tactique-2026-11-16.md").read_text(encoding="utf-8") == "brief" and (o / "que-faire-2026-11-16.md").is_file()
+        yield "restauration : un fichier présent sur main reste celui de main", (o / "commun.md").read_text(encoding="utf-8") == "main"
+
+
+CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

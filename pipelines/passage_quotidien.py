@@ -5,7 +5,9 @@
    docs/attentes/jeux/basketvibe.yaml), chacun par `claude -p --agent <nom>`, avec sa sortie attendue.
 3. Écrit outputs/basketvibe/que-faire-AAAA-MM-JJ.md : ligne de statut des agents, une ligne « agent X non lancé : raison » par
    échec (jamais un silence), garde-fous, puis le plan.
-4. Commit et push de outputs/basketvibe/ sur la branche courante.
+0. Restaure depuis origin/claude/passage-quotidien les fichiers d'outputs/ absents de main (un fichier présent reste celui de main).
+4. Commit et push de outputs/ sur claude/passage-quotidien, jamais sur main (la routine reçoit 403 sur main) ; la fusion vers main
+   est un geste de session (fusion_main.py). « git : » dit « poussé sur claude/passage-quotidien » ou le refus 403.
 
 Garde-fous : aucun achat, vente ni enchère (règle 2) — le script ne parle à aucun jeu, chaque agent reçoit l'interdiction ;
 toute somme au-dessus de police.SEUIL_GROS_MONTANT sans trace police du jour donne une ligne 🟥 ; la police passe par
@@ -136,11 +138,34 @@ def que_faire(jour, plan: str, res: list, gardes: list, alerte) -> str:
 
 # ---- Git -------------------------------------------------------------------------------------------------------------------
 
-def commit_push(fichiers: list, jour, executer=subprocess.run, branche=None, attente=time.sleep) -> tuple:
-    """(ok, message) : add, commit si quelque chose change, push avec 4 nouvelles tentatives (2, 4, 8, 16 s)."""
-    run = lambda c: executer(c, cwd=RACINE, capture_output=True, text=True)
-    if branche is None:
-        branche = run(["git", "rev-parse", "--abbrev-ref", "HEAD"]).stdout.strip()
+BRANCHE_PASSAGE = "claude/passage-quotidien"  # 17/11 : la routine n'a pas le droit de pousser sur main (403) ; la fusion vers main
+# reste un geste de session (fusion_main.py), jamais automatique
+
+
+def restaurer(executer=subprocess.run, racine=None, branche=BRANCHE_PASSAGE) -> tuple:
+    """(sha de la branche ou None, message) : si origin/<branche> existe, restaure depuis elle les fichiers d'outputs/ absents du
+    dépôt (briefs, que-faire, learnings des passages pas encore fusionnés) ; un fichier présent reste celui de main."""
+    racine = Path(racine or RACINE)
+    run = lambda c: executer(c, cwd=racine, capture_output=True, text=True)  # noqa: E731
+    r = run(["git", "fetch", "origin", branche])
+    if r.returncode:
+        return None, f"branche {branche} absente : rien à restaurer"
+    sha = run(["git", "rev-parse", "FETCH_HEAD"]).stdout.strip() or None
+    r = run(["git", "ls-tree", "-r", "--name-only", "FETCH_HEAD", "--", "outputs/"])
+    manquants = [f for f in r.stdout.splitlines() if f.strip() and not (racine / f).exists()]
+    if not manquants:
+        return sha, f"restauration depuis {branche} : aucun fichier manquant"
+    r = run(["git", "checkout", "FETCH_HEAD", "--", *manquants])
+    if r.returncode:
+        return sha, f"restauration depuis {branche} en échec : {_derniere(r.stderr)}"
+    return sha, f"restauration depuis {branche} : {len(manquants)} fichier(s) d'outputs/ repris"
+
+
+def commit_push(fichiers: list, jour, executer=subprocess.run, branche=BRANCHE_PASSAGE, attente=time.sleep, base_sha=None) -> tuple:
+    """(ok, message) : add, commit si quelque chose change, push de HEAD sur `branche` (claude/passage-quotidien, jamais main)
+    avec 4 nouvelles tentatives (2, 4, 8, 16 s). La branche est réécrite depuis HEAD (--force-with-lease sur le sha lu par
+    restaurer) : ses fichiers absents de main ont été restaurés avant le commit, rien n'est perdu."""
+    run = lambda c: executer(c, cwd=RACINE, capture_output=True, text=True)  # noqa: E731
     r = run(["git", "add", "--", *fichiers])
     if r.returncode:
         return False, f"git add en échec : {_derniere(r.stderr)}"
@@ -149,18 +174,19 @@ def commit_push(fichiers: list, jour, executer=subprocess.run, branche=None, att
     r = run(["git", "commit", "-m", f"Passage quotidien BasketVibe du {jour.isoformat()} (routine planifiée)"])
     if r.returncode:
         return False, f"git commit en échec : {_derniere(r.stderr or r.stdout)}"
+    lease = f"--force-with-lease=refs/heads/{branche}:{base_sha}" if base_sha else f"--force-with-lease=refs/heads/{branche}:"
     for i in range(5):
-        r = run(["git", "push", "-u", "origin", branche])
+        r = run(["git", "push", "-u", lease, "origin", f"HEAD:refs/heads/{branche}"])
         if r.returncode == 0:
             return True, f"poussé sur {branche}"
+        if "403" in f"{r.stderr or ''}{r.stdout or ''}":
+            return False, PUSH_403  # refus de droits : réessayer ne change rien
         if i < 4:
             attente(2 ** (i + 1))
-    if "403" in f"{r.stderr or ''}{r.stdout or ''}":
-        return False, PUSH_403
     return False, f"git push en échec : {_derniere(r.stderr)}"
 
 
-PUSH_403 = "NON POUSSÉ (403) — les fiches du jour seront perdues à la fin de cette session"
+PUSH_403 = "403 même sur claude/ — droits d'écriture de l'application GitHub à donner"
 
 
 # ---- Rejeu du plan ---------------------------------------------------------------------------------------------------------
@@ -190,6 +216,10 @@ def main() -> int:
     sys.stdout.reconfigure(encoding="utf-8")
     import aujourdhui_sources as src
     import etat_jour as ej
+    base_sha = None
+    if not a.sans_git:
+        base_sha, msg = restaurer()
+        print(msg)
     jour, _, rendu, etats, S, alerte, cfg = rejouer()
     prevus = ej.agents_a_lancer(etats, cfg, BASE, jour)
     if alerte or a.sans_agents:
@@ -206,7 +236,7 @@ def main() -> int:
         print(l)
     code = 2 if alerte else 0
     if not a.sans_git:
-        ok, msg = commit_push([str(BASE.relative_to(RACINE))], jour)
+        ok, msg = commit_push(["outputs"], jour, base_sha=base_sha)
         print(f"git : {msg}")
         code = code or (0 if ok else 1)
     return code
