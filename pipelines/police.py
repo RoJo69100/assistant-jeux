@@ -174,6 +174,12 @@ def police_faite(jeu: str, type_: str) -> bool:
     return False
 
 
+def travail_du_jeu(jeu: str, cmds: str) -> bool:
+    """17/11 (H3) : la session a pris une décision pour ce jeu = une commande de plan, de dossier, de décision ou de lecture de la base
+    lancée avec le jeu en argument (jamais un test, jamais un simple nom dans la réponse), ou un fichier `outputs/<jeu>/` touché."""
+    return bool(re.search(rf"\b(?:aujourdhui|dossier|decision|sql|garde)\w*\.py\b(?!\w)[^\n]*?\b{re.escape(jeu)}\b|outputs[/\\]{re.escape(jeu)}[/\\]", cmds))
+
+
 def decision_faite(jeu: str, type_: str, cmds: str) -> bool:
     doms = DOM_TYPE.get(type_, (type_,))
     if re.search(rf"decision\.py\s+new\s+{jeu}\s+({'|'.join(doms)})\b", cmds):
@@ -230,7 +236,7 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
         if t in gros and not police_faite(jeu, t):
             f.append(f"H2 : décision {t} ({jeu}) sans trace police — agent `police`, qui écrit "
                      f"outputs/{jeu}/police-{date.today().isoformat()}.md")
-        if not decision_faite(jeu, t, cmds):
+        if travail_du_jeu(jeu, cmds) and not decision_faite(jeu, t, cmds):
             f.append(f"H3 : décision {t} ({jeu}) absente du journal — `python -I pipelines/decision.py new {jeu} "
                      f"{DOM_TYPE.get(t, (t,))[0]} --label … --prediction '<json>' --evaluer-le AAAA-MM-JJ`")
     nommes = [j for j, noms in JEUX.items() if any(x in norm(text) for x in noms)]

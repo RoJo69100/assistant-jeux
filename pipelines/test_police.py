@@ -54,6 +54,8 @@ MANQUE_OK = "Il me manque la forme de Chara — cherché dans : gold.bv_roster_n
 
 CAS = [
     # (nom, texte, entrées, principal, préfixes de fautes attendues ; [] = passe)
+    ("H3 sans travail sur le jeu : jeu seulement nommé, aucun H3", PLAN_COMPO, [u("que faire"), outil("python -I pipelines/test_aujourdhui_testjeu.py")], True, []),
+    ("H3 sans travail sur le jeu : un autre jeu travaillé ne compte pas", PLAN_COMPO, [u("que faire"), outil("python -I pipelines/aujourdhui.py autrejeu")], True, []),
     ("aveu bloqué", AVEU, [u("que faire sur basketvibe")], True, ["pas tout lu", "non releve"]),
     ("manque sourcé passe", MANQUE_OK, [u("analyse")], True, []),
     ("manque sans source bloqué", "Il me manque la forme.", [u("analyse")], True, ["« il me manque »"]),
@@ -87,6 +89,10 @@ CAS = [
 def main() -> int:
     erreurs = 0
     for nom, texte, ents, principal, attendu in CAS:
+        # 17/11 : H3 seulement si la session a travaillé le jeu (commande de plan, dossier, décision ou sortie du jeu) ; les cas de
+        # ce fichier sont des décisions du jeu « testjeu », sauf ceux dont le nom commence par « H3 sans travail »
+        if not nom.startswith("H3 sans travail"):
+            ents = [*ents, outil("python -I pipelines/aujourdhui.py testjeu")]
         session = "test-" + uuid.uuid4().hex
         f = police.fautes_de(texte, ents, principal, session)
         ok = len(f) == len(attendu) and all(any(x.startswith(a) for x in f) for a in attendu)
