@@ -143,7 +143,7 @@ FIN_FLECHE = re.compile(r"^(.*?) → (blocs? .+)$")
 ENTETE_MATCH = re.compile(r"^(?:Amical|Ligue|Coupe)\b.*?\((?:[^)]*?)(\d{2})/(\d{2})\)")
 
 
-def complements_bloc_1(l0: list, l2: list, l3: list, l7: list, jour: dt.date) -> list:
+def complements_bloc_1(l0: list, l2: list, l3: list, l7: list, jour: dt.date, points: list = ()) -> list:
     """Compléments du bloc 1 (R1), que `plan()` ne porte pas : chaque ligne du bloc 0 (catégorie Export, texte et « → bloc N » repris à
     l'identique), une ligne « Composition : <match> » par match des blocs 2 et 3 (en « Demain » si le match n'est pas aujourd'hui) et la
     ligne d'analyse du bloc 7 quand l'analyse n'est pas faite. Dict : prio, cat, texte, bloc (« bloc N »), date (ou None), dedup (bloc, adversaire)."""
@@ -156,8 +156,15 @@ def complements_bloc_1(l0: list, l2: list, l3: list, l7: list, jour: dt.date) ->
             d = dt.date(jour.year, int(m.group(2)), int(m.group(1)))
             nom = re.search(r"contre (.+?) \(", l)
             court = l.split(", heure limite")[0]
-            sortie.append({"prio": 1 if d <= jour + dt.timedelta(days=1) else 2, "cat": "composition", "texte": f"Composition : {court}",
+            prio = 1 if d <= jour + dt.timedelta(days=1) else 2
+            sortie.append({"prio": prio, "cat": "composition", "texte": f"Composition : {court}",
                            "bloc": f"bloc {n}", "date": d, "dedup": (n, nom.group(1) if nom else court)})
+            for p in points:  # 17/11 : points d'amélioration 1 et 2 du brief analyste du jour, une ligne chacun sous la composition
+                texte = p["texte"].replace("|", "/")
+                texte = texte if len(texte) <= 150 else texte[:149].rstrip() + "…"
+                sortie.append({"prio": prio, "cat": "composition", "bloc": f"bloc {n}", "date": d, "dedup": None,
+                               "texte": f"Composition : {court} — point {p['n']} de l'analyste (confiance {p['confiance']}, "
+                                        f"{p['fichier']}) : {texte}"})
     if l7 and "analyse non faite" in l7[0]:
         sortie.append({"prio": 2, "cat": "analyse", "texte": f"Analyse : {l7[0]}", "bloc": "bloc 7", "date": None, "dedup": None})
     return sortie
@@ -1063,7 +1070,8 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
     b6, c6 = bloc_6(donnees, etudes, jour, S.get("experiences"), fait)
     b0 = bloc_0(donnees, res, etudes, jour, maintenant)
     b7 = bloc_7(actions, donnees, S.get("analyste"))
-    blocs = [b0, bloc_1(actions, jour, complements_bloc_1(b0, b2, b3, b7, jour)), b2, b3,
+    points = auj.src.lire_points_analyste(base or BASE, jour)  # 17/11 : vide sans brief analyste du jour
+    blocs = [b0, bloc_1(actions, jour, complements_bloc_1(b0, b2, b3, b7, jour, points)), b2, b3,
              bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), bloc_5(etudes), b6,
              b7, bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
              bloc_10(actions, garder)]

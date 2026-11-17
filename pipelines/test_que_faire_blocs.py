@@ -165,6 +165,7 @@ def cas():
     yield from cas_a1()
     yield from cas_r3()
     yield from cas_r1()
+    yield from cas_points_analyste()
     yield from cas_r8()
     yield from cas_a2()
     yield from cas_a6()
@@ -1120,6 +1121,56 @@ def cas_r1():
         and any("Personnel" in f for f in fautes)
     yield "test_r1_exports_jamais_urgents : sauf l'aperçu du prochain match de ligue, aucun export en 🟥 au bloc 1", \
         not re.search(r"🟥 URGENT \| Export \|", b1) and not re.search(r"🟥 URGENT \| Export \|", qfb.section(t12, 1))
+
+
+BRIEF_ANALYSTE = """# Analyse défaite ligue J6
+## 6. Ce qui a changé
+## Points d'amélioration (à faire avant 19:45)
+1. **Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 et cliquer Sauvegarder, puis ré-ouvrir le match.** Ne pas toucher à l'agressivité. Chiffre : 3 matchs de suite. Confiance **élevée** sur la cause (fait). Faux si autre chose.
+2. **Durand (SF) : 24 min maximum, jamais les 4 quarts.** Chiffre : Durand 48 min = éval 15. Confiance moyenne. Faux si Gimenez moins bon.
+3. **Dang : Tir écran 3 → 1.** Confiance faible (n = 26 tirs).
+## Propositions
+"""
+
+
+def cas_points_analyste():
+    """17/11 : quand un brief analyste du jour existe, les lignes de composition (amical et ligue) du bloc 1 reprennent ses points
+    d'amélioration 1 et 2, une ligne chacun, avec leur confiance et le fichier source. Sans brief : rien."""
+    jour = dt.date(2026, 11, 17)
+    with tempfile.TemporaryDirectory() as tmp:
+        yield "test_points_analyste : pas de brief du jour, aucun point", qfb.auj.src.lire_points_analyste(tmp, jour) == []
+        (Path(tmp) / "briefs").mkdir()
+        (Path(tmp) / "briefs" / "2026-11-16-analyste.md").write_text(BRIEF_ANALYSTE, encoding="utf-8")
+        yield "test_points_analyste : brief de la veille, aucun point", qfb.auj.src.lire_points_analyste(tmp, jour) == []
+        (Path(tmp) / "briefs" / "2026-11-17-analyste.md").write_text(BRIEF_ANALYSTE, encoding="utf-8")
+        pts = qfb.auj.src.lire_points_analyste(tmp, jour)
+    yield "test_points_analyste : les points 1 et 2 seulement, avec confiance et fichier", len(pts) == 2 \
+        and [p["n"] for p in pts] == [1, 2] and [p["confiance"] for p in pts] == ["élevée", "moyenne"] \
+        and all(p["fichier"] == "outputs/basketvibe/briefs/2026-11-17-analyste.md" for p in pts) \
+        and pts[0]["texte"].startswith("Aujourd'hui : re-sélectionner le preset") and "**" not in pts[0]["texte"] \
+        and pts[1]["texte"] == "Durand (SF) : 24 min maximum, jamais les 4 quarts."
+    am = ["Amical contre Union Heidelberg (mer. 18/11), heure limite du verrou 07:45"]
+    li = ["Ligue J8 contre C.B.Granada (mer. 18/11)"]
+    comp = qfb.complements_bloc_1([], am, li, [], jour, pts)
+    t = "\n".join(qfb.bloc_1([], jour, comp))
+    lignes = [l for l in t.splitlines() if l.startswith("|")]
+    i_li = next(i for i, l in enumerate(lignes) if "Composition : Ligue J8" in l and "point" not in l)
+    yield "test_points_analyste : sous la ligne Composition J8, les points 1 et 2, une ligne chacun", \
+        "point 1" in lignes[i_li + 1] and "(confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md)" in lignes[i_li + 1] \
+        and "re-sélectionner le preset" in lignes[i_li + 1] and "point 2" in lignes[i_li + 2] and "confiance moyenne" in lignes[i_li + 2] \
+        and lignes[i_li + 1].endswith("→ bloc 3 |") and "Composition |" in lignes[i_li + 1]
+    i_am = next(i for i, l in enumerate(lignes) if "Composition : Amical" in l and "point" not in l)
+    yield "test_points_analyste : idem sous la ligne de l'amical (bloc 2)", \
+        "point 1" in lignes[i_am + 1] and "point 2" in lignes[i_am + 2] and lignes[i_am + 1].endswith("→ bloc 2 |")
+    yield "test_points_analyste : le point 3 n'est pas repris", "Dang" not in t
+    sans = "\n".join(qfb.bloc_1([], jour, qfb.complements_bloc_1([], am, li, [], jour)))
+    yield "test_points_analyste : sans brief, aucune ligne de point", "point 1" not in sans and "Composition : Ligue J8" in sans
+    longue = dict(pts[0], texte="x" * 400)
+    court = [l for l in "\n".join(qfb.bloc_1([], jour, qfb.complements_bloc_1([], [], li, [], jour, [longue]))).splitlines() if "point 1" in l][0]
+    yield "test_points_analyste : texte tronqué à 150 caractères", "x" * 150 not in court and "x" * 149 + "…" in court
+    import inspect
+    yield "test_points_analyste : rendre_blocs lit le brief du jour de la base donnée", \
+        "lire_points_analyste(base or BASE, jour)" in inspect.getsource(qfb.rendre_blocs)
 
 
 TRAITEES_Q = ("| début de la demande | statut | date | question liée | raison |\n|---|---|---|---|---|\n"
