@@ -159,7 +159,31 @@ def cas_horizon_et_completude():
     yield "complétude : détecte un événement oublié", ej.sans_ligne(tous, [l for l in ls if l["id"] != "a"], CFG, MAINT) == [dans]
 
 
-CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude]
+def cas_exports():
+    """P2.2 : un export n'est demandé que s'il débloque une transition, nomme l'événement et disparaît dès que la base voit la capture."""
+    ex = lambda evs, m=MAINT: ej.exports(ej.lignes(evs, CFG, m))
+    e = ex([match(id="a")])
+    yield "export : l'aperçu manquant est demandé, avec adversaire et date", len(e) == 1 and "aperçu" in e[0]["consigne"] \
+        and "Adv A" in e[0]["consigne"] and "18/11" in e[0]["consigne"]
+    yield "export : l'aperçu capturé disparaît", ex([match(id="a", apercu_at=T_APERCU)]) == []
+    yield "export : ni fiche ni écran ne sont des exports", ex([match(id="a", apercu_at=T_APERCU, fiche=FICHE)]) == []
+    pret = match(id="a", apercu_at=T_APERCU, fiche=FICHE, ecran=ECRAN)
+    yield "export : avant la fin du match, aucune page à exporter", ex([pret], dt.datetime(2026, 11, 18, 19, 50)) == []
+    joue = dict(pret, joue=True)
+    e = ex([joue], dt.datetime(2026, 11, 18, 21, 0))
+    yield "export : match joué, page demandée", len(e) == 1 and "page du match" in e[0]["consigne"] and "Adv A" in e[0]["consigne"]
+    yield "export : page capturée, disparaît", ex([dict(joue, page_at=dt.datetime(2026, 11, 18, 20, 55))], dt.datetime(2026, 11, 18, 21, 0)) == []
+    am = match(id="b", genre="amical", coup_envoi=dt.datetime(2026, 11, 18, 8, 0), verrou=dt.datetime(2026, 11, 18, 7, 45))
+    yield "export : amical avant le match, jamais d'export", all(ex([dict(am, **k)]) == [] for k in ({}, {"fiche": FICHE}, {"fiche": FICHE, "ecran": ECRAN}))
+    ac = {"type": "academie", "id": "ac", "quand": dt.datetime(2026, 11, 19, 9, 0), "rapport_at": None, "decide": False, "maj_at": None}
+    yield "export : académie avant 09:00, rien", ex([ac]) == []
+    e = ex([ac], dt.datetime(2026, 11, 19, 10, 0))
+    yield "export : académie après 09:00, page Académie demandée avec la date du rapport", len(e) == 1 and "Académie" in e[0]["consigne"] and "19/11" in e[0]["consigne"]
+    yield "export : rapport capturé, disparaît", ex([dict(ac, rapport_at=dt.datetime(2026, 11, 19, 9, 1))], dt.datetime(2026, 11, 19, 10, 0)) == []
+    yield "export : chaque export porte l'état qu'il débloque", all(x["prochain"] in ej.ETATS_EXPORT for x in ex([match(id="a"), ac], dt.datetime(2026, 11, 19, 10, 0)))
+
+
+CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

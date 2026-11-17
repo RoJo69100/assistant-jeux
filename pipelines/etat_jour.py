@@ -192,6 +192,17 @@ def lignes(evenements, cfg, maintenant) -> list:
     return sorted(res, key=lambda l: (not l["action"], l["priorite"], l["echeance"] or dt.datetime.max))
 
 
+# P2.2 : états dont la transition est un export (la capture passive de la page fait passer l'état)
+ETATS_EXPORT = ("apercu", "joue", "rapport_exporte", "page_exportee")
+
+
+def exports(ls) -> list:
+    """Exports à demander : seulement les lignes dont la prochaine transition est un export (action, état d'ETATS_EXPORT).
+    La consigne nomme l'événement ; dès que la base voit la capture, l'état est atteint et la ligne n'est plus un export.
+    Un match pas encore joué n'en demande aucun (« joue » sans action) ; un amical n'a pas d'aperçu."""
+    return [l for l in ls if l["action"] and l["prochain"] in ETATS_EXPORT]
+
+
 def sans_ligne(evenements, ls, cfg, maintenant) -> list:
     """Complétude : événements retenus qui n'ont pas de ligne dans `ls` (doit être vide)."""
     ids = {l["id"] for l in ls}
