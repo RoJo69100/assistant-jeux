@@ -157,6 +157,7 @@ def cas():
     yield "test_separer_liste_vide", qfb.separer([]) == ([], [])
     yield from cas_blocs_2_3()
     yield from cas_contrat_brief()
+    yield from cas_forme_fiche()
     yield from cas_produit_le()
     yield from cas_bloc_4()
     yield from cas_t5()
@@ -434,6 +435,37 @@ def brief_depuis_la_consigne(consigne):
     texte = (ligne.group(1) + "\n\n## Saisie\n" + JOUEURS + adv
              + "\n" + debut.group(1) + " Gimenez porte 31 % des tirs à 3 points ; si le focus 5 tombe sur lui, plan B : Bonnet tireur principal.\n")
     return nom.group(1), texte
+
+
+FICHE_FORME = ("Amical contre Adv A (18/11)\nVerrou : mer. 18/11 07:45 (match 08:00)\nAdversaire : Adv A\n\n## À saisir\n### Écran 1 — Composition\n"
+               "| | PG | SG |\n|---|---|---|\n| Q1 | Baron | Leclerc |\n\n### Écran 2 — Consignes\n" + JOUEURS_FORME
+               + "\n### Écran 3 — Adversaires\n| Adversaire | Poste | Focus défensif (1-5) | Zone |\n|---|---|---|---|\n| Les 12 | tous | 3 | Middle (3) |\n\n"
+               "## Après sauvegarde, vérifie\n- [ ] Agress. = 3 pour chaque joueur\n\n## À exporter ensuite\nLa page du match, après le match.\n\n---\n"
+               "## Annexe — pourquoi\nRaisonnement.\nAnticipation (hypothèse) : plan B Bonnet.\n") if (JOUEURS_FORME := (
+    "| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Min | Off. focus | Rôle | Tir | Agress. |\n|---|---|---|---|---|---|---|---|---|---|---|---|\n"
+    "| Baron | PG | PG | — | PG | PG | — | 36 | 2 | 1 | 2 | 3 |\n")) else ""
+
+
+def cas_forme_fiche():
+    """17/11 : forme de la fiche tactique (À saisir, vérifie, exporter, ---, Annexe) ; contrat vérifiable."""
+    yield "forme_fiche : fiche conforme → aucun défaut", qfb.controle_forme_fiche(FICHE_FORME) == []
+    yield "forme_fiche : la fiche conforme se lit (joueurs et adversaires)", qfb.comp.lire_fiche(FICHE_FORME) is not None
+    yield "forme_fiche : sans séparateur → défaut", qfb.controle_forme_fiche(FICHE_FORME.replace("\n---\n", "\n")) != []
+    yield "forme_fiche : prose dans À saisir → défaut", any("prose" in x for x in qfb.controle_forme_fiche(
+        FICHE_FORME.replace("### Écran 3", "Remplaçants : aucun.\n### Écran 3")))
+    six = FICHE_FORME.replace("- [ ] Agress. = 3 pour chaque joueur\n", "- [ ] a\n" * 6)
+    yield "forme_fiche : 6 cases à cocher → défaut", any("vérifie" in x for x in qfb.controle_forme_fiche(six))
+    yield "forme_fiche : case sans « - [ ] » → défaut", any("vérifie" in x for x in qfb.controle_forme_fiche(FICHE_FORME.replace("- [ ] Agress", "Agress")))
+    yield "forme_fiche : 2 lignes à exporter → défaut", any("exporter" in x for x in qfb.controle_forme_fiche(
+        FICHE_FORME.replace("après le match.\n", "après le match.\nEt l'aperçu.\n")))
+    longue = FICHE_FORME.replace("| Q1 | Baron | Leclerc |\n", "| Q1 | Baron | Leclerc |\n" * 40)
+    yield "forme_fiche : plus de 40 lignes avant --- → défaut", any("40" in x for x in qfb.controle_forme_fiche(longue))
+    yield "forme_fiche : annexe avant À saisir → défaut", qfb.controle_forme_fiche(
+        FICHE_FORME.replace("## Annexe — pourquoi", "## Annexe").replace("## À saisir", "## Annexe — pourquoi\n## À saisir")) != []
+    yield "forme_fiche : la consigne de l'agent tactique décrit la forme", "## À saisir" in qfb.FORME_FICHE and "## Après sauvegarde, vérifie" in qfb.FORME_FICHE \
+        and "Réponds en une ligne : le chemin du fichier" in qfb.FORME_FICHE and qfb.FORME_FICHE in qfb.consigne_brief(JOUR_T, True, "Adv A", JOUR_T)
+    for f in sorted((qfb.RACINE if hasattr(qfb, "RACINE") else Path(__file__).resolve().parent.parent).glob("outputs/basketvibe/briefs/2026-11-17-tactique-amical*.md")):
+        yield f"forme_fiche : fiche réelle {f.name} conforme", qfb.controle_forme_fiche(f.read_text(encoding="utf-8")) == []
 
 
 def cas_contrat_brief():

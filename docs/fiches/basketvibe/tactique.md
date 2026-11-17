@@ -69,5 +69,5 @@ L'utilisateur joue **un amical presque chaque jour** (08:00, à domicile). C'est
 - Ajoute chaque nouveau conseil dans la section Conseils de `outputs/basketvibe/learnings.md` (ID `C-nnn`, critère vérifiable en SQL), pour que l'agent Match le contrôle.
 
 ## Sortie propre au jeu
-- En tête du brief : la **fiche de saisie** (cinqs, consignes, depth chart, focus défensif), puis les justifications et le contrôle SQL.
+- Forme de la fiche de match (amical, ligue, coupe), 17/11 : titre, `Verrou : …`, `Adversaire : …` ; `## À saisir` (un tableau par écran, valeurs seules) ; `## Après sauvegarde, vérifie` (5 cases `- [ ]` au plus) ; `## À exporter ensuite` (1 ligne) ; `---` ; `## Annexe — pourquoi` (justifications, contrôle SQL, fatigue, test, plan B). Avant `---` : 40 lignes au plus. Contrat : `pipelines/que_faire_blocs.py` (`FORME_FICHE`, `controle_forme_fiche`). Réponse de l'agent : le chemin du fichier.
 - Si la forme n'est pas à jour ou si la tactique adverse est inconnue, dis-le et indique quel export faire.

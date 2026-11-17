@@ -142,8 +142,52 @@ BASE = comp.BASE
 ANTICIPATION = ("anticipe les décisions de l'adversaire contre nous : pour chacun de nos joueurs, le focus défensif et la zone qu'un adversaire "
                 "appliquerait selon la même règle que la nôtre (parts de tirs, 2P/3P de nos joueurs, gold.bv_match_player_lines) ; compose pour "
                 "rester solide si le focus tombe sur notre meilleur tireur (plan B) ; hypothèse signalée comme telle, aucune donnée sur les focus "
-                "adverses en base ; sous le tableau de saisie, écris une ligne commençant exactement par « Anticipation (hypothèse) : » "
+                "adverses en base ; dans l'annexe, écris une ligne commençant exactement par « Anticipation (hypothèse) : » "
                 "avec le plan B nommé")
+
+# 17/11 : forme de la fiche tactique de match (amical, ligue, coupe), vérifiée par `controle_forme_fiche`.
+TITRES_FICHE = ("## À saisir", "## Après sauvegarde, vérifie", "## À exporter ensuite", "## Annexe — pourquoi")
+TETE_MAX, VERIFS_MAX = 40, 5
+FORME_FICHE = ("forme de la fiche, dans cet ordre : (a) la première ligne (titre), une ligne « Verrou : … », une ligne « Adversaire : … » ; "
+               "(b) « ## À saisir » : un tableau par écran du jeu (« ### Écran 1 — Composition », « ### Écran 2 — Consignes » avec le tableau "
+               "de saisie, « ### Écran 3 — Adversaires »), dans l'ordre et les colonnes de l'écran, valeurs seules, sans prose ; "
+               f"(c) « ## Après sauvegarde, vérifie » : {VERIFS_MAX} lignes au plus, chacune « - [ ] … » ; (d) « ## À exporter ensuite » : "
+               "1 ligne ; (e) une ligne « --- » puis « ## Annexe — pourquoi » : tout le raisonnement (tirs, contrôles SQL, fatigue, test, plan B). "
+               f"Avant « --- » : {TETE_MAX} lignes au plus. Réponds en une ligne : le chemin du fichier")
+
+
+def controle_forme_fiche(texte: str) -> list:
+    """Défauts de forme d'une fiche tactique de match (FORME_FICHE) ; [] si conforme."""
+    lignes = texte.splitlines()
+    if "---" not in [l.strip() for l in lignes]:
+        return ["séparateur « --- » absent"]
+    sep = [l.strip() for l in lignes].index("---")
+    tete, d = lignes[:sep], []
+    if len(tete) > TETE_MAX:
+        d.append(f"{len(tete)} lignes avant « --- » (maximum {TETE_MAX})")
+    if not ENTETE_MATCH.match(lignes[0]) and not re.match(r"^J\d+ : .+\(\d{2}/\d{2}\)", lignes[0]):
+        d.append("première ligne : titre du match attendu")
+    pos = [next((i for i, l in enumerate(lignes) if l.strip() == t), None) for t in TITRES_FICHE]
+    if None in pos:
+        return d + [f"section absente : {t}" for t, p in zip(TITRES_FICHE, pos) if p is None]
+    if pos != sorted(pos) or not pos[2] < sep < pos[3]:
+        return d + ["sections hors de l'ordre À saisir, vérifie, exporter, ---, Annexe"]
+    entete = lignes[1:pos[0]]
+    for cle in ("Verrou", "Adversaire"):
+        if not any(l.startswith(cle + " :") for l in entete):
+            d.append(f"en-tête : ligne « {cle} : … » absente")
+    saisie = [l for l in lignes[pos[0] + 1:pos[1]] if l.strip()]
+    if not any(l.startswith("|") for l in saisie):
+        d.append("À saisir : aucun tableau")
+    d += [f"À saisir : prose interdite « {l[:40]} »" for l in saisie if not (l.startswith("|") or l.startswith("### Écran"))]
+    verifs = [l for l in lignes[pos[1] + 1:pos[2]] if l.strip()]
+    if not 1 <= len(verifs) <= VERIFS_MAX or any(not l.startswith("- [ ] ") for l in verifs):
+        d.append(f"vérifie : 1 à {VERIFS_MAX} lignes « - [ ] … »")
+    if len([l for l in lignes[pos[2] + 1:sep] if l.strip()]) != 1:
+        d.append("À exporter ensuite : exactement 1 ligne")
+    if not any(l.strip() for l in lignes[pos[3] + 1:]):
+        d.append("annexe vide")
+    return d
 
 
 def contrat_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.date, manche=None, genre: str = "ligue") -> tuple:
@@ -163,7 +207,7 @@ def consigne_brief(jour: dt.date, amical: bool, adversaire: str, date_match: dt.
     chemin, ligne = contrat_brief(jour, amical, adversaire, date_match, manche, genre)
     return (f"écris le brief dans {chemin}, première ligne exactement « {ligne} », puis le tableau de saisie ; "
             "puis le tableau des adversaires (colonnes « Adversaire | Poste | Focus défensif (1-5) | Zone », une ligne par adversaire de "
-            "gold.bv_saisie_adversaires ; sans ce tableau le script ne lit pas le brief) ; " + ANTICIPATION)
+            "gold.bv_saisie_adversaires ; sans ce tableau le script ne lit pas le brief) ; " + FORME_FICHE + " ; " + ANTICIPATION)
 
 
 LIGNE_ANTICIPATION = re.compile(r"^[\s>*-]*\**\s*(Anticipation \(hypothèse\)\s*:.*?)\**\s*$", re.M)

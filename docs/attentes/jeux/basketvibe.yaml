@@ -140,9 +140,9 @@ etat_jour:
   # sortie : relative à outputs/basketvibe/ ; champs {jour} (AAAA-MM-JJ du passage), {cle} (adversaire ou objet + date), {titre}.
   # Une sortie déjà présente = pas de relance. avant : commande à réussir avant le lancement (règle 6 : dossier puis police).
   agents:
-    - { type: match, genre: ligue,  prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-{cle}.md",        consigne: "première ligne du fichier : « {titre} »" }
-    - { type: match, genre: coupe,  prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-coupe-{cle}.md",  consigne: "première ligne du fichier : « {titre} »" }
-    - { type: match, genre: amical, prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-amical-{cle}.md", consigne: "première ligne du fichier : « {titre} »" }
+    - { type: match, genre: ligue,  prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-{cle}.md",        consigne: "première ligne du fichier : « {titre} » ; forme : que_faire_blocs.FORME_FICHE (À saisir, vérifie, exporter, ---, Annexe) ; réponse : le chemin du fichier, une ligne" }
+    - { type: match, genre: coupe,  prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-coupe-{cle}.md",  consigne: "première ligne du fichier : « {titre} » ; forme : que_faire_blocs.FORME_FICHE (À saisir, vérifie, exporter, ---, Annexe) ; réponse : le chemin du fichier, une ligne" }
+    - { type: match, genre: amical, prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-amical-{cle}.md", consigne: "première ligne du fichier : « {titre} » ; forme : que_faire_blocs.FORME_FICHE (À saisir, vérifie, exporter, ---, Annexe) ; réponse : le chemin du fichier, une ligne" }
     - { type: match, genre: ligue,  prochain: analyse, agent: analyste,  sortie: "briefs/{jour}-analyste-{cle}.md" }
     - { type: match, genre: coupe,  prochain: analyse, agent: analyste,  sortie: "briefs/{jour}-analyste-{cle}.md" }
     - { type: match,                prochain: juge,    agent: null }      # python -I pipelines/evaluer_decisions.py, pas d'agent
