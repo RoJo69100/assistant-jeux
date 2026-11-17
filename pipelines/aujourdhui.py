@@ -824,6 +824,22 @@ def _fr1(x):
     return str(round(float(x), 1)).replace(".", ",")
 
 
+def verdict_prospect(p):
+    """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour."""
+    pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
+    bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
+    test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
+    if not bas <= taille <= haut:
+        verdict = "ignorer"
+    elif not test:
+        verdict = "tester"
+    elif test == "high":
+        verdict = "signer"
+    else:
+        verdict = "ignorer"  # test lu, pas High : hors règle de signature, à valider
+    return verdict, bas, haut, test
+
+
 def academie(donnees, erreurs, cles, maintenant, ajoute):
     """K3 : à l'arrivée d'un rapport du scout (moins de 7 jours, aucune clé `[clé=Académie]` au registre depuis), une ligne
     par prospect, même sous 100 % de jauge. Verdicts d'après la règle de l'utilisateur du 17/11 (seuils à valider) :
@@ -856,17 +872,8 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
         return
     for p in pros:
         pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
-        bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
-        test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
-        if not bas <= taille <= haut:
-            verdict = "ignorer"
-        elif not test:
-            verdict = "tester"
-        elif test == "high":
-            verdict = "signer"
-        else:
-            verdict = "ignorer"  # test lu, pas High : hors règle de signature, à valider
-        ps = f"{_fr1(p['ps_mid'])}" if p.get("ps_mid") not in (None, "") else "—"
+        verdict, bas, haut, test = verdict_prospect(p)
+        ps =f"{_fr1(p['ps_mid'])}" if p.get("ps_mid") not in (None, "") else "—"
         faible, meilleur = (_fr1(postes[pos][0]), _fr1(postes[pos][1])) if pos in postes else ("—", "—")
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({pos}, {age} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
         ajoute(None, 2, f"{tete} : {verdict}",

@@ -125,6 +125,6 @@ etat_jour:
     coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
     amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui, libelle: "match amical" }   # jamais d'aperçu ni d'export avant le match
   evenements:
-    academie:     { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide] }
+    academie:     { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
     enchere:      { etats: [police, fin, resultat] }

@@ -430,8 +430,22 @@ def cas_deux_amicaux_meme_jour():
     yield "deux amicaux le même jour : le second (suffixe adversaire) est retrouvé", b is not None and b[1].name == "2026-11-17-tactique-amical-bg-bangers.md"
 
 
+def cas_academie_decision():
+    """17/11 : rapport du 12/11 non décidé, 5 jours après : une ligne « décision attendue : tester N prospects (N × 25 000) »."""
+    cols = ["rapport_paris", "slot", "name", "position", "age", "tsp_min", "tsp_max", "ps_mid", "height_cm"]
+    pros = [("2026-11-12T09:00:01", 0, "P1", "PF", 17, 260, 420, 42.8, 197), ("2026-11-12T09:00:01", 1, "P2", "PF", 16, 219, 379, 37.8, 198),
+            ("2026-11-12T09:00:01", 2, "P3", "SF", 16, 236, 396, 39.4, 190), ("2026-11-12T09:00:01", 3, "P4", "PF", 16, 200, 300, 30, 150)]
+    S = {"analyste": None, "cles": [], "cibles": [], "police": ""}
+    d = donnees(prospects=(cols, pros))
+    ls = [l for l in ej.lignes(ej.construire(d, S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]]
+    yield "académie : une seule ligne pour le rapport du 12/11 non décidé", len(ls) == 1 and ls[0]["prochain"] == "decide"
+    yield "académie : décision attendue chiffrée (3 tests, 75 000 ; le prospect hors taille est ignoré)", \
+        ls and "décision attendue : tester 3 prospects (75 000)" in ls[0]["consigne"]
+    yield "académie : sans prospects, la consigne générique reste", "décide pour chaque prospect" in [l for l in ej.lignes(ej.construire(donnees(), S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]][0]["consigne"]
+
+
 CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
-       cas_construire, cas_deux_amicaux_meme_jour, cas_rejeu, cas_branchement]
+       cas_construire, cas_deux_amicaux_meme_jour, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

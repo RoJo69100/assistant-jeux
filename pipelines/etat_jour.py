@@ -116,6 +116,10 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
     if etat == "rapport_exporte":
         return None, f"exporte la page Académie (rapport du {_jj(ev['quand'])})", True
     if etat == "decide":
+        n = ev.get("tests")
+        if n:  # 17/11 : décision attendue chiffrée (verdict « tester » de aujourdhui.verdict_prospect, coût de la config)
+            cout = f"{n * cfg['evenements']['academie']['cout_test']:,}".replace(",", " ")
+            return None, f"décision attendue : tester {n} prospect{'s' if n > 1 else ''} ({cout}), rapport du {_jj(ev['quand'])}", True
         return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
     if etat == "traitement_attendu":
         return ev["quand"], f"rien avant le traitement de l'entraînement ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
@@ -193,7 +197,8 @@ def dans_horizon(ev, cfg, maintenant) -> bool:
     if r >= maintenant:
         return True
     # passé : un match garde sa ligne `jours_non_analyses` jours, un autre événement `horizon_h` heures, tant qu'il reste une transition
-    recul = dt.timedelta(days=cfg["jours_non_analyses"]) if ev["type"] == "match" else dt.timedelta(hours=cfg["horizon_h"])
+    jours = cfg["jours_non_analyses"] if ev["type"] == "match" else cfg["evenements"].get(ev["type"], {}).get("jours_decision")
+    recul = dt.timedelta(days=jours) if jours else dt.timedelta(hours=cfg["horizon_h"])  # 17/11 : un rapport d'académie non décidé reste 7 jours
     return r >= maintenant - recul and etat_evenement(ev, cfg, maintenant)["prochain"] is not None
 
 
@@ -408,6 +413,15 @@ def lire_fiche(base, jour, ev):
     return fiche
 
 
+def _tests_academie(donnees):
+    """Nombre de prospects du rapport au verdict « tester » (gold.bv_academy_prospects) ; None si une taille ou un poste manque."""
+    import aujourdhui as auj
+    pros = _rows(donnees, "prospects")
+    if not pros or any(p.get("position") not in auj.PLAGE_TAILLE or p.get("height_cm") in (None, "") for p in pros):
+        return None
+    return sum(auj.verdict_prospect(p)[0] == "tester" for p in pros)
+
+
 def construire(donnees, S, base, jour, maintenant, cfg) -> list:
     """Événements du jour depuis les lignes lues (`donnees`, format de aujourdhui.lignes_de), les sources (S : analyste, cles,
     cibles, police) et les briefs de `base` ; les contrôles fiche contre réalité sont appliqués à chaque match."""
@@ -452,7 +466,7 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
         for q in occurrences(c["quand"], maintenant):
             ev = {"type": t, "id": f"{t}-{q:%Y-%m-%d}", "quand": q, "maj_at": None}
             if t == "academie":
-                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()))
+                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=_tests_academie(donnees))
             else:
                 ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()))
             evs.append(ev)
