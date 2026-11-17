@@ -155,7 +155,12 @@ def commit_push(fichiers: list, jour, executer=subprocess.run, branche=None, att
             return True, f"poussé sur {branche}"
         if i < 4:
             attente(2 ** (i + 1))
+    if "403" in f"{r.stderr or ''}{r.stdout or ''}":
+        return False, PUSH_403
     return False, f"git push en échec : {_derniere(r.stderr)}"
+
+
+PUSH_403 = "NON POUSSÉ (403) — les fiches du jour seront perdues à la fin de cette session"
 
 
 # ---- Rejeu du plan ---------------------------------------------------------------------------------------------------------

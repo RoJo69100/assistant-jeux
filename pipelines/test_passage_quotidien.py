@@ -4,6 +4,7 @@ import datetime as dt
 import subprocess
 import sys
 import tempfile
+import types
 from pathlib import Path
 
 ICI = Path(__file__).resolve().parent
@@ -92,6 +93,15 @@ def cas_git():
     run = executeur([0, 0])  # add, diff (rien)
     ok, msg = pq.commit_push(["x"], JOUR, executer=run, branche="b", attente=lambda s: None)
     yield "git : rien à commiter → pas d'échec, pas de push", ok and not any(c[:2] == ["git", "push"] for c in run.appels)
+
+    def refus(c, **kw):  # add, diff (changements), commit : ok ; chaque push : 403
+        push = c[:2] == ["git", "push"]
+        code = 1 if push or c[:3] == ["git", "diff", "--cached"] else 0
+        err = "remote: Permission denied\nfatal: unable to access 'https://github.com/x/y/': The requested URL returned error: 403" if push else ""
+        return types.SimpleNamespace(returncode=code, stdout="", stderr=err)
+    ok, msg = pq.commit_push(["x"], JOUR, executer=refus, branche="b", attente=lambda s: None)
+    yield "git : push refusé (403) → « NON POUSSÉ (403) — les fiches du jour seront perdues »", not ok \
+        and msg == "NON POUSSÉ (403) — les fiches du jour seront perdues à la fin de cette session"
 
 
 CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git]
