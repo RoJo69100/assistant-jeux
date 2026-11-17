@@ -621,6 +621,37 @@ def cas_bloc_4():
     yield "test_aucune_annonce_24h", "aucune annonce du Marché ne se termine dans les 24 h (export du 10/11, 20 annonces)" in vide \
         and "donnée manquante" not in vide.split("Qui vendre")[0]
 
+    # 17/11, règle générale : donnée périmée = « inconnu », jamais « aucun »
+    def etat_marche(age):
+        return T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], [(3, "Marché (enchères)", "x", "2026-11-13T10:00:00", age, "s")])
+    vieux = "\n".join(qfb.bloc_4(donnees_4(annonces_24h=T(ANN_COLS, []), **{"gold.bv_exports_state": etat_marche(100)}), {}, 300000, 1.0))
+    yield "test_perime_100h_inconnu", "inconnu : export de 100 h, à refaire" in vieux and "aucune annonce du Marché" not in vieux \
+        and "Offres à regarder" not in vieux
+    frais2 = "\n".join(qfb.bloc_4(donnees_4(annonces_24h=T(ANN_COLS, []), **{"gold.bv_exports_state": etat_marche(2)}), {}, 300000, 1.0))
+    yield "test_frais_2h_aucune", "aucune annonce du Marché ne se termine dans les 24 h" in frais2 and "inconnu" not in frais2.split("Qui vendre")[0]
+    yield "test_conclusion_vide_historique", auj.conclusion_vide("aucune ligne", {"historique_global": T(["derniere_paris"], [("2026-11-13T10:00:00",)])},
+                                                                 auj.HISTORIQUE_GLOBAL, dt.datetime(2026, 11, 17, 14, 0)) == "inconnu : export de 100 h, à refaire"
+
+    # 17/11 : 5 offres les moins chères par rapport à la médiane de leur case, sans seuil ; case < 3 ventes = « pas de case »
+    ACT_COLS = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris"]
+    six = T(ACT_COLS, [("o1", "Paul Aubert", "PG", 23, 47.0, 50000, "2026-11-12T09:00:00"),
+                       ("o2", "Luc Brun", "SG", 24, 46.0, 120000, "2026-11-12T10:00:00"),
+                       ("o3", "Yan Dole", "C", 25, 47.0, 60000, "2026-11-12T12:00:00"),
+                       ("o4", "Marc Cler", "PF", 22, 36.0, 500, "2026-11-12T11:00:00"),
+                       ("o5", "Eli Ferrand", "SF", 31, 52.0, 1000, "2026-11-12T13:00:00"),
+                       ("o6", "Tom Gay", "PG", 24, 45.5, 10000, "2026-11-12T14:00:00")])
+    cases_45 = {(int(float(r[0])), r[1]): r for r in PRIX[1]}
+    of = "\n".join(qfb.bloc_4(donnees_4(annonces_actives=six), {}, 300000, 1.0))
+    bloc_of = of.split("Offres à regarder")[1].split("Qui vendre")[0] if "Offres à regarder" in of else ""
+    rangs = [l.split("|")[1].strip() for l in bloc_of.splitlines() if l.startswith("| ") and "Nom" not in l]
+    yield "test_offres_classees_par_rapport", rangs == ["Tom Gay", "Paul Aubert", "Yan Dole", "Luc Brun"] if (45, "22-25") in cases_45 else bool(rangs)
+    yield "test_offres_colonnes_sans_verdict", all(x in bloc_of for x in ("Prix / médiane", "Médiane de la case", "Fin", "12/11 14:00")) \
+        and "bonne offre" not in bloc_of and "achetable" not in bloc_of.lower()
+    yield "test_offres_pas_de_case", "pas de case : 2 annonce(s)" in bloc_of and "Marc Cler" not in rangs and "Eli Ferrand" not in rangs
+    sans_prix = T(["auction_id", "name", "position", "age", "ps", "ends_paris"], [("o1", "Paul Aubert", "PG", 23, 47.0, "2026-11-12T09:00:00")])
+    yield "test_offres_colonne_manquante", "la vue du Marché n'a pas le prix actuel" in "\n".join(
+        qfb.bloc_4(donnees_4(annonces_actives=sans_prix), {}, 300000, 1.0))
+
     # déduplication entre les pages
     doublon = T(ANN_COLS, list(ANN[1][:1]) * 2 + [ANN[1][1]])
     td = "\n".join(qfb.bloc_4(donnees_4(annonces_24h=doublon), {}, 300000, 1.0))

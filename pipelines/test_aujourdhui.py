@@ -261,8 +261,11 @@ def cas():
         ("Yuma Fujita", "2026-11-08T02:51:00+00:00", "San Jacobo", True)])})
     yield "PB7 acheté par mon équipe : dit « acheté »", "Fujita (C) terminée le 08/11 : acheté (résultat lu" in auj.rendre(
         auj.plan(achete, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
-    yield "PB7 aucune ligne en base : le dit, sans inventer", "aucune ligne (export Historique global des transferts)" in auj.rendre(
-        auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}), {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    hg = lambda h: {"historique_global": (["derniere_paris"], [((TOT - dt.timedelta(hours=h)).isoformat(),)])}  # noqa: E731
+    yield "PB7 aucune ligne en base, historique frais : le dit, sans inventer", "aucune ligne (export Historique global des transferts)" in auj.rendre(
+        auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}, **hg(2)), {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
+    yield "PB7 aucune ligne en base, historique de 100 h : inconnu, jamais « aucune »", "inconnu : export de 100 h, à refaire" in auj.rendre(
+        auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}, **hg(100)), {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
     yield "PB7 vue illisible : « il me manque transferts_recents »", "il me manque transferts_recents" in auj.rendre(
         auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": None}), {"transferts_recents": "boum"},
                  JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
@@ -1075,7 +1078,7 @@ def cas_marche_5i():
     pf = plan5i([affaires[4]], [])
     yield "X2 absent : toutes finies, aucune ligne, la demi-ligne Garder dit le Marché du 05/11", \
         not [a for a in pf["actions"] if a[2].startswith("Enchère maximale")] \
-        and any("aucune affaire fiable ouverte dans le Marché du 05/11" in g for g in pf["garder"])
+        and any("transferts : affaires fiables inconnues : export de 30 h, à refaire" in g for g in pf["garder"])  # 17/11 : périmé = inconnu
     # X3 : joueur de besoin au poste PG (note ≥ 57,2), capacité 279 666 (solde, aucune enchère ouverte)
     cands = [("Dupuis", "PG", 58.0, 1, True, 100000, 100000, "2026-11-06T21:00:00", 150000),
              ("Borne", "PG", 58.5, 1, True, 200000, 200000, "2026-11-07T10:00:00", 400000),

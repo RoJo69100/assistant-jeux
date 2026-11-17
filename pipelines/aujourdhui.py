@@ -154,6 +154,10 @@ REQUETES = {
                     "c.gain_vs_my_second, c.enters_top8 from gold.bv_market_candidates c "
                     "where c.ends_paris > now() at time zone 'Europe/Paris' "
                     "and c.ends_paris <= (now() at time zone 'Europe/Paris') + interval '24 hours' order by c.auction_id, c.ends_paris",
+    # 17/11 : toutes les annonces encore ouvertes (dédupliquées par auction_id), pour les 5 offres les moins chères par rapport à leur case
+    "annonces_actives": "select distinct on (c.auction_id) c.auction_id, c.name, c.position, c.age, c.ps, "
+                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris from gold.bv_market_candidates c "
+                        "where c.ends_paris > now() at time zone 'Europe/Paris' order by c.auction_id, c.ends_paris",
     # 5n T4 : nombre d'annonces du dernier export du Marché (phrase « aucune annonce ne se termine dans les 24 h »)
     "annonces_export": "select count(*) as n from gold.bv_market_candidates",
     # 5n T4 : mes joueurs vendables (gold.bv_sell_candidates). Les remplaçants viennent de la requête « gold.bv_sell_replacement » (déjà lue
@@ -231,6 +235,47 @@ ECHEANCE_CONSEIL = "Conseil {id} à juger, échéance le {jj}"  # phase 0 : « a
 JOUR_RAPPORT_ACADEMIE = 3  # jeudi (weekday) : rapport du scout, 09:00 heure de la ligue (basketvibe-academie, 01-cycle-hebdomadaire.md l. 2)
 PRIX_NON_SIGNIFICATIF = 1  # phase 0 : un prix de départ ≤ 1 ne permet pas de calculer une marge de revente
 MARCHE_FRAIS_H = 24  # phase 0 : page du Marché « fraîche » (même fenêtre que le compte des captures du bloc 0, 24 h)
+HISTORIQUE_GLOBAL = "Historique global des transferts"
+
+
+def seuil_peremption_h(ecran, cfg=None):
+    """`perime_h` de l'écran dans `exports_periodiques` de docs/attentes/jeux/basketvibe.yaml (Marché et historique : 24 h) ; None si absent."""
+    try:
+        cfg = cfg if cfg is not None else etat_jour.charger_config()
+    except Exception:
+        return None
+    return next((float(p["perime_h"]) for p in cfg.get("exports_periodiques", []) if p["ecran"] == ecran), None)
+
+
+def age_export_h(donnees, ecran, maintenant=None):
+    """Âge en heures du dernier export de l'écran : gold.bv_exports_state (age_h) ou, pour l'historique global, la dernière page
+    (requête `historique_global` d'etat_jour). None si illisible."""
+    if ecran == HISTORIQUE_GLOBAL:
+        r = next(iter(lignes_de(donnees, "historique_global")), None)
+        if not r or not r.get("derniere_paris"):
+            return None
+        return ((maintenant or heure_paris_naive()) - en_heure(r["derniere_paris"])).total_seconds() / 3600
+    r = next((r for r in lignes_de(donnees, "gold.bv_exports_state") if r.get("ecran") == ecran), None)
+    return None if r is None or r.get("age_h") in (None, "") else float(r["age_h"])
+
+
+def inconnu_si_perime(donnees, ecran, maintenant=None, seuil=None):
+    """Règle du 17/11 : une conclusion « aucun / aucune / 0 » tirée d'un export n'est permise que si l'export a au plus son seuil de
+    péremption. Renvoie None si l'export est frais, sinon le texte « inconnu : export de X h, à refaire » (ou âge inconnu)."""
+    age = age_export_h(donnees, ecran, maintenant)
+    seuil = seuil if seuil is not None else seuil_peremption_h(ecran)
+    if age is None:
+        return f"inconnu : âge de l'export {ecran} illisible, à refaire"
+    if seuil is not None and age > seuil:
+        return f"inconnu : export de {int(age)} h, à refaire"
+    return None
+
+
+def conclusion_vide(texte, donnees, ecran, maintenant=None, seuil=None) -> str:
+    """`texte` (« aucun… ») si l'export de l'écran est frais, sinon « inconnu : export de X h, à refaire »."""
+    return inconnu_si_perime(donnees, ecran, maintenant, seuil) or texte
+
+
 PARALLELE = 8  # requêtes simultanées (K1, étape 5e) : elles sont indépendantes ; l'ordre du résultat reste celui de REQUETES
 
 
@@ -396,7 +441,7 @@ def regrouper(reglages):
     return " ; ".join(f"{r} : {', '.join(n)}" for r, n in par.items())
 
 
-def enchere_terminee(c, fin, donnees, erreurs):
+def enchere_terminee(c, fin, donnees, erreurs, maintenant=None):
     """Ligne d'une décision d'achat dont l'enchère est finie : résultat lu dans silver.bv_transfers (PB7), jamais écrit."""
     titre = f"Enchère sur {c['nom']} ({c['poste']}) terminée le {fin:%d/%m}"
     m = manque(donnees, erreurs, "transferts_recents", "Historique global des transferts")
@@ -409,7 +454,8 @@ def enchere_terminee(c, fin, donnees, erreurs):
             if quand >= fin - dt.timedelta(days=1):
                 trouves.append((abs((quand - fin).total_seconds()), r))
     if not trouves:
-        return f"{titre} : résultat lu dans silver.bv_transfers : aucune ligne (export Historique global des transferts)"
+        return f"{titre} : " + conclusion_vide("résultat lu dans silver.bv_transfers : aucune ligne (export Historique global des transferts)",
+                                               donnees, HISTORIQUE_GLOBAL, maintenant)
     r = min(trouves, key=lambda x: x[0])[1]
     verdict = "acheté" if vrai(r["achete"]) else f"non acheté, parti à {r['to_team']}"
     return f"{titre} : {verdict} (résultat lu dans silver.bv_transfers)"
@@ -1014,7 +1060,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         pol = "police faite" if c["police"] else "police d'abord (aucune trace de police du jour)"
         fin = c["fin"]
         if fin is not None and fin <= maintenant:  # enchère finie : plus une action, le résultat se lit en base (PB7)
-            infos.append(enchere_terminee(c, fin, donnees, erreurs))
+            infos.append(enchere_terminee(c, fin, donnees, erreurs, maintenant))
             continue
         detail = (f"fin {jour_fr(fin.date())} {fin:%H:%M}" if fin
                   else "fin d'enchère absente de la base : export Marché (enchères)")
@@ -1201,7 +1247,8 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                                                       else "plafond de besoin non calculé (aucune référence de prix)")
                     for r, prix, pl in offres)
             else:
-                tete += f" : aucune annonce au poste {cible['position']} {dans_marche} (annonces encore ouvertes de l'export)"
+                tete += " : " + conclusion_vide(f"aucune annonce au poste {cible['position']} {dans_marche} (annonces encore ouvertes de l'export)",
+                                                donnees, "Marché (enchères)", maintenant)
             fins = [f for f in (fin_de(r) for r, _, _ in offres) if f]
             detail = f"poste {cible['position']} : profondeur {cible['depth']}, PS moyen {cible['ps_avg']}"
             if offres:
@@ -1266,9 +1313,10 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    + f" ; {fin_txt(fin)} ; marge de revente p25 {montant(r['resale_margin_p25'])} ; {page} ; {MISE}",
                    "gold.bv_market_bargains")
         if not bonnes:
-            garder.append(f"transferts : aucune affaire fiable ouverte {dans_marche} qui tienne dans le solde moins les enchères encore ouvertes "
-                          "(capacité restante"
-                          + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")")
+            garder.append("transferts : " + conclusion_vide(
+                f"aucune affaire fiable ouverte {dans_marche} qui tienne dans le solde moins les enchères encore ouvertes (capacité restante"
+                + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")",
+                donnees, "Marché (enchères)", maintenant).replace("inconnu :", "affaires fiables inconnues :", 1))
     m = manque(donnees, erreurs, "gold.bv_personnel_status", "Personnel")
     pers = lignes_de(donnees, "gold.bv_personnel_status")
     if m:

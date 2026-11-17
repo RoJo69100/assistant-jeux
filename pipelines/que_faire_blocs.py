@@ -517,7 +517,8 @@ def _table_annonces(donnees, capacite, actions=()) -> list:
         quand = _export_marche(donnees)
         n = next((int(float(r["n"])) for r in auj.lignes_de(donnees, "annonces_export")), None)
         precis = ", ".join(x for x in ((f"export du {quand:%d/%m}" if quand else ""), (f"{n} annonces" if n is not None else "")) if x)
-        return titre + ["aucune annonce du Marché ne se termine dans les 24 h" + (f" ({precis})" if precis else ""), ""]
+        return titre + [auj.conclusion_vide("aucune annonce du Marché ne se termine dans les 24 h" + (f" ({precis})" if precis else ""),
+                                            donnees, MARCHE), ""]
     cases = _cases(donnees)
     decides = plafonds_des_actions(actions)
     lignes = titre + ["| Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |",
@@ -531,6 +532,52 @@ def _table_annonces(donnees, capacite, actions=()) -> list:
                       f"{auj.montant(case['median']) if case else '—'} | {auj.montant(plafond) if plafond is not None else '—'} | "
                       f"dans {_virg(r['heures'])} h | {('+' if float(gain) > 0 else '') + _virg(gain) if gain is not None else '—'} | {verdict} |")
     return lignes + [""]
+
+
+MARCHE = "Marché (enchères)"
+CASE_MIN_OFFRES = 3  # consigne du 17/11 : une case à moins de 3 ventes ne classe pas (« pas de case »)
+N_OFFRES = 5
+
+
+def _offres(donnees) -> list:
+    """5 annonces actives les moins chères par rapport à la médiane de leur case (âge × palier de note). Aucun seuil ni verdict :
+    l'utilisateur juge. Appelée seulement quand l'export du Marché est frais (bloc_4)."""
+    titre = ["**Offres à regarder (les 5 annonces actives les moins chères par rapport à la médiane de leur case ; aucun seuil, à toi de juger)**", ""]
+    vues, rows = set(), []
+    for r in auj.lignes_de(donnees, "annonces_actives"):
+        if r["auction_id"] not in vues:
+            vues.add(r["auction_id"])
+            rows.append(r)
+    if not rows:
+        return titre + ["aucune annonce active dans l'export du Marché", ""]
+    manquent = [lib for col, lib in (("price_now", "le prix actuel"), ("ps", "la note")) if all(r.get(col) is None for r in rows)]
+    if manquent:
+        return titre + [f"la vue du Marché n'a pas {' ni '.join(manquent)} : classement impossible", ""]
+    cases = _cases(donnees)
+    classees, sans_case, incompletes = [], 0, 0
+    for r in rows:
+        if r.get("price_now") is None or r.get("ps") is None or r.get("age") is None:
+            incompletes += 1
+            continue
+        case = cases.get((palier_note(r["ps"]), tranche_age(r["age"])))
+        if case is None or int(float(case["n"])) < CASE_MIN_OFFRES or float(case["median"]) <= 0:
+            sans_case += 1
+            continue
+        classees.append((float(r["price_now"]) / float(case["median"]), r, case))
+    classees.sort(key=lambda x: x[0])
+    lignes = list(titre)
+    if classees:
+        lignes += ["| Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Prix / médiane | Fin |", "|---|---|---|---|---|---|---|---|"]
+        for rap, r, case in classees[:N_OFFRES]:
+            fin = f"{auj.en_heure(r['ends_paris']):%d/%m %H:%M}" if r.get("ends_paris") else "inconnue"
+            lignes.append(f"| {r['name']} | {r['position']} | {int(float(r['age']))} | {_virg(r['ps'])} | {auj.montant(r['price_now'])} | "
+                          f"{auj.montant(case['median'])} | {_virg(rap, 2)} | {fin} |")
+        lignes.append("")
+    if sans_case:
+        lignes += [f"pas de case : {sans_case} annonce(s) dont la case a moins de {CASE_MIN_OFFRES} ventes, non classée(s)", ""]
+    if incompletes:
+        lignes += [f"{incompletes} annonce(s) sans prix actuel, note ou âge dans la vue du Marché, non classée(s)", ""]
+    return lignes
 
 
 def _verdict_vente(r, tolerance):
@@ -585,6 +632,8 @@ def bloc_4(donnees, erreurs, capacite, tolerance, actions=(), police="") -> list
     sortie = []
     for noms, fabrique in ((("prix_cases",), lambda: _table_prix(donnees)),
                            (("annonces_24h",), lambda: _table_annonces(donnees, capacite, actions)),
+                           (("annonces_actives",) if auj.inconnu_si_perime(donnees, MARCHE) is None else (),
+                            lambda: _offres(donnees) if auj.inconnu_si_perime(donnees, MARCHE) is None else []),
                            (("vendre", "gold.bv_sell_replacement"), lambda: _table_vente(donnees, tolerance, police))):
         illisibles = [n for n in noms if donnees.get(n) in (None, "rejeu")]
         sortie += [vue_illisible(n) for n in illisibles] + [""] if illisibles else fabrique()
@@ -920,7 +969,7 @@ def bloc_10(actions, garder) -> list:
     """Bloc 10 : propositions d'achat, de vente et d'enchère qui attendent l'accord écrit, puis les règles « à valider » du jour."""
     affichables, _ = separer(list(actions))
     sortie = [f"- à valider par écrit : {sans_heure(a[2])}" for a in affichables
-              if PROPOSITION.match(a[2]) and "aucune annonce" not in a[2]]  # « Acheter un X : aucune annonce » est un besoin, rien à valider
+              if PROPOSITION.match(a[2]) and "aucune annonce" not in a[2] and " : inconnu : " not in a[2]]  # « Acheter un X : aucune annonce » est un besoin, rien à valider
     sortie += [f"- {g}" for g in garder if "à valider" in g or "non tranchée" in g]
     return sortie or ["- aucune décision n'attend ton accord écrit"]
 
