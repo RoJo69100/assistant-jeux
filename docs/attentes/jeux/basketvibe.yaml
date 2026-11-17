@@ -135,3 +135,20 @@ etat_jour:
     academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
     enchere:      { etats: [police, fin, resultat] }
+  # P3 (17/11) : état de l'événement → agent à lancer → sortie attendue. UNE table, lue par etat_jour.agents_a_lancer ; une ligne
+  # s'applique si chacune de ses clés type / genre / prochain égale celle de l'état. agent null = aucun agent (action manuelle).
+  # sortie : relative à outputs/basketvibe/ ; champs {jour} (AAAA-MM-JJ du passage), {cle} (adversaire ou objet + date), {titre}.
+  # Une sortie déjà présente = pas de relance. avant : commande à réussir avant le lancement (règle 6 : dossier puis police).
+  agents:
+    - { type: match, genre: ligue,  prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-{cle}.md",        consigne: "première ligne du fichier : « {titre} »" }
+    - { type: match, genre: coupe,  prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-coupe-{cle}.md",  consigne: "première ligne du fichier : « {titre} »" }
+    - { type: match, genre: amical, prochain: fiche,   agent: tactique,  sortie: "briefs/{jour}-tactique-amical-{cle}.md", consigne: "première ligne du fichier : « {titre} »" }
+    - { type: match, genre: ligue,  prochain: analyse, agent: analyste,  sortie: "briefs/{jour}-analyste-{cle}.md" }
+    - { type: match, genre: coupe,  prochain: analyse, agent: analyste,  sortie: "briefs/{jour}-analyste-{cle}.md" }
+    - { type: match,                prochain: juge,    agent: null }      # python -I pipelines/evaluer_decisions.py, pas d'agent
+    - { type: academie,             prochain: decide,  agent: academie,  sortie: "briefs/{jour}-academie-{cle}.md" }
+    - { type: entrainement,         prochain: saisi,   agent: entrainement, sortie: "briefs/{jour}-entrainement-{cle}.md" }
+    - { type: enchere,              prochain: police,  agent: police,    sortie: "police-{jour}.md", avant: "python -I pipelines/dossier.py basketvibe achat" }
+  agents_plafond: 3                       # agents d'analyse par passage (CLAUDE.md), hors ceux de agents_hors_plafond
+  agents_hors_plafond: [analyste, police]
+  agent_timeout_min: 15

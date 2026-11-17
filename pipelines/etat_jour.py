@@ -176,7 +176,28 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
         prio = min(3, prio + 1)
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
-            "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts}
+            "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
+            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev)}
+
+
+def _slug(s) -> str:
+    import re
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+
+
+def _cle_fichier(ev) -> str:
+    """Morceau de nom de fichier propre à l'événement (P3) : adversaire ou objet, puis date (jj-mm)."""
+    d = ev.get("jour") or ev.get("quand") or ev.get("fin")
+    return "-".join(x for x in (_slug(ev.get("adversaire") or ev.get("nom") or ev["type"]), f"{d:%d-%m}" if d else "") if x)
+
+
+def _titre(ev) -> str:
+    """Première ligne attendue d'une fiche de match (contrat de que_faire_blocs.contrat_brief) ; nom de l'événement sinon."""
+    if ev["type"] == "match":
+        return f"{ev['genre'].capitalize()} contre {ev['adversaire']} ({_jj(ev.get('jour'))})"
+    return _nom(ev)
 
 
 def _repere(ev):
@@ -344,6 +365,49 @@ def exports_periodiques(donnees, cfg, maintenant) -> list:
         res.append({"id": f"export-{p['ecran']}", "type": "export_periodique", "evenement": p["ecran"], "ecran": p["ecran"], "etat": None,
                     "prochain": "export_periodique", "rates": [], "echeance": None, "consigne": f"exporte {p['libelle']} — {quoi}", "age_h": None,
                     "priorite": 2, "action": True, "defauts": []})
+    return res
+
+
+class _Champs(dict):
+    def __missing__(self, k):
+        return "{" + k + "}"
+
+
+def agents_a_lancer(etats, cfg=None, base=None, jour=None, dossier_agents=None) -> list:
+    """P3 (17/11) : agents à lancer pour les états du jour, lus dans la table `agents` de la config (état → agent → sortie).
+    Une ligne d'état (action vraie) prend la première ligne de table dont chaque clé type / genre / prochain lui est égale.
+    Agent null : rien. Résultat, une entrée par lancement prévu : {agent, id, evenement, sortie (relative à `base`), consigne,
+    avant, statut, raison} ; statut « a_lancer », « deja_fait » (sortie présente et non vide : pas de relance) ou « refus »
+    (agent absent de .claude/agents, plafond d'agents d'analyse du passage atteint), avec sa raison."""
+    cfg = cfg or charger_config()
+    base = Path(base) if base else RACINE / "outputs" / "basketvibe"
+    if jour is None:
+        from heure_paris import paris
+        jour = paris().date()
+    dossier_agents = Path(dossier_agents) if dossier_agents else RACINE / ".claude" / "agents"
+    hors = set(cfg.get("agents_hors_plafond", []))
+    plafond, n, res = cfg.get("agents_plafond"), 0, []
+    for l in etats:
+        if not l.get("action"):
+            continue
+        r = next((r for r in cfg.get("agents", []) if all(l.get(k) == r[k] for k in ("type", "genre", "prochain") if k in r)), None)
+        if not r or not r.get("agent"):
+            continue
+        champs = _Champs(l, jour=jour.isoformat())
+        sortie = r["sortie"].format_map(champs)
+        e = {"agent": r["agent"], "id": l.get("id"), "evenement": l.get("evenement"), "sortie": sortie,
+             "consigne": " ; ".join(x for x in (l.get("consigne"), r.get("consigne", "").format_map(champs)) if x),
+             "avant": r.get("avant"), "statut": "a_lancer", "raison": None}
+        f = base / sortie
+        if f.is_file() and f.stat().st_size > 0:
+            e.update(statut="deja_fait", raison=f"sortie déjà présente ({sortie})")
+        elif not (dossier_agents / f"{r['agent']}.md").is_file():
+            e.update(statut="refus", raison=f"agent {r['agent']} absent de .claude/agents")
+        elif r["agent"] not in hors and plafond is not None and n >= plafond:
+            e.update(statut="refus", raison=f"plafond de {plafond} agents d'analyse par passage atteint")
+        elif r["agent"] not in hors:
+            n += 1
+        res.append(e)
     return res
 
 

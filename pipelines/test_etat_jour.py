@@ -464,7 +464,56 @@ def cas_academie_decision():
     yield "académie : sans prospects, la consigne générique reste", "décide pour chaque prospect" in [l for l in ej.lignes(ej.construire(donnees(), S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]][0]["consigne"]
 
 
-CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def ligne_etat(type_, prochain, genre=None, action=True, **kw):
+    l = {"id": f"{type_}-{genre}-{prochain}", "type": type_, "genre": genre, "prochain": prochain, "action": action,
+         "evenement": f"{type_} test", "consigne": "consigne test", "cle": "adv-a-18-11", "titre": "Ligue contre Adv A (18/11)"}
+    l.update(kw)
+    return l
+
+
+def cas_agents():
+    """P3 (17/11) : table état → agent → sortie (config `agents`), lue par agents_a_lancer ; aucun cas particulier par événement."""
+    import tempfile
+    jour = dt.date(2026, 11, 17)
+    agents_repo = {f.stem for f in (ICI.parent / ".claude" / "agents").glob("*.md")}
+    table = CFG["agents"]
+    yield "agents : la table n'utilise que des agents du dépôt (.claude/agents)", all(r["agent"] in agents_repo for r in table if r.get("agent"))
+    with tempfile.TemporaryDirectory() as tmp:
+        for r in table:
+            l = ligne_etat(r["type"], r["prochain"], r.get("genre") or "ligue")
+            res = ej.agents_a_lancer([l], CFG, tmp, jour)
+            nom = f"{r['type']}/{r.get('genre', '*')}/{r['prochain']}"
+            if not r.get("agent"):
+                yield f"agents : {nom} sans agent défini → aucun lancement", res == []
+                continue
+            attendu = r["sortie"].format(jour=jour.isoformat(), cle="adv-a-18-11")
+            yield f"agents : {nom} → agent {r['agent']}, sortie {attendu}", \
+                len(res) == 1 and res[0]["agent"] == r["agent"] and res[0]["sortie"] == attendu and res[0]["statut"] == "a_lancer"
+        yield "agents : état absent de la table (aperçu) → aucun lancement", ej.agents_a_lancer([ligne_etat("match", "apercu", "ligue")], CFG, tmp, jour) == []
+        yield "agents : ligne d'attente (action fausse) → aucun lancement", ej.agents_a_lancer([ligne_etat("match", "fiche", "ligue", action=False)], CFG, tmp, jour) == []
+        yield "agents : export périodique (sans type de la table) → aucun lancement", \
+            ej.agents_a_lancer([{"type": "export_periodique", "prochain": "export_periodique", "action": True}], CFG, tmp, jour) == []
+        yield "agents : la consigne de la ligne remplit le titre", "« Ligue contre Adv A (18/11) »" in ej.agents_a_lancer([ligne_etat("match", "fiche", "ligue")], CFG, tmp, jour)[0]["consigne"]
+        sortie = Path(tmp) / "briefs" / f"{jour.isoformat()}-tactique-adv-a-18-11.md"
+        sortie.parent.mkdir()
+        sortie.write_text("Ligue contre Adv A (18/11)\n", encoding="utf-8")
+        res = ej.agents_a_lancer([ligne_etat("match", "fiche", "ligue")], CFG, tmp, jour)
+        yield "agents : sortie déjà présente → pas de relance", len(res) == 1 and res[0]["statut"] == "deja_fait"
+        sortie.write_text("", encoding="utf-8")
+        yield "agents : sortie vide → relance", ej.agents_a_lancer([ligne_etat("match", "fiche", "ligue")], CFG, tmp, jour)[0]["statut"] == "a_lancer"
+        vide = Path(tmp) / "agents"
+        vide.mkdir()
+        res = ej.agents_a_lancer([ligne_etat("match", "analyse", "ligue")], CFG, tmp, jour, dossier_agents=vide)
+        yield "agents : agent absent du dépôt → refus avec raison", res and res[0]["statut"] == "refus" and "analyste" in res[0]["raison"]
+        quatre = [ligne_etat("match", "fiche", "amical", cle=f"adv-{i}") for i in range(4)] + [ligne_etat("match", "analyse", "ligue")]
+        res = ej.agents_a_lancer(quatre, CFG, tmp, jour)
+        yield "agents : plafond de 3 agents d'analyse par passage, analyste hors plafond", \
+            [r["statut"] for r in res] == ["a_lancer"] * 3 + ["refus", "a_lancer"] and "plafond" in res[3]["raison"]
+    l = ej.etat_evenement(match(), CFG, MAINT)
+    yield "agents : l'état d'un match porte genre, clé de fichier et titre", l["genre"] == "ligue" and l["cle"] == "adv-a-18-11" and l["titre"] == "Ligue contre Adv A (18/11)"
+
+
+CAS = [cas_config, cas_agents, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
