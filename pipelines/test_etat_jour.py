@@ -80,6 +80,8 @@ def cas_etats_amical():
     for etat in ({}, {"fiche": FICHE}, {"fiche": FICHE, "ecran": ECRAN}):
         t = ej.etat_evenement(dict(am, **etat), CFG, MAINT)["consigne"].lower()
         yield f"amical avant le match ({sorted(etat)}) : ni aperçu ni export dans la consigne", "aperçu" not in t and "export" not in t
+    yield "amical : libellé « match amical » lu dans la config, jamais « match de amical »", \
+        "match amical contre Adv B" in ej.etat_evenement(am, CFG, MAINT)["consigne"] and "de amical" not in ej.etat_evenement(am, CFG, MAINT)["consigne"]
     jo = dict(am, fiche=FICHE, ecran=ECRAN, joue=True)
     apres = ej.etat_evenement(jo, CFG, dt.datetime(2026, 11, 18, 9, 0))
     yield "amical joué : la page du match est à exporter", apres["prochain"] == "joue" and "export" in apres["consigne"].lower()

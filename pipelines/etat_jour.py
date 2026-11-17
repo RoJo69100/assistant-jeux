@@ -56,7 +56,8 @@ def _match_ok(ev, etat, maintenant, cfg) -> bool:
 
 
 def _match_gabarit(ev, etat, maintenant, cfg):
-    quoi = f"match de {ev['genre']} contre {ev['adversaire']} ({_jj(ev.get('jour'))})"
+    libelle = cfg["matchs"][ev["genre"]].get("libelle", f"match de {ev['genre']}")
+    quoi = f"{libelle} contre {ev['adversaire']} ({_jj(ev.get('jour'))})"
     if etat == "calendrier":
         return None, f"ouvre la page des matchs : le {quoi} n'a pas de date en base", True
     if etat == "apercu":

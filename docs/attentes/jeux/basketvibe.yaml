@@ -123,7 +123,7 @@ etat_jour:
     ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui,
               coup_envoi_defaut: "20:00", verrou_defaut: "19:45" }   # heures de la section rythme quand core.fixture n'en a pas
     coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
-    amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui }   # jamais d'aperçu ni d'export avant le match
+    amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui, libelle: "match amical" }   # jamais d'aperçu ni d'export avant le match
   evenements:
     academie:     { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide] }
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
