@@ -95,6 +95,7 @@ offres:
   minutes_hors_rotation: 6
   max_offres: 3
   max_ventes: 2
+  vente_marge_profit: 0.25   # vente pour profit : (prix attendu − prix payé) / prix payé ≥ 25 % quand le prix payé est connu
 
 # Phase A.5 (17/11) : règle de personnel PROPOSÉE par Claude, à valider par l'utilisateur ; affichée par le plan, jamais comme action.
 # Effets et coûts : skill basketvibe-economie (03-depenses.md, [M§4.3]). Données du 16/11 : gold.bv_personnel_status (semaine du 02/11),

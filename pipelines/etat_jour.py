@@ -476,8 +476,9 @@ def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
 
 def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     """Joueurs à vendre pour profit : hors rotation (moyenne ≤ minutes_hors_rotation sur les matchs_rotation derniers matchs de
-    ligue), écart de force avec son remplaçant ≤ tolérance du bloc 4, prix attendu (médiane de sa case, case ≥ case_min_ventes
-    ventes) ≥ médiane de la case ; jamais « ne pas vendre <nom> » de la police du jour, jamais déjà en vente ; l'effectif reste
+    ligue), écart de force avec son remplaçant ≤ tolérance du bloc 4, prix attendu = médiane de sa case (case ≥ case_min_ventes
+    ventes) ; prix payé connu (gold.bv_transfer_history, bought_by_me) : profit ≥ vente_marge_profit, sinon « prix d'achat
+    inconnu, profit non calculé » et la vente reste proposée ; jamais « ne pas vendre <nom> » de la police du jour, jamais déjà en vente ; l'effectif reste
     ≥ minimum_effectif. Triés par prix attendu décroissant."""
     import aujourdhui as auj
     import que_faire_blocs as qfb
@@ -487,6 +488,7 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     rot = {str(r["player_id"]): r for r in _rows(donnees, "rotation")}
     rempl = {str(r["player_id"]): r for r in _rows(donnees, "gold.bv_sell_replacement")}
     joueurs = _rows(donnees, "vendre")
+    achats = {str(r["player_id"]): float(r["fee"]) for r in _rows(donnees, "prix_achat") if _f(r.get("fee")) and float(r["fee"]) > 0}
     res = []
     for j in joueurs:
         r, m = rempl.get(str(j["player_id"]), {}), rot.get(str(j["player_id"]))
@@ -499,10 +501,15 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
         case = cases.get((qfb.palier_note(j["ps"]), auj.tranche_age(j["age"])))
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
             continue
-        prix = float(case["median"])  # prix attendu = médiane de la case : la condition « ≥ médiane » tient par construction
+        prix = float(case["median"])  # prix attendu = médiane de la case
+        paye = achats.get(str(j["player_id"]))
+        profit = None if paye is None else (prix - paye) / paye
+        if profit is not None and profit < float(o["vente_marge_profit"]):
+            continue
         res.append({"type": "vente", "nom": j["name"], "poste": j["position"], "age": int(float(j["age"])), "note": float(j["ps"]),
                     "prix": prix, "mediane": prix, "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
-                    "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix})
+                    "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix,
+                    "prix_achat": paye, "profit": profit})
     places = max(0, len(joueurs) - int(o["minimum_effectif"]))
     return sorted(res, key=lambda x: -x["gain"])[:places]
 
@@ -518,7 +525,10 @@ def texte_transfert(x, o) -> str:
     if x["type"] == "vente":
         t = (f"vente : {qui}, prix attendu {_m(x['prix'])}, médiane de la case {_m(x['mediane'])} ({x['n_case']} ventes ≥ {o['case_min_ventes']}) ; "
              f"{_virg(x['min_moy'])} min en moyenne sur {o['matchs_rotation']} matchs de ligue (≤ {_virg(o['minutes_hors_rotation'])}), "
-             f"écart avec {x['remplacant']} {_virg(x['ecart'])} (tolérance {_virg(x['tolerance'])}) ; fin : annonce à créer")
+             f"écart avec {x['remplacant']} {_virg(x['ecart'])} (tolérance {_virg(x['tolerance'])}) ; "
+             + ("prix d'achat inconnu, profit non calculé" if x.get("prix_achat") is None else
+                f"profit {x['profit'] * 100:.0f} % sur le prix payé {_m(x['prix_achat'])} (≥ {o['vente_marge_profit'] * 100:.0f} %)")
+             + " ; fin : annonce à créer")
     else:
         if x["type"] == "amélioration":
             seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre plus faible utilisé au poste sur {o['matchs_rotation']} matchs "
@@ -613,6 +623,8 @@ REQUETES = {
     "historique_global": "select max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
                          "where page_type = 'transfers_global-history'",
 }
+REQUETES["prix_achat"] = ("select distinct on (player_id) player_id, fee from gold.bv_transfer_history "
+                          "where bought_by_me and fee is not null order by player_id, sold_on desc")  # prix payé pour nos joueurs achetés
 REQUETES["rotation"] = requete_rotation(charger_offres()["matchs_rotation"])  # phase A : N lu dans le yaml
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 

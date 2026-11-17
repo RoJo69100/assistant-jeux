@@ -625,6 +625,16 @@ def cas_ventes():
     yield "ventes : tolérance inconnue → rien", ej.ventes_du_jour(d, O, None) == []
     yield "ventes : minimum d'effectif de 8 respecté", ej.ventes_du_jour(marche(rotation=rot, **effectif(8)), O, 1.0) == []
     yield "ventes : minutes_hors_rotation du yaml à 1 → Paul Banc (2 min) reste", ej.ventes_du_jour(d, dict(O, minutes_hors_rotation=1), 1.0) == []
+    yield "ventes : vente_marge_profit lue dans le yaml (25 %)", O["vente_marge_profit"] == 0.25
+    yield "ventes : prix d'achat inconnu → proposée, « prix d'achat inconnu, profit non calculé »", v and v[0]["prix_achat"] is None \
+        and "prix d'achat inconnu, profit non calculé" in ej.texte_transfert(v[0], O)
+    achat = lambda fee: dict(d, prix_achat=(["player_id", "fee"], [["p2", fee]]))
+    yield "ventes : prix d'achat connu, profit 20 % < 25 % → pas de vente", ej.ventes_du_jour(achat(50000), O, 1.0) == []
+    v2 = ej.ventes_du_jour(achat(40000), O, 1.0)
+    yield "ventes : prix d'achat connu, profit 50 % ≥ 25 % → vente avec le profit", [x["nom"] for x in v2] == ["Paul Banc"] \
+        and "profit 50 % sur le prix payé 40 000 (≥ 25 %)" in ej.texte_transfert(v2[0], O)
+    yield "ventes : marge du yaml à 0,6 → la vente à 50 % disparaît", ej.ventes_du_jour(achat(40000), dict(O, vente_marge_profit=0.6), 1.0) == []
+    yield "ventes : requête du prix d'achat déclarée", "bought_by_me" in ej.REQUETES["prix_achat"]
     yield "ventes : case_min_ventes du yaml à 3 → case de 2 ventes refusée", ej.ventes_du_jour(
         marche(rotation=rot, cases=[[50, "22-25", 2, 40000, 60000, 80000, "2026-11-10"]], **effectif()), O, 1.0) == []
 
