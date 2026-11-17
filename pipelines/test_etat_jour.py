@@ -416,8 +416,22 @@ def cas_branchement():
     yield "branchement : consignes de la section dans les consignes de session", any("lance l'agent tactique" in c for c in cons)
 
 
+def cas_deux_amicaux_meme_jour():
+    """17/11 : deux amicaux préparés le même jour = deux fichiers `AAAA-MM-JJ-tactique-amical[-adversaire].md`, chacun retrouvé par adversaire."""
+    import tempfile
+    entete = "# Tactique — Ligue J8 contre Adv A (mer. 18/11 20:00, verrou 19:45)"
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        (Path(tmp) / "briefs" / "2026-11-17-tactique-amical.md").write_text(BRIEF.replace(entete, "Amical contre Union Heidelberg (18/11)"), encoding="utf-8")
+        (Path(tmp) / "briefs" / "2026-11-17-tactique-amical-bg-bangers.md").write_text(BRIEF.replace(entete, "Amical contre BG Bangers (19/11)"), encoding="utf-8")
+        a = __import__("composition").brief_pour(tmp, dt.date(2026, 11, 17), "Union Heidelberg", True)
+        b = __import__("composition").brief_pour(tmp, dt.date(2026, 11, 17), "BG Bangers", True)
+    yield "deux amicaux le même jour : le premier est retrouvé par son adversaire", a is not None and a[1].name == "2026-11-17-tactique-amical.md"
+    yield "deux amicaux le même jour : le second (suffixe adversaire) est retrouvé", b is not None and b[1].name == "2026-11-17-tactique-amical-bg-bangers.md"
+
+
 CAS = [cas_config, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
-       cas_construire, cas_rejeu, cas_branchement]
+       cas_construire, cas_deux_amicaux_meme_jour, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

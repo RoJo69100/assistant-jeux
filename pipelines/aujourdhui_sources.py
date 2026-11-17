@@ -14,7 +14,7 @@ import datetime as dt
 import re
 from pathlib import Path
 
-BRIEF = re.compile(r"^(\d{4}-\d{2}-\d{2})-tactique(-amical|-coupe)?\.md$")  # R8 : la coupe a son fichier
+BRIEF = re.compile(r"^(\d{4}-\d{2}-\d{2})-tactique(-amical|-coupe)?(?:-[a-z0-9]+)*\.md$")  # R8 : la coupe a son fichier ; 17/11 : suffixe adversaire (deux amicaux le même jour)
 SEUIL_VIEUX = 3  # jours : un brief plus ancien pour un match du jour est signalé (skill, étape 3)
 JOURS = ["lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim."]
 CLAUSE = re.compile(r"([A-Za-zÉé]+\.?\s?\d)\s+pour\s+(.+?)(?=,\s*[A-Za-zÉé]+\.?\s?\d\s+pour|\s*$)")
