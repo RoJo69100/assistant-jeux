@@ -97,18 +97,24 @@ offres:
   max_ventes: 2
   vente_marge_profit: 0.25   # vente pour profit : (prix attendu − prix payé) / prix payé ≥ 25 % quand le prix payé est connu
 
-# Phase A.5 (17/11) : règle de personnel PROPOSÉE par Claude, à valider par l'utilisateur ; affichée par le plan, jamais comme action.
+# Phase A.5 (17/11) : règle de personnel DÉCIDÉE par Claude le 17/11, contestable par l'utilisateur ; le plan n'affiche une ligne
+# Personnel que si gold.bv_personnel_status s'en écarte (etat_jour.texte_personnel).
 # Effets et coûts : skill basketvibe-economie (03-depenses.md, [M§4.3]). Données du 16/11 : gold.bv_personnel_status (semaine du 02/11),
 # gold.bv_finance_health (personnel 60 000 / semaine, recettes récurrentes 557 206 / semaine, popularité 0,66), silver.bv_match_events
 # (36 blessures en base).
+# Mesures du 17/11 (17:05, Paris) : forme moyenne des 10 joueurs utilisés sur les 4 derniers matchs de ligue (gold.bv_roster_now,
+# gold.bv_match_player_lines) = 7,2 (min 5, max 9) < 8 → psychologues 2. Blessures de NOTRE équipe cette saison : 3 (3 joueurs de
+# l'effectif actuel, silver.bv_match_events) ; jours perdus non mesurables (aucune date de retour historisée ; gold.bv_blessures_match
+# et gold.bv_roster_now : 0 blessé aujourd'hui).
 personnel_propose:
-  statut: proposée
+  statut: "décidée par Claude le 17/11, contestable par l'utilisateur"
+  regle_psychologue: { mesure: forme moyenne des joueurs utilisés sur les 4 derniers matchs de ligue, seuil: 8, si_atteint: 0, sinon: 2, mesure_17_11: 7.2 }
   plafond_semaine: 85000
   roles:
     - { role: médecin,          garder: 2, cout_unitaire: 10000, raison: "−25 % de durée de blessure chacun ; 36 blessures en base, en ligue seulement" }
     - { role: kinésithérapeute, garder: 4, cout_unitaire: 5000,  raison: "−12,5 % de risque chacun, compté au coup d'envoi ; le moins cher par effet" }
-    - { role: psychologue,      garder: 2, cout_unitaire: 10000, raison: "+5 pts vers la hausse de forme du dimanche chacun ; la forme pèse sur chaque match" }
-    - { role: marketing,        garder: 0, cout_unitaire: 12500, raison: "−1 pt de popularité perdue par défaite à domicile ; 2 embauches (25 000) seulement après 2 défaites à domicile de suite en ligue" }
+    - { role: psychologue,      garder: 2, cout_unitaire: 10000, raison: "forme moyenne 7,2 < 8 sur les 4 derniers matchs de ligue (17/11) ; +5 pts vers la hausse de forme du dimanche chacun" }
+    - { role: marketing,        garder: 0, cout_unitaire: 12500, raison: "1 % de popularité = 80 spectateurs × 50 = 4 000 par match à domicile ; deux spécialistes (25 000 par semaine) n'évitent que 2 points par défaite à domicile" }
   personnel:       { present: oui, postes: [médecins, kinés, psychologues, marketing], facturation: "maximum atteint dans la semaine (dev 2026-09-14 ; 85 000 contre 60 000 le 25/10, à confirmer le 01/11)" }
   infrastructures: { present: non }
 
