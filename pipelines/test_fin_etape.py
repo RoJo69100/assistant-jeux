@@ -75,6 +75,16 @@ def cas_tests(racine):
     return "test_a.py : 3/3" in out and "test_b.py : (aucune sortie)" in out
 
 
+def cas_ligne_de_forme(racine):
+    """17/11 : la ligne d'un test est sa dernière ligne N/N (stdout) si elle existe, jamais un message stderr ; sans N/N, repli sur la dernière ligne."""
+    _, travail = depot(racine)
+    (travail / "pipelines" / "test_c.py").write_text(
+        "import sys\nprint('3 requêtes sur 4 en échec', file=sys.stderr)\nprint('OK x')\nprint('282/282')\nprint('fin sans forme')\n", encoding="utf-8")
+    (travail / "pipelines" / "test_d.py").write_text("import sys\nprint('vert')\nprint('message', file=sys.stderr)\n", encoding="utf-8")
+    _, out = lancer(travail)
+    return "test_c.py : 282/282" in out and "test_c.py : 3 requêtes" not in out and "test_d.py : message" in out
+
+
 def cas_lecture_seule(racine):
     _, travail = depot(racine)
     (travail / "sale.txt").write_text("x", encoding="utf-8")
@@ -88,6 +98,7 @@ CAS = [
     ("en avance : code 1, commit listé", cas_en_avance),
     ("git status --short affiché", cas_statut_court),
     ("dernière ligne de chaque test_*.py", cas_tests),
+    ("ligne N/N de stdout plutôt qu'un message stderr", cas_ligne_de_forme),
     ("lecture seule : HEAD, origin/main, statut inchangés", cas_lecture_seule),
 ]
 

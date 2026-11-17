@@ -7,6 +7,7 @@ Aucun fetch, aucune écriture git. Code retour 1 si HEAD n'est pas contenu dans 
 Tests : test_fin_etape.py.
 """
 
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -22,8 +23,9 @@ def derniere_ligne(cwd, fichier: Path) -> str:
                            text=True, encoding="utf-8", errors="replace", timeout=300)
     except subprocess.TimeoutExpired:
         return "(délai dépassé)"
+    forme = [l.strip() for l in r.stdout.splitlines() if re.fullmatch(r"\s*\d+/\d+\s*", l)]  # 17/11 : « N/N » de stdout d'abord
     lignes = [l for l in (r.stdout + "\n" + r.stderr).splitlines() if l.strip()]
-    fin = lignes[-1].strip() if lignes else "(aucune sortie)"
+    fin = forme[-1] if forme else lignes[-1].strip() if lignes else "(aucune sortie)"
     return fin if r.returncode == 0 else f"{fin} [code {r.returncode}]"
 
 
