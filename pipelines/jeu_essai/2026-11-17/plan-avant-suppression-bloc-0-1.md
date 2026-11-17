@@ -1,0 +1,165 @@
+## Aujourd'hui — état par événement
+
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match amical contre Union Heidelberg (18/11) selon la fiche — échéance 18/11 07:45 |
+| 🟧 IMPORTANT | Export | exporte l'aperçu du match de ligue contre C.B.Granada (18/11) — échéance 18/11 19:45 |
+| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre BG Bangers (19/11) selon la fiche — échéance 19/11 07:45 |
+| 🟧 IMPORTANT | Export | exporte la page du match amical contre Union Heidelberg (17/11) |
+| 🟧 IMPORTANT | Académie/Draft | décision attendue : tester 3 prospects (75 000), rapport du 12/11 |
+| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 24,1 h |
+| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 24,1 h |
+
+## Bloc 0 — Exports d'abord
+
+- export à faire : Page du match contre Opper Cards (10/11) : box, quarts, play-by-play manquent → bloc 7
+- export à faire : Équipe (aperçu, joueurs) (24 h) → bloc 3
+- export à faire : Tactique (24 h) → bloc 3
+- export à faire : Amical : tactique du match (97 h) → bloc 2
+- export à faire : le Marché (plusieurs pages) (dernier export il y a 97 h) → bloc 4
+- export à faire : Personnel (216 h) → bloc 9
+- export à faire : historique global des transferts depuis 2026-11-13 → bloc 4
+- export à faire : l'aperçu du match de ligue du 18/11 → bloc 3
+- export à faire : la page du match → bloc 2
+- Marché : 0 capture, 0 annonce vue depuis 24 h → bloc 4
+
+## Bloc 1 — À faire aujourd'hui, puis demain
+
+**Aujourd'hui**
+
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : tester → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : tester → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : tester → bloc 9 |
+| 🟩 SUIVI | Analyse | Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier → bloc 7 |
+
+**Demain (préparé aujourd'hui)**
+
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟥 URGENT | Composition | Amical contre Union Heidelberg (mer. 18/11) : saisis le test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs → bloc 2 |
+| 🟥 URGENT | Composition | Amical contre BG Bangers (19/11) (jeu. 19/11) : saisis la tactique maintenant → bloc 2 |
+| 🟥 URGENT | Composition | Composition : Amical contre Union Heidelberg (mer. 18/11) — point 1 de l'analyste (confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 (Granada, 18/11) et cliquer Sauvegarder, puis ré-ouvrir le match pour const… → bloc 2 |
+| 🟥 URGENT | Composition | Composition : Amical contre Union Heidelberg (mer. 18/11) — point 2 de l'analyste (confiance moyenne, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Durand (SF) : 24 min maximum, jamais les 4 quarts ; Gimenez (blessure finie le 15/11 d'après le brief du 13/11 : vérifier `bv_roster_now`) SF sur les… → bloc 2 |
+| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) → bloc 3 |
+| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) — point 1 de l'analyste (confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 (Granada, 18/11) et cliquer Sauvegarder, puis ré-ouvrir le match pour const… → bloc 3 |
+| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) — point 2 de l'analyste (confiance moyenne, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Durand (SF) : 24 min maximum, jamais les 4 quarts ; Gimenez (blessure finie le 15/11 d'après le brief du 13/11 : vérifier `bv_roster_now`) SF sur les… → bloc 3 |
+
+
+## Bloc 2 — Composition de l'amical
+
+Amical contre Union Heidelberg (mer. 18/11), heure limite du verrou 07:45
+
+Fiche : briefs/2026-11-17-tactique-amical.md (brief du 17/11).
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Baron (17 ans) | PG | PG | — | PG | PG | — | 36 | 2 | 1 | 2 | 3 |
+| Boyer (20 ans) | PG | SF | PG | SF | — | PG | 36 (+5) | 4 | 3 | 3 | 3 |
+| Richard | PG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Bonnet | SG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Leclerc (17 ans) | SG | SG | SG | SG | — | SG | 36 (+5) | 3 | 3 | 2 | 3 |
+| Durand | SF | — | SF | — | SG | SF | 24 (+5) | 3 | 3 | 2 | 3 |
+| Gimenez | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Albano | PF | PF | — | PF | SF | — | 36 | 3 | 4 | 1 | 3 |
+| Lefebvre | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Legrand | PF | — | PF | C | PF | PF | 36 (+5) | 4 | 4 | 1 | 3 |
+| Bernard (18 ans) | C | C | C | — | C | C | 36 (+5) | 3 | 3 | 1 | 3 |
+| Fournier | C | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Les 12 (noms inconnus, export à faire) | tous | 3 | Perimeter |
+
+agressivité 3 à l'écran sur tous les joueurs : réglage du test E1 niveau A, à la place de celui du brief
+zone Perimeter : constant pendant E1 ; focus défensif 3 (Normal) : constant pendant E1
+
+Anticipation (hypothèse) : absente du brief du jour
+Test en cours (un seul réglage à la fois) : test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs
+
+## Bloc 3 — Composition de la ligue ou de la coupe
+
+Ligue J8 contre C.B.Granada (mer. 18/11)
+
+export à faire : l'aperçu du match de ligue du 18/11 (bloc 3)
+
+
+## Bloc 4 — Transferts
+
+**Table des prix (ventes conclues, par tranche d'âge et palier de note de 5)**
+
+| Âge | Note (dès) | Ventes | Prix bas (p25) | Médian | Prix haut (p75) | Dernière vente |
+|---|---|---|---|---|---|---|
+| ≤21 | 25 | 3 | 1 625 | 1 750 | 5 875 | 07/11 |
+| ≤21 | 30 | 6 | 438 | 1 875 | 14 188 | 07/11 |
+| ≤21 | 35 | 45 | 1 501 | 15 000 | 101 000 | 13/11 |
+| ≤21 | 40 | 78 | 64 500 | 294 999 | 841 250 | 13/11 |
+| ≤21 | 45 | 47 | 525 000 | 795 000 | 1 568 897 | 13/11 |
+| ≤21 | 50 | 10 | 1 507 500 | 3 132 937 | 5 541 093 | 10/11 |
+| 22-25 | 35 | 5 | 1 | 252 | 1 000 | 11/11 |
+| 22-25 | 40 | 28 | 475 | 4 375 | 34 250 | 12/11 |
+| 22-25 | 45 | 43 | 18 625 | 87 777 | 197 500 | 13/11 |
+| 22-25 | 50 | 21 | 500 000 | 670 000 | 910 000 | 11/11 |
+| 22-25 | 55 | 27 | 1 010 000 | 1 365 000 | 1 825 661 | 13/11 |
+| 22-25 | 60 | 5 | 2 333 333 | 2 500 000 | 2 635 500 | 07/11 |
+| 26-29 | 35 | 10 | 62 | 625 | 2 125 | 11/11 |
+| 26-29 | 40 | 27 | 1 | 1 000 | 16 625 | 13/11 |
+| 26-29 | 45 | 53 | 1 000 | 10 000 | 75 000 | 12/11 |
+| 26-29 | 50 | 62 | 161 250 | 499 382 | 700 000 | 12/11 |
+| 26-29 | 55 | 74 | 752 500 | 999 500 | 1 317 250 | 13/11 |
+| 26-29 | 60 | 26 | 1 123 893 | 1 460 587 | 1 800 000 | 13/11 |
+| 30+ | 35 | 2 | 2 563 | 5 125 | 7 687 | 11/11 |
+| 30+ | 40 | 6 | 313 | 750 | 1 000 | 08/11 |
+| 30+ | 45 | 36 | 875 | 10 250 | 35 000 | 11/11 |
+| 30+ | 50 | 18 | 29 247 | 66 000 | 87 250 | 12/11 |
+
+**Qui acheter (annonces du Marché qui se terminent dans les 24 h)**
+
+aucune annonce du Marché ne se termine dans les 24 h (export du 13/11, 150 annonces)
+
+vue vendre illisible
+
+
+## Bloc 5 — Les meilleurs et les failles du jeu
+
+carte de faisabilité du 10/11 : 3a force du club et victoires : faisable maintenant ; 3b pourquoi les premiers le sont (compétences, tactique) : export reçu le 10/11, étude à lancer
+
+## Bloc 6 — Match Engine
+
+matchs ajoutés : 9 (ligue 1, amical 2 ; autres clubs 6) · 120 en base · étude à jour au 16/11, 0 de nos matchs pas encore étudiés ; 0 d'autres clubs
+Pour comprendre le Match Engine, j'ai besoin de : exporte les onglets Details, Stats par quart et Play-by-play des matchs de ligue listés dans l'inventaire du 16/11 (§ b), parce qu'il faut ≈ 110 matchs pour la baisse au Q4 en éval/min et ≥ 8 matchs « 5 × 48 ». (étude du 16/11)
+Pour comprendre le Match Engine, j'ai besoin de : exporte la page match (Details + Stats par quart) de chacun de nos prochains matchs de ligue où un adversaire est en Lock ou Intense, parce qu'il faut ≥ 8 matchs v4 ligue par niveau pour calibrer le focus. (étude du 16/11)
+Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte. (étude du 11/11)
+Pour comprendre le Match Engine, j'ai besoin de : exporte la page Classement des trois ligues après chaque journée, parce que le vainqueur de chaque match entre deux autres clubs manque hors score brut. L'écart de victoires d'un relevé à l'autre, croisé avec `silver.bv_fixtures`, donnerait qui a battu qui, sans utiliser de score. Aujourd'hui, le classement n'est relevé jour par jour que pour notre ligue. (étude du 11/11)
+Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche), parce que le `defensive_focus` adverse est absent : 0 ligne adverse sur 53 dans `silver.bv_match_tactics`, toutes les captures `match-tactics-used` ont `viewer_is_primary` = true. Hypothèse : cette page existe. Si le jeu ne la montre pas, la question 1c est hors d'atteinte. (étude du 10/11)
+Avancement des expériences : E1 : 0 vérifié sur 4 ; E5 : 0 vérifié sur 3 ; E2 : 0 vérifié sur 3 ; E3 : 0 vérifié sur 7 ; E4 : 0 vérifié sur 16
+prochaine hypothèse : E1 — agressivité défensive, uniforme sur nos cinq
+
+## Bloc 7 — Analyse détaillée
+
+défaite du 14/11 : analyse faite
+- Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier
+
+## Bloc 8 — Économie
+
+carte de faisabilité du 10/11 : 2 prix : PS et âge : faisable maintenant ; 2 prix : poste : dans 334 jours ; 4a rendement d'un achat-revente (marché) : faisable maintenant ; 4b usage de notre argent et rendement : bloquée par : une seule équipe observée (aucun export connu ne la lève)
+- finances : seuil non atteint (résultat hebdo estimé +140 631, la réduction de charges commence sous 0)
+
+## Bloc 9 — Académie, personnel, entraînement
+
+carte de faisabilité du 10/11 : 5a entraînement principal contre secondaire : faisable maintenant ; 5b personnel : bloquée par : une seule configuration observée (aucun export ne la lève) ; 5c académie : bloquée par : un seul niveau d'investissement observé (aucun export ne la lève)
+- Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : tester — taille 197 cm (plage du poste 192-206) ; test : non lu (aucune vue ne porte le résultat d'un test) ; à titre d'information, sans décider : PS estimé 42,8, poste PF : plus faible 47,9, meilleur 63,2 (seuils à valider)
+- Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : tester — taille 198 cm (plage du poste 192-202) ; test : non lu (aucune vue ne porte le résultat d'un test) ; à titre d'information, sans décider : PS estimé 37,8, poste PF : plus faible 47,9, meilleur 63,2 (seuils à valider)
+- Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : tester — taille 190 cm (plage du poste 187-202) ; test : non lu (aucune vue ne porte le résultat d'un test) ; à titre d'information, sans décider : PS estimé 39,4, poste SF : plus faible 43,7, meilleur 60,2 (seuils à valider)
+
+## Bloc 10 — À valider par l'utilisateur
+
+- effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
+- Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2, semaine du 2026-11-02) : règle de personnel non tranchée, à valider
+
+--- session (à exécuter, ne pas afficher) ---
+- python -I pipelines/evaluer_decisions.py ; python -I pipelines/relier_faits.py basketvibe
+- relancer l'agent tactique (BasketVibe, amical du 18/11, horizon aujourd'hui) : ajouter au brief du jour la ligne « Anticipation (hypothèse) : … » avec le plan B nommé ; écris le brief dans outputs/basketvibe/briefs/2026-11-17-tactique-amical.md, première ligne exactement « Amical contre Union Heidelberg (18/11) », puis le tableau de saisie ; puis le tableau des adversaires (colonnes « Adversaire | Poste | Focus défensif (1-5) | Zone », une ligne par adversaire de gold.bv_saisie_adversaires ; sans ce tableau le script ne lit pas le brief) ; anticipe les décisions de l'adversaire contre nous : pour chacun de nos joueurs, le focus défensif et la zone qu'un adversaire appliquerait selon la même règle que la nôtre (parts de tirs, 2P/3P de nos joueurs, gold.bv_match_player_lines) ; compose pour rester solide si le focus tombe sur notre meilleur tireur (plan B) ; hypothèse signalée comme telle, aucune donnée sur les focus adverses en base ; sous le tableau de saisie, écris une ligne commençant exactement par « Anticipation (hypothèse) : » avec le plan B nommé
+- ligue contre BC Gelrode, 14/11 : juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) : python -I pipelines/evaluer_decisions.py
+

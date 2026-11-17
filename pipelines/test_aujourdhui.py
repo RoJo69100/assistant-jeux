@@ -1210,7 +1210,7 @@ def cas_t7():
     jour, maint = dt.date(2026, 11, 10), dt.datetime(2026, 11, 10, 15, 50)
     affichage, instantane = auj.rendre_jour(res, {}, {}, jour, maint, {}, etudes=[], base=ESSAI)
     avant, _, apres = affichage.partition(auj.SEPARATEUR)
-    yield "T7 sortie : les 11 blocs sont avant le séparateur", all(f"## Bloc {n} — " in avant for n in range(11))
+    yield "T7 sortie : la section d'état et les blocs 2 à 10 sont avant le séparateur, sans bloc 0 ni 1", "## Aujourd'hui — état par événement" in avant and all(f"## Bloc {n} — " in avant for n in range(2, 11)) and "## Bloc 0 — " not in avant and "## Bloc 1 — " not in avant
     yield "T7 sortie : le séparateur est exact", auj.SEPARATEUR == "--- session (à exécuter, ne pas afficher) ---" and affichage.count(auj.SEPARATEUR) == 1
     yield "T7 sortie : la consigne de l'agent tactique est après le séparateur, jamais avant", "lance l'agent tactique" in apres and "lance l'agent tactique" not in avant
     yield "T7 instantané : le rendu sans séparateur ni consigne", auj.SEPARATEUR not in instantane and "lance l'agent tactique" not in instantane \

@@ -1,54 +1,46 @@
-<!-- généré le 2026-11-17 10:49 -->
+<!-- généré le 2026-11-17 11:13 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Composition | agent tactique à lancer : fiche du match de amical contre Union Heidelberg (18/11) — échéance 18/11 07:45 |
+| 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match amical contre Union Heidelberg (18/11) selon la fiche — échéance 18/11 07:45 |
 | 🟧 IMPORTANT | Export | exporte l'aperçu du match de ligue contre C.B.Granada (18/11) — échéance 18/11 19:45 |
-| 🟧 IMPORTANT | Composition | agent tactique à lancer : fiche du match de amical contre BG Bangers (19/11) — échéance 19/11 07:45 |
-| 🟧 IMPORTANT | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 23,8 h |
-| 🟧 IMPORTANT | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 23,8 h |
-| 🟧 IMPORTANT | Export | exporte la page du match de amical contre Union Heidelberg (17/11) |
-
-## Bloc 0 — Exports d'abord
-
-- export à faire : Page du match contre Opper Cards (10/11) : box, quarts, play-by-play manquent → bloc 7
-- export à faire : Amical : tactique du match (96 h) → bloc 2
-- export à faire : le Marché (plusieurs pages) (dernier export il y a 96 h) → bloc 4
-- export à faire : Personnel (216 h) → bloc 9
-- export à faire : historique global des transferts depuis 2026-11-13 → bloc 4
-- export à faire : l'aperçu du match de ligue du 18/11 → bloc 3
-- export à faire : la page du match → bloc 2
-- Marché : 0 capture, 0 annonce vue depuis 24 h → bloc 4
-
-## Bloc 1 — À faire aujourd'hui, puis demain
-
-**Aujourd'hui**
-
-| Priorité | Catégorie | Action |
-|---|---|---|
-| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : tester → bloc 9 |
-| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : tester → bloc 9 |
-| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : tester → bloc 9 |
-| 🟩 SUIVI | Analyse | Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier → bloc 7 |
-
-**Demain (préparé aujourd'hui)**
-
-| Priorité | Catégorie | Action |
-|---|---|---|
-| 🟥 URGENT | Composition | Amical contre Union Heidelberg (mer. 18/11) : saisis le test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs → bloc 2 |
-| 🟥 URGENT | Composition | Composition : Amical contre Union Heidelberg (mer. 18/11) — point 1 de l'analyste (confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 (Granada, 18/11) et cliquer Sauvegarder, puis ré-ouvrir le match pour const… → bloc 2 |
-| 🟥 URGENT | Composition | Composition : Amical contre Union Heidelberg (mer. 18/11) — point 2 de l'analyste (confiance moyenne, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Durand (SF) : 24 min maximum, jamais les 4 quarts ; Gimenez (blessure finie le 15/11 d'après le brief du 13/11 : vérifier `bv_roster_now`) SF sur les… → bloc 2 |
-| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) → bloc 3 |
-| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) — point 1 de l'analyste (confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 (Granada, 18/11) et cliquer Sauvegarder, puis ré-ouvrir le match pour const… → bloc 3 |
-| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) — point 2 de l'analyste (confiance moyenne, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Durand (SF) : 24 min maximum, jamais les 4 quarts ; Gimenez (blessure finie le 15/11 d'après le brief du 13/11 : vérifier `bv_roster_now`) SF sur les… → bloc 3 |
-
+| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre BG Bangers (19/11) selon la fiche — échéance 19/11 07:45 |
+| 🟧 IMPORTANT | Export | exporte la page du match amical contre Union Heidelberg (17/11) |
+| 🟧 IMPORTANT | Académie/Draft | décision attendue : tester 3 prospects (75 000), rapport du 12/11 |
+| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 24,2 h |
+| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 24,2 h |
 
 ## Bloc 2 — Composition de l'amical
 
 Amical contre Union Heidelberg (mer. 18/11), heure limite du verrou 07:45
 
-composition de l'amical en préparation
+Fiche : briefs/2026-11-17-tactique-amical.md (brief du 17/11).
+
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Baron (17 ans) | PG | PG | — | PG | PG | — | 36 | 2 | 1 | 2 | 3 |
+| Boyer (20 ans) | PG | SF | PG | SF | — | PG | 36 (+5) | 4 | 3 | 3 | 3 |
+| Richard | PG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Bonnet | SG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Leclerc (17 ans) | SG | SG | SG | SG | — | SG | 36 (+5) | 3 | 3 | 2 | 3 |
+| Durand | SF | — | SF | — | SG | SF | 24 (+5) | 3 | 3 | 2 | 3 |
+| Gimenez | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Albano | PF | PF | — | PF | SF | — | 36 | 3 | 4 | 1 | 3 |
+| Lefebvre | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+| Legrand | PF | — | PF | C | PF | PF | 36 (+5) | 4 | 4 | 1 | 3 |
+| Bernard (18 ans) | C | C | C | — | C | C | 36 (+5) | 3 | 3 | 1 | 3 |
+| Fournier | C | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Les 12 (noms inconnus, export à faire) | tous | 3 | Perimeter |
+
+agressivité 3 à l'écran sur tous les joueurs : réglage du test E1 niveau A, à la place de celui du brief
+zone Perimeter : constant pendant E1 ; focus défensif 3 (Normal) : constant pendant E1
+
+Anticipation (hypothèse) : absente du brief du jour
+Test en cours (un seul réglage à la fois) : test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs
 
 ## Bloc 3 — Composition de la ligue ou de la coupe
 

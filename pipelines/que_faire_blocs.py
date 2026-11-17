@@ -123,76 +123,16 @@ def sans_heure(texte: str) -> str:
     return HEURE.sub("", PREFIXE_HEURE.sub("", texte)).replace("  ", " ").strip()
 
 
-def _ligne_plan(prio: int, texte: str) -> str:
-    bloc, cat = classer(texte)
-    court = sans_heure(texte).replace("|", "/")
-    court = court if len(court) <= 150 else court[:149].rstrip() + "…"
-    return f"| {PASTILLE.get(prio, PASTILLE[3])} | {cat} | {court} → bloc {bloc} |"
 
 
-def _tableau(titre: str, actions: list, complements: list = ()) -> list:
-    """Actions du plan (limite, prio, texte, …) puis compléments (R1 : dict prio, cat, texte, bloc) rangés par priorité."""
-    rangees = [(a[1], a[0] is None, a[0] or dt.datetime.max, _ligne_plan(a[1], a[2])) for a in actions]
-    rangees += [(c["prio"], True, dt.datetime.max, f"| {PASTILLE[c['prio']]} | {AFFICHAGE[c['cat']]} | {c['texte'].replace('|', '/')} → {c['bloc']} |")
-                for c in complements]
-    rangees.sort(key=lambda r: r[:3])
-    return [f"**{titre}**", "", "| Priorité | Catégorie | Action |", "|---|---|---|"] + [r[3] for r in rangees] + [""]
 
 
 FIN_FLECHE = re.compile(r"^(.*?) → (blocs? .+)$")
 ENTETE_MATCH = re.compile(r"^(?:Amical|Ligue|Coupe)\b.*?\((?:[^)]*?)(\d{2})/(\d{2})\)")
 
 
-def complements_bloc_1(l0: list, l2: list, l3: list, l7: list, jour: dt.date, points: list = ()) -> list:
-    """Compléments du bloc 1 (R1), que `plan()` ne porte pas : chaque ligne du bloc 0 (catégorie Export, texte et « → bloc N » repris à
-    l'identique), une ligne « Composition : <match> » par match des blocs 2 et 3 (en « Demain » si le match n'est pas aujourd'hui) et la
-    ligne d'analyse du bloc 7 quand l'analyse n'est pas faite. Dict : prio, cat, texte, bloc (« bloc N »), date (ou None), dedup (bloc, adversaire)."""
-    sortie = []  # 13/11 (audit) : les lignes du bloc 0 (`l0`) ne sont plus reprises ici, un export = une ligne, au bloc 0
-    for n, lignes in ((2, l2), (3, l3)):
-        for l in lignes:
-            m = ENTETE_MATCH.match(l)
-            if not m:
-                continue
-            d = dt.date(jour.year, int(m.group(2)), int(m.group(1)))
-            nom = re.search(r"contre (.+?) \(", l)
-            court = l.split(", heure limite")[0]
-            prio = 1 if d <= jour + dt.timedelta(days=1) else 2
-            sortie.append({"prio": prio, "cat": "composition", "texte": f"Composition : {court}",
-                           "bloc": f"bloc {n}", "date": d, "dedup": (n, nom.group(1) if nom else court)})
-            for p in points:  # 17/11 : points d'amélioration 1 et 2 du brief analyste du jour, une ligne chacun sous la composition
-                texte = p["texte"].replace("|", "/")
-                texte = texte if len(texte) <= 150 else texte[:149].rstrip() + "…"
-                sortie.append({"prio": prio, "cat": "composition", "bloc": f"bloc {n}", "date": d, "dedup": None,
-                               "texte": f"Composition : {court} — point {p['n']} de l'analyste (confiance {p['confiance']}, "
-                                        f"{p['fichier']}) : {texte}"})
-    if l7 and "analyse non faite" in l7[0]:
-        sortie.append({"prio": 2, "cat": "analyse", "texte": f"Analyse : {l7[0]}", "bloc": "bloc 7", "date": None, "dedup": None})
-    return sortie
 
 
-def bloc_1(actions: list, jour: dt.date, complements: list = ()) -> list:
-    """Bloc 1 : « Aujourd'hui » puis « Demain (préparé aujourd'hui) », tableaux Priorité | Catégorie | Action, sans heures.
-
-    Toutes les actions affichables y figurent, chacune avec « → bloc N » (le détail reste dans son bloc), puis les compléments (R1, voir
-    `complements_bloc_1`) sauf ceux dont le match est déjà nommé par une action du plan classée dans le même bloc. Une action dont
-    la limite tombe après `jour` va en « Demain » ; sinon en « Aujourd'hui ». Jamais vide."""
-    affichables, _ = separer(actions)
-    # 13/11 (audit) : un export est porté par le bloc 0 seulement ; jamais de ligne Export au bloc 1
-    affichables = [a for a in affichables if classer(a[2])[0] != 0 and classer(a[2])[1] != AFFICHAGE["export"]
-                   and not (classer(a[2])[0] == 9 and a[2].endswith(": ignorer"))]  # 17/11 : un prospect « ignorer » reste au bloc 9
-    ajd = [a for a in affichables if not (a[0] is not None and a[0].date() > jour)]
-    dem = [a for a in affichables if a[0] is not None and a[0].date() > jour]
-    nouveaux = [c for c in complements if not (c["dedup"] and any(classer(a[2])[0] == c["dedup"][0] and c["dedup"][1] in a[2] for a in affichables))]
-    c_dem = [c for c in nouveaux if c["date"] is not None and c["date"] > jour]
-    c_ajd = [c for c in nouveaux if c not in c_dem]
-    sortie = []
-    if ajd or c_ajd:
-        sortie += _tableau("Aujourd'hui", ajd, c_ajd)
-    if dem or c_dem:
-        sortie += _tableau("Demain (préparé aujourd'hui)", dem, c_dem)
-    if not sortie:
-        sortie = ["| Priorité | Catégorie | Action |", "|---|---|---|", f"| {PASTILLE[3]} | {AFFICHAGE['analyse']} | {LIGNE_VIDE} → bloc 0 |", ""]
-    return sortie
 
 
 # ---- Blocs 2 et 3 : compositions -------------------------------------------------------------------------------
@@ -826,56 +766,6 @@ def demande_courte(demande: str) -> str:
     return re.split(r",?\s+parce que\b", t.strip(), maxsplit=1)[0].strip().rstrip(".;")
 
 
-def bloc_0(donnees, res, etudes, jour: dt.date, maintenant: dt.datetime) -> list:
-    """Bloc 0 : ce qu'il faut exporter, chaque ligne avec le bloc qu'elle débloque. Contrôle par match (aperçu de ligue ou de coupe,
-    page du match joué, amical), Marché (nombre de captures, sans seuil), exports hebdomadaires de l'étude (plus de 168 h, mesurés par
-    page_type), puis les demandes des études, recopiées telles quelles. Jamais une commande."""
-    lignes, a_faire = [], []
-
-    def export(texte, bloc):
-        a_faire.append(f"- {texte if texte.startswith(('il me manque', 'rejeu non', 'export à faire', 'vue ')) else manque(texte)} → bloc {bloc}")
-
-    for t in res.get("exports", []):
-        if t.startswith("Marché (enchères) ("):  # R4 : « exporte le Marché (plusieurs pages) (dernier export il y a N h) »
-            age = t[len("Marché (enchères) ("):-1]
-            export("le Marché (plusieurs pages) (" + (age if age == "jamais exporté" else f"dernier export il y a {age}") + ")", 4)
-        elif not t.startswith("aperçu du match de"):  # l'aperçu se contrôle match par match, ci-dessous
-            export(t, bloc_de_export(t, 3))
-    if donnees.get("apercus_matchs") in (None, "rejeu"):
-        export("l'aperçu du prochain match de ligue ou de coupe", 3)
-    else:
-        for m in _matchs_ligue_coupe(donnees, jour, maintenant):
-            if not m["captures"]:
-                export(f"l'aperçu du match de {'ligue' if m['kind'] == 'ligue' else 'coupe'} du {m['jour']:%d/%m}", 3)
-    affichables, _ = separer(res.get("actions", []))
-    for a in affichables:
-        if classer(a[2])[0] == 0:
-            export(sans_heure(a[2]), bloc_de_export(a[2], 0))
-    a_faire += demande_entrainement(donnees, jour)
-
-    if donnees.get("captures_marche") in (None, "rejeu"):
-        lignes.append(vue_illisible("captures_marche"))
-    else:
-        r = next(iter(auj.lignes_de(donnees, "captures_marche")), {})
-        c, m = int(float(r.get("captures") or 0)), int(float(r.get("annonces") or 0))
-        quand = f" (dernière le {auj.en_heure(r['derniere_paris']):%d/%m})" if r.get("derniere_paris") else ""
-        lignes.append(f"- Marché : {c} capture{'s' if c > 1 else ''}, {m} annonce{'s' if m > 1 else ''} "
-                      f"vue{'s' if m > 1 else ''} depuis 24 h{quand} → bloc 4")
-
-    if donnees.get("exports_hebdo") in (None, "rejeu"):
-        lignes.append(vue_illisible("exports_hebdo"))
-    else:
-        derniers = {r["page_type"]: r.get("derniere_paris") for r in auj.lignes_de(donnees, "exports_hebdo")}
-        for pt, libelle in HEBDO:
-            d = derniers.get(pt)
-            age = (maintenant - auj.en_heure(d)).total_seconds() / 3600 if d else None
-            if age is None or age > SEUIL_HEBDO_H:
-                a_faire.append(f"- {manque(libelle, 'jamais exporté' if age is None else f'dernier export il y a {int(age)} h')} → blocs 5 et 6")
-
-    sortie = list(dict.fromkeys(a_faire))  # 13/11 (audit) : les demandes des études restent au bloc 6 seulement
-    if not sortie:
-        sortie = ["- aucun export à refaire : toutes les pages suivies sont à jour"]
-    return sortie + lignes
 
 
 def defaites_suite(donnees) -> int:
@@ -1041,19 +931,6 @@ def section(rendu: str, n: int) -> str:
     return m.group(1) if m else ""
 
 
-def fautes_bloc_1(rendu: str) -> list:
-    """13/11 (audit, remplace R1) : lignes du bloc 0 (sans « - » ni flèche) qui reparaissent dans le bloc 1 d'un rendu complet ;
-    un export n'est écrit qu'une fois. « aucun export à refaire » n'est pas une action."""
-    b1 = section(rendu, 1)
-    fautes = []
-    for l in section(rendu, 0).splitlines():
-        if not l.startswith("- ") or l.startswith("- aucun export"):
-            continue
-        m = FIN_FLECHE.match(l[2:])
-        t = (m.group(1) if m else l[2:]).replace("|", "/")
-        if t in b1:
-            fautes.append(t)
-    return fautes
 
 
 # P2 (plan v4) : catégorie affichée d'une ligne de etat_jour, par type d'événement et prochaine transition
@@ -1101,15 +978,14 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
     b2, c2 = bloc_2(donnees, S, jour, maintenant, base)
     b3, c3 = bloc_3(donnees, S, jour, maintenant, base)
     b6, c6 = bloc_6(donnees, etudes, jour, S.get("experiences"), fait)
-    b0 = bloc_0(donnees, res, etudes, jour, maintenant)
     b7 = bloc_7(actions, donnees, S.get("analyste"))
-    points = auj.src.lire_points_analyste(base or BASE, jour)  # 17/11 : vide sans brief analyste du jour
-    blocs = [b0, bloc_1(actions, jour, complements_bloc_1(b0, b2, b3, b7, jour, points)), b2, b3,
+    # 17/11 : l'ancien bloc 0 (exports) et l'ancien bloc 1 (tableau du jour) sont remplacés par la section d'état ; les blocs 2 à 10 restent
+    blocs = [b2, b3,
              bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), bloc_5(etudes), b6,
              b7, bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
              bloc_10(actions, garder)]
     be, ce = bloc_etat(donnees, S, base or BASE, jour, maintenant)  # P2 : en tête du plan, à côté des blocs actuels
     texte = [TITRE_ETAT, ""] + be
-    for n, (titre, lignes) in enumerate(zip(TITRES, blocs)):
+    for n, (titre, lignes) in enumerate(zip(TITRES[2:], blocs), start=2):
         texte += [f"## Bloc {n} — {titre}", ""] + list(lignes) + [""]
     return "\n".join(texte).rstrip() + "\n", separer(actions)[1] + c2 + c3 + c6 + ce

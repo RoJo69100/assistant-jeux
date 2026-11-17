@@ -240,22 +240,6 @@ def lire_analyste(base, jour: dt.date):
     return max(dates) if dates else None
 
 
-def lire_points_analyste(base, jour: dt.date) -> list[dict]:
-    """17/11 : points d'amélioration 1 et 2 du brief de l'agent analyste DU JOUR (`briefs/<jour>-analyste.md`, section « Points
-    d'amélioration »), chacun {n, texte (le passage en gras, sans « ** »), confiance (élevée, moyenne ou faible), fichier}.
-    Aucun brief du jour, ou section absente : liste vide."""
-    f = Path(base) / "briefs" / f"{jour.isoformat()}-analyste.md"
-    if not f.is_file():
-        return []
-    m = re.search(r"(?ms)^## Points d'amélioration.*?\n(.*?)(?=^## |\Z)", f.read_text(encoding="utf-8"))
-    points = []
-    for ligne in (m.group(1).splitlines() if m else []):
-        p = re.match(r"^([12])\. \*\*(.+?)\*\*", ligne)
-        if p:
-            c = re.search(r"Confiance \**(élevée|moyenne|faible)", ligne, re.IGNORECASE)
-            points.append({"n": int(p.group(1)), "texte": p.group(2).strip(), "confiance": c.group(1).lower() if c else "inconnue",
-                           "fichier": f"outputs/basketvibe/briefs/{f.name}"})
-    return points
 
 
 ENTRAINEMENT = re.compile(r"^(\d{4}-\d{2}-\d{2})-entrainement\.md$")
