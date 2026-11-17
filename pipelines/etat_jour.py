@@ -24,6 +24,20 @@ def charger_config(jeu: str = "basketvibe", chemin=None) -> dict:
     return yaml.safe_load(texte)["etat_jour"]
 
 
+LIEN_FICHE = "https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/"  # la branche du passage contient tout main
+
+
+def lien_fiche(fichier) -> str:
+    """« chemin — lien » d'une fiche (`briefs/<nom>` relatif à outputs/basketvibe, ou nom seul) : toute action « selon la fiche » ou
+    « corrige la fiche » le cite (17/11)."""
+    chemin = f"outputs/basketvibe/briefs/{Path(str(fichier)).name}"
+    return f"{chemin} — {LIEN_FICHE}{chemin}"
+
+
+def _avec_fiche(texte, fiche) -> str:
+    return f"{texte} ({lien_fiche(fiche['fichier'])})" if fiche and fiche.get("fichier") else texte
+
+
 def _jj(d) -> str:
     return f"{d:%d/%m}" if d else "date inconnue"
 
@@ -65,13 +79,15 @@ def _match_gabarit(ev, etat, maintenant, cfg):
     if etat == "fiche":
         defauts = (ev.get("fiche") or {}).get("defauts")
         if defauts:
-            return ev.get("verrou"), f"corrige la fiche du {quoi} : " + " ; ".join(d["correction"] for d in defauts), True
+            return ev.get("verrou"), _avec_fiche(f"corrige la fiche du {quoi} : " + " ; ".join(d["correction"] for d in defauts), ev.get("fiche")), True
         return ev.get("verrou"), f"lance l'agent tactique : fiche du {quoi}", True
     if etat == "ecran":
         defauts = (ev.get("ecran") or {}).get("defauts")
         if defauts:
             return ev.get("verrou"), f"corrige l'écran du {quoi} puis sauvegarde : " + " ; ".join(d["correction"] for d in defauts), True
-        return ev.get("verrou"), f"saisis et sauvegarde l'écran du {quoi} selon la fiche", True
+        if not (ev.get("fiche") or {}).get("fichier"):
+            return ev.get("verrou"), f"saisis et sauvegarde l'écran du {quoi} : fiche introuvable dans briefs/ (agent tactique)", True
+        return ev.get("verrou"), _avec_fiche(f"saisis et sauvegarde l'écran du {quoi} selon la fiche", ev["fiche"]), True
     if etat == "verrou":
         return ev.get("verrou"), f"rien avant le verrou {_hh(ev.get('verrou'))} : écran du {quoi} sauvegardé", False
     if etat == "joue":
@@ -126,7 +142,9 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
     if etat == "page_exportee":
         return None, f"exporte la page Entraînement (traitement du {_jj(ev['quand'])})", True
     if etat == "saisi":
-        return None, "saisis et sauvegarde l'entraînement de la semaine selon la fiche", True
+        if not (ev.get("fiche") or {}).get("fichier"):
+            return None, "saisis et sauvegarde l'entraînement de la semaine : aucune fiche d'entraînement de la semaine dans briefs/ (agent entrainement)", True
+        return None, _avec_fiche("saisis et sauvegarde l'entraînement de la semaine selon la fiche", ev["fiche"]), True
     if t == "enchere" and etat == "police":
         return ev.get("fin"), f"police d'abord pour l'enchère sur {ev['nom']} : python pipelines/dossier.py basketvibe achat", True
     if t == "enchere" and etat == "fin":
@@ -501,6 +519,17 @@ def lire_fiche(base, jour, ev):
     return fiche
 
 
+def fiche_entrainement(base, jour, depuis):
+    """Fiche d'entraînement la plus récente (`briefs/AAAA-MM-JJ-entrainement*.md`) datée entre `depuis` et `jour` ; None sinon."""
+    import re
+    trouves = []
+    for f in (Path(base) / "briefs").glob("*-entrainement*.md"):
+        m = re.match(r"(\d{4}-\d{2}-\d{2})-entrainement", f.name)
+        if m and depuis <= dt.date.fromisoformat(m.group(1)) <= jour and f.stat().st_size > 0:
+            trouves.append((m.group(1), f.name))
+    return {"fichier": f"briefs/{max(trouves)[1]}"} if trouves else None
+
+
 def _tests_academie(donnees):
     """Nombre de prospects du rapport au verdict « tester » (gold.bv_academy_prospects) ; None si une taille ou un poste manque."""
     import aujourdhui as auj
@@ -556,7 +585,7 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
             if t == "academie":
                 ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=_tests_academie(donnees))
             else:
-                ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()))
+                ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()), fiche=fiche_entrainement(base, jour, q.date()))
             evs.append(ev)
     vendus = {str(r["name"]).lower() for r in _rows(donnees, "transferts_recents")}
     for c in S.get("cibles", []):

@@ -513,7 +513,36 @@ def cas_agents():
     yield "agents : l'état d'un match porte genre, clé de fichier et titre", l["genre"] == "ligue" and l["cle"] == "adv-a-18-11" and l["titre"] == "Ligue contre Adv A (18/11)"
 
 
-CAS = [cas_config, cas_agents, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_lien_fiche():
+    """17/11 : chaque ligne qui cite une fiche (« … selon la fiche », « corrige la fiche … ») contient son chemin et son lien."""
+    import re
+    import tempfile
+    url = "https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/"
+    fiche = {"ok": True, "adversaire": "Adv A", "fichier": "briefs/2026-11-17-tactique-amical-adv-a-18-11.md"}
+    lignes = []
+    for genre in ("ligue", "coupe", "amical"):
+        lignes.append(ej.etat_evenement(match(genre=genre, fiche=fiche, apercu_at=T_APERCU), CFG, MAINT))
+        mauvaise = dict(fiche, defauts=[{"texte": "❌ x", "correction": "ramène X à 36 min"}])
+        lignes.append(ej.etat_evenement(match(genre=genre, fiche=mauvaise, apercu_at=T_APERCU), CFG, MAINT))
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        (Path(tmp) / "briefs" / "2026-11-22-entrainement-semaine.md").write_text("x", encoding="utf-8")
+        f = ej.fiche_entrainement(tmp, dt.date(2026, 11, 22), dt.date(2026, 11, 22))
+        yield "lien : fiche d'entraînement trouvée dans briefs/", f == {"fichier": "briefs/2026-11-22-entrainement-semaine.md"}
+        yield "lien : fiche d'entraînement d'avant le traitement ignorée", ej.fiche_entrainement(tmp, dt.date(2026, 11, 29), dt.date(2026, 11, 29)) is None
+    en = {"type": "entrainement", "quand": dt.datetime(2026, 11, 22, 4, 0), "page_at": dt.datetime(2026, 11, 22, 8, 0), "saisi": False, "maj_at": None}
+    lignes.append(ej.etat_evenement(dict(en, fiche=f), CFG, dt.datetime(2026, 11, 22, 9, 0)))
+    sans = ej.etat_evenement(en, CFG, dt.datetime(2026, 11, 22, 9, 0))
+    citent = [l for l in lignes + [sans] if re.search(r"selon la fiche|corrige la fiche", l["consigne"])]
+    yield "lien : 7 lignes citent une fiche (3 écrans, 3 corrections, 1 entraînement)", len(citent) == 7
+    yield "lien : chaque ligne qui cite une fiche contient son chemin et son lien", all(
+        re.search(r"outputs/basketvibe/briefs/\S+\.md — " + re.escape(url) + r"\S+\.md", l["consigne"]) for l in citent)
+    yield "lien : le lien pointe sur le fichier de la fiche", url + "2026-11-17-tactique-amical-adv-a-18-11.md" in citent[0]["consigne"] \
+        and url + "2026-11-22-entrainement-semaine.md" in citent[-1]["consigne"]
+    yield "lien : sans fiche, la ligne ne dit pas « selon la fiche »", "selon la fiche" not in sans["consigne"] and "aucune fiche" in sans["consigne"]
+
+
+CAS = [cas_config, cas_agents, cas_lien_fiche, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
