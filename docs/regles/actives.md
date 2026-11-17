@@ -2,6 +2,15 @@
 
 Format : `Quand <déclencheur> → <action vérifiable>`. Classes et destinations : `docs/regles/triage.md`. Une règle déjà bloquée par un hook n'est pas répétée ici. Nouvelle règle apprise : une ligne ici, et son code si elle a déjà récidivé (classe E du triage).
 
+## Nouvelles (2026-11-17, soir)
+N28. Quand je dis « fait / pas fait », ou cite un âge, un prix, un nom → `select max(captured_at)` par page_type et la valeur lues dans le même tour (BasketVibe). RÉCIDIVE (erreur 16) : `hook à écrire`.
+N29. Quand je donne un plafond d'enchère → prix lu le jour même, requête datée citée dans la ligne, sinon « prix à relire ».
+N30. Quand je cite un fichier ou dossier à l'utilisateur → je l'ai lu (Read) dans le même tour.
+N31. Quand je lance l'agent tactique → brief avec « fatigue > 20 : 0 min » et « 40 lignes avant --- » ; je compte les lignes au retour (`.claude/agents/tactique.md` à compléter).
+N32. Quand je contredis une thèse → je relis qui l'a avancée et je la vérifie par requête ; vraie, je la confirme.
+N33. Quand j'explique un transfert → joueur, prix en chiffres, geste à faire dans le jeu, 3 lignes, sans nom de règle.
+RÉCIDIVES du soir : E8 (solde pris pour capacite_invest : hook à écrire), N23 (403 Cloudflare), N24 (`fin_etape.py` sort 0 avec test rouge : à corriger, Opus).
+
 ## Nouvelles (2026-11-17)
 N25. Quand j'écris « lancé », « fait », « appliqué » dans un plan → l'outil a déjà rendu sa sortie dans le même tour, sinon « à lancer » (tous les jeux ; `etat_jour.py` pour l'état des événements).
 N26. Quand une ligne vendre/acheter dépasse 250 000 → `dossier.py` puis `police` avant la réponse, vente comprise. RÉCIDIVE de l'erreur 10 : vérifier que `pipelines/police.py` bloque la vente, sinon `hook à écrire`.
