@@ -1,18 +1,18 @@
-<!-- généré le 2026-11-17 15:14 -->
+<!-- généré le 2026-11-17 16:13 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match amical contre Union Heidelberg (18/11) selon la fiche — échéance 18/11 07:45 |
+| 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match amical contre Union Heidelberg (18/11) selon la fiche (outputs/basketvibe/briefs/2026-11-17-tactique-amical.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-17-tactique-amical.md) — échéance 18/11 07:45 |
 | 🟧 IMPORTANT | Export | exporte l'aperçu du match de ligue contre C.B.Granada (18/11) — échéance 18/11 19:45 |
-| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre BG Bangers (19/11) selon la fiche — échéance 19/11 07:45 |
+| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre BG Bangers (19/11) selon la fiche (outputs/basketvibe/briefs/2026-11-17-tactique-amical-bg-bangers.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-17-tactique-amical-bg-bangers.md) — échéance 19/11 07:45 |
 | 🟧 IMPORTANT | Export | exporte la page du match amical contre Union Heidelberg (17/11) |
 | 🟧 IMPORTANT | Académie/Draft | décision attendue : tester 3 prospects (75 000), rapport du 12/11 |
-| 🟧 IMPORTANT | Export | exporte le Marché (toutes les pages) — export de 101 h |
-| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 100 h |
-| 🟧 IMPORTANT | Export | exporte la page Personnel — export de 220 h |
-| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 28,2 h |
-| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 28,2 h |
+| 🟧 IMPORTANT | Export | exporte le Marché (toutes les pages) — export de 102 h |
+| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 101 h |
+| 🟧 IMPORTANT | Export | exporte la page Personnel — export de 221 h |
+| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre BC Gelrode (14/11) — données de 29,2 h |
+| 🟩 SUIVI | Export | exporte la page du match de ligue contre Astur Hoops (16/11) — données de 29,2 h |
 
 ## Bloc 2 — Composition de l'amical
 
@@ -22,22 +22,22 @@ Fiche : briefs/2026-11-17-tactique-amical.md (brief du 17/11).
 
 | Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Minutes | Off. focus | Rôle | Tir | Agress. |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Baron (17 ans) | PG | PG | — | PG | PG | — | 36 | 2 | 1 | 2 | 3 |
-| Boyer (20 ans) | PG | SF | PG | SF | — | PG | 36 (+5) | 4 | 3 | 3 | 3 |
+| Baron | PG | PG | — | PG | PG | — | 36 | 2 | 1 | 2 | 3 |
+| Boyer | PG | SF | PG | SF | — | PG | 36 (+5) | 4 | 3 | 3 | 3 |
 | Richard | PG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
 | Bonnet | SG | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
-| Leclerc (17 ans) | SG | SG | SG | SG | — | SG | 36 (+5) | 3 | 3 | 2 | 3 |
+| Leclerc | SG | SG | SG | SG | — | SG | 36 (+5) | 3 | 3 | 2 | 3 |
 | Durand | SF | — | SF | — | SG | SF | 24 (+5) | 3 | 3 | 2 | 3 |
 | Gimenez | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
 | Albano | PF | PF | — | PF | SF | — | 36 | 3 | 4 | 1 | 3 |
 | Lefebvre | PF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
 | Legrand | PF | — | PF | C | PF | PF | 36 (+5) | 4 | 4 | 1 | 3 |
-| Bernard (18 ans) | C | C | C | — | C | C | 36 (+5) | 3 | 3 | 1 | 3 |
+| Bernard | C | C | C | — | C | C | 36 (+5) | 3 | 3 | 1 | 3 |
 | Fournier | C | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
 
 | Adversaire | Poste | Focus défensif (1-5) | Zone |
 |---|---|---|---|
-| Les 12 (noms inconnus, export à faire) | tous | 3 | Perimeter |
+| Les 12 | tous | 3 | Perimeter |
 
 agressivité 3 à l'écran sur tous les joueurs : réglage du test E1 niveau A, à la place de celui du brief
 zone Perimeter : constant pendant E1 ; focus défensif 3 (Normal) : constant pendant E1
@@ -83,7 +83,7 @@ export à faire : l'aperçu du match de ligue du 18/11 (bloc 3)
 
 **Qui acheter (annonces du Marché qui se terminent dans les 24 h)**
 
-inconnu : export de 101 h, à refaire
+inconnu : export de 102 h, à refaire
 
 **Qui vendre (joueurs vendables et s'ils sont nécessaires)**
 
