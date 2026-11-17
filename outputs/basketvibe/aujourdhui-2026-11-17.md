@@ -1,9 +1,9 @@
-<!-- généré le 2026-11-17 09:54 -->
+<!-- généré le 2026-11-17 10:17 -->
 ## Bloc 0 — Exports d'abord
 
 - export à faire : Page du match contre Opper Cards (10/11) : box, quarts, play-by-play manquent → bloc 7
-- export à faire : Amical : tactique du match (95 h) → bloc 2
-- export à faire : le Marché (plusieurs pages) (dernier export il y a 95 h) → bloc 4
+- export à faire : Amical : tactique du match (96 h) → bloc 2
+- export à faire : le Marché (plusieurs pages) (dernier export il y a 96 h) → bloc 4
 - export à faire : Personnel (215 h) → bloc 9
 - export à faire : historique global des transferts depuis 2026-11-13 → bloc 4
 - export à faire : l'aperçu du match de ligue du 18/11 → bloc 3
@@ -16,10 +16,9 @@
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : ignorer → bloc 9 |
-| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : ignorer → bloc 9 |
-| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : ignorer → bloc 9 |
-| 🟧 IMPORTANT | Transferts | Vendre Nolan Baron : économie 16 691 par semaine, remplaçant Jonathan Durand au poste PG, écart 0,6 → bloc 4 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : tester → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : tester → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : tester → bloc 9 |
 | 🟩 SUIVI | Analyse | Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier → bloc 7 |
 
 **Demain (préparé aujourd'hui)**
@@ -27,7 +26,11 @@
 | Priorité | Catégorie | Action |
 |---|---|---|
 | 🟥 URGENT | Composition | Amical contre Union Heidelberg (mer. 18/11) : saisis le test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs → bloc 2 |
+| 🟥 URGENT | Composition | Composition : Amical contre Union Heidelberg (mer. 18/11) — point 1 de l'analyste (confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 (Granada, 18/11) et cliquer Sauvegarder, puis ré-ouvrir le match pour const… → bloc 2 |
+| 🟥 URGENT | Composition | Composition : Amical contre Union Heidelberg (mer. 18/11) — point 2 de l'analyste (confiance moyenne, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Durand (SF) : 24 min maximum, jamais les 4 quarts ; Gimenez (blessure finie le 15/11 d'après le brief du 13/11 : vérifier `bv_roster_now`) SF sur les… → bloc 2 |
 | 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) → bloc 3 |
+| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) — point 1 de l'analyste (confiance élevée, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Aujourd'hui : re-sélectionner le preset « League Tactic » sur le match J8 (Granada, 18/11) et cliquer Sauvegarder, puis ré-ouvrir le match pour const… → bloc 3 |
+| 🟥 URGENT | Composition | Composition : Ligue J8 contre C.B.Granada (mer. 18/11) — point 2 de l'analyste (confiance moyenne, outputs/basketvibe/briefs/2026-11-17-analyste.md) : Durand (SF) : 24 min maximum, jamais les 4 quarts ; Gimenez (blessure finie le 15/11 d'après le brief du 13/11 : vérifier `bv_roster_now`) SF sur les… → bloc 3 |
 
 
 ## Bloc 2 — Composition de l'amical
@@ -80,8 +83,6 @@ aucune annonce du Marché ne se termine dans les 24 h (export du 13/11, 150 anno
 
 | Nom | Poste | Âge | Note | Salaire hebdomadaire | Rang au poste | Minutes (4 derniers matchs de ligue) | Remplaçant | Écart de force | Prix attendu (médiane de la case) | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Maël Bernard | C | 18 | 48,3 | 17 303 | 5 (C) | 6,0 | Anselmo Albano | 0,4 | 795 000 | vendable |
-| Nolan Baron | PG | 17 | 44,9 | 16 691 | 7 (PG) | 0,0 | Jonathan Durand | 0,6 | 294 999 | vendable |
 | Léo Lefebvre | PF | 29 | 63,2 | 31 803 | 1 (C) | 33,0 | Hadrien Gimenez | 4,1 | 1 460 587 | nécessaire (écart de force 4,1 supérieur à la tolérance 1,0) |
 | Hadrien Gimenez | SF | 26 | 60,2 | 28 328 | 1 (SG) | 25,4 | Oscar Richard | 4,4 | 1 460 587 | nécessaire (écart de force 4,4 supérieur à la tolérance 1,0) |
 | Oscar Richard | PG | 25 | 56,6 | 25 605 | 2 (PG) | 33,0 | Léo Lefebvre | 4,7 | 1 365 000 | nécessaire (écart de force 4,7 supérieur à la tolérance 1,0) |
@@ -90,12 +91,10 @@ aucune annonce du Marché ne se termine dans les 24 h (export du 13/11, 150 anno
 | Noé Legrand | PF | 23 | 49,6 | 19 227 | 4 (PF) | 21,0 | Maël Bernard | 1,3 | 87 777 | nécessaire (écart de force 1,3 supérieur à la tolérance 1,0) |
 | Naël Boyer | PG | 20 | 48,5 | 18 252 | 5 (PG) | 15,0 | Nolan Baron | 3,7 | 795 000 | nécessaire (écart de force 3,7 supérieur à la tolérance 1,0) |
 | Anselmo Albano | PF | 27 | 47,9 | 17 668 | 8 (PF) | 3,0 | Thibault Bonnet | 1,2 | 10 000 | nécessaire (écart de force 1,2 supérieur à la tolérance 1,0) |
+| Maël Bernard | C | 18 | 48,3 | 17 303 | 5 (C) | 6,0 | Anselmo Albano | 0,4 | 795 000 | ne pas vendre (police du jour) |
+| Nolan Baron | PG | 17 | 44,9 | 16 691 | 7 (PG) | 0,0 | Jonathan Durand | 0,6 | 294 999 | ne pas vendre (police du jour) |
 | Jonathan Durand | SF | 25 | 43,7 | 15 928 | 9 (SG) | 13,6 | Sacha Leclerc | 2,1 | 4 375 | nécessaire (écart de force 2,1 supérieur à la tolérance 1,0) |
 | Sacha Leclerc | SG | 17 | 42,7 | 13 767 | 11 (SG) | 0,0 | Nolan Baron | 1,3 | 294 999 | nécessaire (écart de force 1,3 supérieur à la tolérance 1,0) |
-
-**Enchères, achats et ventes déjà proposés**
-
-- Vendre Nolan Baron : économie 16 691 par semaine, remplaçant Jonathan Durand au poste PG, écart 0,6 — force au poste 44,7 contre 44,1, tolérance 1,0 (core.game_params.vente_tolerance_force)
 
 
 ## Bloc 5 — Les meilleurs et les failles du jeu
@@ -126,13 +125,12 @@ carte de faisabilité du 10/11 : 2 prix : PS et âge : faisable maintenant ; 2 p
 ## Bloc 9 — Académie, personnel, entraînement
 
 carte de faisabilité du 10/11 : 5a entraînement principal contre secondaire : faisable maintenant ; 5b personnel : bloquée par : une seule configuration observée (aucun export ne la lève) ; 5c académie : bloquée par : un seul niveau d'investissement observé (aucun export ne la lève)
-- Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : ignorer — PS estimé 42,8 ; taille 197 cm (plage du poste 192-206) ; poste PF : plus faible 47,9, meilleur 63,2 ; test : non lu (aucune vue ne porte le résultat d'un test) (seuils à valider)
-- Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : ignorer — PS estimé 37,8 ; taille 198 cm (plage du poste 192-202) ; poste PF : plus faible 47,9, meilleur 63,2 ; test : non lu (aucune vue ne porte le résultat d'un test) (seuils à valider)
-- Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : ignorer — PS estimé 39,4 ; taille 190 cm (plage du poste 187-202) ; poste SF : plus faible 43,7, meilleur 60,2 ; test : non lu (aucune vue ne porte le résultat d'un test) (seuils à valider)
+- Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : tester — taille 197 cm (plage du poste 192-206) ; test : non lu (aucune vue ne porte le résultat d'un test) ; à titre d'information, sans décider : PS estimé 42,8, poste PF : plus faible 47,9, meilleur 63,2 (seuils à valider)
+- Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : tester — taille 198 cm (plage du poste 192-202) ; test : non lu (aucune vue ne porte le résultat d'un test) ; à titre d'information, sans décider : PS estimé 37,8, poste PF : plus faible 47,9, meilleur 63,2 (seuils à valider)
+- Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : tester — taille 190 cm (plage du poste 187-202) ; test : non lu (aucune vue ne porte le résultat d'un test) ; à titre d'information, sans décider : PS estimé 39,4, poste SF : plus faible 43,7, meilleur 60,2 (seuils à valider)
 
 ## Bloc 10 — À valider par l'utilisateur
 
-- à valider par écrit : Vendre Nolan Baron : économie 16 691 par semaine, remplaçant Jonathan Durand au poste PG, écart 0,6
 - effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
 - Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2, semaine du 2026-11-02) : règle de personnel non tranchée, à valider
 
