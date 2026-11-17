@@ -111,7 +111,15 @@ CAS = [
     ("h type introuvable déclaré", "Le type veille est introuvable, j'utilise general-purpose.",
      [demande("analyse"), outil("Agent", {"subagent_type": "general-purpose"})], True),
     # i : heredoc
-    ("i heredoc qui écrit", "Fait.", [demande("écris"), outil("Bash", {"command": "cat > a.md <<'EOF'\nx\nEOF"})], False),
+    # 17/11 : un appel refusé par garde_heredoc n'a rien écrit ; seul un fichier réellement écrit par heredoc déclenche i
+    ("i heredoc refusé par la garde : rien d'écrit", "Fait.", [demande("écris"), outil("Bash", {"command": "cat > a.md <<'EOF'\nx\nEOF"})], True),
+    ("i heredoc refusé (PowerShell) : rien d'écrit", "Fait.", [demande("écris"), outil("PowerShell", {"command": "python - <<'EOF'\nopen('a','w')\nEOF"})], True),
+    ("i heredoc qui écrit pour de bon (non refusé)", "Fait.", [demande("écris"), outil("Bash", {"command": "ruby - <<'EOF'\nFile.open('a', 'w')\nEOF"})], False),
+    # 17/11 : le rappel de modèle (a) ne se demande qu'une fois par session
+    ("a rappel déjà demandé dans la session", "Fait.",
+     [demande("ajoute la vue"), {"type": "system", "message": {"content": "Contrôle de sortie : a : fichiers de conception modifiés sans rappel « /model opus »"}}, EDIT_SQL], True),
+    # 17/11 : l ne s'applique que si la réponse contient un tableau de plan (Priorité | Catégorie | Action)
+    ("l tableau sans colonne Action : pas un plan", "| Priorité | Catégorie |\n|---|---|\n| 🟩 SUIVI | Export |\n", [demande("que faire"), BV_SQL], True),
     ("i heredoc de lecture", "Fait.", [demande("lis"), outil("Bash", {"command": "python - <<'EOF'\nprint(1)\nEOF"})], True),
     ("j absence sans requête", "La Preview n'est pas en base.", [demande("preview ?")], False),
     ("j absence après requête", "La Preview n'est pas en base.",

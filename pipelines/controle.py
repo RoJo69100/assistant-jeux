@@ -143,11 +143,25 @@ def reports(text: str) -> list[str]:
 
 
 def heredoc_ecrit(ops: list[tuple[str, dict]]) -> bool:
+    """Un fichier réellement écrit par heredoc. 17/11 : un appel refusé par garde_heredoc n'a rien écrit, il ne compte pas."""
+    import garde_heredoc
     for nom, inp in ops:
         cmd = str(inp.get("command", ""))
-        if nom in ("Bash", "PowerShell") and HEREDOC.search(cmd) and ECRIT_FICHIER.search(cmd):
+        if nom in ("Bash", "PowerShell") and HEREDOC.search(cmd) and ECRIT_FICHIER.search(cmd) and garde_heredoc.verdict(cmd) is None:
             return True
     return False
+
+
+def rappel_deja_demande(ents: list[dict]) -> bool:
+    """17/11 : le rappel de modèle (contrôle a) ne se demande qu'une fois par session ; lu dans les retours de hook déjà reçus
+    (jamais dans les réponses de l'assistant, qui peuvent le citer)."""
+    return any(e.get("type") != "assistant" and "a : fichiers de conception modifiés sans rappel" in json.dumps(e, ensure_ascii=False)
+               for e in ents)
+
+
+def tableau_plan(text: str) -> bool:
+    """17/11 : un tableau de plan = colonnes Priorité | Catégorie | Action (les trois)."""
+    return any(c[:3] == ["priorite", "categorie", "action"] for c, _ in forme.tableaux(text))
 
 
 ABSENCE = ["pas en base", "absente de la base", "absent de la base", "pas dans la base", "aucune source", "il me manque"]
@@ -203,7 +217,7 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
     dem = police.demandes(t)
     conception = bool(dem) and bool(police.CONCEPTION.search(police.norm(dem[-1]))) or conception_modifiee(ops_tour)
     f = []
-    if conception_modifiee(ops_session):
+    if conception_modifiee(ops_session) and not rappel_deja_demande(ents):
         dit = police.norm(textes(ents) + "\n" + text)
         attendu = "/model sonnet" if "opus" in modele(ents) else "/model opus"
         # voie courte : la déclaration « opus avant, sonnet après » faite une fois dans la session suffit
@@ -230,7 +244,7 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
     if FAIT_DECLARE.search(nd) and not police.CONCEPTION.search(nd) and not registre_ecrit(ops_tour):
         f.append("k : l'utilisateur dit avoir fait quelque chose — inscris-le dans `outputs/<jeu>/fait-<jour>.md` "
                  "(heure, quoi, « déclaré par l'utilisateur ») avant tout résumé")
-    if QUE_FAIRE.search(nd) and forme.a_plan(text):
+    if QUE_FAIRE.search(nd) and tableau_plan(text):
         manque = categories_manquantes(text, requete_base(ops_tour), forme.jeu_de(text, forme.commandes(ents)))
         if manque:
             f.append("l : catégories absentes du plan (" + ", ".join(manque) + ") — une ligne chacune, ou nommée "
