@@ -1,19 +1,14 @@
-<!-- généré le 2026-11-17 08:56 -->
+<!-- généré le 2026-11-17 09:54 -->
 ## Bloc 0 — Exports d'abord
 
 - export à faire : Page du match contre Opper Cards (10/11) : box, quarts, play-by-play manquent → bloc 7
-- export à faire : Amical : tactique du match (94 h) → bloc 2
-- export à faire : le Marché (plusieurs pages) (dernier export il y a 94 h) → bloc 4
-- export à faire : Personnel (214 h) → bloc 9
+- export à faire : Amical : tactique du match (95 h) → bloc 2
+- export à faire : le Marché (plusieurs pages) (dernier export il y a 95 h) → bloc 4
+- export à faire : Personnel (215 h) → bloc 9
 - export à faire : historique global des transferts depuis 2026-11-13 → bloc 4
 - export à faire : l'aperçu du match de ligue du 18/11 → bloc 3
 - export à faire : la page du match → bloc 2
 - Marché : 0 capture, 0 annonce vue depuis 24 h → bloc 4
-- exporte les onglets Details, Stats par quart et Play-by-play des matchs de ligue listés dans l'inventaire du 16/11 (§ b), parce qu'il faut ≈ 110 matchs pour la baisse au Q4 en éval/min et ≥ 8 matchs « 5 × 48 » (étude du 16/11) → bloc 6
-- exporte la page match (Details + Stats par quart) de chacun de nos prochains matchs de ligue où un adversaire est en Lock ou Intense, parce qu'il faut ≥ 8 matchs v4 ligue par niveau pour calibrer le focus (étude du 16/11) → bloc 6
-- exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte (étude du 11/11) → bloc 6
-- exporte la page Classement des trois ligues après chaque journée (étude du 11/11) → bloc 6
-- exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche) (étude du 10/11) → bloc 6
 
 ## Bloc 1 — À faire aujourd'hui, puis demain
 
@@ -21,23 +16,11 @@
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Export | export à faire : Amical : tactique du match (94 h) → bloc 0 |
-| 🟥 URGENT | Export | export à faire : l'aperçu du match de ligue du 18/11 → bloc 0 |
-| 🟧 IMPORTANT | Transferts | Vendre Maël Bernard : économie 17 303 par semaine, remplaçant Anselmo Albano au poste PF, écart 0,4 → bloc 4 |
-| 🟧 IMPORTANT | Export | export à faire : Page du match contre Opper Cards (10/11) : box, quarts, play-by-play manquent → bloc 0 |
-| 🟧 IMPORTANT | Export | export à faire : le Marché (plusieurs pages) (dernier export il y a 94 h) → bloc 0 |
-| 🟧 IMPORTANT | Export | export à faire : Personnel (214 h) → bloc 0 |
-| 🟧 IMPORTANT | Export | export à faire : historique global des transferts depuis 2026-11-13 → bloc 0 |
-| 🟧 IMPORTANT | Export | export à faire : la page du match → bloc 0 |
-| 🟧 IMPORTANT | Analyse | Analyse : défaite du 14/11 : analyse non faite, lancée dans ce passage → bloc 7 |
-| 🟩 SUIVI | Académie/Draft | Académie, rapport du 12/11 : 3 prospects ; valeur d'un High inconnue → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : ignorer → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : ignorer → bloc 9 |
+| 🟧 IMPORTANT | Académie/Draft | Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : ignorer → bloc 9 |
+| 🟧 IMPORTANT | Transferts | Vendre Nolan Baron : économie 16 691 par semaine, remplaçant Jonathan Durand au poste PG, écart 0,6 → bloc 4 |
 | 🟩 SUIVI | Analyse | Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier → bloc 7 |
-| 🟩 SUIVI | Export | Marché : 0 capture, 0 annonce vue depuis 24 h → bloc 0 |
-| 🟩 SUIVI | Export | exporte les onglets Details, Stats par quart et Play-by-play des matchs de ligue listés dans l'inventaire du 16/11 (§ b), parce qu'il faut ≈ 110 matchs pour la baisse au Q4 en éval/min et ≥ 8 matchs « 5 × 48 » (étude du 16/11) → bloc 0 |
-| 🟩 SUIVI | Export | exporte la page match (Details + Stats par quart) de chacun de nos prochains matchs de ligue où un adversaire est en Lock ou Intense, parce qu'il faut ≥ 8 matchs v4 ligue par niveau pour calibrer le focus (étude du 16/11) → bloc 0 |
-| 🟩 SUIVI | Export | exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte (étude du 11/11) → bloc 0 |
-| 🟩 SUIVI | Export | exporte la page Classement des trois ligues après chaque journée (étude du 11/11) → bloc 0 |
-| 🟩 SUIVI | Export | exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche) (étude du 10/11) → bloc 0 |
 
 **Demain (préparé aujourd'hui)**
 
@@ -112,7 +95,7 @@ aucune annonce du Marché ne se termine dans les 24 h (export du 13/11, 150 anno
 
 **Enchères, achats et ventes déjà proposés**
 
-- Vendre Maël Bernard : économie 17 303 par semaine, remplaçant Anselmo Albano au poste PF, écart 0,4 — force au poste 48,1 contre 47,7, tolérance 1,0 (core.game_params.vente_tolerance_force)
+- Vendre Nolan Baron : économie 16 691 par semaine, remplaçant Jonathan Durand au poste PG, écart 0,6 — force au poste 44,7 contre 44,1, tolérance 1,0 (core.game_params.vente_tolerance_force)
 
 
 ## Bloc 5 — Les meilleurs et les failles du jeu
@@ -132,7 +115,7 @@ prochaine hypothèse : E1 — agressivité défensive, uniforme sur nos cinq
 
 ## Bloc 7 — Analyse détaillée
 
-défaite du 14/11 : analyse non faite, lancée dans ce passage
+défaite du 14/11 : analyse faite
 - Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier
 
 ## Bloc 8 — Économie
@@ -143,11 +126,13 @@ carte de faisabilité du 10/11 : 2 prix : PS et âge : faisable maintenant ; 2 p
 ## Bloc 9 — Académie, personnel, entraînement
 
 carte de faisabilité du 10/11 : 5a entraînement principal contre secondaire : faisable maintenant ; 5b personnel : bloquée par : une seule configuration observée (aucun export ne la lève) ; 5c académie : bloquée par : un seul niveau d'investissement observé (aucun export ne la lève)
-- Académie, rapport du 12/11 : 3 prospects ; valeur d'un High inconnue — valeurs à renseigner : core.game_params.academie_valeur_high
+- Académie, rapport du 12/11 : Gabriel Bertrand (PF, 17 ans, TSP 260-420) : ignorer — PS estimé 42,8 ; taille 197 cm (plage du poste 192-206) ; poste PF : plus faible 47,9, meilleur 63,2 ; test : non lu (aucune vue ne porte le résultat d'un test) (seuils à valider)
+- Académie, rapport du 12/11 : Oscar Guillaume (PF, 16 ans, TSP 219-379) : ignorer — PS estimé 37,8 ; taille 198 cm (plage du poste 192-202) ; poste PF : plus faible 47,9, meilleur 63,2 ; test : non lu (aucune vue ne porte le résultat d'un test) (seuils à valider)
+- Académie, rapport du 12/11 : Noé Deschamps (SF, 16 ans, TSP 236-396) : ignorer — PS estimé 39,4 ; taille 190 cm (plage du poste 187-202) ; poste SF : plus faible 43,7, meilleur 60,2 ; test : non lu (aucune vue ne porte le résultat d'un test) (seuils à valider)
 
 ## Bloc 10 — À valider par l'utilisateur
 
-- à valider par écrit : Vendre Maël Bernard : économie 17 303 par semaine, remplaçant Anselmo Albano au poste PF, écart 0,4
+- à valider par écrit : Vendre Nolan Baron : économie 16 691 par semaine, remplaçant Jonathan Durand au poste PG, écart 0,6
 - effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)
 - Personnel (médecin 2/2, kinésithérapeute 4/4, psychologue 2/2, marketing 0/2, semaine du 2026-11-02) : règle de personnel non tranchée, à valider
 
