@@ -60,6 +60,8 @@ DOM_TYPE = {"achat": ("achat",), "vente": ("vente",), "composition": ("compositi
             "entrainement": ("entrainement",), "academie": ("academie",),
             "finances": ("finances", "infrastructure", "personnel")}
 LECON = re.compile(r"\bL-\d{3}[a-z]?\b")
+# texte normalisé (sans accent) : la session dit avoir pris la décision ; « decision attendue » n'en fait pas partie
+DECISION_PRISE = re.compile(r"\bdecisions? prises?\b|\bj'ai (?:decide|tranche)\b|\bnous avons (?:decide|tranche)\b|\bje decide\b")
 
 
 def norm(s: str) -> str:
@@ -112,7 +114,7 @@ def decisions(text: str) -> set[str]:
         j = " ".join(cols)
         if cols[0] == "priorite" and len(cols) > 2 and cols[1] == "categorie":
             for c in lignes:
-                if len(c) < 3 or not c[0].replace("*", "").startswith(("🟥", "🟧")):
+                if len(c) < 3 or not c[0].replace("*", "").startswith(("🟥", "🟧")) or "decision attendue" in norm(c[2]):
                     continue
                 cat = forme.norm(c[1])
                 if cat == "transferts":
@@ -228,6 +230,7 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
     citees = sorted(set(LECON.findall(text))) if principal else []
     jeu = jeu_de(text, cmds) if types or citees else None
     gros = gros_transferts(text, jeu) if jeu else set()
+    prise = bool(DECISION_PRISE.search(n))  # 17/11 (H3) : ni « décision attendue » ni ligne du plan, seulement une décision dite prise
     for t in sorted(types):
         if not jeu:
             break
@@ -236,7 +239,7 @@ def fautes_de(text: str, ents: list[dict], principal: bool, session: str = "") -
         if t in gros and not police_faite(jeu, t):
             f.append(f"H2 : décision {t} ({jeu}) sans trace police — agent `police`, qui écrit "
                      f"outputs/{jeu}/police-{date.today().isoformat()}.md")
-        if travail_du_jeu(jeu, cmds) and not decision_faite(jeu, t, cmds):
+        if prise and travail_du_jeu(jeu, cmds) and not decision_faite(jeu, t, cmds):
             f.append(f"H3 : décision {t} ({jeu}) absente du journal — `python -I pipelines/decision.py new {jeu} "
                      f"{DOM_TYPE.get(t, (t,))[0]} --label … --prediction '<json>' --evaluer-le AAAA-MM-JJ`")
     nommes = [j for j, noms in JEUX.items() if any(x in norm(text) for x in noms)]

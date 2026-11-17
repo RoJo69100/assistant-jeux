@@ -47,6 +47,12 @@ PLAN_COMPO = """Testjeu, ce soir.
 | 🟧 IMPORTANT | Entraînement | Baron : principale Tir. |
 | 🟧 IMPORTANT | Finances | Baisser le prix des billets à 12. |
 """
+PLAN_ATTENDU = """Testjeu, ce soir.
+| Priorité | Catégorie | Action |
+|---|---|---|
+| 🟧 IMPORTANT | Académie/Draft | décision attendue : tester 3 prospects (75 000), rapport du 12/11 |
+"""
+PRISE = "\nDécision prise : voir le tableau."  # 17/11 : H3 seulement sur une décision que la session dit avoir prise
 assert police.SEUIL_GROS_MONTANT.get("basketvibe") == 250_000, "seuil BasketVibe (2026-11-07) perdu"
 police.SEUIL_GROS_MONTANT["testjeu"] = 100_000
 AVEU = "Je n'ai pas tout lu le Discord, non relevé pour l'instant."
@@ -56,6 +62,11 @@ CAS = [
     # (nom, texte, entrées, principal, préfixes de fautes attendues ; [] = passe)
     ("H3 sans travail sur le jeu : jeu seulement nommé, aucun H3", PLAN_COMPO, [u("que faire"), outil("python -I pipelines/test_aujourdhui_testjeu.py")], True, []),
     ("H3 sans travail sur le jeu : un autre jeu travaillé ne compte pas", PLAN_COMPO, [u("que faire"), outil("python -I pipelines/aujourdhui.py autrejeu")], True, []),
+    ("H3 « décision attendue » : pas de H3", PLAN_ATTENDU, [u("que faire")], True, []),
+    ("H3 ligne du plan sans décision prise : pas de H3", PLAN_COMPO, [u("que faire")], True, []),
+    ("H3 « décision attendue » même avec une décision prise ailleurs : pas de H3", PLAN_ATTENDU + PRISE, [u("que faire")], True, []),
+    ("H3 décision prise dite : H3", PLAN_COMPO + PRISE, [u("que faire")], True,
+     ["H3 : décision composition", "H3 : décision entrainement", "H3 : décision finances"]),
     ("aveu bloqué", AVEU, [u("que faire sur basketvibe")], True, ["pas tout lu", "non releve"]),
     ("manque sourcé passe", MANQUE_OK, [u("analyse")], True, []),
     ("manque sans source bloqué", "Il me manque la forme.", [u("analyse")], True, ["« il me manque »"]),
@@ -93,6 +104,9 @@ def main() -> int:
         # ce fichier sont des décisions du jeu « testjeu », sauf ceux dont le nom commence par « H3 sans travail »
         if not nom.startswith("H3 sans travail"):
             ents = [*ents, outil("python -I pipelines/aujourdhui.py testjeu")]
+        # les cas qui attendent un H3 portent la mention « Décision prise » (hors cas qui l'ont déjà)
+        if any(a.startswith("H3") for a in attendu) and "Décision prise" not in texte:
+            texte += PRISE
         session = "test-" + uuid.uuid4().hex
         f = police.fautes_de(texte, ents, principal, session)
         ok = len(f) == len(attendu) and all(any(x.startswith(a) for x in f) for a in attendu)
