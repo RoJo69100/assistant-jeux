@@ -523,6 +523,7 @@ def cas_etape5a():
     yield from cas_entrainement()
     yield from cas_fatigue()
     yield from cas_amical_export()
+    yield from cas_ecran_non_sauvegarde()
     yield from cas_revue()
     yield from cas_echec_bruyant()
 
@@ -629,6 +630,31 @@ def cas_amical_export():
         "Amicaux (liste) (30 h)" in avec and "Amical : tactique du match (30 h)" in avec
     loin = [(JOUR + dt.timedelta(days=3), "07:45", 1, "amical", "Avant 07:45 : preset sur le match contre Knight Jays")]
     yield "Audit1 amical dans 3 jours : pas encore redemandé", "Amicaux (liste)" not in exports(loin)
+
+
+def cas_ecran_non_sauvegarde():
+    """Audit du 13/11, défaut 2 : « écran non sauvegardé » pour tout match à venir dont sauvegarde_match est faux, même sous la
+    zone verte ; la ligne « Sors » ne nomme que les joueurs qui dépassent."""
+    COLS = ["kind", "match_day", "opponent", "joueur", "minutes", "defense_tier", "sat_fatigue", "zone_verte",
+            "sauvegarde_match", "ecran_par_defaut", "depasse"]
+    CAL = (["day", "competition_kind", "opponent", "coup_envoi_paris", "verrou_paris"],
+           [("2026-11-12", "coupe", "Stare Kotlety", "2026-11-12T19:15:00", "2026-11-12T19:00:00")])
+
+    def actions(rows):
+        d = figees(**{"fatigue_avant_match": (COLS, rows), "calendrier": CAL})
+        return [a[2] for a in auj.plan(d, {}, dt.date(2026, 11, 12), dt.datetime(2026, 11, 12, 14, 51), "", {})["actions"]]
+    ligne = lambda n, sauve, dep, fat=15.0: ("coupe", "2026-11-12", "Stare Kotlety", n, 36, 2, fat, 20, sauve, False, dep)
+    msg = "Coupe contre Stare Kotlety (jeu. 12/11) : écran non sauvegardé, fatigue projetée non calculée"
+    sous = actions([ligne("Bonnet", False, False), ligne("Richard", False, False)])
+    yield "Audit2 sauvegarde_match faux, fatigue sous la zone verte : « écran non sauvegardé »", \
+        msg in sous and not any(a.startswith("Sors ") for a in sous)
+    yield "Audit2 écran sauvegardé, fatigue sous la zone verte : aucune ligne", \
+        not any("Bonnet" in a or "non sauvegardé" in a for a in actions([ligne("Bonnet", True, False)]))
+    mixte = actions([ligne("Bonnet", True, True, 25.0), ligne("Richard", True, False)])
+    yield "Audit2 écran sauvegardé : « Sors » ne nomme que les joueurs qui dépassent", \
+        any(a.startswith("Sors Bonnet avant") for a in mixte) and not any("Richard" in a for a in mixte)
+    yield "Audit2 requête : lit aussi les écrans non sauvegardés sous la zone verte et la colonne depasse", \
+        "sauvegarde_match is false" in auj.REQUETES["fatigue_avant_match"] and "depasse" in auj.REQUETES["fatigue_avant_match"].split("from")[0]
 
 
 def cas_entrainement():
