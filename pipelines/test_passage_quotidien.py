@@ -184,7 +184,64 @@ def cas_etiquettes():
         "commit_push([\"outputs\"]" in Path(pq.__file__).read_text(encoding="utf-8") and pq.BRANCHE_PASSAGE != "main"
 
 
-CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes]
+def cas_police():
+    """18/11 : police lancée par la routine pour toute enchère/achat de maximum > seuil finissant dans les 36 h, 3 au plus."""
+    m = dt.datetime(2026, 11, 18, 14, 45)
+    fin = m + dt.timedelta(hours=9)
+    cibles = [{"nom": "Alan Szewczyk", "max": 550_000, "fin": fin}, {"nom": "Petit Prix", "max": 250_000, "fin": fin},
+              {"nom": "Loin Loin", "max": 900_000, "fin": m + dt.timedelta(hours=40)}]
+    bargains = [{"name": "Zoran Vujovic", "bid_ceiling_resale": 300_000, "ends_paris": str(fin)},
+                {"name": "Ivo Trois", "bid_ceiling_resale": 400_000, "ends_paris": str(fin)},
+                {"name": "Quatre Refus", "bid_ceiling_resale": 500_000, "ends_paris": str(fin)}]
+    c = pq.candidats_police(cibles, bargains, m)
+    noms = [x["nom"] for x in c]
+    yield "police : > 250 000 et fin dans 36 h retenu", "Alan Szewczyk" in noms and "Zoran Vujovic" in noms
+    yield "police : = 250 000 pas de police", "Petit Prix" not in noms
+    yield "police : fin au-delà de 36 h exclue", "Loin Loin" not in noms
+    with tempfile.TemporaryDirectory() as tmp:
+        appels = []
+
+        def run(cmd, **k):
+            appels.append(cmd)
+            if cmd[0] == "claude":
+                nom = cmd[2].split("Joueur : ")[1].split(",")[0]
+                f = Path(tmp) / "police-2026-11-18.md"
+                verdict = "ne pas acheter " + nom if nom == "Zoran Vujovic" else f"enchère max 550 000 sur {nom}"
+                with f.open("a", encoding="utf-8") as h:
+                    h.write(f"\n## achat — {nom} — 14:50\n- Décision : {verdict}\n")
+            return subprocess.CompletedProcess(cmd, 0, "", "")
+        res = pq.lancer_polices(c, dt.date(2026, 11, 18), base=tmp, executer=run, claude="claude",
+                                horloge=lambda: dt.datetime(2026, 11, 18, 14, 52))
+        lances = [r for r in res if r["lance"]]
+        refus = [r for r in res if not r["lance"]]
+        yield "police : ligne > 250 000 → dossier.py puis claude -p --agent police", \
+            appels[0][:5] == ["python", "-I", "pipelines/dossier.py", "basketvibe", "achat"] \
+            and appels[1][0] == "claude" and appels[1][1] == "-p" and appels[1][3:5] == ["--agent", "police"]
+        yield "police : 3 lancées au plus", len(lances) == 3 and sum(1 for a in appels if a[0] == "claude") == 3
+        yield "police : 4e ligne refusée avec message", len(refus) == 1 and refus[0]["nom"] == "Quatre Refus" \
+            and "plafond de 3 polices par passage" in refus[0]["raison"] \
+            and any("Quatre Refus" in l and "plafond" in l for l in pq.polices_non_lancees(res))
+        txt = (Path(tmp) / "police-2026-11-18.md").read_text(encoding="utf-8")
+        rendu = ("| 🟥 URGENT | Transferts | Enchère sur Alan Szewczyk (SG) : maximum 550 000 |\n"
+                 "- Enchère maximale 300 000 sur Zoran Vujovic (SF, PS 40.5)\n"
+                 "| Alan Szewczyk | SG | 28 | 56,4 |\n- Enchère sur Petit Prix : maximum 250 000")
+        frais = pq.annoter(rendu, res, txt, dt.datetime(2026, 11, 18, 14, 0), dt.datetime(2026, 11, 18, 14, 55))
+        l = frais.splitlines()
+        yield "plan : « police faite à HH:MM, prix de l'export de HH:MM » sur la ligne", \
+            l[0].endswith("— police faite à 14:52, prix de l'export de 14:00 |") and "police faite" not in l[3]
+        yield "plan : ligne de données du marché non annotée", "police" not in l[2]
+        yield "plan : prix frais (< 2 h) sans « à relire »", "à relire" not in frais
+        vieux = pq.annoter(rendu, res, txt, dt.datetime(2026, 11, 18, 11, 0), dt.datetime(2026, 11, 18, 14, 55))
+        yield "plan : prix de plus de 2 h → « à relire en jeu avant d'enchérir »", \
+            "prix de l'export de 11:00 — à relire en jeu avant d'enchérir" in vieux.splitlines()[0]
+        yield "plan : « ne pas acheter » en premier sur la ligne", \
+            l[1].startswith("- Police : ne pas acheter — Enchère maximale 300 000 sur Zoran Vujovic")
+        yield "plan : la ligne reste une proposition (aucun ordre au jeu)", \
+            all(a[0] in ("python", "claude") for a in appels) and "Interdit : aucun achat" in appels[1][2]
+    yield "seuil inchangé : 250 000", pq.SEUIL == 250_000
+
+
+CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

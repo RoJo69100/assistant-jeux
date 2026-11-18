@@ -12,10 +12,15 @@
 Garde-fous : aucun achat, vente ni enchère (règle 2) — le script ne parle à aucun jeu, chaque agent reçoit l'interdiction ;
 toute somme au-dessus de police.SEUIL_GROS_MONTANT sans trace police du jour donne une ligne 🟥 ; la police passe par
 `dossier.py` d'abord (colonne `avant` de la table).
+Police des gros transferts (18/11) : toute enchère ou achat proposé de maximum > SEUIL dont l'enchère finit dans les 36 h →
+`dossier.py <jeu> achat` puis `claude -p --agent police` (3 au plus par passage, au-delà une ligne de refus) ; sortie
+outputs/basketvibe/police-AAAA-MM-JJ.md, poussée avec outputs/ sur claude/passage-quotidien. La ligne du plan dit « police faite
+à HH:MM, prix de l'export de HH:MM » (+ « à relire en jeu avant d'enchérir » au-delà de 2 h ; refus de la police en premier).
 
 Lancer : python -I pipelines/passage_quotidien.py [--sans-agents] [--sans-git]
 """
 import argparse
+import datetime as dt
 import re
 import shlex
 import shutil
@@ -78,7 +83,7 @@ def lancer_agent(e: dict, jour, base=BASE, executer=subprocess.run, claude=_CLAU
             r = executer(shlex.split(e["avant"]), cwd=RACINE, capture_output=True, text=True, timeout=300)
             if r.returncode:
                 return False, f"commande préalable « {e['avant']} » en échec (code {r.returncode} : {_derniere(r.stderr)})"
-        cmd = [claude, "-p", consigne_agent(e, jour), "--agent", e["agent"], "--permission-mode", "acceptEdits",
+        cmd = [claude, "-p", e.get("prompt") or consigne_agent(e, jour), "--agent", e["agent"], "--permission-mode", "acceptEdits",
                "--allowedTools", OUTILS, "--output-format", "text"]
         r = executer(cmd, cwd=RACINE, capture_output=True, text=True, timeout=timeout_min * 60)
     except subprocess.TimeoutExpired:
@@ -103,6 +108,115 @@ def lancer_tous(prevus: list, jour, base=BASE, timeout_min=15, **kw) -> list:
     return res
 
 
+# ---- Police des gros transferts (18/11) ------------------------------------------------------------------------------------
+# Toute enchère ou achat proposé dont le maximum dépasse SEUIL et dont l'enchère finit dans les 36 h : dossier.py puis l'agent
+# police, lancés par la routine (3 au plus par passage). La ligne reste une proposition : accord écrit requis (règle 2).
+POLICES_MAX = 3
+HORIZON_POLICE_H = 36
+PRIX_FRAIS_H = 2
+REFUS = ("ne pas acheter", "ne pas vendre")
+
+
+def _date(v):
+    if v in (None, ""):
+        return None
+    return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v)[:19])
+
+
+def candidats_police(cibles: list, bargains: list, maintenant, seuil=SEUIL, horizon_h=HORIZON_POLICE_H) -> list:
+    """Décisions d'achat ouvertes (S['cibles'] : max) et affaires du marché (bid_ceiling_resale) de maximum > seuil dont la fin
+    tombe dans les `horizon_h` heures ; fin inconnue : exclue (pas de plafond à donner loin de la fin). Un joueur une fois."""
+    lim, vus, res = maintenant + dt.timedelta(hours=horizon_h), set(), []
+    lignes = [(c.get("nom"), c.get("max"), c.get("fin")) for c in cibles] \
+        + [(r.get("name"), r.get("bid_ceiling_resale"), r.get("ends_paris")) for r in bargains]
+    for nom, mx, fin in lignes:
+        fin = _date(fin)
+        if not nom or mx in (None, "") or float(mx) <= seuil or fin is None or not maintenant < fin <= lim \
+                or str(nom).lower() in vus:
+            continue
+        vus.add(str(nom).lower())
+        res.append({"nom": str(nom), "max": float(mx), "fin": fin})
+    return res
+
+
+def consigne_police(c: dict, jour) -> str:
+    return (f"Jeu : BasketVibe. Type : achat. Joueur : {c['nom']}, maximum proposé {_fr(int(c['max']))}, "
+            f"fin d'enchère {c['fin']:%d/%m %H:%M}. Horizon d'action = aujourd'hui {jour.isoformat()}. "
+            f"Dossier : outputs/{JEU}/dossier/{jour.isoformat()}-achat.md. Brouillon : la ligne du plan du jour sur {c['nom']}. "
+            f"Plafond : 12 appels d'outil, 3 minutes. Ajoute à outputs/{JEU}/police-{jour.isoformat()}.md une section "
+            f"« ## achat — {c['nom']} — HH:MM » (Verdict, Décision ; écris « ne pas acheter {c['nom']} » si tu refuses). "
+            f"Interdit : aucun achat, aucune vente, aucune enchère (règle 2) — tu proposes, l'utilisateur exécute.")
+
+
+def lancer_polices(cands: list, jour, base=BASE, horloge=None, plafond=POLICES_MAX, **kw) -> list:
+    """[{nom, lance, raison, heure}] : dossier.py (`avant`) puis `claude -p --agent police` pour les `plafond` premiers ;
+    au-delà, refus avec message. Lancée = la trace du jour nomme le joueur après l'exécution."""
+    if horloge is None:
+        import aujourdhui as auj
+        horloge = auj.heure_paris_naive
+    sortie, res = f"police-{jour.isoformat()}.md", []
+    for i, c in enumerate(cands):
+        r = dict(c, lance=False, raison=None, heure=None)
+        if i >= plafond:
+            r["raison"] = f"plafond de {plafond} polices par passage atteint — lance-la en session (dossier.py puis agent police)"
+        else:
+            e = {"agent": "police", "sortie": sortie, "prompt": consigne_police(c, jour),
+                 "avant": f"python -I pipelines/dossier.py {JEU} achat --mots {shlex.quote(c['nom'])} --date {jour.isoformat()}"}
+            ok, raison = lancer_agent(e, jour, base=base, timeout_min=kw.pop("timeout_min", 5), **kw)
+            f = Path(base) / sortie
+            if ok and c["nom"].lower() not in f.read_text(encoding="utf-8").lower():
+                ok, raison = False, f"{sortie} ne nomme pas {c['nom']} après l'exécution"
+            r.update(lance=ok, raison=raison, heure=horloge() if ok else None)
+        res.append(r)
+    return res
+
+
+def polices_non_lancees(res: list) -> list:
+    return [f"police non lancée pour {r['nom']} (maximum {_fr(int(r['max']))}) : {r['raison']}" for r in res if not r["lance"]]
+
+
+def verdict_police(police_txt: str, nom: str):
+    """« ne pas acheter » / « ne pas vendre » si une section de la trace police qui nomme `nom` le dit, sinon None."""
+    for s in re.split(r"\n(?=## )", police_txt.lower()):
+        if nom.lower() in s:
+            v = next((x for x in REFUS if f"{x} {nom.lower()}" in s
+                      or any(x in l for l in s.splitlines() if l.lstrip("- ").startswith("décision"))), None)
+            if v:
+                return v
+    return None
+
+
+def annoter(rendu: str, res: list, police_txt: str, prix_export, maintenant) -> str:
+    """Lignes d'enchère ou d'achat du plan qui nomment un joueur contrôlé : « police faite à HH:MM, prix de l'export de HH:MM »
+    (+ « à relire en jeu avant d'enchérir » si les prix ont plus de 2 h) ; refus de la police écrit en premier."""
+    faits = [r for r in res if r["lance"]]
+    out = []
+    for l in rendu.splitlines():
+        r = next((r for r in faits if r["nom"].lower() in l.lower()
+                  and re.search(r"ench[èe]r|achet|achat|revente", l, re.I)), None)
+        if r is None or not l.lstrip().startswith(("-", "|")):
+            out.append(l)
+            continue
+        if prix_export is None:
+            fin = f" — police faite à {r['heure']:%H:%M}, heure de l'export des prix inconnue — à relire en jeu avant d'enchérir"
+        else:
+            jour = "" if prix_export.date() == maintenant.date() else f" du {prix_export:%d/%m}"
+            fin = f" — police faite à {r['heure']:%H:%M}, prix de l'export{jour} de {prix_export:%H:%M}"
+            if maintenant - prix_export > dt.timedelta(hours=PRIX_FRAIS_H):
+                fin += " — à relire en jeu avant d'enchérir"
+        v = verdict_police(police_txt, r["nom"])
+        tete = f"Police : {v} — " if v else ""
+        if l.lstrip().startswith("|"):
+            cel = l.rstrip().split("|")
+            i = 3 if len(cel) >= 5 else len(cel) - 2
+            cel[i] = f" {tete}{cel[i].strip()}{fin} "
+            out.append("|".join(cel))
+        else:
+            ind, corps = l[:len(l) - len(l.lstrip())], l.lstrip()[1:].lstrip()
+            out.append(f"{ind}- {tete}{corps}{fin}")
+    return "\n".join(out)
+
+
 # ---- Rendu -----------------------------------------------------------------------------------------------------------------
 
 def non_lances(res: list) -> list:
@@ -125,13 +239,18 @@ def statut_agents(res: list) -> str:
     return f"Agents : {n} lancé{'s' if n > 1 else ''} sur {len(res)} prévu{'s' if len(res) > 1 else ''} — " + " · ".join(morceaux)
 
 
-def que_faire(jour, plan: str, res: list, gardes: list, alerte) -> str:
+def que_faire(jour, plan: str, res: list, gardes: list, alerte, polices=()) -> str:
     t = [f"# Que faire — BasketVibe — {jour:%d/%m/%Y}", "",
          "Propositions seulement : aucun achat, aucune vente, aucune enchère sans ton accord écrit (règle 2).", ""]
     if alerte:
         t += [f"🟥 {alerte}", ""]
     t += [statut_agents(res), ""]
     t += [f"- {l}" for l in non_lances(res)] + ([""] if non_lances(res) else [])
+    if polices:
+        n = sum(1 for r in polices if r["lance"])
+        t += [f"Police : {n} lancée{'s' if n > 1 else ''} sur {len(polices)} (maximum > {_fr(SEUIL)}, fin dans {HORIZON_POLICE_H} h, "
+              f"{POLICES_MAX} au plus) → police-{jour.isoformat()}.md", ""]
+        t += [f"- {l}" for l in polices_non_lancees(polices)] + ([""] if polices_non_lancees(polices) else [])
     t += gardes + ([""] if gardes else [])
     return "\n".join(t + [plan.rstrip(), ""])
 
@@ -220,7 +339,28 @@ def rejouer():
         auj.ecrire_instantane(BASE / f"aujourdhui-{jour.isoformat()}.md", f"<!-- généré le {maintenant:%Y-%m-%d %H:%M} -->\n{rendu}\n", erreurs, n)
     cfg = ej.charger_config()
     etats = ej.lignes(ej.construire(donnees, S, BASE, jour, maintenant, cfg), cfg, maintenant)
-    return jour, maintenant, rendu, etats, S, alerte, cfg
+    return jour, maintenant, rendu, etats, S, alerte, cfg, (donnees, erreurs, n, fait)
+
+
+def passage_police(ctx, jour, maintenant, S, rendu, refus=None, lancer=None):
+    """(rendu annoté, résultats police) : candidats > SEUIL finissant dans 36 h → lancer_polices ; si une police a tourné, le
+    plan est rendu de nouveau (la trace du jour lève « police d'abord ») et l'instantané réécrit ; puis annoter()."""
+    import aujourdhui as auj
+    import aujourdhui_sources as src
+    donnees, erreurs, n, fait = ctx
+    cands = candidats_police(S.get("cibles", []), auj.lignes_de(donnees, "gold.bv_market_bargains"), maintenant)
+    if not cands:
+        return rendu, []
+    if refus:
+        return rendu, [dict(c, lance=False, raison=refus, heure=None) for c in cands]
+    res = (lancer or lancer_polices)(cands, jour)
+    if any(r["lance"] for r in res):
+        S = auj.lire_sources(donnees, jour)
+        _, rendu = auj.rendre_jour(auj.plan(donnees, erreurs, jour, maintenant, fait, S), donnees, erreurs, jour, maintenant, S, fait=fait)
+        auj.ecrire_instantane(BASE / f"aujourdhui-{jour.isoformat()}.md",
+                              f"<!-- généré le {maintenant:%Y-%m-%d %H:%M} -->\n{rendu}\n", erreurs, n)
+    m = next((r for r in auj.lignes_de(donnees, "gold.bv_exports_state") if r.get("ecran") == "Marché (enchères)"), {})
+    return annoter(rendu, res, src.lire_police(BASE, jour), _date(m.get("dernier_paris")), maintenant), res
 
 
 def main() -> int:
@@ -236,19 +376,21 @@ def main() -> int:
         base_sha, msg = restaurer()
         print(msg)
     print(etiqueter_experiences())  # avant le plan : le niveau du prochain amical suit l'étiquette écrite
-    jour, _, rendu, etats, S, alerte, cfg = rejouer()
+    jour, maintenant, rendu, etats, S, alerte, cfg, ctx = rejouer()
     prevus = ej.agents_a_lancer(etats, cfg, BASE, jour)
     if alerte or a.sans_agents:
         raison = alerte or "passage sans agents (--sans-agents)"
         res = [dict(e, statut="refus", raison=raison) if e["statut"] == "a_lancer" else e for e in prevus]
     else:
         res = lancer_tous(prevus, jour, timeout_min=cfg.get("agent_timeout_min", 15))
+    rendu, polices = passage_police(ctx, jour, maintenant, S, rendu,
+                                    refus=alerte or ("passage sans agents (--sans-agents)" if a.sans_agents else None))
     sorties = "\n".join((BASE / e["sortie"]).read_text(encoding="utf-8") for e in res if (BASE / e["sortie"]).is_file())
     gardes = garde_fous(rendu + "\n" + sorties, src.lire_police(BASE, jour))
     f = BASE / f"que-faire-{jour.isoformat()}.md"
-    f.write_text(que_faire(jour, rendu, res, gardes, alerte), encoding="utf-8")
+    f.write_text(que_faire(jour, rendu, res, gardes, alerte, polices), encoding="utf-8")
     print(statut_agents(res))
-    for l in non_lances(res):
+    for l in non_lances(res) + polices_non_lancees(polices):
         print(l)
     code = 2 if alerte else 0
     if not a.sans_git:
