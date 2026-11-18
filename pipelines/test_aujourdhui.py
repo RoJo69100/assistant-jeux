@@ -915,8 +915,28 @@ def cas_academie_verdict():
     yield "Audit5 17 ans : borne haute +4 (PG 190 <= 191) : tester", v("PG", 17, 50.0, 190) == "tester"
     yield "Audit5 taille sous la plage (C 195 < 200) : ignorer", v("C", 16, 50.0, 195) == "ignorer"
     yield "Audit5 PS estimé sous le plus faible du poste (44,0 < 44,9) : ne décide pas, tester", v("PG", 16, 44.0, 180) == "tester"
-    yield "Audit5 test lu High, taille correcte : signer, même si le PS estimé est sous le meilleur du poste", \
-        v("C", 16, 40.0, 205, "High") == "signer"
+    # 18/11 (seuil décidé par Claude) : High sans fourchette de PS du test → « à juger » (ancien cas « signer » adapté)
+    yield "Audit5 test lu High, taille correcte, fourchette du test absente : à juger, pas signer", \
+        v("C", 16, 40.0, 205, "High") == "à juger"
+    # Seuil académie du 18/11 : borne basse ≥ plus faible du poste ET borne haute ≥ meilleur − 5 ; High seulement
+    P = {"position": "PG", "age": 16, "height_cm": 180}
+    vp = lambda test, b, h, poste=(44.9, 56.6): auj.verdict_prospect(dict(P, test_potentiel=test, ps_test_bas=b, ps_test_haut=h), poste)[0]
+    yield "Seuil18 High, bas 45,0 ≥ 44,9 et haut 52,0 ≥ 51,6 : signer", vp("High", 45.0, 52.0) == "signer"
+    yield "Seuil18 High, bas 44,0 < 44,9 : ignorer", vp("High", 44.0, 60.0) == "ignorer"
+    yield "Seuil18 High, haut 51,5 < 56,6 − 5 : ignorer", vp("High", 46.0, 51.5) == "ignorer"
+    yield "Seuil18 Decent, fourchette au-dessus des deux seuils : ignorer", vp("Decent", 50.0, 60.0) == "ignorer"
+    yield "Seuil18 High, poste absent de l'effectif : à juger", vp("High", 50.0, 60.0, None) == "à juger"
+    poids = [{"skill": s, "pg": w} for s, w in (("two_point", .15), ("three_point", .15), ("passing", .15), ("ball_handling", .15),
+                                                  ("defense", .15), ("rebounding", .05), ("athleticism", .1), ("stamina", .1))]
+    br = {s: {"min": 40, "max": 60} for s in ("two_point", "three_point", "passing", "ball_handling", "defense", "rebounding",
+                                              "athleticism", "stamina")}
+    yield "Seuil18 fourchette de PS du test = somme pondérée des bornes (40-60 partout → 40,0-60,0)", \
+        auj.ps_fourchette_test(br, "PG", poids) == (40.0, 60.0)
+    yield "Seuil18 fourchette illisible (compétence manquante) : None", auj.ps_fourchette_test({"defense": {"min": 1, "max": 2}}, "PG", poids) is None
+    yield "Seuil18 clé academie_signature du yaml : potentiel high, marge haute 5", \
+        auj.seuil_signature() == {"potentiel": "high", "marge_haute": 5.0}
+    yield "Seuil18 requêtes : brackets du test et poids PS", "refined_skill_brackets" in auj.REQUETES["tests_academie"] \
+        and "brackets" in auj.REQUETES["tests_academie"] and "bv_ps_weight" in auj.REQUETES.get("ps_poids", "")
     yield "Audit5 test lu Decent, taille correcte : hors règle de signature, pas signer", v("C", 16, 53.0, 205, "Decent") != "signer"
     yield "Audit5 test High mais taille hors plage : ignorer", v("C", 16, 53.0, 190, "High") == "ignorer"
     yield "Audit5 sans résultat de test lisible : jamais signer (même PS >= meilleur)", v("C", 16, 60.0, 205) == "tester"

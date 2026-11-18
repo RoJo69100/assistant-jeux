@@ -88,6 +88,13 @@ domaines:
 # Phase A (17/11, règles de l'utilisateur) : offres et ventes du jour, lues par pipelines/etat_jour.py (jamais en dur dans le code).
 # Case = tranche d'âge × palier de note de 5 (table des prix du bloc 4, gold.bv_price_ref_ps). Utilisé = a joué sur les
 # `matchs_rotation` derniers matchs de ligue ; hors rotation = moyenne de minutes ≤ `minutes_hors_rotation` sur ces matchs.
+# Seuil de signature d'un prospect testé (décidé par Claude le 18/11, contestable par l'utilisateur ; docs/regles-utilisateur.md).
+# « Meilleures compétences au poste » : sur la fourchette de PS du test (refined_skill_brackets × gold.bv_ps_weight),
+# borne basse ≥ PS le plus faible de l'effectif au poste (gold.bv_roster_now : aucune vue de rotation, l'effectif en tient lieu)
+# ET borne haute ≥ PS du meilleur au poste − marge_haute ; potentiel high seulement. Aucun high observé le 18/11 : à recalibrer au premier.
+academie_signature:
+  potentiel: high
+  marge_haute: 5
 offres:
   matchs_rotation: 4
   case_min_ventes: 3

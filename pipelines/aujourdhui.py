@@ -123,12 +123,15 @@ REQUETES = {
                       "select (c->>'slot')::int as slot, c->>'last_name' as name, c->>'position' as position, "
                       "(c->>'height_cm')::int as height_cm, c->>'potential_bucket' as potentiel, "
                       "jsonb_typeof(c->'refined_skill_brackets') = 'object' as teste, "
+                      "c->'refined_skill_brackets' as brackets, "
                       "r.captured_at at time zone 'Europe/Paris' as capture_paris "
                       "from d, bronze.raw_pages r, jsonb_array_elements(r.payload->'body'->'scout_candidates') c "
                       "where r.game = 'basketvibe' and r.page_type = 'academy' and r.source_url like '%/academy' and r.captured_at = d.m "
                       "order by slot",
     # 17/11 : PS le plus faible et le meilleur de chaque poste de l'effectif (gold.bv_position_summary ne porte que les noms)
     "ps_poste": "select position, min(ps) as ps_min, max(ps) as ps_max from gold.bv_roster_now group by position",
+    # 18/11 : poids du PS par poste, pour la fourchette de PS d'un prospect testé (seuil academie_signature)
+    "ps_poids": "select skill, pg, sg, sf, pf, c from gold.bv_ps_weight",
     # L3 (étape 5f) : remplaçant au même poste (force fit), écart et salaire ; tolérance de force lue dans core.game_params
     "gold.bv_sell_replacement": "select player_id, name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
                                 "on_transfer_list, available, available_players from gold.bv_sell_replacement",
@@ -879,19 +882,63 @@ def _fr1(x):
     return str(round(float(x), 1)).replace(".", ",")
 
 
-def verdict_prospect(p):
-    """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour."""
+def seuil_signature(cfg=None):
+    """`academie_signature` de docs/attentes/jeux/basketvibe.yaml (seuil décidé par Claude le 18/11) ; défaut si illisible."""
+    try:
+        s = (cfg if cfg is not None else etat_jour.charger_config()).get("academie_signature") or {}
+    except Exception:
+        s = {}
+    return {"potentiel": str(s.get("potentiel", "high")).lower(), "marge_haute": float(s.get("marge_haute", 5))}
+
+
+def _json(v):
+    """Objet JSON lu en base (dict, ou texte JSON selon le transport) ; None si illisible."""
+    if isinstance(v, dict) or v is None:
+        return v
+    try:
+        import json
+        return json.loads(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def ps_fourchette_test(brackets, position, poids):
+    """(bas, haut) du PS au poste d'un prospect testé : bornes `refined_skill_brackets` pondérées par gold.bv_ps_weight
+    (même formule que ps_mid de gold.bv_academy_prospects). None si une compétence ou un poids manque."""
+    col = str(position or "").lower()
+    w = {r["skill"]: r.get(col) for r in poids or []}
+    if not isinstance(brackets, dict) or not w or any(v in (None, "") for v in w.values()):
+        return None
+    try:
+        bas = sum(float(brackets[s]["min"]) * float(v) for s, v in w.items())
+        haut = sum(float(brackets[s]["max"]) * float(v) for s, v in w.items())
+    except (KeyError, TypeError, ValueError):
+        return None
+    return round(bas, 1), round(haut, 1)
+
+
+def verdict_prospect(p, poste=None):
+    """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour.
+    Seuil du 18/11 (décidé par Claude, contestable) pour « meilleures compétences au poste » : sur la fourchette de PS du test
+    (`ps_test_bas`, `ps_test_haut`), bas ≥ PS le plus faible du poste ET haut ≥ meilleur − marge_haute ; potentiel high seulement.
+    `poste` = (ps_min, ps_max) de l'effectif au poste ; fourchette ou poste absent → « à juger »."""
     pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
     bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
     test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
+    s = seuil_signature()
+    tb, th = p.get("ps_test_bas"), p.get("ps_test_haut")
     if not bas <= taille <= haut:
         verdict = "ignorer"
     elif not test:
         verdict = "tester"
-    elif test == "high":
+    elif test != s["potentiel"]:
+        verdict = "ignorer"  # test lu, pas High : hors règle de signature
+    elif tb in (None, "") or th in (None, "") or not poste:
+        verdict = "à juger"
+    elif float(tb) >= float(poste[0]) and float(th) >= float(poste[1]) - s["marge_haute"]:
         verdict = "signer"
     else:
-        verdict = "ignorer"  # test lu, pas High : hors règle de signature, à valider
+        verdict = "ignorer"
     return verdict, bas, haut, test
 
 
@@ -903,8 +950,14 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
     Le résultat d'un test n'est lisible dans aucune vue (champ `test_potentiel` absent) : jamais « signer » en production.
     L5 : la taille manque → UNE ligne pour tout le rapport.
     Vue absente ou rapport ancien : rien."""
-    tests = {str(r["slot"]): r["potentiel"] for r in lignes_de(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}  # 18/11
-    pros = [dict(p, test_potentiel=tests.get(str(p.get("slot")), p.get("test_potentiel"))) for p in lignes_de(donnees, "prospects")]
+    tests = {str(r["slot"]): r for r in lignes_de(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}  # 18/11
+    poids = lignes_de(donnees, "ps_poids")
+    pros = []
+    for p in lignes_de(donnees, "prospects"):
+        t = tests.get(str(p.get("slot")))
+        f = ps_fourchette_test(_json(t.get("brackets")), p.get("position"), poids) if t else None
+        pros.append(dict(p, test_potentiel=t["potentiel"] if t else p.get("test_potentiel"),
+                         ps_test_bas=f[0] if f else p.get("ps_test_bas"), ps_test_haut=f[1] if f else p.get("ps_test_haut")))
     du_jour = bool(pros) and en_heure(pros[0]["rapport_paris"]).date() == maintenant.date()
     if maintenant.weekday() == JOUR_RAPPORT_ACADEMIE and not du_jour \
             and not any(norm(c["nom"]) == "academie" and c["jour"] >= maintenant.date() for c in cles):
@@ -928,7 +981,7 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
         return
     for p in pros:
         pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
-        verdict, bas, haut, test = verdict_prospect(p)
+        verdict, bas, haut, test = verdict_prospect(p, postes.get(pos))
         ps =f"{_fr1(p['ps_mid'])}" if p.get("ps_mid") not in (None, "") else "—"
         faible, meilleur = (_fr1(postes[pos][0]), _fr1(postes[pos][1])) if pos in postes else ("—", "—")
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({pos}, {age} ans, TSP {p['tsp_min']}-{p['tsp_max']})"

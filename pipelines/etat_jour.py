@@ -769,7 +769,7 @@ def _tests_academie(donnees):
             n += verdict == "tester"
             continue
         verdicts.append({"nom": p["name"], "poste": p["position"], "potentiel": str(t["potentiel"]).lower(),
-                         "verdict": MANQUE_SIGNATURE if verdict == "signer" else verdict})
+                         "verdict": MANQUE_SIGNATURE if verdict == "à juger" else verdict})
     return n, verdicts, capture
 
 
