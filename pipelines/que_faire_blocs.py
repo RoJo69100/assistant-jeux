@@ -1010,7 +1010,7 @@ def section(rendu: str, n: int) -> str:
 
 # P2 (plan v4) : catégorie affichée d'une ligne de etat_jour, par type d'événement et prochaine transition
 CAT_ETAT = {"export_periodique": "export", "apercu": "export","joue": "export", "calendrier": "export", "rapport_exporte": "export", "page_exportee": "export",
-            "fiche": "composition", "ecran": "composition", "analyse": "analyse", "juge": "analyse", "decide": "academie/draft",
+            "fiche": "composition", "ecran": "composition", "analyse": "analyse", "juge": "analyse", "decide": "academie/draft", "teste": "academie/draft",
             "saisi": "entrainement", "police": "transferts", "resultat": "transferts", "offre": "transferts", "vente": "transferts"}
 TITRE_ETAT = "## Aujourd'hui — état par événement"
 

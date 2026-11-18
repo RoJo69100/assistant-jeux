@@ -163,7 +163,7 @@ etat_jour:
     - { ecran: "Historique global des transferts", libelle: "l'historique global des transferts", source: page_type, page_type: transfers_global-history, periode: quotidien, perime_h: 24 }
     - { ecran: "Personnel", libelle: "la page Personnel", source: exports_state, periode: hebdomadaire, perime_h: 168 }
   evenements:
-    academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
+    academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, teste, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
     enchere:      { etats: [police, fin, resultat] }
   # P3 (17/11) : état de l'événement → agent à lancer → sortie attendue. UNE table, lue par etat_jour.agents_a_lancer ; une ligne

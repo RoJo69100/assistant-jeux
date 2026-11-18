@@ -115,6 +115,18 @@ REQUETES = {
     # K3 (étape 5e) : dernier rapport du scout, cote du potentiel à la jauge actuelle, valeur d'un High et coût du test
     "prospects": "select scout_report_at at time zone 'Europe/Paris' as rapport_paris, slot, name, position, age, tsp_min, tsp_max, ps_mid, height_cm "
                  "from gold.bv_academy_prospects order by slot",
+    # 18/11 : résultat des tests d'académie, lu sur la DERNIÈRE capture de la page Académie (API /teams/<id>/academy) : un prospect
+    # testé a des `refined_skill_brackets` ; son potentiel est `potential_bucket` (low / decent / high).
+    # Forme en CTE : « = (select … » et concat_ws dans l'URL sont bloqués par le pare-feu HTTPS de Supabase (403, 18/11).
+    "tests_academie": "with d as (select max(captured_at) as m from bronze.raw_pages where game = 'basketvibe' and page_type = 'academy' "
+                      "and source_url like '%/academy') "
+                      "select (c->>'slot')::int as slot, c->>'last_name' as name, c->>'position' as position, "
+                      "(c->>'height_cm')::int as height_cm, c->>'potential_bucket' as potentiel, "
+                      "jsonb_typeof(c->'refined_skill_brackets') = 'object' as teste, "
+                      "r.captured_at at time zone 'Europe/Paris' as capture_paris "
+                      "from d, bronze.raw_pages r, jsonb_array_elements(r.payload->'body'->'scout_candidates') c "
+                      "where r.game = 'basketvibe' and r.page_type = 'academy' and r.source_url like '%/academy' and r.captured_at = d.m "
+                      "order by slot",
     # 17/11 : PS le plus faible et le meilleur de chaque poste de l'effectif (gold.bv_position_summary ne porte que les noms)
     "ps_poste": "select position, min(ps) as ps_min, max(ps) as ps_max from gold.bv_roster_now group by position",
     # L3 (étape 5f) : remplaçant au même poste (force fit), écart et salaire ; tolérance de force lue dans core.game_params
@@ -891,7 +903,8 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
     Le résultat d'un test n'est lisible dans aucune vue (champ `test_potentiel` absent) : jamais « signer » en production.
     L5 : la taille manque → UNE ligne pour tout le rapport.
     Vue absente ou rapport ancien : rien."""
-    pros = lignes_de(donnees, "prospects")
+    tests = {str(r["slot"]): r["potentiel"] for r in lignes_de(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}  # 18/11
+    pros = [dict(p, test_potentiel=tests.get(str(p.get("slot")), p.get("test_potentiel"))) for p in lignes_de(donnees, "prospects")]
     du_jour = bool(pros) and en_heure(pros[0]["rapport_paris"]).date() == maintenant.date()
     if maintenant.weekday() == JOUR_RAPPORT_ACADEMIE and not du_jour \
             and not any(norm(c["nom"]) == "academie" and c["jour"] >= maintenant.date() for c in cles):

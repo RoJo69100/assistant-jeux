@@ -117,8 +117,8 @@ def cas_hors_match():
     yield "académie : après 09:00, rapport absent → rapport_exporte", ej.etat_evenement(ac, CFG, dt.datetime(2026, 11, 19, 10, 0))["prochain"] == "rapport_exporte"
     ok = dict(ac, rapport_at=dt.datetime(2026, 11, 19, 9, 0, 1))
     l = ej.etat_evenement(ok, CFG, dt.datetime(2026, 11, 19, 10, 0))
-    yield "académie : rapport en base, non décidé → decide", l["prochain"] == "decide" and "tester, signer ou ignorer" in l["consigne"]
-    yield "académie : décidé → plus rien", ej.etat_evenement(dict(ok, decide=True), CFG, dt.datetime(2026, 11, 19, 10, 0))["prochain"] is None
+    yield "académie : rapport en base, tests inconnus → teste (18/11)", l["prochain"] == "teste" and "tester, signer ou ignorer" in l["consigne"]
+    yield "académie : décidé → plus rien", ej.etat_evenement(dict(ok, decide=True, tests=0), CFG, dt.datetime(2026, 11, 19, 10, 0))["prochain"] is None
     en = {"type": "entrainement", "quand": dt.datetime(2026, 11, 22, 4, 0), "page_at": None, "saisi": False, "maj_at": None}
     yield "entraînement : avant dimanche 04:00 → traitement_attendu", ej.etat_evenement(en, CFG, dt.datetime(2026, 11, 21, 12, 0))["prochain"] == "traitement_attendu"
     yield "entraînement : traité, page non exportée → page_exportee", ej.etat_evenement(en, CFG, dt.datetime(2026, 11, 22, 9, 0))["prochain"] == "page_exportee"
@@ -459,9 +459,28 @@ def cas_academie_decision():
     S = {"analyste": None, "cles": [], "cibles": [], "police": ""}
     d = donnees(prospects=(cols, pros))
     ls = [l for l in ej.lignes(ej.construire(d, S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]]
-    yield "académie : une seule ligne pour le rapport du 12/11 non décidé", len(ls) == 1 and ls[0]["prochain"] == "decide"
-    yield "académie : décision attendue chiffrée (3 tests, 75 000 ; le prospect hors taille est ignoré)", \
-        ls and "décision attendue : tester 3 prospects (75 000)" in ls[0]["consigne"]
+    yield "académie : une seule ligne pour le rapport du 12/11 non testé", len(ls) == 1 and ls[0]["prochain"] == "teste"
+    yield "académie : tests attendus chiffrés (3 tests, 75 000 ; le prospect hors taille est ignoré)", \
+        ls and "tester 3 prospects (75 000)" in ls[0]["consigne"]
+    # 18/11 : les 3 tests faits et exportés le 17/11 (dernière capture de la page Académie) → état « testé », verdict de la règle
+    tcols = ["slot", "name", "position", "height_cm", "potentiel", "teste", "capture_paris"]
+    tests = [(0, "P1", "PF", 197, "low", True, "2026-11-17T21:50:48"), (1, "P2", "PF", 198, "decent", True, "2026-11-17T21:50:48"),
+             (2, "P3", "SF", 190, "decent", True, "2026-11-17T21:50:48"), (3, "P4", "PF", 150, None, False, "2026-11-17T21:50:48")]
+    dt_ = donnees(prospects=(cols, pros), tests_academie=(tcols, tests))
+    ev = next(e for e in ej.construire(dt_, S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie")
+    lt = [l for l in ej.lignes([ev], CFG, MAINT) if l["action"]]
+    yield "académie : tests lus → état « testé », plus de « tester 3 prospects »", ej.etat_evenement(ev, CFG, MAINT)["etat"] == "teste" \
+        and lt and lt[0]["prochain"] == "decide" and "tester 3 prospects" not in lt[0]["consigne"]
+    yield "académie : verdict par prospect testé (low, decent : pas de très gros potentiel → ignorer)", lt and all(
+        x in lt[0]["consigne"] for x in ("P1 (PF, low) : ignorer", "P2 (PF, decent) : ignorer", "P3 (SF, decent) : ignorer", "capture du 17/11"))
+    haut = [(0, "P1", "PF", 197, "high", True, "2026-11-17T21:50:48")] + tests[1:]
+    lh = [l for l in ej.lignes([e for e in ej.construire(donnees(prospects=(cols, pros), tests_academie=(tcols, haut)), S, "/nonexistent",
+                                                          dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie"], CFG, MAINT) if l["action"]]
+    yield "académie : potentiel high → la règle ne s'applique pas en entier, ce qui manque est nommé, aucun seuil inventé", lh and \
+        "P1 (PF, high) : à juger, il manque" in lh[0]["consigne"]
+    ok, err = ej._rows({"tests_academie": (tcols, tests)}, "tests_academie"), None
+    yield "académie : requête des tests sur la dernière capture (max(captured_at))", "tests_academie" in __import__("aujourdhui").REQUETES \
+        and "max(captured_at)" in __import__("aujourdhui").REQUETES["tests_academie"] and len(ok) == 4
     yield "académie : sans prospects, la consigne générique reste", "décide pour chaque prospect" in [l for l in ej.lignes(ej.construire(donnees(), S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]][0]["consigne"]
 
 

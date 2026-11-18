@@ -113,6 +113,8 @@ def _autre_ok(ev, etat, maintenant, cfg) -> bool:
         return maintenant >= ev["quand"]
     if t == "academie" and etat == "rapport_exporte":
         return ev.get("rapport_at") is not None and ev["rapport_at"] >= ev["quand"]
+    if t == "academie" and etat == "teste":  # 18/11 : plus aucun prospect au verdict « tester » (tests lus sur la dernière capture)
+        return ev.get("tests") == 0
     if t == "academie" and etat == "decide":
         return bool(ev.get("decide"))
     if t == "entrainement" and etat == "page_exportee":
@@ -134,11 +136,19 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
         return ev["quand"], f"rien avant le rapport du scout ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
     if etat == "rapport_exporte":
         return None, f"exporte la page Académie (rapport du {_jj(ev['quand'])})", True
-    if etat == "decide":
+    if etat == "teste":
         n = ev.get("tests")
-        if n:  # 17/11 : décision attendue chiffrée (verdict « tester » de aujourdhui.verdict_prospect, coût de la config)
+        if n:  # 17/11 : tests attendus chiffrés (verdict « tester » de aujourdhui.verdict_prospect, coût de la config)
             cout = f"{n * cfg['evenements']['academie']['cout_test']:,}".replace(",", " ")
             return None, f"décision attendue : tester {n} prospect{'s' if n > 1 else ''} ({cout}), rapport du {_jj(ev['quand'])}", True
+        return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
+    if etat == "decide":
+        v = ev.get("verdicts") or []
+        if v:  # 18/11 : tests lus, verdict de la règle de signature de l'utilisateur (17/11)
+            signer = [x["nom"] for x in v if x["verdict"] == "signer"]
+            quoi = f"signe {', '.join(signer)}" if signer else "aucun prospect à signer"
+            return None, (f"testé (capture du {_jj(ev.get('capture'))}), rapport du {_jj(ev['quand'])} : "
+                          + " ; ".join(f"{x['nom']} ({x['poste']}, {x['potentiel']}) : {x['verdict']}" for x in v) + f" — {quoi}"), True
         return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
     if etat == "traitement_attendu":
         return ev["quand"], f"rien avant le traitement de l'entraînement ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
@@ -736,13 +746,31 @@ def fiche_entrainement(base, jour, depuis):
     return {"fichier": f"briefs/{max(trouves)[1]}"} if trouves else None
 
 
+MANQUE_SIGNATURE = ("à juger, il manque la mesure « meilleures caractéristiques du poste » de la règle de signature "
+                    "(aucun seuil écrit par l'utilisateur)")
+
+
 def _tests_academie(donnees):
-    """Nombre de prospects du rapport au verdict « tester » (gold.bv_academy_prospects) ; None si une taille ou un poste manque."""
+    """(n, verdicts, capture) : n = prospects du rapport encore au verdict « tester » (None si une taille ou un poste manque) ;
+    verdicts des prospects testés, lus sur la dernière capture de la page Académie (requête « tests_academie », max(captured_at)) :
+    règle de signature de l'utilisateur du 17/11 (potentiel énorme, meilleures caractéristiques du poste, bonne taille).
+    Potentiel autre que high : ignorer. High et taille juste : la mesure des compétences au poste manque, elle est nommée."""
     import aujourdhui as auj
     pros = _rows(donnees, "prospects")
     if not pros or any(p.get("position") not in auj.PLAGE_TAILLE or p.get("height_cm") in (None, "") for p in pros):
-        return None
-    return sum(auj.verdict_prospect(p)[0] == "tester" for p in pros)
+        return None, [], None
+    tests = {str(r["slot"]): r for r in _rows(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}
+    capture = max((_dt(r["capture_paris"]) for r in _rows(donnees, "tests_academie") if r.get("capture_paris")), default=None)
+    n, verdicts = 0, []
+    for p in pros:
+        t = tests.get(str(p["slot"]))
+        verdict = auj.verdict_prospect(dict(p, test_potentiel=t["potentiel"] if t else None))[0]
+        if t is None:
+            n += verdict == "tester"
+            continue
+        verdicts.append({"nom": p["name"], "poste": p["position"], "potentiel": str(t["potentiel"]).lower(),
+                         "verdict": MANQUE_SIGNATURE if verdict == "signer" else verdict})
+    return n, verdicts, capture
 
 
 def construire(donnees, S, base, jour, maintenant, cfg) -> list:
@@ -791,7 +819,8 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
         for q in occurrences(c["quand"], maintenant):
             ev = {"type": t, "id": f"{t}-{q:%Y-%m-%d}", "quand": q, "maj_at": None}
             if t == "academie":
-                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=_tests_academie(donnees))
+                n, verdicts, capture = _tests_academie(donnees)
+                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=n, verdicts=verdicts, capture=capture)
             else:
                 ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()), fiche=fiche_entrainement(base, jour, q.date()))
             evs.append(ev)
