@@ -617,7 +617,7 @@ JOUR_J = dt.date(2026, 11, 10)
 
 def donnees_4(**plus):
     d = {"prix_cases": PRIX, "annonces_24h": ANN, "vendre": VENTE, "gold.bv_sell_replacement": REMPL,
-         "annonces_export": T(["n"], [(20,)]),
+         "annonces_export": T(["n"], [(20,)]), "rotation": T(["player_id", "name", "position", "ps", "min_moy", "matchs_joues"], []),
          "gold.bv_exports_state": T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                     [(3, "Marché (enchères)", "x", "2026-11-10T10:13:00", 5, "🟩 à jour")])}
     d.update(plus)
