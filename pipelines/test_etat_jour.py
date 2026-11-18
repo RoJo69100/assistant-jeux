@@ -612,6 +612,19 @@ def cas_rotation_illisible():
         [("amélioration", "Thibault Bonnet")]
 
 
+def cas_prix_inconnu():
+    """Verdict du 18/11 : Pellegrini et Balbuena « à 0 » (aucune enchère = prix inconnu) proposés en revente ; aucun âge d'export."""
+    zero_rv = ["b1", "Gino Pellegrini", "PG", 24, 51, 0, "2026-11-18T23:49:00"]   # PG : aucun utilisé → serait revente
+    zero_am = ["b2", "Armando Balbuena", "SF", 23, 52, 0, "2026-11-18T17:52:00"]  # 52 > 40 → amélioration
+    r = ej.offres_du_jour(marche(annonces=[zero_rv, zero_am]), O, 300000)
+    yield "prix 0 : pas de revente (marge non calculable)", [x["nom"] for x in r["offres"]] == ["Armando Balbuena"]
+    t = ej.texte_transfert(r["offres"][0], O)
+    yield "prix 0 : « prix inconnu », jamais « à 0 »", "prix inconnu" in t and "à 0 " not in t
+    am = ["b3", "Tom Gain", "SF", 23, 52, 751, "2026-11-18T09:00:00"]
+    t = ej.texte_transfert(ej.offres_du_jour(marche(annonces=[am]), O, 300000)["offres"][0], O)
+    yield "prix connu : âge de l'export du Marché donné", "à 751 (export du Marché de 2 h)" in t
+
+
 def cas_offres():
     yield "offres : seuils lus dans le yaml", O["revente_marge"] == 1.25 and O["case_min_ventes"] == 3 and O["matchs_rotation"] == 4 \
         and O["minimum_effectif"] == 8
@@ -774,7 +787,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

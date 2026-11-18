@@ -493,6 +493,7 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
     if donnees.get("rotation") is None:  # 18/11 : sans rotation, aucun « plus faible » : tout tombait en revente
         return {"inconnu": "inconnu : rotation illisible (minutes de ligue), offres non classées", "offres": []}
     exclus = {str(x).lower() for x in exclus}
+    age_export = auj.age_export_h(donnees, MARCHE, maintenant)
     cases = qfb._cases(donnees)
     faibles = {}
     for r in _rows(donnees, "rotation"):
@@ -513,12 +514,12 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
         f = faibles.get(r["position"])
         base = {"nom": r["name"], "poste": r["position"], "age": int(float(r["age"])), "note": float(r["ps"]), "prix": prix, "mediane": med,
                 "p25": p25, "p75": float(case["p75"]), "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")),
-                "gain": med - prix, "capacite": float(capacite), "salaire": sal}
+                "gain": med - prix, "capacite": float(capacite), "salaire": sal, "age_export_h": age_export}
         if f is not None and float(r["ps"]) > float(f["ps"]):
             x = enchere_max(case, capacite, sal)
             if x is not None and prix <= x:  # prix relu au-dessus de l'enchère max : ligne supprimée
                 res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x))
-        elif prix <= p25 and med >= float(o["revente_marge"]) * prix:
+        elif prix > auj.PRIX_NON_SIGNIFICATIF and prix <= p25 and med >= float(o["revente_marge"]) * prix:  # 18/11 : prix 0 = inconnu
             x = enchere_max(case, capacite, sal, o["revente_marge"])
             if x is not None and prix <= x:
                 res.append(dict(base, type="revente", max=x))
@@ -605,7 +606,12 @@ def texte_transfert(x, o) -> str:
             seuil = (f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix ; "
                      f"max = min(médiane / {_virg(o['revente_marge'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
-        t = f"{x['type']} : {qui}, enchère max {_m(x['max'])}, à {_m(x['prix'])} ; médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
+        import aujourdhui as auj
+        age = x.get("age_export_h")
+        age = f"export du Marché de {age:.0f} h" if age is not None else "âge de l'export du Marché illisible"
+        prix = (f"prix inconnu (aucune enchère, {age})" if x["prix"] <= auj.PRIX_NON_SIGNIFICATIF  # 18/11 : « à 0 » = inconnu
+                else f"à {_m(x['prix'])} ({age})")
+        t = f"{x['type']} : {qui}, enchère max {_m(x['max'])}, {prix} ; médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
     t += " — proposition seulement (règle 2)"
     if max(x["prix"], x.get("max") or 0) > SEUIL_GROS_MONTANT["basketvibe"]:
         t += " — police d'abord : dossier.py puis agent police"
