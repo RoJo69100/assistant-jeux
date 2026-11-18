@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BasketVibe → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      1.0.0
+// @version      1.1.0
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages (file persistante, envoi automatique). Aucune requête supplémentaire vers basketvibe.com.
 // @match        https://www.basketvibe.com/*
 // @match        https://basketvibe.com/*
@@ -73,7 +73,7 @@ const JEU = {
 if (window.top !== window.self) return;   // pas dans les iframes
 
 const GAME = JEU.game;
-const CLIENT = GAME + '.user.js@1.0.0';
+const CLIENT = GAME + '.user.js@1.1.0';
 const O = Object.assign({
   autoCount: 20,            // envoi dès 20 captures en attente
   idleMs: 60000,            // ... ou 60 s après la dernière capture

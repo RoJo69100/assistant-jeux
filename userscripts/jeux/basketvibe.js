@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BasketVibe → Supabase (export bronze)
 // @namespace    assistant-jeux
-// @version      1.0.0
+// @version      1.1.0
 // @description  Capture passive des données chargées par la page ouverte et envoi dans bronze.raw_pages (file persistante, envoi automatique). Aucune requête supplémentaire vers basketvibe.com.
 // @match        https://www.basketvibe.com/*
 // @match        https://basketvibe.com/*
