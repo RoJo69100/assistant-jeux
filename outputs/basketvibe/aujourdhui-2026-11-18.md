@@ -1,15 +1,15 @@
-<!-- généré le 2026-11-18 16:24 -->
+<!-- généré le 2026-11-18 16:39 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
 | 🟥 URGENT | Transferts | priorité : plafonds additionnés 1 873 886 > capacité 686 018 ; enchéris dans cet ordre (gain attendu) : 1. Alan Szewczyk (max 660 518), 2. Armando Balbuena (max 665 368), 3. Lucas Laurent (max 548 000) ; tiennent ensemble à leur plafond : Alan Szewczyk ; chaque enchère gagnée retire son prix de la capacité et baisse les plafonds suivants |
 | 🟧 IMPORTANT | Composition | agent tactique à lancer : fiche du match amical contre FuzzyTeam (20/11) — échéance 20/11 07:45 |
-| 🟧 IMPORTANT | Analyse | juge les décisions à mesurer après le match de ligue contre Astur Hoops (16/11) — données de 17,8 h |
+| 🟧 IMPORTANT | Analyse | juge les décisions à mesurer après le match de ligue contre Astur Hoops (16/11) — données de 18,1 h |
 | 🟧 IMPORTANT | Académie/Draft | testé (capture du 17/11), rapport du 12/11 : Gabriel Bertrand (PF, low) : ignorer ; Oscar Guillaume (PF, decent) : ignorer ; Noé Deschamps (SF, decent) : ignorer — aucun prospect à signer |
-| 🟧 IMPORTANT | Transferts | amélioration : Alan Szewczyk (SG, 28 ans, note 56,4), enchère max 660 518, à 205 000 (export du Marché de 3 h) ; médiane de la case 1 000 000 ; note > 51,9 de Thibault Bonnet (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 1 378 125, capacité 686 018 − salaire 25 500) ; fin 18/11 23:37 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
-| 🟧 IMPORTANT | Transferts | amélioration : Armando Balbuena (SF, 26 ans, note 50,3), enchère max 665 368, à 1 001 (export du Marché de 3 h) ; médiane de la case 490 000 ; note > 43,7 de Jonathan Durand (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 700 000, capacité 686 018 − salaire 20 650) ; fin 18/11 17:52 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
-| 🟧 IMPORTANT | Transferts | revente : Lucas Laurent (SG, 23 ans, note 50,1), enchère max 548 000, à 350 000 (export du Marché de 3 h) ; médiane de la case 685 000 ; case de 24 ventes (≥ 3), prix ≤ p25 442 500, médiane ≥ 1,25 × prix ; max = min(médiane / 1,25, capacité 686 018 − salaire 19 600) ; fin 18/11 21:00 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
+| 🟧 IMPORTANT | Transferts | amélioration : Alan Szewczyk (SG, 28 ans, note 56,4), enchère max 660 518, à 205 000 (export du Marché de 2 h) ; médiane de la case 1 000 000 ; note > 51,9 de Thibault Bonnet (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 1 378 125, capacité 686 018 − salaire 25 500) ; fin 18/11 23:37 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
+| 🟧 IMPORTANT | Transferts | amélioration : Armando Balbuena (SF, 26 ans, note 50,3), enchère max 665 368, à 1 001 (export du Marché de 2 h) ; médiane de la case 490 000 ; note > 43,7 de Jonathan Durand (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 700 000, capacité 686 018 − salaire 20 650) ; fin 18/11 17:52 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
+| 🟧 IMPORTANT | Transferts | revente : Lucas Laurent (SG, 23 ans, note 50,1), enchère max 548 000, à 350 000 (export du Marché de 2 h) ; médiane de la case 685 000 ; case de 24 ventes (≥ 3), prix ≤ p25 442 500, médiane ≥ 1,25 × prix ; max = min(médiane / 1,25, capacité 686 018 − salaire 19 600) ; fin 18/11 21:00 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
 | 🟧 IMPORTANT | Transferts | vente : Nolan Baron (PG, 17 ans, note 44,9), prix attendu 300 000, médiane de la case 300 000 (86 ventes ≥ 3) ; 0 min en moyenne sur 4 matchs de ligue (≤ 6), écart avec Jonathan Durand 0,6 (tolérance 1) ; prix d'achat inconnu, profit non calculé ; fin : annonce à créer — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police |
 
 ## Bloc 2 — Composition de l'amical
@@ -51,86 +51,85 @@ composition de l'amical en préparation
 
 | Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |
 |---|---|---|---|---|---|---|---|---|---|
-| Dennis Herzog | PG | 29 | 56,0 | 1 250 000 | 1 000 000 | 686 018 | dans 0,1 h | -0,8 | non (prix au-dessus de la médiane de la case) |
-| Norman Krüger | PF | 17 | 37,3 | 200 000 | 25 000 | 25 000 | dans 0,1 h | -21,7 | non (prix au-dessus de la médiane de la case) |
-| Baltasar Cadenas | SF | 28 | 55,5 | 1 111 111 | 1 000 000 | 686 018 | dans 0,5 h | -0,6 | non (prix au-dessus de la médiane de la case) |
-| Armando Balbuena | SF | 26 | 50,3 | 1 001 | 490 000 | 152 000 | dans 1,5 h | -6,2 | oui |
-| Benjamin Lecomte | C | 16 | 40,4 | 640 000 | 299 999 | 299 999 | dans 1,5 h | -19,9 | non (prix au-dessus de la médiane de la case) |
-| Andrea Franzoni | PG | 26 | 42,6 | 0 | 1 000 | 1 000 | dans 1,7 h | -14,1 | oui |
-| Carmine D'Angelo | PF | 24 | 39,7 | 0 | 251 | 251 | dans 1,7 h | -19,6 | oui |
-| Jan Słowiński | SG | 25 | 60,6 | 2 800 000 | 2 333 333 | 686 018 | dans 2,4 h | +4,2 | non (prix au-dessus de la médiane de la case) |
-| Cyprian Cieślak | PG | 26 | 58,6 | 2 500 000 | 1 000 000 | 686 018 | dans 2,4 h | +1,7 | non (prix au-dessus de la médiane de la case) |
-| Pablo Ferreyra | PG | 17 | 34,5 | 0 | 1 875 | 1 875 | dans 3,1 h | -22,6 | oui |
-| Diego Pereira | SF | 16 | 49,8 | 8 400 000 | 795 000 | 686 018 | dans 3,3 h | -10,6 | non (prix au-dessus de la médiane de la case) |
-| Hyun-soo Abraham | SF | 17 | 43,8 | 215 000 | 299 999 | 299 999 | dans 3,4 h | -12,4 | oui |
-| Marco Friedman | SG | 16 | 44,3 | 1 000 000 | 299 999 | 299 999 | dans 3,5 h | -12,4 | non (prix au-dessus de la médiane de la case) |
-| Yong-jun Dahan | SG | 28 | 43,1 | 1 | 1 000 | 1 000 | dans 3,9 h | -13,1 | oui |
-| Lloyd Hamilton | SG | 17 | 40,1 | 250 000 | 299 999 | 299 999 | dans 4,2 h | -16,5 | oui |
-| Maciej Grabowski | PF | 27 | 48,6 | 1 000 000 | 10 000 | 10 000 | dans 4,5 h | -10,3 | non (prix au-dessus de la médiane de la case) |
-| Eugenio Suárez | C | 22 | 42,2 | 1 | 5 000 | 5 000 | dans 4,6 h | -11,6 | oui |
-| Lucas Laurent | SG | 23 | 50,1 | 350 000 | 685 000 | 685 000 | dans 4,6 h | -6,2 | oui |
-| Przemysław Witkowski | SF | 17 | 40,3 | 2 000 000 | 299 999 | 299 999 | dans 4,7 h | -20,0 | non (prix au-dessus de la médiane de la case) |
-| Jed Le | SF | 17 | 39,5 | 250 000 | 25 000 | 25 000 | dans 4,7 h | -20,9 | non (prix au-dessus de la médiane de la case) |
-| Fortunat Sikora | PF | 26 | 54,5 | 999 999 | 490 000 | 490 000 | dans 4,7 h | -4,5 | non (prix au-dessus de la médiane de la case) |
-| Witold Mazurek | SG | 26 | 53,1 | 999 999 | 490 000 | 490 000 | dans 4,7 h | -7,3 | non (prix au-dessus de la médiane de la case) |
-| Fabiano Bianchi | C | 28 | 43,3 | 0 | 1 000 | 1 000 | dans 4,7 h | -15,7 | oui |
-| Soan Boyer | C | 29 | 41,9 | 200 000 | 1 000 | 1 000 | dans 4,8 h | -11,5 | non (prix au-dessus de la médiane de la case) |
-| Jelani Mensah | PF | 26 | 48,4 | 550 000 | 10 000 | 10 000 | dans 4,9 h | -10,7 | non (prix au-dessus de la médiane de la case) |
-| Michael Jung | PF | 28 | 63,1 | 5 000 000 | 1 421 175 | 686 018 | dans 5,4 h | +3,2 | non (prix au-dessus de la médiane de la case) |
-| Paul Hofmann | SG | 27 | 51,1 | 850 000 | 490 000 | 490 000 | dans 5,5 h | -5,1 | non (prix au-dessus de la médiane de la case) |
-| Ricardo Teixeira | PF | 27 | 53,2 | 750 000 | 490 000 | 490 000 | dans 5,7 h | -0,2 | non (prix au-dessus de la médiane de la case) |
-| Francesco Caruso | SG | 17 | 47,6 | 2 999 999 | 795 000 | 686 018 | dans 5,8 h | -9,2 | non (prix au-dessus de la médiane de la case) |
-| Zeno Galli | SF | 29 | 46,5 | 100 | 10 000 | 10 000 | dans 6,1 h | -9,7 | oui |
-| Aljaž Leskovar | SG | 16 | 38,4 | 222 000 | 25 000 | 25 000 | dans 6,3 h | -19,4 | non (prix au-dessus de la médiane de la case) |
-| Goffredo Greco | C | 23 | 42,5 | 50 000 | 5 000 | 5 000 | dans 6,7 h | -11,0 | non (prix au-dessus de la médiane de la case) |
-| Neil Bustamante | PG | 29 | 42,0 | 10 000 | 1 000 | 1 000 | dans 6,8 h | -14,7 | non (prix au-dessus de la médiane de la case) |
-| David Okonkwo | SG | 23 | 42,1 | 125 000 | 5 000 | 5 000 | dans 6,9 h | -14,2 | non (prix au-dessus de la médiane de la case) |
-| Hipolit Chmielewski | PG | 23 | 45,9 | 350 000 | 93 388 | 93 388 | dans 6,9 h | -11,0 | non (prix au-dessus de la médiane de la case) |
-| Damián Aimar | C | 28 | 41,7 | 100 000 | 1 000 | 1 000 | dans 7,0 h | -12,2 | non (prix au-dessus de la médiane de la case) |
-| Julius Quizon | PF | 25 | 44,3 | 300 000 | 5 000 | 5 000 | dans 7,1 h | -14,7 | non (prix au-dessus de la médiane de la case) |
-| Paweł Grabowski | SF | 27 | 59,7 | 1 010 000 | 1 000 000 | 686 018 | dans 7,2 h | -1,2 | non (prix au-dessus de la médiane de la case) |
-| Alan Szewczyk | SG | 28 | 56,4 | 205 000 | 1 000 000 | 686 018 | dans 7,2 h | -3,8 | oui |
-| Michał Marciniak | PG | 24 | 57,8 | 1 155 000 | 1 365 000 | 686 018 | dans 7,2 h | +0,9 | non (au-dessus de la capacité restante) |
-| Gino Pellegrini | PG | 26 | 53,0 | 370 000 | 490 000 | 490 000 | dans 7,4 h | -3,7 | oui |
-| Rijad Kurtović | PG | 17 | 38,5 | 190 000 | 25 000 | 25 000 | dans 7,4 h | -18,2 | non (prix au-dessus de la médiane de la case) |
-| Miles Girard | C | 17 | 35,4 | 190 000 | 25 000 | 25 000 | dans 7,4 h | -18,2 | non (prix au-dessus de la médiane de la case) |
-| Günter Horn | SF | 17 | 37,9 | 190 000 | 25 000 | 25 000 | dans 7,4 h | -20,1 | non (prix au-dessus de la médiane de la case) |
-| Jeremiah Ferguson | SG | 17 | 38,3 | 190 000 | 25 000 | 25 000 | dans 7,4 h | -18,7 | non (prix au-dessus de la médiane de la case) |
-| Omar Boone | SF | 16 | 27,0 | 8 900 | 1 750 | 1 750 | dans 8,2 h | -30,1 | non (case peu fiable : 3 ventes) |
-| Pablo Olivera | C | 24 | 38,8 | 100 000 | 251 | 251 | dans 9,3 h | -15,0 | non (prix au-dessus de la médiane de la case) |
-| Naoki Saito | SG | 24 | 41,2 | 1 000 | 5 000 | 5 000 | dans 9,4 h | -15,3 | oui |
-| Boštjan Oblak | SG | 25 | 58,6 | 1 378 125 | 1 365 000 | 686 018 | dans 11,0 h | -1,8 | non (prix au-dessus de la médiane de la case) |
-| Slobodan Ivanović | SG | 24 | 40,0 | 1 000 | 5 000 | 5 000 | dans 11,3 h | -17,0 | oui |
-| Jaleel Nazim | PG | 30 | 47,3 | 10 000 | 10 250 | 10 250 | dans 11,5 h | -8,5 | oui |
-| Onni Mäkelä | C | 25 | 52,9 | 1 125 000 | 685 000 | 685 000 | dans 12,4 h | -0,5 | non (prix au-dessus de la médiane de la case) |
-| Dušan Crnčević | PG | 26 | 41,4 | 1 000 | 1 000 | 1 000 | dans 12,5 h | -14,3 | oui |
-| Boubacar Ould Baba | SG | 27 | 45,9 | 10 000 | 10 000 | 10 000 | dans 12,5 h | -10,2 | oui |
-| Aleksandar Nedić | PF | 30 | 48,1 | 100 000 | 10 250 | 10 250 | dans 15,3 h | -11,3 | non (prix au-dessus de la médiane de la case) |
-| Nino Bianco | PF | 27 | 48,6 | 60 000 | 10 000 | 10 000 | dans 15,6 h | -10,9 | non (prix au-dessus de la médiane de la case) |
-| Damjan Kosmač | PG | 26 | 47,7 | 500 | 10 000 | 10 000 | dans 17,3 h | -9,5 | oui |
-| Corrado Cattaneo | C | 17 | 45,1 | 1 060 499 | 795 000 | 686 018 | dans 18,5 h | -14,5 | non (prix au-dessus de la médiane de la case) |
-| Salvatore Martino | PG | 30 | 49,6 | 100 000 | 10 250 | 10 250 | dans 19,3 h | -7,6 | non (prix au-dessus de la médiane de la case) |
-| Claudio Piras | SG | 26 | 41,4 | 100 000 | 1 000 | 1 000 | dans 19,3 h | -15,7 | non (prix au-dessus de la médiane de la case) |
-| Kajetan Socha | SG | 27 | 39,5 | 50 000 | 625 | 625 | dans 19,6 h | -16,8 | non (prix au-dessus de la médiane de la case) |
-| Fouad Naguib | SF | 17 | 45,9 | 1 736 438 | 795 000 | 686 018 | dans 20,1 h | -10,6 | non (prix au-dessus de la médiane de la case) |
-| Gabriel Haas | PF | 17 | 46,6 | 2 475 000 | 795 000 | 686 018 | dans 21,2 h | -12,4 | non (prix au-dessus de la médiane de la case) |
-| Roland Farkas | PF | 17 | 45,2 | 999 999 | 795 000 | 686 018 | dans 21,3 h | -14,1 | non (prix au-dessus de la médiane de la case) |
-| Borys Danylenko | SF | 22 | 44,2 | 199 | 5 000 | 5 000 | dans 21,3 h | -16,2 | oui |
-| Maurits Peters | SG | 23 | 44,2 | 2 500 | 5 000 | 5 000 | dans 22,5 h | -15,7 | oui |
-| Horacy Sułkowski | SG | 28 | 45,7 | 3 000 | 10 000 | 10 000 | dans 22,6 h | -10,6 | oui |
-| Łukasz Szewczyk | PF | 26 | 40,0 | 1 000 | 1 000 | 1 000 | dans 22,6 h | -19,6 | oui |
-| Barry Ford | C | 26 | 51,4 | 600 000 | 490 000 | 490 000 | dans 23,1 h | -2,0 | non (prix au-dessus de la médiane de la case) |
-| Guilherme Lopes | SG | 18 | 41,5 | 150 000 | 299 999 | 299 999 | dans 23,1 h | -15,1 | oui |
-| Zoran Vujović | SF | 20 | 40,5 | 7 500 | 299 999 | 85 500 | dans 23,3 h | -15,5 | oui |
-| Marceli Zieliński | SF | 25 | 49,6 | 299 000 | 93 388 | 93 388 | dans 23,3 h | -9,3 | non (prix au-dessus de la médiane de la case) |
-| Kazimierz Lewicki | C | 28 | 60,0 | 1 000 000 | 1 421 175 | 686 018 | dans 23,5 h | +6,6 | non (au-dessus de la capacité restante) |
+| Baltasar Cadenas | SF | 28 | 55,5 | 1 111 111 | 1 000 000 | 686 018 | dans 0,3 h | -0,6 | non (prix au-dessus de la médiane de la case) |
+| Armando Balbuena | SF | 26 | 50,3 | 1 001 | 490 000 | 152 000 | dans 1,2 h | -10,3 | oui |
+| Benjamin Lecomte | C | 16 | 40,4 | 640 000 | 299 999 | 299 999 | dans 1,3 h | -19,9 | non (prix au-dessus de la médiane de la case) |
+| Andrea Franzoni | PG | 26 | 42,6 | 0 | 1 000 | 1 000 | dans 1,5 h | -14,1 | oui |
+| Carmine D'Angelo | PF | 24 | 39,7 | 0 | 251 | 251 | dans 1,5 h | -19,6 | oui |
+| Jan Słowiński | SG | 25 | 60,6 | 2 800 000 | 2 333 333 | 686 018 | dans 2,1 h | +4,2 | non (prix au-dessus de la médiane de la case) |
+| Cyprian Cieślak | PG | 26 | 58,6 | 2 500 000 | 1 000 000 | 686 018 | dans 2,1 h | +1,7 | non (prix au-dessus de la médiane de la case) |
+| Pablo Ferreyra | PG | 17 | 34,5 | 0 | 1 875 | 1 875 | dans 2,8 h | -22,6 | oui |
+| Diego Pereira | SF | 16 | 49,8 | 8 400 000 | 795 000 | 686 018 | dans 3,0 h | -10,6 | non (prix au-dessus de la médiane de la case) |
+| Hyun-soo Abraham | SF | 17 | 43,8 | 215 000 | 299 999 | 299 999 | dans 3,2 h | -12,4 | oui |
+| Marco Friedman | SG | 16 | 44,3 | 1 000 000 | 299 999 | 299 999 | dans 3,2 h | -12,4 | non (prix au-dessus de la médiane de la case) |
+| Yong-jun Dahan | SG | 28 | 43,1 | 1 | 1 000 | 1 000 | dans 3,7 h | -16,7 | oui |
+| Lloyd Hamilton | SG | 17 | 40,1 | 250 000 | 299 999 | 299 999 | dans 3,9 h | -16,5 | oui |
+| Maciej Grabowski | PF | 27 | 48,6 | 1 000 000 | 10 000 | 10 000 | dans 4,3 h | -10,3 | non (prix au-dessus de la médiane de la case) |
+| Lucas Laurent | SG | 23 | 50,1 | 350 000 | 685 000 | 685 000 | dans 4,3 h | -6,2 | oui |
+| Przemysław Witkowski | SF | 17 | 40,3 | 2 000 000 | 299 999 | 299 999 | dans 4,4 h | -20,0 | non (prix au-dessus de la médiane de la case) |
+| Witold Mazurek | SG | 26 | 53,1 | 999 999 | 490 000 | 490 000 | dans 4,4 h | -7,3 | non (prix au-dessus de la médiane de la case) |
+| Eugenio Suárez | C | 22 | 42,2 | 1 | 5 000 | 5 000 | dans 4,4 h | -11,6 | oui |
+| Fabiano Bianchi | C | 28 | 43,3 | 0 | 1 000 | 1 000 | dans 4,4 h | -15,7 | oui |
+| Jed Le | SF | 17 | 39,5 | 250 000 | 25 000 | 25 000 | dans 4,5 h | -20,9 | non (prix au-dessus de la médiane de la case) |
+| Soan Boyer | C | 29 | 41,9 | 200 000 | 1 000 | 1 000 | dans 4,5 h | -11,5 | non (prix au-dessus de la médiane de la case) |
+| Fortunat Sikora | PF | 26 | 54,5 | 999 999 | 490 000 | 490 000 | dans 4,5 h | -4,5 | non (prix au-dessus de la médiane de la case) |
+| Jelani Mensah | PF | 26 | 48,4 | 550 000 | 10 000 | 10 000 | dans 4,6 h | -10,7 | non (prix au-dessus de la médiane de la case) |
+| Michael Jung | PF | 28 | 63,1 | 5 000 000 | 1 421 175 | 686 018 | dans 5,2 h | +3,2 | non (prix au-dessus de la médiane de la case) |
+| Paul Hofmann | SG | 27 | 51,1 | 850 000 | 490 000 | 490 000 | dans 5,2 h | -5,1 | non (prix au-dessus de la médiane de la case) |
+| Ricardo Teixeira | PF | 27 | 53,2 | 750 000 | 490 000 | 490 000 | dans 5,4 h | -5,8 | non (prix au-dessus de la médiane de la case) |
+| Francesco Caruso | SG | 17 | 47,6 | 2 999 999 | 795 000 | 686 018 | dans 5,5 h | -9,2 | non (prix au-dessus de la médiane de la case) |
+| Zeno Galli | SF | 29 | 46,5 | 100 | 10 000 | 10 000 | dans 5,8 h | -13,8 | oui |
+| Aljaž Leskovar | SG | 16 | 38,4 | 222 000 | 25 000 | 25 000 | dans 6,1 h | -19,4 | non (prix au-dessus de la médiane de la case) |
+| Goffredo Greco | C | 23 | 42,5 | 50 000 | 5 000 | 5 000 | dans 6,4 h | -11,0 | non (prix au-dessus de la médiane de la case) |
+| Neil Bustamante | PG | 29 | 42,0 | 10 000 | 1 000 | 1 000 | dans 6,5 h | -14,7 | non (prix au-dessus de la médiane de la case) |
+| David Okonkwo | SG | 23 | 42,1 | 125 000 | 5 000 | 5 000 | dans 6,6 h | -14,2 | non (prix au-dessus de la médiane de la case) |
+| Hipolit Chmielewski | PG | 23 | 45,9 | 350 000 | 93 388 | 93 388 | dans 6,6 h | -11,0 | non (prix au-dessus de la médiane de la case) |
+| Damián Aimar | C | 28 | 41,7 | 100 000 | 1 000 | 1 000 | dans 6,7 h | -12,2 | non (prix au-dessus de la médiane de la case) |
+| Julius Quizon | PF | 25 | 44,3 | 300 000 | 5 000 | 5 000 | dans 6,8 h | -14,7 | non (prix au-dessus de la médiane de la case) |
+| Paweł Grabowski | SF | 27 | 59,7 | 1 010 000 | 1 000 000 | 686 018 | dans 7,0 h | -1,2 | non (prix au-dessus de la médiane de la case) |
+| Alan Szewczyk | SG | 28 | 56,4 | 205 000 | 1 000 000 | 686 018 | dans 7,0 h | -3,8 | oui |
+| Michał Marciniak | PG | 24 | 57,8 | 1 155 000 | 1 365 000 | 686 018 | dans 7,0 h | +0,9 | non (au-dessus de la capacité restante) |
+| Gino Pellegrini | PG | 26 | 53,0 | 370 000 | 490 000 | 490 000 | dans 7,2 h | -3,7 | oui |
+| Rijad Kurtović | PG | 17 | 38,5 | 190 000 | 25 000 | 25 000 | dans 7,2 h | -18,2 | non (prix au-dessus de la médiane de la case) |
+| Miles Girard | C | 17 | 35,4 | 190 000 | 25 000 | 25 000 | dans 7,2 h | -18,2 | non (prix au-dessus de la médiane de la case) |
+| Günter Horn | SF | 17 | 37,9 | 190 000 | 25 000 | 25 000 | dans 7,2 h | -20,1 | non (prix au-dessus de la médiane de la case) |
+| Jeremiah Ferguson | SG | 17 | 38,3 | 190 000 | 25 000 | 25 000 | dans 7,2 h | -18,7 | non (prix au-dessus de la médiane de la case) |
+| Omar Boone | SF | 16 | 27,0 | 8 900 | 1 750 | 1 750 | dans 8,0 h | -30,1 | non (case peu fiable : 3 ventes) |
+| Pablo Olivera | C | 24 | 38,8 | 100 000 | 251 | 251 | dans 9,0 h | -15,0 | non (prix au-dessus de la médiane de la case) |
+| Naoki Saito | SG | 24 | 41,2 | 1 000 | 5 000 | 5 000 | dans 9,2 h | -15,3 | oui |
+| Boštjan Oblak | SG | 25 | 58,6 | 1 378 125 | 1 365 000 | 686 018 | dans 10,7 h | +2,3 | non (prix au-dessus de la médiane de la case) |
+| Slobodan Ivanović | SG | 24 | 40,0 | 1 000 | 5 000 | 5 000 | dans 11,0 h | -17,0 | oui |
+| Jaleel Nazim | PG | 30 | 47,3 | 10 000 | 10 250 | 10 250 | dans 11,2 h | -8,5 | oui |
+| Onni Mäkelä | C | 25 | 52,9 | 1 125 000 | 685 000 | 685 000 | dans 12,1 h | -0,5 | non (prix au-dessus de la médiane de la case) |
+| Boubacar Ould Baba | SG | 27 | 45,9 | 10 000 | 10 000 | 10 000 | dans 12,2 h | -10,2 | oui |
+| Dušan Crnčević | PG | 26 | 41,4 | 1 000 | 1 000 | 1 000 | dans 12,3 h | -14,3 | oui |
+| Aleksandar Nedić | PF | 30 | 48,1 | 100 000 | 10 250 | 10 250 | dans 15,0 h | -11,3 | non (prix au-dessus de la médiane de la case) |
+| Nino Bianco | PF | 27 | 48,6 | 60 000 | 10 000 | 10 000 | dans 15,4 h | -10,9 | non (prix au-dessus de la médiane de la case) |
+| Damjan Kosmač | PG | 26 | 47,7 | 500 | 10 000 | 10 000 | dans 17,1 h | -9,5 | oui |
+| Corrado Cattaneo | C | 17 | 45,1 | 1 060 499 | 795 000 | 686 018 | dans 18,3 h | -14,5 | non (prix au-dessus de la médiane de la case) |
+| Salvatore Martino | PG | 30 | 49,6 | 100 000 | 10 250 | 10 250 | dans 19,0 h | -7,6 | non (prix au-dessus de la médiane de la case) |
+| Claudio Piras | SG | 26 | 41,4 | 100 000 | 1 000 | 1 000 | dans 19,1 h | -15,7 | non (prix au-dessus de la médiane de la case) |
+| Kajetan Socha | SG | 27 | 39,5 | 50 000 | 625 | 625 | dans 19,4 h | -16,8 | non (prix au-dessus de la médiane de la case) |
+| Fouad Naguib | SF | 17 | 45,9 | 1 736 438 | 795 000 | 686 018 | dans 19,9 h | -10,6 | non (prix au-dessus de la médiane de la case) |
+| Gabriel Haas | PF | 17 | 46,6 | 2 475 000 | 795 000 | 686 018 | dans 21,0 h | -12,4 | non (prix au-dessus de la médiane de la case) |
+| Roland Farkas | PF | 17 | 45,2 | 999 999 | 795 000 | 686 018 | dans 21,1 h | -14,1 | non (prix au-dessus de la médiane de la case) |
+| Borys Danylenko | SF | 22 | 44,2 | 199 | 5 000 | 5 000 | dans 21,1 h | -16,2 | oui |
+| Maurits Peters | SG | 23 | 44,2 | 2 500 | 5 000 | 5 000 | dans 22,2 h | -15,7 | oui |
+| Horacy Sułkowski | SG | 28 | 45,7 | 3 000 | 10 000 | 10 000 | dans 22,3 h | -10,6 | oui |
+| Łukasz Szewczyk | PF | 26 | 40,0 | 1 000 | 1 000 | 1 000 | dans 22,3 h | -19,6 | oui |
+| Barry Ford | C | 26 | 51,4 | 600 000 | 490 000 | 490 000 | dans 22,8 h | -2,0 | non (prix au-dessus de la médiane de la case) |
+| Guilherme Lopes | SG | 18 | 41,5 | 150 000 | 299 999 | 299 999 | dans 22,8 h | -15,1 | oui |
+| Zoran Vujović | SF | 20 | 40,5 | 7 500 | 299 999 | 85 500 | dans 23,0 h | -15,5 | oui |
+| Marceli Zieliński | SF | 25 | 49,6 | 299 000 | 93 388 | 93 388 | dans 23,0 h | -9,3 | non (prix au-dessus de la médiane de la case) |
+| Kazimierz Lewicki | C | 28 | 60,0 | 1 000 000 | 1 421 175 | 686 018 | dans 23,2 h | +6,6 | non (au-dessus de la capacité restante) |
+| Raimonds Čakste | PF | 26 | 59,6 | 1 999 999 | 1 000 000 | 686 018 | dans 23,9 h | +0,3 | non (prix au-dessus de la médiane de la case) |
 
 **Offres et ventes du jour (mêmes lignes que l'état par événement)**
 
 - priorité : plafonds additionnés 1 873 886 > capacité 686 018 ; enchéris dans cet ordre (gain attendu) : 1. Alan Szewczyk (max 660 518), 2. Armando Balbuena (max 665 368), 3. Lucas Laurent (max 548 000) ; tiennent ensemble à leur plafond : Alan Szewczyk ; chaque enchère gagnée retire son prix de la capacité et baisse les plafonds suivants
-- amélioration : Alan Szewczyk (SG, 28 ans, note 56,4), enchère max 660 518, à 205 000 (export du Marché de 3 h) ; médiane de la case 1 000 000 ; note > 51,9 de Thibault Bonnet (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 1 378 125, capacité 686 018 − salaire 25 500) ; fin 18/11 23:37 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
-- amélioration : Armando Balbuena (SF, 26 ans, note 50,3), enchère max 665 368, à 1 001 (export du Marché de 3 h) ; médiane de la case 490 000 ; note > 43,7 de Jonathan Durand (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 700 000, capacité 686 018 − salaire 20 650) ; fin 18/11 17:52 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
-- revente : Lucas Laurent (SG, 23 ans, note 50,1), enchère max 548 000, à 350 000 (export du Marché de 3 h) ; médiane de la case 685 000 ; case de 24 ventes (≥ 3), prix ≤ p25 442 500, médiane ≥ 1,25 × prix ; max = min(médiane / 1,25, capacité 686 018 − salaire 19 600) ; fin 18/11 21:00 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
+- amélioration : Alan Szewczyk (SG, 28 ans, note 56,4), enchère max 660 518, à 205 000 (export du Marché de 2 h) ; médiane de la case 1 000 000 ; note > 51,9 de Thibault Bonnet (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 1 378 125, capacité 686 018 − salaire 25 500) ; fin 18/11 23:37 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
+- amélioration : Armando Balbuena (SF, 26 ans, note 50,3), enchère max 665 368, à 1 001 (export du Marché de 2 h) ; médiane de la case 490 000 ; note > 43,7 de Jonathan Durand (notre plus faible utilisé au poste sur 4 matchs de ligue) ; max = min(p75 700 000, capacité 686 018 − salaire 20 650) ; fin 18/11 17:52 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
+- revente : Lucas Laurent (SG, 23 ans, note 50,1), enchère max 548 000, à 350 000 (export du Marché de 2 h) ; médiane de la case 685 000 ; case de 24 ventes (≥ 3), prix ≤ p25 442 500, médiane ≥ 1,25 × prix ; max = min(médiane / 1,25, capacité 686 018 − salaire 19 600) ; fin 18/11 21:00 — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
 - vente : Nolan Baron (PG, 17 ans, note 44,9), prix attendu 300 000, médiane de la case 300 000 (86 ventes ≥ 3) ; 0 min en moyenne sur 4 matchs de ligue (≤ 6), écart avec Jonathan Durand 0,6 (tolérance 1) ; prix d'achat inconnu, profit non calculé ; fin : annonce à créer — proposition seulement (règle 2) — police d'abord : dossier.py puis agent police
 
 **Qui vendre (joueurs vendables et s'ils sont nécessaires)**
@@ -152,9 +151,9 @@ composition de l'amical en préparation
 
 **Enchères, achats et ventes déjà proposés**
 
-- Enchère maximale 152 000 sur Armando Balbuena (SF, PS 50.3) — plafond de revente (95 % du p25) ; prix à l'export 1 001 ; fin 18/11 ; marge de revente p25 150 999 ; page du Marché de 3 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 85 500 sur Eusebio Gallego (PF, PS 40.8) — plafond de revente (95 % du p25) ; prix à l'export 251 ; fin 19/11 ; marge de revente p25 85 249 ; page du Marché de 3 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 85 500 sur Zoran Vujović (SF, PS 40.5) — plafond de revente (95 % du p25) ; prix à l'export 7 500 ; fin 19/11 ; marge de revente p25 78 000 ; page du Marché de 3 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 152 000 sur Armando Balbuena (SF, PS 50.3) — plafond de revente (95 % du p25) ; prix à l'export 1 001 ; fin 18/11 ; marge de revente p25 150 999 ; page du Marché de 2 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 85 500 sur Eusebio Gallego (PF, PS 40.8) — plafond de revente (95 % du p25) ; prix à l'export 251 ; fin 19/11 ; marge de revente p25 85 249 ; page du Marché de 2 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 85 500 sur Zoran Vujović (SF, PS 40.5) — plafond de revente (95 % du p25) ; prix à l'export 7 500 ; fin 19/11 ; marge de revente p25 78 000 ; page du Marché de 2 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
 
 
 ## Bloc 5 — Les meilleurs et les failles du jeu
