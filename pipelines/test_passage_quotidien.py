@@ -149,7 +149,42 @@ def cas_restauration():
         yield "restauration : un fichier présent sur main reste celui de main", (o / "commun.md").read_text(encoding="utf-8") == "main"
 
 
-CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration]
+def cas_etiquettes():
+    """18/11 : l'étiquette d'expérience est écrite par la routine, sans intervention, avant le plan."""
+    with tempfile.TemporaryDirectory() as t:
+        f = Path(t) / "fait-2026-11-14.md"
+
+        def run(cmd, **kw):
+            run.cmd = cmd
+            if "--ecrire" in cmd:
+                f.write_text("- [clé=Artificial Instinct 14/11] [expérience=E1:A]\n", encoding="utf-8")
+            return subprocess.CompletedProcess(cmd, 0, "1 amical(s) étiqueté(s)\n", "")
+        msg = pq.etiqueter_experiences(run)
+        yield "étiquettes : experiences_deduites.py --ecrire lancé, étiquette écrite sans intervention", \
+            "experiences_deduites.py" in run.cmd[2] and "[expérience=E1:A]" in f.read_text(encoding="utf-8") \
+            and msg == "étiquettes d'expérience : 1 amical(s) étiqueté(s)"
+        echec = pq.etiqueter_experiences(lambda c, **k: subprocess.CompletedProcess(c, 1, "", "base injoignable\n"))
+        yield "étiquettes : échec → une ligne, pas d'arrêt", echec.startswith("étiquettes d'expérience en échec (code 1")
+    ordre = []
+    sauve = (pq.etiqueter_experiences, pq.rejouer, sys.argv)
+    pq.etiqueter_experiences = lambda: ordre.append("etiquettes") or "ok"
+
+    def rejouer():
+        ordre.append("plan")
+        raise RuntimeError("arrêt du test")
+    pq.rejouer, sys.argv = rejouer, ["passage_quotidien.py", "--sans-git", "--sans-agents"]
+    try:
+        pq.main()
+    except RuntimeError:
+        pass
+    finally:
+        pq.etiqueter_experiences, pq.rejouer, sys.argv = sauve
+    yield "étiquettes : écrites avant le plan dans main()", ordre == ["etiquettes", "plan"]
+    yield "étiquettes : fait-*.md dans outputs/, publié par commit_push(['outputs']) sur la branche de la routine", \
+        "commit_push([\"outputs\"]" in Path(pq.__file__).read_text(encoding="utf-8") and pq.BRANCHE_PASSAGE != "main"
+
+
+CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
