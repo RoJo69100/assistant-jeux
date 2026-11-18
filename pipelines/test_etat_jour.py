@@ -648,16 +648,52 @@ def cas_offres():
     rien = ["a3", "Max Cher", "C", 24, 50, 70000, "2026-11-18T11:00:00"]
     petite = ["a4", "Eli Rare", "SF", 23, 57, 10000, "2026-11-18T11:00:00"]  # case de 2 ventes < 3
     r = ej.offres_du_jour(marche(annonces=[am, rv, rien, petite]), O, 300000)
-    yield "offres : amélioration et revente trouvées, triées par gain", [(x["nom"], x["type"]) for x in r["offres"]] == \
-        [("Yan Bas", "revente"), ("Tom Gain", "amélioration")] and r["inconnu"] is None
-    yield "offres : l'amélioration nomme notre plus faible utilisé (Luc Absent n'a pas joué)", r["offres"][1]["faible"] == "Paul Banc"
+    yield "offres : amélioration seule, la revente adulte ne donne plus d'enchère (règle du 18/11)", \
+        [(x["nom"], x["type"]) for x in r["offres"]] == [("Tom Gain", "amélioration")] and r["inconnu"] is None
+    yield "offres : l'amélioration nomme notre titulaire au poste (le plus de minutes)", r["offres"][0]["faible"] == "Jean Moyen"
     yield "offres : hors budget → pas d'amélioration", [x["nom"] for x in ej.offres_du_jour(marche(annonces=[am]), O, 50000)["offres"]] == []
     yield "offres : aucune annonce intéressante → aucune offre", ej.offres_du_jour(marche(annonces=[rien, petite]), O, 300000)["offres"] == []
     p = ej.offres_du_jour(marche(age_h=100, annonces=[am, rv]), O, 300000)
     yield "offres : Marché périmé → inconnu, aucune offre", p["offres"] == [] and p["inconnu"].startswith("inconnu : export de 100 h")
-    yield "offres : marge du yaml à 1,6 → plus de revente", ej.offres_du_jour(marche(annonces=[rv]), dict(O, revente_marge=1.6), 300000)["offres"] == []
     yield "offres : case_min_ventes du yaml à 2 → la petite case compte", "Eli Rare" in [
         x["nom"] for x in ej.offres_du_jour(marche(annonces=[petite]), dict(O, case_min_ventes=2), 300000)["offres"]]
+
+
+def cas_regle_jeunes():
+    """Règle de l'utilisateur du 18/11 : titulaires de tout âge, remplaçants de 16 à 18 ans à fort potentiel (4 cas)."""
+    cols = ANN + ["height_cm", "player_id"]
+    cases = [[50, "22-25", 4, 40000, 60000, 80000, "2026-11-10"], [55, "30+", 4, 40000, 60000, 80000, "2026-11-10"],
+             [40, "≤21", 4, 40000, 60000, 80000, "2026-11-10"], [55, "26-28", 4, 40000, 60000, 80000, "2026-11-10"]]
+    vieux = ["j1", "Vieux Titulaire", "SF", 31, 55, 50000, "2026-11-18T22:00:00", 10000, 198, "v1"]  # 55 > 48 Jean Moyen
+    adulte = ["j2", "Alan Szewczyk", "SG", 28, 56, 50000, "2026-11-18T23:37:00", 10000, 196, "v2"]  # 56 < 60 Bonnet titulaire
+    high = ["j3", "Jeune High", "C", 17, 40, 30000, "2026-11-19T10:00:00", 10000, 206, "v3"]
+    low = ["j4", "Jeune Low", "C", 17, 41, 30000, "2026-11-19T10:00:00", 10000, 206, "v4"]
+    inconnus = [["j0", "Jeune Cher", "C", 17, 49, 5000000, "2026-11-19T17:00:00", 10000, 206, "v0"],  # hors capacité : pas de test
+                ["j5", "Jeune A", "C", 18, 45, 50000, "2026-11-20T16:31:00", 10000, 207, "v5"],
+                ["j6", "Jeune B", "C", 18, 40, 2000, "2026-11-20T15:20:00", 10000, 210, "v6"],
+                ["j7", "Jeune C", "PG", 17, 39, 1000, "2026-11-20T15:20:00", 10000, 184, "v7"],
+                ["j8", "Jeune Petit", "C", 17, 46, 1000, "2026-11-20T15:20:00", 10000, 190, "v8"]]  # 190 cm : hors plage C
+    rot = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 40, 2, 1], ["p9", "Thibault Bonnet", "SG", 60, 36, 4],
+           ["p3", "Armand Fournier", "C", 52, 30, 4]]
+    tm = (["player_id", "potentiel"], [["v3", "high"], ["v4", "low"]])
+    d = marche(annonces=[], cases=cases, rotation=rot, tests_marche=tm)
+    d["annonces_actives"] = (cols, [vieux, adulte, high, low] + inconnus)
+    r = ej.offres_du_jour(d, O, 300000)
+    types = {x["nom"]: x["type"] for x in r["offres"]}
+    yield "règle 18/11 cas 1 : titulaire chez nous de 31 ans → amélioration (tout âge)", types.get("Vieux Titulaire") == "amélioration"
+    yield "règle 18/11 cas 2 : adulte pas titulaire (Szewczyk sous Bonnet) → aucune ligne", "Alan Szewczyk" not in types \
+        and "Alan Szewczyk" not in [t["nom"] for t in r["tests"]]
+    yield "règle 18/11 cas 3 : 17 ans testé High → enchère « jeune » ; testé Low → ni enchère ni test", types.get("Jeune High") == "jeune" \
+        and "Jeune Low" not in types and "Jeune Low" not in [t["nom"] for t in r["tests"]] \
+        and "Jeune High" not in [t["nom"] for t in r["tests"]]
+    yield "règle 18/11 cas 4 : sans test, 2 tests au plus (50 000), meilleure note d'abord, taille hors plage et prix hors capacité exclus", \
+        [t["nom"] for t in r["tests"]] == ["Jeune A", "Jeune B"] and sum(t["cout"] for t in r["tests"]) == 50000
+    l = ej.lignes_transferts(d, 300000, None, o=O)
+    t = [x for x in l if x["id"].startswith("tester-")]
+    yield "règle 18/11 : ligne « tester le potentiel (25 000) », seul High justifie une enchère, règle 2", len(t) == 2 \
+        and t[0]["consigne"].startswith("tester le potentiel (25 000) : Jeune A") and "seul « High » justifie une enchère" in t[0]["consigne"] \
+        and "proposition seulement (règle 2)" in t[0]["consigne"]
+    yield "règle 18/11 : test de potentiel lu sur la page profil (requête déclarée)", "potential_bucket" in ej.REQUETES["tests_marche"]
 
 
 VEN = ["player_id", "name", "position", "age", "ps", "salary", "best_slot", "rank_in_slot", "league_min_last4", "on_transfer_list"]
@@ -733,12 +769,13 @@ def cas_affichage_transferts():
     rv = ["a2", "Yan Bas", "PG", 24, 51, 38000, "2026-11-18T10:00:00"]
     d = dict(marche(annonces=[am, rv], rotation=rot, **effectif()), tolerance_vente=(["value"], [[1.0]]))
     ls = ej.lignes_transferts(d, 300000, 1.0)
-    yield "affichage : offres et vente, triées par gain attendu", [l["id"] for l in ls] == ["vente-Paul Banc", "revente-Yan Bas", "amélioration-Tom Gain"]
+    yield "affichage : offre et vente, triées par gain attendu (revente adulte retirée le 18/11)", \
+        [l["id"] for l in ls] == ["vente-Paul Banc", "amélioration-Tom Gain"]
     yield "affichage : catégorie Transferts", all(qfb.AFFICHAGE[qfb.CAT_ETAT[l["prochain"]]] == "Transferts" for l in ls)
     t = ls[1]["consigne"]
     yield "affichage : la ligne porte nom, poste, âge, note, prix, médiane, type, fin, règle 2", all(x in t for x in (
-        "revente : Yan Bas (PG, 24 ans, note 51)", "à 38 000", "médiane de la case 60 000", "fin 18/11 10:00", "proposition seulement (règle 2)"))
-    yield "affichage : les seuils du yaml sont dans la ligne", "1,25 × prix" in t and "≥ 3" in t and "sur 4 matchs de ligue" in ls[2]["consigne"]
+        "amélioration : Tom Gain (SF, 23 ans, note 52)", "à 55 000", "médiane de la case 60 000", "fin 18/11 09:00", "proposition seulement (règle 2)"))
+    yield "affichage : les seuils du yaml sont dans la ligne", "notre titulaire au poste" in t and "sur 4 matchs de ligue" in t
     yield "affichage : petite somme sans police", "police d'abord" not in t
     gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00", 10000]]),
                 prix_cases=(CASE_COLS, [[50, "22-25", 4, 300000, 400000, 500000, "2026-11-10"]]))
@@ -800,7 +837,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

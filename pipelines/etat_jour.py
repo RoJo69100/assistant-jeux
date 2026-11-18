@@ -419,7 +419,8 @@ def charger_offres(jeu: str = "basketvibe", chemin=None) -> dict:
     """Section `offres` de docs/attentes/jeux/<jeu>.yaml (seuils de l'utilisateur) et `domaines.transferts.minimum_effectif`."""
     import yaml
     y = yaml.safe_load(Path(chemin or CONFIG / f"{jeu}.yaml").read_text(encoding="utf-8"))
-    return dict(y["offres"], minimum_effectif=y["domaines"]["transferts"]["minimum_effectif"])
+    return dict(y["offres"], minimum_effectif=y["domaines"]["transferts"]["minimum_effectif"],
+                cout_test=y["etat_jour"]["evenements"]["academie"]["cout_test"])
 
 
 def charger_personnel(jeu: str = "basketvibe", chemin=None) -> dict:
@@ -478,52 +479,79 @@ def enchere_max(case, capacite, salaire, revente_marge=None):
 
 
 def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
-    """{"inconnu": texte ou None, "offres": [...]} : annonces actives du Marché de type « amélioration » (note au poste > celle de
-    notre joueur utilisé le plus faible à ce poste) ou « revente » (case ≥ case_min_ventes ventes, prix ≤ p25, médiane ≥
-    revente_marge × prix), chacune avec son enchère max X (enchere_max) ; ligne supprimée si le prix relu (dernier export,
-    gold.bv_market_candidates) dépasse X. Triées par gain attendu (médiane − prix). Marché périmé ou capacité illisible : « inconnu ».
-    `exclus` : noms déjà décidés (leur plafond est déjà retiré de la capacité)."""
+    """{"inconnu": texte ou None, "offres": [...], "tests": [...]} ; règle de l'utilisateur du 18/11 (titulaires de tout âge,
+    remplaçants de 16 à 18 ans à fort potentiel) :
+    - « amélioration » : note > celle de notre titulaire au poste (le joueur du poste qui a le plus de minutes sur les 4 derniers
+      matchs de ligue), quel que soit l'âge ;
+    - pas titulaire : jamais d'enchère, sauf « jeune » (jeune_age_min–jeune_age_max ans, test de potentiel connu = High) ;
+    - pas titulaire, 16-18 ans, aucun test connu, taille dans la plage du poste (règle de signature d'académie) : « tester le
+      potentiel » (cout_test), tests_par_jour au plus et tests_budget au total, meilleure note d'abord. Test connu : jamais retesté.
+    Enchère max X (enchere_max) ; ligne supprimée si le prix relu (dernier export, gold.bv_market_candidates) dépasse X. Triées par
+    gain attendu (médiane − prix). Marché périmé ou capacité illisible : « inconnu ». La revente (prix ≤ p25) ne donne plus de ligne
+    d'enchère (18/11). `exclus` : noms déjà décidés (leur plafond est déjà retiré de la capacité)."""
     import aujourdhui as auj
     import que_faire_blocs as qfb
     perime = auj.inconnu_si_perime(donnees, MARCHE, maintenant)
     if perime is not None:
-        return {"inconnu": perime, "offres": []}
+        return {"inconnu": perime, "offres": [], "tests": []}
     if capacite is None:
-        return {"inconnu": "inconnu : capacité d'investissement illisible (capacite_invest de gold.finance_health)", "offres": []}
-    if donnees.get("rotation") is None:  # 18/11 : sans rotation, aucun « plus faible » : tout tombait en revente
-        return {"inconnu": "inconnu : rotation illisible (minutes de ligue), offres non classées", "offres": []}
+        return {"inconnu": "inconnu : capacité d'investissement illisible (capacite_invest de gold.finance_health)", "offres": [], "tests": []}
+    if donnees.get("rotation") is None:  # 18/11 : sans rotation, aucun titulaire connu
+        return {"inconnu": "inconnu : rotation illisible (minutes de ligue), offres non classées", "offres": [], "tests": []}
     exclus = {str(x).lower() for x in exclus}
     age_export = auj.age_export_h(donnees, MARCHE, maintenant)
     cases = qfb._cases(donnees)
-    faibles = {}
+    titulaires = {}  # 18/11 : titulaire du poste = le plus de minutes de ligue (min_moy) parmi ceux qui ont joué
     for r in _rows(donnees, "rotation"):
         if int(float(r["matchs_joues"] or 0)) > 0 and r.get("ps") is not None:
-            if r["position"] not in faibles or float(r["ps"]) < float(faibles[r["position"]]["ps"]):
-                faibles[r["position"]] = r
-    vues, res = set(), []
+            t = titulaires.get(r["position"])
+            if t is None or float(r["min_moy"] or 0) > float(t["min_moy"] or 0):
+                titulaires[r["position"]] = r
+    testes = {str(r["player_id"]): str(r["potentiel"]).strip().lower() for r in _rows(donnees, "tests_marche")
+              if r.get("player_id") and r.get("potentiel")}
+    jeune = lambda a: int(o["jeune_age_min"]) <= a <= int(o["jeune_age_max"])  # noqa: E731
+    vues, res, a_tester = set(), [], []
     for r in _rows(donnees, "annonces_actives"):
         if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))) \
                 or str(r["name"]).lower() in exclus:
             continue
         vues.add(r["auction_id"])
+        age, prix, sal = int(float(r["age"])), float(r["price_now"]), _f(r.get("est_weekly_salary"))
+        f = titulaires.get(r["position"])
+        titulaire = f is not None and float(r["ps"]) > float(f["ps"])
+        pot = testes.get(str(r.get("player_id") or ""))
+        if not titulaire and not jeune(age):
+            continue  # remplaçant adulte : jamais d'enchère (règle du 18/11)
+        if not titulaire and pot is None:
+            if prix <= float(capacite) - (sal or 0) and r.get("height_cm") is not None and r["position"] in auj.PLAGE_TAILLE and auj.verdict_prospect(
+                    {"position": r["position"], "age": age, "height_cm": r["height_cm"]})[0] == "tester":
+                a_tester.append({"type": "tester", "nom": r["name"], "poste": r["position"], "age": age, "note": float(r["ps"]),
+                                 "taille": int(float(r["height_cm"])), "prix": prix, "fin": _dt(r.get("ends_paris")),
+                                 "cout": float(o["cout_test"]), "age_export_h": age_export})
+            continue
+        if not titulaire and pot != "high":
+            continue  # test connu Low / Decent : ni enchère ni nouveau test
         case = cases.get((qfb.palier_note(r["ps"]), auj.tranche_age(r["age"])))
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
             continue
-        prix, med, p25 = float(r["price_now"]), float(case["median"]), float(case["p25"])
-        sal = _f(r.get("est_weekly_salary"))
-        f = faibles.get(r["position"])
-        base = {"nom": r["name"], "poste": r["position"], "age": int(float(r["age"])), "note": float(r["ps"]), "prix": prix, "mediane": med,
-                "p25": p25, "p75": float(case["p75"]), "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")),
+        med = float(case["median"])
+        base = {"nom": r["name"], "poste": r["position"], "age": age, "note": float(r["ps"]), "prix": prix, "mediane": med,
+                "p25": float(case["p25"]), "p75": float(case["p75"]), "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")),
                 "gain": med - prix, "capacite": float(capacite), "salaire": sal, "age_export_h": age_export}
-        if f is not None and float(r["ps"]) > float(f["ps"]):
-            x = enchere_max(case, capacite, sal)
-            if x is not None and prix <= x:  # prix relu au-dessus de l'enchère max : ligne supprimée
-                res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x))
-        elif prix > auj.PRIX_NON_SIGNIFICATIF and prix <= p25 and med >= float(o["revente_marge"]) * prix:  # 18/11 : prix 0 = inconnu
-            x = enchere_max(case, capacite, sal, o["revente_marge"])
-            if x is not None and prix <= x:
-                res.append(dict(base, type="revente", max=x))
-    return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"])}
+        x = enchere_max(case, capacite, sal)
+        if x is None or prix > x:  # prix relu au-dessus de l'enchère max : ligne supprimée
+            continue
+        if titulaire:
+            res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x))
+        else:
+            res.append(dict(base, type="jeune", potentiel=pot, max=x))
+    tests, total = [], 0.0
+    for t in sorted(a_tester, key=lambda t: (-t["note"], t["prix"])):
+        if len(tests) >= int(o["tests_par_jour"]) or total + t["cout"] > float(o["tests_budget"]) or total + t["cout"] > float(capacite):
+            break
+        total += t["cout"]
+        tests.append(t)
+    return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"]), "tests": tests}
 
 
 def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
@@ -600,8 +628,11 @@ def texte_transfert(x, o) -> str:
              + " ; fin : annonce à créer")
     else:
         if x["type"] == "amélioration":
-            seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre plus faible utilisé au poste sur {o['matchs_rotation']} matchs "
+            seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre titulaire au poste, le plus de minutes sur {o['matchs_rotation']} matchs "
                      f"de ligue) ; max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
+        elif x["type"] == "jeune":
+            seuil = (f"remplaçant {o['jeune_age_min']}-{o['jeune_age_max']} ans, test de potentiel connu High ; "
+                     f"max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         else:
             seuil = (f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix ; "
                      f"max = min(médiane / {_virg(o['revente_marge'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
@@ -616,6 +647,14 @@ def texte_transfert(x, o) -> str:
     if max(x["prix"], x.get("max") or 0) > SEUIL_GROS_MONTANT["basketvibe"]:
         t += " — police d'abord : dossier.py puis agent police"
     return t
+
+
+def texte_test_marche(x, o) -> str:
+    """18/11 : « tester le potentiel (25 000) » d'un 16-18 ans du Marché sans test connu ; seul High justifie une enchère."""
+    fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
+    return (f"tester le potentiel ({_m(x['cout'])}) : {x['nom']} ({x['poste']}, {x['age']} ans, {x['taille']} cm, note {_virg(x['note'])}), "
+            f"fin {fin} ; taille dans la plage du poste (règle de signature d'académie) ; seul « High » justifie une enchère "
+            f"(au plus {o['tests_par_jour']} tests et {_m(float(o['tests_budget']))} par jour) — proposition seulement (règle 2)")
 
 
 def texte_aucune_vente(bilan) -> str:
@@ -654,7 +693,8 @@ def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, 
     if not ventes:  # 18/11 : jamais de silence sur les ventes
         res.append(dict(ligne("ventes-aucune", "vente", texte_aucune_vente(bilan)), action=False, priorite=3))
     return res + [ligne(f"{x['type']}-{x['nom']}", x["type"] if x["type"] == "vente" else "offre", texte_transfert(x, o))
-                  for x in sorted(choix, key=lambda x: -x["gain"])]
+                  for x in sorted(choix, key=lambda x: -x["gain"])] \
+        + [ligne(f"tester-{x['nom']}", "offre", texte_test_marche(x, o)) for x in of.get("tests", [])]
 
 
 class _Champs(dict):
@@ -726,6 +766,15 @@ REQUETES = {
 REQUETES["prix_achat"] = ("select distinct on (player_id) player_id, fee from gold.bv_transfer_history "
                           "where bought_by_me and fee is not null order by player_id, sold_on desc")  # prix payé pour nos joueurs achetés
 REQUETES["rotation"] = requete_rotation(charger_offres()["matchs_rotation"])  # phase A : N lu dans le yaml
+# 18/11 : test de potentiel connu d'un joueur (Low / Decent / High), lu sur sa page profil (season-profile ou transfer-auction de
+# l'API), dernière capture ; aucune vue silver ne le porte. 12 ms mesuré le 18/11.
+REQUETES["tests_marche"] = (
+    "select distinct on (right(p.page_url, 36)) right(p.page_url, 36) as player_id, "
+    "jsonb_path_query_first(p.payload, 'lax $.body.**.potential_bucket') #>> '{}' as potentiel "
+    "from bronze.raw_pages p where p.game = 'basketvibe' and p.page_type = 'player' "
+    "and p.source_url ~ '/players/[0-9a-f-]{36}/(season-profile|transfer-auction)' "
+    "and jsonb_path_exists(p.payload, 'lax $.body.**.potential_bucket ? (@ != null)') "
+    "order by right(p.page_url, 36), p.captured_at desc")
 JOURS = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
 

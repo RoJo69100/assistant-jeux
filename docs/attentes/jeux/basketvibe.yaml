@@ -103,6 +103,13 @@ offres:
   max_offres: 3
   max_ventes: 2
   vente_marge_profit: 0.25   # vente pour profit : (prix attendu − prix payé) / prix payé ≥ 25 % quand le prix payé est connu
+  # 18/11, règle de l'utilisateur (docs/regles-utilisateur.md) : titulaires de tout âge, remplaçants de 16 à 18 ans à fort potentiel.
+  # Hors titulaire : enchère seulement pour un 16-18 ans testé High ; sans test connu, « tester le potentiel » (25 000, cout_test
+  # de evenements.academie) au plus tests_par_jour fois et tests_budget au total par jour.
+  jeune_age_min: 16
+  jeune_age_max: 18
+  tests_par_jour: 2
+  tests_budget: 50000
 
 # Phase A.5 (17/11) : règle de personnel DÉCIDÉE par Claude le 17/11, contestable par l'utilisateur ; le plan n'affiche une ligne
 # Personnel que si gold.bv_personnel_status s'en écarte (etat_jour.texte_personnel).

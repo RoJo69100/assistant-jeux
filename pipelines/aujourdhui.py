@@ -172,7 +172,9 @@ REQUETES = {
                     "and c.ends_paris <= (now() at time zone 'Europe/Paris') + interval '24 hours' order by c.auction_id, c.ends_paris",
     # 17/11 : toutes les annonces encore ouvertes (dédupliquées par auction_id), pour les 5 offres les moins chères par rapport à leur case
     "annonces_actives": "select distinct on (c.auction_id) c.auction_id, c.name, c.position, c.age, c.ps, "
-                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, c.est_weekly_salary from gold.bv_market_candidates c "
+                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, c.est_weekly_salary, c.height_cm, "
+                        "(select l.player_id from core.market_listing l where l.game = 'basketvibe' and l.listing_id = c.auction_id::text "
+                        "limit 1) as player_id from gold.bv_market_candidates c "
                         "where c.ends_paris > now() at time zone 'Europe/Paris' order by c.auction_id, c.ends_paris",
     # 5n T4 : nombre d'annonces du dernier export du Marché (phrase « aucune annonce ne se termine dans les 24 h »)
     "annonces_export": "select count(*) as n from gold.bv_market_candidates",
