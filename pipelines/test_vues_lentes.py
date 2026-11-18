@@ -11,7 +11,8 @@ import que_faire_blocs as qfb  # noqa: E402
 import sql as sqlmod  # noqa: E402
 
 LIMITE_S = 5.0
-VUES = {"vendre": "gold.bv_sell_candidates", "matchs_autres": "matchs d'autres clubs"}
+VUES = {"vendre": "gold.bv_sell_candidates", "matchs_autres": "matchs d'autres clubs",
+        "gold.bv_sell_replacement": "remplaçant par poste, migration 088"}
 
 
 def lire(nom):
@@ -32,7 +33,7 @@ def cas():
         yield f"{nom} ({quoi}) : lisible ({err or 'ok'})", d is not None
         yield f"{nom} ({quoi}) : {s:.1f} s < {LIMITE_S:.0f} s", s < LIMITE_S
     # le plan n'imprime pas « illisible » pour ces deux vues (bloc 4 et bloc 6 du rendu)
-    for nom in ("prix_cases", "gold.bv_sell_replacement", "matchs_captes", "matchs_ajoutes"):
+    for nom in ("prix_cases", "matchs_captes", "matchs_ajoutes"):
         donnees[nom], _, _ = lire(nom)
     rendu = "\n".join(qfb.bloc_4(donnees, {}, None, 1.0) + qfb.bloc_6(donnees, [], auj_jour(), None, "")[0])
     for nom in VUES:
