@@ -625,6 +625,19 @@ def cas_prix_inconnu():
     yield "prix connu : âge de l'export du Marché donné", "à 751 (export du Marché de 2 h)" in t
 
 
+def cas_priorite_capacite():
+    """Verdict du 18/11 : 3 plafonds additionnés (1 439 392) au-dessus de la capacité (666 868) sans ligne de priorité."""
+    a = ["c1", "Tom Gain", "SF", 23, 52, 55000, "2026-11-18T09:00:00"]
+    b = ["c2", "Bob Juste", "SF", 23, 51, 58000, "2026-11-18T10:00:00"]
+    l = ej.lignes_transferts(marche(annonces=[a, b]), 100000, None, o=O)
+    p = [x for x in l if x["id"] == "offres-priorite"]
+    yield "plafonds 80 000 + 80 000 > capacité 100 000 → ligne de priorité urgente", len(p) == 1 and p[0]["priorite"] == 1 \
+        and "160 000" in p[0]["consigne"] and "100 000" in p[0]["consigne"] \
+        and p[0]["consigne"].index("Tom Gain") < p[0]["consigne"].index("Bob Juste")
+    l = ej.lignes_transferts(marche(annonces=[a, b]), 300000, None, o=O)
+    yield "plafonds dans la capacité → pas de ligne de priorité", not [x for x in l if x["id"] == "offres-priorite"]
+
+
 def cas_offres():
     yield "offres : seuils lus dans le yaml", O["revente_marge"] == 1.25 and O["case_min_ventes"] == 3 and O["matchs_rotation"] == 4 \
         and O["minimum_effectif"] == 8
@@ -760,7 +773,7 @@ def cas_enchere_max():
     nag = lambda prix: ["bd0f", "Fouad Naguib", "SF", 17, 45.9, prix, "2026-11-19T12:31:00", 18130]
     sze = lambda prix: ["3061", "Alan Szewczyk", "SG", 28, 56.4, prix, "2026-11-18T23:37:00", 25500]
     d = lambda *a: marche(annonces=list(a), cases=cases, rotation=rot)
-    t = lambda ls, nom: next((l["consigne"] for l in ls if nom in l["consigne"]), None)
+    t = lambda ls, nom: next((l["consigne"] for l in ls if nom in l["consigne"] and l["id"] != "offres-priorite"), None)
     ls = ej.lignes_transferts(d(nag(28250), sze(751)), 666868, None)
     yield "enchère max : Naguib périmé à 28 250 → max 648 738 (capacité 666 868 − salaire 18 130 < p75)", \
         "Fouad Naguib (SF, 17 ans, note 45,9), enchère max 648 738, à 28 250" in (t(ls, "Naguib") or "")
@@ -787,7 +800,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

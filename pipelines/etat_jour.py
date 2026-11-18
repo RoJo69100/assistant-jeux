@@ -638,6 +638,19 @@ def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, 
                                            "rates": [], "echeance": None, "consigne": consigne, "age_h": None, "priorite": 2,
                                            "action": True, "defauts": []}
     res = [ligne("offres-inconnu", "offre", f"offres du Marché : {of['inconnu']}")] if of["inconnu"] else []
+    offres = sorted(of["offres"][:int(o["max_offres"])], key=lambda x: -x["gain"])
+    somme = sum(x["max"] for x in offres)
+    if capacite is not None and len(offres) > 1 and somme > float(capacite):  # 18/11 : plafonds additionnés > capacité
+        cumul, tient = 0.0, []
+        for x in offres:
+            if cumul + x["max"] <= float(capacite):
+                cumul += x["max"]
+                tient.append(x["nom"])
+        ordre = ", ".join(f"{i}. {x['nom']} (max {_m(x['max'])})" for i, x in enumerate(offres, 1))
+        res.append(dict(ligne("offres-priorite", "offre",
+                              f"priorité : plafonds additionnés {_m(somme)} > capacité {_m(float(capacite))} ; enchéris dans cet ordre "
+                              f"(gain attendu) : {ordre} ; tiennent ensemble à leur plafond : {', '.join(tient) or 'aucune'} ; "
+                              "chaque enchère gagnée retire son prix de la capacité et baisse les plafonds suivants"), priorite=1))
     if not ventes:  # 18/11 : jamais de silence sur les ventes
         res.append(dict(ligne("ventes-aucune", "vente", texte_aucune_vente(bilan)), action=False, priorite=3))
     return res + [ligne(f"{x['type']}-{x['nom']}", x["type"] if x["type"] == "vente" else "offre", texte_transfert(x, o))
