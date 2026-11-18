@@ -413,7 +413,7 @@ def cas_branchement():
     yield "branchement : aucune commande d'agent affichée, elle part dans les consignes de session", \
         "lance l'agent" not in t and any("lance l'agent tactique" in c for c in consignes)
     yield "branchement : la section est en tête, avant le bloc 2", texte.index("## Aujourd'hui — état par événement") < texte.index("## Bloc 2")
-    yield "branchement : les blocs 2 à 10 restent là, pas de bloc 0 ni 1", all(f"## Bloc {n} — " in texte for n in range(2, 11)) and "## Bloc 0 — " not in texte and "## Bloc 1 — " not in texte
+    yield "branchement : les blocs 2 et 4 à 9 restent là, pas de bloc 0, 1, 3 ni 10 (18/11)", all(f"## Bloc {n} — " in texte for n in (2, 4, 5, 6, 7, 8, 9)) and not any(f"## Bloc {n} — " in texte for n in (0, 1, 3, 10))
     yield "branchement : consignes de la section dans les consignes de session", any("lance l'agent tactique" in c for c in cons)
 
 

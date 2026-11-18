@@ -1053,16 +1053,15 @@ def rendre_blocs(res, donnees, erreurs, jour: dt.date, maintenant: dt.datetime, 
     tol = next((r["value"] for r in auj.lignes_de(donnees, "tolerance_vente")), None)
     tol = float(tol) if tol not in (None, "") else None
     b2, c2 = bloc_2(donnees, S, jour, maintenant, base)
-    b3, c3 = bloc_3(donnees, S, jour, maintenant, base)
     b6, c6 = bloc_6(donnees, etudes, jour, S.get("experiences"), fait)
     b7 = bloc_7(actions, donnees, S.get("analyste"))
-    # 17/11 : l'ancien bloc 0 (exports) et l'ancien bloc 1 (tableau du jour) sont remplacés par la section d'état ; les blocs 2 à 10 restent
-    blocs = [b2, b3,
-             bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), bloc_5(etudes), b6,
-             b7, bloc_8(actions, etudes, garder, erreurs), bloc_9(actions, etudes, garder, erreurs),
-             bloc_10(actions, garder)]
+    # 17/11 : anciens blocs 0 et 1 remplacés par la section d'état. 18/11 : anciens blocs 3 (composition de ligue/coupe) et 10
+    # (« à valider par écrit ») retirés : ils contredisaient l'état par événement (« composition en préparation » contre la fiche
+    # du jour ; achats au solde et cibles abandonnées par la police). Le match et les transferts ne viennent plus que de l'état.
+    blocs = {2: b2, 4: bloc_4(donnees, erreurs, res.get("capacite"), tol, actions, S.get("police", "")), 5: bloc_5(etudes), 6: b6,
+             7: b7, 8: bloc_8(actions, etudes, garder, erreurs), 9: bloc_9(actions, etudes, garder, erreurs)}
     be, ce = bloc_etat(donnees, S, base or BASE, jour, maintenant, res.get("capacite"))  # P2 : en tête du plan, à côté des blocs actuels
     texte = [TITRE_ETAT, ""] + be
-    for n, (titre, lignes) in enumerate(zip(TITRES[2:], blocs), start=2):
-        texte += [f"## Bloc {n} — {titre}", ""] + list(lignes) + [""]
-    return "\n".join(texte).rstrip() + "\n", separer(actions)[1] + c2 + c3 + c6 + ce
+    for n, lignes in blocs.items():
+        texte += [f"## Bloc {n} — {TITRES[n]}", ""] + list(lignes) + [""]
+    return "\n".join(texte).rstrip() + "\n", separer(actions)[1] + c2 + c6 + ce

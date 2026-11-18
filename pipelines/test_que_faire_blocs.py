@@ -967,10 +967,12 @@ def cas_t6():
 
     # --- assemblage
     texte, consignes = qfb.rendre_blocs(r, donnees_t6(), {}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
-    pos = [texte.find(f"## Bloc {n} — ") for n in range(2, 11)]
-    yield "test_blocs_2_a_10_dans_l_ordre", all(p >= 0 for p in pos) and pos == sorted(pos)
+    GARDES = [2, 4, 5, 6, 7, 8, 9]  # 18/11 : anciens blocs 3 et 10 retirés (contredisaient l'état par événement)
+    pos = [texte.find(f"## Bloc {n} — ") for n in GARDES]
+    yield "test_blocs_gardes_dans_l_ordre", all(p >= 0 for p in pos) and pos == sorted(pos)
+    yield "test_blocs_3_et_10_retires (18/11)", "## Bloc 3 — " not in texte and "## Bloc 10 — " not in texte and "à valider par écrit" not in texte
     vide_texte, vide_cons = qfb.rendre_blocs(RES_VIDE, {}, {}, JOUR_T, MAINT, S, etudes=[], base=dossier())
-    yield "test_aucun_bloc_absent", all(f"## Bloc {n} — " in vide_texte for n in range(2, 11)) and isinstance(vide_cons, list)
+    yield "test_aucun_bloc_absent", all(f"## Bloc {n} — " in vide_texte for n in GARDES) and isinstance(vide_cons, list)
     yield "test_aucun_bloc_vide : chaque bloc a au moins une ligne", all(len(b.split("\n", 1)[1].strip()) > 0 for b in vide_texte.split("## Bloc ")[1:])
     yield "test_consignes_de_session_collectees", any("lancer l'agent tactique" in c or "lance l'agent tactique" in c for c in consignes) \
         and any("lance l'agent analyste" in c for c in consignes) and not any(c in texte for c in consignes)
