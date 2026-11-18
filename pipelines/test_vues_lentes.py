@@ -42,6 +42,27 @@ def cas():
     yield f"matchs d'autres clubs comptés ({len(autres)})", len(autres) > 0
 
 
+MIGRATION_MINS = Path(__file__).resolve().parent.parent / "sql" / "gold" / "089_bv_sell_minutes_sur_4.sql"
+
+
+def cas_minutes_sur_4():
+    """18/11 : league_min_last4 = somme des minutes sur les 4 derniers matchs de ligue de l'équipe / 4 (0 pour un match non joué).
+    Le CTE `mins` de la migration (entre -- MINS-DEBUT et -- MINS-FIN) tourne sur des lignes synthétiques."""
+    if not MIGRATION_MINS.exists():
+        yield f"migration {MIGRATION_MINS.name} présente", False
+        return
+    t = MIGRATION_MINS.read_text(encoding="utf-8")
+    cte = t[t.index("-- MINS-DEBUT"):t.index("-- MINS-FIN")].split("\n", 1)[1].rstrip().rstrip(",")
+    lignes = ("lignes(fixture_id, competition, match_day, player_id, min) as (values "
+              "('f0','league',1,'A',30),('f0','league',1,'B',40),('f1','league',2,'A',30),('f2','league',3,'A',30),"
+              "('f3','league',4,'A',30),('f4','league',5,'A',30),('f4','league',5,'B',12),('c1','cup',6,'B',40))")
+    q = "with " + lignes + ", " + cte.replace("gold.bv_match_player_lines", "lignes") + " select player_id, league_min_last4 from mins order by 1"
+    _, l = sqlmod.executer(q)
+    r = {a: float(b) for a, b in l}
+    yield f"1 match de 12 min sur les 4 derniers de ligue → 3,0 ({r.get('B')})", r.get("B") == 3.0
+    yield f"4 matchs de 30 min → 30,0 ({r.get('A')})", r.get("A") == 30.0
+
+
 def auj_jour():
     from heure_paris import paris
     return paris().date()
@@ -49,7 +70,7 @@ def auj_jour():
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
-    jeux = list(cas())
+    jeux = list(cas()) + list(cas_minutes_sur_4())
     echecs = 0
     for n, ok in jeux:
         echecs += not ok
