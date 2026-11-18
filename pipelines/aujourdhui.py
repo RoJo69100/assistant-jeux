@@ -230,6 +230,51 @@ REQUETES = {
 }
 import etat_jour  # noqa: E402  (P2 : état par événement ; aucune dépendance vers ce module)
 REQUETES.update(etat_jour.REQUETES)
+# 18/11 : mesure du gain réel, un relevé par lundi (docs/mesures/gain-hebdomadaire.md). Pour chaque lundi, la dernière capture
+# ≤ ce lundi : rang (core.standing, is_mine) ; force = PS moyen (core.player_daily) des 7 joueurs qui ont le plus de minutes sur les
+# 4 derniers matchs de ligue joués avant ce lundi (règle de league_min_last4 ; silver.bv_match_player_stats, la vue
+# gold.bv_match_player_lines dépasse le délai) ; trésorerie = solde et capacite_invest (formule de gold.finance_health appliquée
+# au relevé de core.finance_daily : solde − reserve_periodes × charges). {n} = nombre de lundis - 1.
+MESURE_SQL = """with lundis as (
+  select (date_trunc('week', """ + JOUR_PARIS_SQL + """) - (g * interval '7 days'))::date as lundi from generate_series(0, {n}) g
+),
+rang as (
+  select distinct on (l.lundi) l.lundi, s.day as rang_capture, s.rank, s.played
+  from lundis l join core.standing s on s.game = 'basketvibe' and s.is_mine and s.day <= l.lundi
+  order by l.lundi, s.day desc
+),
+fin as (
+  select distinct on (l.lundi) l.lundi, f.day as fin_capture, f.balance as solde,
+         f.balance - k.value::text::numeric * f.expenses as capacite_invest
+  from lundis l join core.finance_daily f on f.game = 'basketvibe' and f.day <= l.lundi
+  join core.game_params k on k.game = f.game and k.key = 'reserve_periodes'
+  order by l.lundi, f.day desc
+),
+fx as (
+  select l.lundi, x.fixture_id, x.match_day from lundis l cross join lateral (
+    select f.fixture_id, f.day as match_day from core.fixture f
+    where f.game = 'basketvibe' and f.played and f.competition_kind = 'ligue' and f.day < l.lundi
+    order by f.day desc, f.fixture_id limit 4) x
+),
+rot as (
+  select lundi, player_id, row_number() over (partition by lundi order by mins desc, player_id) as rg
+  from (select fx.lundi, m.player_id::text as player_id, sum(m.min) as mins
+        from fx join silver.bv_match_player_stats m on m.fixture_id::text = fx.fixture_id and m.period = 0 and m.is_mine
+        group by fx.lundi, m.player_id) t
+),
+force as (
+  select r.lundi, round(avg(p.rating), 1) as force_moy, count(p.rating) as n, max(p.day) as force_capture,
+         (select max(match_day) from fx where fx.lundi = r.lundi) as dernier_match
+  from rot r left join lateral (select rating, day from core.player_daily d
+                                where d.game = 'basketvibe' and d.player_id = r.player_id and d.day <= r.lundi
+                                order by d.day desc limit 1) p on true
+  where r.rg <= 7 group by r.lundi
+)
+select l.lundi, r.rank, r.played, r.rang_capture, fo.force_moy, fo.n, fo.force_capture, fo.dernier_match,
+       f.capacite_invest, f.solde, f.fin_capture
+from lundis l left join rang r using (lundi) left join fin f using (lundi) left join force fo using (lundi)
+order by l.lundi desc"""
+REQUETES["mesure_semaine"] = MESURE_SQL.format(n=1)
 # Vues rejouables sur un jour passé : requête de remplacement avec le paramètre {jour}.
 REJEU = {
     "derniere_vente": "select max(sold_on) as derniere from gold.bv_transfer_history where sold_on <= '{jour}'",
@@ -803,6 +848,38 @@ def minutes_jeunes(donnees, erreurs, ajoute, garder):
            propre(r["raison"]), "gold.match_objective")
 
 
+def _ecart(a, b, fmt):
+    if a is None:
+        return "illisible"
+    if b is None:
+        return f"{fmt(a)} (± : semaine d'avant illisible)"
+    d = float(a) - float(b)
+    return f"{fmt(a)} ({'+' if d >= 0 else '−'}{fmt(abs(d))})"
+
+
+def ligne_mesure(donnees, erreurs, jour, ajoute):
+    """18/11 : le lundi seulement, « Mesure de la semaine : rang X (±), force moyenne Y (±), trésorerie Z (±) », variation par
+    rapport au lundi d'avant (MESURE_SQL). Une valeur illisible est dite illisible, jamais remplacée."""
+    if jour.isoweekday() != 1 or "mesure_semaine" not in donnees:
+        return
+    m = manque(donnees, erreurs, "mesure_semaine", "Classement, Équipe, Finances")
+    if m:
+        ajoute(None, 3, m)
+        return
+    r = sorted(lignes_de(donnees, "mesure_semaine"), key=lambda x: str(x["lundi"]), reverse=True)
+    if not r:
+        return
+    c, p = r[0], (r[1] if len(r) > 1 else {})
+    entier = lambda v: f"{float(v):.0f}"
+    force = (lambda v: f"{float(v):.1f}".replace(".", ",")) if c.get("n") == 7 else None
+    ajoute(None, 3, f"Mesure de la semaine : rang {_ecart(c.get('rank'), p.get('rank'), entier)}, "
+                    f"force moyenne {_ecart(c.get('force_moy'), p.get('force_moy'), force) if force else 'illisible (moins de 7 joueurs lus)'}, "
+                    f"trésorerie capacite_invest {_ecart(c.get('capacite_invest'), p.get('capacite_invest'), montant)} "
+                    f"/ solde {_ecart(c.get('solde'), p.get('solde'), montant)}",
+           f"captures : classement {c.get('rang_capture')}, joueurs {c.get('force_capture')}, finances {c.get('fin_capture')}",
+           "docs/mesures/gain-hebdomadaire.md")
+
+
 def solde_projete(donnees, erreurs, fh, ajoute):
     """A4 : ligne Finances si le solde projeté de fin de saison est négatif ou inférieur à une semaine de masse salariale
     (`weekly_salaries` de gold.bv_finance_health, aucun seuil écrit à la main), avec la cause. Source absente : rien."""
@@ -1164,6 +1241,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
         ajoute(None, 3, f"Revue de la semaine : à lire ({page})",
                "" if S.get("revue_hebdo") else "page absente : python -I pipelines/revue_hebdo.py basketvibe",
                "pipelines/revue_hebdo.py")
+    ligne_mesure(donnees, erreurs, jour, ajoute)  # 18/11 : mesure du gain réel, le lundi seulement
     ent = ligne_entrainement(donnees, S, jour, maintenant)  # N2 : contrôle de l'entraînement, remplace la ligne d'agenda
     if ent:
         ajoute(ent[0], 2, ent[1], ent[2], ent[3])

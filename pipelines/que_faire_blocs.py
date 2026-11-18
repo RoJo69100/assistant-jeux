@@ -56,6 +56,7 @@ REGLES = [
     (r"Boucle d'apprentissage", 7, "analyse"),
     (r"Conseil \S+ à juger", 7, "analyse"),
     (r"Revue de la semaine", 7, "analyse"),
+    (r"Mesure de la semaine", 7, "analyse"),
     (r"Amical contre ", 2, "composition"),
     (r"(?:Ligue|Coupe) ", 3, "composition"),
     (r"Sors ", 3, "composition"),

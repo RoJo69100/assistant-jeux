@@ -542,6 +542,7 @@ def cas_etape5a():
     yield from cas_amical_export()
     yield from cas_ecran_non_sauvegarde()
     yield from cas_revue()
+    yield from cas_mesure()
     yield from cas_echec_bruyant()
 
 
@@ -583,6 +584,29 @@ def cas_revue():
         "python -I pipelines/revue_hebdo.py basketvibe" in revue(DIM, False)[0][3]
     yield "R8 lundi, absent : aucune ligne de revue", revue(JOUR9) == []
     yield "R8 samedi, absent : aucune ligne de revue", revue(dt.date(2026, 11, 14)) == []
+
+
+def cas_mesure():
+    """18/11 : ligne « Mesure de la semaine » le lundi seulement, variation par rapport au lundi d'avant, rien d'inventé."""
+    COLS = ["lundi", "rank", "played", "rang_capture", "force_moy", "n", "force_capture", "dernier_match",
+            "capacite_invest", "solde", "fin_capture"]
+    LUN = dt.date(2026, 11, 16)
+    deux = (COLS, [["2026-11-16", 8, 5, "2026-11-13", 54.7, 7, "2026-11-16", "2026-11-14", 585181, 1494431, "2026-11-13"],
+                   ["2026-11-09", 7, 3, "2026-11-08", 54.5, 7, "2026-11-09", "2026-11-07", 50931, 960181, "2026-11-08"]])
+
+    def mes(jour, d):
+        p = auj.plan(figees(mesure_semaine=d), {}, jour, dt.datetime.combine(jour, dt.time(10, 0)), "", {})
+        return [a for a in p["actions"] if a[2].startswith("Mesure de la semaine")]
+
+    l = mes(LUN, deux)
+    yield "mesure lundi : une ligne SUIVI, rang +1, force +0,2", len(l) == 1 and l[0][1] == 3 \
+        and l[0][2].startswith("Mesure de la semaine : rang 8 (+1), force moyenne 54,7 (+0,2), trésorerie capacite_invest ") \
+        and "/ solde " in l[0][2] and "2026-11-13" in l[0][3]
+    yield "mesure mardi : aucune ligne", mes(dt.date(2026, 11, 17), deux) == []
+    l = mes(LUN, (COLS, [["2026-11-16", None, None, None, 54.7, 6, None, None, None, None, None]]))
+    yield "mesure lundi, valeurs absentes : « illisible », rien de remplacé", len(l) == 1 and l[0][2].count("illisible") == 4
+    yield "mesure : requête sur le jour de Paris, deux lundis", auj.JOUR_PARIS_SQL in auj.REQUETES["mesure_semaine"] \
+        and "generate_series(0, 1)" in auj.REQUETES["mesure_semaine"]
 
 
 def cas_fatigue():
