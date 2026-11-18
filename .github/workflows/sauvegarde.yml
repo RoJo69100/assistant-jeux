@@ -1,0 +1,83 @@
+# Sauvegarde hebdomadaire du bronze vers un dépôt PRIVÉ (voir docs/sauvegarde.md).
+# À copier tel quel dans .github/workflows/sauvegarde.yml du dépôt public assistant-jeux (bouton « Add file » sur GitHub).
+# Secrets du dépôt public (Settings > Secrets and variables > Actions) : SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, BRONZE_EXPORT_TOKEN,
+# BACKUP_REPO_TOKEN (jeton GitHub à droit « Contents : Read and write » limité au seul dépôt privé de sauvegardes).
+# Le dépôt privé s'appelle assistant-jeux-sauvegardes (même propriétaire) ; changer BACKUP_REPO ci-dessous sinon.
+# Aucun secret n'est écrit dans ce fichier. Les sauvegardes ne vont JAMAIS dans le dépôt public.
+# GitHub désactive les workflows planifiés d'un dépôt public sans aucune activité pendant 60 jours : un commit suffit à les réactiver.
+
+name: Sauvegarde du bronze
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'   # lundi 04:17 UTC (05:17 ou 06:17 à Paris)
+  workflow_dispatch:        # lancement manuel : onglet Actions > Sauvegarde du bronze > Run workflow
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sauvegarde-bronze
+  cancel-in-progress: false
+
+env:
+  BACKUP_REPO: assistant-jeux-sauvegardes
+
+jobs:
+  sauvegarde:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+      BRONZE_EXPORT_TOKEN: ${{ secrets.BRONZE_EXPORT_TOKEN }}
+    steps:
+      - name: Secrets présents
+        run: |
+          for v in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY BRONZE_EXPORT_TOKEN; do
+            if [ -z "${!v}" ]; then echo "::error::secret $v absent du dépôt"; exit 1; fi
+          done
+          if [ -z "${{ secrets.BACKUP_REPO_TOKEN }}" ]; then echo "::error::secret BACKUP_REPO_TOKEN absent du dépôt"; exit 1; fi
+
+      - name: Cloner le dépôt public (script)
+        uses: actions/checkout@v4
+        with:
+          path: code
+
+      - name: Cloner le dépôt privé des sauvegardes
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/${{ env.BACKUP_REPO }}
+          token: ${{ secrets.BACKUP_REPO_TOKEN }}
+          path: sauvegardes
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Sauvegarde incrémentale + vérification
+        run: |
+          set -o pipefail
+          python -I code/pipelines/sauvegarde_bronze.py --dossier sauvegardes/bronze 2>&1 | tee sauvegarde.log
+          # Échec bruyant : une ligne ❌, ou une table sans ligne ✅, arrête le job avant tout commit.
+          if grep -q '❌' sauvegarde.log; then echo "::error::vérification de la sauvegarde en ÉCART (❌)"; exit 1; fi
+          for t in raw_pages discord_messages; do
+            grep -q "✅ $t" sauvegarde.log || { echo "::error::pas de ✅ pour $t"; exit 1; }
+          done
+
+      - name: Pousser dans le dépôt privé
+        working-directory: sauvegardes
+        run: |
+          git config user.name  "sauvegarde-bronze"
+          git config user.email "sauvegarde-bronze@users.noreply.github.com"
+          git add bronze
+          if git diff --cached --quiet; then
+            echo "Rien de nouveau depuis la dernière sauvegarde."
+          else
+            git commit -m "Sauvegarde du bronze $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+          fi
+
+      - name: Échec
+        if: failure()
+        run: echo "::error::La sauvegarde du bronze a échoué, voir les étapes ci-dessus (rien n'a été poussé si l'échec précède l'étape de push)."
