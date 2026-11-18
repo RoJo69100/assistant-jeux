@@ -14,6 +14,12 @@
 # `lecons` (étape 6b, S2) : leçons de learn.lesson que le verdict de l'expérience met à jour (identifiants courts,
 #   préfixe `basketvibe:` en base). Classement : docs/refonte-v3/journal-aujourdhui.md, « Revue hebdomadaire, étape 6b », S1.
 #   Liste vide : aucune hypothèse ne correspond ; la leçon à créer est proposée en commentaire, jamais écrite en base ici.
+# `neutre` (18/11, DÉCIDÉ par Claude, contestable) : réglage de référence de gold.bv_amical_reglage, une dimension par
+#   expérience : agressivité uniforme cran 2 (E1:A), zone Perimeter (E1 constant, E5:A), au plus 1 joueur au focus de tir
+#   cran 4 (E2 exige 2), aucun quart avec un Primary (E3:B Normal). Lu par pipelines/experiences_deduites.py : un amical
+#   est étiqueté seulement si au plus une dimension diffère du neutre ; tout neutre = expérience en cours (première non
+#   terminée de la file) à son niveau neutre.
+neutre: {agress_cran: 2, zone: Perimeter, tir_cran4_max: 1, primary_quarts_max: 0}
 debut: 2026-11-10
 experiences:
   - id: E1
