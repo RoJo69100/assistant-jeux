@@ -208,7 +208,18 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
-            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev)}
+            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test")}
+
+
+def texte_test_fiche(experiences, r, joues=()) -> str:
+    """18/11 : test de la file d'expériences pour la fiche de cet amical (niveau alterné, aujourdhui.test_en_cours), à porter
+    tel quel dans la fiche ; « » si aucune expérience en cours."""
+    import aujourdhui as auj
+    t = auj.test_en_cours(experiences, {"match": r["opponent"], "date": _date(r["day"])}, joues) if experiences else None
+    if not t:
+        return ""
+    return (f"réglage de test à écrire dans la fiche : {auj.texte_test(t[0], t[1])} ; tout le reste au réglage neutre de "
+            "docs/attentes/experiences-amicales-basketvibe.yaml (un seul test)")
 
 
 def _slug(s) -> str:
@@ -654,7 +665,7 @@ def agents_a_lancer(etats, cfg=None, base=None, jour=None, dossier_agents=None) 
         champs = _Champs(l, jour=jour.isoformat())
         sortie = r["sortie"].format_map(champs)
         e = {"agent": r["agent"], "id": l.get("id"), "evenement": l.get("evenement"), "sortie": sortie,
-             "consigne": " ; ".join(x for x in (l.get("consigne"), r.get("consigne", "").format_map(champs)) if x),
+             "consigne": " ; ".join(x for x in (l.get("consigne"), l.get("test"), r.get("consigne", "").format_map(champs)) if x),
              "avant": r.get("avant"), "statut": "a_lancer", "raison": None}
         f = base / sortie
         if f.is_file() and f.stat().st_size > 0:
@@ -839,6 +850,8 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
               "adv_connus": None if connus is None else str(r["fixture_id"]) in connus,
               "juge_requis": r["fixture_id"] == dernier, "juge": a_evaluer == 0, "maj_at": max(dates) if dates else None}
         ev["fiche"] = lire_fiche(base, jour, ev) if d and d >= jour else None
+        if genre == "amical" and d and d >= jour:
+            ev["test"] = texte_test_fiche(S.get("experiences"), r, _rows(donnees, "amical_reglage")) or None
         evs.append(appliquer_controles(ev, {"blessures": blessures.get(r["fixture_id"], {}), "fatigue": fatigue, "seuil_fatigue": seuil}, cfg))
     rapport = max((_dt(r["rapport_paris"]) for r in _rows(donnees, "prospects")), default=None)
     page_entr = next((_dt(r["dernier_paris"]) for r in _rows(donnees, "gold.bv_exports_state") if r["ecran"] == "Entraînement"), None)

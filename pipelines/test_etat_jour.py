@@ -659,6 +659,33 @@ def cas_ventes():
         marche(rotation=rot, cases=[[50, "22-25", 2, 40000, 60000, 80000, "2026-11-10"]], **effectif()), O, 1.0) == []
 
 
+def cas_niveau_e1():
+    """18/11 : le niveau de E1 alterne A et B ; l'amical FuzzyTeam du 20/11 est en niveau B, et la fiche le reçoit."""
+    import yaml
+    import aujourdhui as auj
+    conf = yaml.safe_load((ej.RACINE / "docs/attentes/experiences-amicales-basketvibe.yaml").read_text(encoding="utf-8"))
+    e1 = next(e for e in conf["experiences"] if e["id"] == "E1")
+    yield "E1 : ordre du yaml alterné A, B", e1["ordre"] == ["A", "B", "A", "B"]
+    j = lambda m, d: dt.date(2026, 11, d)  # noqa: E731
+    fait = lambda nom, d, niv: {"id": "E1", "niveau": niv, "jour": j(0, d), "cle": {"nom": nom, "date": j(0, d), "jour": j(0, d), "fichier": "f"}}
+    jo = lambda nom, d, cran: {"fixture_id": nom, "match_day": f"2026-11-{d}", "opponent": nom, "agress_uniforme": True, "agress_cran": cran}
+    x = {"file": conf["experiences"], "debut": dt.date(2026, 11, 10), "faits": [fait("Artificial Instinct", 14, "A")]}
+    fz = {"match": "FuzzyTeam", "date": j(0, 20)}
+    t = auj.test_en_cours(x, fz, [jo("Artificial Instinct", 14, 2)])
+    yield "E1 : après le 14/11 en A, FuzzyTeam (20/11) en niveau B", t and (t[0]["id"], t[1]) == ("E1", "B")
+    x2 = dict(x, faits=x["faits"] + [fait("BG Bangers", 19, "A")])
+    t2 = auj.test_en_cours(x2, fz, [jo("Artificial Instinct", 14, 2), jo("BG Bangers", 19, 2)])
+    yield "E1 : 14/11 et 19/11 en A → FuzzyTeam (20/11) toujours en B (alternance sur le dernier niveau joué)", t2 and t2[1] == "B"
+    x3 = dict(x, faits=x["faits"] + [fait("BG Bangers", 19, "B")])
+    yield "E1 : dernier en B → le suivant en A", auj.test_en_cours(x3, fz, [jo("Artificial Instinct", 14, 2), jo("BG Bangers", 19, 4)])[1] == "A"
+    texte = ej.texte_test_fiche(x, {"opponent": "FuzzyTeam", "day": "2026-11-20"}, [jo("Artificial Instinct", 14, 2)])
+    yield "fiche d'amical : la consigne porte le test E1 niveau B (agressivité 5 à l'écran), le reste neutre", \
+        "test E1 niveau B : agressivité 5 à l'écran (cran 4, agressive) sur tous les joueurs" in texte and "neutre" in texte
+    yield "fiche : la consigne de l'agent reprend le test", any("test E1 niveau B" in e["consigne"] for e in ej.agents_a_lancer(
+        [{"action": True, "type": "match", "genre": "amical", "prochain": "fiche", "consigne": "fiche", "test": texte, "cle": "fuzzyteam-20-11",
+          "titre": "Amical contre FuzzyTeam (20/11)", "id": "m"}], base=ej.RACINE / "outputs" / "inexistant", jour=dt.date(2026, 11, 18)))
+
+
 def cas_affichage_transferts():
     import que_faire_blocs as qfb
     rot = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 51, 2, 1], ["p3", "Luc Absent", "SF", 50, 0, 0]]
@@ -733,7 +760,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

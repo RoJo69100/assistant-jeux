@@ -694,6 +694,16 @@ def faits_ici(experiences, amical):
     return [f for f in experiences["faits"] if f["cle"] and cle_match([f["cle"]], amical["match"], amical["date"])]
 
 
+def ecart_fait(f, e, joues):
+    """18/11 : vrai si l'amical du fait est joué avec un réglage différent du niveau déclaré (écart : n'avance pas l'alternance)."""
+    lignes = [{**r, "jour": _jour(r["match_day"])} for r in joues or []]
+    if f["cle"]:
+        r = next((r for r in lignes if cle_match([f["cle"]], r["opponent"], r["jour"])), None)
+    else:
+        r = next((r for r in lignes if f["jour"] <= r["jour"] <= f["jour"] + dt.timedelta(days=1)), None)
+    return r is not None and not conforme((e.get("joue") or {}).get(f["niveau"]), r)
+
+
 def test_en_cours(experiences, amical, joues=()):
     """H1-H2 : (expérience, niveau, déjà saisi) du test à jouer sur `amical`, None si aucune expérience en cours (H4).
     Les expériences passent dans l'ordre du fichier ; un fait dont la clé désigne cet amical ne le fait pas avancer :
@@ -709,6 +719,13 @@ def test_en_cours(experiences, amical, joues=()):
             return e, fait["niveau"], True
         if v[e["id"]]["verifies"] < int(e["amicaux_vises"]):
             ordre = e["ordre"]
+            # 18/11 : le niveau alterne sur le dernier niveau saisi avant cet amical (E1 : A puis B puis A…), pas sur un compte
+            debut = experiences.get("debut")
+            quand = lambda f: (f["cle"] or {}).get("date") or f["jour"]  # noqa: E731
+            prec = sorted((f for f in experiences["faits"] if f["id"] == e["id"] and f not in ici
+                           and (not debut or quand(f) >= debut) and quand(f) < amical["date"] and not ecart_fait(f, e, joues)), key=quand)
+            if prec and prec[-1]["niveau"] in ordre:
+                return e, ordre[(ordre.index(prec[-1]["niveau"]) + 1) % len(ordre)], False
             return e, ordre[(v[e["id"]]["verifies"] + v[e["id"]]["attente"]) % len(ordre)], False
     return None
 
