@@ -563,16 +563,17 @@ def cas_preset_adversaire():
 
 O = ej.charger_offres()
 CASE_COLS = ["ps_band", "age_band", "n", "p25", "median", "p75", "last_sale"]
-ANN = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris"]
+ANN = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris", "est_weekly_salary"]
 ROT = ["player_id", "name", "position", "ps", "min_moy", "matchs_joues"]
 
 
 def marche(age_h=2, annonces=(), cases=None, rotation=None, **plus):
+    """Annonce sans salaire (7 colonnes) : salaire hebdo 10 000."""
     d = {"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                    [[3, "Marché (enchères)", "x", "2026-11-17T10:00:00", age_h, "s"]]),
          "prix_cases": (CASE_COLS, cases if cases is not None else [[50, "22-25", 4, 40000, 60000, 80000, "2026-11-10"],
                                                                     [55, "22-25", 2, 50000, 90000, 100000, "2026-11-10"]]),
-         "annonces_actives": (ANN, list(annonces)),
+         "annonces_actives": (ANN, [list(a) + [10000] if len(a) == 7 else list(a) for a in annonces]),
          "rotation": (ROT, rotation if rotation is not None else [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 40, 2, 1],
                                                                  ["p3", "Luc Absent", "SF", 30, 0, 0]])}
     d.update(plus)
@@ -653,7 +654,7 @@ def cas_affichage_transferts():
         "revente : Yan Bas (PG, 24 ans, note 51)", "à 38 000", "médiane de la case 60 000", "fin 18/11 10:00", "proposition seulement (règle 2)"))
     yield "affichage : les seuils du yaml sont dans la ligne", "1,25 × prix" in t and "≥ 3" in t and "sur 4 matchs de ligue" in ls[2]["consigne"]
     yield "affichage : petite somme sans police", "police d'abord" not in t
-    gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00"]]),
+    gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00", 10000]]),
                 prix_cases=(CASE_COLS, [[50, "22-25", 4, 300000, 400000, 500000, "2026-11-10"]]))
     yield "affichage : somme > 250 000 → police d'abord", any("police d'abord : dossier.py puis agent police" in l["consigne"]
                                                              for l in ej.lignes_transferts(gros, 1000000, 1.0))
@@ -668,6 +669,33 @@ def cas_affichage_transferts():
         l["id"] for l in ej.lignes_transferts(d, 300000, 1.0, o=dict(O, revente_marge=1.6))]
 
 
+def cas_enchere_max():
+    """18/11 : budget = capacite_invest (666 868 le 17/11), jamais le solde (1 500 018) ; enchère max X = min(p75 de la case,
+    capacité − salaire hebdo de la recrue) ; ligne supprimée si le prix relu dépasse X. Cas réels du 17/11 : Naguib (28 250 périmé
+    dans le plan, 510 000 relu à 22:07) et Szewczyk (751)."""
+    cases = [[45, "≤21", 51, 535000, 950000, 1645832.5, "2026-11-15"], [55, "26-29", 88, 757500, 1000000, 1357031.25, "2026-11-15"]]
+    rot = [["d1", "Jonathan Durand", "SF", 43.7, 20, 4], ["b1", "Thibault Bonnet", "SG", 51.9, 15, 4]]
+    nag = lambda prix: ["bd0f", "Fouad Naguib", "SF", 17, 45.9, prix, "2026-11-19T12:31:00", 18130]
+    sze = lambda prix: ["3061", "Alan Szewczyk", "SG", 28, 56.4, prix, "2026-11-18T23:37:00", 25500]
+    d = lambda *a: marche(annonces=list(a), cases=cases, rotation=rot)
+    t = lambda ls, nom: next((l["consigne"] for l in ls if nom in l["consigne"]), None)
+    ls = ej.lignes_transferts(d(nag(28250), sze(751)), 666868, None)
+    yield "enchère max : Naguib périmé à 28 250 → max 648 738 (capacité 666 868 − salaire 18 130 < p75)", \
+        "Fouad Naguib (SF, 17 ans, note 45,9), enchère max 648 738, à 28 250" in (t(ls, "Naguib") or "")
+    yield "enchère max : Szewczyk → max 641 368 (666 868 − 25 500), à 751, police d'abord (max > 250 000)", \
+        "Alan Szewczyk (SG, 28 ans, note 56,4), enchère max 641 368, à 751" in (t(ls, "Szewczyk") or "") and "police d'abord" in t(ls, "Szewczyk")
+    yield "enchère max : la ligne nomme la capacité, pas le solde", "capacité 666 868" in t(ls, "Szewczyk") and "1 500 018" not in t(ls, "Szewczyk")
+    ls = ej.lignes_transferts(d(nag(510000)), 666868, None)
+    yield "enchère max : Naguib relu à 510 000 ≤ 648 738 → gardé, « à 510 000 »", "enchère max 648 738, à 510 000" in (t(ls, "Naguib") or "")
+    ls = ej.lignes_transferts(d(nag(510000), sze(751)), 666868 - 550000, None, exclus=["Alan Szewczyk"])
+    yield "enchère max : Szewczyk décidé à 550 000 → capacité 116 868, Naguib relu à 510 000 > 98 738 → ligne supprimée", \
+        t(ls, "Naguib") is None and t(ls, "Szewczyk") is None
+    yield "enchère max : Szewczyk relu à 700 000 > 641 368 → ligne supprimée", t(ej.lignes_transferts(d(sze(700000)), 666868, None), "Szewczyk") is None
+    yield "enchère max : salaire inconnu → aucune offre", t(ej.lignes_transferts(d(sze(751)[:7] + [None]), 666868, None), "Szewczyk") is None
+    p = ej.lignes_transferts(d(sze(751)), None, None)
+    yield "enchère max : capacité illisible → ligne « inconnu », jamais le solde", len(p) == 1 and "capacité d'investissement illisible" in p[0]["consigne"]
+
+
 def cas_personnel():
     p = ej.charger_personnel()
     yield "personnel : règle décidée dans le yaml, 4 rôles", p.get("statut", "").startswith("décidée") and len(p["roles"]) == 4
@@ -676,7 +704,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

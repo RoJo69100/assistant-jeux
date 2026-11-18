@@ -447,15 +447,30 @@ def _f(v):
     return None if v in (None, "") else float(v)
 
 
-def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
+def enchere_max(case, capacite, salaire, revente_marge=None):
+    """Enchère maximale d'une offre (18/11, règle de l'utilisateur) : min(p75 de la case, capacité − salaire hebdo de la recrue) ;
+    revente : min(médiane / revente_marge, capacité − salaire), au-delà la marge de revente disparaît. Capacité = capacite_invest
+    (gold.finance_health) moins les enchères déjà décidées, jamais le solde. Capacité ou salaire inconnus : None (pas d'offre)."""
+    if capacite is None or salaire is None:
+        return None
+    haut = float(case["p75"]) if revente_marge is None else float(case["median"]) / float(revente_marge)
+    return min(haut, float(capacite) - float(salaire))
+
+
+def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
     """{"inconnu": texte ou None, "offres": [...]} : annonces actives du Marché de type « amélioration » (note au poste > celle de
-    notre joueur utilisé le plus faible à ce poste, prix ≤ médiane de la case, prix ≤ capacité) ou « revente » (case ≥ case_min_ventes
-    ventes, prix ≤ p25, médiane ≥ revente_marge × prix), triées par gain attendu (médiane − prix). Marché périmé : « inconnu »."""
+    notre joueur utilisé le plus faible à ce poste) ou « revente » (case ≥ case_min_ventes ventes, prix ≤ p25, médiane ≥
+    revente_marge × prix), chacune avec son enchère max X (enchere_max) ; ligne supprimée si le prix relu (dernier export,
+    gold.bv_market_candidates) dépasse X. Triées par gain attendu (médiane − prix). Marché périmé ou capacité illisible : « inconnu ».
+    `exclus` : noms déjà décidés (leur plafond est déjà retiré de la capacité)."""
     import aujourdhui as auj
     import que_faire_blocs as qfb
     perime = auj.inconnu_si_perime(donnees, MARCHE, maintenant)
     if perime is not None:
         return {"inconnu": perime, "offres": []}
+    if capacite is None:
+        return {"inconnu": "inconnu : capacité d'investissement illisible (capacite_invest de gold.finance_health)", "offres": []}
+    exclus = {str(x).lower() for x in exclus}
     cases = qfb._cases(donnees)
     faibles = {}
     for r in _rows(donnees, "rotation"):
@@ -464,20 +479,27 @@ def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
                 faibles[r["position"]] = r
     vues, res = set(), []
     for r in _rows(donnees, "annonces_actives"):
-        if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))):
+        if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))) \
+                or str(r["name"]).lower() in exclus:
             continue
         vues.add(r["auction_id"])
         case = cases.get((qfb.palier_note(r["ps"]), auj.tranche_age(r["age"])))
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
             continue
         prix, med, p25 = float(r["price_now"]), float(case["median"]), float(case["p25"])
+        sal = _f(r.get("est_weekly_salary"))
         f = faibles.get(r["position"])
         base = {"nom": r["name"], "poste": r["position"], "age": int(float(r["age"])), "note": float(r["ps"]), "prix": prix, "mediane": med,
-                "p25": p25, "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")), "gain": med - prix}
-        if f is not None and float(r["ps"]) > float(f["ps"]) and prix <= med and capacite is not None and prix <= float(capacite):
-            res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), capacite=float(capacite)))
+                "p25": p25, "p75": float(case["p75"]), "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")),
+                "gain": med - prix, "capacite": float(capacite), "salaire": sal}
+        if f is not None and float(r["ps"]) > float(f["ps"]):
+            x = enchere_max(case, capacite, sal)
+            if x is not None and prix <= x:  # prix relu au-dessus de l'enchère max : ligne supprimée
+                res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x))
         elif prix <= p25 and med >= float(o["revente_marge"]) * prix:
-            res.append(dict(base, type="revente"))
+            x = enchere_max(case, capacite, sal, o["revente_marge"])
+            if x is not None and prix <= x:
+                res.append(dict(base, type="revente", max=x))
     return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"])}
 
 
@@ -539,22 +561,23 @@ def texte_transfert(x, o) -> str:
     else:
         if x["type"] == "amélioration":
             seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre plus faible utilisé au poste sur {o['matchs_rotation']} matchs "
-                     f"de ligue), prix ≤ médiane, budget {_m(x['capacite'])}")
+                     f"de ligue) ; max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         else:
-            seuil = f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix"
+            seuil = (f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix ; "
+                     f"max = min(médiane / {_virg(o['revente_marge'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
-        t = f"{x['type']} : {qui} à {_m(x['prix'])}, médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
+        t = f"{x['type']} : {qui}, enchère max {_m(x['max'])}, à {_m(x['prix'])} ; médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
     t += " — proposition seulement (règle 2)"
-    if x["prix"] > SEUIL_GROS_MONTANT["basketvibe"]:
+    if max(x["prix"], x.get("max") or 0) > SEUIL_GROS_MONTANT["basketvibe"]:
         t += " — police d'abord : dossier.py puis agent police"
     return t
 
 
-def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None) -> list:
+def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=()) -> list:
     """Lignes « Transferts » de l'état par événement : `max_offres` offres et `max_ventes` ventes au plus, triées par gain attendu ;
     Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes."""
     o = o or charger_offres()
-    of = offres_du_jour(donnees, o, capacite, maintenant)
+    of = offres_du_jour(donnees, o, capacite, maintenant, exclus)
     choix = of["offres"][:int(o["max_offres"])] + ventes_du_jour(donnees, o, tolerance, police)[:int(o["max_ventes"])]
     ligne = lambda i, prochain, consigne: {"id": i, "type": "transfert", "evenement": "transferts", "etat": None, "prochain": prochain,
                                            "rates": [], "echeance": None, "consigne": consigne, "age_h": None, "priorite": 2,

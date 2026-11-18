@@ -64,7 +64,8 @@ REQUETES = {
                       "where day <= (now() at time zone 'Europe/Paris')::date + 1 order by day, at_time, priority",
     "gold.bv_exports_state": "select ordre, ecran, pour_quoi, dernier_paris, age_h, statut from gold.bv_exports_state order by ordre",
     "gold.bv_daily_alerts": "select priority, category, alert from gold.bv_daily_alerts order by priority limit 30",
-    "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde ; capacité = solde − enchères ouvertes
+    "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde (jamais le budget des achats)
+    "gold.finance_health": "select capacite_invest from gold.finance_health where game = 'basketvibe'",  # 18/11 : capacité = capacite_invest − enchères ouvertes
     "gold.bv_position_summary": "select * from gold.bv_position_summary limit 10",
     # 5i : seules les annonces encore ouvertes (fin à venir ou inconnue) ; le prix est celui de la page exportée
     "gold.bv_market_bargains": "select name, position, ps, price_now, ref_n, ref_reliable, bid_ceiling_resale, resale_margin_p25, "
@@ -156,7 +157,7 @@ REQUETES = {
                     "and c.ends_paris <= (now() at time zone 'Europe/Paris') + interval '24 hours' order by c.auction_id, c.ends_paris",
     # 17/11 : toutes les annonces encore ouvertes (dédupliquées par auction_id), pour les 5 offres les moins chères par rapport à leur case
     "annonces_actives": "select distinct on (c.auction_id) c.auction_id, c.name, c.position, c.age, c.ps, "
-                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris from gold.bv_market_candidates c "
+                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, c.est_weekly_salary from gold.bv_market_candidates c "
                         "where c.ends_paris > now() at time zone 'Europe/Paris' order by c.auction_id, c.ends_paris",
     # 5n T4 : nombre d'annonces du dernier export du Marché (phrase « aucune annonce ne se termine dans les 24 h »)
     "annonces_export": "select count(*) as n from gold.bv_market_candidates",
@@ -1198,10 +1199,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
 
     decides = [norm(c["nom"]) for c in S.get("cibles", [])]  # déjà décidés (plafond de la décision) : pas de 2e ligne
 
-    # Capacité (PB8, décision de l'utilisateur du 09/11) : solde moins les enchères encore ouvertes, sans réserve de sécurité.
-    solde = next((r.get("balance") for r in lignes_de(donnees, "gold.bv_finance_health")), None)
+    # Capacité (18/11, règle de l'utilisateur, remplace PB8) : capacite_invest (gold.finance_health) moins les enchères encore
+    # ouvertes, jamais le solde.
+    cap = next((r.get("capacite_invest") for r in lignes_de(donnees, "gold.finance_health")), None)
     ouvertes = [c for c in S.get("cibles", []) if c["fin"] is None or c["fin"] > maintenant]
-    reste_cap = float(solde) - sum(c["max"] for c in ouvertes) if solde is not None else None
+    reste_cap = float(cap) - sum(c["max"] for c in ouvertes) if cap not in (None, "") else None
 
     def libre(r):
         return not any(n in norm(r["name"]) for n in decides)
@@ -1314,7 +1316,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    "gold.bv_market_bargains")
         if not bonnes:
             garder.append("transferts : " + conclusion_vide(
-                f"aucune affaire fiable ouverte {dans_marche} qui tienne dans le solde moins les enchères encore ouvertes (capacité restante"
+                f"aucune affaire fiable ouverte {dans_marche} qui tienne dans capacite_invest moins les enchères encore ouvertes (capacité restante"
                 + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")",
                 donnees, "Marché (enchères)", maintenant).replace("inconnu :", "affaires fiables inconnues :", 1))
     m = manque(donnees, erreurs, "gold.bv_personnel_status", "Personnel")

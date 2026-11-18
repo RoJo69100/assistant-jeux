@@ -595,7 +595,9 @@ def lignes_transferts_du_jour(donnees, capacite, S, maintenant=None) -> list:
     """Phase A : lignes Transferts (offres, ventes) de pipelines/etat_jour.py, seuils de la section offres du yaml. Une seule source :
     l'état par événement et le bloc 4 lisent ces lignes."""
     import etat_jour as ej
-    return ej.lignes_transferts(donnees, capacite, _tolerance(donnees), (S or {}).get("police", ""), maintenant)
+    S = S or {}
+    return ej.lignes_transferts(donnees, capacite, _tolerance(donnees), S.get("police", ""), maintenant,
+                                exclus=[c["nom"] for c in S.get("cibles", [])])  # décidés : déjà retirés de la capacité
 
 
 def _offres_et_ventes(donnees, capacite, police="") -> list:
