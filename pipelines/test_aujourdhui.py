@@ -599,12 +599,14 @@ def cas_mesure():
         return [a for a in p["actions"] if a[2].startswith("Mesure de la semaine")]
 
     l = mes(LUN, deux)
-    yield "mesure lundi : une ligne SUIVI, rang +1, force +0,2", len(l) == 1 and l[0][1] == 3 \
-        and l[0][2].startswith("Mesure de la semaine : rang 8 (+1), force moyenne 54,7 (+0,2), trésorerie capacite_invest ") \
+    yield "mesure lundi : une ligne SUIVI, rang ▼ 1 place perdue, force +0,2", len(l) == 1 and l[0][1] == 3 \
+        and l[0][2].startswith("Mesure de la semaine : rang 8 (▼ 1 place perdue), force moyenne 54,7 (+0,2), trésorerie capacite_invest ") \
         and "/ solde " in l[0][2] and "2026-11-13" in l[0][3]
     yield "mesure mardi : aucune ligne", mes(dt.date(2026, 11, 17), deux) == []
     l = mes(LUN, (COLS, [["2026-11-16", None, None, None, 54.7, 6, None, None, None, None, None]]))
     yield "mesure lundi, valeurs absentes : « illisible », rien de remplacé", len(l) == 1 and l[0][2].count("illisible") == 4
+    yield "mesure : rang ▲ places gagnées, = stable, jamais de +/−", auj._rang(5, 7) == "5 (▲ 2 places gagnées)" \
+        and auj._rang(7, 7) == "7 (= stable)" and auj._rang(10, 8) == "10 (▼ 2 places perdues)"
     yield "mesure : requête sur le jour de Paris, deux lundis", auj.JOUR_PARIS_SQL in auj.REQUETES["mesure_semaine"] \
         and "generate_series(0, 1)" in auj.REQUETES["mesure_semaine"]
 

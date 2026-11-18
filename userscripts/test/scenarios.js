@@ -22,7 +22,10 @@ async function main() {
     controle('reprise après fermeture', b.calls.length >= 1 && b.core.listKeys().length === 0, `${b.calls.length} appel(s), ${b.core.listKeys().length} restantes`);
     const items = b.corps(0).p_items;
     controle('envoi : champs de la RPC seuls', items.length >= 5 && [...Object.keys(items[0])].sort().join() === 'captured_at,client,game,page_type,page_url,payload,source,source_url', Object.keys(items[0]).join());
-    controle('CLIENT = version du script', /^basketvibe\.user\.js@1\.0\.0$/.test(items[0].client), items[0].client);
+    // 18/11 : version lue dans la source du jeu (@version), plus figée dans le test (cassait à chaque montée de version)
+    const version = (require('fs').readFileSync(require('path').join(__dirname, '..', 'jeux', 'basketvibe.js'), 'utf8')
+      .match(/^\/\/ @version\s+(\S+)/m) || [])[1];
+    controle('CLIENT = version du script', Boolean(version) && items[0].client === `basketvibe.user.js@${version}`, `${items[0].client} (source : ${version})`);
   }
 
   // 3. échec : rien n'est retiré, bouton rouge, nouvel essai automatique, puis succès

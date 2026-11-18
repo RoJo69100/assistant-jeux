@@ -857,6 +857,19 @@ def _ecart(a, b, fmt):
     return f"{fmt(a)} ({'+' if d >= 0 else '−'}{fmt(abs(d))})"
 
 
+def _rang(a, b):
+    """Rang avec places gagnées (▲) ou perdues (▼) par rapport au lundi d'avant, jamais en +1 / −1 (règle de l'utilisateur, 18/11)."""
+    if a is None:
+        return "illisible"
+    if b is None:
+        return f"{int(a)} (semaine d'avant illisible)"
+    d = int(b) - int(a)
+    if d == 0:
+        return f"{int(a)} (= stable)"
+    n = abs(d)
+    return f"{int(a)} ({'▲' if d > 0 else '▼'} {n} place{'s' if n > 1 else ''} {'gagnée' if d > 0 else 'perdue'}{'s' if n > 1 else ''})"
+
+
 def ligne_mesure(donnees, erreurs, jour, ajoute):
     """18/11 : le lundi seulement, « Mesure de la semaine : rang X (±), force moyenne Y (±), trésorerie Z (±) », variation par
     rapport au lundi d'avant (MESURE_SQL). Une valeur illisible est dite illisible, jamais remplacée."""
@@ -870,9 +883,8 @@ def ligne_mesure(donnees, erreurs, jour, ajoute):
     if not r:
         return
     c, p = r[0], (r[1] if len(r) > 1 else {})
-    entier = lambda v: f"{float(v):.0f}"
     force = (lambda v: f"{float(v):.1f}".replace(".", ",")) if c.get("n") == 7 else None
-    ajoute(None, 3, f"Mesure de la semaine : rang {_ecart(c.get('rank'), p.get('rank'), entier)}, "
+    ajoute(None, 3, f"Mesure de la semaine : rang {_rang(c.get('rank'), p.get('rank'))}, "
                     f"force moyenne {_ecart(c.get('force_moy'), p.get('force_moy'), force) if force else 'illisible (moins de 7 joueurs lus)'}, "
                     f"trésorerie capacite_invest {_ecart(c.get('capacite_invest'), p.get('capacite_invest'), montant)} "
                     f"/ solde {_ecart(c.get('solde'), p.get('solde'), montant)}",
