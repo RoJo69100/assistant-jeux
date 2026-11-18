@@ -3,7 +3,7 @@
 Conçu le 2026-11-09 (critère T4, journal-aujourdhui.md « Garde-fous mécaniques »).
 Imprime : branche, HEAD, origin/main, commits d'avance sur origin/main, `git status --short`,
 dernière ligne de sortie de chaque pipelines/test_*.py.
-Aucun fetch, aucune écriture git. Code retour 1 si HEAD n'est pas contenu dans origin/main.
+Aucun fetch, aucune écriture git. Code retour 1 si HEAD n'est pas contenu dans origin/main ou si un test est rouge (18/11).
 Tests : test_fin_etape.py.
 """
 
@@ -43,11 +43,22 @@ def rapport(cwd=None) -> int:
     statut = git(cwd, "status", "--short").stdout.rstrip()
     print("git status --short :" + ("\n" + statut if statut else " (propre)"))
     print("tests :")
+    rouges = []
     for fichier in sorted((racine / "pipelines").glob("test_*.py")):
-        print(f"  {fichier.name} : {derniere_ligne(racine, fichier)}")
+        fin = derniere_ligne(racine, fichier)
+        print(f"  {fichier.name} : {fin}")
+        if rouge(fin):
+            rouges.append(fichier.name)
+    print(f"tests rouges : {len(rouges)}" + (f" ({', '.join(rouges)})" if rouges else ""))
     contenu = bool(om) and git(cwd, "merge-base", "--is-ancestor", "HEAD", om).returncode == 0
     print("HEAD dans origin/main : " + ("oui" if contenu else "NON"))
-    return 0 if contenu else 1
+    return 0 if contenu and not rouges else 1
+
+
+def rouge(fin: str) -> bool:
+    """18/11 : test rouge = code retour non nul, délai dépassé, ou dernière ligne N/M avec N < M."""
+    m = re.fullmatch(r"(\d+)/(\d+)", fin)
+    return "[code " in fin or fin == "(délai dépassé)" or (m is not None and int(m.group(1)) < int(m.group(2)))
 
 
 if __name__ == "__main__":

@@ -113,6 +113,8 @@ def _autre_ok(ev, etat, maintenant, cfg) -> bool:
         return maintenant >= ev["quand"]
     if t == "academie" and etat == "rapport_exporte":
         return ev.get("rapport_at") is not None and ev["rapport_at"] >= ev["quand"]
+    if t == "academie" and etat == "teste":  # 18/11 : plus aucun prospect au verdict « tester » (tests lus sur la dernière capture)
+        return ev.get("tests") == 0
     if t == "academie" and etat == "decide":
         return bool(ev.get("decide"))
     if t == "entrainement" and etat == "page_exportee":
@@ -134,11 +136,19 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
         return ev["quand"], f"rien avant le rapport du scout ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
     if etat == "rapport_exporte":
         return None, f"exporte la page Académie (rapport du {_jj(ev['quand'])})", True
-    if etat == "decide":
+    if etat == "teste":
         n = ev.get("tests")
-        if n:  # 17/11 : décision attendue chiffrée (verdict « tester » de aujourdhui.verdict_prospect, coût de la config)
+        if n:  # 17/11 : tests attendus chiffrés (verdict « tester » de aujourdhui.verdict_prospect, coût de la config)
             cout = f"{n * cfg['evenements']['academie']['cout_test']:,}".replace(",", " ")
             return None, f"décision attendue : tester {n} prospect{'s' if n > 1 else ''} ({cout}), rapport du {_jj(ev['quand'])}", True
+        return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
+    if etat == "decide":
+        v = ev.get("verdicts") or []
+        if v:  # 18/11 : tests lus, verdict de la règle de signature de l'utilisateur (17/11)
+            signer = [x["nom"] for x in v if x["verdict"] == "signer"]
+            quoi = f"signe {', '.join(signer)}" if signer else "aucun prospect à signer"
+            return None, (f"testé (capture du {_jj(ev.get('capture'))}), rapport du {_jj(ev['quand'])} : "
+                          + " ; ".join(f"{x['nom']} ({x['poste']}, {x['potentiel']}) : {x['verdict']}" for x in v) + f" — {quoi}"), True
         return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
     if etat == "traitement_attendu":
         return ev["quand"], f"rien avant le traitement de l'entraînement ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
@@ -198,7 +208,18 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
-            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev)}
+            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test")}
+
+
+def texte_test_fiche(experiences, r, joues=()) -> str:
+    """18/11 : test de la file d'expériences pour la fiche de cet amical (niveau alterné, aujourdhui.test_en_cours), à porter
+    tel quel dans la fiche ; « » si aucune expérience en cours."""
+    import aujourdhui as auj
+    t = auj.test_en_cours(experiences, {"match": r["opponent"], "date": _date(r["day"])}, joues) if experiences else None
+    if not t:
+        return ""
+    return (f"réglage de test à écrire dans la fiche : {auj.texte_test(t[0], t[1])} ; tout le reste au réglage neutre de "
+            "docs/attentes/experiences-amicales-basketvibe.yaml (un seul test)")
 
 
 def _slug(s) -> str:
@@ -434,28 +455,45 @@ def forme_role(x) -> str:
 
 
 def requete_rotation(n: int) -> str:
-    """Minutes de chaque joueur de l'effectif sur les `n` derniers matchs de ligue (0 s'il n'a pas joué) : moyenne et matchs joués."""
-    n = int(n)
-    return ("select r.player_id, r.name, r.position, r.ps, round(coalesce(sum(l.min), 0)::numeric / " + str(n) + ", 1) as min_moy, "
-            "count(l.fixture_id) filter (where l.min > 0) as matchs_joues from gold.bv_roster_now r "
-            "left join gold.bv_match_player_lines l on l.player_id = r.player_id and l.fixture_id in ("
-            "select fixture_id from (select distinct fixture_id, match_day from gold.bv_match_player_lines where competition = 'league') x "
-            "order by match_day desc limit " + str(n) + ") group by r.player_id, r.name, r.position, r.ps")
+    """Minutes de chaque joueur de l'effectif sur les 4 derniers matchs de ligue, lues dans gold.bv_sell_candidates (18/11 : la
+    jointure sur gold.bv_match_player_lines dépasse le délai, la rotation revenait vide et toute offre tombait en « revente »).
+    min_moy = league_min_last4 (moyenne sur ses lignes de match), matchs_joues = 1 s'il a joué. La vue fixe N = 4 : `n` doit valoir 4."""
+    assert int(n) == 4, "gold.bv_sell_candidates porte les 4 derniers matchs de ligue : matchs_rotation doit valoir 4"
+    return ("select player_id, name, position, ps, league_min_last4 as min_moy, "
+            "case when league_min_last4 > 0 then 1 else 0 end as matchs_joues from gold.bv_sell_candidates")
 
 
 def _f(v):
     return None if v in (None, "") else float(v)
 
 
-def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
+def enchere_max(case, capacite, salaire, revente_marge=None):
+    """Enchère maximale d'une offre (18/11, règle de l'utilisateur) : min(p75 de la case, capacité − salaire hebdo de la recrue) ;
+    revente : min(médiane / revente_marge, capacité − salaire), au-delà la marge de revente disparaît. Capacité = capacite_invest
+    (gold.finance_health) moins les enchères déjà décidées, jamais le solde. Capacité ou salaire inconnus : None (pas d'offre)."""
+    if capacite is None or salaire is None:
+        return None
+    haut = float(case["p75"]) if revente_marge is None else float(case["median"]) / float(revente_marge)
+    return min(haut, float(capacite) - float(salaire))
+
+
+def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
     """{"inconnu": texte ou None, "offres": [...]} : annonces actives du Marché de type « amélioration » (note au poste > celle de
-    notre joueur utilisé le plus faible à ce poste, prix ≤ médiane de la case, prix ≤ capacité) ou « revente » (case ≥ case_min_ventes
-    ventes, prix ≤ p25, médiane ≥ revente_marge × prix), triées par gain attendu (médiane − prix). Marché périmé : « inconnu »."""
+    notre joueur utilisé le plus faible à ce poste) ou « revente » (case ≥ case_min_ventes ventes, prix ≤ p25, médiane ≥
+    revente_marge × prix), chacune avec son enchère max X (enchere_max) ; ligne supprimée si le prix relu (dernier export,
+    gold.bv_market_candidates) dépasse X. Triées par gain attendu (médiane − prix). Marché périmé ou capacité illisible : « inconnu ».
+    `exclus` : noms déjà décidés (leur plafond est déjà retiré de la capacité)."""
     import aujourdhui as auj
     import que_faire_blocs as qfb
     perime = auj.inconnu_si_perime(donnees, MARCHE, maintenant)
     if perime is not None:
         return {"inconnu": perime, "offres": []}
+    if capacite is None:
+        return {"inconnu": "inconnu : capacité d'investissement illisible (capacite_invest de gold.finance_health)", "offres": []}
+    if donnees.get("rotation") is None:  # 18/11 : sans rotation, aucun « plus faible » : tout tombait en revente
+        return {"inconnu": "inconnu : rotation illisible (minutes de ligue), offres non classées", "offres": []}
+    exclus = {str(x).lower() for x in exclus}
+    age_export = auj.age_export_h(donnees, MARCHE, maintenant)
     cases = qfb._cases(donnees)
     faibles = {}
     for r in _rows(donnees, "rotation"):
@@ -464,24 +502,31 @@ def offres_du_jour(donnees, o, capacite, maintenant=None) -> dict:
                 faibles[r["position"]] = r
     vues, res = set(), []
     for r in _rows(donnees, "annonces_actives"):
-        if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))):
+        if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))) \
+                or str(r["name"]).lower() in exclus:
             continue
         vues.add(r["auction_id"])
         case = cases.get((qfb.palier_note(r["ps"]), auj.tranche_age(r["age"])))
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
             continue
         prix, med, p25 = float(r["price_now"]), float(case["median"]), float(case["p25"])
+        sal = _f(r.get("est_weekly_salary"))
         f = faibles.get(r["position"])
         base = {"nom": r["name"], "poste": r["position"], "age": int(float(r["age"])), "note": float(r["ps"]), "prix": prix, "mediane": med,
-                "p25": p25, "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")), "gain": med - prix}
-        if f is not None and float(r["ps"]) > float(f["ps"]) and prix <= med and capacite is not None and prix <= float(capacite):
-            res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), capacite=float(capacite)))
-        elif prix <= p25 and med >= float(o["revente_marge"]) * prix:
-            res.append(dict(base, type="revente"))
+                "p25": p25, "p75": float(case["p75"]), "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")),
+                "gain": med - prix, "capacite": float(capacite), "salaire": sal, "age_export_h": age_export}
+        if f is not None and float(r["ps"]) > float(f["ps"]):
+            x = enchere_max(case, capacite, sal)
+            if x is not None and prix <= x:  # prix relu au-dessus de l'enchère max : ligne supprimée
+                res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x))
+        elif prix > auj.PRIX_NON_SIGNIFICATIF and prix <= p25 and med >= float(o["revente_marge"]) * prix:  # 18/11 : prix 0 = inconnu
+            x = enchere_max(case, capacite, sal, o["revente_marge"])
+            if x is not None and prix <= x:
+                res.append(dict(base, type="revente", max=x))
     return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"])}
 
 
-def ventes_du_jour(donnees, o, tolerance, police="") -> list:
+def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
     """Joueurs à vendre pour profit : hors rotation (moyenne ≤ minutes_hors_rotation sur les matchs_rotation derniers matchs de
     ligue), écart de force avec son remplaçant ≤ tolérance du bloc 4, prix attendu = médiane de sa case (case ≥ case_min_ventes
     ventes) ; prix payé connu (gold.bv_transfer_history, bought_by_me) : profit ≥ vente_marge_profit, sinon « prix d'achat
@@ -489,7 +534,10 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     ≥ minimum_effectif. Triés par prix attendu décroissant."""
     import aujourdhui as auj
     import que_faire_blocs as qfb
+    bilan = {} if bilan is None else bilan
+    compte = lambda r: bilan.__setitem__(r, bilan.get(r, 0) + 1)  # noqa: E731
     if tolerance is None:
+        bilan["tolérance du bloc 4 non lue"] = 0
         return []
     cases = qfb._cases(donnees)
     rot = {str(r["player_id"]): r for r in _rows(donnees, "rotation")}
@@ -497,27 +545,41 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     joueurs = _rows(donnees, "vendre")
     achats = {str(r["player_id"]): float(r["fee"]) for r in _rows(donnees, "prix_achat") if _f(r.get("fee")) and float(r["fee"]) > 0}
     res = []
+    bilan["_n"] = len(joueurs)
     for j in joueurs:
         r, m = rempl.get(str(j["player_id"]), {}), rot.get(str(j["player_id"]))
-        if auj.vrai(j.get("on_transfer_list")) or m is None or float(m["min_moy"]) > float(o["minutes_hors_rotation"]):
+        if auj.vrai(j.get("on_transfer_list")):
+            compte("déjà en vente")
+            continue
+        if m is None:
+            compte("minutes de ligue absentes")
+            continue
+        if float(m["min_moy"]) > float(o["minutes_hors_rotation"]):
+            compte("en rotation")
             continue
         if r.get("gap") is None or float(r["gap"]) > float(tolerance):
+            compte("remplaçant trop faible ou absent")
             continue
         if f"ne pas vendre {str(j['name']).lower()}" in str(police).lower():
+            compte("« ne pas vendre » de la police")
             continue
         case = cases.get((qfb.palier_note(j["ps"]), auj.tranche_age(j["age"])))
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
+            compte("case de prix trop petite")
             continue
         prix = float(case["median"])  # prix attendu = médiane de la case
         paye = achats.get(str(j["player_id"]))
         profit = None if paye is None else (prix - paye) / paye
         if profit is not None and profit < float(o["vente_marge_profit"]):
+            compte("profit insuffisant")
             continue
         res.append({"type": "vente", "nom": j["name"], "poste": j["position"], "age": int(float(j["age"])), "note": float(j["ps"]),
                     "prix": prix, "mediane": prix, "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
                     "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix,
                     "prix_achat": paye, "profit": profit})
     places = max(0, len(joueurs) - int(o["minimum_effectif"]))
+    if res and not places:
+        bilan["minimum d'effectif atteint"] = len(res)
     return sorted(res, key=lambda x: -x["gain"])[:places]
 
 
@@ -539,27 +601,58 @@ def texte_transfert(x, o) -> str:
     else:
         if x["type"] == "amélioration":
             seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre plus faible utilisé au poste sur {o['matchs_rotation']} matchs "
-                     f"de ligue), prix ≤ médiane, budget {_m(x['capacite'])}")
+                     f"de ligue) ; max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         else:
-            seuil = f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix"
+            seuil = (f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix ; "
+                     f"max = min(médiane / {_virg(o['revente_marge'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
-        t = f"{x['type']} : {qui} à {_m(x['prix'])}, médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
+        import aujourdhui as auj
+        age = x.get("age_export_h")
+        age = f"export du Marché de {age:.0f} h" if age is not None else "âge de l'export du Marché illisible"
+        prix = (f"prix inconnu (aucune enchère, {age})" if x["prix"] <= auj.PRIX_NON_SIGNIFICATIF  # 18/11 : « à 0 » = inconnu
+                else f"à {_m(x['prix'])} ({age})")
+        t = f"{x['type']} : {qui}, enchère max {_m(x['max'])}, {prix} ; médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
     t += " — proposition seulement (règle 2)"
-    if x["prix"] > SEUIL_GROS_MONTANT["basketvibe"]:
+    if max(x["prix"], x.get("max") or 0) > SEUIL_GROS_MONTANT["basketvibe"]:
         t += " — police d'abord : dossier.py puis agent police"
     return t
 
 
-def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None) -> list:
+def texte_aucune_vente(bilan) -> str:
+    """« Ventes : aucune à proposer (N joueurs évalués, raison) » ; raisons triées par nombre de joueurs écartés."""
+    n = bilan.get("_n", 0)
+    raisons = sorted(((k, v) for k, v in bilan.items() if k != "_n"), key=lambda x: -x[1])
+    r = " ; ".join(k if not v else f"{k} : {v}" for k, v in raisons) or "aucun joueur dans l'effectif lu"
+    return f"Ventes : aucune à proposer ({n} joueur{'s' if n > 1 else ''} évalué{'s' if n > 1 else ''}, {r})"
+
+
+def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=()) -> list:
     """Lignes « Transferts » de l'état par événement : `max_offres` offres et `max_ventes` ventes au plus, triées par gain attendu ;
     Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes."""
     o = o or charger_offres()
-    of = offres_du_jour(donnees, o, capacite, maintenant)
-    choix = of["offres"][:int(o["max_offres"])] + ventes_du_jour(donnees, o, tolerance, police)[:int(o["max_ventes"])]
+    of = offres_du_jour(donnees, o, capacite, maintenant, exclus)
+    bilan = {}
+    ventes = ventes_du_jour(donnees, o, tolerance, police, bilan)[:int(o["max_ventes"])]
+    choix = of["offres"][:int(o["max_offres"])] + ventes
     ligne = lambda i, prochain, consigne: {"id": i, "type": "transfert", "evenement": "transferts", "etat": None, "prochain": prochain,
                                            "rates": [], "echeance": None, "consigne": consigne, "age_h": None, "priorite": 2,
                                            "action": True, "defauts": []}
     res = [ligne("offres-inconnu", "offre", f"offres du Marché : {of['inconnu']}")] if of["inconnu"] else []
+    offres = sorted(of["offres"][:int(o["max_offres"])], key=lambda x: -x["gain"])
+    somme = sum(x["max"] for x in offres)
+    if capacite is not None and len(offres) > 1 and somme > float(capacite):  # 18/11 : plafonds additionnés > capacité
+        cumul, tient = 0.0, []
+        for x in offres:
+            if cumul + x["max"] <= float(capacite):
+                cumul += x["max"]
+                tient.append(x["nom"])
+        ordre = ", ".join(f"{i}. {x['nom']} (max {_m(x['max'])})" for i, x in enumerate(offres, 1))
+        res.append(dict(ligne("offres-priorite", "offre",
+                              f"priorité : plafonds additionnés {_m(somme)} > capacité {_m(float(capacite))} ; enchéris dans cet ordre "
+                              f"(gain attendu) : {ordre} ; tiennent ensemble à leur plafond : {', '.join(tient) or 'aucune'} ; "
+                              "chaque enchère gagnée retire son prix de la capacité et baisse les plafonds suivants"), priorite=1))
+    if not ventes:  # 18/11 : jamais de silence sur les ventes
+        res.append(dict(ligne("ventes-aucune", "vente", texte_aucune_vente(bilan)), action=False, priorite=3))
     return res + [ligne(f"{x['type']}-{x['nom']}", x["type"] if x["type"] == "vente" else "offre", texte_transfert(x, o))
                   for x in sorted(choix, key=lambda x: -x["gain"])]
 
@@ -592,7 +685,7 @@ def agents_a_lancer(etats, cfg=None, base=None, jour=None, dossier_agents=None) 
         champs = _Champs(l, jour=jour.isoformat())
         sortie = r["sortie"].format_map(champs)
         e = {"agent": r["agent"], "id": l.get("id"), "evenement": l.get("evenement"), "sortie": sortie,
-             "consigne": " ; ".join(x for x in (l.get("consigne"), r.get("consigne", "").format_map(champs)) if x),
+             "consigne": " ; ".join(x for x in (l.get("consigne"), l.get("test"), r.get("consigne", "").format_map(champs)) if x),
              "avant": r.get("avant"), "statut": "a_lancer", "raison": None}
         f = base / sortie
         if f.is_file() and f.stat().st_size > 0:
@@ -713,13 +806,31 @@ def fiche_entrainement(base, jour, depuis):
     return {"fichier": f"briefs/{max(trouves)[1]}"} if trouves else None
 
 
+MANQUE_SIGNATURE = ("à juger, il manque la mesure « meilleures caractéristiques du poste » de la règle de signature "
+                    "(aucun seuil écrit par l'utilisateur)")
+
+
 def _tests_academie(donnees):
-    """Nombre de prospects du rapport au verdict « tester » (gold.bv_academy_prospects) ; None si une taille ou un poste manque."""
+    """(n, verdicts, capture) : n = prospects du rapport encore au verdict « tester » (None si une taille ou un poste manque) ;
+    verdicts des prospects testés, lus sur la dernière capture de la page Académie (requête « tests_academie », max(captured_at)) :
+    règle de signature de l'utilisateur du 17/11 (potentiel énorme, meilleures caractéristiques du poste, bonne taille).
+    Potentiel autre que high : ignorer. High et taille juste : la mesure des compétences au poste manque, elle est nommée."""
     import aujourdhui as auj
     pros = _rows(donnees, "prospects")
     if not pros or any(p.get("position") not in auj.PLAGE_TAILLE or p.get("height_cm") in (None, "") for p in pros):
-        return None
-    return sum(auj.verdict_prospect(p)[0] == "tester" for p in pros)
+        return None, [], None
+    tests = {str(r["slot"]): r for r in _rows(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}
+    capture = max((_dt(r["capture_paris"]) for r in _rows(donnees, "tests_academie") if r.get("capture_paris")), default=None)
+    n, verdicts = 0, []
+    for p in pros:
+        t = tests.get(str(p["slot"]))
+        verdict = auj.verdict_prospect(dict(p, test_potentiel=t["potentiel"] if t else None))[0]
+        if t is None:
+            n += verdict == "tester"
+            continue
+        verdicts.append({"nom": p["name"], "poste": p["position"], "potentiel": str(t["potentiel"]).lower(),
+                         "verdict": MANQUE_SIGNATURE if verdict == "à juger" else verdict})
+    return n, verdicts, capture
 
 
 def construire(donnees, S, base, jour, maintenant, cfg) -> list:
@@ -759,6 +870,8 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
               "adv_connus": None if connus is None else str(r["fixture_id"]) in connus,
               "juge_requis": r["fixture_id"] == dernier, "juge": a_evaluer == 0, "maj_at": max(dates) if dates else None}
         ev["fiche"] = lire_fiche(base, jour, ev) if d and d >= jour else None
+        if genre == "amical" and d and d >= jour:
+            ev["test"] = texte_test_fiche(S.get("experiences"), r, _rows(donnees, "amical_reglage")) or None
         evs.append(appliquer_controles(ev, {"blessures": blessures.get(r["fixture_id"], {}), "fatigue": fatigue, "seuil_fatigue": seuil}, cfg))
     rapport = max((_dt(r["rapport_paris"]) for r in _rows(donnees, "prospects")), default=None)
     page_entr = next((_dt(r["dernier_paris"]) for r in _rows(donnees, "gold.bv_exports_state") if r["ecran"] == "Entraînement"), None)
@@ -768,7 +881,8 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
         for q in occurrences(c["quand"], maintenant):
             ev = {"type": t, "id": f"{t}-{q:%Y-%m-%d}", "quand": q, "maj_at": None}
             if t == "academie":
-                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=_tests_academie(donnees))
+                n, verdicts, capture = _tests_academie(donnees)
+                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=n, verdicts=verdicts, capture=capture)
             else:
                 ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()), fiche=fiche_entrainement(base, jour, q.date()))
             evs.append(ev)

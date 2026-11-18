@@ -42,6 +42,7 @@ ECHANTILLONS = {
                     "Après 04:00 : exporter Entraînement, Finances et Personnel",
                     "Après 09:00 : exporter la page Académie (nouveau rapport du jeudi)",
                     "Avant 19:45 : vérifier le preset de ligue et régler le focus défensif"],
+    "t_pers": ["personnel : licencie 2 marketing (2 → 0) (−20 000 par semaine) : marketing : 1 % de recettes"],  # 17/11 : écart à personnel_propose
     "r['alert']": ["Dupont blessé, retour le 12/11", "Dupont : fatigue 73 (hors zone verte)",
                    "Dupont : forme 2 (attaque −8 %)", "Semaine type déficitaire : -1200 par semaine",
                    "Match de ligue joué non exporté : J5 du 06/11"],
@@ -616,7 +617,7 @@ JOUR_J = dt.date(2026, 11, 10)
 
 def donnees_4(**plus):
     d = {"prix_cases": PRIX, "annonces_24h": ANN, "vendre": VENTE, "gold.bv_sell_replacement": REMPL,
-         "annonces_export": T(["n"], [(20,)]),
+         "annonces_export": T(["n"], [(20,)]), "rotation": T(["player_id", "name", "position", "ps", "min_moy", "matchs_joues"], []),
          "gold.bv_exports_state": T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                     [(3, "Marché (enchères)", "x", "2026-11-10T10:13:00", 5, "🟩 à jour")])}
     d.update(plus)
@@ -868,7 +869,7 @@ def cas_t5():
     seuls_autres = donnees_t5(matchs_ajoutes=T(["day", "competition_kind", "n"], [("2026-11-08", "amical", 1)]), matchs_autres=T(["premiere_jour"], [("2026-11-10",)] * 5))
     l_a, c_a = qfb.bloc_6(seuls_autres, etu, jour)
     yield "test_matchs_autres_clubs_ne_declenchent_pas_l_etude_et_hors_de_k", c_a == [] and "0 de nos matchs pas encore étudiés ; 5 d'autres clubs" in l_a[0]
-    yield "test_requete_matchs_autres_existe", "matchs_autres" in auj.REQUETES and "silver.bv_matches" in auj.REQUETES["matchs_autres"] and "not exists" in auj.REQUETES["matchs_autres"]
+    yield "test_requete_matchs_autres_existe", "matchs_autres" in auj.REQUETES and "gold.bv_matchs_autres" in auj.REQUETES["matchs_autres"]  # 18/11 : vue matérialisée
     yield "test_bloc_6_vue_illisible", "vue matchs_ajoutes illisible" in "\n".join(qfb.bloc_6(donnees_t5(matchs_ajoutes=None), etu, jour)[0])
 
     # avancement des expériences et prochaine hypothèse
@@ -966,10 +967,12 @@ def cas_t6():
 
     # --- assemblage
     texte, consignes = qfb.rendre_blocs(r, donnees_t6(), {}, JOUR_T, MAINT, S, etudes=etu, base=dossier())
-    pos = [texte.find(f"## Bloc {n} — ") for n in range(2, 11)]
-    yield "test_blocs_2_a_10_dans_l_ordre", all(p >= 0 for p in pos) and pos == sorted(pos)
+    GARDES = [2, 4, 5, 6, 7, 8, 9]  # 18/11 : anciens blocs 3 et 10 retirés (contredisaient l'état par événement)
+    pos = [texte.find(f"## Bloc {n} — ") for n in GARDES]
+    yield "test_blocs_gardes_dans_l_ordre", all(p >= 0 for p in pos) and pos == sorted(pos)
+    yield "test_blocs_3_et_10_retires (18/11)", "## Bloc 3 — " not in texte and "## Bloc 10 — " not in texte and "à valider par écrit" not in texte
     vide_texte, vide_cons = qfb.rendre_blocs(RES_VIDE, {}, {}, JOUR_T, MAINT, S, etudes=[], base=dossier())
-    yield "test_aucun_bloc_absent", all(f"## Bloc {n} — " in vide_texte for n in range(2, 11)) and isinstance(vide_cons, list)
+    yield "test_aucun_bloc_absent", all(f"## Bloc {n} — " in vide_texte for n in GARDES) and isinstance(vide_cons, list)
     yield "test_aucun_bloc_vide : chaque bloc a au moins une ligne", all(len(b.split("\n", 1)[1].strip()) > 0 for b in vide_texte.split("## Bloc ")[1:])
     yield "test_consignes_de_session_collectees", any("lancer l'agent tactique" in c or "lance l'agent tactique" in c for c in consignes) \
         and any("lance l'agent analyste" in c for c in consignes) and not any(c in texte for c in consignes)

@@ -52,6 +52,7 @@ def figees(**remplace):
             (3, "export", "Finances : dernier export il y a 8 jour(s)"),
         ]),
         "gold.bv_finance_health": (["balance", "weekly_result_est", "weekly_personnel", "weekly_academy"], [(279666, 108847, 60000, 100000)]),
+        "gold.finance_health": (["capacite_invest"], [(279666,)]),  # 18/11 : capacité = capacite_invest, jamais le solde
         "gold.bv_position_summary": (["position", "depth", "ps_avg", "ps_max"], [
             ("PG", 3, 49.4, 56.2), ("SG", 4, 46.4, 51.6), ("C", 3, 49.4, 52.4)]),
         "gold.bv_market_bargains": (["name", "position", "ps", "ref_n", "ref_reliable", "bid_ceiling_resale",
@@ -166,15 +167,19 @@ def cas():
     vieux = figees(**{"joueurs_declin": (["name", "age"], [("Vétéran", 33)])})
     yield "D1 joueur de 31 ans ou plus : vendre", "Mets Vétéran en vente (33 ans" in texte(vieux) \
         and "rien de vendable" not in texte(vieux)
-    yield "D1 capacité restante = solde − enchères ouvertes, sans réserve (PB8)", "réserve" not in t \
+    cap17 = figees(**{"gold.bv_finance_health": (["balance", "weekly_result_est", "weekly_personnel", "weekly_academy"], [(1500018, 141948, 60000, 100000)]),
+                      "gold.finance_health": (["capacite_invest"], [(666868,)])})
+    yield "18/11 budget des achats = capacite_invest 666 868, jamais le solde 1 500 018", \
+        auj.plan(cap17, {}, JOUR9, TOT, "", {})["capacite"] == 666868
+    yield "D1 capacité restante = capacite_invest − enchères ouvertes (18/11)", "réserve" not in t \
         and "(capacité restante : 29 666)" in t
     mince = figees(**{"gold.bv_position_summary": (["position", "depth", "ps_avg", "ps_max"], [("PG", 2, 49.4, 56.2), ("SG", 4, 46.4, 51.6)])})
     yield "D1 EFF-1 : poste mince = acheter un PG de note ≥ 57,2", "Acheter un PG de note ≥ 57,2" in texte(mince)
     rouge = figees(**{"gold.bv_finance_health": (["weekly_result_est", "weekly_personnel", "weekly_academy"], [(-5000, 60000, 100000)])})
     yield "D1 FIN-1 : résultat négatif = réduire le plus gros poste", "Réduis le poste académie (100 000" in texte(rouge)
     yield "D1 TRF-1 : affaire fiable = enchère maximale", "Enchère maximale 120 000 sur Martin" in texte(figees())
-    yield "D1 capacité restante (solde 279 666 − 250 000 d'enchères ouvertes) trop faible = affaire abandonnée", \
-        "Martin" not in t and "tienne dans le solde moins les enchères encore ouvertes" in t and "(capacité restante : 29 666)" in t
+    yield "D1 capacité restante (capacite_invest 279 666 − 250 000 d'enchères ouvertes) trop faible = affaire abandonnée", \
+        "Martin" not in t and "tienne dans capacite_invest moins les enchères encore ouvertes" in t and "(capacité restante : 29 666)" in t
     perime = figees(**{"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                                  [(8, "Marché (enchères)", "cibles", None, 30, "🟧 à refaire")])})
     tp = texte(perime)
@@ -276,13 +281,13 @@ def cas():
     yield "PB7 vue illisible : « il me manque transferts_recents »", "il me manque transferts_recents" in auj.rendre(
         auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], []), "transferts_recents": None}), {"transferts_recents": "boum"},
                  JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
-    # PB8 : capacité = solde − enchères encore ouvertes (une enchère finie ne retient plus d'argent), jamais de réserve
+    # 18/11 : capacité = capacite_invest − enchères encore ouvertes (une enchère finie ne retient plus d'argent), jamais de réserve
     bargains9 = (["name", "position", "ps", "ref_n", "ref_reliable", "bid_ceiling_resale", "resale_margin_p25", "ends_paris"], [
         ("Martin", "PG", 57.0, 9, True, 120000, 40000, "2026-11-09T21:00:00")])  # fin ce soir : encore une action
     d8 = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_market_bargains": bargains9})
     t8_finies = auj.rendre(auj.plan(d8, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
     t8_ouvertes = auj.rendre(auj.plan(d8, {}, JOUR9, TOT, "", {"cibles": ouvertes}), JOUR9)
-    yield "PB8 enchères finies : rien n'est retenu, l'affaire de 120 000 tient dans le solde (279 666)", \
+    yield "PB8 enchères finies : rien n'est retenu, l'affaire de 120 000 tient dans capacite_invest (279 666)", \
         "Enchère maximale 120 000 sur Martin" in t8_finies
     yield "PB8 enchères ouvertes (250 000) : capacité 29 666, l'affaire de 120 000 est écartée", \
         "Martin" not in t8_ouvertes and "(capacité restante : 29 666)" in t8_ouvertes
@@ -296,6 +301,7 @@ def cas():
     def plan12(age_h, gain):
         d = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_market_bargains": (cb12, b12),
                       "gold.bv_finance_health": (["balance", "weekly_result_est", "weekly_personnel", "weekly_academy"], [(5000000, 98227, 60000, 100000)]),
+                      "gold.finance_health": (["capacite_invest"], [(5000000,)]),
                       "gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"], [(8, "Marché (enchères)", "cibles", None, age_h, "")]),
                       "annonces_24h": (ca, [(1, "Edgars Bērziņš", "PF", 29, 56.8, 600000, "2026-11-12T22:33:00", 7.7, gain, False)])})
         return auj.plan(d, {}, dt.date(2026, 11, 12), dt.datetime(2026, 11, 12, 14, 51), "", {})
@@ -306,9 +312,9 @@ def cas():
     yield "X 12/11 gain positif et page fraîche, fin aujourd'hui : URGENT", [a[1] for a in plan12(3, 1.0)["actions"] if "Bērziņš" in a[2]] == [1]
     yield "X 12/11 prix de départ ≤ 1 : aucune enchère, « marge non calculable »", not any("Torres" in a[2] for a in r12["actions"]) \
         and any("Hilario Torres" in g and "marge non calculable" in g for g in r12["garder"])
-    sans_solde = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.bv_finance_health": (
+    sans_solde = figees(**{"gold.bv_agenda": (AGENDA[0], []), "gold.finance_health": (["capacite_invest"], []), "gold.bv_finance_health": (
         ["weekly_result_est", "weekly_personnel", "weekly_academy"], [(108847, 60000, 100000)])})
-    yield "PB8 solde illisible : capacité dite illisible, affaire non écartée", "(capacité restante illisible)" in auj.rendre(
+    yield "capacite_invest illisible : capacité dite illisible, affaire non écartée", "(capacité restante illisible)" in auj.rendre(
         auj.plan(sans_solde, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9) or "Martin" in auj.rendre(
         auj.plan(sans_solde, {}, JOUR9, TOT, "", {"cibles": cibles9}), JOUR9)
     yield "PB8 le mot « réserve » n'apparaît dans aucune sortie", \
@@ -805,7 +811,7 @@ def cas_experiences(COLS_CAL, MIDI):
         yield "H3 amical sans brief, présent : une ligne E1 niveau A, verrou 07:45 du calendrier, exports après le match", \
             len(l) == 1 and l[0][0] == dt.datetime(2026, 11, 10, 7, 45) \
             and "test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs" in l[0][2] and "verrou 07:45" in l[0][3] \
-            and "aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour" in l[0][3]
+            and "après le match exporte : la page du match ;" in l[0][3] and "page Équipe" not in l[0][3] + l[0][2]
         yield "H3 amical sans brief, absent (pas d'amical aujourd'hui ni demain) : aucune ligne de test", \
             not any("test E" in a[2] + a[3] for a in auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}), {}, JOUR9, MIDI,
                                                                 "", {"experiences": exps()})["actions"])
@@ -909,8 +915,28 @@ def cas_academie_verdict():
     yield "Audit5 17 ans : borne haute +4 (PG 190 <= 191) : tester", v("PG", 17, 50.0, 190) == "tester"
     yield "Audit5 taille sous la plage (C 195 < 200) : ignorer", v("C", 16, 50.0, 195) == "ignorer"
     yield "Audit5 PS estimé sous le plus faible du poste (44,0 < 44,9) : ne décide pas, tester", v("PG", 16, 44.0, 180) == "tester"
-    yield "Audit5 test lu High, taille correcte : signer, même si le PS estimé est sous le meilleur du poste", \
-        v("C", 16, 40.0, 205, "High") == "signer"
+    # 18/11 (seuil décidé par Claude) : High sans fourchette de PS du test → « à juger » (ancien cas « signer » adapté)
+    yield "Audit5 test lu High, taille correcte, fourchette du test absente : à juger, pas signer", \
+        v("C", 16, 40.0, 205, "High") == "à juger"
+    # Seuil académie du 18/11 : borne basse ≥ plus faible du poste ET borne haute ≥ meilleur − 5 ; High seulement
+    P = {"position": "PG", "age": 16, "height_cm": 180}
+    vp = lambda test, b, h, poste=(44.9, 56.6): auj.verdict_prospect(dict(P, test_potentiel=test, ps_test_bas=b, ps_test_haut=h), poste)[0]
+    yield "Seuil18 High, bas 45,0 ≥ 44,9 et haut 52,0 ≥ 51,6 : signer", vp("High", 45.0, 52.0) == "signer"
+    yield "Seuil18 High, bas 44,0 < 44,9 : ignorer", vp("High", 44.0, 60.0) == "ignorer"
+    yield "Seuil18 High, haut 51,5 < 56,6 − 5 : ignorer", vp("High", 46.0, 51.5) == "ignorer"
+    yield "Seuil18 Decent, fourchette au-dessus des deux seuils : ignorer", vp("Decent", 50.0, 60.0) == "ignorer"
+    yield "Seuil18 High, poste absent de l'effectif : à juger", vp("High", 50.0, 60.0, None) == "à juger"
+    poids = [{"skill": s, "pg": w} for s, w in (("two_point", .15), ("three_point", .15), ("passing", .15), ("ball_handling", .15),
+                                                  ("defense", .15), ("rebounding", .05), ("athleticism", .1), ("stamina", .1))]
+    br = {s: {"min": 40, "max": 60} for s in ("two_point", "three_point", "passing", "ball_handling", "defense", "rebounding",
+                                              "athleticism", "stamina")}
+    yield "Seuil18 fourchette de PS du test = somme pondérée des bornes (40-60 partout → 40,0-60,0)", \
+        auj.ps_fourchette_test(br, "PG", poids) == (40.0, 60.0)
+    yield "Seuil18 fourchette illisible (compétence manquante) : None", auj.ps_fourchette_test({"defense": {"min": 1, "max": 2}}, "PG", poids) is None
+    yield "Seuil18 clé academie_signature du yaml : potentiel high, marge haute 5", \
+        auj.seuil_signature() == {"potentiel": "high", "marge_haute": 5.0}
+    yield "Seuil18 requêtes : brackets du test et poids PS", "refined_skill_brackets" in auj.REQUETES["tests_academie"] \
+        and "brackets" in auj.REQUETES["tests_academie"] and "bv_ps_weight" in auj.REQUETES.get("ps_poids", "")
     yield "Audit5 test lu Decent, taille correcte : hors règle de signature, pas signer", v("C", 16, 53.0, 205, "Decent") != "signer"
     yield "Audit5 test High mais taille hors plage : ignorer", v("C", 16, 53.0, 190, "High") == "ignorer"
     yield "Audit5 sans résultat de test lisible : jamais signer (même PS >= meilleur)", v("C", 16, 60.0, 205) == "tester"
@@ -1086,7 +1112,7 @@ def cas_marche_5i():
     yield "X2 absent : toutes finies, aucune ligne, la demi-ligne Garder dit le Marché du 05/11", \
         not [a for a in pf["actions"] if a[2].startswith("Enchère maximale")] \
         and any("transferts : affaires fiables inconnues : export de 30 h, à refaire" in g for g in pf["garder"])  # 17/11 : périmé = inconnu
-    # X3 : joueur de besoin au poste PG (note ≥ 57,2), capacité 279 666 (solde, aucune enchère ouverte)
+    # X3 : joueur de besoin au poste PG (note ≥ 57,2), capacité 279 666 (capacite_invest, aucune enchère ouverte)
     cands = [("Dupuis", "PG", 58.0, 1, True, 100000, 100000, "2026-11-06T21:00:00", 150000),
              ("Borne", "PG", 58.5, 1, True, 200000, 200000, "2026-11-07T10:00:00", 400000),
              ("Cher", "PG", 59.0, 1, True, 300000, 300000, "2026-11-07T10:00:00", 400000),
@@ -1220,7 +1246,7 @@ def cas_t7():
     jour, maint = dt.date(2026, 11, 10), dt.datetime(2026, 11, 10, 15, 50)
     affichage, instantane = auj.rendre_jour(res, {}, {}, jour, maint, {}, etudes=[], base=ESSAI)
     avant, _, apres = affichage.partition(auj.SEPARATEUR)
-    yield "T7 sortie : la section d'état et les blocs 2 à 10 sont avant le séparateur, sans bloc 0 ni 1", "## Aujourd'hui — état par événement" in avant and all(f"## Bloc {n} — " in avant for n in range(2, 11)) and "## Bloc 0 — " not in avant and "## Bloc 1 — " not in avant
+    yield "T7 sortie : la section d'état et les blocs 2, 4 à 9 sont avant le séparateur, sans bloc 0, 1, 3 ni 10 (18/11)", "## Aujourd'hui — état par événement" in avant and all(f"## Bloc {n} — " in avant for n in (2, 4, 5, 6, 7, 8, 9)) and not any(f"## Bloc {n} — " in avant for n in (0, 1, 3, 10))
     yield "T7 sortie : le séparateur est exact", auj.SEPARATEUR == "--- session (à exécuter, ne pas afficher) ---" and affichage.count(auj.SEPARATEUR) == 1
     yield "T7 sortie : la consigne de l'agent tactique est après le séparateur, jamais avant", "lance l'agent tactique" in apres and "lance l'agent tactique" not in avant
     yield "T7 instantané : le rendu sans séparateur ni consigne", auj.SEPARATEUR not in instantane and "lance l'agent tactique" not in instantane \

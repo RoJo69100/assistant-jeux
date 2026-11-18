@@ -18,7 +18,7 @@ Règle générale : `CLAUDE.md`, section « Enchaînement automatique ». Après
 - **Consignes par joueur** : passe ↔ tir, focus offensif, focus de tir, agressivité défensive, avec libellé de l'écran et cran.
 - **Depth chart** : 2 ou 3 remplaçants par emplacement.
 - **Focus défensif** par joueur adverse (Intense / Lock / Normal / Light / Give up) ; en amical v4, la zone Rim / Perimeter / Neutral.
-- Blessés et plan B ; rappel : re-sélectionner le preset sur chaque match déjà planifié.
+- Blessés et plan B ; rappel (ligue et coupe) : preset de l'adversaire, puis zone et focus défensif, puis sauvegarde du match.
 - « À refaire si : forme, blessure, fatigue, adversaire. »
 - Amical quotidien : aucun preset ni saisie (consigne du 2026-10-26) ; export de la page du match, analyse par l'agent Match.
 

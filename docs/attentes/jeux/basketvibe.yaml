@@ -39,8 +39,8 @@ rythme:
   - { quand: fin de saison, quoi: "+1 an pour tous les joueurs" }
 
 competitions:
-  ligue:  { saisie: oui, preset: League Tactic, moteur: "v3 jusqu'au 26/10, v4 dès la saison 2", but: gagner }
-  coupe:  { saisie: oui, preset: League Tactic, but: gagner }   # à vérifier : vu sur un seul export (26/10)
+  ligue:  { saisie: oui, preset: adversaire, moteur: "v3 jusqu'au 26/10, v4 dès la saison 2", but: gagner }
+  coupe:  { saisie: oui, preset: adversaire, but: gagner }   # utilisateur 2026-11-17 : preset de l'adversaire (voir ses joueurs), puis zone et focus défensif ; plus de preset « League Tactic » à re-sélectionner
   amical: { saisie: oui, preset: non, moteur: v4, but: tester }  # utilisateur 2026-10-27 : pas de preset à enregistrer, mais composition complète (tableau joueur × quart-temps) et réglages de test (zone Rim…) à saisir sur la page du match ; remplace la consigne du 2026-10-26 « ni preset ni saisie »
 
 ecrans:
@@ -88,6 +88,13 @@ domaines:
 # Phase A (17/11, règles de l'utilisateur) : offres et ventes du jour, lues par pipelines/etat_jour.py (jamais en dur dans le code).
 # Case = tranche d'âge × palier de note de 5 (table des prix du bloc 4, gold.bv_price_ref_ps). Utilisé = a joué sur les
 # `matchs_rotation` derniers matchs de ligue ; hors rotation = moyenne de minutes ≤ `minutes_hors_rotation` sur ces matchs.
+# Seuil de signature d'un prospect testé (décidé par Claude le 18/11, contestable par l'utilisateur ; docs/regles-utilisateur.md).
+# « Meilleures compétences au poste » : sur la fourchette de PS du test (refined_skill_brackets × gold.bv_ps_weight),
+# borne basse ≥ PS le plus faible de l'effectif au poste (gold.bv_roster_now : aucune vue de rotation, l'effectif en tient lieu)
+# ET borne haute ≥ PS du meilleur au poste − marge_haute ; potentiel high seulement. Aucun high observé le 18/11 : à recalibrer au premier.
+academie_signature:
+  potentiel: high
+  marge_haute: 5
 offres:
   matchs_rotation: 4
   case_min_ventes: 3
@@ -163,7 +170,7 @@ etat_jour:
     - { ecran: "Historique global des transferts", libelle: "l'historique global des transferts", source: page_type, page_type: transfers_global-history, periode: quotidien, perime_h: 24 }
     - { ecran: "Personnel", libelle: "la page Personnel", source: exports_state, periode: hebdomadaire, perime_h: 168 }
   evenements:
-    academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
+    academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, teste, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }
     enchere:      { etats: [police, fin, resultat] }
   # P3 (17/11) : état de l'événement → agent à lancer → sortie attendue. UNE table, lue par etat_jour.agents_a_lancer ; une ligne

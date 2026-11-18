@@ -189,6 +189,21 @@ def commit_push(fichiers: list, jour, executer=subprocess.run, branche=BRANCHE_P
 PUSH_403 = "403 même sur claude/ — droits d'écriture de l'application GitHub à donner"
 
 
+# ---- Étiquettes d'expérience ----------------------------------------------------------------------------------------------
+
+def etiqueter_experiences(executer=subprocess.run) -> str:
+    """18/11 : `experiences_deduites.py --ecrire` avant le plan ; les lignes écrites dans outputs/basketvibe/fait-*.md partent
+    avec les autres sorties de la routine (commit_push sur claude/passage-quotidien, jamais main). Échec : une ligne, jamais un arrêt."""
+    try:
+        r = executer([sys.executable, "-I", str(ICI / "experiences_deduites.py"), "--ecrire"], cwd=RACINE,
+                     capture_output=True, text=True, timeout=300)
+    except (OSError, subprocess.TimeoutExpired) as x:
+        return f"étiquettes d'expérience : lancement impossible ({x})"
+    if r.returncode:
+        return f"étiquettes d'expérience en échec (code {r.returncode} : {_derniere(r.stderr or r.stdout)})"
+    return f"étiquettes d'expérience : {_derniere(r.stdout)}"
+
+
 # ---- Rejeu du plan ---------------------------------------------------------------------------------------------------------
 
 def rejouer():
@@ -220,6 +235,7 @@ def main() -> int:
     if not a.sans_git:
         base_sha, msg = restaurer()
         print(msg)
+    print(etiqueter_experiences())  # avant le plan : le niveau du prochain amical suit l'étiquette écrite
     jour, _, rendu, etats, S, alerte, cfg = rejouer()
     prevus = ej.agents_a_lancer(etats, cfg, BASE, jour)
     if alerte or a.sans_agents:

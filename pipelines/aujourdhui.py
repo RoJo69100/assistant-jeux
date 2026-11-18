@@ -64,7 +64,8 @@ REQUETES = {
                       "where day <= (now() at time zone 'Europe/Paris')::date + 1 order by day, at_time, priority",
     "gold.bv_exports_state": "select ordre, ecran, pour_quoi, dernier_paris, age_h, statut from gold.bv_exports_state order by ordre",
     "gold.bv_daily_alerts": "select priority, category, alert from gold.bv_daily_alerts order by priority limit 30",
-    "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde ; capacité = solde − enchères ouvertes
+    "gold.bv_finance_health": "select * from gold.bv_finance_health limit 3",  # balance = solde (jamais le budget des achats)
+    "gold.finance_health": "select capacite_invest from gold.finance_health where game = 'basketvibe'",  # 18/11 : capacité = capacite_invest − enchères ouvertes
     "gold.bv_position_summary": "select * from gold.bv_position_summary limit 10",
     # 5i : seules les annonces encore ouvertes (fin à venir ou inconnue) ; le prix est celui de la page exportée
     "gold.bv_market_bargains": "select name, position, ps, price_now, ref_n, ref_reliable, bid_ceiling_resale, resale_margin_p25, "
@@ -114,8 +115,23 @@ REQUETES = {
     # K3 (étape 5e) : dernier rapport du scout, cote du potentiel à la jauge actuelle, valeur d'un High et coût du test
     "prospects": "select scout_report_at at time zone 'Europe/Paris' as rapport_paris, slot, name, position, age, tsp_min, tsp_max, ps_mid, height_cm "
                  "from gold.bv_academy_prospects order by slot",
+    # 18/11 : résultat des tests d'académie, lu sur la DERNIÈRE capture de la page Académie (API /teams/<id>/academy) : un prospect
+    # testé a des `refined_skill_brackets` ; son potentiel est `potential_bucket` (low / decent / high).
+    # Forme en CTE : « = (select … » et concat_ws dans l'URL sont bloqués par le pare-feu HTTPS de Supabase (403, 18/11).
+    "tests_academie": "with d as (select max(captured_at) as m from bronze.raw_pages where game = 'basketvibe' and page_type = 'academy' "
+                      "and source_url like '%/academy') "
+                      "select (c->>'slot')::int as slot, c->>'last_name' as name, c->>'position' as position, "
+                      "(c->>'height_cm')::int as height_cm, c->>'potential_bucket' as potentiel, "
+                      "jsonb_typeof(c->'refined_skill_brackets') = 'object' as teste, "
+                      "c->'refined_skill_brackets' as brackets, "
+                      "r.captured_at at time zone 'Europe/Paris' as capture_paris "
+                      "from d, bronze.raw_pages r, jsonb_array_elements(r.payload->'body'->'scout_candidates') c "
+                      "where r.game = 'basketvibe' and r.page_type = 'academy' and r.source_url like '%/academy' and r.captured_at = d.m "
+                      "order by slot",
     # 17/11 : PS le plus faible et le meilleur de chaque poste de l'effectif (gold.bv_position_summary ne porte que les noms)
     "ps_poste": "select position, min(ps) as ps_min, max(ps) as ps_max from gold.bv_roster_now group by position",
+    # 18/11 : poids du PS par poste, pour la fourchette de PS d'un prospect testé (seuil academie_signature)
+    "ps_poids": "select skill, pg, sg, sf, pf, c from gold.bv_ps_weight",
     # L3 (étape 5f) : remplaçant au même poste (force fit), écart et salaire ; tolérance de force lue dans core.game_params
     "gold.bv_sell_replacement": "select player_id, name, best_slot, fit_best, replacement_name, replacement_fit, gap, weekly_salary, "
                                 "on_transfer_list, available, available_players from gold.bv_sell_replacement",
@@ -156,7 +172,7 @@ REQUETES = {
                     "and c.ends_paris <= (now() at time zone 'Europe/Paris') + interval '24 hours' order by c.auction_id, c.ends_paris",
     # 17/11 : toutes les annonces encore ouvertes (dédupliquées par auction_id), pour les 5 offres les moins chères par rapport à leur case
     "annonces_actives": "select distinct on (c.auction_id) c.auction_id, c.name, c.position, c.age, c.ps, "
-                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris from gold.bv_market_candidates c "
+                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, c.est_weekly_salary from gold.bv_market_candidates c "
                         "where c.ends_paris > now() at time zone 'Europe/Paris' order by c.auction_id, c.ends_paris",
     # 5n T4 : nombre d'annonces du dernier export du Marché (phrase « aucune annonce ne se termine dans les 24 h »)
     "annonces_export": "select count(*) as n from gold.bv_market_candidates",
@@ -184,12 +200,8 @@ REQUETES = {
                      "group by right(p.page_url, 36), 1",
     # 5n A7 (bloc 6) : matchs d'autres clubs (finis dans silver.bv_matches, sans fixture chez nous) avec le jour (Paris) de la première
     # capture de leur page de match ; None si la page n'a jamais été captée. Comptés dans « N en base », jamais dans k ni dans le
-    # déclencheur de l'étude (nos matchs seulement).
-    "matchs_autres": "select (select (min(p.captured_at) at time zone 'Europe/Paris')::date from bronze.raw_pages p where p.game = 'basketvibe' "
-                     "and right(p.page_url, 36) = m.fixture_id::text "
-                     "and p.page_url ~ '^https://www[.]basketvibe[.]com/(match|friendly|cup)/[0-9a-f-]{36}$') as premiere_jour "
-                     "from silver.bv_matches m where m.status = 'finished' and not exists "
-                     "(select 1 from core.fixture f where f.game = 'basketvibe' and f.fixture_id = m.fixture_id::text)",
+    # déclencheur de l'étude (nos matchs seulement). 18/11 : vue matérialisée (sql/gold/087), la requête corrélée dépassait 20 s.
+    "matchs_autres": "select premiere_jour from gold.bv_matchs_autres",
     # 5n T5 (bloc 0) : dernière capture des exports hebdomadaires de l'étude, mesurée par page_type (relevé à l'étape 0 du plan :
     # onglets de ligue standings_teams / _players / _injuries ; l'onglet Transferts est déjà dans l'historique global, R6) ; les pages /c/<club> n'ont pas de page_type propre
     # (« unknown » avec 308 autres pages) : mesurées par leur page_url.
@@ -682,6 +694,16 @@ def faits_ici(experiences, amical):
     return [f for f in experiences["faits"] if f["cle"] and cle_match([f["cle"]], amical["match"], amical["date"])]
 
 
+def ecart_fait(f, e, joues):
+    """18/11 : vrai si l'amical du fait est joué avec un réglage différent du niveau déclaré (écart : n'avance pas l'alternance)."""
+    lignes = [{**r, "jour": _jour(r["match_day"])} for r in joues or []]
+    if f["cle"]:
+        r = next((r for r in lignes if cle_match([f["cle"]], r["opponent"], r["jour"])), None)
+    else:
+        r = next((r for r in lignes if f["jour"] <= r["jour"] <= f["jour"] + dt.timedelta(days=1)), None)
+    return r is not None and not conforme((e.get("joue") or {}).get(f["niveau"]), r)
+
+
 def test_en_cours(experiences, amical, joues=()):
     """H1-H2 : (expérience, niveau, déjà saisi) du test à jouer sur `amical`, None si aucune expérience en cours (H4).
     Les expériences passent dans l'ordre du fichier ; un fait dont la clé désigne cet amical ne le fait pas avancer :
@@ -697,6 +719,13 @@ def test_en_cours(experiences, amical, joues=()):
             return e, fait["niveau"], True
         if v[e["id"]]["verifies"] < int(e["amicaux_vises"]):
             ordre = e["ordre"]
+            # 18/11 : le niveau alterne sur le dernier niveau saisi avant cet amical (E1 : A puis B puis A…), pas sur un compte
+            debut = experiences.get("debut")
+            quand = lambda f: (f["cle"] or {}).get("date") or f["jour"]  # noqa: E731
+            prec = sorted((f for f in experiences["faits"] if f["id"] == e["id"] and f not in ici
+                           and (not debut or quand(f) >= debut) and quand(f) < amical["date"] and not ecart_fait(f, e, joues)), key=quand)
+            if prec and prec[-1]["niveau"] in ordre:
+                return e, ordre[(ordre.index(prec[-1]["niveau"]) + 1) % len(ordre)], False
             return e, ordre[(v[e["id"]]["verifies"] + v[e["id"]]["attente"]) % len(ordre)], False
     return None
 
@@ -870,19 +899,63 @@ def _fr1(x):
     return str(round(float(x), 1)).replace(".", ",")
 
 
-def verdict_prospect(p):
-    """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour."""
+def seuil_signature(cfg=None):
+    """`academie_signature` de docs/attentes/jeux/basketvibe.yaml (seuil décidé par Claude le 18/11) ; défaut si illisible."""
+    try:
+        s = (cfg if cfg is not None else etat_jour.charger_config()).get("academie_signature") or {}
+    except Exception:
+        s = {}
+    return {"potentiel": str(s.get("potentiel", "high")).lower(), "marge_haute": float(s.get("marge_haute", 5))}
+
+
+def _json(v):
+    """Objet JSON lu en base (dict, ou texte JSON selon le transport) ; None si illisible."""
+    if isinstance(v, dict) or v is None:
+        return v
+    try:
+        import json
+        return json.loads(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def ps_fourchette_test(brackets, position, poids):
+    """(bas, haut) du PS au poste d'un prospect testé : bornes `refined_skill_brackets` pondérées par gold.bv_ps_weight
+    (même formule que ps_mid de gold.bv_academy_prospects). None si une compétence ou un poids manque."""
+    col = str(position or "").lower()
+    w = {r["skill"]: r.get(col) for r in poids or []}
+    if not isinstance(brackets, dict) or not w or any(v in (None, "") for v in w.values()):
+        return None
+    try:
+        bas = sum(float(brackets[s]["min"]) * float(v) for s, v in w.items())
+        haut = sum(float(brackets[s]["max"]) * float(v) for s, v in w.items())
+    except (KeyError, TypeError, ValueError):
+        return None
+    return round(bas, 1), round(haut, 1)
+
+
+def verdict_prospect(p, poste=None):
+    """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour.
+    Seuil du 18/11 (décidé par Claude, contestable) pour « meilleures compétences au poste » : sur la fourchette de PS du test
+    (`ps_test_bas`, `ps_test_haut`), bas ≥ PS le plus faible du poste ET haut ≥ meilleur − marge_haute ; potentiel high seulement.
+    `poste` = (ps_min, ps_max) de l'effectif au poste ; fourchette ou poste absent → « à juger »."""
     pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
     bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
     test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
+    s = seuil_signature()
+    tb, th = p.get("ps_test_bas"), p.get("ps_test_haut")
     if not bas <= taille <= haut:
         verdict = "ignorer"
     elif not test:
         verdict = "tester"
-    elif test == "high":
+    elif test != s["potentiel"]:
+        verdict = "ignorer"  # test lu, pas High : hors règle de signature
+    elif tb in (None, "") or th in (None, "") or not poste:
+        verdict = "à juger"
+    elif float(tb) >= float(poste[0]) and float(th) >= float(poste[1]) - s["marge_haute"]:
         verdict = "signer"
     else:
-        verdict = "ignorer"  # test lu, pas High : hors règle de signature, à valider
+        verdict = "ignorer"
     return verdict, bas, haut, test
 
 
@@ -894,7 +967,14 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
     Le résultat d'un test n'est lisible dans aucune vue (champ `test_potentiel` absent) : jamais « signer » en production.
     L5 : la taille manque → UNE ligne pour tout le rapport.
     Vue absente ou rapport ancien : rien."""
-    pros = lignes_de(donnees, "prospects")
+    tests = {str(r["slot"]): r for r in lignes_de(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}  # 18/11
+    poids = lignes_de(donnees, "ps_poids")
+    pros = []
+    for p in lignes_de(donnees, "prospects"):
+        t = tests.get(str(p.get("slot")))
+        f = ps_fourchette_test(_json(t.get("brackets")), p.get("position"), poids) if t else None
+        pros.append(dict(p, test_potentiel=t["potentiel"] if t else p.get("test_potentiel"),
+                         ps_test_bas=f[0] if f else p.get("ps_test_bas"), ps_test_haut=f[1] if f else p.get("ps_test_haut")))
     du_jour = bool(pros) and en_heure(pros[0]["rapport_paris"]).date() == maintenant.date()
     if maintenant.weekday() == JOUR_RAPPORT_ACADEMIE and not du_jour \
             and not any(norm(c["nom"]) == "academie" and c["jour"] >= maintenant.date() for c in cles):
@@ -918,7 +998,7 @@ def academie(donnees, erreurs, cles, maintenant, ajoute):
         return
     for p in pros:
         pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
-        verdict, bas, haut, test = verdict_prospect(p)
+        verdict, bas, haut, test = verdict_prospect(p, postes.get(pos))
         ps =f"{_fr1(p['ps_mid'])}" if p.get("ps_mid") not in (None, "") else "—"
         faible, meilleur = (_fr1(postes[pos][0]), _fr1(postes[pos][1])) if pos in postes else ("—", "—")
         tete = f"Académie, rapport du {rapport:%d/%m} : {p['name']} ({pos}, {age} ans, TSP {p['tsp_min']}-{p['tsp_max']})"
@@ -1198,10 +1278,11 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
 
     decides = [norm(c["nom"]) for c in S.get("cibles", [])]  # déjà décidés (plafond de la décision) : pas de 2e ligne
 
-    # Capacité (PB8, décision de l'utilisateur du 09/11) : solde moins les enchères encore ouvertes, sans réserve de sécurité.
-    solde = next((r.get("balance") for r in lignes_de(donnees, "gold.bv_finance_health")), None)
+    # Capacité (18/11, règle de l'utilisateur, remplace PB8) : capacite_invest (gold.finance_health) moins les enchères encore
+    # ouvertes, jamais le solde.
+    cap = next((r.get("capacite_invest") for r in lignes_de(donnees, "gold.finance_health")), None)
     ouvertes = [c for c in S.get("cibles", []) if c["fin"] is None or c["fin"] > maintenant]
-    reste_cap = float(solde) - sum(c["max"] for c in ouvertes) if solde is not None else None
+    reste_cap = float(cap) - sum(c["max"] for c in ouvertes) if cap not in (None, "") else None
 
     def libre(r):
         return not any(n in norm(r["name"]) for n in decides)
@@ -1314,7 +1395,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    "gold.bv_market_bargains")
         if not bonnes:
             garder.append("transferts : " + conclusion_vide(
-                f"aucune affaire fiable ouverte {dans_marche} qui tienne dans le solde moins les enchères encore ouvertes (capacité restante"
+                f"aucune affaire fiable ouverte {dans_marche} qui tienne dans capacite_invest moins les enchères encore ouvertes (capacité restante"
                 + (f" : {montant(reste_cap)}" if reste_cap is not None else " illisible") + ")",
                 donnees, "Marché (enchères)", maintenant).replace("inconnu :", "affaires fiables inconnues :", 1))
     m = manque(donnees, erreurs, "gold.bv_personnel_status", "Personnel")

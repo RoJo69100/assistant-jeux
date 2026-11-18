@@ -117,8 +117,8 @@ def cas_hors_match():
     yield "académie : après 09:00, rapport absent → rapport_exporte", ej.etat_evenement(ac, CFG, dt.datetime(2026, 11, 19, 10, 0))["prochain"] == "rapport_exporte"
     ok = dict(ac, rapport_at=dt.datetime(2026, 11, 19, 9, 0, 1))
     l = ej.etat_evenement(ok, CFG, dt.datetime(2026, 11, 19, 10, 0))
-    yield "académie : rapport en base, non décidé → decide", l["prochain"] == "decide" and "tester, signer ou ignorer" in l["consigne"]
-    yield "académie : décidé → plus rien", ej.etat_evenement(dict(ok, decide=True), CFG, dt.datetime(2026, 11, 19, 10, 0))["prochain"] is None
+    yield "académie : rapport en base, tests inconnus → teste (18/11)", l["prochain"] == "teste" and "tester, signer ou ignorer" in l["consigne"]
+    yield "académie : décidé → plus rien", ej.etat_evenement(dict(ok, decide=True, tests=0), CFG, dt.datetime(2026, 11, 19, 10, 0))["prochain"] is None
     en = {"type": "entrainement", "quand": dt.datetime(2026, 11, 22, 4, 0), "page_at": None, "saisi": False, "maj_at": None}
     yield "entraînement : avant dimanche 04:00 → traitement_attendu", ej.etat_evenement(en, CFG, dt.datetime(2026, 11, 21, 12, 0))["prochain"] == "traitement_attendu"
     yield "entraînement : traité, page non exportée → page_exportee", ej.etat_evenement(en, CFG, dt.datetime(2026, 11, 22, 9, 0))["prochain"] == "page_exportee"
@@ -413,7 +413,7 @@ def cas_branchement():
     yield "branchement : aucune commande d'agent affichée, elle part dans les consignes de session", \
         "lance l'agent" not in t and any("lance l'agent tactique" in c for c in consignes)
     yield "branchement : la section est en tête, avant le bloc 2", texte.index("## Aujourd'hui — état par événement") < texte.index("## Bloc 2")
-    yield "branchement : les blocs 2 à 10 restent là, pas de bloc 0 ni 1", all(f"## Bloc {n} — " in texte for n in range(2, 11)) and "## Bloc 0 — " not in texte and "## Bloc 1 — " not in texte
+    yield "branchement : les blocs 2 et 4 à 9 restent là, pas de bloc 0, 1, 3 ni 10 (18/11)", all(f"## Bloc {n} — " in texte for n in (2, 4, 5, 6, 7, 8, 9)) and not any(f"## Bloc {n} — " in texte for n in (0, 1, 3, 10))
     yield "branchement : consignes de la section dans les consignes de session", any("lance l'agent tactique" in c for c in cons)
 
 
@@ -459,9 +459,28 @@ def cas_academie_decision():
     S = {"analyste": None, "cles": [], "cibles": [], "police": ""}
     d = donnees(prospects=(cols, pros))
     ls = [l for l in ej.lignes(ej.construire(d, S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]]
-    yield "académie : une seule ligne pour le rapport du 12/11 non décidé", len(ls) == 1 and ls[0]["prochain"] == "decide"
-    yield "académie : décision attendue chiffrée (3 tests, 75 000 ; le prospect hors taille est ignoré)", \
-        ls and "décision attendue : tester 3 prospects (75 000)" in ls[0]["consigne"]
+    yield "académie : une seule ligne pour le rapport du 12/11 non testé", len(ls) == 1 and ls[0]["prochain"] == "teste"
+    yield "académie : tests attendus chiffrés (3 tests, 75 000 ; le prospect hors taille est ignoré)", \
+        ls and "tester 3 prospects (75 000)" in ls[0]["consigne"]
+    # 18/11 : les 3 tests faits et exportés le 17/11 (dernière capture de la page Académie) → état « testé », verdict de la règle
+    tcols = ["slot", "name", "position", "height_cm", "potentiel", "teste", "capture_paris"]
+    tests = [(0, "P1", "PF", 197, "low", True, "2026-11-17T21:50:48"), (1, "P2", "PF", 198, "decent", True, "2026-11-17T21:50:48"),
+             (2, "P3", "SF", 190, "decent", True, "2026-11-17T21:50:48"), (3, "P4", "PF", 150, None, False, "2026-11-17T21:50:48")]
+    dt_ = donnees(prospects=(cols, pros), tests_academie=(tcols, tests))
+    ev = next(e for e in ej.construire(dt_, S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie")
+    lt = [l for l in ej.lignes([ev], CFG, MAINT) if l["action"]]
+    yield "académie : tests lus → état « testé », plus de « tester 3 prospects »", ej.etat_evenement(ev, CFG, MAINT)["etat"] == "teste" \
+        and lt and lt[0]["prochain"] == "decide" and "tester 3 prospects" not in lt[0]["consigne"]
+    yield "académie : verdict par prospect testé (low, decent : pas de très gros potentiel → ignorer)", lt and all(
+        x in lt[0]["consigne"] for x in ("P1 (PF, low) : ignorer", "P2 (PF, decent) : ignorer", "P3 (SF, decent) : ignorer", "capture du 17/11"))
+    haut = [(0, "P1", "PF", 197, "high", True, "2026-11-17T21:50:48")] + tests[1:]
+    lh = [l for l in ej.lignes([e for e in ej.construire(donnees(prospects=(cols, pros), tests_academie=(tcols, haut)), S, "/nonexistent",
+                                                          dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie"], CFG, MAINT) if l["action"]]
+    yield "académie : potentiel high → la règle ne s'applique pas en entier, ce qui manque est nommé, aucun seuil inventé", lh and \
+        "P1 (PF, high) : à juger, il manque" in lh[0]["consigne"]
+    ok, err = ej._rows({"tests_academie": (tcols, tests)}, "tests_academie"), None
+    yield "académie : requête des tests sur la dernière capture (max(captured_at))", "tests_academie" in __import__("aujourdhui").REQUETES \
+        and "max(captured_at)" in __import__("aujourdhui").REQUETES["tests_academie"] and len(ok) == 4
     yield "académie : sans prospects, la consigne générique reste", "décide pour chaque prospect" in [l for l in ej.lignes(ej.construire(donnees(), S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG), CFG, MAINT) if l["type"] == "academie" and l["action"]][0]["consigne"]
 
 
@@ -563,26 +582,67 @@ def cas_preset_adversaire():
 
 O = ej.charger_offres()
 CASE_COLS = ["ps_band", "age_band", "n", "p25", "median", "p75", "last_sale"]
-ANN = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris"]
+ANN = ["auction_id", "name", "position", "age", "ps", "price_now", "ends_paris", "est_weekly_salary"]
 ROT = ["player_id", "name", "position", "ps", "min_moy", "matchs_joues"]
 
 
 def marche(age_h=2, annonces=(), cases=None, rotation=None, **plus):
+    """Annonce sans salaire (7 colonnes) : salaire hebdo 10 000."""
     d = {"gold.bv_exports_state": (["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
                                    [[3, "Marché (enchères)", "x", "2026-11-17T10:00:00", age_h, "s"]]),
          "prix_cases": (CASE_COLS, cases if cases is not None else [[50, "22-25", 4, 40000, 60000, 80000, "2026-11-10"],
                                                                     [55, "22-25", 2, 50000, 90000, 100000, "2026-11-10"]]),
-         "annonces_actives": (ANN, list(annonces)),
+         "annonces_actives": (ANN, [list(a) + [10000] if len(a) == 7 else list(a) for a in annonces]),
          "rotation": (ROT, rotation if rotation is not None else [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 40, 2, 1],
                                                                  ["p3", "Luc Absent", "SF", 30, 0, 0]])}
     d.update(plus)
     return d
 
 
+def cas_rotation_illisible():
+    """Verdict du 18/11 : Szewczyk (SG 56,4) classé « revente » alors que Bonnet (SG 51,9) joue : la requête de rotation était en
+    timeout, donc aucun « plus faible » connu et toute annonce tombait en revente."""
+    sz = ["a9", "Alan Szewczyk", "SG", 23, 52, 38000, "2026-11-18T23:37:00"]
+    d = marche(annonces=[sz])
+    d["rotation"] = None
+    r = ej.offres_du_jour(d, O, 300000)
+    yield "rotation illisible → aucune offre classée, « inconnu » nomme la rotation", r["offres"] == [] and "rotation" in (r["inconnu"] or "")
+    r = ej.offres_du_jour(marche(annonces=[sz], rotation=[["p9", "Thibault Bonnet", "SG", 48, 36, 1]]), O, 300000)
+    yield "rotation lue (min_moy > 0) → Szewczyk en amélioration face à Bonnet", [(x["type"], x.get("faible")) for x in r["offres"]] == \
+        [("amélioration", "Thibault Bonnet")]
+
+
+def cas_prix_inconnu():
+    """Verdict du 18/11 : Pellegrini et Balbuena « à 0 » (aucune enchère = prix inconnu) proposés en revente ; aucun âge d'export."""
+    zero_rv = ["b1", "Gino Pellegrini", "PG", 24, 51, 0, "2026-11-18T23:49:00"]   # PG : aucun utilisé → serait revente
+    zero_am = ["b2", "Armando Balbuena", "SF", 23, 52, 0, "2026-11-18T17:52:00"]  # 52 > 40 → amélioration
+    r = ej.offres_du_jour(marche(annonces=[zero_rv, zero_am]), O, 300000)
+    yield "prix 0 : pas de revente (marge non calculable)", [x["nom"] for x in r["offres"]] == ["Armando Balbuena"]
+    t = ej.texte_transfert(r["offres"][0], O)
+    yield "prix 0 : « prix inconnu », jamais « à 0 »", "prix inconnu" in t and "à 0 " not in t
+    am = ["b3", "Tom Gain", "SF", 23, 52, 751, "2026-11-18T09:00:00"]
+    t = ej.texte_transfert(ej.offres_du_jour(marche(annonces=[am]), O, 300000)["offres"][0], O)
+    yield "prix connu : âge de l'export du Marché donné", "à 751 (export du Marché de 2 h)" in t
+
+
+def cas_priorite_capacite():
+    """Verdict du 18/11 : 3 plafonds additionnés (1 439 392) au-dessus de la capacité (666 868) sans ligne de priorité."""
+    a = ["c1", "Tom Gain", "SF", 23, 52, 55000, "2026-11-18T09:00:00"]
+    b = ["c2", "Bob Juste", "SF", 23, 51, 58000, "2026-11-18T10:00:00"]
+    l = ej.lignes_transferts(marche(annonces=[a, b]), 100000, None, o=O)
+    p = [x for x in l if x["id"] == "offres-priorite"]
+    yield "plafonds 80 000 + 80 000 > capacité 100 000 → ligne de priorité urgente", len(p) == 1 and p[0]["priorite"] == 1 \
+        and "160 000" in p[0]["consigne"] and "100 000" in p[0]["consigne"] \
+        and p[0]["consigne"].index("Tom Gain") < p[0]["consigne"].index("Bob Juste")
+    l = ej.lignes_transferts(marche(annonces=[a, b]), 300000, None, o=O)
+    yield "plafonds dans la capacité → pas de ligne de priorité", not [x for x in l if x["id"] == "offres-priorite"]
+
+
 def cas_offres():
     yield "offres : seuils lus dans le yaml", O["revente_marge"] == 1.25 and O["case_min_ventes"] == 3 and O["matchs_rotation"] == 4 \
         and O["minimum_effectif"] == 8
-    yield "offres : la requête de rotation prend N du yaml", "limit 4)" in ej.REQUETES["rotation"] and "limit 6)" in ej.requete_rotation(6)
+    yield "offres : la requête de rotation lit la vue rapide (bv_match_player_lines dépasse le délai, 18/11)", \
+        "bv_sell_candidates" in ej.REQUETES["rotation"] and "bv_match_player_lines" not in ej.REQUETES["rotation"]
     am = ["a1", "Tom Gain", "SF", 23, 52, 55000, "2026-11-18T09:00:00"]   # note 52 > 40 (Paul Banc, utilisé le plus faible), 55 000 ≤ médiane 60 000
     rv = ["a2", "Yan Bas", "PG", 24, 51, 38000, "2026-11-18T10:00:00"]   # PG : aucun utilisé ; 38 000 ≤ p25 40 000 et 60 000 ≥ 1,25 × 38 000
     rien = ["a3", "Max Cher", "C", 24, 50, 70000, "2026-11-18T11:00:00"]
@@ -639,6 +699,33 @@ def cas_ventes():
         marche(rotation=rot, cases=[[50, "22-25", 2, 40000, 60000, 80000, "2026-11-10"]], **effectif()), O, 1.0) == []
 
 
+def cas_niveau_e1():
+    """18/11 : le niveau de E1 alterne A et B ; l'amical FuzzyTeam du 20/11 est en niveau B, et la fiche le reçoit."""
+    import yaml
+    import aujourdhui as auj
+    conf = yaml.safe_load((ej.RACINE / "docs/attentes/experiences-amicales-basketvibe.yaml").read_text(encoding="utf-8"))
+    e1 = next(e for e in conf["experiences"] if e["id"] == "E1")
+    yield "E1 : ordre du yaml alterné A, B", e1["ordre"] == ["A", "B", "A", "B"]
+    j = lambda m, d: dt.date(2026, 11, d)  # noqa: E731
+    fait = lambda nom, d, niv: {"id": "E1", "niveau": niv, "jour": j(0, d), "cle": {"nom": nom, "date": j(0, d), "jour": j(0, d), "fichier": "f"}}
+    jo = lambda nom, d, cran: {"fixture_id": nom, "match_day": f"2026-11-{d}", "opponent": nom, "agress_uniforme": True, "agress_cran": cran}
+    x = {"file": conf["experiences"], "debut": dt.date(2026, 11, 10), "faits": [fait("Artificial Instinct", 14, "A")]}
+    fz = {"match": "FuzzyTeam", "date": j(0, 20)}
+    t = auj.test_en_cours(x, fz, [jo("Artificial Instinct", 14, 2)])
+    yield "E1 : après le 14/11 en A, FuzzyTeam (20/11) en niveau B", t and (t[0]["id"], t[1]) == ("E1", "B")
+    x2 = dict(x, faits=x["faits"] + [fait("BG Bangers", 19, "A")])
+    t2 = auj.test_en_cours(x2, fz, [jo("Artificial Instinct", 14, 2), jo("BG Bangers", 19, 2)])
+    yield "E1 : 14/11 et 19/11 en A → FuzzyTeam (20/11) toujours en B (alternance sur le dernier niveau joué)", t2 and t2[1] == "B"
+    x3 = dict(x, faits=x["faits"] + [fait("BG Bangers", 19, "B")])
+    yield "E1 : dernier en B → le suivant en A", auj.test_en_cours(x3, fz, [jo("Artificial Instinct", 14, 2), jo("BG Bangers", 19, 4)])[1] == "A"
+    texte = ej.texte_test_fiche(x, {"opponent": "FuzzyTeam", "day": "2026-11-20"}, [jo("Artificial Instinct", 14, 2)])
+    yield "fiche d'amical : la consigne porte le test E1 niveau B (agressivité 5 à l'écran), le reste neutre", \
+        "test E1 niveau B : agressivité 5 à l'écran (cran 4, agressive) sur tous les joueurs" in texte and "neutre" in texte
+    yield "fiche : la consigne de l'agent reprend le test", any("test E1 niveau B" in e["consigne"] for e in ej.agents_a_lancer(
+        [{"action": True, "type": "match", "genre": "amical", "prochain": "fiche", "consigne": "fiche", "test": texte, "cle": "fuzzyteam-20-11",
+          "titre": "Amical contre FuzzyTeam (20/11)", "id": "m"}], base=ej.RACINE / "outputs" / "inexistant", jour=dt.date(2026, 11, 18)))
+
+
 def cas_affichage_transferts():
     import que_faire_blocs as qfb
     rot = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 51, 2, 1], ["p3", "Luc Absent", "SF", 50, 0, 0]]
@@ -653,12 +740,21 @@ def cas_affichage_transferts():
         "revente : Yan Bas (PG, 24 ans, note 51)", "à 38 000", "médiane de la case 60 000", "fin 18/11 10:00", "proposition seulement (règle 2)"))
     yield "affichage : les seuils du yaml sont dans la ligne", "1,25 × prix" in t and "≥ 3" in t and "sur 4 matchs de ligue" in ls[2]["consigne"]
     yield "affichage : petite somme sans police", "police d'abord" not in t
-    gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00"]]),
+    gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00", 10000]]),
                 prix_cases=(CASE_COLS, [[50, "22-25", 4, 300000, 400000, 500000, "2026-11-10"]]))
     yield "affichage : somme > 250 000 → police d'abord", any("police d'abord : dossier.py puis agent police" in l["consigne"]
                                                              for l in ej.lignes_transferts(gros, 1000000, 1.0))
     sans = dict(d, annonces_actives=(ANN, []), vendre=(VEN, []))
-    yield "affichage : sans offre ni vente → aucune ligne", ej.lignes_transferts(sans, 300000, 1.0) == []
+    ls0 = ej.lignes_transferts(sans, 300000, 1.0)
+    yield "affichage : sans offre ni vente → une seule ligne « Ventes : aucune à proposer (0 joueur évalué, …) »", \
+        [l["id"] for l in ls0] == ["ventes-aucune"] and ls0[0]["consigne"].startswith("Ventes : aucune à proposer (0 joueur évalué, ")
+    rot_tous = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 51, 30, 4], ["p3", "Luc Absent", "SF", 50, 30, 4]]
+    t0 = [l for l in ej.lignes_transferts(dict(d, rotation=(ROT, rot_tous)), 300000, 1.0) if l["id"] == "ventes-aucune"]
+    yield "affichage : aucune vente → N joueurs évalués et la raison (en rotation)", len(t0) == 1 \
+        and t0[0]["consigne"].startswith("Ventes : aucune à proposer (10 joueurs évalués, ") and "en rotation : 3" in t0[0]["consigne"] and t0[0]["prochain"] == "vente"
+    yield "affichage : tolérance inconnue → raison dite", "tolérance du bloc 4 non lue" in \
+        [l for l in ej.lignes_transferts(d, 300000, None) if l["id"] == "ventes-aucune"][0]["consigne"]
+    yield "affichage : une vente proposée → pas de ligne « aucune »", "ventes-aucune" not in [l["id"] for l in ls]
     p = ej.lignes_transferts(dict(d, **{"gold.bv_exports_state": marche(age_h=100)["gold.bv_exports_state"]}), 300000, 1.0)
     yield "affichage : Marché périmé → ligne « inconnu », pas d'offre", p[0]["consigne"].startswith("offres du Marché : inconnu : export de 100 h") \
         and not any(l["id"].startswith(("revente", "amélioration")) for l in p)
@@ -666,6 +762,34 @@ def cas_affichage_transferts():
                                                                      if l["prochain"] == "offre"]) == 1
     yield "affichage : revente_marge du yaml à 1,6 → Yan Bas disparaît", "revente-Yan Bas" not in [
         l["id"] for l in ej.lignes_transferts(d, 300000, 1.0, o=dict(O, revente_marge=1.6))]
+
+
+def cas_enchere_max():
+    """18/11 : budget = capacite_invest (666 868 le 17/11), jamais le solde (1 500 018) ; enchère max X = min(p75 de la case,
+    capacité − salaire hebdo de la recrue) ; ligne supprimée si le prix relu dépasse X. Cas réels du 17/11 : Naguib (28 250 périmé
+    dans le plan, 510 000 relu à 22:07) et Szewczyk (751)."""
+    cases = [[45, "≤21", 51, 535000, 950000, 1645832.5, "2026-11-15"], [55, "26-29", 88, 757500, 1000000, 1357031.25, "2026-11-15"]]
+    rot = [["d1", "Jonathan Durand", "SF", 43.7, 20, 4], ["b1", "Thibault Bonnet", "SG", 51.9, 15, 4]]
+    nag = lambda prix: ["bd0f", "Fouad Naguib", "SF", 17, 45.9, prix, "2026-11-19T12:31:00", 18130]
+    sze = lambda prix: ["3061", "Alan Szewczyk", "SG", 28, 56.4, prix, "2026-11-18T23:37:00", 25500]
+    d = lambda *a: marche(annonces=list(a), cases=cases, rotation=rot)
+    t = lambda ls, nom: next((l["consigne"] for l in ls if nom in l["consigne"] and l["id"] != "offres-priorite"), None)
+    ls = ej.lignes_transferts(d(nag(28250), sze(751)), 666868, None)
+    yield "enchère max : Naguib périmé à 28 250 → max 648 738 (capacité 666 868 − salaire 18 130 < p75)", \
+        "Fouad Naguib (SF, 17 ans, note 45,9), enchère max 648 738, à 28 250" in (t(ls, "Naguib") or "")
+    yield "enchère max : Szewczyk → max 641 368 (666 868 − 25 500), à 751, police d'abord (max > 250 000)", \
+        "Alan Szewczyk (SG, 28 ans, note 56,4), enchère max 641 368, à 751" in (t(ls, "Szewczyk") or "") and "police d'abord" in t(ls, "Szewczyk")
+    yield "enchère max : la ligne nomme la capacité, pas le solde", "capacité 666 868" in t(ls, "Szewczyk") and "1 500 018" not in t(ls, "Szewczyk")
+    ls = ej.lignes_transferts(d(nag(510000)), 666868, None)
+    yield "enchère max : Naguib relu à 510 000 ≤ 648 738 → gardé, « à 510 000 »", "enchère max 648 738, à 510 000" in (t(ls, "Naguib") or "")
+    ls = ej.lignes_transferts(d(nag(510000), sze(751)), 666868 - 550000, None, exclus=["Alan Szewczyk"])
+    yield "enchère max : Szewczyk décidé à 550 000 → capacité 116 868, Naguib relu à 510 000 > 98 738 → ligne supprimée", \
+        t(ls, "Naguib") is None and t(ls, "Szewczyk") is None
+    yield "enchère max : Szewczyk relu à 700 000 > 641 368 → ligne supprimée", t(ej.lignes_transferts(d(sze(700000)), 666868, None), "Szewczyk") is None
+    yield "enchère max : salaire inconnu → aucune offre", t(ej.lignes_transferts(d(sze(751)[:7] + [None]), 666868, None), "Szewczyk") is None
+    p = ej.lignes_transferts(d(sze(751)), None, None)
+    p = [l for l in p if l["id"] != "ventes-aucune"]
+    yield "enchère max : capacité illisible → ligne « inconnu », jamais le solde", len(p) == 1 and "capacité d'investissement illisible" in p[0]["consigne"]
 
 
 def cas_personnel():
@@ -676,7 +800,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
