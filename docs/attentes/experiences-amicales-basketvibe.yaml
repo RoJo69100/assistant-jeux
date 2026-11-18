@@ -35,7 +35,7 @@ experiences:
     # 5j (Y4) : valeurs qui ne bougent pas pendant E1 ; pipelines/composition.py les écrit « constant pendant E1 » sous le tableau.
     constants: {zone: Perimeter, focus: 3}
     lecons: [L-004, L-008, L-011#2, L-015, L-021]
-    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+    export_requis: [la page du match]  # 18/11 : un seul libellé, celui de la fiche
   - id: E5
     reglage: zone défensive (Perimeter, Middle, Rim), alternée par match
     niveaux:
@@ -52,7 +52,7 @@ experiences:
     # leçon à créer (proposée) : « La zone défensive change le pourcentage à 2 points adverse (Perimeter 45-55 %, Middle 64-66 %
     #   en amical, L-027) » ; aucune leçon existante n'y répond.
     lecons: []
-    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+    export_requis: [la page du match]  # 18/11 : un seul libellé, celui de la fiche
   - id: E2
     reglage: focus de tir de deux tireurs
     niveaux:
@@ -63,7 +63,7 @@ experiences:
     ordre: [A]
     amicaux_vises: 3
     lecons: [L-002, L-020, L-025]
-    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+    export_requis: [la page du match]  # 18/11 : un seul libellé, celui de la fiche
   - id: E3
     reglage: focus offensif Primary à chaque quart-temps
     niveaux:
@@ -76,7 +76,7 @@ experiences:
     # leçon à créer (proposée) : « Un joueur au focus offensif Primary tente environ 1,33 fois les tirs d'un joueur Normal
     #   sur le même quart [M§6.3] » (chiffre 6 de l'étude).
     lecons: []
-    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+    export_requis: [la page du match]  # 18/11 : un seul libellé, celui de la fiche
   - id: E4
     reglage: aucun (réglage habituel)
     niveaux:
@@ -86,4 +86,4 @@ experiences:
     # leçon à créer (proposée) : « La réussite à 3 points de nos tireurs monte avec leur compétence Trois points, à type de
     #   tir égal » (chiffre 1 de l'étude, 871 tirs requis en v5).
     lecons: []
-    export_requis: [aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour]
+    export_requis: [la page du match]  # 18/11 : un seul libellé, celui de la fiche

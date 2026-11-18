@@ -811,7 +811,7 @@ def cas_experiences(COLS_CAL, MIDI):
         yield "H3 amical sans brief, présent : une ligne E1 niveau A, verrou 07:45 du calendrier, exports après le match", \
             len(l) == 1 and l[0][0] == dt.datetime(2026, 11, 10, 7, 45) \
             and "test E1 niveau A : agressivité 3 à l'écran (cran 2, équilibrée) sur tous les joueurs" in l[0][2] and "verrou 07:45" in l[0][3] \
-            and "aperçu, box scores par quart-temps, réglages utilisés, page Équipe du jour" in l[0][3]
+            and "après le match exporte : la page du match ;" in l[0][3] and "page Équipe" not in l[0][3] + l[0][2]
         yield "H3 amical sans brief, absent (pas d'amical aujourd'hui ni demain) : aucune ligne de test", \
             not any("test E" in a[2] + a[3] for a in auj.plan(figees(**{"gold.bv_agenda": (AGENDA[0], [])}), {}, JOUR9, MIDI,
                                                                 "", {"experiences": exps()})["actions"])
