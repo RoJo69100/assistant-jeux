@@ -869,7 +869,7 @@ def cas_t5():
     seuls_autres = donnees_t5(matchs_ajoutes=T(["day", "competition_kind", "n"], [("2026-11-08", "amical", 1)]), matchs_autres=T(["premiere_jour"], [("2026-11-10",)] * 5))
     l_a, c_a = qfb.bloc_6(seuls_autres, etu, jour)
     yield "test_matchs_autres_clubs_ne_declenchent_pas_l_etude_et_hors_de_k", c_a == [] and "0 de nos matchs pas encore étudiés ; 5 d'autres clubs" in l_a[0]
-    yield "test_requete_matchs_autres_existe", "matchs_autres" in auj.REQUETES and "silver.bv_matches" in auj.REQUETES["matchs_autres"] and "not exists" in auj.REQUETES["matchs_autres"]
+    yield "test_requete_matchs_autres_existe", "matchs_autres" in auj.REQUETES and "gold.bv_matchs_autres" in auj.REQUETES["matchs_autres"]  # 18/11 : vue matérialisée
     yield "test_bloc_6_vue_illisible", "vue matchs_ajoutes illisible" in "\n".join(qfb.bloc_6(donnees_t5(matchs_ajoutes=None), etu, jour)[0])
 
     # avancement des expériences et prochaine hypothèse
