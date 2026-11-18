@@ -678,7 +678,16 @@ def cas_affichage_transferts():
     yield "affichage : somme > 250 000 → police d'abord", any("police d'abord : dossier.py puis agent police" in l["consigne"]
                                                              for l in ej.lignes_transferts(gros, 1000000, 1.0))
     sans = dict(d, annonces_actives=(ANN, []), vendre=(VEN, []))
-    yield "affichage : sans offre ni vente → aucune ligne", ej.lignes_transferts(sans, 300000, 1.0) == []
+    ls0 = ej.lignes_transferts(sans, 300000, 1.0)
+    yield "affichage : sans offre ni vente → une seule ligne « Ventes : aucune à proposer (0 joueur évalué, …) »", \
+        [l["id"] for l in ls0] == ["ventes-aucune"] and ls0[0]["consigne"].startswith("Ventes : aucune à proposer (0 joueur évalué, ")
+    rot_tous = [["p1", "Jean Moyen", "SF", 48, 30, 4], ["p2", "Paul Banc", "SF", 51, 30, 4], ["p3", "Luc Absent", "SF", 50, 30, 4]]
+    t0 = [l for l in ej.lignes_transferts(dict(d, rotation=(ROT, rot_tous)), 300000, 1.0) if l["id"] == "ventes-aucune"]
+    yield "affichage : aucune vente → N joueurs évalués et la raison (en rotation)", len(t0) == 1 \
+        and t0[0]["consigne"].startswith("Ventes : aucune à proposer (10 joueurs évalués, ") and "en rotation : 3" in t0[0]["consigne"] and t0[0]["prochain"] == "vente"
+    yield "affichage : tolérance inconnue → raison dite", "tolérance du bloc 4 non lue" in \
+        [l for l in ej.lignes_transferts(d, 300000, None) if l["id"] == "ventes-aucune"][0]["consigne"]
+    yield "affichage : une vente proposée → pas de ligne « aucune »", "ventes-aucune" not in [l["id"] for l in ls]
     p = ej.lignes_transferts(dict(d, **{"gold.bv_exports_state": marche(age_h=100)["gold.bv_exports_state"]}), 300000, 1.0)
     yield "affichage : Marché périmé → ligne « inconnu », pas d'offre", p[0]["consigne"].startswith("offres du Marché : inconnu : export de 100 h") \
         and not any(l["id"].startswith(("revente", "amélioration")) for l in p)
@@ -712,6 +721,7 @@ def cas_enchere_max():
     yield "enchère max : Szewczyk relu à 700 000 > 641 368 → ligne supprimée", t(ej.lignes_transferts(d(sze(700000)), 666868, None), "Szewczyk") is None
     yield "enchère max : salaire inconnu → aucune offre", t(ej.lignes_transferts(d(sze(751)[:7] + [None]), 666868, None), "Szewczyk") is None
     p = ej.lignes_transferts(d(sze(751)), None, None)
+    p = [l for l in p if l["id"] != "ventes-aucune"]
     yield "enchère max : capacité illisible → ligne « inconnu », jamais le solde", len(p) == 1 and "capacité d'investissement illisible" in p[0]["consigne"]
 
 

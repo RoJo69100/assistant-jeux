@@ -513,7 +513,7 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
     return {"inconnu": None, "offres": sorted(res, key=lambda x: -x["gain"])}
 
 
-def ventes_du_jour(donnees, o, tolerance, police="") -> list:
+def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
     """Joueurs à vendre pour profit : hors rotation (moyenne ≤ minutes_hors_rotation sur les matchs_rotation derniers matchs de
     ligue), écart de force avec son remplaçant ≤ tolérance du bloc 4, prix attendu = médiane de sa case (case ≥ case_min_ventes
     ventes) ; prix payé connu (gold.bv_transfer_history, bought_by_me) : profit ≥ vente_marge_profit, sinon « prix d'achat
@@ -521,7 +521,10 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     ≥ minimum_effectif. Triés par prix attendu décroissant."""
     import aujourdhui as auj
     import que_faire_blocs as qfb
+    bilan = {} if bilan is None else bilan
+    compte = lambda r: bilan.__setitem__(r, bilan.get(r, 0) + 1)  # noqa: E731
     if tolerance is None:
+        bilan["tolérance du bloc 4 non lue"] = 0
         return []
     cases = qfb._cases(donnees)
     rot = {str(r["player_id"]): r for r in _rows(donnees, "rotation")}
@@ -529,27 +532,41 @@ def ventes_du_jour(donnees, o, tolerance, police="") -> list:
     joueurs = _rows(donnees, "vendre")
     achats = {str(r["player_id"]): float(r["fee"]) for r in _rows(donnees, "prix_achat") if _f(r.get("fee")) and float(r["fee"]) > 0}
     res = []
+    bilan["_n"] = len(joueurs)
     for j in joueurs:
         r, m = rempl.get(str(j["player_id"]), {}), rot.get(str(j["player_id"]))
-        if auj.vrai(j.get("on_transfer_list")) or m is None or float(m["min_moy"]) > float(o["minutes_hors_rotation"]):
+        if auj.vrai(j.get("on_transfer_list")):
+            compte("déjà en vente")
+            continue
+        if m is None:
+            compte("minutes de ligue absentes")
+            continue
+        if float(m["min_moy"]) > float(o["minutes_hors_rotation"]):
+            compte("en rotation")
             continue
         if r.get("gap") is None or float(r["gap"]) > float(tolerance):
+            compte("remplaçant trop faible ou absent")
             continue
         if f"ne pas vendre {str(j['name']).lower()}" in str(police).lower():
+            compte("« ne pas vendre » de la police")
             continue
         case = cases.get((qfb.palier_note(j["ps"]), auj.tranche_age(j["age"])))
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
+            compte("case de prix trop petite")
             continue
         prix = float(case["median"])  # prix attendu = médiane de la case
         paye = achats.get(str(j["player_id"]))
         profit = None if paye is None else (prix - paye) / paye
         if profit is not None and profit < float(o["vente_marge_profit"]):
+            compte("profit insuffisant")
             continue
         res.append({"type": "vente", "nom": j["name"], "poste": j["position"], "age": int(float(j["age"])), "note": float(j["ps"]),
                     "prix": prix, "mediane": prix, "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
                     "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix,
                     "prix_achat": paye, "profit": profit})
     places = max(0, len(joueurs) - int(o["minimum_effectif"]))
+    if res and not places:
+        bilan["minimum d'effectif atteint"] = len(res)
     return sorted(res, key=lambda x: -x["gain"])[:places]
 
 
@@ -583,16 +600,28 @@ def texte_transfert(x, o) -> str:
     return t
 
 
+def texte_aucune_vente(bilan) -> str:
+    """« Ventes : aucune à proposer (N joueurs évalués, raison) » ; raisons triées par nombre de joueurs écartés."""
+    n = bilan.get("_n", 0)
+    raisons = sorted(((k, v) for k, v in bilan.items() if k != "_n"), key=lambda x: -x[1])
+    r = " ; ".join(k if not v else f"{k} : {v}" for k, v in raisons) or "aucun joueur dans l'effectif lu"
+    return f"Ventes : aucune à proposer ({n} joueur{'s' if n > 1 else ''} évalué{'s' if n > 1 else ''}, {r})"
+
+
 def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=()) -> list:
     """Lignes « Transferts » de l'état par événement : `max_offres` offres et `max_ventes` ventes au plus, triées par gain attendu ;
     Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes."""
     o = o or charger_offres()
     of = offres_du_jour(donnees, o, capacite, maintenant, exclus)
-    choix = of["offres"][:int(o["max_offres"])] + ventes_du_jour(donnees, o, tolerance, police)[:int(o["max_ventes"])]
+    bilan = {}
+    ventes = ventes_du_jour(donnees, o, tolerance, police, bilan)[:int(o["max_ventes"])]
+    choix = of["offres"][:int(o["max_offres"])] + ventes
     ligne = lambda i, prochain, consigne: {"id": i, "type": "transfert", "evenement": "transferts", "etat": None, "prochain": prochain,
                                            "rates": [], "echeance": None, "consigne": consigne, "age_h": None, "priorite": 2,
                                            "action": True, "defauts": []}
     res = [ligne("offres-inconnu", "offre", f"offres du Marché : {of['inconnu']}")] if of["inconnu"] else []
+    if not ventes:  # 18/11 : jamais de silence sur les ventes
+        res.append(dict(ligne("ventes-aucune", "vente", texte_aucune_vente(bilan)), action=False, priorite=3))
     return res + [ligne(f"{x['type']}-{x['nom']}", x["type"] if x["type"] == "vente" else "offre", texte_transfert(x, o))
                   for x in sorted(choix, key=lambda x: -x["gain"])]
 
