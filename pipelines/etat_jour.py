@@ -455,13 +455,12 @@ def forme_role(x) -> str:
 
 
 def requete_rotation(n: int) -> str:
-    """Minutes de chaque joueur de l'effectif sur les `n` derniers matchs de ligue (0 s'il n'a pas joué) : moyenne et matchs joués."""
-    n = int(n)
-    return ("select r.player_id, r.name, r.position, r.ps, round(coalesce(sum(l.min), 0)::numeric / " + str(n) + ", 1) as min_moy, "
-            "count(l.fixture_id) filter (where l.min > 0) as matchs_joues from gold.bv_roster_now r "
-            "left join gold.bv_match_player_lines l on l.player_id = r.player_id and l.fixture_id in ("
-            "select fixture_id from (select distinct fixture_id, match_day from gold.bv_match_player_lines where competition = 'league') x "
-            "order by match_day desc limit " + str(n) + ") group by r.player_id, r.name, r.position, r.ps")
+    """Minutes de chaque joueur de l'effectif sur les 4 derniers matchs de ligue, lues dans gold.bv_sell_candidates (18/11 : la
+    jointure sur gold.bv_match_player_lines dépasse le délai, la rotation revenait vide et toute offre tombait en « revente »).
+    min_moy = league_min_last4 (moyenne sur ses lignes de match), matchs_joues = 1 s'il a joué. La vue fixe N = 4 : `n` doit valoir 4."""
+    assert int(n) == 4, "gold.bv_sell_candidates porte les 4 derniers matchs de ligue : matchs_rotation doit valoir 4"
+    return ("select player_id, name, position, ps, league_min_last4 as min_moy, "
+            "case when league_min_last4 > 0 then 1 else 0 end as matchs_joues from gold.bv_sell_candidates")
 
 
 def _f(v):
@@ -491,6 +490,8 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
         return {"inconnu": perime, "offres": []}
     if capacite is None:
         return {"inconnu": "inconnu : capacité d'investissement illisible (capacite_invest de gold.finance_health)", "offres": []}
+    if donnees.get("rotation") is None:  # 18/11 : sans rotation, aucun « plus faible » : tout tombait en revente
+        return {"inconnu": "inconnu : rotation illisible (minutes de ligue), offres non classées", "offres": []}
     exclus = {str(x).lower() for x in exclus}
     cases = qfb._cases(donnees)
     faibles = {}

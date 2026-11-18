@@ -599,10 +599,24 @@ def marche(age_h=2, annonces=(), cases=None, rotation=None, **plus):
     return d
 
 
+def cas_rotation_illisible():
+    """Verdict du 18/11 : Szewczyk (SG 56,4) classé « revente » alors que Bonnet (SG 51,9) joue : la requête de rotation était en
+    timeout, donc aucun « plus faible » connu et toute annonce tombait en revente."""
+    sz = ["a9", "Alan Szewczyk", "SG", 23, 52, 38000, "2026-11-18T23:37:00"]
+    d = marche(annonces=[sz])
+    d["rotation"] = None
+    r = ej.offres_du_jour(d, O, 300000)
+    yield "rotation illisible → aucune offre classée, « inconnu » nomme la rotation", r["offres"] == [] and "rotation" in (r["inconnu"] or "")
+    r = ej.offres_du_jour(marche(annonces=[sz], rotation=[["p9", "Thibault Bonnet", "SG", 48, 36, 1]]), O, 300000)
+    yield "rotation lue (min_moy > 0) → Szewczyk en amélioration face à Bonnet", [(x["type"], x.get("faible")) for x in r["offres"]] == \
+        [("amélioration", "Thibault Bonnet")]
+
+
 def cas_offres():
     yield "offres : seuils lus dans le yaml", O["revente_marge"] == 1.25 and O["case_min_ventes"] == 3 and O["matchs_rotation"] == 4 \
         and O["minimum_effectif"] == 8
-    yield "offres : la requête de rotation prend N du yaml", "limit 4)" in ej.REQUETES["rotation"] and "limit 6)" in ej.requete_rotation(6)
+    yield "offres : la requête de rotation lit la vue rapide (bv_match_player_lines dépasse le délai, 18/11)", \
+        "bv_sell_candidates" in ej.REQUETES["rotation"] and "bv_match_player_lines" not in ej.REQUETES["rotation"]
     am = ["a1", "Tom Gain", "SF", 23, 52, 55000, "2026-11-18T09:00:00"]   # note 52 > 40 (Paul Banc, utilisé le plus faible), 55 000 ≤ médiane 60 000
     rv = ["a2", "Yan Bas", "PG", 24, 51, 38000, "2026-11-18T10:00:00"]   # PG : aucun utilisé ; 38 000 ≤ p25 40 000 et 60 000 ≥ 1,25 × 38 000
     rien = ["a3", "Max Cher", "C", 24, 50, 70000, "2026-11-18T11:00:00"]
@@ -760,7 +774,7 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
