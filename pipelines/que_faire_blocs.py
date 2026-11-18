@@ -46,6 +46,7 @@ REGLES = [
     (r"Analyse : ", 7, "analyse"),
     (r"Finances : ", 8, "finances"),
     (r"Réduis le poste", 8, "finances"),
+    (r"personnel : ", 8, "finances"),  # 18/11 : écart à personnel_propose (etat_jour.texte_personnel), jamais Question
     (r"Semaine type déficitaire", 8, "finances"),
     (r"Vendre ", 4, "transferts"),
     (r"Mets .+ en vente", 4, "transferts"),

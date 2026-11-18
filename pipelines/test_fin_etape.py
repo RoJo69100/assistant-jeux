@@ -85,6 +85,18 @@ def cas_ligne_de_forme(racine):
     return "test_c.py : 282/282" in out and "test_c.py : 3 requêtes" not in out and "test_d.py : message" in out
 
 
+def cas_test_rouge(racine):
+    """18/11 : un test rouge (N/M avec N < M, ou code retour non nul) fait sortir fin_etape.py avec un code non nul, même à jour."""
+    _, travail = depot(racine)
+    (travail / "pipelines" / "test_r.py").write_text("print('ECHEC x')\nprint('504/505')\n", encoding="utf-8")
+    code_n, out_n = lancer(travail)
+    (travail / "pipelines" / "test_r.py").write_text("import sys\nprint('5/5')\nsys.exit(1)\n", encoding="utf-8")
+    code_c, _ = lancer(travail)
+    (travail / "pipelines" / "test_r.py").write_text("print('5/5')\n", encoding="utf-8")
+    code_v, _ = lancer(travail)
+    return code_n != 0 and "tests rouges : 1" in out_n and code_c != 0 and code_v == 0
+
+
 def cas_lecture_seule(racine):
     _, travail = depot(racine)
     (travail / "sale.txt").write_text("x", encoding="utf-8")
@@ -99,6 +111,7 @@ CAS = [
     ("git status --short affiché", cas_statut_court),
     ("dernière ligne de chaque test_*.py", cas_tests),
     ("ligne N/N de stdout plutôt qu'un message stderr", cas_ligne_de_forme),
+    ("test rouge : code non nul", cas_test_rouge),
     ("lecture seule : HEAD, origin/main, statut inchangés", cas_lecture_seule),
 ]
 

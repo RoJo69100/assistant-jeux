@@ -42,6 +42,7 @@ ECHANTILLONS = {
                     "Après 04:00 : exporter Entraînement, Finances et Personnel",
                     "Après 09:00 : exporter la page Académie (nouveau rapport du jeudi)",
                     "Avant 19:45 : vérifier le preset de ligue et régler le focus défensif"],
+    "t_pers": ["personnel : licencie 2 marketing (2 → 0) (−20 000 par semaine) : marketing : 1 % de recettes"],  # 17/11 : écart à personnel_propose
     "r['alert']": ["Dupont blessé, retour le 12/11", "Dupont : fatigue 73 (hors zone verte)",
                    "Dupont : forme 2 (attaque −8 %)", "Semaine type déficitaire : -1200 par semaine",
                    "Match de ligue joué non exporté : J5 du 06/11"],
