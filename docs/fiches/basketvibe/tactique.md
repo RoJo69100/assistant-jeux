@@ -35,7 +35,7 @@ Lue par l'agent `tactique` après `commun.md`. Contenu repris de l'agent BasketV
 - **Cinqs** : un tableau Q1, Q2, Q3, Q4, OT × PG, SG, SF, PF, C. Les rotations par quart-temps sont le levier contre les 36 min [M§5.7] ; en v4, la fatigue d'un match à l'autre compte aussi [News 2026-10-17].
 - **Consignes par joueur** : passe ↔ tir, focus offensif, focus de tir, agressivité défensive. Une ligne par joueur, avec le libellé de l'écran et le cran, et la raison en quelques mots (profil de compétences [M§7.1]).
 - **Depth chart** : pour chaque emplacement, 2 ou 3 remplaçants dans l'ordre [M§6.2.2].
-- Rappel de saisie : sauvegarder le preset, puis **le re-sélectionner sur chaque match déjà planifié** [Com 2026-09-05]. Verrouillage à 19:45 (ligue) [M§6.5].
+- Rappel de saisie (ligue et coupe, utilisateur 17/11) : faire le preset de l'adversaire pour voir ses joueurs, puis régler zone et focus défensif et sauvegarder le match ; plus de preset « League Tactic » à re-sélectionner (remplace [Com 2026-09-05]). Verrouillage à 19:45 (ligue) [M§6.5].
 
 ### 2. Ajustement à l'adversaire du prochain match (case E8)
 - Lis `gold.bv_next_opponents` (1re ligne) et nos matchs passés contre lui.
