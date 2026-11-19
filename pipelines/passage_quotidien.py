@@ -139,12 +139,38 @@ def candidats_police(cibles: list, bargains: list, maintenant, seuil=SEUIL, hori
     return res
 
 
+def candidats_plan(donnees, S, maintenant, seuil=SEUIL, horizon_h=HORIZON_POLICE_H) -> list:
+    """19/11 (consigne de l'utilisateur) : lignes d'offres et de vente du plan (etat_jour.offres_du_jour / ventes_du_jour, mêmes seuils
+    que le plan) dont le montant dépasse le seuil : offre = max(enchère max, prix), fin dans les horizon_h heures ; vente = prix
+    attendu, annonce à créer (pas de fin). Joueur déjà nommé par la police du jour (S['police']) : exclu."""
+    import aujourdhui as auj
+    import etat_jour as ej
+    import que_faire_blocs as qfb
+    o = ej.charger_offres()
+    cap = next((r.get("capacite_invest") for r in auj.lignes_de(donnees, "gold.finance_health")), None)
+    ouvertes = [c for c in S.get("cibles", []) if c.get("fin") is None or c["fin"] > maintenant]
+    cap = None if cap in (None, "") else float(cap) - sum(float(c["max"]) for c in ouvertes)
+    refus, deja = S.get("refus_police", ""), str(S.get("police", "")).lower()
+    of = ej.offres_du_jour(donnees, o, cap, maintenant, [c["nom"] for c in S.get("cibles", [])], refus)["offres"][:int(o["max_offres"])]
+    ventes = ej.ventes_du_jour(donnees, o, qfb._tolerance(donnees), f"{S.get('police', '')}\n{refus}")[:int(o["max_ventes"])]
+    lim, res = maintenant + dt.timedelta(hours=horizon_h), []
+    for x in of:
+        mx, fin = max(float(x["max"]), float(x["prix"])), x.get("fin")
+        if mx > seuil and fin is not None and maintenant < fin <= lim:
+            res.append({"nom": x["nom"], "max": mx, "fin": fin, "type": "achat"})
+    res += [{"nom": x["nom"], "max": float(x["prix"]), "fin": None, "type": "vente"} for x in ventes if float(x["prix"]) > seuil]
+    return [c for c in res if c["nom"].lower() not in deja]
+
+
 def consigne_police(c: dict, jour) -> str:
-    return (f"Jeu : BasketVibe. Type : achat. Joueur : {c['nom']}, maximum proposé {_fr(int(c['max']))}, "
-            f"fin d'enchère {c['fin']:%d/%m %H:%M}. Horizon d'action = aujourd'hui {jour.isoformat()}. "
-            f"Dossier : outputs/{JEU}/dossier/{jour.isoformat()}-achat.md. Brouillon : la ligne du plan du jour sur {c['nom']}. "
+    t = c.get("type", "achat")  # 19/11 : achat (enchère) ou vente (ligne de vente du plan)
+    verbe = "acheter" if t == "achat" else "vendre"
+    quand = f"fin d'enchère {c['fin']:%d/%m %H:%M}" if c.get("fin") else "annonce à créer"
+    return (f"Jeu : BasketVibe. Type : {t}. Joueur : {c['nom']}, {'maximum proposé' if t == 'achat' else 'prix attendu'} {_fr(int(c['max']))}, "
+            f"{quand}. Horizon d'action = aujourd'hui {jour.isoformat()}. "
+            f"Dossier : outputs/{JEU}/dossier/{jour.isoformat()}-{t}.md. Brouillon : la ligne du plan du jour sur {c['nom']}. "
             f"Plafond : 12 appels d'outil, 3 minutes. Ajoute à outputs/{JEU}/police-{jour.isoformat()}.md une section "
-            f"« ## achat — {c['nom']} — HH:MM » (Verdict, Décision ; écris « ne pas acheter {c['nom']} » si tu refuses). "
+            f"« ## {t} — {c['nom']} — HH:MM » (Verdict, Décision ; écris « ne pas {verbe} {c['nom']} » si tu refuses). "
             f"Interdit : aucun achat, aucune vente, aucune enchère (règle 2) — tu proposes, l'utilisateur exécute.")
 
 
@@ -161,7 +187,7 @@ def lancer_polices(cands: list, jour, base=BASE, horloge=None, plafond=POLICES_M
             r["raison"] = f"plafond de {plafond} polices par passage atteint — lance-la en session (dossier.py puis agent police)"
         else:
             e = {"agent": "police", "sortie": sortie, "prompt": consigne_police(c, jour),
-                 "avant": f"python -I pipelines/dossier.py {JEU} achat --mots {shlex.quote(c['nom'])} --date {jour.isoformat()}"}
+                 "avant": f"python -I pipelines/dossier.py {JEU} {c.get('type', 'achat')} --mots {shlex.quote(c['nom'])} --date {jour.isoformat()}"}
             ok, raison = lancer_agent(e, jour, base=base, timeout_min=kw.pop("timeout_min", 5), **kw)
             f = Path(base) / sortie
             if ok and c["nom"].lower() not in f.read_text(encoding="utf-8").lower():
@@ -342,13 +368,15 @@ def rejouer():
     return jour, maintenant, rendu, etats, S, alerte, cfg, (donnees, erreurs, n, fait)
 
 
-def passage_police(ctx, jour, maintenant, S, rendu, refus=None, lancer=None):
+def passage_police(ctx, jour, maintenant, S, rendu, refus=None, lancer=None, plan_cands=None):
     """(rendu annoté, résultats police) : candidats > SEUIL finissant dans 36 h → lancer_polices ; si une police a tourné, le
     plan est rendu de nouveau (la trace du jour lève « police d'abord ») et l'instantané réécrit ; puis annoter()."""
     import aujourdhui as auj
     import aujourdhui_sources as src
     donnees, erreurs, n, fait = ctx
     cands = candidats_police(S.get("cibles", []), auj.lignes_de(donnees, "gold.bv_market_bargains"), maintenant)
+    vus = {c["nom"].lower() for c in cands}  # 19/11 : + lignes d'offres et de vente du plan au-dessus du seuil
+    cands += [c for c in (plan_cands if plan_cands is not None else candidats_plan(donnees, S, maintenant)) if c["nom"].lower() not in vus]
     if not cands:
         return rendu, []
     if refus:

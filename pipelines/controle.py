@@ -177,8 +177,18 @@ def requete_base(ops: list[tuple[str, dict]]) -> bool:
     return False
 
 
-FAIT_DECLARE = re.compile(r"\bj'ai (deja )?(saisi|exporte|fait|mis|corrige|change|regle|enchere)|\bc'est fait\b"
-                          r"|\b(sont|est) (faite?s?|saisie?s?|exportee?s?)\b|\bdeja (fait|saisi|exporte)")
+# 19/11 : seulement une déclaration d'action de jeu (exporté, fait, saisi, vendu, enchéri, testé…), jamais une demande de code : une
+# proposition au conditionnel (« si un point est déjà fait sur main ») ou une phrase qui parle de code (main, commit, test…) ne compte pas.
+ACTION_JEU = r"(saisie?s?|exportee?s?|faite?s?|vendue?s?|encherie?s?|testee?s?|mise?s?|corrigee?s?|changee?s?|reglee?s?)"
+FAIT_DECLARE = re.compile(rf"\bj'ai (deja )?(saisi|exporte|fait|vendu|enchere|teste|mis|corrige|change|regle)\b|\bc'est fait\b"
+                          rf"|\b(sont|est) (deja )?{ACTION_JEU}\b|\bdeja (fait|saisi|exporte|vendu|enchere|teste)\b")
+PHRASE_CODE = re.compile(r"\bsi\b|\bsur main\b|\bcommit|\bpush|\btests?\b|\bfin_etape\b|\bcode\b|\bdis[- ]le\b")
+
+
+def fait_declare(nd: str) -> bool:
+    """Vrai si une phrase du message déclare une action faite dans le jeu (FAIT_DECLARE) sans être une phrase de demande de code
+    (PHRASE_CODE : « si », « sur main », commit, test…)."""
+    return any(FAIT_DECLARE.search(p) and not PHRASE_CODE.search(p) for p in re.split(r"[.!?;\n]+", nd))
 REGISTRE = re.compile(r"outputs[/\\]\w+[/\\]fait-\d{4}-\d{2}-\d{2}\.md$")
 QUE_FAIRE = re.compile(r"\bque faire\b|\bqu'est-ce que je fais\b|\breprenons\b|\bplan du jour\b|\bon fait quoi\b")
 CATEGORIES_S1 = ["composition", "tactique", "entrainement", "transferts", "finances", "analyse"]
@@ -241,7 +251,7 @@ def fautes_de(text: str, ents: list[dict]) -> list[str]:
     if heredoc_ecrit(ops_tour):
         f.append("i : fichier écrit par heredoc dans le terminal — utilise l'outil Write")
     nd = police.norm(dem[-1]) if dem else ""
-    if FAIT_DECLARE.search(nd) and not police.CONCEPTION.search(nd) and not registre_ecrit(ops_tour):
+    if fait_declare(nd) and not police.CONCEPTION.search(nd) and not registre_ecrit(ops_tour):
         f.append("k : l'utilisateur dit avoir fait quelque chose — inscris-le dans `outputs/<jeu>/fait-<jour>.md` "
                  "(heure, quoi, « déclaré par l'utilisateur ») avant tout résumé")
     if QUE_FAIRE.search(nd) and tableau_plan(text):

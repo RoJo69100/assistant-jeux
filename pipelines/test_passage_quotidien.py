@@ -241,7 +241,42 @@ def cas_police():
     yield "seuil inchangé : 250 000", pq.SEUIL == 250_000
 
 
-CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police]
+def cas_police_plan():
+    """19/11 : la police automatique couvre aussi les lignes d'offres et de vente du plan au-dessus de 250 000 (dossier puis police),
+    plafond de 3 polices par passage inchangé."""
+    import test_etat_jour as T
+    m = dt.datetime(2026, 11, 19, 10, 0)
+    ann = (T.ANN + ["height_cm", "best_slot", "best_fit"], [["g1", "Gros Gain", "SG", 24, 50, 260000, "2026-11-19T22:00:00", 10000, None, "SG", 58.1],
+                                                               ["g2", "Petit Gain", "SG", 24, 50, 1000, "2026-11-19T22:00:00", 10000, None, "SG", 58.1]])
+    cases = T._plan_19()["prix_cases_poste"]
+    cases = (cases[0], cases[1] + [["SG", 50, "22-25", 4, 100000, 200000, 300000, 90000, 400000]])
+    d = dict(T.marche(**T._plan_19()), annonces_actives=ann, prix_cases_poste=cases, tolerance_vente=(["value"], [[1.0]]),
+             **{"gold.finance_health": (["capacite_invest"], [[900000]])})
+    S = {"cibles": [], "police": "", "refus_police": ""}
+    c = pq.candidats_plan(d, S, m)
+    yield "police du plan : offre de max 300 000 et vente de Baron à 400 000 retenues, offre à 1 000 (max 300 000) aussi", \
+        sorted((x["nom"], x["type"]) for x in c) == [("Gros Gain", "achat"), ("Nolan Baron", "vente"), ("Petit Gain", "achat")]
+    yield "police du plan : refus « ne pas vendre » ou police déjà faite aujourd'hui → exclu", \
+        "Nolan Baron" not in [x["nom"] for x in pq.candidats_plan(d, dict(S, refus_police="ne pas vendre nolan baron"), m)] \
+        and "Gros Gain" not in [x["nom"] for x in pq.candidats_plan(d, dict(S, police="## achat — gros gain"), m)]
+    v = next(x for x in c if x["type"] == "vente")
+    yield "police du plan : consigne et dossier de type vente, « ne pas vendre » si refus", "Type : vente" in pq.consigne_police(v, m.date()) \
+        and "2026-11-19-vente.md" in pq.consigne_police(v, m.date()) and "ne pas vendre Nolan Baron" in pq.consigne_police(v, m.date())
+    vus = []
+    def lancer(cands, jour):
+        vus.extend(cands)
+        orig, pq.lancer_agent = pq.lancer_agent, lambda *a, **k: (False, "test")
+        try:
+            return pq.lancer_polices(cands, jour)
+        finally:
+            pq.lancer_agent = orig
+    plus = [{"nom": f"N{i}", "max": 500000, "fin": None, "type": "vente"} for i in range(3)]
+    _, res = pq.passage_police((d, {}, 1, ""), m.date(), m, S, "rendu", lancer=lancer, plan_cands=c + plus)
+    yield "police du plan : candidats du plan passés à la routine, plafond de 3 par passage", len(vus) == 6 \
+        and sum("plafond de 3 polices" in str(r["raison"]) for r in res) == 3
+
+
+CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

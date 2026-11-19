@@ -177,6 +177,10 @@ etat_jour:
     - { ecran: "Marché (enchères)", libelle: "le Marché (toutes les pages)", source: exports_state, periode: quotidien, perime_h: 24 }
     - { ecran: "Historique global des transferts", libelle: "l'historique global des transferts", source: page_type, page_type: transfers_global-history, periode: quotidien, perime_h: 24 }
     - { ecran: "Personnel", libelle: "la page Personnel", source: exports_state, periode: hebdomadaire, perime_h: 168 }
+    # 19/11 (consigne de l'utilisateur ; la police les réclame) : Équipe (effectif, salaires, contrats) chaque semaine ; Mes enchères
+    # seulement s'il y a une enchère ouverte (core.market_listing) ou une ligne d'enchère proposée (la capacité en dépend), périmé après 24 h.
+    - { ecran: "Équipe (aperçu, joueurs)", libelle: "la page Équipe (effectif, salaires, contrats)", source: exports_state, periode: hebdomadaire, perime_h: 168 }
+    - { ecran: "Mes enchères", libelle: "la page Mes enchères", source: exports_state, periode: si_enchere, perime_h: 24, si: enchere }
     # 19/11 (consigne de l'utilisateur ; études Match Engine des 11/11 et 18/11) : classement des trois ligues après chaque journée
     # (périmé si la dernière capture de /leagues/<id>/seasons/<s>/standings précède le coup d'envoi du dernier match de ligue joué) ;
     # les trois ligues = celles des clubs de silver.bv_club_roster (requête du 19/11 : 12 clubs chacune).

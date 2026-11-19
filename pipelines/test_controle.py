@@ -129,6 +129,10 @@ CAS = [
     ("k j'ai exporté sans registre", "Merci.", [demande("j'ai exporté le personnel")], False),
     ("k saisie déclarée avec registre", "Noté.", [demande("j'ai saisi l'amical"), EDIT_OUT], True),
     ("k conception qui parle de fait", "Hook ajouté.", [demande("conçois le hook, j'ai fait le plan")], True),
+    ("k demande de code « si un point est déjà fait sur main » (19/11)", "Commit poussé.",
+     [demande("Si un point est déjà fait sur main, ne le refais pas : dis-le.\n1. Priorité : l'export de la page d'un match. Test.")], True),
+    ("k j'ai vendu sans registre (19/11)", "Noté.", [demande("j'ai vendu Baron ce matin")], False),
+    ("k enchère déclarée sans registre (19/11)", "Noté.", [demande("l'enchère sur Fontana est faite")], False),
     # l : catégories du « que faire »
     ("l plan incomplet", PLAN, [demande("que faire"), SQL], False),
     ("l plan complet", PLAN_COMPLET, [demande("que faire"), BV_SQL], True),

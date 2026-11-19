@@ -441,7 +441,7 @@ def cas_exports_ligue_19():
     """19/11 (consigne de l'utilisateur) : classement des trois ligues après chaque journée, onglets Équipes/Joueurs/Blessés chaque semaine,
     et une ligne 🟩 « exporte les N matchs de la ligue joués hier » (N ≤ 8, liste écrite dans exports-a-faire/ligue-AAAA-MM-JJ.md)."""
     cols = ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"]
-    frais = {"gold.bv_exports_state": (cols, [(8, "Marché (enchères)", "x", "2026-11-17T09:00:00", 1, "🟩"), (13, "Personnel", "x", "2026-11-14T09:00:00", 73, "🟩")]),
+    frais = {"gold.bv_exports_state": (cols, [(8, "Marché (enchères)", "x", "2026-11-17T09:00:00", 1, "🟩"), (1, "Équipe (aperçu, joueurs)", "x", "2026-11-17T09:00:00", 1, "🟩"), (13, "Personnel", "x", "2026-11-14T09:00:00", 73, "🟩")]),
              "historique_global": (["derniere_paris"], [("2026-11-17T08:00:00",)])}
     em = (COLS_EM, [("f1", "ligue", "2026-11-16", "Adv A", True, True, "W", "2026-11-16T20:00:00") + (None,) * 6])
     a = ej.exports_periodiques(donnees(etat_match=em, **frais, **FRAIS_19), CFG, MAINT)
@@ -476,8 +476,8 @@ def cas_exports_periodiques():
     """17/11 (décision de l'utilisateur) : Marché et historique global des transferts chaque jour (périmés après 24 h), Personnel chaque semaine ;
     une ligne par écran avec l'âge de l'export, qui disparaît quand la base voit la capture."""
     cols = ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"]
-    vieux = (cols, [(8, "Marché (enchères)", "x", "2026-11-13T10:26:30", 97, "🟧 à refaire"), (13, "Personnel", "x", "2026-11-08T11:10:48", 216, "🟧 à refaire")])
-    frais = (cols, [(8, "Marché (enchères)", "x", "2026-11-17T09:00:00", 1, "🟩 à jour"), (13, "Personnel", "x", "2026-11-14T09:00:00", 73, "🟩 à jour")])
+    vieux = (cols, [(8, "Marché (enchères)", "x", "2026-11-13T10:26:30", 97, "🟧 à refaire"), (1, "Équipe (aperçu, joueurs)", "x", "2026-11-17T09:00:00", 1, "🟩"), (13, "Personnel", "x", "2026-11-08T11:10:48", 216, "🟧 à refaire")])
+    frais = (cols, [(8, "Marché (enchères)", "x", "2026-11-17T09:00:00", 1, "🟩 à jour"), (1, "Équipe (aperçu, joueurs)", "x", "2026-11-17T09:00:00", 1, "🟩"), (13, "Personnel", "x", "2026-11-14T09:00:00", 73, "🟩 à jour")])
     h_vieux = (["derniere_paris"], [("2026-11-13T10:24:16",)])
     h_frais = (["derniere_paris"], [("2026-11-17T08:00:00",)])
     a = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": vieux, "historique_global": h_vieux, **FRAIS_19}), CFG, MAINT)
@@ -487,8 +487,8 @@ def cas_exports_periodiques():
     b = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": frais, "historique_global": h_frais, **FRAIS_19}), CFG, MAINT)
     yield "périodiques : les captures vues en base font disparaître les lignes", b == []
     c = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": (cols, []), "historique_global": (["derniere_paris"], [(None,)]), **FRAIS_19}), CFG, MAINT)
-    yield "périodiques : jamais exporté", len(c) == 3 and all("jamais exporté" in l["consigne"] for l in c)
-    d = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": (cols, [(8, "Marché (enchères)", "x", "2026-11-16T11:00:00", 23, "🟩 à jour"), (13, "Personnel", "x", "2026-11-10T10:00:00", 120, "🟩 à jour")]), "historique_global": h_frais, **FRAIS_19}), CFG, MAINT)
+    yield "périodiques : jamais exporté (Marché, historique, Personnel, Équipe)", len(c) == 4 and all("jamais exporté" in l["consigne"] for l in c)
+    d = ej.exports_periodiques(donnees(**{"gold.bv_exports_state": (cols, [(8, "Marché (enchères)", "x", "2026-11-16T11:00:00", 23, "🟩 à jour"), (1, "Équipe (aperçu, joueurs)", "x", "2026-11-17T09:00:00", 1, "🟩"), (13, "Personnel", "x", "2026-11-10T10:00:00", 120, "🟩 à jour")]), "historique_global": h_frais, **FRAIS_19}), CFG, MAINT)
     yield "périodiques : Marché 23 h et Personnel 120 h ne sont pas périmés", d == []
 
 
@@ -955,7 +955,24 @@ def cas_priorite_export_match():
     yield "export d'un amical joué : sous celui de la ligue", amical["prochain"] == "joue" and amical["priorite"] > juste["priorite"]
 
 
-CAS = [cas_config, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_equipe_encheres():
+    """19/11 : Équipe (effectif, salaires, contrats) toutes les 168 h ; Mes enchères seulement avec une enchère ouverte ou proposée."""
+    cols = ["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"]
+    base = [(8, "Marché (enchères)", "x", "2026-11-17T09:00:00", 1, "🟩"), (13, "Personnel", "x", "2026-11-14T09:00:00", 73, "🟩"),
+            (9, "Mes enchères", "x", "2026-11-13T10:25:53", 96, "🟧")]
+    h = ("historique_global", (["derniere_paris"], [("2026-11-17T08:00:00",)]))
+    d = lambda eq: donnees(**{"gold.bv_exports_state": (cols, base + [(1, "Équipe (aperçu, joueurs)", "x", "2026-11-10T09:00:00", eq, "🟧")]),  # noqa: E731
+                             h[0]: h[1], **FRAIS_19})
+    ecrans = lambda ls: [l["ecran"] for l in ls]  # noqa: E731
+    yield "Équipe : export de 169 h → ligne ; 167 h → rien", "Équipe (aperçu, joueurs)" in ecrans(ej.exports_periodiques(d(169), CFG, MAINT)) \
+        and "Équipe (aperçu, joueurs)" not in ecrans(ej.exports_periodiques(d(167), CFG, MAINT))
+    yield "Mes enchères : aucune enchère ouverte ni proposée → rien", "Mes enchères" not in ecrans(ej.exports_periodiques(d(1), CFG, MAINT))
+    a = ej.exports_periodiques(d(1), CFG, MAINT, enchere_proposee=True)
+    yield "Mes enchères : enchère ouverte ou proposée, export de 96 h → ligne avec l'âge", [l["consigne"] for l in a if l["ecran"] == "Mes enchères"] \
+        == ["exporte la page Mes enchères — export de 96 h"]
+
+
+CAS = [cas_config, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

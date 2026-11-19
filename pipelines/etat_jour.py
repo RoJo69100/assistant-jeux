@@ -394,8 +394,9 @@ def exports(ls) -> list:
     return [l for l in ls if l["action"] and l["prochain"] in ETATS_EXPORT]
 
 
-def exports_periodiques(donnees, cfg, maintenant) -> list:
-    """Exports périodiques de la config (`exports_periodiques`, décision de l'utilisateur du 17/11) : une ligne par écran dont l'export a
+def exports_periodiques(donnees, cfg, maintenant, enchere_proposee=False) -> list:
+    """Paramètre enchere_proposee (19/11) : une de nos enchères est ouverte ou une ligne d'enchère est proposée (condition « si: enchere »).
+    Exports périodiques de la config (`exports_periodiques`, décision de l'utilisateur du 17/11) : une ligne par écran dont l'export a
     plus de `perime_h` heures, avec l'âge de l'export ; dès que la base voit la capture, la ligne disparaît. Âge lu dans
     gold.bv_exports_state (règles core.export_rule) ou, sans écran dédié, dans la dernière page de `page_type` (bronze.raw_pages)."""
     etat = {r["ecran"]: r for r in _rows(donnees, "gold.bv_exports_state")}
@@ -405,6 +406,8 @@ def exports_periodiques(donnees, cfg, maintenant) -> list:
     journee = derniere_journee(donnees, maintenant)
     res = []
     for p in cfg.get("exports_periodiques", []):
+        if p.get("si") == "enchere" and not enchere_proposee:
+            continue  # 19/11 : Mes enchères seulement avec une enchère ouverte ou proposée
         if p["source"] == "exports_state":
             age = (etat.get(p["ecran"]) or {}).get("age_h")
             age = None if age in (None, "") else float(age)
