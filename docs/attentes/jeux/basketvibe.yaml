@@ -176,6 +176,19 @@ etat_jour:
     - { ecran: "Marché (enchères)", libelle: "le Marché (toutes les pages)", source: exports_state, periode: quotidien, perime_h: 24 }
     - { ecran: "Historique global des transferts", libelle: "l'historique global des transferts", source: page_type, page_type: transfers_global-history, periode: quotidien, perime_h: 24 }
     - { ecran: "Personnel", libelle: "la page Personnel", source: exports_state, periode: hebdomadaire, perime_h: 168 }
+    # 19/11 (consigne de l'utilisateur ; études Match Engine des 11/11 et 18/11) : classement des trois ligues après chaque journée
+    # (périmé si la dernière capture de /leagues/<id>/seasons/<s>/standings précède le coup d'envoi du dernier match de ligue joué) ;
+    # les trois ligues = celles des clubs de silver.bv_club_roster (requête du 19/11 : 12 clubs chacune).
+    - { ecran: "Classement Tier 3 - League 13", libelle: "le Classement de ma ligue (Tier 3 - League 13)", source: classement, league_id: 5fdd980c-032b-4ea3-b608-5eadc0c61f44, periode: journee }
+    - { ecran: "Classement Tier 2 - League 4", libelle: "le Classement de la Tier 2 - League 4", source: classement, league_id: 45caebc5-824f-4d86-85e5-e8956e8cac6a, periode: journee }
+    - { ecran: "Classement Premier League", libelle: "le Classement de l'European Premier League", source: classement, league_id: a7250ea5-b8b1-4e1d-87c2-020b4572412e, periode: journee }
+    # 19/11 : onglets Équipes, Joueurs et Blessés de ma ligue chaque semaine (anciens exports hebdo de que_faire_blocs.HEBDO, perdus en v4)
+    - { ecran: "Ligue — Équipes", libelle: "l'onglet Équipes de ma ligue", source: page_type, page_type: standings_teams, periode: hebdomadaire, perime_h: 168 }
+    - { ecran: "Ligue — Joueurs", libelle: "l'onglet Joueurs de ma ligue", source: page_type, page_type: standings_players, periode: hebdomadaire, perime_h: 168 }
+    - { ecran: "Ligue — Blessés", libelle: "l'onglet Blessés de ma ligue", source: page_type, page_type: standings_injuries, periode: hebdomadaire, perime_h: 168 }
+  # 19/11 : matchs de ma ligue joués hier (pas les miens) sans onglets Details (preview « finished ») et Stats par quart (period-box)
+  # en base ; liste dans outputs/basketvibe/<dossier>/ligue-<date des matchs>.md, du plus ancien au plus récent, plafond par jour.
+  matchs_ligue: { plafond_jour: 8, objectif_etude: 150, dossier: exports-a-faire }
   evenements:
     academie:    { quand: "jeudi 09:00", etats: [rapport_attendu, rapport_exporte, teste, decide], jours_decision: 7, cout_test: 25000 }   # tests à 25 000 : skill basketvibe-academie, fiche academie.md
     entrainement: { quand: "dimanche 04:00", etats: [traitement_attendu, page_exportee, saisi] }

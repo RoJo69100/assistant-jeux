@@ -393,21 +393,62 @@ def exports_periodiques(donnees, cfg, maintenant) -> list:
     plus de `perime_h` heures, avec l'âge de l'export ; dès que la base voit la capture, la ligne disparaît. Âge lu dans
     gold.bv_exports_state (règles core.export_rule) ou, sans écran dédié, dans la dernière page de `page_type` (bronze.raw_pages)."""
     etat = {r["ecran"]: r for r in _rows(donnees, "gold.bv_exports_state")}
-    page = next((_dt(r["derniere_paris"]) for r in _rows(donnees, "historique_global")), None)
+    pages = {r["page_type"]: _dt(r["derniere_paris"]) for r in _rows(donnees, "pages_periodiques")}
+    pages["transfers_global-history"] = next((_dt(r["derniere_paris"]) for r in _rows(donnees, "historique_global")), None)
+    classements = {str(r["league_id"]): _dt(r["derniere_paris"]) for r in _rows(donnees, "classements")}
+    journee = derniere_journee(donnees, maintenant)
     res = []
     for p in cfg.get("exports_periodiques", []):
         if p["source"] == "exports_state":
             age = (etat.get(p["ecran"]) or {}).get("age_h")
             age = None if age in (None, "") else float(age)
         else:
-            age = None if page is None else (maintenant - page).total_seconds() / 3600
-        if age is not None and age <= p["perime_h"]:
+            vu = classements.get(str(p["league_id"])) if p["source"] == "classement" else pages.get(p["page_type"])
+            age = None if vu is None else (maintenant - vu).total_seconds() / 3600
+        if p["source"] == "classement":  # 19/11 : à refaire après chaque journée (capture antérieure au dernier coup d'envoi de ligue)
+            if age is not None and (journee is None or vu >= journee):
+                continue
+        elif age is not None and age <= p["perime_h"]:
             continue
         quoi = "jamais exporté" if age is None else f"export de {int(age)} h"
         res.append({"id": f"export-{p['ecran']}", "type": "export_periodique", "evenement": p["ecran"], "ecran": p["ecran"], "etat": None,
                     "prochain": "export_periodique", "rates": [], "echeance": None, "consigne": f"exporte {p['libelle']} — {quoi}", "age_h": None,
                     "priorite": 2, "action": True, "defauts": []})
     return res
+
+
+def derniere_journee(donnees, maintenant):
+    """Coup d'envoi (heure de Paris) du dernier match de ligue déjà commencé, lu dans gold.bv_etat_match ; None sans match."""
+    envois = [_dt(r["coup_envoi_paris"]) for r in _rows(donnees, "etat_match") if r.get("competition_kind") == "ligue"]
+    passes = [e for e in envois if e is not None and e <= maintenant]
+    return max(passes) if passes else None
+
+
+def matchs_ligue(donnees, cfg, maintenant, base=None) -> list:
+    """19/11 (consigne de l'utilisateur) : une ligne 🟩 « exporte les N matchs de la ligue joués hier et pas encore en base » (N plafonné,
+    du plus ancien au plus récent) ; la liste des liens est écrite dans <base>/<dossier>/ligue-<date des matchs>.md. Un match est en base
+    si ses onglets Details (preview « finished ») et Stats par quart (period-box) sont capturés. [] si tout est en base."""
+    reg = cfg.get("matchs_ligue")
+    if not reg:
+        return []
+    hier = maintenant.date() - dt.timedelta(days=1)
+    manque = sorted((r for r in _rows(donnees, "matchs_ligue") if _date(r["match_day"]) == hier and not r["is_mine"] and not r["en_base"]),
+                    key=lambda r: (str(r.get("kickoff") or ""), str(r["fixture_id"])))[:int(reg["plafond_jour"])]
+    if not manque:
+        return []
+    n_base = next((int(r["n"]) for r in _rows(donnees, "matchs_en_base")), 0)
+    rel = f"outputs/basketvibe/{reg['dossier']}/ligue-{hier:%Y-%m-%d}.md"
+    if base is not None:
+        f = Path(base) / reg["dossier"] / f"ligue-{hier:%Y-%m-%d}.md"
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(f"# Matchs de ma ligue du {hier:%d/%m/%Y} à exporter (onglets Details et Stats par quart)\n\n"
+                     + "".join(f"{i}. {r['home_team']} – {r['away_team']} : https://www.basketvibe.com/match/{r['fixture_id']}\n"
+                               for i, r in enumerate(manque, 1)), encoding="utf-8")
+    consigne = (f"exporte les {len(manque)} matchs de la ligue joués hier et pas encore en base (onglets Details et Stats par quart ; "
+                f"liste : {rel}) — sert à l'étude du Match Engine : {n_base} matchs en base, objectif ~{reg['objectif_etude']}")
+    return [{"id": f"export-ligue-{hier}", "type": "export_periodique", "evenement": "Matchs de la ligue", "ecran": "Matchs de la ligue",
+             "etat": None, "prochain": "export_periodique", "rates": [], "echeance": None, "consigne": consigne, "age_h": None,
+             "priorite": 3, "action": True, "defauts": []}]
 
 
 # ---- Phase A (17/11) : offres et ventes du jour, seuils lus dans la section `offres` du yaml -------------------------------
@@ -765,6 +806,35 @@ REQUETES = {
 }
 REQUETES["prix_achat"] = ("select distinct on (player_id) player_id, fee from gold.bv_transfer_history "
                           "where bought_by_me and fee is not null order by player_id, sold_on desc")  # prix payé pour nos joueurs achetés
+# 19/11 : âge des exports périodiques par page_type (onglets de la ligue), du classement par ligue, et matchs de ma ligue des 3 derniers
+# jours avec l'état de leurs onglets Details (preview « finished ») et Stats par quart (period-box).
+_FIX_LIGUE = "source_url ~ '/leagues/[0-9a-f-]{36}/seasons/[0-9a-f-]{36}/fixtures$'"
+_MOI = ("(select payload->'body'->>'club_id' from bronze.raw_pages where game = 'basketvibe' and source = 'api' "
+        "and source_url ~ '/api/v1/auth/me$' order by captured_at desc limit 1)")
+_EN_BASE = ("(select substring(source_url from '/fixtures/([0-9a-f-]{36})/') as fid from bronze.raw_pages "
+            "where game = 'basketvibe' and source = 'api' and source_url ~ '/fixtures/[0-9a-f-]{36}/(preview|period-box)' group by 1 "
+            "having bool_or(source_url ~ '/preview' and payload->'body'->>'kind' = 'finished') and bool_or(source_url ~ '/period-box'))")
+REQUETES["pages_periodiques"] = (
+    "select page_type, max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
+    "where game = 'basketvibe' and page_type in ('standings_teams', 'standings_players', 'standings_injuries') group by page_type")
+REQUETES["classements"] = (
+    "select substring(source_url from '/leagues/([0-9a-f-]{36})/') as league_id, max(captured_at at time zone 'Europe/Paris') as derniere_paris "
+    "from bronze.raw_pages where game = 'basketvibe' and source = 'api' "
+    "and source_url ~ '/leagues/[0-9a-f-]{36}/seasons/[0-9a-f-]{36}/standings$' group by 1")
+REQUETES["matchs_ligue"] = (
+    "select distinct on (f->>'id') f->>'id' as fixture_id, (f->>'match_day')::date as match_day, f->>'kickoff_time' as kickoff, "
+    "jsonb_path_query_first(p.payload->'body'->'team_labels', '$[*] ? (@.team_id == $t).team_name', jsonb_build_object('t', f->>'home_team_id')) #>> '{}' as home_team, "
+    "jsonb_path_query_first(p.payload->'body'->'team_labels', '$[*] ? (@.team_id == $t).team_name', jsonb_build_object('t', f->>'away_team_id')) #>> '{}' as away_team, "
+    f"{_MOI} in (f->>'home_team_id', f->>'away_team_id') as is_mine, b.fid is not null as en_base "
+    f"from bronze.raw_pages p cross join lateral jsonb_array_elements(p.payload->'body'->'fixtures') f left join {_EN_BASE} b on b.fid = f->>'id' "
+    f"where p.game = 'basketvibe' and p.source = 'api' and p.{_FIX_LIGUE} "
+    "and exists (select 1 from jsonb_array_elements(p.payload->'body'->'fixtures') g "
+    f"where {_MOI} in (g->>'home_team_id', g->>'away_team_id')) "
+    "and (f->>'match_day')::date >= (now() at time zone 'Europe/Paris')::date - 3 "
+    "and (f->>'match_day')::date < (now() at time zone 'Europe/Paris')::date order by f->>'id', p.captured_at desc")
+REQUETES["matchs_en_base"] = (
+    f"select count(*) as n from {_EN_BASE} b where b.fid in (select f->>'id' from bronze.raw_pages p "
+    f"cross join lateral jsonb_array_elements(p.payload->'body'->'fixtures') f where p.game = 'basketvibe' and p.source = 'api' and p.{_FIX_LIGUE})")
 REQUETES["rotation"] = requete_rotation(charger_offres()["matchs_rotation"])  # phase A : N lu dans le yaml
 # 18/11 : test de potentiel connu d'un joueur (Low / Decent / High), lu sur sa page profil (season-profile ou transfer-auction de
 # l'API), dernière capture ; aucune vue silver ne le porte. 12 ms mesuré le 18/11.
