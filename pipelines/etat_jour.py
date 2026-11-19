@@ -205,6 +205,12 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
     prio = 3 if not action else 1 if echeance is not None and echeance - maintenant <= dt.timedelta(hours=cfg["urgent_h"]) else 2
     if age is not None and age > cfg["donnee_perimee_h"]:
         prio = min(3, prio + 1)
+    if ev["type"] == "match" and prochain == "joue" and action:  # 19/11 : export de la page d'un match joué
+        if ev["genre"] == "ligue":  # 🟧 au minimum, 🟥 plus de 24 h après le match
+            ce = ev.get("coup_envoi")
+            prio = 1 if ce is not None and maintenant - ce > dt.timedelta(hours=24 + cfg.get("duree_match_h", 2)) else min(prio, 2)
+        elif ev["genre"] == "amical":  # sous l'export d'un match de ligue
+            prio = 3
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
@@ -424,7 +430,31 @@ def derniere_journee(donnees, maintenant):
     return max(passes) if passes else None
 
 
-def matchs_ligue(donnees, cfg, maintenant, base=None) -> list:
+ETUDES = RACINE / "docs" / "etudes"
+
+
+def etude_b1(dossier=None):
+    """19/11 : (date, n 5×48, n rotation) de la ligne « B1 » (colonne « 29 / 95 ») de la dernière étude Match Engine de docs/etudes/
+    qui l'a ; None si aucune."""
+    import re
+    for f in sorted(Path(dossier or ETUDES).glob("20*.md"), reverse=True):
+        for ligne in f.read_text(encoding="utf-8").splitlines():
+            if ligne.startswith("| B1"):
+                m = re.search(r"\|\s*(\d+)\s*/\s*(\d+)\s*\|", ligne)
+                if m:
+                    return f.name[:10], int(m.group(1)), int(m.group(2))
+    return None
+
+
+def texte_b1(b1, objectif) -> str:
+    """« B1 (étude du JJ/MM) : 5×48 : 29 sur 150 ; rotation : 95 sur 150 » ; effectifs illisibles sinon."""
+    if b1 is None:
+        return f"effectifs B1 de l'étude illisibles (docs/etudes/), objectif ~{objectif} par sous-ensemble"
+    d, a, r = b1
+    return f"B1 (étude du {d[8:10]}/{d[5:7]}) : 5×48 : {a} sur {objectif} ; rotation : {r} sur {objectif}"
+
+
+def matchs_ligue(donnees, cfg, maintenant, base=None, etudes=None) -> list:
     """19/11 (consigne de l'utilisateur) : une ligne 🟩 « exporte les N matchs de la ligue joués hier et pas encore en base » (N plafonné,
     du plus ancien au plus récent) ; la liste des liens est écrite dans <base>/<dossier>/ligue-<date des matchs>.md. Un match est en base
     si ses onglets Details (preview « finished ») et Stats par quart (period-box) sont capturés. [] si tout est en base."""
@@ -436,16 +466,16 @@ def matchs_ligue(donnees, cfg, maintenant, base=None) -> list:
                     key=lambda r: (str(r.get("kickoff") or ""), str(r["fixture_id"])))[:int(reg["plafond_jour"])]
     if not manque:
         return []
-    n_base = next((int(r["n"]) for r in _rows(donnees, "matchs_en_base")), 0)
-    rel = f"outputs/basketvibe/{reg['dossier']}/ligue-{hier:%Y-%m-%d}.md"
+    jour = maintenant.date()  # 19/11 : fichier nommé par le jour du passage
+    rel = f"outputs/basketvibe/{reg['dossier']}/ligue-{jour:%Y-%m-%d}.md"
     if base is not None:
-        f = Path(base) / reg["dossier"] / f"ligue-{hier:%Y-%m-%d}.md"
+        f = Path(base) / reg["dossier"] / f"ligue-{jour:%Y-%m-%d}.md"
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(f"# Matchs de ma ligue du {hier:%d/%m/%Y} à exporter (onglets Details et Stats par quart)\n\n"
                      + "".join(f"{i}. {r['home_team']} – {r['away_team']} : https://www.basketvibe.com/match/{r['fixture_id']}\n"
                                for i, r in enumerate(manque, 1)), encoding="utf-8")
     consigne = (f"exporte les {len(manque)} matchs de la ligue joués hier et pas encore en base (onglets Details et Stats par quart ; "
-                f"liste : {rel}) — sert à l'étude du Match Engine : {n_base} matchs en base, objectif ~{reg['objectif_etude']}")
+                f"liste : {rel}) — sert à l'étude du Match Engine : {texte_b1(etude_b1(etudes), reg['objectif_etude'])}")
     return [{"id": f"export-ligue-{hier}", "type": "export_periodique", "evenement": "Matchs de la ligue", "ecran": "Matchs de la ligue",
              "etat": None, "prochain": "export_periodique", "rates": [], "echeance": None, "consigne": consigne, "age_h": None,
              "priorite": 3, "action": True, "defauts": []}]
@@ -756,9 +786,9 @@ def texte_transfert(x, o) -> str:
 def texte_test_marche(x, o) -> str:
     """18/11 : « tester le potentiel (25 000) » d'un 16-18 ans du Marché sans test connu ; seul High justifie une enchère."""
     fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
-    return (f"tester le potentiel ({_m(x['cout'])}) : {x['nom']} ({x['poste']}, {x['age']} ans, {x['taille']} cm, note {_virg(x['note'])}), "
+    return (f"pas d'enchère avant le test ; Police : ne pas acheter — tester le potentiel ({_m(x['cout'])}) : {x['nom']} ({x['poste']}, {x['age']} ans, {x['taille']} cm, note {_virg(x['note'])}), "
             f"fin {fin} ; taille dans la plage du poste (règle de signature d'académie) ; seul « High » justifie une enchère "
-            f"(au plus {o['tests_par_jour']} tests et {_m(float(o['tests_budget']))} par jour) — proposition seulement (règle 2)")
+            f"(au plus {o['tests_par_jour']} test{"s" if int(o["tests_par_jour"]) > 1 else ""} et {_m(float(o['tests_budget']))} par jour) — proposition seulement (règle 2)")
 
 
 def texte_aucune_vente(bilan) -> str:

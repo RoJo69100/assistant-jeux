@@ -461,11 +461,12 @@ def cas_exports_ligue_19():
     d = donnees(matchs_ligue=(cm, rows), matchs_en_base=(["n"], [(273,)]))
     with __import__("tempfile").TemporaryDirectory() as tmp:
         m = ej.matchs_ligue(d, CFG, MAINT, tmp)
-        f = Path(tmp) / "exports-a-faire" / "ligue-2026-11-16.md"
+        f = Path(tmp) / "exports-a-faire" / "ligue-2026-11-17.md"
         liste = f.read_text(encoding="utf-8") if f.is_file() else ""
     yield "matchs de la ligue : 8 au plus, hors les miens, ceux en base et ceux d'avant-hier", len(m) == 1 and m[0]["consigne"].startswith("exporte les 8 matchs de la ligue joués hier")
     yield "matchs de la ligue : catégorie Export, 🟩 SUIVI, pourquoi chiffré", m[0]["prochain"] == "export_periodique" and m[0]["priorite"] == 3 \
-        and "sert à l'étude du Match Engine : 273 matchs en base, objectif ~150" in m[0]["consigne"]
+        and "sert à l'étude du Match Engine : B1 (étude du 18/11) : 5×48 : 29 sur 150 ; rotation : 95 sur 150" in m[0]["consigne"] \
+        and "273" not in m[0]["consigne"] and "exports-a-faire/ligue-2026-11-17.md" in m[0]["consigne"]
     yield "matchs de la ligue : liste des liens écrite, du plus ancien au plus récent", liste.count("https://www.basketvibe.com/match/") == 8 \
         and liste.index("/match/m01") < liste.index("/match/m08") and "/match/m09" not in liste and "/match/moi" not in liste
     yield "matchs de la ligue : tout en base = aucune ligne", ej.matchs_ligue(donnees(matchs_ligue=(cm, rows[-2:-1])), CFG, MAINT) == []
@@ -739,12 +740,12 @@ def cas_regle_jeunes():
     yield "règle 18/11 cas 3 : 17 ans testé High → enchère « jeune » ; testé Low → ni enchère ni test", types.get("Jeune High") == "jeune" \
         and "Jeune Low" not in types and "Jeune Low" not in [t["nom"] for t in r["tests"]] \
         and "Jeune High" not in [t["nom"] for t in r["tests"]]
-    yield "règle 18/11 cas 4 : sans test, 2 tests au plus (50 000), meilleure note d'abord, taille hors plage et prix hors capacité exclus", \
-        [t["nom"] for t in r["tests"]] == ["Jeune A", "Jeune B"] and sum(t["cout"] for t in r["tests"]) == 50000
+    yield "règle 19/11 cas 4 : sans test, 1 test au plus (25 000), meilleure note d'abord, taille hors plage et prix hors capacité exclus", \
+        [t["nom"] for t in r["tests"]] == ["Jeune A"] and sum(t["cout"] for t in r["tests"]) == 25000 and O["tests_par_jour"] == 1 and O["tests_budget"] == 25000
     l = ej.lignes_transferts(d, 300000, None, o=O)
     t = [x for x in l if x["id"].startswith("tester-")]
-    yield "règle 18/11 : ligne « tester le potentiel (25 000) », seul High justifie une enchère, règle 2", len(t) == 2 \
-        and t[0]["consigne"].startswith("tester le potentiel (25 000) : Jeune A") and "seul « High » justifie une enchère" in t[0]["consigne"] \
+    yield "règle 19/11 : ligne « pas d'enchère avant le test ; Police : ne pas acheter » en tête, seul High justifie une enchère, règle 2", len(t) == 1 \
+        and t[0]["consigne"].startswith("pas d'enchère avant le test ; Police : ne pas acheter — tester le potentiel (25 000) : Jeune A") and "seul « High » justifie une enchère" in t[0]["consigne"] \
         and "proposition seulement (règle 2)" in t[0]["consigne"]
     yield "règle 18/11 : test de potentiel lu sur la page profil (requête déclarée)", "potential_bucket" in ej.REQUETES["tests_marche"]
 
@@ -940,7 +941,21 @@ def cas_plan_19_11():
     yield "règle 14 : jeune de 17 ans non titulaire sans test → aucune vente ; test Low → vente possible", jeune([]) == [] and jeune([["jeune", "Low"]]) == ["Tim Jeune"]
 
 
-CAS = [cas_config, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_priorite_export_match():
+    """19/11 : export de la page d'un de nos matchs de ligue joués = 🟧 au minimum, 🟥 plus de 24 h après le match, au-dessus d'un amical."""
+    pret = match(apercu_at=T_APERCU, fiche=FICHE, ecran=ECRAN)
+    p = lambda ev, m: ej.etat_evenement(ev, CFG, m)  # noqa: E731
+    juste = p(pret, dt.datetime(2026, 11, 18, 22, 30))
+    tard = p(pret, dt.datetime(2026, 11, 19, 23, 0))
+    perime = p(dict(pret, maj_at=dt.datetime(2026, 11, 16, 9, 0)), dt.datetime(2026, 11, 18, 22, 30))
+    amical = p(match(genre="amical", fiche=FICHE, ecran=ECRAN), dt.datetime(2026, 11, 18, 22, 30))
+    yield "export de match de ligue joué : 🟧 au minimum, même avec des données périmées", juste["prochain"] == "joue" and juste["priorite"] == 2 \
+        and perime["priorite"] == 2
+    yield "export de match de ligue joué : 🟥 plus de 24 h après le match", tard["prochain"] == "joue" and tard["priorite"] == 1
+    yield "export d'un amical joué : sous celui de la ligue", amical["prochain"] == "joue" and amical["priorite"] > juste["priorite"]
+
+
+CAS = [cas_config, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

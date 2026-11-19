@@ -2013,3 +2013,4 @@ HEAD dans origin/main : oui
 | 2026-11-18 16:39 | aujourd'hui | 47.1 | 59 |
 | 2026-11-18 17:02 | aujourd'hui | 33.4 | 60 |
 | 2026-11-18 17:03 | aujourd'hui | 33.0 | 60 |
+| 2026-11-19 15:41 | aujourd'hui | 33.6 | 66 |

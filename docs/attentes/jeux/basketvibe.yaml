@@ -109,8 +109,8 @@ offres:
   # de evenements.academie) au plus tests_par_jour fois et tests_budget au total par jour.
   jeune_age_min: 16
   jeune_age_max: 18
-  tests_par_jour: 2
-  tests_budget: 50000
+  tests_par_jour: 1                   # 19/11 : 1 test par jour, 25 000 au total
+  tests_budget: 25000
 
 # Phase A.5 (17/11) : règle de personnel DÉCIDÉE par Claude le 17/11, contestable par l'utilisateur ; le plan n'affiche une ligne
 # Personnel que si gold.bv_personnel_status s'en écarte (etat_jour.texte_personnel).
