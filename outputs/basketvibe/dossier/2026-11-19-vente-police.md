@@ -40,5 +40,8 @@ Décision : vendre Baron, prix minimum 290 000 (= départ), annonce d'environ 2 
 | Skill vendre | 1 | 1 | taxe, délai, minimum | — |
 | Vues gold | 6 | 6 | roster_bilan, sell_candidates, player_outlook, price_ref_ps, resale_stats, market_listing | — |
 
+## Correction du prix — 11:40 (session principale)
+Ventes réelles (`gold.bv_transfer_history`, hors joueurs libres) : PG 17 ans, PS 42–48, 21/10–13/11 : n=7, p25 1 449 926, médiane 1 575 000, p75 2 670 302. PG 16–18 ans, même PS : 12 ventes, dont 5 entre 910 000 et 1 562 794 depuis le 10/11. La case `bv_price_ref_ps` (PS 40, ≤ 21 ans, médiane 300 000) mélange les postes : prix minimum corrigé de 290 000 à 950 000. Achat de Baron absent de l'historique (`bought_by_me`) : délai de 7 jours à vérifier en jeu.
+
 ## Récidive
 Brouillon : remplaçant nommé hors poste (Durand SF pour un PG) et minutes sur 4 matchs au lieu de la saison. Ligne pour `docs/regles/actives.md` : « Vente : le remplaçant interne se lit au même poste (`gold.roster_bilan`, même `position`) ; minutes sur la saison (`gold.bv_player_outlook.games`). »
