@@ -27,3 +27,4 @@ desktop.ini
 # Exports Discord/chat : non versionnés (tiers) ; copie hors dépôt, import en base pour les jeux suivis
 data/discord/
 data/chat/
+outputs/*/dossier/*-discord*.txt
