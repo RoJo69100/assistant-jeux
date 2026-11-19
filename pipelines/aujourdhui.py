@@ -172,7 +172,7 @@ REQUETES = {
                     "and c.ends_paris <= (now() at time zone 'Europe/Paris') + interval '24 hours' order by c.auction_id, c.ends_paris",
     # 17/11 : toutes les annonces encore ouvertes (dédupliquées par auction_id), pour les 5 offres les moins chères par rapport à leur case
     "annonces_actives": "select distinct on (c.auction_id) c.auction_id, c.name, c.position, c.age, c.ps, "
-                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, c.est_weekly_salary, c.height_cm, "
+                        "greatest(c.current_price, c.starting_price) as price_now, c.ends_paris, c.est_weekly_salary, c.height_cm, c.best_slot, c.best_fit, "
                         "(select l.player_id from core.market_listing l where l.game = 'basketvibe' and l.listing_id = c.auction_id::text "
                         "limit 1) as player_id from gold.bv_market_candidates c "
                         "where c.ends_paris > now() at time zone 'Europe/Paris' order by c.auction_id, c.ends_paris",
@@ -421,7 +421,7 @@ def lire_sources(donnees, jour, base=BASE):
     return {"tactique": src.lire_tactique(base, jour), "restes": src.lire_restes(base, jour),
             "cibles": src.lire_cibles(lignes_de(donnees, "decisions_achat"), lignes_de(donnees, "encheres_ouvertes"), base, jour),
             "conseils": src.lire_conseils(base, jour), "saisies": src.lire_saisies(base, jour),
-            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour), "police": src.lire_police(base, jour),
+            "cles": src.lire_cles(base, jour), "analyste": src.lire_analyste(base, jour), "police": src.lire_police(base, jour), "refus_police": src.lire_refus_police(base, jour),
             "experiences": src.lire_experiences(base, jour), "refs_decisions": lire_refs_decisions(base, jour),
             "fiche_entrainement": src.lire_fiche_entrainement(base, jour),
             "revue_hebdo": (Path(base) / f"revue-hebdo-{jour.isoformat()}.md").exists()}
@@ -1438,7 +1438,7 @@ def plan(donnees, erreurs, jour, maintenant, fait="", sources=None):
                    "31 ans ou plus", "gold.bv_roster_now")
         else:
             garder.append("effectif, vendre : rien de vendable (aucun joueur de 31 ans ou plus, âge du déclin)")
-        vendre_remplacable(donnees, ajoute, (S or {}).get("police", ""))
+        vendre_remplacable(donnees, ajoute, (S or {}).get("police", "") + "\n" + (S or {}).get("refus_police", ""))
         garder.append("effectif, vendre pour profit : règle non écrite — à valider (seuil de déclenchement non validé)")
         if "objectifs" not in donnees:  # A3 : sans gold.match_objective (anciens jeux de données), l'ancienne demi-ligne
             garder.append("effectif, jeunes : règle non écrite — à valider (le script ne sait pas dire si un match de ligue est gagné d'avance)")

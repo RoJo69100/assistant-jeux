@@ -519,7 +519,23 @@ def enchere_max(case, capacite, salaire, revente_marge=None):
     return min(haut, float(capacite) - float(salaire))
 
 
-def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
+def cases_poste(donnees) -> dict:
+    """19/11 (règle de la police du 17/11) : case de prix = (poste, palier de note de 5, tranche d'âge), ventes à au moins une enchère
+    (requête prix_cases_poste) ; {(poste, palier, tranche): ligne}."""
+    return {(r["position"], int(float(r["ps_band"])), r["age_band"]): r for r in _rows(donnees, "prix_cases_poste")}
+
+
+def case_du_poste(cases, poste, ps, age):
+    import que_faire_blocs as qfb
+    return cases.get((poste, qfb.palier_note(ps), qfb.tranche_age(age)))
+
+
+def fits_au_poste(donnees) -> dict:
+    """{(player_id, poste): (nom, ajustement, poste du joueur)} de gold.bv_slot_fit (requête slot_fit)."""
+    return {(str(r["player_id"]), r["slot"]): (r["name"], float(r["fit"]), r.get("position")) for r in _rows(donnees, "slot_fit") if _f(r.get("fit")) is not None}
+
+
+def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=(), refus="") -> dict:
     """{"inconnu": texte ou None, "offres": [...], "tests": [...]} ; règle de l'utilisateur du 18/11 (titulaires de tout âge,
     remplaçants de 16 à 18 ans à fort potentiel) :
     - « amélioration » : note > celle de notre titulaire au poste (le joueur du poste qui a le plus de minutes sur les 4 derniers
@@ -541,7 +557,9 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
         return {"inconnu": "inconnu : rotation illisible (minutes de ligue), offres non classées", "offres": [], "tests": []}
     exclus = {str(x).lower() for x in exclus}
     age_export = auj.age_export_h(donnees, MARCHE, maintenant)
-    cases = qfb._cases(donnees)
+    cases = cases_poste(donnees)
+    fits = fits_au_poste(donnees)
+    gain_min = float(o.get("gain_ajustement_min", 1.0))
     titulaires = {}  # 18/11 : titulaire du poste = le plus de minutes de ligue (min_moy) parmi ceux qui ont joué
     for r in _rows(donnees, "rotation"):
         if int(float(r["matchs_joues"] or 0)) > 0 and r.get("ps") is not None:
@@ -554,12 +572,20 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
     vues, res, a_tester = set(), [], []
     for r in _rows(donnees, "annonces_actives"):
         if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))) \
-                or str(r["name"]).lower() in exclus:
-            continue
+                or str(r["name"]).lower() in exclus or f"ne pas acheter {str(r['name']).lower()}" in str(refus).lower():
+            continue  # 19/11 : « ne pas acheter » d'une police des 14 derniers jours
         vues.add(r["auction_id"])
         age, prix, sal = int(float(r["age"])), float(r["price_now"]), _f(r.get("est_weekly_salary"))
-        f = titulaires.get(r["position"])
-        titulaire = f is not None and float(r["ps"]) > float(f["ps"])
+        # 19/11 : amélioration = ajustement au poste (gold.bv_slot_fit), jamais la note brute ; gain ≥ gain_ajustement_min sur notre titulaire
+        poste = r.get("best_slot") or r["position"]
+        f = titulaires.get(poste)
+        fit_t = fits.get((str(f["player_id"]), poste)) if f is not None else None
+        fit_c = _f(r.get("best_fit"))
+        gain_fit = None if fit_t is None or fit_c is None else fit_c - fit_t[1]
+        titulaire = gain_fit is not None and gain_fit >= gain_min
+        if "slot_fit" not in donnees:  # appelant sans la requête slot_fit (anciens rejeux) : note brute, comme avant le 19/11
+            f = titulaires.get(r["position"])
+            titulaire, gain_fit = f is not None and float(r["ps"]) > float(f["ps"]), None
         pot = testes.get(str(r.get("player_id") or ""))
         if not titulaire and not jeune(age):
             continue  # remplaçant adulte : jamais d'enchère (règle du 18/11)
@@ -572,18 +598,21 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=()) -> dict:
             continue
         if not titulaire and pot != "high":
             continue  # test connu Low / Decent : ni enchère ni nouveau test
-        case = cases.get((qfb.palier_note(r["ps"]), auj.tranche_age(r["age"])))
+        case = case_du_poste(cases, r["position"], r["ps"], r["age"])
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
-            continue
+            continue  # 19/11 : moins de case_min_ventes ventes au poste = prix inconnu, aucune ligne
         med = float(case["median"])
         base = {"nom": r["name"], "poste": r["position"], "age": age, "note": float(r["ps"]), "prix": prix, "mediane": med,
                 "p25": float(case["p25"]), "p75": float(case["p75"]), "n_case": int(float(case["n"])), "fin": _dt(r.get("ends_paris")),
+                "mini": _f(case.get("mini")), "maxi": _f(case.get("maxi")),
                 "gain": med - prix, "capacite": float(capacite), "salaire": sal, "age_export_h": age_export}
         x = enchere_max(case, capacite, sal)
         if x is None or prix > x:  # prix relu au-dessus de l'enchère max : ligne supprimée
             continue
         if titulaire:
-            res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x))
+            res.append(dict(base, type="amélioration", faible=f["name"], faible_note=float(f["ps"]), max=x, slot=poste, fit=fit_c,
+                            faible_fit=fit_t and fit_t[1], gain_fit=gain_fit,
+                            cout_point=x / gain_fit if gain_fit else None))
         else:
             res.append(dict(base, type="jeune", potentiel=pot, max=x))
     tests, total = [], 0.0
@@ -608,15 +637,29 @@ def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
     if tolerance is None:
         bilan["tolérance du bloc 4 non lue"] = 0
         return []
-    cases = qfb._cases(donnees)
+    cases = cases_poste(donnees)
+    fits = fits_au_poste(donnees)
     rot = {str(r["player_id"]): r for r in _rows(donnees, "rotation")}
-    rempl = {str(r["player_id"]): r for r in _rows(donnees, "gold.bv_sell_replacement")}
+    titulaires = {}  # même règle que les offres : le plus de minutes de ligue au poste
+    for r in rot.values():
+        if int(float(r.get("matchs_joues") or 0)) > 0:
+            t = titulaires.get(r["position"])
+            if t is None or float(r["min_moy"] or 0) > float(t["min_moy"] or 0):
+                titulaires[r["position"]] = r
+    testes = {str(r["player_id"]): str(r["potentiel"]).strip().lower() for r in _rows(donnees, "tests_marche")
+              if r.get("player_id") and r.get("potentiel")}
     joueurs = _rows(donnees, "vendre")
     achats = {str(r["player_id"]): float(r["fee"]) for r in _rows(donnees, "prix_achat") if _f(r.get("fee")) and float(r["fee"]) > 0}
     res = []
     bilan["_n"] = len(joueurs)
     for j in joueurs:
-        r, m = rempl.get(str(j["player_id"]), {}), rot.get(str(j["player_id"]))
+        pid, poste, m = str(j["player_id"]), j["position"], rot.get(str(j["player_id"]))
+        # 19/11 : remplaçant pris au même poste, par l'ajustement au poste (gold.bv_slot_fit), jamais la note brute
+        autres = [(nf[1], nf[0]) for (p, s), nf in fits.items() if s == poste and p != pid and nf[2] == poste]
+        moi = fits.get((pid, poste))
+        r = {} if moi is None or not autres else {"replacement_name": max(autres)[1], "gap": moi[1] - max(autres)[0]}
+        if "slot_fit" not in donnees:  # appelant sans la requête slot_fit (anciens rejeux) : gold.bv_sell_replacement
+            r = next((x for x in _rows(donnees, "gold.bv_sell_replacement") if str(x["player_id"]) == pid), {})
         if auj.vrai(j.get("on_transfer_list")):
             compte("déjà en vente")
             continue
@@ -632,9 +675,14 @@ def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
         if f"ne pas vendre {str(j['name']).lower()}" in str(police).lower():
             compte("« ne pas vendre » de la police")
             continue
-        case = cases.get((qfb.palier_note(j["ps"]), auj.tranche_age(j["age"])))
+        age = int(float(j["age"]))  # règle 14 (19/11) : 16-18 ans non titulaire vendu seulement si test connu Low ou Decent
+        if int(o["jeune_age_min"]) <= age <= int(o["jeune_age_max"]) and (titulaires.get(poste) or {}).get("player_id") != j["player_id"] \
+                and testes.get(pid) not in ("low", "decent"):
+            compte("jeune de 16 à 18 ans sans test Low ou Decent")
+            continue
+        case = case_du_poste(cases, poste, j["ps"], j["age"])
         if case is None or int(float(case["n"])) < int(o["case_min_ventes"]):
-            compte("case de prix trop petite")
+            compte(f"prix inconnu (moins de {o['case_min_ventes']} ventes à au moins une enchère au poste)")
             continue
         prix = float(case["median"])  # prix attendu = médiane de la case
         paye = achats.get(str(j["player_id"]))
@@ -644,6 +692,7 @@ def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
             continue
         res.append({"type": "vente", "nom": j["name"], "poste": j["position"], "age": int(float(j["age"])), "note": float(j["ps"]),
                     "prix": prix, "mediane": prix, "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
+                    "mini": _f(case.get("mini")), "maxi": _f(case.get("maxi")),
                     "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix,
                     "prix_achat": paye, "profit": profit})
     places = max(0, len(joueurs) - int(o["minimum_effectif"]))
@@ -656,21 +705,35 @@ def _m(x) -> str:
     return f"{x:,.0f}".replace(",", " ")
 
 
+def _virg1(v) -> str:
+    return f"{float(v):.1f}".replace(".", ",")
+
+
+def _fourchette(x) -> str:
+    """19/11 : « , fourchette min à max » des ventes comparables du poste ; vide si inconnue."""
+    return "" if x.get("mini") is None or x.get("maxi") is None else f", fourchette {_m(x['mini'])} à {_m(x['maxi'])}"
+
+
 def texte_transfert(x, o) -> str:
     """Ligne d'une offre ou d'une vente : nom, poste, âge, note, prix, médiane de la case, type, fin, seuils du yaml, règle 2, police."""
     from police import SEUIL_GROS_MONTANT
     qui = f"{x['nom']} ({x['poste']}, {x['age']} ans, note {_virg(x['note'])})"
     if x["type"] == "vente":
-        t = (f"vente : {qui}, prix attendu {_m(x['prix'])}, médiane de la case {_m(x['mediane'])} ({x['n_case']} ventes ≥ {o['case_min_ventes']}) ; "
+        t = (f"vente : {qui}, prix attendu {_m(x['prix'])}, médiane du poste {_m(x['mediane'])}{_fourchette(x)} "
+             f"({x['n_case']} ventes à au moins une enchère ≥ {o['case_min_ventes']}) ; "
              f"{_virg(x['min_moy'])} min en moyenne sur {o['matchs_rotation']} matchs de ligue (≤ {_virg(o['minutes_hors_rotation'])}), "
              f"écart avec {x['remplacant']} {_virg(x['ecart'])} (tolérance {_virg(x['tolerance'])}) ; "
              + ("prix d'achat inconnu, profit non calculé" if x.get("prix_achat") is None else
                 f"profit {x['profit'] * 100:.0f} % sur le prix payé {_m(x['prix_achat'])} (≥ {o['vente_marge_profit'] * 100:.0f} %)")
              + " ; fin : annonce à créer")
     else:
-        if x["type"] == "amélioration":
-            seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre titulaire au poste, le plus de minutes sur {o['matchs_rotation']} matchs "
-                     f"de ligue) ; max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
+        if x["type"] == "amélioration" and x.get("gain_fit") is None:
+            seuil = (f"note > {_virg(x["faible_note"])} de {x["faible"]} (notre titulaire au poste, le plus de minutes sur {o["matchs_rotation"]} matchs de ligue ; ajustement au poste non lu) ; "
+                     f"max = min(p75 {_m(x["p75"])}, capacité {_m(x["capacite"])} − salaire {_m(x["salaire"])})")
+        elif x["type"] == "amélioration":
+            seuil = (f"ajustement {x['slot']} {_virg(x['fit'])} contre {_virg(x['faible_fit'])} pour {x['faible']} (notre titulaire au poste, le plus "
+                     f"de minutes sur {o['matchs_rotation']} matchs de ligue), gain {_virg1(x['gain_fit'])} (≥ {_virg1(o.get('gain_ajustement_min', 1.0))}), "
+                     f"coût par point gagné {_m(x['cout_point'])} (enchère max / gain) ; max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         elif x["type"] == "jeune":
             seuil = (f"remplaçant {o['jeune_age_min']}-{o['jeune_age_max']} ans, test de potentiel connu High ; "
                      f"max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
@@ -683,7 +746,7 @@ def texte_transfert(x, o) -> str:
         age = f"export du Marché de {age:.0f} h" if age is not None else "âge de l'export du Marché illisible"
         prix = (f"prix inconnu (aucune enchère, {age})" if x["prix"] <= auj.PRIX_NON_SIGNIFICATIF  # 18/11 : « à 0 » = inconnu
                 else f"à {_m(x['prix'])} ({age})")
-        t = f"{x['type']} : {qui}, enchère max {_m(x['max'])}, {prix} ; médiane de la case {_m(x['mediane'])} ; {seuil} ; fin {fin}"
+        t = f"{x['type']} : {qui}, enchère max {_m(x['max'])}, {prix} ; médiane du poste {_m(x['mediane'])}{_fourchette(x)} ; {seuil} ; fin {fin}"
     t += " — proposition seulement (règle 2)"
     if max(x["prix"], x.get("max") or 0) > SEUIL_GROS_MONTANT["basketvibe"]:
         t += " — police d'abord : dossier.py puis agent police"
@@ -706,13 +769,14 @@ def texte_aucune_vente(bilan) -> str:
     return f"Ventes : aucune à proposer ({n} joueur{'s' if n > 1 else ''} évalué{'s' if n > 1 else ''}, {r})"
 
 
-def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=()) -> list:
+def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=(), refus="") -> list:
     """Lignes « Transferts » de l'état par événement : `max_offres` offres et `max_ventes` ventes au plus, triées par gain attendu ;
-    Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes."""
+    Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes. `refus` : verdicts « ne pas vendre /
+    ne pas acheter » des polices des 14 derniers jours (aujourdhui_sources.lire_refus_police)."""
     o = o or charger_offres()
-    of = offres_du_jour(donnees, o, capacite, maintenant, exclus)
+    of = offres_du_jour(donnees, o, capacite, maintenant, exclus, refus)
     bilan = {}
-    ventes = ventes_du_jour(donnees, o, tolerance, police, bilan)[:int(o["max_ventes"])]
+    ventes = ventes_du_jour(donnees, o, tolerance, f"{police}\n{refus}", bilan)[:int(o["max_ventes"])]
     choix = of["offres"][:int(o["max_offres"])] + ventes
     ligne = lambda i, prochain, consigne: {"id": i, "type": "transfert", "evenement": "transferts", "etat": None, "prochain": prochain,
                                            "rates": [], "echeance": None, "consigne": consigne, "age_h": None, "priorite": 2,
@@ -814,6 +878,15 @@ _MOI = ("(select payload->'body'->>'club_id' from bronze.raw_pages where game = 
 _EN_BASE = ("(select substring(source_url from '/fixtures/([0-9a-f-]{36})/') as fid from bronze.raw_pages "
             "where game = 'basketvibe' and source = 'api' and source_url ~ '/fixtures/[0-9a-f-]{36}/(preview|period-box)' group by 1 "
             "having bool_or(source_url ~ '/preview' and payload->'body'->>'kind' = 'finished') and bool_or(source_url ~ '/period-box'))")
+# 19/11 (règle de la police du 17/11) : case de prix par poste, ventes à au moins une enchère (prix > prix de départ ou bids > 0 vu
+# au Marché), avec la fourchette min–max ; ajustement de chaque joueur à chaque poste.
+REQUETES["prix_cases_poste"] = (
+    "select t.position, t.ps_band, t.age_band, count(*) as n, percentile_cont(0.25) within group (order by t.fee) as p25, "
+    "percentile_cont(0.5) within group (order by t.fee) as median, percentile_cont(0.75) within group (order by t.fee) as p75, "
+    "min(t.fee) as mini, max(t.fee) as maxi from gold.bv_transfer_history t where t.fee > 0 and t.position is not null "
+    "and t.ps_band is not null and (t.fee > t.starting_price or exists (select 1 from core.market_listing l where l.game = 'basketvibe' "
+    "and l.listing_id = t.auction_id::text and l.bids > 0)) group by 1, 2, 3")
+REQUETES["slot_fit"] = "select player_id, name, position, slot, fit from gold.bv_slot_fit"
 REQUETES["pages_periodiques"] = (
     "select page_type, max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
     "where game = 'basketvibe' and page_type in ('standings_teams', 'standings_players', 'standings_injuries') group by page_type")

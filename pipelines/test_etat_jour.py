@@ -639,6 +639,19 @@ def marche(age_h=2, annonces=(), cases=None, rotation=None, **plus):
     return d
 
 
+_rows_orig = ej._rows
+
+
+def _rows_compat(donnees, nom):
+    """Anciens cas (avant le 19/11) : cases sans poste recopiées pour chaque poste (fourchette = p25 à p75)."""
+    if nom == "prix_cases_poste" and nom not in donnees:
+        return [dict(r, position=p, mini=r["p25"], maxi=r["p75"]) for r in _rows_orig(donnees, "prix_cases") for p in ("PG", "SG", "SF", "PF", "C")]
+    return _rows_orig(donnees, nom)
+
+
+ej._rows = _rows_compat
+
+
 def cas_rotation_illisible():
     """Verdict du 18/11 : Szewczyk (SG 56,4) classé « revente » alors que Bonnet (SG 51,9) joue : la requête de rotation était en
     timeout, donc aucun « plus faible » connu et toute annonce tombait en revente."""
@@ -814,7 +827,7 @@ def cas_affichage_transferts():
     yield "affichage : catégorie Transferts", all(qfb.AFFICHAGE[qfb.CAT_ETAT[l["prochain"]]] == "Transferts" for l in ls)
     t = ls[1]["consigne"]
     yield "affichage : la ligne porte nom, poste, âge, note, prix, médiane, type, fin, règle 2", all(x in t for x in (
-        "amélioration : Tom Gain (SF, 23 ans, note 52)", "à 55 000", "médiane de la case 60 000", "fin 18/11 09:00", "proposition seulement (règle 2)"))
+        "amélioration : Tom Gain (SF, 23 ans, note 52)", "à 55 000", "médiane du poste 60 000", "fin 18/11 09:00", "proposition seulement (règle 2)"))
     yield "affichage : les seuils du yaml sont dans la ligne", "notre titulaire au poste" in t and "sur 4 matchs de ligue" in t
     yield "affichage : petite somme sans police", "police d'abord" not in t
     gros = dict(d, annonces_actives=(ANN, [["a9", "Gros Prix", "PG", 24, 51, 260000, "2026-11-18T10:00:00", 10000]]),
@@ -877,7 +890,57 @@ def cas_personnel():
     yield "personnel : conforme ou sans règle → aucune ligne", ej.texte_personnel(p, [{"role": "marketing", "hired": 0, "slots": 2}]) == "" and ej.texte_personnel({}) == ""
 
 
-CAS = [cas_config, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def _plan_19():
+    """Effectif du plan du 19/11 : Baron (PG, 24 ans, hors rotation), Boyer (PG) et Durand (SF), Bonnet titulaire SG, 7 joueurs en rotation."""
+    rot = [["baron", "Nolan Baron", "PG", 45, 2, 1], ["boyer", "Naël Boyer", "PG", 47, 25, 4], ["durand", "Léo Durand", "SF", 50, 30, 4],
+           ["bonnet", "Thibault Bonnet", "SG", 50, 30, 4], ["jeune", "Tim Jeune", "PG", 44, 1, 1]] \
+        + [[f"x{i}", f"Autre {i}", "C", 45, 30, 4] for i in range(6)]
+    ven = [[r[0], r[1], r[2], 24, r[3], 10000, r[2], 2, r[4], False] for r in rot]
+    ven[4][3] = 17
+    fit = [["baron", "Nolan Baron", "PG", "PG", 44.7], ["boyer", "Naël Boyer", "PG", "PG", 48.3], ["durand", "Léo Durand", "SF", "PG", 52.0],
+           ["bonnet", "Thibault Bonnet", "SG", "SG", 56.1], ["jeune", "Tim Jeune", "PG", "PG", 44.0]]
+    cases = [["PG", 45, "22-25", 4, 300000, 400000, 500000, 290000, 910000], ["PG", 40, "≤21", 4, 30000, 100000, 290000, 26250, 290000]]
+    return dict(rotation=rot, vendre=(VEN, ven), slot_fit=(["player_id", "name", "position", "slot", "fit"], fit),
+                prix_cases_poste=(["position", "ps_band", "age_band", "n", "p25", "median", "p75", "mini", "maxi"], cases))
+
+
+def cas_plan_19_11():
+    """19/11 : les deux lignes fausses du plan du 19/11 et les règles qui les corrigent (police ancienne, ajustement au poste, n par poste,
+    règle 14)."""
+    import aujourdhui_sources as src
+    d = marche(**_plan_19())
+    v = ej.ventes_du_jour(d, O, 1.0)
+    yield "vente : remplaçant au même poste (Baron PG → Boyer, pas Durand SF), écart d'ajustement", \
+        [(x["nom"], x["remplacant"], round(x["ecart"], 1)) for x in v] == [("Nolan Baron", "Naël Boyer", -3.6)]
+    yield "vente : fourchette min à max du poste affichée avec la médiane", "médiane du poste 400 000, fourchette 290 000 à 910 000" in ej.texte_transfert(v[0], O)
+    with __import__("tempfile").TemporaryDirectory() as tmp:
+        (Path(tmp) / "police-2026-11-17.md").write_text("## vente — Nolan Baron\n- Décision : ne pas vendre Nolan Baron\n", encoding="utf-8")
+        refus = src.lire_refus_police(tmp, dt.date(2026, 11, 19))
+        trop_vieux = src.lire_refus_police(tmp, dt.date(2026, 12, 2))
+        (Path(tmp) / "police-2026-11-18.md").write_text("- Décision : vendre Nolan Baron, minimum 400 000\n", encoding="utf-8")
+        leve = src.lire_refus_police(tmp, dt.date(2026, 11, 19))
+    yield "police du 17/11 « ne pas vendre Nolan Baron » vaut encore le 19/11", refus == "ne pas vendre nolan baron" \
+        and not [l for l in ej.lignes_transferts(d, 300000, 1.0, "", refus=refus) if "Nolan Baron" in l["consigne"] and "vente" in l["consigne"]]
+    yield "police : verdict de plus de 14 jours oublié, verdict contraire plus récent le lève", trop_vieux == "" and leve == ""
+    fontana = ["f1", "Fontana", "SG", 24, 52, 100000, "2026-11-20T10:00:00", 10000, None, "SG", 51.7]
+    gain = ["f2", "Tom Gain", "SG", 24, 50, 100000, "2026-11-20T10:00:00", 10000, None, "SG", 58.1]
+    ann = (ANN + ["height_cm", "best_slot", "best_fit"], [fontana, gain])
+    cas = (["position", "ps_band", "age_band", "n", "p25", "median", "p75", "mini", "maxi"], [["SG", 50, "22-25", 4, 100000, 200000, 300000, 90000, 400000]])
+    r = ej.offres_du_jour(dict(d, annonces_actives=ann, prix_cases_poste=cas), O, 600000)
+    yield "amélioration : Fontana (note 52, ajustement SG 51,7 contre 56,1 pour Bonnet) → aucune ligne ; Tom Gain (+2,0) → ligne", \
+        [x["nom"] for x in r["offres"]] == ["Tom Gain"]
+    t = ej.texte_transfert(r["offres"][0], O)
+    yield "amélioration : gain d'ajustement et coût par point gagné écrits", "ajustement SG 58,1 contre 56,1 pour Thibault Bonnet" in t \
+        and "gain 2,0 (≥ 1,0)" in t and "coût par point gagné 150 000" in t
+    d2 = dict(d, prix_cases_poste=(cas[0], [["PG", 45, "22-25", 2, 300000, 400000, 500000, 290000, 910000]]))
+    bilan = {}
+    yield "meneur sans n suffisant (2 ventes PG) : prix inconnu, aucune vente", ej.ventes_du_jour(d2, O, 1.0, "", bilan) == [] \
+        and any("prix inconnu" in k for k in bilan)
+    jeune = lambda tm: [x["nom"] for x in ej.ventes_du_jour(dict(d, tests_marche=(["player_id", "potentiel"], tm)), O, 1.0, "ne pas vendre nolan baron")]
+    yield "règle 14 : jeune de 17 ans non titulaire sans test → aucune vente ; test Low → vente possible", jeune([]) == [] and jeune([["jeune", "Low"]]) == ["Tim Jeune"]
+
+
+CAS = [cas_config, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

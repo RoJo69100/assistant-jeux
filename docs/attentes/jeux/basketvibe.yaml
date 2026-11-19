@@ -98,6 +98,7 @@ academie_signature:
 offres:
   matchs_rotation: 4
   case_min_ventes: 3
+  gain_ajustement_min: 1.0            # 19/11 : amélioration = gain d'ajustement au poste (gold.bv_slot_fit) sur notre titulaire ≥ 1,0 point
   revente_marge: 1.25
   minutes_hors_rotation: 6
   max_offres: 3

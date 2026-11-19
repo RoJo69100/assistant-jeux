@@ -599,7 +599,8 @@ def lignes_transferts_du_jour(donnees, capacite, S, maintenant=None) -> list:
     import etat_jour as ej
     S = S or {}
     return ej.lignes_transferts(donnees, capacite, _tolerance(donnees), S.get("police", ""), maintenant,
-                                exclus=[c["nom"] for c in S.get("cibles", [])])  # décidés : déjà retirés de la capacité
+                                exclus=[c["nom"] for c in S.get("cibles", [])],  # décidés : déjà retirés de la capacité
+                                refus=S.get("refus_police", ""))  # 19/11 : « ne pas vendre / acheter » des 14 derniers jours
 
 
 def _offres_et_ventes(donnees, capacite, police="") -> list:

@@ -212,6 +212,33 @@ def lire_police(base, jour: dt.date) -> str:
     return f.read_text(encoding="utf-8").lower() if f.is_file() else ""
 
 
+REFUS = re.compile(r"ne pas (vendre|acheter) ([^;,.()\n]+)")
+ACCORD = re.compile(r"(?<!ne pas )\b(vendre|acheter) ([a-zà-ÿ][^;,.()\n]*)")
+
+
+def lire_refus_police(base, jour: dt.date, jours: int = 14) -> str:
+    """19/11 : verdicts « ne pas vendre / ne pas acheter <nom> » des lignes « Décision : » de outputs/<jeu>/police-*.md des `jours`
+    derniers jours (jour inclus), encore valides : un verdict contraire plus récent (« Décision : vendre <nom> ») les lève.
+    Une ligne « ne pas vendre <nom> » par verdict valide (minuscules) ; chaîne vide sans verdict."""
+    etat = {}
+    for f in sorted(Path(base).glob("police-*.md")):
+        try:
+            d = dt.date.fromisoformat(f.stem[len("police-"):])
+        except ValueError:
+            continue
+        if not (jour - dt.timedelta(days=jours) <= d <= jour):
+            continue
+        for ligne in f.read_text(encoding="utf-8").lower().splitlines():
+            if "décision" not in ligne:
+                continue
+            for verbe, nom in REFUS.findall(ligne):
+                etat[(verbe, nom.strip())] = True
+            for verbe, nom in ACCORD.findall(ligne.replace("ne pas vendre", "").replace("ne pas acheter", "")):
+                if (verbe, nom.strip()) in etat:
+                    etat[(verbe, nom.strip())] = False
+    return "\n".join(f"ne pas {v} {n}" for (v, n), ok in etat.items() if ok)
+
+
 def lire_cibles(decisions: list[dict], encheres: list[dict], base, jour: dt.date) -> list[dict]:
     """Une cible par « Nom POSTE (max N) » des décisions d'achat ouvertes ; fin d'enchère lue dans `encheres`."""
     base = Path(base)
