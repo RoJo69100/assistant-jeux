@@ -761,8 +761,8 @@ def texte_transfert(x, o) -> str:
              + " ; fin : annonce à créer")
     else:
         if x["type"] == "amélioration" and x.get("gain_fit") is None:
-            seuil = (f"note > {_virg(x["faible_note"])} de {x["faible"]} (notre titulaire au poste, le plus de minutes sur {o["matchs_rotation"]} matchs de ligue ; ajustement au poste non lu) ; "
-                     f"max = min(p75 {_m(x["p75"])}, capacité {_m(x["capacite"])} − salaire {_m(x["salaire"])})")
+            seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre titulaire au poste, le plus de minutes sur {o['matchs_rotation']} matchs de ligue ; ajustement au poste non lu) ; "
+                     f"max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         elif x["type"] == "amélioration":
             seuil = (f"ajustement {x['slot']} {_virg(x['fit'])} contre {_virg(x['faible_fit'])} pour {x['faible']} (notre titulaire au poste, le plus "
                      f"de minutes sur {o['matchs_rotation']} matchs de ligue), gain {_virg1(x['gain_fit'])} (≥ {_virg1(o.get('gain_ajustement_min', 1.0))}), "
@@ -791,7 +791,7 @@ def texte_test_marche(x, o) -> str:
     fin = f"{x['fin']:%d/%m %H:%M}" if x.get("fin") else "inconnue"
     return (f"pas d'enchère avant le test ; Police : ne pas acheter — tester le potentiel ({_m(x['cout'])}) : {x['nom']} ({x['poste']}, {x['age']} ans, {x['taille']} cm, note {_virg(x['note'])}), "
             f"fin {fin} ; taille dans la plage du poste (règle de signature d'académie) ; seul « High » justifie une enchère "
-            f"(au plus {o['tests_par_jour']} test{"s" if int(o["tests_par_jour"]) > 1 else ""} et {_m(float(o['tests_budget']))} par jour) — proposition seulement (règle 2)")
+            f"(au plus {o['tests_par_jour']} test{'s' if int(o['tests_par_jour']) > 1 else ''} et {_m(float(o['tests_budget']))} par jour) — proposition seulement (règle 2)")
 
 
 def texte_aucune_vente(bilan) -> str:
