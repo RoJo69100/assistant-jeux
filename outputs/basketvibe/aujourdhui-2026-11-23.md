@@ -1,4 +1,4 @@
-<!-- généré le 2026-11-23 17:26 -->
+<!-- généré le 2026-11-23 17:29 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
@@ -12,7 +12,8 @@
 | 🟧 IMPORTANT | Transferts | vente : Anselmo Albano (PF, 27 ans, note 48), prix attendu 6 000, médiane du poste 6 000, fourchette 350 à 65 000 (5 ventes à au moins une enchère ≥ 3) ; 3 min en moyenne sur 4 matchs de ligue (≤ 6), écart avec Léo Lefebvre -15,1 (tolérance 1) ; prix d'achat inconnu, profit non calculé ; fin : annonce à créer ; libère 18 020 de salaire hebdomadaire — proposition seulement (règle 2) |
 | 🟧 IMPORTANT | Export | exporte le Classement de la Tier 2 - League 4 — export de 101 h |
 | 🟧 IMPORTANT | Export | exporte le Classement de l'European Premier League — export de 101 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 101,5 h |
+| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 101,6 h |
+| 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo** À 475 000 : Aucun Gain Sportif, Héctor Castro** : Gain Négatif Contre Notre N°2, Kazimierz Lewicki** : Prix Actuel 1 000 000 Et Maximum 1 057 849 Dépassent La Capacité De 686 018, Camilo Varela, Albert De Groot → ne pas acheter) — outputs/basketvibe/police-2026-11-23.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-23.md |
 
 ## Bloc 2 — Composition de l'amical
 
@@ -56,21 +57,21 @@ composition de l'amical en préparation
 |---|---|---|---|---|---|---|---|---|---|
 | Nikola Raičević | PF | 26 | 41,4 | 1 000 | 1 000 | 1 000 | dans 0,1 h | -12,5 | oui |
 | Luan Alves | PF | 28 | 61,3 | 2 000 000 | 1 405 162 | 660 141 | dans 0,2 h | +7,8 | non (prix au-dessus de la médiane de la case) |
-| Gabriel Haas | PF | 17 | 46,9 | 2 425 000 | 1 010 000 | 660 141 | dans 2,1 h | -12,2 | non (prix au-dessus de la médiane de la case) |
-| Gregorio Ferrara | SF | 19 | 41,7 | 10 000 | 302 500 | 302 500 | dans 3,1 h | -14,3 | oui |
-| Tae-hoon Choi | PF | 17 | 40,3 | 390 000 | 302 500 | 302 500 | dans 3,2 h | -16,6 | non (prix au-dessus de la médiane de la case) |
-| Miles Girard | C | 17 | 35,6 | 190 000 | 45 500 | 45 500 | dans 3,2 h | -23,7 | non (prix au-dessus de la médiane de la case) |
-| Günter Horn | SF | 17 | 38,1 | 190 000 | 45 500 | 45 500 | dans 3,2 h | -20,1 | non (prix au-dessus de la médiane de la case) |
-| Federigo Ferrara | C | 18 | 41,8 | 390 000 | 302 500 | 302 500 | dans 3,2 h | -11,7 | non (prix au-dessus de la médiane de la case) |
+| Gabriel Haas | PF | 17 | 46,9 | 2 425 000 | 1 010 000 | 660 141 | dans 2,0 h | -12,2 | non (prix au-dessus de la médiane de la case) |
+| Gregorio Ferrara | SF | 19 | 41,7 | 10 000 | 302 500 | 302 500 | dans 3,0 h | -14,3 | oui |
+| Tae-hoon Choi | PF | 17 | 40,3 | 390 000 | 302 500 | 302 500 | dans 3,1 h | -16,6 | non (prix au-dessus de la médiane de la case) |
+| Miles Girard | C | 17 | 35,6 | 190 000 | 45 500 | 45 500 | dans 3,1 h | -23,7 | non (prix au-dessus de la médiane de la case) |
+| Günter Horn | SF | 17 | 38,1 | 190 000 | 45 500 | 45 500 | dans 3,1 h | -20,1 | non (prix au-dessus de la médiane de la case) |
+| Federigo Ferrara | C | 18 | 41,8 | 390 000 | 302 500 | 302 500 | dans 3,1 h | -11,7 | non (prix au-dessus de la médiane de la case) |
 | Cezary Błaszczyk | SG | 28 | 55,6 | 500 000 | 1 009 999 | 660 141 | dans 3,4 h | -1,1 | oui |
 | Anatol Sikora | C | 26 | 55,3 | 690 000 | 1 009 999 | 660 141 | dans 3,4 h | +1,6 | non (au-dessus de la capacité restante) |
 | Maciej Niemiec | PG | 26 | 60,9 | 2 000 000 | 1 405 162 | 660 141 | dans 3,4 h | +4,1 | non (prix au-dessus de la médiane de la case) |
-| Miha Bizjak | SG | 25 | 52,5 | 330 000 | 700 000 | 456 000 | dans 3,6 h | -4,0 | oui |
+| Miha Bizjak | SG | 25 | 52,5 | 330 000 | 700 000 | 660 141 | dans 3,5 h | -4,0 | oui |
 | Dragoslav Vukčević | PG | 18 | 53,8 | 3 999 999 | 3 733 865 | 660 141 | dans 3,6 h | -3,0 | non (prix au-dessus de la médiane de la case) |
 | Romualdas Morkūnas | PG | 17 | 35,4 | 299 999 | 45 500 | 45 500 | dans 3,7 h | -21,2 | non (prix au-dessus de la médiane de la case) |
 | Vittorio Bianchini | PF | 17 | 34,7 | 299 999 | 1 126 | 1 126 | dans 3,7 h | -24,6 | non (prix au-dessus de la médiane de la case) |
-| Wouter Nijhof | C | 25 | 51,7 | 600 000 | 700 000 | 660 141 | dans 3,9 h | -2,1 | oui |
-| Józef Kania | PF | 25 | 52,9 | 1 500 000 | 700 000 | 660 141 | dans 3,9 h | -0,7 | non (prix au-dessus de la médiane de la case) |
+| Wouter Nijhof | C | 25 | 51,7 | 600 000 | 700 000 | 660 141 | dans 3,8 h | -2,1 | oui |
+| Józef Kania | PF | 25 | 52,9 | 1 500 000 | 700 000 | 660 141 | dans 3,8 h | -0,7 | non (prix au-dessus de la médiane de la case) |
 | Gary Duncan | PG | 17 | 47,4 | 3 500 000 | 1 010 000 | 660 141 | dans 4,3 h | -9,4 | non (prix au-dessus de la médiane de la case) |
 | Harald Graf | PG | 17 | 45,4 | 1 500 000 | 1 010 000 | 660 141 | dans 4,3 h | -11,4 | non (prix au-dessus de la médiane de la case) |
 | Landon Brown | SF | 25 | 45,8 | 10 000 | 102 500 | 102 500 | dans 5,4 h | -10,4 | oui |
@@ -80,52 +81,52 @@ composition de l'amical en préparation
 | Benito Abad | SF | 18 | 46,6 | 1 000 000 | 1 010 000 | 660 141 | dans 6,3 h | -13,6 | non (au-dessus de la capacité restante) |
 | Cristiano Russo | C | 23 | 43,3 | 500 000 | 5 000 | 5 000 | dans 6,3 h | -10,2 | non (prix au-dessus de la médiane de la case) |
 | Evan Gauthier | PF | 27 | 46,2 | 9 999 | 10 000 | 10 000 | dans 7,1 h | -12,9 | oui |
-| Pascal Gnassingbé | PG | 27 | 48,0 | 56 000 | 10 000 | 10 000 | dans 8,0 h | -8,8 | non (prix au-dessus de la médiane de la case) |
-| Ryder Chester | PG | 16 | 37,1 | 2 000 | 45 500 | 45 500 | dans 9,9 h | -20,6 | oui |
+| Pascal Gnassingbé | PG | 27 | 48,0 | 56 000 | 10 000 | 10 000 | dans 7,9 h | -8,8 | non (prix au-dessus de la médiane de la case) |
+| Ryder Chester | PG | 16 | 37,1 | 2 000 | 45 500 | 45 500 | dans 9,8 h | -20,6 | oui |
+| Isaac Turay | PG | 33 | 44,5 | 10 000 | 875 | 875 | dans 11,5 h | -12,1 | non (prix au-dessus de la médiane de la case) |
 | Steven Oiterong | C | 25 | 44,7 | 10 250 | 5 000 | 5 000 | dans 11,5 h | -8,7 | non (prix au-dessus de la médiane de la case) |
-| Isaac Turay | PG | 33 | 44,5 | 10 000 | 875 | 875 | dans 11,6 h | -12,1 | non (prix au-dessus de la médiane de la case) |
 | Hugo Rodríguez | PF | 26 | 43,4 | 10 000 | 1 000 | 1 000 | dans 13,4 h | -12,8 | non (prix au-dessus de la médiane de la case) |
 | Makoto Kondo | SF | 31 | 41,2 | 1 | 875 | 875 | dans 13,9 h | -15,1 | oui |
 | Ren Hirano | SG | 29 | 40,6 | 1 | 1 000 | 1 000 | dans 13,9 h | -15,5 | oui |
 | Liutauras Stonys | SG | 18 | 43,1 | 501 | 302 500 | 92 625 | dans 15,2 h | -13,3 | oui |
+| Batu Kartal | PG | 27 | 48,5 | 350 000 | 10 000 | 10 000 | dans 15,9 h | -8,2 | non (prix au-dessus de la médiane de la case) |
 | Oleksandr Stepanenko | PF | 17 | 43,4 | 500 000 | 302 500 | 302 500 | dans 15,9 h | -17,9 | non (prix au-dessus de la médiane de la case) |
-| Batu Kartal | PG | 27 | 48,5 | 350 000 | 10 000 | 10 000 | dans 16,0 h | -8,2 | non (prix au-dessus de la médiane de la case) |
+| Stepan Savchuk | C | 17 | 40,4 | 500 000 | 302 500 | 302 500 | dans 15,9 h | -13,1 | non (prix au-dessus de la médiane de la case) |
 | Igor Oliveira | SF | 17 | 38,3 | 500 000 | 45 500 | 45 500 | dans 16,0 h | -18,1 | non (prix au-dessus de la médiane de la case) |
 | Daniel Silva | SF | 17 | 42,2 | 750 000 | 302 500 | 302 500 | dans 16,0 h | -18,4 | non (prix au-dessus de la médiane de la case) |
-| Stepan Savchuk | C | 17 | 40,4 | 500 000 | 302 500 | 302 500 | dans 16,0 h | -13,1 | non (prix au-dessus de la médiane de la case) |
-| Simon Gorenc | SG | 19 | 43,1 | 200 000 | 302 500 | 302 500 | dans 16,6 h | -13,5 | oui |
+| Simon Gorenc | SG | 19 | 43,1 | 200 000 | 302 500 | 302 500 | dans 16,5 h | -13,5 | oui |
+| Bernard Witkowski | PG | 17 | 40,7 | 59 000 | 302 500 | 302 500 | dans 16,6 h | -15,9 | oui |
+| Dmytro Fedorenko | SF | 19 | 45,6 | 204 000 | 1 010 000 | 660 141 | dans 16,6 h | -14,7 | oui |
 | Antoine Vandenberg | C | 17 | 43,4 | 550 000 | 302 500 | 302 500 | dans 16,7 h | -17,0 | non (prix au-dessus de la médiane de la case) |
 | Tobias Haas | SG | 17 | 42,4 | 290 000 | 302 500 | 302 500 | dans 16,7 h | -14,2 | oui |
 | Yaroslav Kulyk | PF | 17 | 41,1 | 299 000 | 302 500 | 302 500 | dans 16,7 h | -15,0 | oui |
-| Bernard Witkowski | PG | 17 | 40,7 | 59 000 | 302 500 | 302 500 | dans 16,7 h | -15,9 | oui |
-| Dmytro Fedorenko | SF | 19 | 45,6 | 204 000 | 1 010 000 | 501 125 | dans 16,7 h | -14,7 | oui |
 | Marko Vuković | SF | 17 | 52,6 | 5 888 888 | 3 733 865 | 660 141 | dans 17,2 h | -3,2 | non (prix au-dessus de la médiane de la case) |
-| Aiden Bar | C | 30 | 40,3 | 1 000 | 875 | 875 | dans 17,3 h | -13,6 | non (prix au-dessus de la médiane de la case) |
-| Oskaras Stonys | C | 17 | 51,4 | 6 123 321 | 3 733 865 | 660 141 | dans 17,4 h | -7,8 | non (prix au-dessus de la médiane de la case) |
+| Aiden Bar | C | 30 | 40,3 | 1 000 | 875 | 875 | dans 17,2 h | -13,6 | non (prix au-dessus de la médiane de la case) |
+| Oskaras Stonys | C | 17 | 51,4 | 6 123 321 | 3 733 865 | 660 141 | dans 17,3 h | -7,8 | non (prix au-dessus de la médiane de la case) |
+| Tunde Okafor | SG | 28 | 47,6 | 20 000 | 10 000 | 10 000 | dans 17,9 h | -10,9 | non (prix au-dessus de la médiane de la case) |
 | Gildo Bucci | PF | 18 | 36,0 | 0 | 45 500 | 45 500 | dans 17,9 h | -19,8 | oui |
 | Alexandre Pauwels | PF | 17 | 41,2 | 390 000 | 302 500 | 302 500 | dans 17,9 h | -18,1 | non (prix au-dessus de la médiane de la case) |
-| Tunde Okafor | SG | 28 | 47,6 | 20 000 | 10 000 | 10 000 | dans 18,0 h | -10,9 | non (prix au-dessus de la médiane de la case) |
-| Soan Boyer | C | 29 | 42,0 | 10 000 | 1 000 | 1 000 | dans 18,9 h | -11,6 | non (prix au-dessus de la médiane de la case) |
-| Marcos Paredes | SF | 17 | 43,7 | 1 500 000 | 302 500 | 302 500 | dans 19,1 h | -11,5 | non (prix au-dessus de la médiane de la case) |
+| Soan Boyer | C | 29 | 42,0 | 10 000 | 1 000 | 1 000 | dans 18,8 h | -11,6 | non (prix au-dessus de la médiane de la case) |
+| Marcos Paredes | SF | 17 | 43,7 | 1 500 000 | 302 500 | 302 500 | dans 19,0 h | -11,5 | non (prix au-dessus de la médiane de la case) |
 | Ivan Mašek | SF | 22 | 42,5 | 150 000 | 5 000 | 5 000 | dans 21,2 h | -16,8 | non (prix au-dessus de la médiane de la case) |
 | Iker León | PF | 16 | 37,4 | 450 000 | 45 500 | 45 500 | dans 21,3 h | -18,2 | non (prix au-dessus de la médiane de la case) |
 | Michal Růžička | PF | 24 | 38,8 | 250 | 251 | 251 | dans 21,3 h | -20,6 | oui |
-| Felicjan Musiał | PG | 24 | 47,8 | 0 | 102 500 | 102 500 | dans 22,3 h | -9,4 | oui |
-| Tomé Leite | PG | 29 | 52,6 | 250 000 | 499 999 | 499 999 | dans 22,4 h | -4,1 | oui |
+| Felicjan Musiał | PG | 24 | 47,8 | 0 | 102 500 | 102 500 | dans 22,2 h | -9,4 | oui |
+| Tomé Leite | PG | 29 | 52,6 | 250 000 | 499 999 | 499 999 | dans 22,3 h | -4,1 | oui |
 | Jack Boyle | C | 26 | 37,9 | 25 000 | 175 | 175 | dans 22,6 h | -21,5 | non (prix au-dessus de la médiane de la case) |
 | Pádraig Fitzgerald | SF | 28 | 55,0 | 1 199 000 | 1 009 999 | 660 141 | dans 22,6 h | -1,3 | non (prix au-dessus de la médiane de la case) |
 | Odhran Smith | PG | 30 | 50,5 | 399 000 | 61 000 | 61 000 | dans 22,6 h | -6,6 | non (prix au-dessus de la médiane de la case) |
 | Padraig Power | PF | 28 | 41,2 | 50 000 | 1 000 | 1 000 | dans 22,6 h | -12,6 | non (prix au-dessus de la médiane de la case) |
+| Carlo Moretti | C | 17 | 40,3 | 550 000 | 302 500 | 302 500 | dans 22,6 h | -13,3 | non (prix au-dessus de la médiane de la case) |
 | Stanko Đurić | SG | 16 | 48,7 | 6 500 000 | 1 010 000 | 660 141 | dans 22,7 h | -7,8 | non (prix au-dessus de la médiane de la case) |
-| Carlo Moretti | C | 17 | 40,3 | 550 000 | 302 500 | 302 500 | dans 22,7 h | -13,3 | non (prix au-dessus de la médiane de la case) |
-| Miloš Golubović | PG | 17 | 38,5 | 199 000 | 45 500 | 45 500 | dans 22,9 h | -18,4 | non (prix au-dessus de la médiane de la case) |
+| Miloš Golubović | PG | 17 | 38,5 | 199 000 | 45 500 | 45 500 | dans 22,8 h | -18,4 | non (prix au-dessus de la médiane de la case) |
+| Jeremiasz Buczek | C | 30 | 38,3 | 0 | 10 250 | 10 250 | dans 23,0 h | -15,6 | non (case peu fiable : 3 ventes) |
 | Ignacy Kosowski | SF | 22 | 44,5 | 0 | 5 000 | 5 000 | dans 23,1 h | -13,8 | oui |
-| Jeremiasz Buczek | C | 30 | 38,3 | 0 | 10 250 | 10 250 | dans 23,1 h | -15,6 | non (case peu fiable : 3 ventes) |
 | Matéo Fleury | SG | 25 | 48,1 | 1 000 000 | 102 500 | 102 500 | dans 23,7 h | -8,9 | non (prix au-dessus de la médiane de la case) |
-| Gaspard Thomas | SG | 17 | 46,9 | 5 600 000 | 1 010 000 | 660 141 | dans 23,8 h | -10,0 | non (prix au-dessus de la médiane de la case) |
+| Gaspard Thomas | SG | 17 | 46,9 | 5 600 000 | 1 010 000 | 660 141 | dans 23,7 h | -10,0 | non (prix au-dessus de la médiane de la case) |
+| Matan Bouzaglo | PF | 16 | 46,2 | 3 500 000 | 1 010 000 | 660 141 | dans 23,9 h | -14,6 | non (prix au-dessus de la médiane de la case) |
 | Raz Ovadia | C | 16 | 39,5 | 999 000 | 45 500 | 45 500 | dans 23,9 h | -14,4 | non (prix au-dessus de la médiane de la case) |
 | Henryk Witkowski | SF | 27 | 51,5 | 140 000 | 499 999 | 499 999 | dans 23,9 h | -7,3 | oui |
-| Matan Bouzaglo | PF | 16 | 46,2 | 3 500 000 | 1 010 000 | 660 141 | dans 24,0 h | -14,6 | non (prix au-dessus de la médiane de la case) |
 
 **Offres et ventes du jour (mêmes lignes que l'état par événement)**
 
@@ -150,8 +151,8 @@ composition de l'amical en préparation
 
 **Enchères, achats et ventes déjà proposés**
 
-- Enchère maximale 501 125 sur Dmytro Fedorenko (SF, PS 45.6) — plafond de revente (95 % du p25) ; prix à l'export 204 000 ; fin 24/11 ; marge de revente p25 297 125 ; page du Marché de 2 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 456 000 sur Miha Bizjak (SG, PS 52.5) — plafond de revente (95 % du p25) ; prix à l'export 330 000 ; fin 23/11 ; marge de revente p25 126 000 ; page du Marché de 2 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère sur Dmytro Fedorenko (SF, PS 45.6) : police d'abord : python pipelines/dossier.py basketvibe achat — fin 24/11 ; page du Marché de 2 h : le prix a pu monter
+- Enchère sur Miha Bizjak (SG, PS 52.5) : police d'abord : python pipelines/dossier.py basketvibe achat — fin 23/11 ; page du Marché de 2 h : le prix a pu monter
 - Enchère maximale 92 625 sur Liutauras Stonys (SG, PS 43.1) — plafond de revente (95 % du p25) ; prix à l'export 501 ; fin 24/11 ; marge de revente p25 92 124 ; page du Marché de 2 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
 
 
