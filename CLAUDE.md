@@ -29,7 +29,7 @@ Refonte en cours (v3) : `docs/refonte-v3/plan.md`, journal `docs/refonte-v3/jour
 
 ## Agents (en attendant l'orchestrateur, phase 5 du plan)
 - Types propres dans `.claude/agents/` (match, tactique, entrainement, academie, transferts, veille, analyste, decideur, police, synthese, retro, data-scientist) ; jamais `general-purpose`. Donner le jeu et la règle d'horizon dans chaque demande.
-- Un agent ne tourne que si un export plus récent que son brief est arrivé. 3 agents d'analyse au plus par passage, 20 par semaine (hors `analyste` et `police`) ; j'annonce le nombre avant de lancer.
+- Un agent ne tourne que si un export plus récent que son brief est arrivé. 3 agents d'analyse au plus par passage, 20 par semaine (hors `analyste`, `police` et `tactique`) ; j'annonce le nombre avant de lancer.
 - `police` seulement pour un gros transfert (inviolable 6) ; une défaite de ligue ou de coupe en base lance `analyste`, jamais un amical (arbitrage 15) ; `synthese` seulement pour assembler au moins deux briefs.
 - `data-scientist` (Opus) : à la demande, jamais dans le quotidien sauf la consigne de session du « que faire » ; 1 lancement par jour au plus, hors du plafond de 3 agents d'analyse par passage.
 - Agents d'analyse en medium + Sonnet : je demande `/effort medium` si la session n'y est pas.

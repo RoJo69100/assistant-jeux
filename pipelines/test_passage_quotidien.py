@@ -364,7 +364,31 @@ def cas_fiches_23_11():
         "Anselmo Albano" in pq.consigne_agent(entree(), JOUR, ["Anselmo Albano"]) and "Ne fais jouer" not in pq.consigne_agent(entree(), JOUR)
 
 
-CAS = [cas_fiches_23_11, cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
+def cas_plafonds_separes():
+    """23/11 : trois fiches tactiques ne bloquent plus l'agent académie (tactique hors du plafond de 3 agents d'analyse)."""
+    import etat_jour as ej
+    cfg = {"agents_plafond": 3, "agents_hors_plafond": ["analyste", "police", "tactique"],
+           "agents": [{"type": "match", "prochain": "fiche", "agent": "tactique", "sortie": "briefs/{jour}-t-{cle}.md"},
+                      {"type": "academie", "prochain": "rapport", "agent": "academie", "sortie": "briefs/{jour}-academie.md"}]}
+    etats = [{"type": "match", "prochain": "fiche", "action": True, "cle": f"m{i}", "id": f"m{i}", "evenement": f"match {i}"} for i in range(4)]
+    etats.append({"type": "academie", "prochain": "rapport", "action": True, "cle": "a", "id": "a", "evenement": "académie"})
+    with tempfile.TemporaryDirectory() as t:
+        (Path(t) / "t").mkdir()
+        for a in ("tactique", "academie"):
+            (Path(t) / "t" / f"{a}.md").write_text("x", encoding="utf-8")
+        res = ej.agents_a_lancer(etats, cfg, base=Path(t) / "b", jour=JOUR, dossier_agents=Path(t) / "t")
+    yield "plafonds : 4 fiches tactiques puis l'académie → les 5 sont à lancer", [e["statut"] for e in res] == ["a_lancer"] * 5
+    cfg2 = dict(cfg, agents_hors_plafond=["analyste", "police"])
+    with tempfile.TemporaryDirectory() as t:
+        (Path(t) / "t").mkdir()
+        for a in ("tactique", "academie"):
+            (Path(t) / "t" / f"{a}.md").write_text("x", encoding="utf-8")
+        res2 = ej.agents_a_lancer(etats, cfg2, base=Path(t) / "b", jour=JOUR, dossier_agents=Path(t) / "t")
+    yield "plafonds : contre-épreuve, tactique dans le plafond → l'académie est refusée", res2[-1]["statut"] == "refus"
+    yield "plafonds : le yaml du jeu met tactique hors plafond", "tactique" in ej.charger_config()["agents_hors_plafond"]
+
+
+CAS = [cas_plafonds_separes, cas_fiches_23_11,cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

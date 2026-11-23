@@ -215,5 +215,5 @@ etat_jour:
     - { type: entrainement,         prochain: saisi,   agent: entrainement, sortie: "briefs/{jour}-entrainement-{cle}.md" }
     - { type: enchere,              prochain: police,  agent: police,    sortie: "police-{jour}.md", avant: "python -I pipelines/dossier.py basketvibe achat" }
   agents_plafond: 3                       # agents d'analyse par passage (CLAUDE.md), hors ceux de agents_hors_plafond
-  agents_hors_plafond: [analyste, police]
+  agents_hors_plafond: [analyste, police, tactique]  # 23/11 : 3 fiches tactiques avaient rempli le plafond et bloqué l académie
   agent_timeout_min: 15
