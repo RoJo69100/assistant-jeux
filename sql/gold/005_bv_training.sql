@@ -15,17 +15,19 @@ select * from (values (0, 1.0), (70, 1.0), (75, 0.88), (80, 0.75), (85, 0.63), (
 create or replace view gold.bv_potential_mult with (security_invoker = true) as
 select * from (values (1, 0.45), (2, 0.65), (3, 0.83), (4, 1.00), (5, 1.15), (6, 1.35), (7, 1.50), (8, 1.60), (9, 1.85), (10, 2.20)) t(potential, mult);
 
--- Gains précis par joueur et compétence, entre deux relevés hebdomadaires consécutifs (un entraînement entre les deux).
+-- Gains précis par joueur et compétence, entre un relevé précis et le relevé précis précédent, k semaines plus tôt (k entraînements).
+-- gain = écart / k (gain par entraînement) ; colonnes ajoutées à la fin : k, ecart.
 create or replace view gold.bv_training_gains_exact with (security_invoker = true) as
 with w as (
   select w.*, lag(w.week) over (partition by w.player_id order by w.week) as prev_week
   from silver.bv_player_weekly w
   join silver.bv_my_team me on me.team_id::text = w.team_id
+  where w.two_point_exact is not null     -- relevés précis seulement
 ),
 pairs as (
   select b.player_id, b.name, a.age, b.week, a.injury_return_on as injured_before,
          a.training_primary, a.training_secondary,
-         s.skill, s.v_before, s.v_after
+         s.skill, s.v_before, s.v_after, ((b.week - b.prev_week) / 7) as k
   from w b
   join w a on a.player_id = b.player_id and a.week = b.prev_week
   cross join lateral (values
@@ -38,10 +40,13 @@ pairs as (
     ('stamina',       a.stamina_exact,       b.stamina_exact),
     ('athleticism',   a.athleticism_exact,   b.athleticism_exact)
   ) s(skill, v_before, v_after)
-  where b.week - b.prev_week = 7          -- semaines consécutives seulement
+  where b.prev_week is not null
 )
-select p.*, round(p.v_after - p.v_before, 3) as gain,
-       rank() over (partition by p.player_id, p.week order by p.v_after - p.v_before desc, p.skill) as gain_rank
+select p.player_id, p.name, p.age, p.week, p.injured_before, p.training_primary, p.training_secondary,
+       p.skill, p.v_before, p.v_after,
+       round((p.v_after - p.v_before) / p.k, 3) as gain,
+       rank() over (partition by p.player_id, p.week order by (p.v_after - p.v_before) / p.k desc, p.skill) as gain_rank,
+       p.k, round(p.v_after - p.v_before, 3) as ecart
 from pairs p;
 
 -- Estimation du potentiel : principale = compétence au plus fort gain de la semaine.
