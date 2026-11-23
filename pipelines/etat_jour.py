@@ -140,7 +140,9 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
         n = ev.get("tests")
         if n:  # 17/11 : tests attendus chiffrés (verdict « tester » de aujourdhui.verdict_prospect, coût de la config)
             cout = f"{n * cfg['evenements']['academie']['cout_test']:,}".replace(",", " ")
-            return None, f"décision attendue : tester {n} prospect{'s' if n > 1 else ''} ({cout}), rapport du {_jj(ev['quand'])}", True
+            base_l = f"décision attendue : tester {n} prospect{'s' if n > 1 else ''} ({cout}), rapport du {_jj(ev['quand'])}"
+            f = ev.get("fiche") or {}  # 22/11 : après l'agent académie, la ligne reprend son verdict prospect par prospect
+            return None, _avec_fiche(base_l + (f" — {f['verdict']}" if f.get("verdict") else ""), f), True
         return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
     if etat == "decide":
         v = ev.get("verdicts") or []
@@ -896,7 +898,10 @@ def agents_a_lancer(etats, cfg=None, base=None, jour=None, dossier_agents=None) 
              "consigne": " ; ".join(x for x in (l.get("consigne"), l.get("test"), r.get("consigne", "").format_map(champs)) if x),
              "avant": r.get("avant"), "statut": "a_lancer", "raison": None}
         f = base / sortie
-        if f.is_file() and f.stat().st_size > 0:
+        brief_a = dernier_brief_academie(base) if r["agent"] == "academie" else None
+        if brief_a and l.get("arrivee") is not None and brief_a[0] >= l["arrivee"].date():  # 22/11 : rapport plus récent que le dernier brief ?
+            e.update(statut="deja_fait", raison=f"brief académie du {brief_a[0]:%d/%m} postérieur au rapport ({brief_a[1]})")
+        elif f.is_file() and f.stat().st_size > 0:
             e.update(statut="deja_fait", raison=f"sortie déjà présente ({sortie})")
         elif not (dossier_agents / f"{r['agent']}.md").is_file():
             e.update(statut="refus", raison=f"agent {r['agent']} absent de .claude/agents")
@@ -1064,6 +1069,31 @@ def fiche_entrainement(base, jour, depuis):
     return {"fichier": f"briefs/{max(trouves)[1]}", **({"verdict": v} if v else {})}
 
 
+def dernier_brief_academie(base):
+    """(date, nom) du brief académie le plus récent (briefs/AAAA-MM-JJ-academie*.md non vide) ; None sinon."""
+    import re
+    trouves = []
+    for f in (Path(base) / "briefs").glob("*-academie*.md"):
+        m = re.match(r"(\d{4}-\d{2}-\d{2})-academie", f.name)
+        if m and f.stat().st_size > 0:
+            trouves.append((dt.date.fromisoformat(m.group(1)), f.name))
+    return max(trouves) if trouves else None
+
+
+def fiche_academie(base, rapport_at):
+    """22/11 : brief académie postérieur ou égal au rapport (même jour ou après) ; {fichier, verdict} avec le verdict prospect par prospect
+    (lignes de tableau de la section « ## Verdict par prospect »), None si aucun brief n'est plus récent que le rapport."""
+    import re
+    d = dernier_brief_academie(base)
+    if d is None or rapport_at is None or d[0] < rapport_at.date():
+        return None
+    texte = (Path(base) / "briefs" / d[1]).read_text(encoding="utf-8")
+    m = re.search(r"^## Verdict par prospect[^\n]*\n(.*?)(?=^## |\Z)", texte, re.M | re.S)
+    lignes = [re.sub(r"\s*\|\s*", " ; ", l.strip().strip("|")).strip(" ;") for l in (m.group(1).splitlines() if m else [])
+              if l.startswith("|") and not re.match(r"\|[\s:|-]+\|?$", l.strip()) and not l.lower().startswith("| prospect")]
+    return {"fichier": f"briefs/{d[1]}", **({"verdict": " | ".join(lignes)} if lignes else {})}
+
+
 def verdict_entrainement(fichier):
     """22/11 : verdict de l'agent entraînement, lu dans le titre de la section « ## 1. Fiche de saisie … : <verdict> » du brief.
     « AUCUN CHANGEMENT » -> « aucun changement : vérifie l'écran » ; sinon les lignes de tableau de la section qui portent « → »
@@ -1158,7 +1188,8 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
             ev = {"type": t, "id": f"{t}-{q:%Y-%m-%d}", "quand": q, "maj_at": None}
             if t == "academie":
                 n, verdicts, capture = _tests_academie(donnees)
-                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=n, verdicts=verdicts, capture=capture)
+                ev.update(rapport_at=rapport, decide=_cle(S, "academie", q.date()), tests=n, verdicts=verdicts, capture=capture,
+                          fiche=fiche_academie(base, rapport))
             else:
                 ev.update(page_at=page_entr, saisi=_cle(S, "entrainement", q.date()), fiche=fiche_entrainement(base, jour, q.date()))
             evs.append(ev)

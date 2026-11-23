@@ -210,6 +210,8 @@ etat_jour:
     - { type: match, genre: coupe,  prochain: analyse, agent: analyste,  sortie: "briefs/{jour}-analyste-{cle}.md" }
     - { type: match,                prochain: juge,    agent: null }      # python -I pipelines/evaluer_decisions.py, pas d'agent
     - { type: academie,             prochain: decide,  agent: academie,  sortie: "briefs/{jour}-academie-{cle}.md" }
+    # 22/11 : le rapport du 19/11 restait à l'état « teste » (tests à faire) et n'a jamais lancé l'agent ; rapport plus récent que le dernier brief -> agent
+    - { type: academie,             prochain: teste,   agent: academie,  sortie: "briefs/{jour}-academie-{cle}.md", consigne: "section « ## Verdict par prospect » : un tableau (prospect | potentiel | progression | trou comblé | verdict : tester, signer, ignorer ou attendre), une ligne par prospect" }
     - { type: entrainement,         prochain: saisi,   agent: entrainement, sortie: "briefs/{jour}-entrainement-{cle}.md" }
     - { type: enchere,              prochain: police,  agent: police,    sortie: "police-{jour}.md", avant: "python -I pipelines/dossier.py basketvibe achat" }
   agents_plafond: 3                       # agents d'analyse par passage (CLAUDE.md), hors ceux de agents_hors_plafond

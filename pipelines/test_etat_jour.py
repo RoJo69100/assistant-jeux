@@ -532,6 +532,31 @@ def ligne_etat(type_, prochain, genre=None, action=True, **kw):
     return l
 
 
+def cas_academie_declencheur():
+    """22/11 : le rapport du 19/11 (état « teste ») n'a jamais lancé l'agent ; rapport plus récent que le dernier brief -> agent."""
+    import tempfile
+    jour, rapport = dt.date(2026, 11, 23), dt.datetime(2026, 11, 19, 9, 0)
+    l = dict(ligne_etat("academie", "teste", "ligue"), arrivee=rapport)
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        res = ej.agents_a_lancer([l], CFG, tmp, jour)
+        yield "académie : rapport du 19/11 à l'état « teste » et aucun brief -> agent académie lancé", len(res) == 1 and res[0]["agent"] == "academie" and res[0]["statut"] == "a_lancer"
+        (Path(tmp) / "briefs" / "2026-11-17-academie-x.md").write_text("ancien\n", encoding="utf-8")
+        res = ej.agents_a_lancer([l], CFG, tmp, jour)
+        yield "académie : dernier brief du 17/11 plus ancien que le rapport du 19/11 -> agent lancé", res[0]["statut"] == "a_lancer"
+        b = Path(tmp) / "briefs" / "2026-11-23-academie-x.md"
+        b.write_text("# Brief\n\n## Verdict par prospect\n\n| Prospect | Potentiel | Progression | Trou comblé | Verdict |\n|---|---|---|---|---|\n"
+                     "| Besson | énorme | +2 | oui | tester |\n\n## Suite\n", encoding="utf-8")
+        res = ej.agents_a_lancer([l], CFG, tmp, jour)
+        yield "académie : brief du 23/11 postérieur au rapport -> pas de relance", res[0]["statut"] == "deja_fait"
+        f = ej.fiche_academie(tmp, rapport)
+        yield "académie : le verdict prospect par prospect est lu dans le brief", f["verdict"] == "Besson ; énorme ; +2 ; oui ; tester" and f["fichier"].endswith("2026-11-23-academie-x.md")
+        ev = {"type": "academie", "id": "a", "quand": rapport, "rapport_at": rapport, "decide": False, "tests": 3, "verdicts": [], "capture": None,
+              "fiche": f, "maj_at": None}
+        c = ej.etat_evenement(ev, CFG, dt.datetime(2026, 11, 23, 16, 0))["consigne"]
+        yield "académie : la ligne « tester 3 prospects » reprend le verdict de l'agent et le lien", "tester 3 prospects" in c and "Besson ; énorme" in c and "2026-11-23-academie-x.md" in c
+
+
 def cas_agents():
     """P3 (17/11) : table état → agent → sortie (config `agents`), lue par agents_a_lancer ; aucun cas particulier par événement."""
     import tempfile
@@ -986,7 +1011,7 @@ def cas_equipe_encheres():
         == ["exporte la page Mes enchères — export de 96 h"]
 
 
-CAS = [cas_config, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
