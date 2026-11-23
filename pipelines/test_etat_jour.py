@@ -593,8 +593,8 @@ def cas_agents():
         yield "agents : agent absent du dépôt → refus avec raison", res and res[0]["statut"] == "refus" and "analyste" in res[0]["raison"]
         quatre = [ligne_etat("match", "fiche", "amical", cle=f"adv-{i}") for i in range(4)] + [ligne_etat("match", "analyse", "ligue")]
         res = ej.agents_a_lancer(quatre, CFG, tmp, jour)
-        yield "agents : plafond de 3 agents d'analyse par passage, analyste hors plafond", \
-            [r["statut"] for r in res] == ["a_lancer"] * 3 + ["refus", "a_lancer"] and "plafond" in res[3]["raison"]
+        yield "agents : tactique et analyste hors du plafond de 3 agents d'analyse (23/11)", \
+            [r["statut"] for r in res] == ["a_lancer"] * 5
     l = ej.etat_evenement(match(), CFG, MAINT)
     yield "agents : l'état d'un match porte genre, clé de fichier et titre", l["genre"] == "ligue" and l["cle"] == "adv-a-18-11" and l["titre"] == "Ligue contre Adv A (18/11)"
 
@@ -729,6 +729,22 @@ def cas_priorite_capacite():
         and p[0]["consigne"].index("Tom Gain") < p[0]["consigne"].index("Bob Juste")
     l = ej.lignes_transferts(marche(annonces=[a, b]), 300000, None, o=O)
     yield "plafonds dans la capacité → pas de ligne de priorité", not [x for x in l if x["id"] == "offres-priorite"]
+
+
+def cas_achats_refuses_police():
+    """23/11 : la police refuse toutes les offres → ligne « Achats : aucun recommandé (police : … → ne pas acheter) » avec le lien."""
+    import tempfile
+    refus = "ne pas acheter tom gain\nne pas acheter bob juste"
+    l = ej.lignes_transferts(marche(annonces=[]), 300000, None, o=O, refus=refus)
+    a = [x for x in l if x["id"] == "achats-aucun"]
+    yield "achats refusés : une ligne « Achats : aucun recommandé » nomme les joueurs refusés", \
+        len(a) == 1 and a[0]["consigne"].startswith("Achats : aucun recommandé (police : Tom Gain, Bob Juste → ne pas acheter)")
+    with tempfile.TemporaryDirectory() as t:
+        (Path(t) / "police-2026-11-23.md").write_text("Décision : ne pas acheter tom gain", encoding="utf-8")
+        txt = ej.texte_aucun_achat(["Tom Gain"], base=t)
+    yield "achats refusés : la ligne cite le fichier police avec son lien GitHub complet", \
+        "outputs/basketvibe/police-2026-11-23.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-23.md" in txt
+    yield "achats refusés : sans verdict de refus, pas de ligne", not [x for x in ej.lignes_transferts(marche(annonces=[]), 300000, None, o=O) if x["id"] == "achats-aucun"]
 
 
 def cas_offres():
@@ -1011,7 +1027,7 @@ def cas_equipe_encheres():
         == ["exporte la page Mes enchères — export de 96 h"]
 
 
-CAS = [cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+CAS = [cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_achats_refuses_police, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

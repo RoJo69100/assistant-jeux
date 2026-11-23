@@ -834,6 +834,24 @@ def texte_aucune_vente(bilan) -> str:
     return f"Ventes : aucune à proposer ({n} joueur{'s' if n > 1 else ''} évalué{'s' if n > 1 else ''}, {r})"
 
 
+def _refus_achat(refus) -> list:
+    """Noms des « ne pas acheter <nom> » (verdicts police valides) ; liste vide sans verdict."""
+    import re
+    return [m.strip().title() for m in re.findall(r"ne pas acheter ([^\n;]+)", str(refus).lower())]
+
+
+def texte_aucun_achat(noms, base=None) -> str:
+    """23/11 : quand la police refuse toutes les offres, jamais le silence — la ligne nomme les refusés et cite le fichier police."""
+    police = sorted((Path(base) if base else RACINE / "outputs" / "basketvibe").glob("police-*.md"))
+    lien = f" — {lien_fiche_police(police[-1].name)}" if police else ""
+    return f"Achats : aucun recommandé (police : {', '.join(noms)} → ne pas acheter){lien}"
+
+
+def lien_fiche_police(nom) -> str:
+    chemin = f"outputs/basketvibe/{nom}"
+    return f"{chemin} — {LIEN_FICHE}{chemin}"
+
+
 def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=(), refus="") -> list:
     """Lignes « Transferts » de l'état par événement : `max_offres` offres et `max_ventes` ventes au plus, triées par gain attendu ;
     Marché périmé : une ligne « inconnu » à la place des offres. Le bloc 4 lit ces mêmes lignes. `refus` : verdicts « ne pas vendre /
@@ -860,6 +878,9 @@ def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, 
                               f"priorité : plafonds additionnés {_m(somme)} > capacité {_m(float(capacite))} ; enchéris dans cet ordre "
                               f"(gain attendu) : {ordre} ; tiennent ensemble à leur plafond : {', '.join(tient) or 'aucune'} ; "
                               "chaque enchère gagnée retire son prix de la capacité et baisse les plafonds suivants"), priorite=1))
+    noms_refus = _refus_achat(refus)
+    if not of["offres"] and not of["inconnu"] and noms_refus:  # 23/11 : police a refusé toutes les offres
+        res.append(dict(ligne("achats-aucun", "offre", texte_aucun_achat(noms_refus)), action=False, priorite=3))
     if not ventes:  # 18/11 : jamais de silence sur les ventes
         res.append(dict(ligne("ventes-aucune", "vente", texte_aucune_vente(bilan)), action=False, priorite=3))
     return res + [ligne(f"{x['type']}-{x['nom']}", x["type"] if x["type"] == "vente" else "offre", texte_transfert(x, o))
