@@ -87,7 +87,7 @@ def _match_gabarit(ev, etat, maintenant, cfg):
     if etat == "ecran":
         defauts = (ev.get("ecran") or {}).get("defauts")
         if defauts:
-            return ev.get("verrou"), f"corrige l'écran du {quoi} puis sauvegarde : " + " ; ".join(d["correction"] for d in defauts), True
+            return ev.get("verrou"), _avec_fiche(f"corrige l'écran du {quoi} puis sauvegarde : " + " ; ".join(d["correction"] for d in defauts), ev.get("fiche")), True
         if not (ev.get("fiche") or {}).get("fichier"):
             return ev.get("verrou"), f"saisis et sauvegarde l'écran du {quoi} : fiche introuvable dans briefs/ (agent tactique)", True
         return ev.get("verrou"), _avec_fiche(f"saisis et sauvegarde l'écran du {quoi} selon la fiche", ev["fiche"]), True
@@ -218,7 +218,7 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
-            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test"),
+            "genre": ev.get("genre"), "fiche": (ev.get("fiche") or {}).get("fichier"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test"),
             "arrivee": ev.get("maj_at") or ev.get("rapport_at") or ev.get("page_at")}  # 22/11 : arrivée du prérequis (passage de relance)
 
 

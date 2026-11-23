@@ -58,8 +58,9 @@ def garde_fous(texte: str, police_du_jour: str) -> list:
             f"`python -I pipelines/dossier.py {JEU} achat` puis l'agent police" for s in sommes if s > SEUIL]
 
 
-def consigne_agent(e: dict, jour) -> str:
-    return (f"Jeu : BasketVibe. Horizon d'action = aujourd'hui {jour.isoformat()} (aucune action reportée à un autre jour). "
+def consigne_agent(e: dict, jour, vendus=()) -> str:
+    interdits = f"Ne fais jouer aucun de ces joueurs (leur vente est proposée au plan) : {', '.join(vendus)}. " if vendus else ""
+    return (interdits +f"Jeu : BasketVibe. Horizon d'action = aujourd'hui {jour.isoformat()} (aucune action reportée à un autre jour). "
             f"Événement : {e['evenement']}. À faire : {e['consigne']}. "
             f"Écris ta sortie dans outputs/{JEU}/{e['sortie']} (fichier non vide). "
             f"Interdit : aucun achat, aucune vente, aucune enchère (règle 2) — tu proposes, l'utilisateur exécute. "
@@ -73,7 +74,7 @@ def _derniere(s) -> str:
     return lignes[-1][:160] if lignes else "sans message"
 
 
-def lancer_agent(e: dict, jour, base=BASE, executer=subprocess.run, claude=_CLAUDE, timeout_min=15) -> tuple:
+def lancer_agent(e: dict, jour, base=BASE, executer=subprocess.run, claude=_CLAUDE, timeout_min=15, vendus=()) -> tuple:
     """(lancé ?, raison) : commande préalable (`avant`), puis `claude -p --agent`, puis contrôle de la sortie attendue."""
     claude = shutil.which("claude") if claude is _CLAUDE else claude
     if not claude:
@@ -83,7 +84,7 @@ def lancer_agent(e: dict, jour, base=BASE, executer=subprocess.run, claude=_CLAU
             r = executer(shlex.split(e["avant"]), cwd=RACINE, capture_output=True, text=True, timeout=300)
             if r.returncode:
                 return False, f"commande préalable « {e['avant']} » en échec (code {r.returncode} : {_derniere(r.stderr)})"
-        cmd = [claude, "-p", e.get("prompt") or consigne_agent(e, jour), "--agent", e["agent"], "--permission-mode", "acceptEdits",
+        cmd = [claude, "-p", e.get("prompt") or consigne_agent(e, jour, vendus), "--agent", e["agent"], "--permission-mode", "acceptEdits",
                "--allowedTools", OUTILS, "--output-format", "text"]
         r = executer(cmd, cwd=RACINE, capture_output=True, text=True, timeout=timeout_min * 60)
     except subprocess.TimeoutExpired:
@@ -293,7 +294,50 @@ def statut_agents(res: list) -> str:
     return f"Agents : {n} lancé{'s' if n > 1 else ''} sur {len(res)} prévu{'s' if len(res) > 1 else ''} — " + " · ".join(morceaux)
 
 
-def que_faire(jour, plan: str, res: list, gardes: list, alerte, polices=()) -> str:
+def lignes_composition(rendu: str) -> list:
+    """Lignes du tableau du plan de catégorie Composition (23/11 : chacune porte le lien GitHub complet du brief)."""
+    return [l for l in rendu.splitlines() if re.match(r"\|[^|]*\|\s*Composition\s*\|", l)]
+
+
+def a_saisir(etats: list, maintenant, base=BASE, horizon_h=24) -> str:
+    """Section « À saisir aujourd'hui » : tableaux Écran 1, 2 et 3 de chaque brief dont l'échéance tombe dans les `horizon_h` heures,
+    recopiés tels quels (23/11 : l'utilisateur n'ouvre rien d'autre)."""
+    fin = maintenant + dt.timedelta(hours=horizon_h)
+    blocs, vus = [], set()
+    for e in etats:
+        f, ech = e.get("fiche"), e.get("echeance")
+        if e.get("type") != "match" or not f or ech is None or not (maintenant <= ech <= fin) or f in vus:
+            continue
+        chemin = Path(base) / f
+        if not chemin.is_file():
+            continue
+        vus.add(f)
+        m = re.search(r"^### Écran 1.*?(?=^## |\Z)", chemin.read_text(encoding="utf-8"), re.S | re.M)
+        if m:
+            blocs.append(f"### {e['evenement']} — échéance {ech:%d/%m %H:%M}\n\n" + m.group(0).strip())
+    return ("## À saisir aujourd'hui\n\n" + "\n\n".join(blocs) + "\n") if blocs else ""
+
+
+def joueurs_en_vente(rendu: str) -> list:
+    """Noms des joueurs dont une ligne « vente : Prénom Nom (… » est au plan."""
+    return sorted({m.strip() for m in re.findall(r"vente : ([^,(|]+?) \(", rendu)})
+
+
+def fiches_avec_vendus(base, fichiers, vendus: list) -> list:
+    """(fiche, nom) pour chaque joueur en vente qui a des minutes > 0 à l'Écran 2 d'une fiche."""
+    import composition as comp
+    res = []
+    for f in sorted(set(fichiers)):
+        chemin = Path(base) / f
+        lue = comp.lire_fiche(chemin.read_text(encoding="utf-8")) if chemin.is_file() else None
+        for c in (lue[0] if lue else []):
+            joue = re.sub(r"\D", "", str(c[7])) not in ("", "0")
+            if joue and any(v.lower().split()[-1] == str(c[0]).lower().split()[-1] for v in vendus):
+                res.append((str(f), str(c[0])))
+    return res
+
+
+def que_faire(jour, plan: str, res: list, gardes: list, alerte, polices=(), saisie="") -> str:
     t = [f"# Que faire — BasketVibe — {jour:%d/%m/%Y}", "",
          "Propositions seulement : aucun achat, aucune vente, aucune enchère sans ton accord écrit (règle 2).", ""]
     if alerte:
@@ -306,6 +350,7 @@ def que_faire(jour, plan: str, res: list, gardes: list, alerte, polices=()) -> s
               f"{POLICES_MAX} au plus) → police-{jour.isoformat()}.md", ""]
         t += [f"- {l}" for l in polices_non_lancees(polices)] + ([""] if polices_non_lancees(polices) else [])
     t += gardes + ([""] if gardes else [])
+    t += [saisie] if saisie else []
     return "\n".join(t + [plan.rstrip(), ""])
 
 
@@ -443,14 +488,20 @@ def main() -> int:
         raison = alerte or "passage sans agents (--sans-agents)"
         res = [dict(e, statut="refus", raison=raison) if e["statut"] == "a_lancer" else e for e in prevus]
     else:
-        res = lancer_tous(prevus, jour, timeout_min=cfg.get("agent_timeout_min", 15))
+        res = lancer_tous(prevus, jour, timeout_min=cfg.get("agent_timeout_min", 15), vendus=joueurs_en_vente(rendu))
+        if any(e.get("lance") for e in res):  # les fiches viennent d'être écrites : relire les états
+            etats = ej.lignes(ej.construire(ctx[0], S, BASE, jour, maintenant, cfg), cfg, maintenant)
     rendu, polices = passage_police(ctx, jour, maintenant, S, rendu,
                                     refus=alerte or ("passage sans agents (--sans-agents)" if a.sans_agents else None))
     sorties = "\n".join((BASE / e["sortie"]).read_text(encoding="utf-8") for e in res if (BASE / e["sortie"]).is_file())
     gardes = garde_fous(rendu + "\n" + sorties, src.lire_police(BASE, jour))
     f = BASE / f"que-faire-{jour.isoformat()}.md"
-    f.write_text(que_faire(jour, rendu, res, gardes, alerte, polices), encoding="utf-8")
+    gardes += [f"🟥 Composition : la fiche {x} fait jouer {n}, dont la vente est proposée au plan — retire-le de la fiche"
+               for x, n in fiches_avec_vendus(BASE, [e["fiche"] for e in etats if e.get("fiche")], joueurs_en_vente(rendu))]
+    f.write_text(que_faire(jour, rendu, res, gardes, alerte, polices, a_saisir(etats, maintenant)), encoding="utf-8")
     print(statut_agents(res))
+    for l in lignes_composition(rendu):
+        print(l)
     for l in non_lances(res) + polices_non_lancees(polices):
         print(l)
     code = 2 if alerte else 0

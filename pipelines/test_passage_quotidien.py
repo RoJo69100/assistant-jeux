@@ -310,7 +310,61 @@ def cas_plan_22():
     yield "vente : sans salaire connu, pas de mention inventée", "libère" not in ej.texte_transfert(dict(x, salaire=None), o)
 
 
-CAS = [cas_plan_22, cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
+FICHE_23 = """# Tactique — Wrzos 23/11
+## À saisir
+### Écran 1 — Composition
+| | PG | SG | SF | PF | C |
+|---|---|---|---|---|---|
+| Q1 | Richard | Bonnet | Gimenez | Fournier | Lefebvre |
+### Écran 2 — Consignes
+| Joueur | Poste | Q1 | Q2 | Q3 | Q4 | Prol. | Min | Off. focus | Rôle | Tir | Agress. |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| Richard | PG | PG | — | PG | PG | PG | 36 | 2 | 1 | 2 | 3 |
+| Albano | PF | — | — | PF | — | — | 12 | 3 | 3 | 1 | 3 |
+| Durand | SF | — | — | — | — | — | 0 | 3 | 3 | 3 | 3 |
+### Écran 3 — Adversaires
+| Adversaire | Poste | Focus défensif (1-5) | Zone |
+|---|---|---|---|
+| Mazur | PG | 3 | Perimeter (1) |
+## Après sauvegarde, vérifie
+secret
+"""
+
+
+def cas_fiches_23_11():
+    """23/11 : lien sur chaque ligne Composition, écrans recopiés au que-faire, aucun joueur en vente dans une fiche."""
+    import etat_jour as ej
+    fiche = {"fichier": "briefs/2026-11-23-tactique-wrzos.md", "ok": True, "defauts": []}
+    ev = {"genre": "ligue", "adversaire": "Wrzos", "jour": dt.date(2026, 11, 23), "verrou": dt.datetime(2026, 11, 23, 19, 45), "fiche": fiche}
+    cfg = {"matchs": {"ligue": {"libelle": "match de ligue"}}}
+    _, texte, _ = ej._match_gabarit(dict(ev, ecran={"defauts": [{"correction": "mets minutes de Richard à 36"}]}), "ecran", dt.datetime(2026, 11, 23, 17), cfg)
+    yield "lien : la ligne « corrige l'écran » porte le lien GitHub complet du brief", \
+        "https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-23-tactique-wrzos.md" in texte
+    rendu = "| 🟥 URGENT | Composition | corrige | x |\n| 🟧 IMPORTANT | Entraînement | y |\n| 🟧 IMPORTANT | Composition | saisis |"
+    yield "lien : lignes_composition ne renvoie que les lignes Composition", len(pq.lignes_composition(rendu)) == 2
+    with tempfile.TemporaryDirectory() as t:
+        (Path(t) / "briefs").mkdir()
+        (Path(t) / "briefs" / "2026-11-23-tactique-wrzos.md").write_text(FICHE_23, encoding="utf-8")
+        (Path(t) / "briefs" / "2026-11-23-tactique-loin.md").write_text(FICHE_23.replace("Wrzos", "Loin"), encoding="utf-8")
+        m = dt.datetime(2026, 11, 23, 17, 0)
+        etats = [{"type": "match", "evenement": "ligue Wrzos", "fiche": "briefs/2026-11-23-tactique-wrzos.md", "echeance": dt.datetime(2026, 11, 23, 19, 45)},
+                 {"type": "match", "evenement": "amical Loin", "fiche": "briefs/2026-11-23-tactique-loin.md", "echeance": dt.datetime(2026, 11, 25, 7, 45)}]
+        s = pq.a_saisir(etats, m, base=t)
+        yield "saisie : section « À saisir aujourd'hui » avec les écrans 1, 2 et 3 recopiés du brief dans les 24 h", \
+            s.startswith("## À saisir aujourd'hui") and "### Écran 1" in s and "### Écran 2" in s and "### Écran 3" in s and "| Albano | PF |" in s
+        yield "saisie : un brief à plus de 24 h et le reste du brief (annexe) n'y sont pas", "Loin" not in s and "secret" not in s
+        yield "saisie : le que-faire contient la section", "## À saisir aujourd'hui" in pq.que_faire(dt.date(2026, 11, 23), "plan", [], [], None, saisie=s)
+        v = pq.joueurs_en_vente("| 🟧 | Transferts | vente : Anselmo Albano (PF, 27 ans, note 48), prix attendu 6 000 |")
+        yield "vente : le nom du joueur en vente est lu au plan", v == ["Anselmo Albano"]
+        yield "vente : une fiche qui fait jouer un joueur en vente est signalée", \
+            pq.fiches_avec_vendus(t, ["briefs/2026-11-23-tactique-wrzos.md"], v) == [("briefs/2026-11-23-tactique-wrzos.md", "Albano")]
+        yield "vente : une fiche sans le joueur (ou à 0 minute) n'est pas signalée", \
+            pq.fiches_avec_vendus(t, ["briefs/2026-11-23-tactique-wrzos.md"], ["Pierre Durand"]) == []
+    yield "vente : la consigne de l'agent tactique interdit de faire jouer le joueur en vente", \
+        "Anselmo Albano" in pq.consigne_agent(entree(), JOUR, ["Anselmo Albano"]) and "Ne fais jouer" not in pq.consigne_agent(entree(), JOUR)
+
+
+CAS = [cas_fiches_23_11, cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
