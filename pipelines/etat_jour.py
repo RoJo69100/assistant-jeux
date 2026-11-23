@@ -756,7 +756,7 @@ def ventes_du_jour(donnees, o, tolerance, police="", bilan=None) -> list:
             compte("profit insuffisant")
             continue
         res.append({"type": "vente", "nom": j["name"], "poste": j["position"], "age": int(float(j["age"])), "note": float(j["ps"]),
-                    "prix": prix, "mediane": prix, "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
+                    "prix": prix, "mediane": prix, "salaire": _f(j.get("salary")), "n_case": int(float(case["n"])), "min_moy": float(m["min_moy"]),
                     "mini": _f(case.get("mini")), "maxi": _f(case.get("maxi")),
                     "remplacant": r.get("replacement_name"), "ecart": float(r["gap"]), "tolerance": float(tolerance), "gain": prix,
                     "prix_achat": paye, "profit": profit})
@@ -790,7 +790,7 @@ def texte_transfert(x, o) -> str:
              f"écart avec {x['remplacant']} {_virg(x['ecart'])} (tolérance {_virg(x['tolerance'])}) ; "
              + ("prix d'achat inconnu, profit non calculé" if x.get("prix_achat") is None else
                 f"profit {x['profit'] * 100:.0f} % sur le prix payé {_m(x['prix_achat'])} (≥ {o['vente_marge_profit'] * 100:.0f} %)")
-             + " ; fin : annonce à créer")
+             + " ; fin : annonce à créer" + (f' ; libère {_m(x["salaire"])} de salaire hebdomadaire' if x.get("salaire") is not None else ""))
     else:
         if x["type"] == "amélioration" and x.get("gain_fit") is None:
             seuil = (f"note > {_virg(x['faible_note'])} de {x['faible']} (notre titulaire au poste, le plus de minutes sur {o['matchs_rotation']} matchs de ligue ; ajustement au poste non lu) ; "

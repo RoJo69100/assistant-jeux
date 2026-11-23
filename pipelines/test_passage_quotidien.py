@@ -298,7 +298,19 @@ def cas_relance():
     yield "relance : un agent « inchange » n'est jamais listé comme non lancé en échec", pq.non_lances([res["academie-1"], res["entr-1"]]) == []
 
 
-CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
+def cas_plan_22():
+    import etat_jour as ej
+    table = "| Nom | Prix attendu |\n|---|---|\n| Zed (PF) | 300 000 |"
+    yield "garde-fou : une somme > 250 000 dans une table de prix (pas seulement une ligne d'action) sans police -> ligne rouge", \
+        any("300 000" in l for l in pq.garde_fous(table, ""))
+    o = {"case_min_ventes": 3, "matchs_rotation": 4, "minutes_hors_rotation": 6, "vente_marge_profit": 0.1}
+    x = {"type": "vente", "nom": "Zed", "poste": "PF", "age": 27, "note": 47.9, "prix": 5250.0, "mediane": 5250.0, "n_case": 4,
+         "min_moy": 3.0, "mini": 350.0, "maxi": 65000.0, "remplacant": "Lef", "ecart": -15.1, "tolerance": 1.0, "prix_achat": None, "salaire": 12000.0}
+    yield "vente : la ligne affiche le salaire hebdomadaire libéré", "libère 12 000 de salaire hebdomadaire" in ej.texte_transfert(x, o).replace(chr(160), " ").replace(chr(8239), " ")
+    yield "vente : sans salaire connu, pas de mention inventée", "libère" not in ej.texte_transfert(dict(x, salaire=None), o)
+
+
+CAS = [cas_plan_22, cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
