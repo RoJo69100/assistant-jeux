@@ -276,7 +276,29 @@ def cas_police_plan():
         and sum("plafond de 3 polices" in str(r["raison"]) for r in res) == 3
 
 
-CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan]
+def cas_relance():
+    import datetime as dt2
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        j = dt2.date(2026, 11, 23)
+        yield "relance : sans instantané, pas d'heure de passage", pq.horodatage_passage(t, j) is None
+        (Path(t) / "aujourdhui-2026-11-23.md").write_text("<!-- généré le 2026-11-23 10:40 -->\nplan\n", encoding="utf-8")
+        depuis = pq.horodatage_passage(t, j)
+        yield "relance : heure du dernier passage lue dans l'instantané", depuis == dt2.datetime(2026, 11, 23, 10, 40)
+    prevus = [{"agent": "tactique", "id": "m-ligue", "statut": "a_lancer", "raison": None},
+              {"agent": "academie", "id": "academie-1", "statut": "a_lancer", "raison": None},
+              {"agent": "entrainement", "id": "entr-1", "statut": "deja_fait", "raison": "x"}]
+    etats = [{"id": "m-ligue", "arrivee": dt2.datetime(2026, 11, 23, 15, 41)},
+             {"id": "academie-1", "arrivee": dt2.datetime(2026, 11, 19, 9, 0)}, {"id": "entr-1", "arrivee": None}]
+    res = {e["id"]: e for e in pq.filtrer_relance(prevus, etats, depuis)}
+    yield "relance : l'aperçu exporté à 15:41 lance l'agent tactique", res["m-ligue"]["statut"] == "a_lancer"
+    yield "relance : le rapport d'académie du 19/11 n'est pas nouveau", res["academie-1"]["statut"] == "inchange" and "10:40" in res["academie-1"]["raison"]
+    yield "relance : un agent déjà fait reste « deja_fait »", res["entr-1"]["statut"] == "deja_fait"
+    yield "relance : sans passage antérieur, rien n'est filtré", pq.filtrer_relance(prevus, etats, None) == prevus
+    yield "relance : un agent « inchange » n'est jamais listé comme non lancé en échec", pq.non_lances([res["academie-1"], res["entr-1"]]) == []
+
+
+CAS = [cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

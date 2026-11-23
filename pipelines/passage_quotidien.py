@@ -17,7 +17,7 @@ Police des gros transferts (18/11) : toute enchère ou achat proposé de maximum
 outputs/basketvibe/police-AAAA-MM-JJ.md, poussée avec outputs/ sur claude/passage-quotidien. La ligne du plan dit « police faite
 à HH:MM, prix de l'export de HH:MM » (+ « à relire en jeu avant d'enchérir » au-delà de 2 h ; refus de la police en premier).
 
-Lancer : python -I pipelines/passage_quotidien.py [--sans-agents] [--sans-git]
+Lancer : python -I pipelines/passage_quotidien.py [--sans-agents] [--sans-git] [--relance]
 """
 import argparse
 import datetime as dt
@@ -104,6 +104,34 @@ def lancer_tous(prevus: list, jour, base=BASE, timeout_min=15, **kw) -> list:
         e = dict(e)
         if e["statut"] == "a_lancer":
             e["lance"], e["raison"] = lancer_agent(e, jour, base=base, timeout_min=timeout_min, **kw)
+        res.append(e)
+    return res
+
+
+# ---- Relance (22/11) --------------------------------------------------------------------------------------------------------
+# Second passage du jour (16:30 Paris) : un aperçu de match exporté après le passage de 10:40 n'a aucune fiche avant le lendemain.
+# --relance ne lance que les agents dont le prérequis (aperçu, page, rapport) est arrivé après le dernier passage du jour.
+
+def horodatage_passage(base, jour):
+    """Heure de Paris du dernier passage du jour (« généré le AAAA-MM-JJ HH:MM » de l'instantané) ; None sans instantané."""
+    f = Path(base) / f"aujourdhui-{jour.isoformat()}.md"
+    if not f.is_file():
+        return None
+    m = re.search(r"généré le (\d{4}-\d{2}-\d{2} \d{2}:\d{2})", f.read_text(encoding="utf-8")[:300])
+    return dt.datetime.strptime(m.group(1), "%Y-%m-%d %H:%M") if m else None
+
+
+def filtrer_relance(prevus: list, etats: list, depuis) -> list:
+    """Agents « a_lancer » dont la ligne d'état n'a pas reçu de prérequis après `depuis` : statut « inchange » (jamais lancés).
+    Sans passage antérieur (depuis None), rien n'est filtré."""
+    if depuis is None:
+        return prevus
+    arrivee = {l.get("id"): l.get("arrivee") for l in etats}
+    res = []
+    for e in prevus:
+        a = arrivee.get(e["id"])
+        if e["statut"] == "a_lancer" and not (a is not None and a > depuis):
+            e = dict(e, statut="inchange", raison=f"aucun prérequis arrivé depuis le passage de {depuis:%H:%M}")
         res.append(e)
     return res
 
@@ -395,6 +423,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--sans-agents", action="store_true", help="calcule les agents prévus sans les lancer")
     ap.add_argument("--sans-git", action="store_true", help="n'écrit ni commit ni push")
+    ap.add_argument("--relance", action="store_true", help="second passage : seulement les agents dont le prérequis est arrivé depuis le dernier passage")
     a = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
     import aujourdhui_sources as src
@@ -403,9 +432,13 @@ def main() -> int:
     if not a.sans_git:
         base_sha, msg = restaurer()
         print(msg)
+    import aujourdhui as auj0
+    depuis = horodatage_passage(BASE, auj0.heure_paris_naive().date()) if a.relance else None  # avant que rejouer() réécrive l'instantané
     print(etiqueter_experiences())  # avant le plan : le niveau du prochain amical suit l'étiquette écrite
     jour, maintenant, rendu, etats, S, alerte, cfg, ctx = rejouer()
     prevus = ej.agents_a_lancer(etats, cfg, BASE, jour)
+    if a.relance:
+        prevus = filtrer_relance(prevus, etats, depuis)
     if alerte or a.sans_agents:
         raison = alerte or "passage sans agents (--sans-agents)"
         res = [dict(e, statut="refus", raison=raison) if e["statut"] == "a_lancer" else e for e in prevus]

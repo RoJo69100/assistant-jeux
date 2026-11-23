@@ -214,7 +214,8 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
-            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test")}
+            "genre": ev.get("genre"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test"),
+            "arrivee": ev.get("maj_at") or ev.get("rapport_at") or ev.get("page_at")}  # 22/11 : arrivée du prérequis (passage de relance)
 
 
 def texte_test_fiche(experiences, r, joues=()) -> str:
