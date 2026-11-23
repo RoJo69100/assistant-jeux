@@ -157,7 +157,9 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
     if etat == "saisi":
         if not (ev.get("fiche") or {}).get("fichier"):
             return None, "saisis et sauvegarde l'entraînement de la semaine : aucune fiche d'entraînement de la semaine dans briefs/ (agent entrainement)", True
-        return None, _avec_fiche("saisis et sauvegarde l'entraînement de la semaine selon la fiche", ev["fiche"]), True
+        v = ev["fiche"].get("verdict")  # 22/11 : après l'agent, la ligne reprend son verdict
+        return None, _avec_fiche(f"saisis et sauvegarde l'entraînement de la semaine : {v}" if v
+                                 else "saisis et sauvegarde l'entraînement de la semaine selon la fiche", ev["fiche"]), True
     if t == "enchere" and etat == "police":
         return ev.get("fin"), f"police d'abord pour l'enchère sur {ev['nom']} : python pipelines/dossier.py basketvibe achat", True
     if t == "enchere" and etat == "fin":
@@ -1056,7 +1058,28 @@ def fiche_entrainement(base, jour, depuis):
         m = re.match(r"(\d{4}-\d{2}-\d{2})-entrainement", f.name)
         if m and depuis <= dt.date.fromisoformat(m.group(1)) <= jour and f.stat().st_size > 0:
             trouves.append((m.group(1), f.name))
-    return {"fichier": f"briefs/{max(trouves)[1]}"} if trouves else None
+    if not trouves:
+        return None
+    v = verdict_entrainement(Path(base) / "briefs" / max(trouves)[1])
+    return {"fichier": f"briefs/{max(trouves)[1]}", **({"verdict": v} if v else {})}
+
+
+def verdict_entrainement(fichier):
+    """22/11 : verdict de l'agent entraînement, lu dans le titre de la section « ## 1. Fiche de saisie … : <verdict> » du brief.
+    « AUCUN CHANGEMENT » -> « aucun changement : vérifie l'écran » ; sinon les lignes de tableau de la section qui portent « → »
+    (ancien → nouveau réglage), à défaut le texte du titre ; None si la section est absente."""
+    import re
+    try:
+        texte = Path(fichier).read_text(encoding="utf-8")
+    except OSError:
+        return None
+    m = re.search(r"^## 1\..*?:\s*(.+?)\s*$(.*?)(?=^## |\Z)", texte, re.M | re.S)
+    if not m:
+        return None
+    if m.group(1).strip().lower().startswith("aucun changement"):
+        return "aucun changement : vérifie l'écran"
+    lignes = [re.sub(r"\s*\|\s*", " ; ", l.strip().strip("|")).strip(" ;") for l in m.group(2).splitlines() if l.startswith("|") and "→" in l]
+    return "changements à saisir : " + (" | ".join(lignes) if lignes else m.group(1).strip())
 
 
 MANQUE_SIGNATURE = ("à juger, il manque la mesure « meilleures caractéristiques du poste » de la règle de signature "

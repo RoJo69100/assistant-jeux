@@ -601,6 +601,20 @@ def cas_lien_fiche():
     yield "lien : le lien pointe sur le fichier de la fiche", url + "2026-11-17-tactique-amical-adv-a-18-11.md" in citent[0]["consigne"] \
         and url + "2026-11-22-entrainement-semaine.md" in citent[-1]["consigne"]
     yield "lien : sans fiche, la ligne ne dit pas « selon la fiche »", "selon la fiche" not in sans["consigne"] and "aucune fiche" in sans["consigne"]
+    # 22/11 : la ligne « saisis l'entraînement » reprend le verdict de l'agent
+    with tempfile.TemporaryDirectory() as tmp:
+        (Path(tmp) / "briefs").mkdir()
+        b = Path(tmp) / "briefs" / "2026-11-23-entrainement-x.md"
+        b.write_text("# Brief\n\n## 1. Fiche de saisie (pour le 29/11) : AUCUN CHANGEMENT\n\n| a | b |\n\n## 2. Verdict\n", encoding="utf-8")
+        f0 = ej.fiche_entrainement(tmp, dt.date(2026, 11, 23), dt.date(2026, 11, 22))
+        l0 = ej.etat_evenement(dict(en, fiche=f0), CFG, dt.datetime(2026, 11, 23, 16, 0))
+        yield "verdict entraînement : aucun changement -> « vérifie l'écran » + lien", "aucun changement : vérifie l'écran" in l0["consigne"] \
+            and url + "2026-11-23-entrainement-x.md" in l0["consigne"] and "aucune fiche" not in l0["consigne"]
+        b.write_text("## 1. Fiche de saisie : 2 CHANGEMENTS\n\n| Poste | Joueur | Réglage |\n|---|---|---|\n| C | Bernard | Rebond → Passes |\n\n## 2. Verdict\n", encoding="utf-8")
+        l1 = ej.etat_evenement(dict(en, fiche=ej.fiche_entrainement(tmp, dt.date(2026, 11, 23), dt.date(2026, 11, 22))), CFG, dt.datetime(2026, 11, 23, 16, 0))
+        yield "verdict entraînement : liste des changements reprise", "changements à saisir : C ; Bernard ; Rebond → Passes" in l1["consigne"]
+        yield "verdict entraînement : la demande d'export reste tant que la page précise manque", \
+            ej.etat_evenement(dict(en, page_at=None), CFG, dt.datetime(2026, 11, 23, 16, 0))["consigne"].startswith("exporte la page Entraînement")
 
 
 def cas_preset_adversaire():
