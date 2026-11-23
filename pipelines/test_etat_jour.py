@@ -404,7 +404,7 @@ def cas_branchement():
         lignes, consignes = qfb.bloc_etat(d, S, tmp, maint.date(), maint)
         texte, cons = qfb.rendre_blocs({"actions": [], "exports": [], "garder": [], "infos": [], "capacite": None}, d, {}, maint.date(), maint,
                                        S, etudes=[], base=tmp)
-        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]] + ej.exports_periodiques(d, CFG, maint) + ej.matchs_ligue(d, CFG, maint) \
+        attendu = [l for l in ej.lignes(ej.construire(d, S, tmp, maint.date(), maint, CFG), CFG, maint) if l["action"]] + ej.exports_periodiques(d, CFG, maint) + ej.matchs_ligue(d, CFG, maint) + ej.calendrier_a_refaire(d, maint) \
             + qfb.lignes_transferts_du_jour(d, None, S, maint)
     t = "\n".join(lignes)
     rangs = [l for l in lignes if l.startswith("| ") and not l.startswith("| Priorité")]

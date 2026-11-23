@@ -256,7 +256,15 @@ def cas_blocs_2_3():
 
     # --- bloc 2
     l, c = qfb.bloc_2(donnees_t(calendrier=(LG_11,)), S, JOUR_T, MAINT, base=dossier())
-    yield "test_aucun_amical", l == ["aucun amical programmé aujourd'hui ni demain"] and c == []
+    yield "test_aucun_amical", l == ["Amical de demain : inconnu : calendrier jamais exporté, à refaire"] and c == []
+    d_age = donnees_t(calendrier=(LG_11,), **{"gold.bv_exports_state": T(["ordre", "ecran", "pour_quoi", "dernier_paris", "age_h", "statut"],
+                                                                        [(3, "Amicaux (liste)", "x", "2026-11-09T09:00:00", 49, "🟧 à refaire")])})
+    l, _ = qfb.bloc_2(d_age, S, JOUR_T, MAINT, base=dossier())
+    yield "test_amical_inconnu_dit_l_age_du_calendrier", l == ["Amical de demain : inconnu : calendrier de 49 h, à refaire"] and "aucun amical programmé" not in l[0]
+    import etat_jour as ej_t
+    ligne = ej_t.calendrier_a_refaire(d_age, MAINT)
+    yield "test_amical_inconnu_ajoute_ligne_export_calendrier", len(ligne) == 1 and ligne[0]["consigne"].startswith("exporte le calendrier") and ligne[0]["action"]
+    yield "test_amical_connu_demain_pas_de_ligne_calendrier", ej_t.calendrier_a_refaire(donnees_t(), MAINT) == [] or not ej_t.amical_connu(donnees_t(), MAINT.date() + dt.timedelta(days=1))
 
     b_jour = dossier(("2026-11-10-tactique-amical.md", brief_amical(), None))
     l, c = qfb.bloc_2(donnees_t(), S, JOUR_T, MAINT, base=b_jour)

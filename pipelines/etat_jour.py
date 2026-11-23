@@ -426,6 +426,33 @@ def exports_periodiques(donnees, cfg, maintenant, enchere_proposee=False) -> lis
     return res
 
 
+def age_calendrier(donnees):
+    """Âge en heures (entier) de la dernière capture de la page Amicaux (gold.bv_exports_state) ; None si jamais exportée."""
+    age = next((r.get("age_h") for r in _rows(donnees, "gold.bv_exports_state") if r.get("ecran") == "Amicaux (liste)"), None)
+    return None if age in (None, "") else int(float(age))
+
+
+def amical_connu(donnees, jour) -> bool:
+    """Un amical est-il au calendrier en base à cette date ?"""
+    return any(r.get("competition_kind") == "amical" and _date(r.get("day")) == jour for r in _rows(donnees, "calendrier"))
+
+
+def texte_calendrier_inconnu(donnees) -> str:
+    h = age_calendrier(donnees)
+    return "inconnu : calendrier jamais exporté, à refaire" if h is None else f"inconnu : calendrier de {h} h, à refaire"
+
+
+def calendrier_a_refaire(donnees, maintenant) -> list:
+    """22/11 : aucun amical connu pour demain -> une ligne d'export « exporte le calendrier » (jamais « aucun amical programmé »)."""
+    if amical_connu(donnees, maintenant.date() + dt.timedelta(days=1)):
+        return []
+    h = age_calendrier(donnees)
+    quoi = "jamais exporté" if h is None else f"export de {h} h"
+    return [{"id": "export-calendrier", "type": "export_periodique", "evenement": "Calendrier", "ecran": "Amicaux (liste)", "etat": None,
+             "prochain": "export_periodique", "rates": [], "echeance": None, "age_h": None, "priorite": 2, "action": True, "defauts": [],
+             "consigne": f"exporte le calendrier (page Amicaux) : aucun amical connu pour demain — {quoi}"}]
+
+
 def derniere_journee(donnees, maintenant):
     """Coup d'envoi (heure de Paris) du dernier match de ligue déjà commencé, lu dans gold.bv_etat_match ; None sans match."""
     envois = [_dt(r["coup_envoi_paris"]) for r in _rows(donnees, "etat_match") if r.get("competition_kind") == "ligue"]

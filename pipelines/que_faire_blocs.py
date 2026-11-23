@@ -388,7 +388,8 @@ def bloc_2(donnees, S, jour: dt.date, maintenant: dt.datetime, base=None) -> tup
     """Bloc 2 : composition de l'amical, choisie le jour même (brief tactique du jour). (lignes affichées, consignes de session)."""
     am = auj.prochain_amical(donnees, jour, maintenant)
     if am is None:
-        return ["aucun amical programmé aujourd'hui ni demain"], []
+        import etat_jour as ej
+        return [f"Amical de demain : {ej.texte_calendrier_inconnu(donnees)}"], []
     test = auj.test_en_cours((S or {}).get("experiences"), am, auj.lignes_de(donnees, "amical_reglage"))
     quand = auj.jour_fr(am["date"])
     entete = f"Amical contre {am['match']} ({quand}), heure limite du verrou {am['limite']:%H:%M}"
@@ -1027,7 +1028,8 @@ def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime, capacite
     ls += lignes_transferts_du_jour(donnees, capacite, S, maintenant)  # phase A : offres et ventes (mêmes lignes que le bloc 4)
     proposee = any(l["action"] and l["prochain"] == "offre" and not str(l["id"]).startswith(("offres-", "tester-")) for l in ls) \
         or any(c.get("fin") is None or c["fin"] > maintenant for c in (S or {}).get("cibles", []))  # 19/11 : Mes enchères
-    ls = sorted(ls + ej.exports_periodiques(donnees, cfg, maintenant, proposee) + ej.matchs_ligue(donnees, cfg, maintenant, base),
+    ls = sorted(ls + ej.exports_periodiques(donnees, cfg, maintenant, proposee) + ej.matchs_ligue(donnees, cfg, maintenant, base)
+                + ej.calendrier_a_refaire(donnees, maintenant),
                 key=lambda l: l["priorite"])  # 17/11 : Marché, historique, Personnel ; 19/11 : classements, onglets et matchs de la ligue
     rangs, consignes = [], []
     for l in ls:
