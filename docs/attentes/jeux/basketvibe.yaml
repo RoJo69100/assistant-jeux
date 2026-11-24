@@ -92,9 +92,12 @@ domaines:
 # « Meilleures compétences au poste » : sur la fourchette de PS du test (refined_skill_brackets × gold.bv_ps_weight),
 # borne basse ≥ PS le plus faible de l'effectif au poste (gold.bv_roster_now : aucune vue de rotation, l'effectif en tient lieu)
 # ET borne haute ≥ PS du meilleur au poste − marge_haute ; potentiel high seulement. Aucun high observé le 18/11 : à recalibrer au premier.
+# 24/11, règle de l'utilisateur : le seuil est à Claude, jamais « à juger ». « Meilleures caractéristiques du poste » = PS au poste
+# du prospect testé, au MILIEU de sa fourchette ((bas + haut) / 2, PS pondéré gold.bv_ps_weight), au moins égal au PS du joueur le
+# plus faible de notre effectif à ce poste (gold.bv_roster_now) ; potentiel high seulement. Verdict : signer ou ignorer.
 academie_signature:
   potentiel: high
-  marge_haute: 5
+  mesure: milieu_fourchette_vs_plus_faible_du_poste
 offres:
   matchs_rotation: 4
   case_min_ventes: 3
@@ -166,9 +169,9 @@ etat_jour:
   minutes_max: 36              # contrôle fiche : minutes par joueur (règle de l'utilisateur, plan v4)
   duree_match_h: 2             # après le coup d'envoi + cette durée, un match non marqué joué demande sa page
   matchs:
-    ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui,
+    ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui, controle_fatigue: oui, export_ecran_avant_verrou: oui,
               coup_envoi_defaut: "20:00", verrou_defaut: "19:45" }   # heures de la section rythme quand core.fixture n'en a pas
-    coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui }
+    coupe:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui, controle_fatigue: oui, export_ecran_avant_verrou: oui }
     amical: { etats: [calendrier, fiche, ecran, verrou, joue], analyse_si: [], e1_uniforme: oui, libelle: "match amical" }   # jamais d'aperçu ni d'export avant le match
   # Décision de l'utilisateur du 17/11 : le plan demande TOUJOURS le Marché (toutes les pages) et l'historique global des transferts
   # (bonnes offres), et le Personnel une fois par semaine. Âge : gold.bv_exports_state (core.export_rule, 24 h / 168 h) ou, pour

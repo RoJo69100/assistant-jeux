@@ -90,6 +90,10 @@ def _match_gabarit(ev, etat, maintenant, cfg):
             return ev.get("verrou"), _avec_fiche(f"corrige l'écran du {quoi} puis sauvegarde : " + " ; ".join(d["correction"] for d in defauts), ev.get("fiche")), True
         if not (ev.get("fiche") or {}).get("fichier"):
             return ev.get("verrou"), f"saisis et sauvegarde l'écran du {quoi} : fiche introuvable dans briefs/ (agent tactique)", True
+        if cfg["matchs"][ev["genre"]].get("export_ecran_avant_verrou"):  # 24/11 : sans export de la page, la saisie n'est jamais contrôlée
+            return ev.get("verrou"), _avec_fiche(
+                f"saisis et sauvegarde l'écran du {quoi} selon la fiche, puis exporte la page du match sauvegardé avant le verrou "
+                f"{_hh(ev.get('verrou'))} (sans export, la saisie n'est pas contrôlée)", ev["fiche"]), True
         return ev.get("verrou"), _avec_fiche(f"saisis et sauvegarde l'écran du {quoi} selon la fiche", ev["fiche"]), True
     if etat == "verrou":
         return ev.get("verrou"), f"rien avant le verrou {_hh(ev.get('verrou'))} : écran du {quoi} sauvegardé", False
@@ -216,6 +220,10 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
         elif ev["genre"] == "amical":  # sous l'export d'un match de ligue
             prio = 3
     defauts = [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("defauts", []) + (ev.get("ecran") or {}).get("defauts", [])
+    if ev["type"] == "match" and ev["genre"] == "amical" and action and not defauts:  # 24/11 : 🟥 = ligue, coupe ou erreur réelle
+        prio = max(prio, 2)
+    if ev["type"] == "match" and prochain == "ecran" and action and cfg["matchs"][ev["genre"]].get("export_ecran_avant_verrou"):
+        prio = 1  # 24/11 : ligue et coupe, après la fiche : saisie puis export de la page avant le verrou, jamais dégradée
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
             "genre": ev.get("genre"), "fiche": (ev.get("fiche") or {}).get("fichier"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test"),
@@ -376,7 +384,8 @@ def appliquer_controles(ev, reel, cfg) -> dict:
         fiche["defauts"] = controle_adversaire(fiche.get("adversaire"), ev["adversaire"]) \
             + (controle_blessures(fj, reel.get("blessures", {}), ev["jour"]) if ev.get("jour") else []) \
             + controle_minutes(fj, cfg["minutes_max"]) \
-            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"]) if reel.get("seuil_fatigue") is not None else [])
+            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"])
+               if regle.get("controle_fatigue") and reel.get("seuil_fatigue") is not None else [])  # 24/11 : jamais en amical (coût ≈ 1/10, M§1.2)
         ev["fiche"] = fiche
     if ev.get("ecran") and ev["ecran"].get("joueurs"):
         ecran = dict(ev["ecran"])
@@ -837,7 +846,14 @@ def texte_aucune_vente(bilan) -> str:
 def _refus_achat(refus) -> list:
     """Noms des « ne pas acheter <nom> » (verdicts police valides) ; liste vide sans verdict."""
     import re
-    return [m.strip().title() for m in re.findall(r"ne pas acheter ([^\n;]+)", str(refus).lower())]
+    noms = []
+    for m in re.findall(r"ne pas acheter ([^\n;]+)", str(refus).lower()):
+        m = re.split(r"\s+à\s+\d|[*:()—]", m)[0].strip(" .,")  # 24/11 : jamais de « ** », de prix ou de motif dans le nom
+        noms.append(" ".join(w if w in PARTICULES else w.capitalize() for w in m.split()))
+    return [n for n in noms if n]
+
+
+PARTICULES = ("de", "du", "des", "da", "dos", "van", "von", "der", "la", "le", "di")
 
 
 def texte_aucun_achat(noms, base=None) -> str:
@@ -1133,8 +1149,8 @@ def verdict_entrainement(fichier):
     return "changements à saisir : " + (" | ".join(lignes) if lignes else m.group(1).strip())
 
 
-MANQUE_SIGNATURE = ("à juger, il manque la mesure « meilleures caractéristiques du poste » de la règle de signature "
-                    "(aucun seuil écrit par l'utilisateur)")
+MANQUE_SIGNATURE = ("ignorer (PS au poste non mesurable : exporte l'Équipe et la page Académie ; seuil : milieu de la fourchette "
+                    "≥ PS le plus faible de l'effectif au poste)")  # 24/11 : jamais « à juger », le seuil est à nous
 
 
 def _tests_academie(donnees):
@@ -1148,10 +1164,14 @@ def _tests_academie(donnees):
         return None, [], None
     tests = {str(r["slot"]): r for r in _rows(donnees, "tests_academie") if r.get("teste") and r.get("potentiel")}
     capture = max((_dt(r["capture_paris"]) for r in _rows(donnees, "tests_academie") if r.get("capture_paris")), default=None)
+    poids = _rows(donnees, "ps_poids")
+    postes = {r["position"]: (float(r["ps_min"]), float(r["ps_max"])) for r in _rows(donnees, "ps_poste")}
     n, verdicts = 0, []
     for p in pros:
         t = tests.get(str(p["slot"]))
-        verdict = auj.verdict_prospect(dict(p, test_potentiel=t["potentiel"] if t else None))[0]
+        f = auj.ps_fourchette_test(auj._json(t.get("brackets")), p["position"], poids) if t else None
+        verdict = auj.verdict_prospect(dict(p, test_potentiel=t["potentiel"] if t else None,
+                                            ps_test_bas=f[0] if f else None, ps_test_haut=f[1] if f else None), postes.get(p["position"]))[0]
         if t is None:
             n += verdict == "tester"
             continue

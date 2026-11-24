@@ -996,7 +996,7 @@ def seuil_signature(cfg=None):
         s = (cfg if cfg is not None else etat_jour.charger_config()).get("academie_signature") or {}
     except Exception:
         s = {}
-    return {"potentiel": str(s.get("potentiel", "high")).lower(), "marge_haute": float(s.get("marge_haute", 5))}
+    return {"potentiel": str(s.get("potentiel", "high")).lower(), "mesure": str(s.get("mesure", "milieu_fourchette_vs_plus_faible_du_poste"))}
 
 
 def _json(v):
@@ -1027,9 +1027,9 @@ def ps_fourchette_test(brackets, position, poids):
 
 def verdict_prospect(p, poste=None):
     """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour.
-    Seuil du 18/11 (décidé par Claude, contestable) pour « meilleures compétences au poste » : sur la fourchette de PS du test
-    (`ps_test_bas`, `ps_test_haut`), bas ≥ PS le plus faible du poste ET haut ≥ meilleur − marge_haute ; potentiel high seulement.
-    `poste` = (ps_min, ps_max) de l'effectif au poste ; fourchette ou poste absent → « à juger »."""
+    Seuil du 24/11 (décidé par Claude, contestable) pour « meilleures caractéristiques du poste » : milieu de la fourchette de PS du
+    test ((`ps_test_bas` + `ps_test_haut`) / 2) ≥ PS le plus faible de notre effectif au poste ; potentiel high seulement.
+    `poste` = (ps_min, ps_max) de l'effectif au poste ; fourchette ou poste absent → « à juger » (mesure manquante, jamais rendu tel quel)."""
     pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
     bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
     test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
@@ -1043,7 +1043,7 @@ def verdict_prospect(p, poste=None):
         verdict = "ignorer"  # test lu, pas High : hors règle de signature
     elif tb in (None, "") or th in (None, "") or not poste:
         verdict = "à juger"
-    elif float(tb) >= float(poste[0]) and float(th) >= float(poste[1]) - s["marge_haute"]:
+    elif (float(tb) + float(th)) / 2 >= float(poste[0]):
         verdict = "signer"
     else:
         verdict = "ignorer"

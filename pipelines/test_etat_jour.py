@@ -22,6 +22,7 @@ def match(**kw):
     return ev
 
 
+SKILLS = ("two_point", "three_point", "passing", "ball_handling", "defense", "rebounding", "athleticism", "stamina")
 FICHE = {"ok": True, "adversaire": "Adv A", "fichier": "briefs/x.md"}
 ECRAN = {"sauvegarde": True}
 T_APERCU = dt.datetime(2026, 11, 17, 9, 0)
@@ -203,6 +204,25 @@ def cas_controles():
     d = ej.controle_fatigue(fj, {"Joueur Beta": 23.5, "Joueur Gamma": 40.0}, 20)
     yield "fatigue : joueur qui joue au-dessus du seuil → ❌ ; au repos : rien", len(d) == 1 and "Beta" in d[0]["texte"] and "23,5" in d[0]["texte"] \
         and "20" in d[0]["texte"]
+    # 24/11 : fatigue contrôlée en ligue et coupe seulement ; en amical, jamais (coût ≈ 1/10) ; 🟥 jamais pour un amical sans erreur réelle
+    fat = {"blessures": {}, "fatigue": {"Joueur Beta": 23.5}, "seuil_fatigue": 20}
+    amf = match(genre="amical", coup_envoi=dt.datetime(2026, 11, 18, 8, 0), verrou=dt.datetime(2026, 11, 18, 7, 45), fiche=dict(FICHE, joueurs=fj))
+    yield "amical : fatigue au-dessus du seuil → aucun défaut de fiche", \
+        ej.appliquer_controles(amf, fat, CFG)["fiche"]["defauts"] == []
+    yield "ligue : fatigue au-dessus du seuil → défaut de fiche", any(
+        "fatigue" in x["texte"] for x in ej.appliquer_controles(match(fiche=dict(FICHE, joueurs=fj)), fat, CFG)["fiche"]["defauts"])
+    la = ej.etat_evenement(ej.appliquer_controles(amf, fat, CFG), CFG, dt.datetime(2026, 11, 18, 6, 0))
+    yield "amical sans erreur réelle à 2 h du verrou : jamais 🟥 (priorité ≥ 2)", la["prochain"] == "ecran" and la["priorite"] >= 2
+    am_err = dict(amf, fiche=dict(FICHE, joueurs=[joueur("Alpha", 40)]))
+    yield "amical avec une erreur réelle (40 min) : 🟥 reste possible", ej.etat_evenement(
+        ej.appliquer_controles(am_err, fat, CFG), CFG, dt.datetime(2026, 11, 18, 6, 0))["priorite"] == 1
+    # 24/11 : ligue et coupe, fiche valide : « saisis, sauvegarde puis exporte la page avant le verrou », 🟥
+    for genre in ("ligue", "coupe"):
+        le = ej.etat_evenement(match(genre=genre, apercu_at=T_APERCU, fiche=FICHE), CFG, MAINT)
+        yield f"{genre} : fiche valide, écran non exporté → ligne « exporte la page du match sauvegardé avant le verrou », 🟥", \
+            le["prochain"] == "ecran" and "exporte la page du match sauvegardé avant le verrou 19:45" in le["consigne"] and le["priorite"] == 1
+    yield "amical : pas de consigne d'export de page (jamais d'export avant le match)", "exporte la page" not in ej.etat_evenement(
+        dict(amf, fiche=FICHE), CFG, MAINT)["consigne"]
     ecran = [joueur("Alpha", 24), joueur("Beta", 24, agress=4), joueur("Gamma", 0)]
     d = ej.controle_ecran(fj, ecran)
     yield "écran contre fiche : chaque écart nommé, avec la valeur de la fiche", len(d) == 2 \
@@ -517,8 +537,19 @@ def cas_academie_decision():
     haut = [(0, "P1", "PF", 197, "high", True, "2026-11-17T21:50:48")] + tests[1:]
     lh = [l for l in ej.lignes([e for e in ej.construire(donnees(prospects=(cols, pros), tests_academie=(tcols, haut)), S, "/nonexistent",
                                                           dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie"], CFG, MAINT) if l["action"]]
-    yield "académie : potentiel high → la règle ne s'applique pas en entier, ce qui manque est nommé, aucun seuil inventé", lh and \
-        "P1 (PF, high) : à juger, il manque" in lh[0]["consigne"]
+    yield "académie : high sans mesure de PS : verdict ignorer, jamais « à juger » ni « aucun seuil écrit »", lh and \
+        "P1 (PF, high) : ignorer (PS au poste non mesurable" in lh[0]["consigne"] and "à juger" not in lh[0]["consigne"] \
+        and "aucun seuil" not in lh[0]["consigne"]
+    ppoids = (["skill", "pg", "sg", "sf", "pf", "c"], [(s, 0.125, 0.125, 0.125, 0.125, 0.125) for s in SKILLS])
+    br = lambda lo, hi: {s: {"min": lo, "max": hi} for s in SKILLS}
+    for nom, lo, hi, attendu in (("fort", 60, 70, "signer"), ("faible", 20, 30, "ignorer")):
+        tc = tcols + ["brackets"]
+        tr = [(0, "P1", "PF", 197, "high", True, "2026-11-17T21:50:48", br(lo, hi))] + [t + ({},) for t in tests[1:]]
+        lg = [l for l in ej.lignes([e for e in ej.construire(
+            donnees(prospects=(cols, pros), tests_academie=(tc, tr), ps_poids=ppoids, ps_poste=(["position", "ps_min", "ps_max"], [("PF", 45.0, 58.0)])),
+            S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie"], CFG, MAINT) if l["action"]]
+        yield f"académie : high {nom} (milieu {(lo + hi) / 2} contre plus faible du poste 45) → {attendu}", \
+            lg and f"P1 (PF, high) : {attendu}" in lg[0]["consigne"]
     ok, err = ej._rows({"tests_academie": (tcols, tests)}, "tests_academie"), None
     yield "académie : requête des tests sur la dernière capture (max(captured_at))", "tests_academie" in __import__("aujourdhui").REQUETES \
         and "max(captured_at)" in __import__("aujourdhui").REQUETES["tests_academie"] and len(ok) == 4
@@ -739,6 +770,9 @@ def cas_achats_refuses_police():
     a = [x for x in l if x["id"] == "achats-aucun"]
     yield "achats refusés : une ligne « Achats : aucun recommandé » nomme les joueurs refusés", \
         len(a) == 1 and a[0]["consigne"].startswith("Achats : aucun recommandé (police : Tom Gain, Bob Juste → ne pas acheter)")
+    brut = "ne pas acheter manuel arevalo** à 475 000 : aucun gain sportif\nne pas acheter albert de groot\nne pas acheter héctor castro**"
+    yield "police : noms sans « ** », sans prix ni motif, majuscule seulement au nom propre (« de Groot » → « de Groot »)", \
+        ej._refus_achat(brut) == ["Manuel Arevalo", "Albert de Groot", "Héctor Castro"]
     with tempfile.TemporaryDirectory() as t:
         (Path(t) / "police-2026-11-23.md").write_text("Décision : ne pas acheter tom gain", encoding="utf-8")
         txt = ej.texte_aucun_achat(["Tom Gain"], base=t)
