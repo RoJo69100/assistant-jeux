@@ -388,7 +388,57 @@ def cas_plafonds_separes():
     yield "plafonds : le yaml du jeu met tactique hors plafond", "tactique" in ej.charger_config()["agents_hors_plafond"]
 
 
-CAS = [cas_plafonds_separes, cas_fiches_23_11,cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
+def cas_base_indisponible():
+    """24/11 : base saturée (66 requêtes sur 66 en échec) → rien n'est écrasé, ligne 🟥 dans un fichier à part, sortie."""
+    def panne(sql):
+        raise SystemExit("erreur SQL (https 503) : base simulée en échec")
+    appels = []
+
+    def une_sur_trois(sql):
+        appels.append(sql)
+        if len(appels) == 1:
+            raise TimeoutError("lecture expirée")
+        return [{"ok": 1}]
+    yield "base : 3 sondes sur 3 en échec → panne", (pq.sonde_base(panne) or "").startswith("3 sondes sur 3 en échec")
+    yield "base : 1 sonde sur 3 en échec → pas de panne", pq.sonde_base(une_sur_trois) is None
+
+    import aujourdhui as auj
+    with tempfile.TemporaryDirectory() as t:
+        base = Path(t)
+        qf = base / f"que-faire-{JOUR.isoformat()}.md"
+        qf.write_text("plan du matin\n", encoding="utf-8")
+        brief = base / "briefs" / "2026-11-17-tactique-adv-a-18-11.md"
+        brief.parent.mkdir()
+        brief.write_text("brief du matin\n", encoding="utf-8")
+        avant = {p: p.read_text(encoding="utf-8") for p in (qf, brief)}
+        engages = []
+        anciens = (pq.BASE, auj.charger_sql, auj.heure_paris_naive, sys.argv, pq.etiqueter_experiences, pq.rejouer)
+        pq.BASE = base
+        auj.charger_sql = lambda: types.SimpleNamespace(executer=panne)
+        auj.heure_paris_naive = lambda: dt.datetime(2026, 11, 17, 18, 30)
+        sys.argv = ["passage_quotidien.py", "--relance", "--sans-git"]
+        pq.etiqueter_experiences = lambda *a, **k: engages.append("etiquettes") or ""
+        pq.rejouer = lambda: engages.append("rejouer")
+        try:
+            code = pq.main()
+        finally:
+            pq.BASE, auj.charger_sql, auj.heure_paris_naive, sys.argv, pq.etiqueter_experiences, pq.rejouer = anciens
+        f = pq.fichier_indisponible(base, JOUR)
+        lignes = f.read_text(encoding="utf-8").splitlines() if f.is_file() else [""]
+        yield "base : passage en panne → code 2", code == 2
+        yield "base : que-faire et brief du matin inchangés", all(p.read_text(encoding="utf-8") == v for p, v in avant.items())
+        yield "base : aucun autre fichier écrit", sorted(p.name for p in base.iterdir()) == sorted(["briefs", qf.name, f.name])
+        yield "base : ligne 🟥 « base indisponible » en tête du fichier à part", lignes[0].startswith("🟥 base indisponible : 3 sondes")
+        yield "base : ni étiquettes, ni plan, ni agents après la sonde en échec", engages == []
+        pousses = []
+        pq.sortie_base_indisponible(JOUR, dt.datetime(2026, 11, 17, 18, 40), "plan non fiable : 66 requêtes sur 66 en échec",
+                                    base=base, commit=lambda fs: pousses.append(fs) or (True, "poussé"))
+        lignes = f.read_text(encoding="utf-8").splitlines()
+        yield "base : deuxième panne en tête, la première reste dessous", "18:40" in lignes[0] and "18:30" in lignes[1]
+        yield "base : seul ce fichier est commité", len(pousses) == 1 and len(pousses[0]) == 1 and pousses[0][0].endswith(f.name)
+
+
+CAS = [cas_base_indisponible, cas_plafonds_separes, cas_fiches_23_11,cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

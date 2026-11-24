@@ -422,6 +422,49 @@ def etiqueter_experiences(executer=subprocess.run) -> str:
     return f"étiquettes d'expérience : {_derniere(r.stdout)}"
 
 
+# ---- Base indisponible (24/11) ----------------------------------------------------------------------------------------------
+# Le 24/11 à 17:40, base saturée : 66 requêtes sur 66 en échec, et le passage --relance a écrasé le que-faire du matin.
+# Désormais : plus de la moitié des requêtes en échec (sonde avant toute écriture, puis lecture du plan) → rien n'est écrasé
+# (que-faire, briefs, instantané, outputs) ; une ligne 🟥 « base indisponible » en tête d'un fichier à part, puis sortie (code 2).
+SONDES = ("select 1 as ok", "select count(*) as n from core.rafraichi_etat", "select max(id) as m from bronze.raw_pages")
+
+
+def sonde_base(executer, sondes=SONDES):
+    """Message d'échec si plus de la moitié des sondes échouent, sinon None. `executer(sql)` lève en cas d'échec."""
+    import aujourdhui as auj
+    erreurs = []
+    for q in sondes:
+        try:
+            executer(q)
+        except SystemExit as e:  # sql.py termine par sys.exit(message)
+            erreurs.append(str(e))
+        except Exception as e:  # noqa: BLE001
+            erreurs.append(f"{type(e).__name__}: {e}")
+    if auj.echec_massif(erreurs, len(sondes)):
+        return f"{len(erreurs)} sondes sur {len(sondes)} en échec ({_derniere(erreurs[-1])})"
+    return None
+
+
+def fichier_indisponible(base, jour):
+    return Path(base) / f"base-indisponible-{jour.isoformat()}.md"
+
+
+def sortie_base_indisponible(jour, maintenant, raison, base=None, commit=None) -> int:
+    """Écrit la ligne 🟥 en tête de base-indisponible-AAAA-MM-JJ.md (les lignes plus anciennes du jour restent dessous) ;
+    ne touche à aucun autre fichier. `commit(fichiers)` (optionnel) ne pousse que ce fichier. Code retour 2."""
+    f = fichier_indisponible(BASE if base is None else base, jour)
+    ligne =(f"🟥 base indisponible : {raison} (passage de {maintenant:%H:%M}) — que-faire, briefs et outputs du jour "
+             f"inchangés ; aucun agent lancé.")
+    ancien = f.read_text(encoding="utf-8") if f.is_file() else ""
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(ligne + "\n" + ancien, encoding="utf-8")
+    print(ligne)
+    if commit:
+        ok, msg = commit([str(f.relative_to(RACINE)) if f.is_relative_to(RACINE) else str(f)])
+        print(f"git : {msg}")
+    return 2
+
+
 # ---- Rejeu du plan ---------------------------------------------------------------------------------------------------------
 
 def rejouer():
@@ -478,9 +521,16 @@ def main() -> int:
         base_sha, msg = restaurer()
         print(msg)
     import aujourdhui as auj0
-    depuis = horodatage_passage(BASE, auj0.heure_paris_naive().date()) if a.relance else None  # avant que rejouer() réécrive l'instantané
+    commit = None if a.sans_git else (lambda fs: commit_push(fs, auj0.heure_paris_naive().date(), base_sha=base_sha))
+    h0 = auj0.heure_paris_naive()
+    panne = sonde_base(auj0.charger_sql().executer)  # avant toute écriture (étiquettes, instantané, que-faire)
+    if panne:
+        return sortie_base_indisponible(h0.date(), h0, panne, commit=commit)
+    depuis = horodatage_passage(BASE, h0.date()) if a.relance else None  # avant que rejouer() réécrive l'instantané
     print(etiqueter_experiences())  # avant le plan : le niveau du prochain amical suit l'étiquette écrite
     jour, maintenant, rendu, etats, S, alerte, cfg, ctx = rejouer()
+    if alerte:  # échec massif des lectures du plan : rien n'est écrasé
+        return sortie_base_indisponible(jour, maintenant, alerte, commit=commit)
     prevus = ej.agents_a_lancer(etats, cfg, BASE, jour)
     if a.relance:
         prevus = filtrer_relance(prevus, etats, depuis)
