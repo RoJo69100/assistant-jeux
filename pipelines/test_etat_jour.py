@@ -542,14 +542,14 @@ def cas_academie_decision():
         and "aucun seuil" not in lh[0]["consigne"]
     ppoids = (["skill", "pg", "sg", "sf", "pf", "c"], [(s, 0.125, 0.125, 0.125, 0.125, 0.125) for s in SKILLS])
     br = lambda lo, hi: {s: {"min": lo, "max": hi} for s in SKILLS}
-    for nom, lo, hi, attendu in (("fort", 60, 70, "signer"), ("faible", 20, 30, "ignorer")):
+    for nom, lo, hi, attendu in (("fort", 60, 70, "signer"), ("faible", 20, 30, "ignorer"), ("borne basse sous la rotation", 40, 70, "ignorer")):
         tc = tcols + ["brackets"]
         tr = [(0, "P1", "PF", 197, "high", True, "2026-11-17T21:50:48", br(lo, hi))] + [t + ({},) for t in tests[1:]]
         lg = [l for l in ej.lignes([e for e in ej.construire(
             donnees(prospects=(cols, pros), tests_academie=(tc, tr), ps_poids=ppoids, ps_poste=(["position", "ps_min", "ps_max"], [("PF", 45.0, 58.0)])),
             S, "/nonexistent", dt.date(2026, 11, 17), MAINT, CFG) if e["type"] == "academie"], CFG, MAINT) if l["action"]]
-        yield f"académie : high {nom} (milieu {(lo + hi) / 2} contre plus faible du poste 45) → {attendu}", \
-            lg and f"P1 (PF, high) : {attendu}" in lg[0]["consigne"]
+        yield f"académie : high {nom} ({lo}–{hi} contre rotation 45–58) → {attendu}, « seuil décidé par Claude le 18/11 »", \
+            lg and f"P1 (PF, high) : {attendu}" in lg[0]["consigne"] and "seuil décidé par Claude le 18/11" in lg[0]["consigne"]
     ok, err = ej._rows({"tests_academie": (tcols, tests)}, "tests_academie"), None
     yield "académie : requête des tests sur la dernière capture (max(captured_at))", "tests_academie" in __import__("aujourdhui").REQUETES \
         and "max(captured_at)" in __import__("aujourdhui").REQUETES["tests_academie"] and len(ok) == 4

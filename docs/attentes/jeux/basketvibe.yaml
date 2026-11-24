@@ -92,12 +92,12 @@ domaines:
 # « Meilleures compétences au poste » : sur la fourchette de PS du test (refined_skill_brackets × gold.bv_ps_weight),
 # borne basse ≥ PS le plus faible de l'effectif au poste (gold.bv_roster_now : aucune vue de rotation, l'effectif en tient lieu)
 # ET borne haute ≥ PS du meilleur au poste − marge_haute ; potentiel high seulement. Aucun high observé le 18/11 : à recalibrer au premier.
-# 24/11, règle de l'utilisateur : le seuil est à Claude, jamais « à juger ». « Meilleures caractéristiques du poste » = PS au poste
-# du prospect testé, au MILIEU de sa fourchette ((bas + haut) / 2, PS pondéré gold.bv_ps_weight), au moins égal au PS du joueur le
-# plus faible de notre effectif à ce poste (gold.bv_roster_now) ; potentiel high seulement. Verdict : signer ou ignorer.
+# Seuil décidé par Claude le 18/11 (jamais « aucun seuil écrit par l'utilisateur », jamais « à juger »). « Meilleures caractéristiques du
+# poste » = fourchette de PS du test (gold.bv_ps_weight) : borne basse ≥ PS du joueur de ROTATION le plus faible au poste (minutes en
+# ligue > 0 sur les 4 derniers matchs) ET borne haute ≥ PS du meilleur du poste − marge_haute ; potentiel high seulement.
 academie_signature:
   potentiel: high
-  mesure: milieu_fourchette_vs_plus_faible_du_poste
+  marge_haute: 5
 offres:
   matchs_rotation: 4
   case_min_ventes: 3

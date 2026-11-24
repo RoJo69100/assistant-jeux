@@ -154,7 +154,8 @@ def _autre_gabarit(ev, etat, maintenant, cfg):
             signer = [x["nom"] for x in v if x["verdict"] == "signer"]
             quoi = f"signe {', '.join(signer)}" if signer else "aucun prospect à signer"
             return None, (f"testé (capture du {_jj(ev.get('capture'))}), rapport du {_jj(ev['quand'])} : "
-                          + " ; ".join(f"{x['nom']} ({x['poste']}, {x['potentiel']}) : {x['verdict']}" for x in v) + f" — {quoi}"), True
+                          + " ; ".join(f"{x['nom']} ({x['poste']}, {x['potentiel']}) : {x['verdict']}" for x in v) + f" — {quoi}"
+                          + " (seuil décidé par Claude le 18/11)"), True
         return None, f"décide pour chaque prospect du rapport du {_jj(ev['quand'])} : tester, signer ou ignorer", True
     if etat == "traitement_attendu":
         return ev["quand"], f"rien avant le traitement de l'entraînement ({_jj(ev['quand'])} {_hh(ev['quand'])})", False
@@ -1149,8 +1150,7 @@ def verdict_entrainement(fichier):
     return "changements à saisir : " + (" | ".join(lignes) if lignes else m.group(1).strip())
 
 
-MANQUE_SIGNATURE = ("ignorer (PS au poste non mesurable : exporte l'Équipe et la page Académie ; seuil : milieu de la fourchette "
-                    "≥ PS le plus faible de l'effectif au poste)")  # 24/11 : jamais « à juger », le seuil est à nous
+MANQUE_SIGNATURE = ("ignorer (PS au poste non mesurable : exporte l'Équipe et la page Académie)")  # jamais « à juger »
 
 
 def _tests_academie(donnees):

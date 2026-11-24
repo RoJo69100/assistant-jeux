@@ -129,7 +129,9 @@ REQUETES = {
                       "where r.game = 'basketvibe' and r.page_type = 'academy' and r.source_url like '%/academy' and r.captured_at = d.m "
                       "order by slot",
     # 17/11 : PS le plus faible et le meilleur de chaque poste de l'effectif (gold.bv_position_summary ne porte que les noms)
-    "ps_poste": "select position, min(ps) as ps_min, max(ps) as ps_max from gold.bv_roster_now group by position",
+    # 24/11 : rotation seulement (minutes en ligue > 0 sur les 4 derniers matchs, gold.bv_sell_candidates), pas tout l'effectif
+    "ps_poste": "select position, min(ps) as ps_min, max(ps) as ps_max from gold.bv_sell_candidates "
+                "where league_min_last4 > 0 group by position",
     # 18/11 : poids du PS par poste, pour la fourchette de PS d'un prospect testé (seuil academie_signature)
     "ps_poids": "select skill, pg, sg, sf, pf, c from gold.bv_ps_weight",
     # L3 (étape 5f) : remplaçant au même poste (force fit), écart et salaire ; tolérance de force lue dans core.game_params
@@ -996,7 +998,7 @@ def seuil_signature(cfg=None):
         s = (cfg if cfg is not None else etat_jour.charger_config()).get("academie_signature") or {}
     except Exception:
         s = {}
-    return {"potentiel": str(s.get("potentiel", "high")).lower(), "mesure": str(s.get("mesure", "milieu_fourchette_vs_plus_faible_du_poste"))}
+    return {"potentiel": str(s.get("potentiel", "high")).lower(), "marge_haute": float(s.get("marge_haute", 5))}
 
 
 def _json(v):
@@ -1012,7 +1014,8 @@ def _json(v):
 
 def ps_fourchette_test(brackets, position, poids):
     """(bas, haut) du PS au poste d'un prospect testé : bornes `refined_skill_brackets` pondérées par gold.bv_ps_weight
-    (même formule que ps_mid de gold.bv_academy_prospects). None si une compétence ou un poids manque."""
+    (même formule que ps_mid de gold.bv_academy_prospects). None si une compétence ou un poids manque. Règle du 18/11 appliquée par
+    verdict_prospect : bas ≥ PS du plus faible de la rotation au poste ET haut ≥ PS du meilleur du poste − 5."""
     col = str(position or "").lower()
     w = {r["skill"]: r.get(col) for r in poids or []}
     if not isinstance(brackets, dict) or not w or any(v in (None, "") for v in w.values()):
@@ -1027,9 +1030,10 @@ def ps_fourchette_test(brackets, position, poids):
 
 def verdict_prospect(p, poste=None):
     """(verdict, bas, haut, test) d'un prospect d'académie : règle de l'utilisateur du 17/11 (voir `academie`). Partagé avec etat_jour.
-    Seuil du 24/11 (décidé par Claude, contestable) pour « meilleures caractéristiques du poste » : milieu de la fourchette de PS du
-    test ((`ps_test_bas` + `ps_test_haut`) / 2) ≥ PS le plus faible de notre effectif au poste ; potentiel high seulement.
-    `poste` = (ps_min, ps_max) de l'effectif au poste ; fourchette ou poste absent → « à juger » (mesure manquante, jamais rendu tel quel)."""
+    Seuil du 18/11 (décidé par Claude, contestable) pour « meilleures caractéristiques du poste » : sur la fourchette de PS du test
+    (`ps_test_bas`, `ps_test_haut`), bas ≥ PS du joueur de ROTATION le plus faible au poste ET haut ≥ PS du meilleur du poste − marge_haute ;
+    potentiel high seulement. `poste` = (ps_min, ps_max) des joueurs de rotation au poste (minutes en ligue > 0 sur les 4 derniers
+    matchs, requête « ps_poste ») ; fourchette ou poste absent → « à juger » (mesure manquante, jamais rendu tel quel)."""
     pos, age, taille = p["position"], int(p["age"]), float(p["height_cm"])
     bas, haut = PLAGE_TAILLE[pos][0], PLAGE_TAILLE[pos][1] + (CROISSANCE_17_ANS if age >= 17 else 0)
     test = str(p.get("test_potentiel") or "").strip().lower()  # « high » / « decent » / « low » ; absent = test non lu
@@ -1043,7 +1047,7 @@ def verdict_prospect(p, poste=None):
         verdict = "ignorer"  # test lu, pas High : hors règle de signature
     elif tb in (None, "") or th in (None, "") or not poste:
         verdict = "à juger"
-    elif (float(tb) + float(th)) / 2 >= float(poste[0]):
+    elif float(tb) >= float(poste[0]) and float(th) >= float(poste[1]) - s["marge_haute"]:
         verdict = "signer"
     else:
         verdict = "ignorer"
