@@ -1,17 +1,17 @@
-<!-- généré le 2026-11-24 11:35 -->
+<!-- généré le 2026-11-24 14:13 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟧 IMPORTANT | Export | fais le preset de l'adversaire (pour voir ses joueurs) puis exporte l'aperçu du match de ligue contre Žirmūnai (25/11) — échéance 25/11 19:45 |
+| 🟧 IMPORTANT | Composition | corrige la fiche du match de ligue contre Žirmūnai (25/11) : réduis les minutes de Boyer (fatigue 21,33) ; réduis les minutes de Richard (fatigue 20,91) ; réduis les minutes de Bonnet (fatigue 24,53) ; réduis les minutes de Gimenez (fatigue 20,95) ; réduis les minutes de Lefebvre (fatigue 23,47) (outputs/basketvibe/briefs/2026-11-24-tactique-zirmunai-25-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-24-tactique-zirmunai-25-11.md) — ❌ Boyer fatigue 21,33 au-dessus de 20 ; ❌ Richard fatigue 20,91 au-dessus de 20 ; ❌ Bonnet fatigue 24,53 au-dessus de 20 ; ❌ Gimenez fatigue 20,95 au-dessus de 20 ; ❌ Lefebvre fatigue 23,47 au-dessus de 20 ; ❌ écran : Baron focus offensif 1 (fiche 3) ; ❌ écran : Baron rôle 1 (fiche 3) ; ❌ écran : Boyer focus offensif 2 (fiche 3) ; ❌ écran : Boyer rôle 2 (fiche 3) ; ❌ écran : Boyer tir 3 (fiche 2) ; ❌ écran : Richard minutes 24 (fiche 36) ; ❌ écran : Richard focus offensif 1 (fiche 2) ; ❌ écran : Richard tir 3 (fiche 2) ; ❌ écran : Bonnet minutes 48 (fiche 36) ; ❌ écran : Leclerc focus offensif 4 (fiche 3) ; ❌ écran : Leclerc rôle 4 (fiche 3) ; ❌ écran : Leclerc tir 5 (fiche 2) ; ❌ écran : Durand minutes 24 (fiche 0) ; ❌ écran : Gimenez minutes 24 (fiche 36) ; ❌ écran : Gimenez focus offensif 3 (fiche 4) ; ❌ écran : Albano tir 3 (fiche 1) ; ❌ écran : Lefebvre minutes 24 (fiche 36) ; ❌ écran : Legrand minutes 24 (fiche 12) ; ❌ écran : Bernard focus offensif 2 (fiche 3) ; ❌ écran : Bernard rôle 2 (fiche 3) ; ❌ écran : Fournier minutes 24 (fiche 36) — échéance 25/11 19:45 — données de 0 h |
 | 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre Garden City (26/11) selon la fiche (outputs/basketvibe/briefs/2026-11-24-tactique-amical-garden-city-26-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-24-tactique-amical-garden-city-26-11.md) — échéance 26/11 07:45 |
-| 🟧 IMPORTANT | Analyse | juge les décisions à mesurer après le match de ligue contre Wrzos Zmigrod (23/11) — données de 14,7 h |
+| 🟧 IMPORTANT | Analyse | juge les décisions à mesurer après le match de ligue contre Wrzos Zmigrod (23/11) — données de 17,4 h |
 | 🟧 IMPORTANT | Académie/Draft | testé (capture du 23/11), rapport du 19/11 : Quentin Besson (PG, decent) : ignorer ; Damien Roussel (PG, high) : ignorer ; Lenny Gauthier (PF, decent) : ignorer — aucun prospect à signer (seuil décidé par Claude le 18/11) |
 | 🟧 IMPORTANT | Transferts | pas d'enchère avant le test ; Police : ne pas acheter — tester le potentiel (25 000) : Orlando Rinaldi (C, 18 ans, 206 cm, note 44,7), fin 25/11 05:14 ; taille dans la plage du poste (règle de signature d'académie) ; seul « High » justifie une enchère (au plus 1 test et 25 000 par jour) — proposition seulement (règle 2) |
-| 🟧 IMPORTANT | Export | exporte le Classement de la Tier 2 - League 4 — export de 119 h |
-| 🟧 IMPORTANT | Export | exporte le Classement de l'European Premier League — export de 119 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 119,7 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre Kaunas (24/11) — données de 17,5 h |
+| 🟧 IMPORTANT | Export | exporte le Classement de la Tier 2 - League 4 — export de 122 h |
+| 🟧 IMPORTANT | Export | exporte le Classement de l'European Premier League — export de 122 h |
+| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 122,3 h |
+| 🟩 SUIVI | Export | exporte la page du match amical contre Kaunas (24/11) — données de 20,2 h |
 | 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo, Héctor Castro, Kazimierz Lewicki, Camilo Varela, Albert de Groot, Dmytro Fedorenko → ne pas acheter) — outputs/basketvibe/police-2026-11-24.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-24.md |
 | 🟩 SUIVI | Transferts | Ventes : aucune à proposer (12 joueurs évalués, en rotation : 9 ; déjà en vente : 1 ; « ne pas vendre » de la police : 1 ; jeune de 16 à 18 ans sans test Low ou Decent : 1) |
 | 🟩 SUIVI | Export | exporte les 5 matchs de la ligue joués hier et pas encore en base (onglets Details et Stats par quart ; liste : outputs/basketvibe/exports-a-faire/ligue-2026-11-24.md) — sert à l'étude du Match Engine : B1 (étude du 18/11) : 5×48 : 29 sur 150 ; rotation : 95 sur 150 |
@@ -56,66 +56,72 @@ composition de l'amical en préparation
 
 | Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |
 |---|---|---|---|---|---|---|---|---|---|
-| Soan Boyer | C | 29 | 42,0 | 10 000 | 1 000 | 1 000 | dans 0,7 h | -11,7 | non (prix au-dessus de la médiane de la case) |
-| Marcos Paredes | SF | 17 | 43,7 | 1 500 000 | 302 500 | 302 500 | dans 0,9 h | -11,7 | non (prix au-dessus de la médiane de la case) |
-| Ivan Mašek | SF | 22 | 42,5 | 150 000 | 5 000 | 5 000 | dans 3,1 h | -16,9 | non (prix au-dessus de la médiane de la case) |
-| Iker León | PF | 16 | 37,4 | 450 000 | 45 500 | 45 500 | dans 3,2 h | -18,4 | non (prix au-dessus de la médiane de la case) |
-| Michal Růžička | PF | 24 | 38,8 | 250 | 251 | 251 | dans 3,2 h | -20,7 | oui |
-| Felicjan Musiał | PG | 24 | 47,8 | 0 | 102 500 | 102 500 | dans 4,1 h | -9,6 | oui |
-| Tomé Leite | PG | 29 | 52,6 | 250 000 | 499 999 | 499 999 | dans 4,2 h | -4,3 | oui |
-| Jack Boyle | C | 26 | 37,9 | 25 000 | 175 | 175 | dans 4,5 h | -21,6 | non (prix au-dessus de la médiane de la case) |
-| Pádraig Fitzgerald | SF | 28 | 55,0 | 1 199 000 | 1 009 999 | 660 141 | dans 4,5 h | -1,5 | non (prix au-dessus de la médiane de la case) |
-| Odhran Smith | PG | 30 | 50,5 | 399 000 | 61 000 | 61 000 | dans 4,5 h | -6,8 | non (prix au-dessus de la médiane de la case) |
-| Padraig Power | PF | 28 | 41,2 | 50 000 | 1 000 | 1 000 | dans 4,5 h | -12,7 | non (prix au-dessus de la médiane de la case) |
-| Carlo Moretti | C | 17 | 40,3 | 550 000 | 302 500 | 302 500 | dans 4,5 h | -13,4 | non (prix au-dessus de la médiane de la case) |
-| Stanko Đurić | SG | 16 | 48,7 | 6 500 000 | 1 010 000 | 660 141 | dans 4,6 h | -8,0 | non (prix au-dessus de la médiane de la case) |
-| Miloš Golubović | PG | 17 | 38,5 | 199 000 | 45 500 | 45 500 | dans 4,7 h | -18,6 | non (prix au-dessus de la médiane de la case) |
-| Jeremiasz Buczek | C | 30 | 38,3 | 0 | 10 250 | 10 250 | dans 4,9 h | -15,7 | non (case peu fiable : 3 ventes) |
-| Ignacy Kosowski | SF | 22 | 44,5 | 0 | 5 000 | 5 000 | dans 5,0 h | -13,9 | oui |
-| Matéo Fleury | SG | 25 | 48,1 | 1 000 000 | 102 500 | 102 500 | dans 5,6 h | -9,0 | non (prix au-dessus de la médiane de la case) |
-| Gaspard Thomas | SG | 17 | 46,9 | 5 600 000 | 1 010 000 | 660 141 | dans 5,6 h | -10,2 | non (prix au-dessus de la médiane de la case) |
-| Matan Bouzaglo | PF | 16 | 46,2 | 3 500 000 | 1 010 000 | 660 141 | dans 5,8 h | -14,7 | non (prix au-dessus de la médiane de la case) |
-| Raz Ovadia | C | 16 | 39,5 | 999 000 | 45 500 | 45 500 | dans 5,8 h | -14,5 | non (prix au-dessus de la médiane de la case) |
-| Henryk Witkowski | SF | 27 | 51,5 | 140 000 | 499 999 | 155 562 | dans 5,8 h | -7,4 | oui |
-| Menahem Mizrahi | PG | 25 | 53,0 | 500 000 | 700 000 | 660 141 | dans 6,5 h | -3,9 | oui |
-| Menahem Abitbol | SG | 26 | 51,4 | 300 000 | 499 999 | 499 999 | dans 6,5 h | -5,3 | oui |
-| Chagai Amar | SG | 24 | 54,2 | 1 250 000 | 700 000 | 660 141 | dans 6,5 h | -2,7 | non (prix au-dessus de la médiane de la case) |
-| Eimantas Vanagas | PG | 16 | 32,7 | 10 000 | 1 126 | 1 126 | dans 6,8 h | -24,5 | non (prix au-dessus de la médiane de la case) |
-| Émile Dupuis | SG | 25 | 51,8 | 950 000 | 700 000 | 660 141 | dans 7,0 h | -5,2 | non (prix au-dessus de la médiane de la case) |
-| Hilary Majchrzak | PF | 17 | 42,7 | 500 000 | 302 500 | 302 500 | dans 7,5 h | -16,5 | non (prix au-dessus de la médiane de la case) |
-| Denis Vučković | C | 16 | 42,9 | 1 500 000 | 302 500 | 302 500 | dans 7,7 h | -11,2 | non (prix au-dessus de la médiane de la case) |
-| Baldassare Russo | SG | 31 | 49,7 | 70 000 | 10 125 | 10 125 | dans 7,8 h | -11,0 | non (prix au-dessus de la médiane de la case) |
-| Norman Krüger | PF | 17 | 37,7 | 0 | 45 500 | 45 500 | dans 8,7 h | -21,6 | oui |
-| Lamberto Alberti | PG | 26 | 59,5 | 2 000 000 | 1 009 999 | 660 141 | dans 9,0 h | +2,5 | non (prix au-dessus de la médiane de la case) |
-| Duarte Pereira | SG | 28 | 61,6 | 1 500 000 | 1 405 162 | 660 141 | dans 9,2 h | +4,7 | non (prix au-dessus de la médiane de la case) |
-| Enrique Aguinaldo | C | 28 | 57,1 | 1 500 000 | 1 009 999 | 660 141 | dans 9,2 h | +3,6 | non (prix au-dessus de la médiane de la case) |
-| Francis Parapolo | SG | 31 | 50,5 | 10 000 | 61 000 | 24 938 | dans 9,3 h | -6,2 | oui |
-| Valentín Bolaños | SF | 16 | 38,9 | 1 599 000 | 45 500 | 45 500 | dans 9,4 h | -17,1 | non (prix au-dessus de la médiane de la case) |
-| Seo-jun Bui | PF | 28 | 60,2 | 1 900 000 | 1 405 162 | 660 141 | dans 9,6 h | +0,9 | non (prix au-dessus de la médiane de la case) |
-| Fabian Pietrzak | SG | 20 | 47,2 | 520 000 | 1 010 000 | 660 141 | dans 10,1 h | -9,3 | oui |
-| Naglis Lapė | C | 17 | 43,7 | 980 000 | 302 500 | 302 500 | dans 10,1 h | -10,2 | non (prix au-dessus de la médiane de la case) |
-| Lenny Marchand | SG | 19 | 48,7 | 980 000 | 1 010 000 | 660 141 | dans 10,1 h | -8,0 | non (au-dessus de la capacité restante) |
-| Damián Benavides | PG | 29 | 59,6 | 2 200 000 | 1 009 999 | 660 141 | dans 10,4 h | +2,6 | non (prix au-dessus de la médiane de la case) |
-| Fábio Lopes | SF | 17 | 37,3 | 155 000 | 45 500 | 45 500 | dans 10,7 h | -19,5 | non (prix au-dessus de la médiane de la case) |
-| Maurice Bowers | C | 26 | 54,3 | 2 222 222 | 499 999 | 499 999 | dans 11,7 h | +0,5 | non (prix au-dessus de la médiane de la case) |
-| Arturo Santos | PF | 25 | 57,2 | 2 222 222 | 1 477 350 | 660 141 | dans 12,0 h | +3,7 | non (prix au-dessus de la médiane de la case) |
-| Cristian Ferreyra | PG | 16 | 34,1 | 0 | 1 126 | 1 126 | dans 15,0 h | -23,1 | oui |
-| Orlando Rinaldi | C | 18 | 44,7 | 300 000 | 302 500 | 302 500 | dans 17,7 h | -14,5 | oui |
-| Albert de Groot | PG | 28 | 56,0 | 600 000 | 1 009 999 | 660 141 | dans 17,8 h | -1,0 | oui |
-| Sander Rasmussen | PG | 27 | 41,4 | 10 000 | 1 000 | 1 000 | dans 19,5 h | -13,6 | non (prix au-dessus de la médiane de la case) |
-| Jaber Al-Abbas | SF | 18 | 42,1 | 1 200 000 | 302 500 | 302 500 | dans 20,3 h | -15,0 | non (prix au-dessus de la médiane de la case) |
-| Nam-joon Ra | C | 25 | 56,9 | 3 500 000 | 1 477 350 | 660 141 | dans 20,8 h | +3,3 | non (prix au-dessus de la médiane de la case) |
-| Dovydas Anužis | SF | 30 | 41,0 | 50 000 | 875 | 875 | dans 20,8 h | -19,7 | non (prix au-dessus de la médiane de la case) |
-| Baptiste Perrin | PG | 25 | 56,8 | 2 000 000 | 1 477 350 | 660 141 | dans 20,9 h | -0,4 | non (prix au-dessus de la médiane de la case) |
-| Hilary Cichy | C | 27 | 47,4 | 50 | 10 000 | 10 000 | dans 21,3 h | -6,2 | oui |
-| Jarosław Kapusta | PG | 30 | 45,5 | 30 000 | 10 125 | 10 125 | dans 21,3 h | -10,1 | non (prix au-dessus de la médiane de la case) |
-| Paul Hofmann | SG | 27 | 51,2 | 900 000 | 499 999 | 499 999 | dans 21,3 h | -5,3 | non (prix au-dessus de la médiane de la case) |
-| Paolo Kim | PF | 26 | 59,2 | 4 500 023 | 1 009 999 | 660 141 | dans 21,7 h | 0,0 | non (prix au-dessus de la médiane de la case) |
-| Tymon Chmielewski | PG | 26 | 61,1 | 3 000 023 | 1 405 162 | 660 141 | dans 21,7 h | +4,3 | non (prix au-dessus de la médiane de la case) |
-| Tvrtko Filipović | PG | 30 | 40,7 | 10 000 | 875 | 875 | dans 22,3 h | -16,6 | non (prix au-dessus de la médiane de la case) |
-| Luke Turay | SG | 27 | 50,3 | 129 000 | 499 999 | 155 562 | dans 23,2 h | -6,6 | oui |
-| Olaf Kozłowski | SF | 31 | 46,5 | 1 000 | 10 125 | 10 125 | dans 23,5 h | -12,5 | oui |
-| Joaquim Magalhães | PF | 19 | 49,6 | 680 000 | 1 010 000 | 660 141 | dans 24,0 h | -9,6 | non (au-dessus de la capacité restante) |
+| Ivan Mašek | SF | 22 | 42,5 | 150 000 | 5 000 | 5 000 | dans 0,5 h | -16,9 | non (prix au-dessus de la médiane de la case) |
+| Michal Růžička | PF | 24 | 38,8 | 250 | 251 | 251 | dans 0,5 h | -20,7 | oui |
+| Iker León | PF | 16 | 37,4 | 450 000 | 45 500 | 45 500 | dans 0,6 h | -18,4 | non (prix au-dessus de la médiane de la case) |
+| Felicjan Musiał | PG | 24 | 47,8 | 0 | 102 500 | 102 500 | dans 1,5 h | -9,6 | oui |
+| Tomé Leite | PG | 29 | 52,6 | 250 000 | 499 999 | 499 999 | dans 1,6 h | -4,3 | oui |
+| Odhran Smith | PG | 30 | 50,5 | 399 000 | 61 000 | 61 000 | dans 1,8 h | -6,8 | non (prix au-dessus de la médiane de la case) |
+| Jack Boyle | C | 26 | 37,9 | 25 000 | 175 | 175 | dans 1,9 h | -21,6 | non (prix au-dessus de la médiane de la case) |
+| Pádraig Fitzgerald | SF | 28 | 55,0 | 1 199 000 | 1 009 999 | 660 141 | dans 1,9 h | -1,5 | non (prix au-dessus de la médiane de la case) |
+| Stanko Đurić | SG | 16 | 48,7 | 6 500 000 | 1 010 000 | 660 141 | dans 1,9 h | -8,0 | non (prix au-dessus de la médiane de la case) |
+| Padraig Power | PF | 28 | 41,2 | 50 000 | 1 000 | 1 000 | dans 1,9 h | -12,7 | non (prix au-dessus de la médiane de la case) |
+| Carlo Moretti | C | 17 | 40,3 | 550 000 | 302 500 | 302 500 | dans 1,9 h | -13,4 | non (prix au-dessus de la médiane de la case) |
+| Miloš Golubović | PG | 17 | 38,5 | 199 000 | 45 500 | 45 500 | dans 2,1 h | -18,6 | non (prix au-dessus de la médiane de la case) |
+| Jeremiasz Buczek | C | 30 | 38,3 | 0 | 10 250 | 10 250 | dans 2,3 h | -15,7 | non (case peu fiable : 3 ventes) |
+| Ignacy Kosowski | SF | 22 | 44,5 | 0 | 5 000 | 5 000 | dans 2,4 h | -13,9 | oui |
+| Matéo Fleury | SG | 25 | 48,1 | 1 000 000 | 102 500 | 102 500 | dans 3,0 h | -9,0 | non (prix au-dessus de la médiane de la case) |
+| Gaspard Thomas | SG | 17 | 46,9 | 5 600 000 | 1 010 000 | 660 141 | dans 3,0 h | -10,2 | non (prix au-dessus de la médiane de la case) |
+| Raz Ovadia | C | 16 | 39,5 | 999 000 | 45 500 | 45 500 | dans 3,1 h | -14,5 | non (prix au-dessus de la médiane de la case) |
+| Henryk Witkowski | SF | 27 | 51,5 | 140 000 | 499 999 | 155 562 | dans 3,1 h | -7,4 | oui |
+| Matan Bouzaglo | PF | 16 | 46,2 | 3 500 000 | 1 010 000 | 660 141 | dans 3,2 h | -14,7 | non (prix au-dessus de la médiane de la case) |
+| Menahem Mizrahi | PG | 25 | 53,0 | 500 000 | 700 000 | 660 141 | dans 3,9 h | -3,9 | oui |
+| Menahem Abitbol | SG | 26 | 51,4 | 300 000 | 499 999 | 499 999 | dans 3,9 h | -5,3 | oui |
+| Chagai Amar | SG | 24 | 54,2 | 1 250 000 | 700 000 | 660 141 | dans 3,9 h | -2,7 | non (prix au-dessus de la médiane de la case) |
+| Eimantas Vanagas | PG | 16 | 32,7 | 10 000 | 1 126 | 1 126 | dans 4,2 h | -24,5 | non (prix au-dessus de la médiane de la case) |
+| Émile Dupuis | SG | 25 | 51,8 | 950 000 | 700 000 | 660 141 | dans 4,4 h | -5,2 | non (prix au-dessus de la médiane de la case) |
+| Hilary Majchrzak | PF | 17 | 42,7 | 500 000 | 302 500 | 302 500 | dans 4,9 h | -16,5 | non (prix au-dessus de la médiane de la case) |
+| Denis Vučković | C | 16 | 42,9 | 1 500 000 | 302 500 | 302 500 | dans 5,1 h | -11,2 | non (prix au-dessus de la médiane de la case) |
+| Baldassare Russo | SG | 31 | 49,7 | 70 000 | 10 125 | 10 125 | dans 5,2 h | -11,0 | non (prix au-dessus de la médiane de la case) |
+| Norman Krüger | PF | 17 | 37,7 | 0 | 45 500 | 45 500 | dans 6,1 h | -21,6 | oui |
+| Lamberto Alberti | PG | 26 | 59,5 | 2 000 000 | 1 009 999 | 660 141 | dans 6,3 h | +2,5 | non (prix au-dessus de la médiane de la case) |
+| Duarte Pereira | SG | 28 | 61,6 | 1 500 000 | 1 405 162 | 660 141 | dans 6,6 h | +4,7 | non (prix au-dessus de la médiane de la case) |
+| Enrique Aguinaldo | C | 28 | 57,1 | 1 500 000 | 1 009 999 | 660 141 | dans 6,6 h | +3,6 | non (prix au-dessus de la médiane de la case) |
+| Valentín Bolaños | SF | 16 | 38,9 | 1 599 000 | 45 500 | 45 500 | dans 6,7 h | -17,1 | non (prix au-dessus de la médiane de la case) |
+| Francis Parapolo | SG | 31 | 50,5 | 10 000 | 61 000 | 24 938 | dans 6,7 h | -6,2 | oui |
+| Seo-jun Bui | PF | 28 | 60,2 | 1 900 000 | 1 405 162 | 660 141 | dans 6,9 h | +0,9 | non (prix au-dessus de la médiane de la case) |
+| Fabian Pietrzak | SG | 20 | 47,2 | 520 000 | 1 010 000 | 660 141 | dans 7,5 h | -9,3 | oui |
+| Naglis Lapė | C | 17 | 43,7 | 980 000 | 302 500 | 302 500 | dans 7,5 h | -10,2 | non (prix au-dessus de la médiane de la case) |
+| Lenny Marchand | SG | 19 | 48,7 | 980 000 | 1 010 000 | 660 141 | dans 7,5 h | -8,0 | non (au-dessus de la capacité restante) |
+| Damián Benavides | PG | 29 | 59,6 | 2 200 000 | 1 009 999 | 660 141 | dans 7,7 h | +2,6 | non (prix au-dessus de la médiane de la case) |
+| Fábio Lopes | SF | 17 | 37,3 | 155 000 | 45 500 | 45 500 | dans 8,0 h | -19,5 | non (prix au-dessus de la médiane de la case) |
+| Maurice Bowers | C | 26 | 54,3 | 2 222 222 | 499 999 | 499 999 | dans 9,1 h | +0,5 | non (prix au-dessus de la médiane de la case) |
+| Arturo Santos | PF | 25 | 57,2 | 2 222 222 | 1 477 350 | 660 141 | dans 9,4 h | +3,7 | non (prix au-dessus de la médiane de la case) |
+| Cristian Ferreyra | PG | 16 | 34,1 | 0 | 1 126 | 1 126 | dans 12,4 h | -23,1 | oui |
+| Orlando Rinaldi | C | 18 | 44,7 | 300 000 | 302 500 | 302 500 | dans 15,0 h | -14,5 | oui |
+| Albert de Groot | PG | 28 | 56,0 | 600 000 | 1 009 999 | 660 141 | dans 15,2 h | -1,0 | oui |
+| Sander Rasmussen | PG | 27 | 41,4 | 10 000 | 1 000 | 1 000 | dans 16,8 h | -13,6 | non (prix au-dessus de la médiane de la case) |
+| Jaber Al-Abbas | SF | 18 | 42,1 | 1 200 000 | 302 500 | 302 500 | dans 17,6 h | -15,0 | non (prix au-dessus de la médiane de la case) |
+| Nam-joon Ra | C | 25 | 56,9 | 3 500 000 | 1 477 350 | 660 141 | dans 18,2 h | +3,3 | non (prix au-dessus de la médiane de la case) |
+| Dovydas Anužis | SF | 30 | 41,0 | 50 000 | 875 | 875 | dans 18,2 h | -19,7 | non (prix au-dessus de la médiane de la case) |
+| Baptiste Perrin | PG | 25 | 56,8 | 2 000 000 | 1 477 350 | 660 141 | dans 18,2 h | -0,4 | non (prix au-dessus de la médiane de la case) |
+| Hilary Cichy | C | 27 | 47,4 | 50 | 10 000 | 10 000 | dans 18,6 h | -6,2 | oui |
+| Jarosław Kapusta | PG | 30 | 45,5 | 30 000 | 10 125 | 10 125 | dans 18,6 h | -10,1 | non (prix au-dessus de la médiane de la case) |
+| Paul Hofmann | SG | 27 | 51,2 | 900 000 | 499 999 | 499 999 | dans 18,7 h | -5,3 | non (prix au-dessus de la médiane de la case) |
+| Paolo Kim | PF | 26 | 59,2 | 4 500 023 | 1 009 999 | 660 141 | dans 19,1 h | 0,0 | non (prix au-dessus de la médiane de la case) |
+| Tymon Chmielewski | PG | 26 | 61,1 | 3 000 023 | 1 405 162 | 660 141 | dans 19,1 h | +4,3 | non (prix au-dessus de la médiane de la case) |
+| Tvrtko Filipović | PG | 30 | 40,7 | 10 000 | 875 | 875 | dans 19,7 h | -16,6 | non (prix au-dessus de la médiane de la case) |
+| Luke Turay | SG | 27 | 50,3 | 129 000 | 499 999 | 155 562 | dans 20,5 h | -6,6 | oui |
+| Olaf Kozłowski | SF | 31 | 46,5 | 1 000 | 10 125 | 10 125 | dans 20,8 h | -12,5 | oui |
+| Joaquim Magalhães | PF | 19 | 49,6 | 680 000 | 1 010 000 | 660 141 | dans 21,3 h | -9,6 | non (au-dessus de la capacité restante) |
+| Jan Hess | C | 23 | 44,3 | 100 000 | 5 000 | 5 000 | dans 21,8 h | -9,3 | non (prix au-dessus de la médiane de la case) |
+| Casimiro Serrano | C | 23 | 45,3 | 100 000 | 102 500 | 102 500 | dans 21,8 h | -8,5 | oui |
+| Julio Barreto | SG | 18 | 37,6 | 49 999 | 45 500 | 45 500 | dans 22,0 h | -19,4 | non (prix au-dessus de la médiane de la case) |
+| Ivica Juriša | SG | 17 | 43,9 | 1 200 000 | 302 500 | 302 500 | dans 22,0 h | -13,2 | non (prix au-dessus de la médiane de la case) |
+| Darío Ramírez | SG | 24 | 45,1 | 0 | 102 500 | 102 500 | dans 22,8 h | -11,7 | oui |
+| Andrés Herrera | C | 28 | 44,6 | 0 | 1 000 | 1 000 | dans 23,0 h | -9,4 | oui |
+| Anderson Correia | PG | 25 | 55,1 | 1 000 000 | 1 477 350 | 660 141 | dans 23,5 h | -1,8 | non (au-dessus de la capacité restante) |
+| Gerard Ruciński | SG | 26 | 56,2 | 2 500 000 | 1 009 999 | 660 141 | dans 24,0 h | -0,3 | non (prix au-dessus de la médiane de la case) |
 
 **Offres et ventes du jour (mêmes lignes que l'état par événement)**
 
@@ -141,9 +147,9 @@ composition de l'amical en préparation
 
 **Enchères, achats et ventes déjà proposés**
 
-- Enchère maximale 155 562 sur Luke Turay (SG, PS 50.3) — plafond de revente (95 % du p25) ; prix à l'export 129 000 ; fin 25/11 ; marge de revente p25 26 562 ; page du Marché de 20 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 155 562 sur Henryk Witkowski (SF, PS 51.5) — plafond de revente (95 % du p25) ; prix à l'export 140 000 ; fin 24/11 ; marge de revente p25 15 562 ; page du Marché de 20 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
-- Enchère maximale 24 938 sur Francis Parapolo (SG, PS 50.5) — plafond de revente (95 % du p25) ; prix à l'export 10 000 ; fin 24/11 ; marge de revente p25 14 938 ; page du Marché de 20 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 155 562 sur Luke Turay (SG, PS 50.3) — plafond de revente (95 % du p25) ; prix à l'export 129 000 ; fin 25/11 ; marge de revente p25 26 562 ; page du Marché de 23 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 155 562 sur Henryk Witkowski (SF, PS 51.5) — plafond de revente (95 % du p25) ; prix à l'export 140 000 ; fin 24/11 ; marge de revente p25 15 562 ; page du Marché de 23 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
+- Enchère maximale 24 938 sur Francis Parapolo (SG, PS 50.5) — plafond de revente (95 % du p25) ; prix à l'export 10 000 ; fin 24/11 ; marge de revente p25 14 938 ; page du Marché de 23 h : le prix a pu monter ; fenêtre de mise non mesurée : mise près de la fin ; ne dépasse pas le plafond
 
 
 ## Bloc 5 — Les meilleurs et les failles du jeu
@@ -152,7 +158,7 @@ carte de faisabilité du 10/11 : 3a force du club et victoires : faisable mainte
 
 ## Bloc 6 — Match Engine
 
-matchs ajoutés : 3 (ligue 1, amical 2 ; autres clubs 0) · 391 en base · étude à jour au 18/11, 7 de nos matchs pas encore étudiés ; 35 d'autres clubs
+matchs ajoutés : 4 (ligue 1, amical 3 ; autres clubs 0) · 392 en base · étude à jour au 18/11, 8 de nos matchs pas encore étudiés ; 35 d'autres clubs
 Pour comprendre le Match Engine, j'ai besoin de : exporte les onglets Details, Stats par quart et Play-by-play du match de ligue du 18/11 dès qu'il est joué, parce que 1a demande 8 matchs de ligue v4 à nous et la base en a 7. (étude du 18/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page match de chaque match de ligue où nous mettons un adversaire en Lock ou Intense, parce que C demande ≥ 8 matchs par niveau (Lock 3, Intense 5). (étude du 18/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés vue côté adversaire (si le jeu l'affiche), parce que 0 des 64 lignes de `silver.bv_match_tactics` n'est adverse. (étude du 18/11)
