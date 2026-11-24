@@ -28,8 +28,11 @@ def cas():
     yield "gold : le relevé précédent est le relevé précis précédent", "where w.two_point_exact is not null" in gains
     # 3. capture d'entraînement sans Aperçu le même jour (22/11) : le jour est gardé
     yield "silver : une capture d'entraînement sans Aperçu le même jour n'est plus perdue", \
-        "union" in jour and "from silver.bv_player_training" in jour.split("union")[1].split("select o2")[0]
-    yield "silver : les champs d'aperçu viennent du dernier aperçu antérieur", "o2.day <= j.day" in jour
+        "from silver.bv_player_training" in jour and "select player_id, team_id, day from tr" in jour.split("union")[1]
+    yield "silver : les champs d'aperçu viennent du dernier aperçu antérieur", \
+        "max(o1.day) over (partition by jj.player_id order by jj.day)" in jour and "o.day = j.o_day" in jour
+    # 4. performance : pas de jointure latérale sur la vue JSON des aperçus (recalculée à chaque ligne)
+    yield "silver : pas de jointure latérale dans bv_player_daily", "lateral" not in jour
 
 
 JEUX = list(cas())

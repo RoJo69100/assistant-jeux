@@ -7,11 +7,26 @@
 -- 2. bv_player_weekly : par joueur et par semaine, le dernier jour qui a les valeurs précises ;
 --    à défaut seulement, le dernier jour tout court. Un relevé sans page Entraînement n'écrase jamais un relevé qui l'a.
 
+--    Pas de jointure latérale : elle recalculait la vue JSON des aperçus pour chaque ligne (> 50 s).
+--    Les CTE ov et tr, lues deux fois, sont matérialisées une seule fois ; le dernier aperçu antérieur
+--    = max(jour d'aperçu) cumulé par joueur.
 create or replace view silver.bv_player_daily with (security_invoker = true) as
-with jours as (
-  select player_id, team_id, day from silver.bv_player_overview
+with ov as (
+  select day, player_id, team_id, capture_id, p from silver.bv_player_overview
+),
+tr as (
+  select day, player_id, team_id, p from silver.bv_player_training
+),
+jours as (
+  select player_id, team_id, day from ov
   union
-  select player_id, team_id, day from silver.bv_player_training
+  select player_id, team_id, day from tr
+),
+j as (
+  select jj.player_id, jj.team_id, jj.day,
+         max(o1.day) over (partition by jj.player_id order by jj.day) as o_day   -- dernier aperçu au plus tard ce jour
+  from jours jj
+  left join ov o1 on o1.player_id = jj.player_id and o1.day = jj.day
 )
 select j.day,
        j.player_id,
@@ -44,13 +59,9 @@ select j.day,
        t.p->>'primary_skill_id'                  as training_primary,
        t.p->>'secondary_skill_id'                as training_secondary,
        o.capture_id
-from jours j
-left join lateral (
-  select o2.* from silver.bv_player_overview o2
-  where o2.player_id = j.player_id and o2.day <= j.day
-  order by o2.day desc limit 1
-) o on true
-left join silver.bv_player_training t on t.player_id = j.player_id and t.day = j.day;
+from j
+left join ov o on o.player_id = j.player_id and o.day = j.o_day
+left join tr t on t.player_id = j.player_id and t.day = j.day;
 
 create or replace view silver.bv_player_weekly with (security_invoker = true) as
 select distinct on (d.player_id, (date_trunc('week', d.day + 1) - interval '1 day')::date)
