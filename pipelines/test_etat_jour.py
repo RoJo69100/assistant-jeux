@@ -251,6 +251,11 @@ def cas_controles():
                                 {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG)
     l = ej.etat_evenement(ev, CFG, MAINT)
     yield "branchement : écran différent de la fiche → « ecran », consigne = corrections", l["prochain"] == "ecran" and "30" in l["consigne"]
+    ev = ej.appliquer_controles(match(apercu_at=T_APERCU, fiche=dict(FICHE, joueurs=fj), ecran={"sauvegarde": False, "joueurs": ecran}),
+                                {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG)
+    l = ej.etat_evenement(ev, CFG, MAINT)
+    yield "écran non sauvegardé (valeurs du jeu) : aucun écart listé, consigne = saisir, 🟥", \
+        l["prochain"] == "ecran" and not l["defauts"] and "saisis et sauvegarde" in l["consigne"] and l["priorite"] == 1
     am = match(genre="amical", coup_envoi=dt.datetime(2026, 11, 18, 8, 0), verrou=dt.datetime(2026, 11, 18, 7, 45),
                fiche=dict(FICHE, joueurs=fj, agress_test=3), ecran={"sauvegarde": True, "joueurs": [joueur("Alpha", 30, agress=2), joueur("Beta", 24)]})
     l = ej.etat_evenement(ej.appliquer_controles(am, {"blessures": {}, "fatigue": {}, "seuil_fatigue": 20}, CFG), CFG, MAINT)

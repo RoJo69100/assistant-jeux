@@ -388,7 +388,7 @@ def appliquer_controles(ev, reel, cfg) -> dict:
             + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"])
                if regle.get("controle_fatigue") and reel.get("seuil_fatigue") is not None else [])  # 24/11 : jamais en amical (coût ≈ 1/10, M§1.2)
         ev["fiche"] = fiche
-    if ev.get("ecran") and ev["ecran"].get("joueurs"):
+    if ev.get("ecran") and ev["ecran"].get("joueurs") and ev["ecran"].get("sauvegarde"):  # 24/11 : écran pas sauvegardé = valeurs du jeu, pas une saisie
         ecran = dict(ev["ecran"])
         if regle.get("e1_uniforme"):
             ecran["defauts"] = controle_e1(ecran["joueurs"], (fiche or {}).get("agress_test"))
