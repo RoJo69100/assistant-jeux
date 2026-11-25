@@ -102,7 +102,13 @@ offres:
   matchs_rotation: 4
   case_min_ventes: 3
   gain_ajustement_min: 1.0            # 19/11 : amélioration = gain d'ajustement au poste (gold.bv_slot_fit) sur notre titulaire ≥ 1,0 point
-  revente_marge: 1.25
+  revente_marge: 1.25                 # 25/11 : revente seulement si revente nette ≥ 1,25 × prix payé (marge nette ≥ 25 %)
+  # 25/11, règle de l'utilisateur (etat_jour.motif_achat) : un achat n'est proposé que s'il entre dans le cinq (gain_ajustement_min
+  # sur notre TITULAIRE), si c'est un jeune à potentiel (jeune_age_*, test High) ou pour une revente à prix très bas, étiquetée
+  # « revente » avec sa marge. Le gain sur notre n°2 (« gain de banc ») n'est plus un motif d'achat.
+  motif_achat: [amélioration, jeune, revente]
+  taxe_vente: 0.05                    # le vendeur reçoit 95 % (basketvibe-transferts, 01-vendre)
+  revente_semaines: 1                 # semaines de salaire payées avant la revente (hypothèse, à valider)
   minutes_hors_rotation: 6
   max_offres: 3
   max_ventes: 2

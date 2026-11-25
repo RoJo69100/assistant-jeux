@@ -1040,9 +1040,9 @@ def cas_plan_19_11():
     ann = (ANN + ["height_cm", "best_slot", "best_fit"], [fontana, gain])
     cas = (["position", "ps_band", "age_band", "n", "p25", "median", "p75", "mini", "maxi"], [["SG", 50, "22-25", 4, 100000, 200000, 300000, 90000, 400000]])
     r = ej.offres_du_jour(dict(d, annonces_actives=ann, prix_cases_poste=cas), O, 600000)
-    yield "amélioration : Fontana (note 52, ajustement SG 51,7 contre 56,1 pour Bonnet) → aucune ligne ; Tom Gain (+2,0) → ligne", \
-        [x["nom"] for x in r["offres"]] == ["Tom Gain"]
-    t = ej.texte_transfert(r["offres"][0], O)
+    yield "Fontana (ajustement SG 51,7 < titulaire 56,1) : pas d'amélioration, seulement « revente » (25/11) ; Tom Gain (+2,0) → amélioration", \
+        sorted((x["nom"], x["type"]) for x in r["offres"]) == [("Fontana", "revente"), ("Tom Gain", "amélioration")]
+    t = ej.texte_transfert(next(x for x in r["offres"] if x["type"] == "amélioration"), O)
     yield "amélioration : gain d'ajustement et coût par point gagné écrits", "ajustement SG 58,1 contre 56,1 pour Thibault Bonnet" in t \
         and "gain 2,0 (≥ 1,0)" in t and "coût par point gagné 150 000" in t
     d2 = dict(d, prix_cases_poste=(cas[0], [["PG", 45, "22-25", 2, 300000, 400000, 500000, 290000, 910000]]))
@@ -1100,7 +1100,34 @@ def cas_academie_deja_fait_cite_le_fichier():
             and (Path(t) / e.get("sortie", "x")).is_file()
 
 
-CAS = [cas_academie_deja_fait_cite_le_fichier, cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_achats_refuses_police, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_motif_achat():
+    """Règle de l'utilisateur du 25/11 : titulaire, jeune à potentiel ou revente étiquetée ; jamais le gain de banc."""
+    case = {"n": 99, "p25": 772500, "median": 1010000, "p75": 1405162}
+    yield "motif : gain de banc (+3,0 sur le n°2, −1,4 sur le titulaire), prix 900 000 → aucun motif", \
+        ej.motif_achat(O, gain_fit=-1.4, age=27, prix=900000, case=case, salaire=28400, capacite=955391) is None
+    yield "motif : +1,0 sur le titulaire → amélioration", ej.motif_achat(O, gain_fit=1.0, age=27) == "amélioration"
+    yield "motif : 17 ans testé High → jeune", ej.motif_achat(O, age=17, potentiel="high") == "jeune"
+    yield "motif : 17 ans testé Decent, prix haut → aucun motif", ej.motif_achat(O, age=17, potentiel="decent", prix=900000, case=case, salaire=28400, capacite=955391) is None
+    x = ej.plafond_revente(case, 955391, 28400, O)
+    yield "plafond de revente = (1 010 000 × 0,95 − 28 400) / 1,25 = 744 880", round(x) == 744880
+    yield "motif : prix 39 000 ≤ plafond → revente", ej.motif_achat(O, gain_fit=-1.4, age=27, prix=39000, case=case, salaire=28400, capacite=955391) == "revente"
+    yield "motif : prix 744 881 > plafond → aucun motif", ej.motif_achat(O, age=27, prix=744881, case=case, salaire=28400, capacite=955391) is None
+    yield "motif : case de 2 ventes → pas de revente", ej.motif_achat(O, age=27, prix=1000, case=dict(case, n=2), salaire=28400, capacite=955391) is None
+    yield "yaml : motif_achat liste les trois motifs, sans banc", O.get("motif_achat") == ["amélioration", "jeune", "revente"]
+    # Cinq du 25/11 : Lefebvre (PF naturel) joue C, Fournier (C naturel) joue PF ; un C à 55,5 ne bat pas Lefebvre (63,2) au C
+    fits = {("ri", "PG"): ("Richard", 56.8, "PG"), ("ri", "SG"): ("Richard", 56.3, "PG"), ("bo", "SG"): ("Bonnet", 52.1, "SG"),
+            ("bo", "PG"): ("Bonnet", 51.8, "SG"), ("gi", "SF"): ("Gimenez", 60.3, "SF"), ("gi", "SG"): ("Gimenez", 60.7, "SF"),
+            ("fo", "PF"): ("Fournier", 52.7, "C"), ("fo", "C"): ("Fournier", 52.7, "C"), ("le", "C"): ("Lefebvre", 63.2, "PF"),
+            ("le", "PF"): ("Lefebvre", 50.0, "PF")}
+    cinq = ["ri", "bo", "gi", "fo", "le"]
+    g, occ, of, sorti = ej.gain_cinq(cinq, fits, "SG", 59.3)
+    yield "cinq : SG à 59,3 remplace Bonnet (52,1), gain 7,2", (occ, round(of, 1), sorti, round(g, 1)) == ("bo", 52.1, "bo", 7.2)
+    g, occ, of, _ = ej.gain_cinq(cinq, fits, "C", 55.5)
+    yield "cinq : le titulaire au C est Lefebvre (PF naturel), pas Fournier (C naturel)", occ == "le" and round(of, 1) == 63.2
+    yield "cinq : C à 55,5 < 63,2, Lefebvre au PF à 50,0 : gain sous 1,0, aucun motif", g < 1.0 and ej.motif_achat(O, gain_fit=g, age=27) is None
+
+
+CAS = [cas_motif_achat, cas_academie_deja_fait_cite_le_fichier, cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_achats_refuses_police, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":

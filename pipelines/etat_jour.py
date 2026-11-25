@@ -640,6 +640,64 @@ def enchere_max(case, capacite, salaire, revente_marge=None):
     return min(haut, float(capacite) - float(salaire))
 
 
+def revente_nette(case, salaire, o) -> float:
+    """Ce que rapporte la revente à la médiane de la case : médiane × (1 − taxe_vente) − salaire × revente_semaines."""
+    return float(case["median"]) * (1 - float(o.get("taxe_vente", 0.05))) - float(salaire) * float(o.get("revente_semaines", 1))
+
+
+def plafond_revente(case, capacite, salaire, o):
+    """Enchère max d'un achat pour revente (25/11) : revente nette / revente_marge (marge nette ≥ revente_marge − 1 du prix payé),
+    bornée par capacité − salaire. None si capacité ou salaire inconnus."""
+    if capacite is None or salaire is None:
+        return None
+    return min(revente_nette(case, salaire, o) / float(o["revente_marge"]), float(capacite) - float(salaire))
+
+
+SLOTS_CINQ = ("PG", "SG", "SF", "PF", "C")
+
+
+def _meilleur_cinq(joueurs, fits, impose=None):
+    """(somme des ajustements, {slot: pid}) de la meilleure affectation des `joueurs` (pids) aux 5 emplacements ;
+    impose = (slot, ajustement) : emplacement déjà tenu par la recrue."""
+    import itertools
+    slots = [s for s in SLOTS_CINQ if not impose or s != impose[0]]
+    best = (-1.0, {})
+    k = min(len(slots), len(joueurs))
+    for choix in itertools.permutations(joueurs, k):
+        for places in itertools.permutations(slots, k):
+            tot = sum(fits.get((p, s), (None, 0.0))[1] for p, s in zip(choix, places))
+            if tot > best[0]:
+                best = (tot, dict(zip(places, choix)))
+    return (best[0] + (impose[1] if impose else 0.0)), best[1]
+
+
+def gain_cinq(cinq, fits, slot, fit_c):
+    """25/11 : « il entre dans le cinq » = gain de la meilleure affectation du cinq avec la recrue à `slot` sur celle du cinq
+    actuel (gold.bv_slot_fit). (gain, titulaire remplacé au slot dans le cinq actuel, son ajustement, joueur sorti du cinq)."""
+    base, aff = _meilleur_cinq(list(cinq), fits)
+    avec, aff2 = _meilleur_cinq(list(cinq), fits, (slot, fit_c))
+    occupant = aff.get(slot)
+    sorti = next((p for p in cinq if p not in aff2.values()), None)
+    return avec - base, occupant, fits.get((occupant, slot), (None, None))[1] if occupant else None, sorti
+
+
+def motif_achat(o, gain_fit=None, age=None, potentiel=None, prix=None, case=None, salaire=None, capacite=None):
+    """Règle de l'utilisateur du 25/11 : un achat n'est proposé que pour
+    (a) « amélioration » : il entre dans le cinq, ajustement au poste ≥ celui de notre TITULAIRE + gain_ajustement_min ;
+    (b) « jeune » : jeune_age_min–jeune_age_max ans, test de potentiel connu High (on le monte) ;
+    (c) « revente » : prix actuel ≤ plafond_revente (marge nette après taxe de vente et salaire ≥ revente_marge − 1).
+    Le gain sur notre n°2 du poste (« gain de banc ») n'est jamais un motif. Renvoie le type ou None."""
+    if gain_fit is not None and gain_fit >= float(o.get("gain_ajustement_min", 1.0)):
+        return "amélioration"
+    if age is not None and int(o["jeune_age_min"]) <= int(age) <= int(o["jeune_age_max"]) and potentiel == "high":
+        return "jeune"
+    if case is not None and int(float(case["n"])) >= int(o["case_min_ventes"]) and prix is not None:
+        x = plafond_revente(case, capacite, salaire, o)
+        if x is not None and x > 0 and float(prix) <= x:
+            return "revente"
+    return None
+
+
 def cases_poste(donnees) -> dict:
     """19/11 (règle de la police du 17/11) : case de prix = (poste, palier de note de 5, tranche d'âge), ventes à au moins une enchère
     (requête prix_cases_poste) ; {(poste, palier, tranche): ligne}."""
@@ -690,6 +748,9 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=(), refus="") -
     testes = {str(r["player_id"]): str(r["potentiel"]).strip().lower() for r in _rows(donnees, "tests_marche")
               if r.get("player_id") and r.get("potentiel")}
     jeune = lambda a: int(o["jeune_age_min"]) <= a <= int(o["jeune_age_max"])  # noqa: E731
+    rot_jouee = sorted([r for r in _rows(donnees, "rotation") if int(float(r["matchs_joues"] or 0)) > 0],
+                       key=lambda r: (-float(r["min_moy"] or 0), -float(r.get("ps") or 0)))  # égalité de minutes : la meilleure note
+    cinq = [str(r["player_id"]) for r in rot_jouee[:5]] if "slot_fit" in donnees and len(rot_jouee) >= 5 else []
     vues, res, a_tester = set(), [], []
     for r in _rows(donnees, "annonces_actives"):
         if r["auction_id"] in vues or None in (_f(r.get("price_now")), _f(r.get("ps")), _f(r.get("age"))) \
@@ -703,13 +764,30 @@ def offres_du_jour(donnees, o, capacite, maintenant=None, exclus=(), refus="") -
         fit_t = fits.get((str(f["player_id"]), poste)) if f is not None else None
         fit_c = _f(r.get("best_fit"))
         gain_fit = None if fit_t is None or fit_c is None else fit_c - fit_t[1]
+        if cinq and fit_c is not None and poste in SLOTS_CINQ:
+            # 25/11 : comparé au CINQ réel (5 joueurs aux plus de minutes, meilleure affectation aux emplacements), pas au joueur
+            # du poste naturel : un C naturel qui joue PF n'est pas notre titulaire au C.
+            gain_fit, occ, occ_fit, _ = gain_cinq(cinq, fits, poste, fit_c)
+            f = next((x for x in rot_jouee if str(x["player_id"]) == occ), f)
+            fit_t = (f["name"], occ_fit, f.get("position")) if f is not None and occ_fit is not None else fit_t
         titulaire = gain_fit is not None and gain_fit >= gain_min
         if "slot_fit" not in donnees:  # appelant sans la requête slot_fit (anciens rejeux) : note brute, comme avant le 19/11
             f = titulaires.get(r["position"])
             titulaire, gain_fit = f is not None and float(r["ps"]) > float(f["ps"]), None
         pot = testes.get(str(r.get("player_id") or ""))
         if not titulaire and not jeune(age):
-            continue  # remplaçant adulte : jamais d'enchère (règle du 18/11)
+            # 25/11 : remplaçant adulte = jamais un « gain de banc » ; seulement une revente à prix très bas (motif_achat, cas c)
+            case = case_du_poste(cases, r["position"], r["ps"], r["age"])
+            if prix > auj.PRIX_NON_SIGNIFICATIF and motif_achat(o, None, age, None, prix, case, sal, capacite) == "revente":  # prix 0 = inconnu (18/11)
+                x = plafond_revente(case, capacite, sal, o)
+                med = float(case["median"])
+                net = revente_nette(case, sal, o)
+                res.append({"type": "revente", "nom": r["name"], "poste": r["position"], "age": age, "note": float(r["ps"]), "prix": prix,
+                            "mediane": med, "p25": float(case["p25"]), "p75": float(case["p75"]), "n_case": int(float(case["n"])),
+                            "fin": _dt(r.get("ends_paris")), "mini": _f(case.get("mini")), "maxi": _f(case.get("maxi")),
+                            "gain": med - prix, "capacite": float(capacite), "salaire": sal, "age_export_h": age_export, "max": x,
+                            "revente_nette": net, "marge_au_max": net - x, "marge_au_prix": net - prix})
+            continue  # remplaçant adulte : jamais d'enchère hors revente (règles du 18/11 et du 25/11)
         if not titulaire and pot is None:
             if prix <= float(capacite) - (sal or 0) and r.get("height_cm") is not None and r["position"] in auj.PLAGE_TAILLE and auj.verdict_prospect(
                     {"position": r["position"], "age": age, "height_cm": r["height_cm"]})[0] == "tester":
@@ -858,6 +936,11 @@ def texte_transfert(x, o) -> str:
         elif x["type"] == "jeune":
             seuil = (f"remplaçant {o['jeune_age_min']}-{o['jeune_age_max']} ans, test de potentiel connu High ; "
                      f"max = min(p75 {_m(x['p75'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
+        elif x.get("revente_nette") is not None:  # 25/11 : revente étiquetée, marge après taxe et salaire
+            seuil = (f"REVENTE (n'entre pas dans le cinq) : revente nette {_m(x['revente_nette'])} = médiane {_m(x['mediane'])} × "
+                     f"{_virg(1 - float(o.get('taxe_vente', 0.05)))} − salaire {_m(x['salaire'])} × {_virg(o.get('revente_semaines', 1))} sem. ; "
+                     f"marge {_m(x['marge_au_max'])} à l'enchère max, {_m(x['marge_au_prix'])} au prix actuel ; "
+                     f"max = min(revente nette / {_virg(o['revente_marge'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
         else:
             seuil = (f"case de {x['n_case']} ventes (≥ {o['case_min_ventes']}), prix ≤ p25 {_m(x['p25'])}, médiane ≥ {_virg(o['revente_marge'])} × prix ; "
                      f"max = min(médiane / {_virg(o['revente_marge'])}, capacité {_m(x['capacite'])} − salaire {_m(x['salaire'])})")
