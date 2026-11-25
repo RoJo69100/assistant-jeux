@@ -167,6 +167,7 @@ etat_jour:
   donnee_perimee_h: 24         # donnée plus vieille = priorité dégradée d'un cran
   jours_non_analyses: 7        # un match joué non analysé garde sa ligne pendant cette fenêtre
   minutes_max: 36              # contrôle fiche : minutes par joueur (règle de l'utilisateur, plan v4)
+  fatigue_signal: 22           # 25/11 (règle de l'utilisateur) : fatigue estimée au coup d'envoi signalée seulement au-dessus de 22
   duree_match_h: 2             # après le coup d'envoi + cette durée, un match non marqué joué demande sa page
   matchs:
     ligue:  { etats: [calendrier, apercu, fiche, ecran, verrou, joue, analyse, juge], analyse_si: [L], ecran_contre_fiche: oui, controle_fatigue: oui, export_ecran_avant_verrou: oui,

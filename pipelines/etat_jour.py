@@ -327,7 +327,7 @@ def controle_minutes(joueurs, maximum) -> list:
             for j in joueurs if int(j.get("minutes") or 0) > maximum]
 
 
-FATIGUE_SIGNAL = 22  # 25/11 (règle de l'utilisateur) : fatigue estimée au coup d'envoi signalée seulement au-dessus de 22
+FATIGUE_SIGNAL = 22  # défaut ; valeur lue : etat_jour.fatigue_signal de <jeu>.yaml (règle de l'utilisateur du 25/11)
 
 
 def fatigue_au_coup_envoi(f, nuits) -> float:
@@ -427,9 +427,11 @@ def appliquer_controles(ev, reel, cfg) -> dict:
         fiche["defauts"] = controle_adversaire(fiche.get("adversaire"), ev["adversaire"]) \
             + (controle_blessures(fj, reel.get("blessures", {}), ev["jour"]) if ev.get("jour") else []) \
             + controle_minutes(fj, cfg["minutes_max"]) \
-            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"], ev.get("coup_envoi") or ev.get("jour"))
+            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"], ev.get("coup_envoi") or ev.get("jour"),
+                                cfg.get("fatigue_signal", FATIGUE_SIGNAL))
                if regle.get("controle_fatigue") and reel.get("seuil_fatigue") is not None else [])  # 24/11 : jamais en amical (coût ≈ 1/10, M§1.2)
-        fiche["infos"] = (infos_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"], ev.get("coup_envoi") or ev.get("jour"))
+        fiche["infos"] = (infos_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"], ev.get("coup_envoi") or ev.get("jour"),
+                                        cfg.get("fatigue_signal", FATIGUE_SIGNAL))
                           if regle.get("controle_fatigue") and reel.get("seuil_fatigue") is not None else [])  # 25/11
         ev["fiche"] = fiche
     if ev.get("ecran") and ev["ecran"].get("joueurs") and ev["ecran"].get("sauvegarde"):  # 24/11 : écran pas sauvegardé = valeurs du jeu, pas une saisie
