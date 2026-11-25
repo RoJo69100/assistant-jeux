@@ -1,21 +1,23 @@
-<!-- généré le 2026-11-25 10:20 -->
+<!-- généré le 2026-11-25 10:37 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Composition | corrige la fiche du match de ligue contre Žirmūnai (25/11) : réduis les minutes de Bonnet (fatigue 21,58) ; réduis les minutes de Lefebvre (fatigue 20,62) (outputs/basketvibe/briefs/2026-11-24-tactique-zirmunai-25-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-24-tactique-zirmunai-25-11.md) — ❌ Bonnet fatigue 21,58 au-dessus de 20 ; ❌ Lefebvre fatigue 20,62 au-dessus de 20 — échéance 25/11 19:45 — données de 20,2 h |
+| 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match de ligue contre Žirmūnai (25/11) selon la fiche, puis exporte la page du match sauvegardé avant le verrou 19:45 (sans export, la saisie n'est pas contrôlée) (outputs/basketvibe/briefs/2026-11-25-tactique-zirmunai-25-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-25-tactique-zirmunai-25-11.md) — échéance 25/11 19:45 — données de 20,4 h |
 | 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre Garden City (26/11) selon la fiche (outputs/basketvibe/briefs/2026-11-24-tactique-amical-garden-city-26-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-24-tactique-amical-garden-city-26-11.md) — échéance 26/11 07:45 |
-| 🟧 IMPORTANT | Composition | agent tactique à lancer : fiche du match amical contre Janusz Team (27/11) — échéance 27/11 07:45 |
+| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre Janusz Team (27/11) selon la fiche (outputs/basketvibe/briefs/2026-11-25-tactique-amical-janusz-team-27-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-25-tactique-amical-janusz-team-27-11.md) — échéance 27/11 07:45 |
 | 🟧 IMPORTANT | Académie/Draft | testé (capture du 23/11), rapport du 19/11 : Quentin Besson (PG, decent) : ignorer ; Damien Roussel (PG, high) : ignorer ; Lenny Gauthier (PF, decent) : ignorer — aucun prospect à signer (seuil décidé par Claude le 18/11) |
 | 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 42 h |
 | 🟧 IMPORTANT | Export | exporte la page Personnel — export de 179 h |
 | 🟧 IMPORTANT | Export | exporte le Classement de la Tier 2 - League 4 — export de 142 h |
 | 🟧 IMPORTANT | Export | exporte le Classement de l'European Premier League — export de 142 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 142,4 h |
-| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre Wrzos Zmigrod (23/11) — données de 37,5 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre SC Barcelona (25/11) — données de 40,3 h |
+| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 142,7 h |
+| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre Wrzos Zmigrod (23/11) — données de 37,8 h |
+| 🟩 SUIVI | Export | exporte la page du match amical contre SC Barcelona (25/11) — données de 40,6 h |
 | 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo, Héctor Castro, Kazimierz Lewicki, Camilo Varela, Albert de Groot, Dmytro Fedorenko → ne pas acheter) — outputs/basketvibe/police-2026-11-24.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-24.md |
 | 🟩 SUIVI | Transferts | Ventes : aucune à proposer (12 joueurs évalués, en rotation : 9 ; déjà en vente : 1 ; « ne pas vendre » de la police : 1 ; jeune de 16 à 18 ans sans test Low ou Decent : 1) |
+| 🟩 SUIVI | Composition | 🟩 info : Bonnet fatigue relevé 21,58 le 24/11, ≈ 18,9 au coup d'envoi (1 nuit de récupération) : rien à changer (signalée au-dessus de 22) |
+| 🟩 SUIVI | Composition | 🟩 info : Lefebvre fatigue relevé 20,62 le 24/11, ≈ 18,1 au coup d'envoi (1 nuit de récupération) : rien à changer (signalée au-dessus de 22) |
 
 ## Bloc 2 — Composition de l'amical
 
