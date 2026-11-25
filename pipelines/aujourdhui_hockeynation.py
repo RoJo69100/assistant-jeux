@@ -96,7 +96,7 @@ def lire_tout(executer):
     for nom, sql in REQUETES.items():
         try:
             donnees[nom] = executer(sql)
-        except SystemExit as e:
+        except (SystemExit, OSError) as e:  # OSError : délai ou coupure HTTPS (TimeoutError, URLError), 25/11
             donnees[nom], erreurs[nom] = None, str(e)[:80]
     return donnees, erreurs, len(REQUETES)
 

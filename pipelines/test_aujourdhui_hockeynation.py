@@ -206,6 +206,11 @@ def h7():
     yield "H7 : le relevé figé contient les 8 requêtes", set(charger()) == set(hn.REQUETES) and len(hn.REQUETES) <= 8
     yield "H7 : le relevé date du 2026-11-06", (ESSAI / "fait-2026-11-06.md").exists() and (ESSAI / "learnings.md").exists()
 
+    def lent(sql):  # 25/11 : un délai HTTPS (TimeoutError) arrêtait tout le plan au lieu d'une vue illisible
+        raise TimeoutError("The read operation timed out")
+    d, err, _ = hn.lire_tout(lent)
+    yield "H7 : un délai réseau donne une vue illisible, jamais un arrêt", all(v is None for v in d.values()) and len(err) == len(hn.REQUETES)
+
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
