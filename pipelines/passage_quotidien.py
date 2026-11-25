@@ -596,7 +596,8 @@ def main() -> int:
     f = BASE / f"que-faire-{jour.isoformat()}.md"
     gardes += [f"🟥 Composition : la fiche {x} fait jouer {n}, dont la vente est proposée au plan — retire-le de la fiche"
                for x, n in fiches_avec_vendus(BASE, [e["fiche"] for e in etats if e.get("fiche")], joueurs_en_vente(rendu))]
-    f.write_text(que_faire(jour, rendu, res, gardes, alerte, polices, a_saisir(etats, maintenant)), encoding="utf-8")
+    import liens  # 25/11 : tout fichier cité est un lien complet sur main
+    f.write_text(liens.lier(que_faire(jour, rendu, res, gardes, alerte, polices, a_saisir(etats, maintenant))), encoding="utf-8")
     print(statut_agents(res))
     for l in lignes_composition(rendu):
         print(l)

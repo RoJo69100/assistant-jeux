@@ -354,7 +354,8 @@ def ecrire_instantane(fichier, texte, erreurs, n) -> int:
               file=sys.stderr)
         return 2
     Path(fichier).parent.mkdir(parents=True, exist_ok=True)
-    Path(fichier).write_text(texte, encoding="utf-8")
+    import liens  # 25/11 : tout fichier cité est un lien complet sur main
+    Path(fichier).write_text(liens.lier(texte), encoding="utf-8")
     return 0
 
 
@@ -1579,7 +1580,8 @@ def main() -> int:
     fait = lire_fait(jour)
     S = lire_sources(donnees, jour)
     affichage, rendu = rendre_jour(plan(donnees, erreurs, jour, maintenant, fait, S), donnees, erreurs, jour, maintenant, S, fait=fait)
-    print(affichage)
+    import liens  # 25/11 : la réponse cite les fichiers en liens complets sur main
+    print(liens.lier(affichage))
     code = 2 if echec_massif(erreurs, n) else 0
     if not a.jour and not a.maintenant:  # instantané quotidien (écrasé si relancé le même jour) : ni rejeu ni simulation d'heure
         code = ecrire_instantane(BASE / f"aujourdhui-{jour.isoformat()}.md",

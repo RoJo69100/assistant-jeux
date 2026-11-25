@@ -4,7 +4,7 @@
 | Priorité | Catégorie | Action |
 |---|---|---|
 | 🟧 IMPORTANT | Académie/Draft | testé (capture du 23/11), rapport du 19/11 : Quentin Besson (PG, decent) : ignorer ; Damien Roussel (PG, high) : ignorer ; Lenny Gauthier (PF, decent) : ignorer — aucun prospect à signer (seuil décidé par Claude le 18/11) |
-| 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo, Héctor Castro, Kazimierz Lewicki, Camilo Varela, Albert de Groot, Dmytro Fedorenko, Dragiša Gavrilović, Anthony Chester, Yuki Fujii → ne pas acheter) — outputs/basketvibe/police-2026-11-25.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-25.md |
+| 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo, Héctor Castro, Kazimierz Lewicki, Camilo Varela, Albert de Groot, Dmytro Fedorenko, Dragiša Gavrilović, Anthony Chester, Yuki Fujii → ne pas acheter) — [outputs/basketvibe/police-2026-11-25.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/basketvibe/police-2026-11-25.md) — https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/basketvibe/police-2026-11-25.md |
 | 🟩 SUIVI | Transferts | Ventes : aucune à proposer (12 joueurs évalués, en rotation : 9 ; déjà en vente : 1 ; « ne pas vendre » de la police : 1 ; jeune de 16 à 18 ans sans test Low ou Decent : 1) |
 
 ## Bloc 2 — Composition de l'amical
@@ -142,7 +142,7 @@ prochaine hypothèse : E1 — agressivité défensive, uniforme sur nos cinq
 ## Bloc 7 — Analyse détaillée
 
 défaite du 23/11 : analyse faite
-- Conseil C-135 à juger, échéance le 26/11 — Académie, rapport du 19/11 : ne signer ni Besson (decent), ni Roussel (high mais PS PG 41,95–51,95 sous Boyer 48,7 et Richard 56,8), ni Gauthier (decent) ; garder l'investissement à 100 000 avant jeudi 26/11 — agent Académie, brief 2026-11-23-academie-academie-19-11.md
+- Conseil C-135 à juger, échéance le 26/11 — Académie, rapport du 19/11 : ne signer ni Besson (decent), ni Roussel (high mais PS PG 41,95–51,95 sous Boyer 48,7 et Richard 56,8), ni Gauthier (decent) ; garder l'investissement à 100 000 avant jeudi 26/11 — agent Académie, brief [outputs/basketvibe/briefs/2026-11-23-academie-academie-19-11.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/basketvibe/briefs/2026-11-23-academie-academie-19-11.md)
 - Boucle d'apprentissage : 2 décisions à mesurer, 0 fait à relier
 
 ## Bloc 8 — Économie

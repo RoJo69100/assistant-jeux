@@ -24,14 +24,14 @@ def charger_config(jeu: str = "basketvibe", chemin=None) -> dict:
     return yaml.safe_load(texte)["etat_jour"]
 
 
-LIEN_FICHE = "https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/"  # la branche du passage contient tout main
+LIEN_FICHE = "https://github.com/RoJo69100/assistant-jeux/blob/main/"  # 25/11 : toujours main (liens.MAIN), jamais la branche de travail
 
 
 def lien_fiche(fichier) -> str:
     """« chemin — lien » d'une fiche (`briefs/<nom>` relatif à outputs/basketvibe, ou nom seul) : toute action « selon la fiche » ou
     « corrige la fiche » le cite (17/11)."""
     chemin = f"outputs/basketvibe/briefs/{Path(str(fichier)).name}"
-    return f"{chemin} — {LIEN_FICHE}{chemin}"
+    return f"[{chemin}]({LIEN_FICHE}{chemin})"  # 25/11 : lien markdown complet sur main (liens.md)
 
 
 def _avec_fiche(texte, fiche) -> str:
@@ -995,7 +995,7 @@ def texte_aucun_achat(noms, base=None) -> str:
 
 def lien_fiche_police(nom) -> str:
     chemin = f"outputs/basketvibe/{nom}"
-    return f"{chemin} — {LIEN_FICHE}{chemin}"
+    return f"[{chemin}]({LIEN_FICHE}{chemin})"  # 25/11 : lien markdown complet sur main (liens.md)
 
 
 def lignes_transferts(donnees, capacite, tolerance, police="", maintenant=None, o=None, exclus=(), refus="") -> list:

@@ -342,8 +342,8 @@ def cas_fiches_23_11():
     ev = {"genre": "ligue", "adversaire": "Wrzos", "jour": dt.date(2026, 11, 23), "verrou": dt.datetime(2026, 11, 23, 19, 45), "fiche": fiche}
     cfg = {"matchs": {"ligue": {"libelle": "match de ligue"}}}
     _, texte, _ = ej._match_gabarit(dict(ev, ecran={"defauts": [{"correction": "mets minutes de Richard à 36"}]}), "ecran", dt.datetime(2026, 11, 23, 17), cfg)
-    yield "lien : la ligne « corrige l'écran » porte le lien GitHub complet du brief", \
-        "https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-23-tactique-wrzos.md" in texte
+    yield "lien : la ligne « corrige l'écran » porte le lien GitHub complet du brief sur main", \
+        "https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/basketvibe/briefs/2026-11-23-tactique-wrzos.md" in texte
     rendu = "| 🟥 URGENT | Composition | corrige | x |\n| 🟧 IMPORTANT | Entraînement | y |\n| 🟧 IMPORTANT | Composition | saisis |"
     yield "lien : lignes_composition ne renvoie que les lignes Composition", len(pq.lignes_composition(rendu)) == 2
     with tempfile.TemporaryDirectory() as t:

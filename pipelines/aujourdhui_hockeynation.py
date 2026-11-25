@@ -19,6 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # python -I n'ajoute pas le dossier du script
 import match_engine_etat as me  # noqa: E402
+import liens  # noqa: E402
 import sql as sqlmod  # noqa: E402
 
 RACINE = Path(__file__).resolve().parent.parent
@@ -27,6 +28,7 @@ JOURNAL = RACINE / "docs/refonte-v3/journal-aujourdhui.md"
 EQUIPES = ("PRO", "FRM", "U21", "U17", "ISL", "ISL21", "HUA")  # ISL = équipe nationale d'Islande, ISL21 = Islande U21, HUA = Huaraz Lamas (tournoi)
 EQUIPES_CLUB = ("PRO", "FRM", "U21", "U17")  # coach pick order et entraînement : équipes du club seulement
 ACTIONS_MAX = 5
+FICHES_TACTIQUE = (("PRO", "PRO", "pro"), ("ISL", "Islande", "islande"), ("ISL21", "Islande U21", "islande-u21"), ("HUA", "Huaraz Lamas", "huaraz-lamas"))
 # Tests ouverts : (premier jour, matchs de ligue PRO avant échéance, libellé). PP/PK : date de la décision, à valider (H4c).
 TESTS = {
     "plan": (dt.date(2026, 10, 29), 10, "plan de jeu à shift length court : 10 matchs de ligue"),
@@ -421,8 +423,14 @@ def plan_du_jour(donnees, jour, fait, learnings="", depuis=None):
     motifs = declencheurs(donnees, fait, jour, jeux)
     plan = bloc_entrainement(donnees)
     acts = list(urgent)
-    if motifs:
-        acts.append(("🟧 IMPORTANT", "Tactique", f"Saisis la lineup PRO selon la fiche outputs/hockeynation/briefs/{jour}-tactique-pro.md : " + " ; ".join(motifs)))
+    # 25/11 : une ligne Tactique par équipe à fiche (PRO, Islande, Islande U21, Huaraz), chacune avec le lien complet de sa fiche sur main
+    for eq, nom, suffixe in FICHES_TACTIQUE:
+        chemin = f"outputs/hockeynation/briefs/{jour}-tactique-{suffixe}.md"
+        if not (RACINE / chemin).exists() and not (eq == "PRO" and motifs):  # sans fiche du jour ni déclencheur : pas de ligne
+            continue
+        quoi = (f"Saisis la lineup {nom} selon la fiche {liens.md(chemin)}" if (RACINE / chemin).exists() else
+                f"Génère la fiche {nom} (python -I pipelines/fiche_tactique_hockeynation.py {eq} --ecrire) puis saisis-la : {liens.md(chemin)}")
+        acts.append(("🟧 IMPORTANT", "Tactique", quoi + (" : " + " ; ".join(motifs) if eq == "PRO" and motifs else "")))
     for eq in EQUIPES_CLUB:
         if plan.get(eq):
             acts.append(("🟧 IMPORTANT", "Entraînement", f"Vérifie et ressaisis l'ordre de choix {eq} ({len(plan[eq])} joueurs, tableau ci-dessous)"))
@@ -438,7 +446,7 @@ def plan_du_jour(donnees, jour, fait, learnings="", depuis=None):
         if plan.get(eq):
             t2 += [f"Ordre de choix {eq}", ""] + table(["Ordre", "Joueur", "Compétence", "Coach"], plan[eq]) + [""]
     t2 += ["Exports à faire aujourd'hui : " + (" ; ".join(a_faire) if a_faire else "aucun")]
-    return {"temps1": "\n".join(t1), "temps2": "\n".join(t2), "a_faire": a_faire, "inconnus": inconnus, "motifs": motifs, "actions": acts}
+    return {"temps1": liens.lier("\n".join(t1)), "temps2": liens.lier("\n".join(t2)), "a_faire": a_faire, "inconnus": inconnus, "motifs": motifs, "actions": acts}
 
 
 def journaliser(etiquette, secondes, requetes):

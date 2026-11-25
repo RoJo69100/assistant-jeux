@@ -1,7 +1,7 @@
-<!-- généré le 2026-11-25 13:17 -->
+<!-- généré le 2026-11-25 15:35 -->
 # Hockey Nation — temps 1 : Lire (jour de saison 32, 2026-11-25)
 
-Dernière capture il y a moins d'1 h
+Dernière capture il y a 2 h
 
 Base : 328 Mo sur 500 (plan gratuit), croissance 1,0 Mo/jour sur 7 jours
 
@@ -157,11 +157,13 @@ Exports à faire aujourd'hui : aucun
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟧 IMPORTANT | Tactique | Saisis la lineup PRO selon la fiche outputs/hockeynation/briefs/2026-11-25-tactique-pro.md : test arrivé à échéance : plan de jeu à shift length court : 10 matchs de ligue (21 matchs joués depuis le 2026-10-29) ; test arrivé à échéance : réglages jeu de puissance et infériorité : 5 matchs de ligue (à valider) (20 matchs joués depuis le 2026-11-02) ; deux défaites de suite en ligue pour PRO ; deux défaites de suite en ligue pour FRM |
+| 🟧 IMPORTANT | Tactique | Saisis la lineup PRO selon la fiche [outputs/hockeynation/briefs/2026-11-25-tactique-pro.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/hockeynation/briefs/2026-11-25-tactique-pro.md) : test arrivé à échéance : plan de jeu à shift length court : 10 matchs de ligue (21 matchs joués depuis le 2026-10-29) ; test arrivé à échéance : réglages jeu de puissance et infériorité : 5 matchs de ligue (à valider) (20 matchs joués depuis le 2026-11-02) ; deux défaites de suite en ligue pour PRO ; deux défaites de suite en ligue pour FRM |
+| 🟧 IMPORTANT | Tactique | Saisis la lineup Islande selon la fiche [outputs/hockeynation/briefs/2026-11-25-tactique-islande.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/hockeynation/briefs/2026-11-25-tactique-islande.md) |
+| 🟧 IMPORTANT | Tactique | Saisis la lineup Islande U21 selon la fiche [outputs/hockeynation/briefs/2026-11-25-tactique-islande-u21.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/hockeynation/briefs/2026-11-25-tactique-islande-u21.md) |
+| 🟧 IMPORTANT | Tactique | Saisis la lineup Huaraz Lamas selon la fiche [outputs/hockeynation/briefs/2026-11-25-tactique-huaraz-lamas.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/hockeynation/briefs/2026-11-25-tactique-huaraz-lamas.md) |
 | 🟧 IMPORTANT | Entraînement | Vérifie et ressaisis l'ordre de choix PRO (21 joueurs, tableau ci-dessous) |
-| 🟧 IMPORTANT | Entraînement | Vérifie et ressaisis l'ordre de choix FRM (22 joueurs, tableau ci-dessous) |
-| 🟧 IMPORTANT | Entraînement | Vérifie et ressaisis l'ordre de choix U21 (24 joueurs, tableau ci-dessous) |
-| 🟧 IMPORTANT | Entraînement | Vérifie et ressaisis l'ordre de choix U17 (21 joueurs, tableau ci-dessous) |
+
+Autres actions (3) : Vérifie et ressaisis l'ordre de choix FRM (22 joueurs, tableau ci-dessous) ; Vérifie et ressaisis l'ordre de choix U21 (24 joueurs, tableau ci-dessous) ; Vérifie et ressaisis l'ordre de choix U17 (21 joueurs, tableau ci-dessous)
 
 Ordre de choix PRO
 

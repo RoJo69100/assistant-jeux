@@ -657,7 +657,7 @@ def cas_lien_fiche():
     """17/11 : chaque ligne qui cite une fiche (« … selon la fiche », « corrige la fiche … ») contient son chemin et son lien."""
     import re
     import tempfile
-    url = "https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/"
+    url = "https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/basketvibe/briefs/"
     fiche = {"ok": True, "adversaire": "Adv A", "fichier": "briefs/2026-11-17-tactique-amical-adv-a-18-11.md"}
     lignes = []
     for genre in ("ligue", "coupe", "amical"):
@@ -676,7 +676,7 @@ def cas_lien_fiche():
     citent = [l for l in lignes + [sans] if re.search(r"selon la fiche|corrige la fiche", l["consigne"])]
     yield "lien : 7 lignes citent une fiche (3 écrans, 3 corrections, 1 entraînement)", len(citent) == 7
     yield "lien : chaque ligne qui cite une fiche contient son chemin et son lien", all(
-        re.search(r"outputs/basketvibe/briefs/\S+\.md — " + re.escape(url) + r"\S+\.md", l["consigne"]) for l in citent)
+        re.search(r"\[outputs/basketvibe/briefs/\S+\.md\]\(" + re.escape(url) + r"\S+\.md\)", l["consigne"]) for l in citent)
     yield "lien : le lien pointe sur le fichier de la fiche", url + "2026-11-17-tactique-amical-adv-a-18-11.md" in citent[0]["consigne"] \
         and url + "2026-11-22-entrainement-semaine.md" in citent[-1]["consigne"]
     yield "lien : sans fiche, la ligne ne dit pas « selon la fiche »", "selon la fiche" not in sans["consigne"] and "aucune fiche" in sans["consigne"]
@@ -800,7 +800,7 @@ def cas_achats_refuses_police():
         (Path(t) / "police-2026-11-23.md").write_text("Décision : ne pas acheter tom gain", encoding="utf-8")
         txt = ej.texte_aucun_achat(["Tom Gain"], base=t)
     yield "achats refusés : la ligne cite le fichier police avec son lien GitHub complet", \
-        "outputs/basketvibe/police-2026-11-23.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-23.md" in txt
+        "[outputs/basketvibe/police-2026-11-23.md](https://github.com/RoJo69100/assistant-jeux/blob/main/outputs/basketvibe/police-2026-11-23.md)" in txt
     yield "achats refusés : sans verdict de refus, pas de ligne", not [x for x in ej.lignes_transferts(marche(annonces=[]), 300000, None, o=O) if x["id"] == "achats-aucun"]
 
 
