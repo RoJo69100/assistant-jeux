@@ -54,7 +54,8 @@ rythme:
   - { quand: saison, quoi: "63 jours, 30 matchs, playoffs au meilleur des 5 (gold.hn_calendar)" }
   - { quand: jours 1–35, quoi: "embauche des coachs (meilleure offre)" }
   - { quand: jours 8–42, quoi: "paies" }
-  - { quand: fenêtres, quoi: "échanges et montées FRM→PRO seulement fenêtre ouverte ; trade-window lu dans l'export (2026-11-28 20:00 UTC, sens à confirmer)", fuseau_heure: UTC }
+  - { quand: fenêtres, quoi: "échanges et montées FRM→PRO seulement fenêtre ouverte", fuseau_heure: UTC }
+  - { quand: fenetre_echanges, quoi: "fermeture de la fenêtre I d'échanges", date: "2026-11-28T20:00:00Z", source: "dernier export Trade Center (trade-window), 29/10 ; le Trade Center n'est plus exporté (25/11) : à mettre à jour ici à la main" }
   - { quand: "1 h avant la draft", quoi: "pré-instructions de draft verrouillées (tirage 2026-12-26 20:00 UTC)", fuseau_heure: UTC }
   - { quand: début de saison, quoi: "recruter les scouts ensemble, selon la classe de draft" }
   - { quand: fin de saison, quoi: "négociations FRM, ELC/Farm des U21, retraites" }
@@ -93,7 +94,7 @@ exports:
   - { page: coaching-staff,          quand: avant une embauche de coach,         evenement: engagement }
   - { page: office_scouting,         quand: après chaque mission de scout,       evenement: export_academie }
   - { page: office_draft-center,     quand: avant la draft,                      evenement: export_academie }
-  - { page: office_trade-center,     quand: si plus de 24 h et fenêtre ouverte,  evenement: export_marche }
+  # 25/11 (consigne de l'utilisateur) : le Trade Center n'est plus jamais demandé (ni ici, ni dans gold.hn_exports_state, ni dans core.export_rule).
   - { page: office_free-agent-center, quand: fenêtre des agents libres,         evenement: export_marche }
   - { page: club_overview_id,        quand: "avant un match important (adversaire)", evenement: export_adversaire }
   - { page: league_standings,        quand: après chaque journée,                evenement: export_ligue }
