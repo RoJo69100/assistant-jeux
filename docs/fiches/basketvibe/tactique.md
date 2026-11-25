@@ -14,6 +14,7 @@ Lue par l'agent `tactique` après `commun.md`. Contenu repris de l'agent BasketV
    - **aucun joueur au-delà de 3 quarts-temps** (36 min, puis −20 % [M§5.7]) ;
    - pour chaque joueur et emplacement, `height_eff` ≥ 95 dans `gold.bv_slot_fit` (sinon justifie-le) ;
    - fatigue stabilisée de chaque joueur selon ses minutes et son agressivité (`gold.bv_fatigue_plan`) : vise la zone verte (≤ 20) pour les titulaires ;
+   - **fatigue de ce match** (règle de l'utilisateur du 25/11) : la pénalité est fixée au coup d'envoi [basketvibe-joueurs, 06-fatigue] ; estime-la = relevé − (0,5 + 10 %) par nuit entre le relevé (`gold.bv_roster_now.day`) et le match. Ne coupe **jamais** de minutes pour une fatigue estimée de 20 à 22 (une ligne d'annexe suffit) ; au-delà de 22, remplace le joueur dans le cinq plutôt que de lui retirer des minutes ;
    - aucun joueur blessé (`injury_return_on`) ni vendu ;
    - **forme** : utilise `fit_with_form` de `gold.bv_slot_fit`. La forme change chaque dimanche [M§5.5] : vérifie la date du relevé (`gold.bv_roster_now.day`) et signale si elle est antérieure au dernier dimanche. Conseil du manuel : tireurs à 7 ou plus, joueurs à 5–6 pour les quarts-temps défensifs, reposer ceux à 4 ou moins [M§5.5].
    Donne le résultat du contrôle dans le brief.

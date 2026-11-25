@@ -1024,7 +1024,9 @@ def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime, capacite
     session et la rangée dit seulement ce qui est à lancer. Les blocs 0 à 10 restent (doublons supprimés seulement à parité prouvée)."""
     import etat_jour as ej
     cfg = ej.charger_config()
-    ls = [l for l in ej.lignes(ej.construire(donnees, S, base, jour, maintenant, cfg), cfg, maintenant) if l["action"]]
+    toutes = ej.lignes(ej.construire(donnees, S, base, jour, maintenant, cfg), cfg, maintenant)
+    infos = [i for l in toutes for i in l.get("infos") or []]  # 25/11 : fatigue estimée ≤ 22 au coup d'envoi, rien à changer
+    ls = [l for l in toutes if l["action"]]
     ls += lignes_transferts_du_jour(donnees, capacite, S, maintenant)  # phase A : offres et ventes (mêmes lignes que le bloc 4)
     proposee = any(l["action"] and l["prochain"] == "offre" and not str(l["id"]).startswith(("offres-", "tester-")) for l in ls) \
         or any(c.get("fin") is None or c["fin"] > maintenant for c in (S or {}).get("cibles", []))  # 19/11 : Mes enchères
@@ -1045,6 +1047,7 @@ def bloc_etat(donnees, S, base, jour: dt.date, maintenant: dt.datetime, capacite
         if l["age_h"] is not None:
             texte += f" — données de {l['age_h']:g} h".replace(".", ",")
         rangs.append(f"| {PASTILLE[l['priorite']]} | {AFFICHAGE[CAT_ETAT.get(l['prochain'], 'question')]} | {texte.replace('|', '/')} |")
+    rangs += [f"| {PASTILLE[3]} | {AFFICHAGE['composition']} | {i.replace('|', '/')} |" for i in infos]
     if not rangs:
         return ["toutes les transitions des 48 h sont faites ou attendent leur échéance", ""], consignes
     return ["| Priorité | Catégorie | Action |", "|---|---|---|"] + rangs + [""], consignes

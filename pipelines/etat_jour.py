@@ -227,6 +227,7 @@ def etat_evenement(ev, cfg, maintenant) -> dict:
         prio = 1  # 24/11 : ligue et coupe, après la fiche : saisie puis export de la page avant le verrou, jamais dégradée
     return {"id": ev.get("id"), "type": ev["type"], "evenement": _nom(ev), "etat": atteint, "prochain": prochain, "rates": rates,
             "echeance": echeance, "consigne": consigne, "age_h": age, "priorite": prio, "action": action, "defauts": defauts,
+            "infos": [] if ev["type"] != "match" else (ev.get("fiche") or {}).get("infos", []),
             "genre": ev.get("genre"), "fiche": (ev.get("fiche") or {}).get("fichier"), "cle": _cle_fichier(ev), "titre": _titre(ev), "test": ev.get("test"),
             "arrivee": ev.get("maj_at") or ev.get("rapport_at") or ev.get("page_at")}  # 22/11 : arrivée du prérequis (passage de relance)
 
@@ -326,14 +327,55 @@ def controle_minutes(joueurs, maximum) -> list:
             for j in joueurs if int(j.get("minutes") or 0) > maximum]
 
 
-def controle_fatigue(joueurs, fatigue, seuil) -> list:
-    """Joueur qui joue dont la fatigue actuelle dépasse le seuil (zone verte de core.alert_rule)."""
+FATIGUE_SIGNAL = 22  # 25/11 (règle de l'utilisateur) : fatigue estimée au coup d'envoi signalée seulement au-dessus de 22
+
+
+def fatigue_au_coup_envoi(f, nuits) -> float:
+    """Récupération de chaque nuit = 0,5 + 10 % de la fatigue actuelle [basketvibe-joueurs, 06-fatigue, M§5.6]."""
+    f = float(f)
+    for _ in range(max(0, int(nuits))):
+        f = max(0.0, f - (0.5 + 0.1 * f))
+    return f
+
+
+def _fatigue_estimee(valeur, coup_envoi):
+    """(relevé, jour du relevé, nuits, estimée) ; `valeur` = fatigue seule ou (fatigue, jour du relevé)."""
+    f, jour = (valeur if isinstance(valeur, (tuple, list)) else (valeur, None))
+    if f is None:
+        return None
+    jour = _date(jour) if jour is not None else None
+    ce = coup_envoi.date() if isinstance(coup_envoi, dt.datetime) else coup_envoi
+    nuits = (ce - jour).days if jour is not None and ce is not None else 0
+    return float(f), jour, nuits, fatigue_au_coup_envoi(f, nuits)
+
+
+def _origine(f, jour, nuits, est) -> str:
+    rel = f"relevé {_virg(round(f, 2))}" + (f" le {_jj(jour)}" if jour else "")
+    return f"{rel}, ≈ {_virg(round(est, 1))} au coup d'envoi ({nuits} nuit{'s' if nuits > 1 else ''} de récupération)"
+
+
+def controle_fatigue(joueurs, fatigue, seuil, coup_envoi=None, signal=FATIGUE_SIGNAL) -> list:
+    """Joueur qui joue dont la fatigue ESTIMÉE au coup d'envoi dépasse `signal` (22). La pénalité est fixée au coup d'envoi :
+    réduire ses minutes ne la change pas, la correction est de le remplacer. `seuil` (zone verte, 20) ne sert qu'aux infos."""
     res = []
     for j in joueurs:
-        for nom, f in fatigue.items():
-            if _joue(j) and _meme(j["nom"], nom) and f is not None and float(f) > float(seuil):
-                res.append({"texte": f"❌ {j['nom']} fatigue {_virg(f)} au-dessus de {_virg(seuil)}",
-                            "correction": f"réduis les minutes de {j['nom']} (fatigue {_virg(f)})"})
+        for nom, v in fatigue.items():
+            e = _fatigue_estimee(v, coup_envoi) if _joue(j) and _meme(j["nom"], nom) else None
+            if e and e[3] > float(signal):
+                res.append({"texte": f"❌ {j['nom']} fatigue {_origine(*e)}, au-dessus de {_virg(signal)}",
+                            "correction": f"remplace {j['nom']} dans le cinq par un joueur reposé (pénalité fixée au coup d'envoi : "
+                                          f"réduire ses minutes ne la change pas)"})
+    return res
+
+
+def infos_fatigue(joueurs, fatigue, seuil, coup_envoi=None, signal=FATIGUE_SIGNAL) -> list:
+    """🟩 info : relevé au-dessus de la zone verte (`seuil`) mais fatigue estimée au coup d'envoi ≤ `signal` : rien à changer."""
+    res = []
+    for j in joueurs:
+        for nom, v in fatigue.items():
+            e = _fatigue_estimee(v, coup_envoi) if _joue(j) and _meme(j["nom"], nom) else None
+            if e and seuil is not None and e[0] > float(seuil) and e[3] <= float(signal):
+                res.append(f"🟩 info : {j['nom']} fatigue {_origine(*e)} : rien à changer (signalée au-dessus de {_virg(signal)})")
     return res
 
 
@@ -385,8 +427,10 @@ def appliquer_controles(ev, reel, cfg) -> dict:
         fiche["defauts"] = controle_adversaire(fiche.get("adversaire"), ev["adversaire"]) \
             + (controle_blessures(fj, reel.get("blessures", {}), ev["jour"]) if ev.get("jour") else []) \
             + controle_minutes(fj, cfg["minutes_max"]) \
-            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"])
+            + (controle_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"], ev.get("coup_envoi") or ev.get("jour"))
                if regle.get("controle_fatigue") and reel.get("seuil_fatigue") is not None else [])  # 24/11 : jamais en amical (coût ≈ 1/10, M§1.2)
+        fiche["infos"] = (infos_fatigue(fj, reel.get("fatigue", {}), reel["seuil_fatigue"], ev.get("coup_envoi") or ev.get("jour"))
+                          if regle.get("controle_fatigue") and reel.get("seuil_fatigue") is not None else [])  # 25/11
         ev["fiche"] = fiche
     if ev.get("ecran") and ev["ecran"].get("joueurs") and ev["ecran"].get("sauvegarde"):  # 24/11 : écran pas sauvegardé = valeurs du jeu, pas une saisie
         ecran = dict(ev["ecran"])
@@ -938,7 +982,8 @@ def agents_a_lancer(etats, cfg=None, base=None, jour=None, dossier_agents=None) 
         f = base / sortie
         brief_a = dernier_brief_academie(base) if r["agent"] == "academie" else None
         if brief_a and l.get("arrivee") is not None and brief_a[0] >= l["arrivee"].date():  # 22/11 : rapport plus récent que le dernier brief ?
-            e.update(statut="deja_fait", raison=f"brief académie du {brief_a[0]:%d/%m} postérieur au rapport ({brief_a[1]})")
+            e.update(statut="deja_fait", sortie=f"briefs/{brief_a[1]}",  # 25/11 : cite le fichier existant, jamais la sortie du jour
+                     raison=f"brief académie du {brief_a[0]:%d/%m} postérieur au rapport ({brief_a[1]})")
         elif f.is_file() and f.stat().st_size > 0:
             e.update(statut="deja_fait", raison=f"sortie déjà présente ({sortie})")
         elif not (dossier_agents / f"{r['agent']}.md").is_file():
@@ -969,7 +1014,7 @@ REQUETES = {
                      "where match_day >= (now() at time zone 'Europe/Paris')::date - 1",
     "adversaires_connus": "select fixture_id, count(*) as n from gold.bv_saisie_adversaires "
                           "where match_day >= (now() at time zone 'Europe/Paris')::date - 1 and fixture_id is not null group by fixture_id",
-    "fatigue_roster": "select name, fatigue from gold.bv_roster_now",
+    "fatigue_roster": "select name, fatigue, day from gold.bv_roster_now",
     "seuil_fatigue": "select seuil_bas from core.alert_rule where game = 'basketvibe' and rule_id = 'fatigue' and actif",
     "historique_global": "select max(captured_at at time zone 'Europe/Paris') as derniere_paris from bronze.raw_pages "
                          "where page_type = 'transfers_global-history'",
@@ -1194,7 +1239,7 @@ def construire(donnees, S, base, jour, maintenant, cfg) -> list:
     for r in _rows(donnees, "blessures_match"):
         blessures.setdefault(r["fixture_id"], {})[r["name"]] = _date(r["injury_return_on"])
     seuil = next((r["seuil_bas"] for r in _rows(donnees, "seuil_fatigue")), None)
-    fatigue = {r["name"]: r["fatigue"] for r in _rows(donnees, "fatigue_roster")}
+    fatigue = {r["name"]: (r["fatigue"], r.get("day")) for r in _rows(donnees, "fatigue_roster")}  # 25/11 : jour du relevé
     a_evaluer = sum(int(r["n"]) for r in _rows(donnees, "a_evaluer"))
     matchs = _rows(donnees, "etat_match")
     officiels = [r for r in matchs if r["played"] and r["competition_kind"] != "amical"]
