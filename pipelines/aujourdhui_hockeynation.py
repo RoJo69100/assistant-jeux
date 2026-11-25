@@ -1,8 +1,8 @@
 """Que faire aujourd'hui Hockey Nation, sans modèle ni agent (critères H1 à H7 de docs/refonte-v3/journal-aujourdhui.md).
 
-Même plan que le skill hockeynation-aujourdhui, qui fait foi : 5 blocs en deux temps. Lecture seule, 8 requêtes au plus
+Même plan que le skill hockeynation-aujourdhui, qui fait foi : 5 blocs en deux temps. Lecture seule, 10 requêtes au plus
 (executer() de sql.py), 60 secondes au plus. Réutilise match_engine_etat.py (registre des règles, intervalle de Wilson).
-  --temps 1  Lire : exports (bloc 1), scouts (bloc 2), matchs joués des 4 équipes (bloc 3)
+  --temps 1  Lire : exports (bloc 1), scouts (bloc 2), matchs joués de nos 7 équipes (bloc 3)
   --temps 2  Agir : tactique PRO si déclenchée (bloc 4), entraînement (bloc 5), 5 actions au plus
 Écrit outputs/hockeynation/aujourdhui-AAAA-MM-JJ.md (les deux temps) et une ligne de durée dans le journal.
 Aucun code interne dans le rendu : les règles sont dites en mots.
@@ -24,7 +24,8 @@ import sql as sqlmod  # noqa: E402
 RACINE = Path(__file__).resolve().parent.parent
 BASE = RACINE / "outputs/hockeynation"
 JOURNAL = RACINE / "docs/refonte-v3/journal-aujourdhui.md"
-EQUIPES = ("PRO", "FRM", "U21", "U17")
+EQUIPES = ("PRO", "FRM", "U21", "U17", "ISL", "ISL21", "HUA")  # ISL = équipe nationale d'Islande, ISL21 = Islande U21, HUA = Huaraz Lamas (tournoi)
+EQUIPES_CLUB = ("PRO", "FRM", "U21", "U17")  # coach pick order et entraînement : équipes du club seulement
 ACTIONS_MAX = 5
 # Tests ouverts : (premier jour, matchs de ligue PRO avant échéance, libellé). PP/PK : date de la décision, à valider (H4c).
 TESTS = {
@@ -48,14 +49,17 @@ Q_SCOUTS = "select scout, nb_total from gold.hn_scout_liste order by scout"
 Q_CIBLES = "select scout, categorie, rang, joueur, poste, nation, rapports from gold.hn_scout_targets order by scout, categorie, rang"
 Q_BOARD = "select scout, poste, nation from gold.hn_scout_board where statut = 'embauché' order by scout"
 Q_JEUX = """
-select g.game_id, coalesce(g.team_level, (select y.level from silver.hn_my_teams y where y.city || ' ' || y.nickname in (g.home, g.away) limit 1)) as equipe,
+select g.game_id, coalesce(
+ (select c.eq from (values """ + me._VALEURS + """) c(id, eq) where c.id in (g.teams->'home'->>'id', g.teams->'away'->>'id') limit 1),
+ g.team_level, (select y.level from silver.hn_my_teams y where y.city || ' ' || y.nickname in (g.home, g.away) limit 1)) as equipe,
  g.game_type, g.scheduled_at, g.my_result, g.home, g.away, g.home_is_mine, (d.game_id is not null) as detail
 from silver.hn_games g left join silver.hn_game_detail d using (game_id)
 where (g.home_is_mine or g.away_is_mine or exists (select 1 from silver.hn_my_teams y where y.city || ' ' || y.nickname in (g.home, g.away)))
  and g.scheduled_at >= (select day1 from gold.hn_today) order by g.scheduled_at"""
 Q_PLAN = "select team_level, ordre, joueur, competence, coach from gold.hn_training_plan order by team_level, ordre"
 REQUETES = {"divers": Q_DIVERS, "scouts": Q_SCOUTS, "cibles": Q_CIBLES, "board": Q_BOARD, "details": me.Q_MATCHS,
-            "jeux": Q_JEUX, "gardiens": me.Q_GARDIENS, "plan": Q_PLAN}
+            "jeux": Q_JEUX, "gardiens": me.Q_GARDIENS, "plan": Q_PLAN,
+            "tous": me.Q_TOUS, "gardiens_tous": me.Q_GARDIENS_TOUS}  # 25/11 : registre sur tous les matchs en base
 
 try:
     from zoneinfo import ZoneInfo
@@ -282,14 +286,20 @@ def bloc_matchs(donnees, jour, depuis, debut_saison):
     for g in lignes(donnees, "gardiens"):
         if g["tirs"] is not None and g["tirs"] > gardiens.get(g["game_id"], {"tirs": -1})["tirs"]:
             gardiens[g["game_id"]] = g
-    saison = {}
-    for eq in EQUIPES:
-        saison[eq] = [dict(details[j["game_id"]]) for j in jeux if j["equipe"] == eq and j["game_type"] == "League"
-                      and j["my_result"] and j["game_id"] in details and vers_date(j["scheduled_at"]) >= debut_saison]
+    # 25/11 (consigne de l'utilisateur) : comparaison sur TOUS les matchs de l'équipe en base (toutes saisons, tous types),
+    # plus seulement la ligue de la saison en cours.
+    eq_de = {str(j["game_id"]): j["equipe"] for j in jeux}
+    saison = {eq: [] for eq in EQUIPES}
+    for gid, d in details.items():
+        eq = eq_de.get(str(gid)) or d.get("team_level")
+        if eq in saison and d.get("my_result"):
+            saison[eq].append(dict(d))
+    saison_ligue = {eq: [m for m in ms if m["game_type"] == "League" and vers_date(m["jour"]) >= debut_saison] for eq, ms in saison.items()}
     rangs, amicaux = {}, {}
     for eq in EQUIPES:
-        for k, j in enumerate([j for j in jeux if j["equipe"] == eq and j["game_type"] == "League"], 1):
-            rangs[j["game_id"]] = k
+        for gt in {j["game_type"] for j in jeux if j["equipe"] == eq and j["game_type"] != "Friendly"}:
+            for k, j in enumerate([j for j in jeux if j["equipe"] == eq and j["game_type"] == gt], 1):
+                rangs[j["game_id"]] = k
     for k, j in enumerate([j for j in jeux if j["game_type"] == "Friendly" and (j["home_is_mine"] is not None) and j["equipe"] in EQUIPES], 1):
         amicaux[j["game_id"]] = k
     tableau, defaites, inconnus = [], [], []
@@ -305,7 +315,7 @@ def bloc_matchs(donnees, jour, depuis, debut_saison):
         if vers_date(j["scheduled_at"]) <= depuis:
             continue
         d = details.get(j["game_id"])
-        etiquette = eq + (" — expérience sans notre choix" if eq != "PRO" else "")
+        etiquette = eq + (" — expérience sans notre choix" if eq in ("FRM", "U21", "U17") else "")
         numero = (f"amical n° {amicaux.get(j['game_id'], '?')}" if j["game_type"] == "Friendly" else f"match n° {rangs.get(j['game_id'], '?')}") + f" du {vers_date(j['scheduled_at'])} contre {adversaire(j)}"
         res = "Victoire" if j["my_result"] == "W" else "Défaite"
         if not d:
@@ -317,7 +327,7 @@ def bloc_matchs(donnees, jour, depuis, debut_saison):
         regles = regles_du_match(d, gardiens.get(j["game_id"]))
         tableau.append((etiquette, numero, res, merite, " ; ".join(regles) if regles else "aucune règle concernée"))
         if j["my_result"] == "L":
-            derniers = sorted(saison[eq], key=lambda m: str(m["jour"]))[-5:]
+            derniers = sorted(saison_ligue[eq] or saison[eq], key=lambda m: str(m["jour"]))[-5:]
             contre_nous = sum(1 for m in derniers if m["xn"] < m["xe"])
             changer = (f"oui : volume contre nous dans {contre_nous} des {len(derniers)} derniers matchs de ligue"
                        if gagner.startswith("non") and contre_nous >= 3 else
@@ -325,10 +335,11 @@ def bloc_matchs(donnees, jour, depuis, debut_saison):
             defaites.append((etiquette, numero, echelle, gagner, changer))
     for j in inconnus:
         tableau.append(("équipe inconnue", f"match du {vers_date(j['scheduled_at'])}, {j['home']} contre {j['away']}", "Victoire" if j["my_result"] == "W" else "Défaite", "indéterminé : équipe inconnue, aucune comparaison", "aucune règle concernée"))
-    pro = [dict(d) for d in details.values() if d["team_level"] == "PRO"]  # toute la base PRO, saison précédente comprise (comme le registre complet)
-    registre = [f"{en_mots(r['regle'])} : {r['verdict']} (n = {r['n']} ; {r['mesure']})" for r in
-                me.evaluer(pro, [g for g in lignes(donnees, "gardiens") if g["game_id"] in {m["game_id"] for m in pro}], [], {}, complet=False)
-                if re.match(r"L-0(01|02|04|06|19)", r["regle"])]
+    # Registre : tous les matchs en base, toutes équipes, toutes saisons, autres clubs inclus (deux observations par match, 25/11).
+    tous = [dict(d) for d in lignes(donnees, "tous")]
+    registre = [f"{en_mots(r['regle'])} : {r['verdict']} (n = {r['n']} sur {len(tous)} équipes-matchs ; {r['mesure']})" for r in
+                me.evaluer(tous, lignes(donnees, "gardiens_tous"), [], {}, complet=False, tous_types=True, propres=False)
+                if re.match(r"L-0(01|02|04|06)", r["regle"])]
     return tableau, defaites, [en_mots(x) for x in registre], bool(inconnus)
 
 
@@ -365,7 +376,7 @@ def declencheurs(donnees, fait, jour, jeux):
 
 def bloc_entrainement(donnees):
     """{équipe: [(ordre, joueur, compétence, coach)]} lu dans le plan ; sans compétence ouverte = fin de liste, sans proposition (H5)."""
-    res = {eq: [] for eq in EQUIPES}
+    res = {eq: [] for eq in EQUIPES_CLUB}
     for r in lignes(donnees, "plan"):
         ouverte = r.get("competence") not in (None, "") and "plafonn" not in str(r["competence"]).lower()
         res.setdefault(r["team_level"], []).append((r["ordre"] if r.get("ordre") is not None else "fin de liste", r["joueur"],
@@ -401,7 +412,7 @@ def plan_du_jour(donnees, jour, fait, learnings="", depuis=None):
     t1 += ([base[0]["ligne"], ""] if base else [])
     t1 += ["## 1. Exports", ""]
     t1 += table(["Priorité", "Catégorie", "Action"], [(p, "Export", a) for p, a in actions1]) + [""] if actions1 else ["Aucun export en retard parmi Roster, pages de match et Scouting.", ""]
-    t1 += ["## 2. Scouts", ""] + table(["Scout", "Cible", "Poste", "Nation", "Catégorie", "Rapports"], scouts) + ["", "## 3. Matchs joués des 4 équipes", ""]
+    t1 += ["## 2. Scouts", ""] + table(["Scout", "Cible", "Poste", "Nation", "Catégorie", "Rapports"], scouts) + ["", "## 3. Matchs joués de nos 7 équipes", ""]
     t1 += table(["Équipe", "Match", "Résultat", "Mérité ou non", "Règle du registre"], matchs) + [""] if matchs else ["Aucun match joué depuis le dernier passage.", ""]
     if defaites:
         t1 += table(["Équipe", "Match perdu", "Échelle", "Pouvait-on gagner", "Changer la structure"], defaites) + [""]
@@ -411,8 +422,8 @@ def plan_du_jour(donnees, jour, fait, learnings="", depuis=None):
     plan = bloc_entrainement(donnees)
     acts = list(urgent)
     if motifs:
-        acts.append(("🟧 IMPORTANT", "Tactique", "Saisis la lineup PRO selon le rendu figé : " + " ; ".join(motifs)))
-    for eq in EQUIPES:
+        acts.append(("🟧 IMPORTANT", "Tactique", f"Saisis la lineup PRO selon la fiche outputs/hockeynation/briefs/{jour}-tactique-pro.md : " + " ; ".join(motifs)))
+    for eq in EQUIPES_CLUB:
         if plan.get(eq):
             acts.append(("🟧 IMPORTANT", "Entraînement", f"Vérifie et ressaisis l'ordre de choix {eq} ({len(plan[eq])} joueurs, tableau ci-dessous)"))
     ordre = {"🟥 URGENT": 0, "🟧 IMPORTANT": 1, "🟩 SUIVI": 2}
@@ -423,7 +434,7 @@ def plan_du_jour(donnees, jour, fait, learnings="", depuis=None):
         t2 += ["Autres actions (" + str(len(acts) - ACTIONS_MAX) + ") : " + " ; ".join(a[2] for a in acts[ACTIONS_MAX:]), ""]
     if not motifs:
         t2 += []
-    for eq in EQUIPES:
+    for eq in EQUIPES_CLUB:
         if plan.get(eq):
             t2 += [f"Ordre de choix {eq}", ""] + table(["Ordre", "Joueur", "Compétence", "Coach"], plan[eq]) + [""]
     t2 += ["Exports à faire aujourd'hui : " + (" ; ".join(a_faire) if a_faire else "aucun")]

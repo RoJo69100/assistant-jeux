@@ -34,14 +34,40 @@ SEUIL_PP = SEUILS["pp"][0]
 SEUIL_P3 = SEUILS["p3"][0]
 SEUIL_GARDIEN_D = SEUILS["gardien_defaite"][0]
 
+# Nos équipes (id du jeu → libellé), clubs et équipes hors club (nation, tournoi) ; même liste que le bloc `equipes` de
+# docs/attentes/jeux/hockeynation.yaml (test_match_engine_etat le vérifie).
+EQUIPES_ID = {
+    "50cf5f9e-4fb2-4469-9f57-e291fe5ce3cd": "PRO", "9c3df9ae-5e1b-4b3b-a9d3-3b593b5c18e9": "FRM",
+    "e44a02bc-bc7a-42de-b853-2271d74a00bd": "U21", "02b15998-21ca-4b55-94d2-64d65037c83a": "U17",
+    "b19873de-482d-431f-9cb8-f62aa7a16572": "ISL", "e403da50-d117-4276-8554-2130789f460d": "ISL21",
+    "18f5fa55-a9ae-4ece-ba1c-a2866ff8d280": "HUA",
+}
+_VALEURS = ", ".join(f"('{i}', '{e}')" for i, e in EQUIPES_ID.items())
+
 # Colonnes du match : côté « nous » (cote) et côté adverse (autre), tout calculé en SQL.
-Q_MATCHS = f"""
+_SELECT = """
+select game_id, team_level, game_type, jour, my_result, bn, bo,"""
+Q_MATCHS_M = """
 with m as (select g.game_id, g.team_level, g.game_type, g.scheduled_at::date as jour, g.my_result,
  case when g.home_is_mine then 'home' else 'away' end as cote, case when g.home_is_mine then 'away' else 'home' end as autre,
  case when g.home_is_mine then g.home_score else g.away_score end as bn, case when g.home_is_mine then g.away_score else g.home_score end as bo,
  d.teams, d.periods, d.summary, d.boxscore, d.players from silver.hn_games g join silver.hn_game_detail d using (game_id)
- where g.home_is_mine or g.away_is_mine)
-select game_id, team_level, game_type, jour, my_result, bn, bo,
+ where g.home_is_mine or g.away_is_mine)"""
+# 25/11 (consigne de l'utilisateur) : registre sur TOUS les matchs en base, toutes équipes, toutes saisons, autres clubs inclus.
+# Chaque match donne deux observations (domicile et extérieur) ; game_id = « uuid/cote » ; résultat = score final (result).
+Q_TOUS_M = f"""
+with c(id, eq) as (values {_VALEURS}),
+m as (select d.game_id::text || '/' || x.cote as game_id, coalesce(c.eq, 'autres clubs') as team_level,
+ coalesce(g.game_type, case when d.teams->x.cote->>'level' in ('WORLD', 'NTU21') then 'WC' when d.teams->x.cote->>'level' = 'TOUR' then 'Tournament' else 'Inconnu' end) as game_type,
+ d.scheduled_at::date as jour, x.cote, x.autre,
+ (d.result->>(x.cote || 'Score'))::int as bn, (d.result->>(x.autre || 'Score'))::int as bo,
+ case when (d.result->>(x.cote || 'Score'))::int > (d.result->>(x.autre || 'Score'))::int then 'W' else 'L' end as my_result,
+ d.teams, d.periods, d.summary, d.boxscore, d.players
+ from silver.hn_game_detail d left join silver.hn_games g using (game_id)
+ cross join (values ('home', 'away'), ('away', 'home')) x(cote, autre)
+ left join c on c.id = d.teams->x.cote->>'id'
+ where d.result ? 'homeScore')"""
+_COLONNES = """
  (teams->cote->'stats'->>'shots')::int as tn, (teams->autre->'stats'->>'shots')::int as te,
  (teams->cote->'stats'->>'xGoalsFor')::float as xn, (teams->autre->'stats'->>'xGoalsFor')::float as xe,
  (teams->cote->'stats'->>'giveaways')::int as gvn, (teams->cote->'stats'->>'ppAttempts')::int as ppn, (teams->autre->'stats'->>'ppAttempts')::int as ppe,
@@ -56,6 +82,8 @@ select game_id, team_level, game_type, jour, my_result, bn, bo,
  (select coalesce(sum((e->autre->>'goals')::int),0) from jsonb_array_elements(periods) e where (e->>'period')::int=3) as g3,
  (select p->>'lastname' from jsonb_array_elements(players->cote) p where p->>'captain'='true' limit 1) as capitaine
 from m order by jour, game_id"""
+Q_MATCHS = Q_MATCHS_M + _SELECT + _COLONNES
+Q_TOUS = Q_TOUS_M + _SELECT + _COLONNES
 
 Q_GARDIENS = """
 select g.game_id, p->>'lastname' as nom, (b.value->>'toi')::int as toi, (b.value->>'saves')::int as arrets,
@@ -63,6 +91,28 @@ select g.game_id, p->>'lastname' as nom, (b.value->>'toi')::int as toi, (b.value
 from silver.hn_games g join silver.hn_game_detail d using (game_id), jsonb_each(d.boxscore) b,
  jsonb_array_elements(d.players->(case when g.home_is_mine then 'home' else 'away' end)) p
 where (g.home_is_mine or g.away_is_mine) and b.value ? 'saves' and p->>'id'=b.key"""
+
+# Gardiens des deux côtés de tous les matchs (même clé « uuid/cote » que Q_TOUS).
+Q_GARDIENS_TOUS = """
+select d.game_id::text || '/' || x.cote as game_id, p->>'lastname' as nom, (b.value->>'toi')::int as toi, (b.value->>'saves')::int as arrets,
+ (b.value->>'shotsFaced')::int as tirs, (b.value->>'goalsAgainst')::int as buts
+from silver.hn_game_detail d cross join (values ('home'), ('away')) x(cote), jsonb_each(d.boxscore) b,
+ jsonb_array_elements(d.players->x.cote) p
+where b.value ? 'saves' and p->>'id'=b.key"""
+
+# Test « shift length court » : réglage de la lineup A à chaque export de lineups PRO (seule source : aucun réglage dans les pages
+# de match). Un match n'est compté que s'il est encadré par deux exports qui donnent la même valeur (réglage fixé, prouvé).
+Q_SHIFT = """
+select captured_at, (body->0->'gameplan'->>'shiftLength')::int as shift from silver.hn_api
+where route = '/team/:id/lineups' and endpoint like '%/50cf5f9e-4fb2-4469-9f57-e291fe5ce3cd/%' and body->0->>'id' = 'A'
+ and body->0->'gameplan' ? 'shiftLength' order by captured_at"""
+Q_PRO_MATCHS = """
+select g.game_id::text as game_id, g.scheduled_at, g.game_type, g.my_result,
+ case when g.home_is_mine then g.away_score else g.home_score end as bo,
+ (d.teams->(case when g.home_is_mine then 'away' else 'home' end)->'stats'->>'shots')::int as te,
+ (d.teams->(case when g.home_is_mine then 'away' else 'home' end)->'stats'->>'xGoalsFor')::float as xe
+from silver.hn_games g join silver.hn_game_detail d using (game_id) where g.team_level = 'PRO' and g.my_result is not null"""
+SHIFT_LIBELLE = {0: "court", 1: "normal", 2: "long"}  # 0 = court : lu le 2026-10-31 après la décision du 2026-10-29 (resume.md)
 
 Q_JOUEURS = """
 select p->>'lastname' as nom, g.my_result as res, count(*) as n, sum((b.value->>'goals')::int) as buts, sum((b.value->>'shots')::int) as tirs,
@@ -74,11 +124,12 @@ group by 1, 2"""
 
 # Temps de glace par ligne : lineup A, dernière saisie au plus tard le jour du match (pas d'heure de saisie en base).
 Q_GLACE = """
-select g.game_id, g.scheduled_at::date as jour, l.line, sum((b.value->>'toi')::int) as toi, count(*) as joueurs
-from silver.hn_games g join silver.hn_game_detail d using (game_id), jsonb_each(d.boxscore) b, silver.hn_lineups l
-where g.team_level='PRO' and (g.home_is_mine or g.away_is_mine) and l.lineup='A' and l.line in ('L1','L2','L3','L4')
- and l.player_id::text=b.key and l.day=(select max(x.day) from silver.hn_lineups x where x.day<=g.scheduled_at::date)
-group by 1,2,3 order by 2,1,3"""
+with l as materialized (select day, player_id::text as pid, line from silver.hn_lineups where lineup='A' and line in ('L1','L2','L3','L4')),
+j as materialized (select g.game_id, g.scheduled_at::date as jour, (select max(x.day) from l x where x.day<=g.scheduled_at::date) as dl
+ from silver.hn_games g where g.team_level='PRO' and (g.home_is_mine or g.away_is_mine))
+select j.game_id, j.jour, l.line, sum((b.value->>'toi')::int) as toi, count(*) as joueurs
+from j join silver.hn_game_detail d using (game_id) cross join jsonb_each(d.boxscore) b join l on l.day=j.dl and l.pid=b.key
+group by 1,2,3 order by 2,1,3"""  # 25/11 : lineups lues une fois (la sous-requête corrélée dépassait le délai SQL)
 
 Q_JOURS = "select count(distinct day) as jours, min(day) as premier, max(day) as dernier from silver.hn_lineups"
 
@@ -186,9 +237,11 @@ def lire_retirees():
     return retirees(p.read_text(encoding="utf-8") for p in FICHIERS_REGLES if p.exists())
 
 
-def evaluer(ms, gardiens, joueurs, dsc, equipe="PRO", complet=True):
-    """ms : matchs (dict) d'une équipe ; gardiens / joueurs / dsc : lecture PRO seulement (complet=True)."""
-    ligue = [m for m in ms if m["game_type"] == "League"]
+def evaluer(ms, gardiens, joueurs, dsc, equipe="PRO", complet=True, tous_types=False, propres=True):
+    """ms : matchs (dict) d'une équipe ; gardiens / joueurs / dsc : lecture PRO seulement (complet=True).
+    tous_types : tous les matchs joués (ligue, playoffs, amicaux, tournoi, nation), pas la ligue seule (25/11).
+    propres=False : sans les règles propres à notre PRO (PP de la saison, S27, Kovalev)."""
+    ligue = [m for m in ms if (m["my_result"] if tous_types else m["game_type"] == "League")]
     defaites = [m for m in ligue if m["my_result"] == "L"]
     victoires = [m for m in ligue if m["my_result"] == "W"]
     s27 = [m for m in ligue if str(m["jour"]) >= DEBUT_S27]
@@ -218,9 +271,10 @@ def evaluer(ms, gardiens, joueurs, dsc, equipe="PRO", complet=True):
                      f"PK D {pk(dp)} ({sum(m['ppe'] for m in dp)} sup. adverses) ; PK V {pk(vp)} ; {ecartes} match(s) écarté(s), ppAttempts absent", equipe,
                      v=v_ecart(kd, kv)))
     att, buts = sum(m["ppn"] for m in sp), sum(m["ppgn"] for m in sp)
-    out.append(ligne(f"L-019 PP de la saison en cours au moins au seuil PP ({100 * SEUIL_PP:.1f} %)", att, buts, att - buts, 20,
-                     f"PP {pct(buts, att)} ({ic(buts, att)}) ; buts SH encaissés {sum(m['shge'] for m in s27)} ; PP ligue toute base {pct(sum(m['ppgn'] for m in lu(ligue)), sum(m['ppn'] for m in lu(ligue)))} ; pour = buts, contre = supériorités sans but",
-                     equipe, v=v_seuil(buts, att, SEUIL_PP, "au-dessus")))
+    if propres:
+        out.append(ligne(f"L-019 PP de la saison en cours au moins au seuil PP ({100 * SEUIL_PP:.1f} %)", att, buts, att - buts, 20,
+                         f"PP {pct(buts, att)} ({ic(buts, att)}) ; buts SH encaissés {sum(m['shge'] for m in s27)} ; PP ligue toute base {pct(sum(m['ppgn'] for m in lu(ligue)), sum(m['ppn'] for m in lu(ligue)))} ; pour = buts, contre = supériorités sans but",
+                         equipe, v=v_seuil(buts, att, SEUIL_PP, "au-dessus")))
     # L-015 / L-017 xG
     xd = [m for m in defaites if m["xn"] > m["xe"]]
     pour = sum(1 for m in xd if m["tn"] and m["te"] and m["bn"] / m["tn"] < m["bo"] / m["te"])
@@ -230,15 +284,16 @@ def evaluer(ms, gardiens, joueurs, dsc, equipe="PRO", complet=True):
                      f"{len(xd)} défaites sur {len(defaites)} avec xG nous > eux ; réussite nous {pct(*rn)}, eux {pct(*re_)}", equipe, v=v_ecart(rn, re_)))
     xs = [m for m in s27 if m["xn"] > m["xe"]]
     pour = sum(1 for m in xs if m["my_result"] == "L")
-    out.append(ligne("L-017 S27 : xG positif et résultat négatif", len(xs), pour, len(xs) - pour, 10,
-                     f"S27 ligue {len(s27)} matchs, {sum(1 for m in s27 if m['my_result'] == 'W')} V ; pertes de palet {sum(m['gvn'] for m in s27)}", equipe))
+    if propres:
+        out.append(ligne("L-017 S27 : xG positif et résultat négatif", len(xs), pour, len(xs) - pour, 10,
+                         f"S27 ligue {len(s27)} matchs, {sum(1 for m in s27 if m['my_result'] == 'W')} V ; pertes de palet {sum(m['gvn'] for m in s27)}", equipe))
     # L-016 / L-018 P3 du gardien (matchs où un seul gardien a joué 3600 s)
     complets = {}
     for g in gardiens:
         if g["toi"] == 3600:
             complets[g["game_id"]] = g
-    for nom, regle, filtre in (("Kovalev", "L-016 Kovalev recule en P3 de 2 points (toutes saisons)", lambda m: True),
-                               ("Kovalev", "L-018 Kovalev P3 en S27", lambda m: str(m["jour"]) >= DEBUT_S27)):
+    for nom, regle, filtre in ((("Kovalev", "L-016 Kovalev recule en P3 de 2 points (toutes saisons)", lambda m: True),
+                                ("Kovalev", "L-018 Kovalev P3 en S27", lambda m: str(m["jour"]) >= DEBUT_S27)) if propres else ()):
         sel = [m for m in ms if m["game_id"] in complets and complets[m["game_id"]]["nom"] == nom and filtre(m)]
         k3, n3 = sum(m["s3"] - m["g3"] for m in sel), sum(m["s3"] for m in sel)
         k12, n12 = sum(m["s12"] - m["g12"] for m in sel), sum(m["s12"] for m in sel)
@@ -264,14 +319,15 @@ def evaluer(ms, gardiens, joueurs, dsc, equipe="PRO", complet=True):
                      f"D {pct(ka, na)} ({ic(ka, na)}) ; V {pct(sum(g['arrets'] for g in vic), sum(g['tirs'] for g in vic))}", equipe,
                      v=v_seuil(ka, na, SEUIL_GARDIEN_D, "sous")))
     # L-003 rang de départ d'affilée
-    rangs, prec, rang = [], None, 0
-    for m in ligue:
+    rangs, prec, rang = [], {}, {}
+    for m in ligue:  # rang compté par équipe (une suite de départs n'a de sens que dans la même équipe) ; autres clubs exclus
         g = titulaire.get(m["game_id"])
-        if not g:
+        eq = m.get("team_level") or equipe
+        if not g or eq == "autres clubs":
             continue
-        rang = rang + 1 if g["nom"] == prec else 1
-        prec = g["nom"]
-        rangs.append((rang, g))
+        rang[eq] = rang.get(eq, 0) + 1 if g["nom"] == prec.get(eq) else 1
+        prec[eq] = g["nom"]
+        rangs.append((rang[eq], g))
     r1 = [g for r, g in rangs if r == 1 and g["tirs"]]
     moy1 = sum(g["arrets"] for g in r1) / sum(g["tirs"] for g in r1) if r1 else None
     hauts = [g for r, g in rangs if r >= 3 and g["tirs"]]
@@ -375,15 +431,92 @@ def temps_de_glace(glace, jours):
     return txt
 
 
-def rapport(ms, gardiens, joueurs, dsc, retirees=frozenset(), glace=None, jours=None):
+def _dt(x):
+    import datetime as dt
+    if isinstance(x, dt.datetime):
+        return x if x.tzinfo else x.replace(tzinfo=dt.timezone.utc)
+    return dt.datetime.fromisoformat(str(x).replace("Z", "+00:00").replace(" ", "T", 1))
+
+
+def reglage_fixe(instant, releves):
+    """Valeur du réglage à `instant` si deux relevés l'encadrent avec la même valeur (réglage fixé, prouvé) ; sinon None.
+    releves : [(datetime, valeur)] triés."""
+    t = _dt(instant)
+    avant = [v for d, v in releves if _dt(d) <= t]
+    apres = [v for d, v in releves if _dt(d) >= t]
+    return avant[-1] if avant and apres and avant[-1] == apres[0] else None
+
+
+def poisson_ic(k, n, z=1.96):
+    """Moyenne k / n d'un compte (buts par match) et IC95 par l'approximation normale de Poisson."""
+    if not n:
+        return None
+    m, e = k / n, z * (k ** 0.5) / n
+    return m, max(0.0, m - e), m + e
+
+
+def test_shift(releves, matchs, requis=10):
+    """Test « shift length court » (C4 : échéance 10 matchs). Seuls les matchs PRO dont le réglage est fixé et prouvé (encadré
+    par deux exports de lineups de même valeur) comptent. Mesure d'équipe (buts encaissés, arrêts) : la mesure par la L1 demande
+    les joueurs sur la glace par but, absents. Verdict : arrêts « court » contre « normal » (intervalles de Wilson séparés)."""
+    groupes = {}
+    for m in matchs:
+        v = reglage_fixe(m["scheduled_at"], releves)
+        if v is not None and m["te"] is not None and m["bo"] is not None:
+            groupes.setdefault(v, []).append(m)
+    lignes_ = ["| shift length | matchs (fixé et prouvé) | buts encaissés / match (IC95) | tirs subis / match | xG adverse / match | arrêts (IC95) | confiance |",
+               "|---|---|---|---|---|---|---|"]
+    stats = {}
+    for v in sorted(groupes):
+        g = groupes[v]
+        ga, sa, n = sum(m["bo"] for m in g), sum(m["te"] for m in g), len(g)
+        xa = sum(m["xe"] or 0 for m in g)
+        p = poisson_ic(ga, n)
+        stats[v] = (sa - ga, sa)
+        lignes_.append(f"| {SHIFT_LIBELLE.get(v, v)} | {n} | {p[0]:.2f} ({p[1]:.2f}–{p[2]:.2f}) | {sa / n:.1f} | {xa / n:.2f} | "
+                       f"{pct(sa - ga, sa)} ({ic(sa - ga, sa)}) | {confiance(n, requis)} |")
+    lire = lambda v: ("échoué : arrêts plus bas en court, retour à normal" if v == "confirmé" else  # noqa: E731
+                      "réussi : arrêts plus hauts en court" if v == "infirmé" else v)
+    if 0 in stats and 1 in stats:
+        verdict_ = lire(v_ecart(stats[0], stats[1]))  # « confirmé » = court encaisse plus (arrêts plus bas) : le test a échoué
+    else:
+        verdict_ = "indéterminé : un des deux réglages n'a aucun match fixé et prouvé"
+        # Référence indicative, hors verdict : matchs d'avant le premier export, réglage supposé égal au premier relevé.
+        if releves and 0 in stats:
+            premier = _dt(releves[0][0])
+            ref = [m for m in matchs if _dt(m["scheduled_at"]) < premier and m["te"] is not None and m["bo"] is not None]
+            if ref and releves[0][1] != 0:
+                ga, sa, n = sum(m["bo"] for m in ref), sum(m["te"] for m in ref), len(ref)
+                p = poisson_ic(ga, n)
+                lignes_.append(f"| {SHIFT_LIBELLE.get(releves[0][1], releves[0][1])} — référence NON prouvée (avant le premier export, "
+                               f"{premier.date()}) | {n} | {p[0]:.2f} ({p[1]:.2f}–{p[2]:.2f}) | {sa / n:.1f} | "
+                               f"{sum(m['xe'] or 0 for m in ref) / n:.2f} | {pct(sa - ga, sa)} ({ic(sa - ga, sa)}) | {confiance(n, requis)} |")
+                verdict_ += f" ; contre la référence non prouvée : {lire(v_ecart(stats[0], (sa - ga, sa)))}"
+    conf = confiance(min(len(groupes.get(0, [])), len(groupes.get(1, []))), requis)
+    exclus = len(matchs) - sum(len(g) for g in groupes.values())
+    lignes_.append(f"Verdict : {verdict_} ; confiance {conf} ; {exclus} match(s) PRO exclus (réglage non prouvé : aucun export de lineups "
+                   "avant le match ou valeur changée entre deux exports). Force de l'adversaire non corrigée.")
+    return lignes_
+
+
+def rapport(ms, gardiens, joueurs, dsc, retirees=frozenset(), glace=None, jours=None, tous=None, gardiens_tous=None, shift=None):
+    """tous / gardiens_tous : toutes les observations (deux par match, autres clubs inclus, Q_TOUS) ; sans elles, l'ancien
+    regroupement FRM+U21+U17. shift : (relevés, matchs PRO) du test « shift length court »."""
     pro = [m for m in ms if m["team_level"] == "PRO"]
-    out = evaluer(pro, [g for g in gardiens if g["game_id"] in {m["game_id"] for m in pro}], joueurs, dsc)
-    autres = [m for m in ms if m["team_level"] != "PRO"]
-    ids = {m["game_id"] for m in autres}
-    for l in evaluer(autres, [g for g in gardiens if g["game_id"] in ids], [], {}, complet=False):
-        l["equipe"] = "FRM+U21+U17 (expérience sans notre choix)"
-        if l["n"]:
-            out.append(l)
+    out = evaluer(pro, [g for g in gardiens if g["game_id"] in {m["game_id"] for m in pro}], joueurs, dsc, tous_types=tous is not None)
+    if tous is not None:
+        matchs = len({m["game_id"].split("/")[0] for m in tous})
+        for l in evaluer(tous, gardiens_tous or [], [], {}, complet=False, tous_types=True, propres=False):
+            l["equipe"] = f"tous les matchs ({matchs} matchs, {len(tous)} équipes-matchs, autres clubs inclus)"
+            if l["n"]:
+                out.append(l)
+    else:
+        autres = [m for m in ms if m["team_level"] != "PRO"]
+        ids = {m["game_id"] for m in autres}
+        for l in evaluer(autres, [g for g in gardiens if g["game_id"] in ids], [], {}, complet=False):
+            l["equipe"] = "FRM+U21+U17 (expérience sans notre choix)"
+            if l["n"]:
+                out.append(l)
     out = [l for l in out if l["regle"].split(" ")[0] not in retirees]  # règle retirée : ni mesurée ni affichée
     cols = ["regle", "equipe", "n", "pour", "contre", "requis", "confiance", "verdict", "mesure"]
     en_tete = ["règle", "équipe", "n matchs", "pour", "contre", "n requis", "confiance", "verdict", "mesure"]
@@ -392,15 +525,28 @@ def rapport(ms, gardiens, joueurs, dsc, retirees=frozenset(), glace=None, jours=
     for regle, manque in NON_MESURABLE:
         if regle.split(" ")[0] not in retirees:
             txt.append(f"| {regle} | — | — | — | — | — | — | non mesurable : il manque {manque} | — |")
+    if shift is not None:
+        txt += ["", "Test « shift length court » (matchs PRO où le réglage est fixé)", *test_shift(*shift)]
     if jours is not None:
         txt += ["", "Temps de glace par ligne (matchs PRO)", *temps_de_glace(glace or [], jours)]
     return "\n".join(txt)
 
 
+def lire_tous():
+    """Toutes les observations (Q_TOUS, Q_GARDIENS_TOUS) et les données du test shift (Q_SHIFT, Q_PRO_MATCHS)."""
+    res = []
+    for q in (Q_TOUS, Q_GARDIENS_TOUS, Q_SHIFT, Q_PRO_MATCHS):
+        cols, lignes = sqlmod.executer(q)
+        res.append([dict(zip(cols, l)) for l in lignes])
+    tous, gardiens_tous, shift, pro = res
+    return tous, gardiens_tous, ([(r["captured_at"], r["shift"]) for r in shift], pro)
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     glace, jours = lire_glace()
-    print(rapport(*lire(), retirees=lire_retirees(), glace=glace, jours=jours))
+    tous, gardiens_tous, shift = lire_tous()
+    print(rapport(*lire(), retirees=lire_retirees(), glace=glace, jours=jours, tous=tous, gardiens_tous=gardiens_tous, shift=shift))
     return 0
 
 

@@ -2017,3 +2017,9 @@ HEAD dans origin/main : oui
 | 2026-11-25 12:15 | hockeynation temps 1 (2026-11-25) | 37.0 | 8 |
 | 2026-11-25 12:16 | hockeynation temps 2 (2026-11-25) | 33.7 | 8 |
 | 2026-11-25 12:20 | hockeynation temps 2 (2026-11-25) | 28.9 | 8 |
+| 2026-11-25 13:01 | hockeynation temps 1 (2026-11-25) | 32.1 | 8 |
+| 2026-11-25 13:09 | hockeynation temps 1 (2026-11-25) | 28.8 | 10 |
+| 2026-11-25 13:10 | hockeynation temps 1 (2026-11-25) | 28.2 | 10 |
+| 2026-11-25 13:10 | hockeynation temps 1 (2026-11-25) | 27.1 | 10 |
+| 2026-11-25 13:17 | hockeynation temps 1 (2026-11-25) | 29.4 | 10 |
+| 2026-11-25 13:17 | hockeynation temps 2 (2026-11-25) | 27.4 | 10 |

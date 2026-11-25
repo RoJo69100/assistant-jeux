@@ -105,7 +105,7 @@ def h3():
     attendu = len([j for j in jeux if j["my_result"] and j["equipe"] in hn.EQUIPES and hn.vers_date(j["scheduled_at"]) > DEPUIS])
     tab, defs, reg, inc = hn.bloc_matchs(d, JOUR, DEPUIS, dt.date(2026, 10, 25))
     yield "H3 : une ligne par match joué des 4 équipes depuis le dernier passage", len(tab) == attendu and attendu >= 4
-    yield "H3 : les 4 équipes sont présentes", {r[0].split(" ")[0] for r in tab} >= set(hn.EQUIPES)
+    yield "H3 : les 4 équipes du club sont présentes", {r[0].split(" ")[0] for r in tab} >= set(hn.EQUIPES_CLUB)
     yield "H3 : résultat en mot, jamais le score brut", all(r[2] in ("Victoire", "Défaite") for r in tab) and not any(re.search(r"(?<![\d-])\d{1,2}-\d{1,2}(?![\d-])", " ".join(r[:3])) for r in tab)
     yield "H3 : « mérité ou non » donne le nombre de matchs de la comparaison", all(re.search(r"sur \d+ matchs|indéterminé", r[3]) for r in tab)
     yield "H3 : FRM, U21, U17 marqués « expérience sans notre choix »", all("expérience sans notre choix" in r[0] for r in tab if not r[0].startswith("PRO"))
@@ -178,13 +178,13 @@ def h4():
 def h5():
     d = charger()
     ent = hn.bloc_entrainement(d)
-    yield "H5 : un tableau par équipe, les 4 équipes", all(ent[eq] for eq in hn.EQUIPES)
+    yield "H5 : un tableau par équipe, les 4 équipes", all(ent[eq] for eq in hn.EQUIPES_CLUB)
     yield "H5 : aucune compétence plafonnée proposée", not any("plafonn" in str(c[2]).lower() for eq in ent.values() for c in eq)
     yield "H5 : le joueur sans compétence ouverte est en fin de liste, sans coach", all(c[0] == "fin de liste" and c[3] == "" for eq in ent.values() for c in eq if c[2] == "aucune compétence ouverte")
     ordres = [c[0] for c in ent["PRO"] if isinstance(c[0], int)]
     yield "H5 : l'ordre de choix est croissant", ordres == sorted(ordres) and ordres[0] == 1
     t2 = plan(d)["temps2"]
-    yield "H5 : le rendu a un tableau par équipe dans l'ordre PRO, FRM, U21, U17", [t2.find(f"Ordre de choix {eq}") for eq in hn.EQUIPES] == sorted(t2.find(f"Ordre de choix {eq}") for eq in hn.EQUIPES) and -1 not in [t2.find(f"Ordre de choix {eq}") for eq in hn.EQUIPES]
+    yield "H5 : le rendu a un tableau par équipe dans l'ordre PRO, FRM, U21, U17", [t2.find(f"Ordre de choix {eq}") for eq in hn.EQUIPES_CLUB] == sorted(t2.find(f"Ordre de choix {eq}") for eq in hn.EQUIPES_CLUB) and -1 not in [t2.find(f"Ordre de choix {eq}") for eq in hn.EQUIPES_CLUB]
 
 
 def h6():
@@ -203,7 +203,7 @@ def h6():
 
 
 def h7():
-    yield "H7 : le relevé figé contient les 8 requêtes", set(charger()) == set(hn.REQUETES) and len(hn.REQUETES) <= 8
+    yield "H7 : le relevé figé est couvert par les requêtes (10 au plus)", set(charger()) <= set(hn.REQUETES) and len(hn.REQUETES) <= 10
     yield "H7 : le relevé date du 2026-11-06", (ESSAI / "fait-2026-11-06.md").exists() and (ESSAI / "learnings.md").exists()
 
     def lent(sql):  # 25/11 : un délai HTTPS (TimeoutError) arrêtait tout le plan au lieu d'une vue illisible

@@ -95,10 +95,37 @@ def rapport():
     yield "rapport : pas de ligne à zéro match hors PRO", not any("expérience" in l and "aucun match" in l for l in txt.splitlines())
 
 
+def tous_les_matchs():
+    """25/11 : registre sur tous les matchs (deux observations par match, autres clubs inclus) et test shift length."""
+    import yaml
+    y = yaml.safe_load((Path(__file__).resolve().parent.parent / "docs/attentes/jeux/hockeynation.yaml").read_text(encoding="utf-8"))
+    yield "EQUIPES_ID couvre les équipes du yaml", set(me.EQUIPES_ID.values()) == {e["id"] for e in y["equipes"]}
+    yield "ids du yaml = EQUIPES_ID (équipes hors club)", all(me.EQUIPES_ID.get(e["game_id"]) == e["id"] for e in y["equipes"] if e.get("game_id"))
+    yield "Q_TOUS lit les deux côtés sans filtre « à nous »", "cross join (values ('home', 'away'), ('away', 'home'))" in me.Q_TOUS and "is_mine or" not in me.Q_TOUS_M
+    tous = [dict(m, game_id=f"t{i}/home", team_level="autres clubs", game_type="Tournament") for i, m in enumerate(MS)]
+    txt = me.rapport(MS, GARDIENS, JOUEURS, DSC, tous=tous, gardiens_tous=[])
+    yield "rapport : ligne « tous les matchs » avec autres clubs", "tous les matchs (6 matchs, 6 équipes-matchs, autres clubs inclus)" in txt
+    yield "rapport : plus de regroupement FRM+U21+U17 quand tous est fourni", "FRM+U21+U17" not in txt
+    r = par_regle(me.evaluer(tous, [], [], {}, complet=False, tous_types=True, propres=False))
+    yield "tous_types : un match de tournoi compte", r["L-001"]["n"] == 4
+    yield "propres=False : ni PP de la saison ni Kovalev", not ({"L-019", "L-016", "L-018", "L-017"} & set(r))
+    rel = [("2026-10-23T10:00:00+00:00", 1), ("2026-10-31T10:00:00+00:00", 0), ("2026-11-25T10:00:00+00:00", 0)]
+    yield "réglage fixé : encadré par deux relevés égaux", me.reglage_fixe("2026-11-10T18:00:00+00:00", rel) == 0
+    yield "réglage non prouvé : relevés différents autour", me.reglage_fixe("2026-10-28T18:00:00+00:00", rel) is None
+    yield "réglage non prouvé : avant le premier relevé", me.reglage_fixe("2026-09-01T18:00:00+00:00", rel) is None
+    pm = [{"scheduled_at": f"2026-11-{j:02d}T18:00:00+00:00", "bo": 3, "te": 30, "xe": 3.0} for j in range(1, 21)] + \
+         [{"scheduled_at": f"2026-09-{j:02d}T18:00:00+00:00", "bo": 3, "te": 30, "xe": 3.0} for j in range(1, 11)]
+    t = "\n".join(me.test_shift(rel, pm))
+    yield "test shift : 20 matchs court prouvés", "| court | 20 |" in t
+    yield "test shift : référence d'avant le premier relevé marquée NON prouvée", "référence NON prouvée" in t and "| 10 |" in t
+    yield "test shift : sans groupe normal prouvé, verdict indéterminé", "Verdict : indéterminé : un des deux réglages" in t
+    yield "poisson_ic : 64 buts en 20 matchs", tuple(round(x, 2) for x in me.poisson_ic(64, 20)) == (3.2, 2.42, 3.98)
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
     echecs = total = 0
-    for groupe in (cas, wilson, retraites, glace, seuils, rapport):
+    for groupe in (cas, wilson, retraites, glace, seuils, rapport, tous_les_matchs):
         for nom, ok in groupe():
             total += 1
             echecs += not ok
