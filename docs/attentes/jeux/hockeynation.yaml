@@ -13,6 +13,20 @@ equipes:              # un bloc par équipe dans chaque rendu ; toujours 20 joue
   - { id: FRM, nom: Farm, niveau: réserve, controle: [poste principal (Swap position), coach pick order, entrainement, negociation 25 ans et plus], limite_effectif: 20 }
   - { id: U21, nom: U21, niveau: jeunes, controle: [poste principal, coach pick order, montee FRM ou PRO, ELC ou contrat Farm], limite_effectif: 20 }
   - { id: U17, nom: U17, niveau: jeunes, controle: [poste principal, coach pick order], limite_effectif: 20 }
+  # 25/11 (consigne de l'utilisateur) : équipes hors club. Contrôles = ce que l'export du 25/11 montre, rien de plus.
+  # game_id : id de l'équipe dans le jeu (même liste que match_engine_etat.EQUIPES_ID ; club : PRO 50cf5f9e, FRM 9c3df9ae, U21 e44a02bc, U17 02b15998).
+  - { id: ISL, nom: "équipe nationale d'Islande (Iceland)", niveau: "nation (WORLD)", game_id: b19873de-482d-431f-9cb8-f62aa7a16572,
+      controle: [lignes, plan de jeu, equipes_speciales], limite_effectif: null,
+      preuve: "export Lineups du 25/11 : lignes L1-L4, gardiens et plan de jeu saisis ; unités spéciales vides mais présentes ; bot: false",
+      competition: "championnat du monde (WC)" }
+  - { id: ISL21, nom: "Islande U21 (nationale, Iceland U21)", niveau: "nation (NTU21)", game_id: e403da50-d117-4276-8554-2130789f460d,
+      controle: [], limite_effectif: null,
+      preuve: "export Lineups du 25/11 entièrement vide et équipe marquée bot: true : contrôle de l'utilisateur non prouvé (à confirmer à l'écran)",
+      competition: "championnat du monde U21 (WC)" }
+  - { id: HUA, nom: "Huaraz Lamas (tournoi Queens League: Nine Lives)", niveau: "tournoi (TOUR)", game_id: 18f5fa55-a9ae-4ece-ba1c-a2866ff8d280,
+      controle: [], limite_effectif: null,
+      preuve: "équipe à nous (own: true, staffMember: true, rosterMode custom) ; onglet Lineups jamais exporté : contrôles non prouvés",
+      competition: "tournoi utilisateur à 32 équipes, phase de groupe puis élimination directe à 8" }
 
 ligue: { taille: 20, division: "2 conférences, 4 niveaux", montee_descente: "skill hockeynation-match-calendrier" }
 
