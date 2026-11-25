@@ -39,41 +39,41 @@ Lineup A lue dans l'export Lineups du 25/11 11:59. 🔁 = case à changer.
 | 🔁 PP1 ANY | — | Ingólfur Traustason | SHO+PAS+SKA = 21, END 6 | moyenne |
 | **Jeu de puissance 2** | | | | |
 | 🔁 PP2 C | — | Sindri Vignisson | SHO+PAS+SKA = 20, END 10 | moyenne |
-| 🔁 PP2 LW | — | Pétur Björgvinsson | SHO+PAS+SKA = 20, END 4 | moyenne |
+| 🔁 PP2 LW | — | Pétur Björgvinsson | SHO+PAS+SKA = 20, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | 🔁 PP2 RW | — | Guðmundur Sæmundsson | SHO+PAS+SKA = 19, END 5 | moyenne |
 | 🔁 PP2 D | — | Davíð Gústafsson | SHO+PAS+SKA = 18, END 5 | moyenne |
 | 🔁 PP2 ANY | — | Sigurður Sigþórsson | SHO+PAS+SKA = 20, END 5 | moyenne |
 | **Infériorité 1 (4 joueurs)** | | | | |
-| 🔁 PK4-1 FW1 | — | Pétur Björgvinsson | DEF+CHK+SKA+PWR = 28, END 4 | moyenne |
-| 🔁 PK4-1 FW2 | — | Sindri Sigvaldason | DEF+CHK+SKA+PWR = 28, END 6 | moyenne |
+| 🔁 PK4-1 FW1 | — | Sindri Sigvaldason | DEF+CHK+SKA+PWR = 28, END 6 | moyenne |
+| 🔁 PK4-1 FW2 | — | Guðmundur Sæmundsson | DEF+CHK+SKA+PWR = 23, END 5 | moyenne |
 | 🔁 PK4-1 LD | — | Björgvin Jóhannsson | DEF+CHK+SKA+PWR = 24, END 5 | moyenne |
-| 🔁 PK4-1 RD | — | Róbert Harðarson | DEF+CHK+SKA+PWR = 26, END 4 | moyenne |
+| 🔁 PK4-1 RD | — | Róbert Harðarson | DEF+CHK+SKA+PWR = 26, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | **Infériorité 2 (4 joueurs)** | | | | |
-| 🔁 PK4-2 FW1 | — | Guðmundur Sæmundsson | DEF+CHK+SKA+PWR = 23, END 5 | moyenne |
-| 🔁 PK4-2 FW2 | — | Grétar Thorsteinsson | DEF+CHK+SKA+PWR = 23 (dont powerplay-specialist), END 5 | moyenne |
-| 🔁 PK4-2 LD | — | Ómar Þorvaldsson | DEF+CHK+SKA+PWR = 24, END 4 | moyenne |
-| 🔁 PK4-2 RD | — | Óskar Birgisson | DEF+CHK+SKA+PWR = 24, END 4 | moyenne |
+| 🔁 PK4-2 FW1 | — | Grétar Thorsteinsson | DEF+CHK+SKA+PWR = 23 (dont powerplay-specialist), END 5 | moyenne |
+| 🔁 PK4-2 FW2 | — | Haukur Matthíasson | DEF+CHK+SKA+PWR = 23, END 5 | moyenne |
+| 🔁 PK4-2 LD | — | Ómar Þorvaldsson | DEF+CHK+SKA+PWR = 24, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
+| 🔁 PK4-2 RD | — | Óskar Birgisson | DEF+CHK+SKA+PWR = 24, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | **Infériorité à 3, unité 1** | | | | |
-| 🔁 PK3-1 FW | — | Pétur Björgvinsson | DEF+CHK+SKA+PWR = 28, END 4 | moyenne |
+| 🔁 PK3-1 FW | — | Sindri Sigvaldason | DEF+CHK+SKA+PWR = 28, END 6 | moyenne |
 | 🔁 PK3-1 LD | — | Björgvin Jóhannsson | DEF+CHK+SKA+PWR = 24, END 5 | moyenne |
-| 🔁 PK3-1 RD | — | Róbert Harðarson | DEF+CHK+SKA+PWR = 26, END 4 | moyenne |
+| 🔁 PK3-1 RD | — | Róbert Konráðsson | DEF+CHK+SKA+PWR = 13, END 5 | moyenne |
 | **Infériorité à 3, unité 2** | | | | |
-| 🔁 PK3-2 FW | — | Sindri Sigvaldason | DEF+CHK+SKA+PWR = 28, END 6 | moyenne |
-| 🔁 PK3-2 LD | — | Ómar Þorvaldsson | DEF+CHK+SKA+PWR = 24, END 4 | moyenne |
-| 🔁 PK3-2 RD | — | Óskar Birgisson | DEF+CHK+SKA+PWR = 24, END 4 | moyenne |
+| 🔁 PK3-2 FW | — | Guðmundur Sæmundsson | DEF+CHK+SKA+PWR = 23, END 5 | moyenne |
+| 🔁 PK3-2 LD | — | Davíð Gústafsson | DEF+CHK+SKA+PWR = 23, END 5 | moyenne |
+| 🔁 PK3-2 RD | — | Róbert Harðarson | DEF+CHK+SKA+PWR = 26, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | **4 contre 4, unité 1** | | | | |
 | 🔁 4V4-1 FW1 | — | Ingvar Oddsson | SKA+PAS+SHO = 22, END 6 | moyenne |
 | 🔁 4V4-1 FW2 | — | Sindri Sigvaldason | SKA+PAS+SHO = 21, END 6 | moyenne |
 | 🔁 4V4-1 LD | — | Björgvin Jóhannsson | SKA+PAS+SHO = 19, END 5 | moyenne |
-| 🔁 4V4-1 RD | — | Óskar Birgisson | SKA+PAS+SHO = 16, END 4 | moyenne |
+| 🔁 4V4-1 RD | — | Róbert Konráðsson | SKA+PAS+SHO = 11, END 5 | moyenne |
 | **4 contre 4, unité 2** | | | | |
 | 🔁 4V4-2 FW1 | — | Ingólfur Traustason | SKA+PAS+SHO = 21, END 6 | moyenne |
-| 🔁 4V4-2 FW2 | — | Pétur Björgvinsson | SKA+PAS+SHO = 20, END 4 | moyenne |
+| 🔁 4V4-2 FW2 | — | Sindri Vignisson | SKA+PAS+SHO = 20, END 10 | moyenne |
 | 🔁 4V4-2 LD | — | Davíð Gústafsson | SKA+PAS+SHO = 18, END 5 | moyenne |
-| 🔁 4V4-2 RD | — | Róbert Harðarson | SKA+PAS+SHO = 12, END 4 | moyenne |
+| 🔁 4V4-2 RD | — | Óskar Birgisson | SKA+PAS+SHO = 16, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | **Gardien retiré** | | | | |
 | 🔁 EXT FW1 | — | Sindri Vignisson | SHO+PAS = 16, END 10 | moyenne |
-| 🔁 EXT FW2 | — | Pétur Björgvinsson | SHO+PAS = 15, END 4 | moyenne |
+| 🔁 EXT FW2 | — | Pétur Björgvinsson | SHO+PAS = 15, END 4 | faible |
 | **Rôles** | | | | |
 | mises au jeu | automatique | rien à saisir (Sigurður Johannsson FOF 8, Sindri Sigvaldason FOF 8) | le jeu prend les 2 attaquants au meilleur FOF sur la glace (02-lignes-pro) | solide |
 | tirs au but | automatique | rien à saisir (Pétur Björgvinsson SHO 10, Sindri Sigvaldason SHO 9, Guðmundur Sæmundsson SHO 8) | le jeu prend les meilleurs tireurs (02-lignes-pro) | solide |

@@ -23,7 +23,8 @@ def roster():
         for k in range(n):
             pl.append(joueur(i, [poste], 70 - 3 * k, end=8 - k))
             i += 1
-    pl[0]["skills"] = [{"id": "END", "lvl": 3}, {"id": "DEF", "lvl": 10}, {"id": "CHK", "lvl": 10}, {"id": "SKA", "lvl": 10}, {"id": "PWR", "lvl": 10}]
+    pl[0]["skills"] = [{"id": "END", "lvl": 6}, {"id": "DEF", "lvl": 10}, {"id": "CHK", "lvl": 10}, {"id": "SKA", "lvl": 10}, {"id": "PWR", "lvl": 10}]
+    pl[1]["skills"] = [{"id": "END", "lvl": 2}, {"id": "DEF", "lvl": 10}, {"id": "CHK", "lvl": 10}, {"id": "SKA", "lvl": 10}, {"id": "PWR", "lvl": 10}]
     pl.append({**joueur(98, ["G"], 75, end=8), "goalie": True})
     pl.append({**joueur(99, ["G"], 65, end=8), "goalie": True})
     pl.append({**joueur(97, ["C"], 30), "amateur": True})
@@ -43,6 +44,7 @@ def cas():
         ids = [v["id"] for (u, _), v in ideal.items() if u in unites]
         yield f"{type_} : un joueur une seule fois par type", len(ids) == len(set(ids))
     yield "infériorité : le meilleur DEF+CHK+SKA+PWR des avants en PK4-1", noms[("PK4-1", "FW1")] == "J 0"
+    yield "endurance : un joueur à END 2 tient au plus une unité spéciale", sum(1 for (u, _), v in ideal.items() if u[:2] in ("PP", "PK", "4V") and v["nom"] == "J 1") <= 1
     # à valeur égale, le joueur en place garde la case
     js2 = [j for j in js]
     en_place = {("PK4-1", "RD"): "J 16"}

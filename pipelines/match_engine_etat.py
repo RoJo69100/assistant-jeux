@@ -542,8 +542,191 @@ def lire_tous():
     return tous, gardiens_tous, ([(r["captured_at"], r["shift"]) for r in shift], pro)
 
 
+# ---------------------------------------------------------------- études PRO (25/11) : gardiens, lignes et paires, unités spéciales
+_PRO_M = """from silver.hn_games g join silver.hn_game_detail d using (game_id)
+ cross join lateral (select case when g.home_is_mine then 'home' else 'away' end as cote, case when g.home_is_mine then 'away' else 'home' end as autre) x
+ where g.team_level = 'PRO' and g.my_result is not null"""
+Q_ETU_GARDIENS = """select g.game_id::text as gid, g.scheduled_at, p->>'lastname' as nom, (b.value->>'toi')::int as toi,
+ (b.value->>'saves')::int as arrets, (b.value->>'shotsFaced')::int as tirs, (b.value->>'goalsAgainst')::int as buts,
+ (d.teams->x.autre->'stats'->>'xGoalsFor')::float as xga """ + _PRO_M.replace(" where", ", jsonb_each(d.boxscore) b, jsonb_array_elements(d.players->x.cote) p where", 1) + \
+    " and b.value ? 'saves' and p->>'id' = b.key and (b.value->>'toi')::int > 0"
+Q_ETU_JOUEURS = """select g.game_id::text as gid, g.scheduled_at, b.key as pid, p->>'lastname' as nom, (b.value->>'toi')::int as toi,
+ (b.value->>'diff')::int as diff, (b.value->>'shots')::int as tirs, (b.value->>'goals')::int as buts, (b.value->>'pim')::int as pim,
+ (d.teams->x.cote->'stats'->>'shots')::int as tirs_equipe """ + _PRO_M.replace(" where", ", jsonb_each(d.boxscore) b, jsonb_array_elements(d.players->x.cote) p where", 1) + \
+    " and not b.value ? 'saves' and p->>'id' = b.key"
+Q_ETU_PP = """select g.game_id::text as gid, g.scheduled_at, s->>'strength' as force, s->>'teamId' = d.teams->x.cote->>'id' as pour,
+ coalesce(s->>'scorer', s->>'playerId', s->'scorer'->>'id') as buteur,
+ (d.teams->x.cote->'stats'->>'ppAttempts')::int as pp_n, (d.teams->x.autre->'stats'->>'ppAttempts')::int as pk_n """ + \
+    _PRO_M.replace(" where", ", jsonb_array_elements(d.summary->'scoring') s where", 1)
+Q_ETU_LINEUPS = """select captured_at, body->0->'lines' as lignes from silver.hn_api where route = '/team/:id/lineups'
+ and endpoint like '%/50cf5f9e-4fb2-4469-9f57-e291fe5ce3cd/%' and body->0->>'id' = 'A' order by captured_at"""
+
+
+def _js(x):
+    import json
+    return json.loads(x) if isinstance(x, str) else x
+
+
+def unites_de(lignes):
+    """{libellé d'unité: frozenset des ids} d'une lineup A exportée (lignes d'attaque, paires D, PP1/PP2, PK4-1/PK4-2)."""
+    l = _js(lignes) or {}
+    u = {}
+    for k in ("L1", "L2", "L3", "L4"):
+        s = l.get(k) or {}
+        u[f"attaque {k}"] = frozenset(v for p, v in s.items() if p in ("LW", "C", "RW") and v)
+        if k != "L4":
+            u[f"paire D{k[1]}"] = frozenset(v for p, v in s.items() if p in ("LD", "RD") and v)
+    for k in ("PP1", "PP2", "PK4-1", "PK4-2"):
+        u[k] = frozenset(v for v in (l.get(k) or {}).values() if v)
+    return {k: v for k, v in u.items() if v}
+
+
+def unites_prouvees(instant, releves):
+    """Unités dont la composition est identique dans l'export d'avant et celui d'après le match (même règle que reglage_fixe)."""
+    t = _dt(instant)
+    avant = [u for d, u in releves if _dt(d) <= t]
+    apres = [u for d, u in releves if _dt(d) >= t]
+    if not avant or not apres:
+        return {}
+    return {k: v for k, v in avant[-1].items() if apres[0].get(k) == v}
+
+
+def _moy_ic(xs):
+    """Moyenne et IC95 (approximation normale) d'une liste ; None si moins de 2 valeurs."""
+    n = len(xs)
+    if n < 2:
+        return None
+    m = sum(xs) / n
+    sd = (sum((x - m) ** 2 for x in xs) / (n - 1)) ** 0.5
+    e = 1.96 * sd / n ** 0.5
+    return m, m - e, m + e
+
+
+def _f2(x):
+    return f"{x:+.2f}".replace(".", ",")
+
+
+def etude_gardiens(rows):
+    """(a) Arrêts ajustés au xG subi : buts évités = xG subi (au prorata du temps de glace) − buts encaissés, par match."""
+    tot = {}
+    for r in rows:
+        tot[r["gid"]] = tot.get(r["gid"], 0) + r["toi"]
+    par = {}
+    for r in rows:
+        xga = (r["xga"] or 0) * r["toi"] / tot[r["gid"]]
+        par.setdefault(r["nom"], []).append((xga - r["buts"], r["arrets"], r["tirs"], r["toi"]))
+    out = ["| Gardien | matchs | arrêts (IC95) | buts évités sur xG par match (IC95) |", "|---|---|---|---|"]
+    res = {}
+    for nom, l in sorted(par.items(), key=lambda x: -len(x[1])):
+        a, t = sum(x[1] for x in l), sum(x[2] for x in l)
+        mi = _moy_ic([x[0] for x in l])
+        res[nom] = mi
+        out.append(f"| {nom} | {len(l)} | {pct(a, t)} ({ic(a, t)}) | " + (f"{_f2(mi[0])} ({_f2(mi[1])} à {_f2(mi[2])})" if mi else "—") + " |")
+    noms = [n for n in res if res[n]]
+    if len(noms) >= 2:
+        a, b = sorted(noms, key=lambda n: -res[n][0])[:2]
+        sep = res[a][1] > res[b][2]
+        out.append(f"Décision : {'**' + a + ' titulaire** (intervalles séparés)' if sep else 'indéterminé : intervalles qui se chevauchent, on garde le titulaire actuel'} ; "
+                   f"meilleur par match : {a} {_f2(res[a][0])} contre {b} {_f2(res[b][0])}. xG subi réparti au prorata du temps de glace quand deux gardiens jouent.")
+    return out
+
+
+def etude_unites(joueurs, releves, pp):
+    """(b) lignes et paires : temps de glace et +/- (buts sur la glace) ; part des tirs = tirs des joueurs de l'unité / tirs de l'équipe
+    (les tirs adverses sur la glace ne sont pas en base). (c) PP1/PP2 : buts en supériorité marqués par un joueur de l'unité."""
+    nom = {}
+    par_match = {}
+    for r in joueurs:
+        nom[r["pid"]] = r["nom"]
+        par_match.setdefault(r["gid"], {"t": r["scheduled_at"], "j": {}, "te": r["tirs_equipe"]})["j"][r["pid"]] = r
+    stats = {}
+    for gid, m in par_match.items():
+        for u, ids in unites_prouvees(m["t"], releves).items():
+            if not ids <= set(m["j"]):
+                continue
+            js = [m["j"][i] for i in ids]
+            s = stats.setdefault((u, ids), {"toi": [], "diff": [], "tirs": 0, "te": 0})
+            s["toi"].append(sum(j["toi"] for j in js) / len(js))
+            s["diff"].append(sum(j["diff"] for j in js) / len(js))
+            s["tirs"] += sum(j["tirs"] for j in js)
+            s["te"] += m["te"] or 0
+    actuel = releves[-1][1] if releves else {}
+    out = ["| Unité (composition en vigueur) | matchs prouvés | temps de glace / match | +/- moyen / match (IC95) | part des tirs de l'équipe (IC95) | décision |",
+           "|---|---|---|---|---|---|"]
+    for u, ids in actuel.items():
+        if u.startswith(("PP", "PK")):
+            continue
+        s = stats.get((u, ids))
+        qui = ", ".join(sorted(nom.get(i, i[:6]) for i in ids))
+        if not s:
+            out.append(f"| {u} ({qui}) | 0 | — | — | — | indéterminé : aucun match joué avec cette composition prouvée |")
+            continue
+        mi = _moy_ic(s["diff"])
+        dec = ("monter" if mi and mi[1] > 0 else "descendre" if mi and mi[2] < 0 else "indéterminé : l'IC95 contient 0")
+        out.append(f"| {u} ({qui}) | {len(s['toi'])} | {mmss(sum(s['toi']) / len(s['toi']))} | " +
+                   (f"{_f2(mi[0])} ({_f2(mi[1])} à {_f2(mi[2])})" if mi else "—") + f" | {pct(s['tirs'], s['te'])} ({ic(s['tirs'], s['te'])}) | {dec} |")
+    out.append("Tirs et xG adverses sur la glace : non mesurables (aucune présence sur la glace par tir en base) ; le +/- compte les buts sur la glace à force égale.")
+    # (c) unités spéciales
+    buts = {"PP1": 0, "PP2": 0, "hors unité": 0}
+    n_pp = n_pk = bpp = bpk = 0
+    vus = set()
+    for r in pp:
+        if r["gid"] not in vus:
+            vus.add(r["gid"])
+            n_pp += r["pp_n"] or 0
+            n_pk += r["pk_n"] or 0
+        if r["force"] != "PP":
+            continue
+        if not r["pour"]:
+            bpk += 1
+            continue
+        bpp += 1
+        u = unites_prouvees(r["scheduled_at"], releves)
+        k = next((k for k in ("PP1", "PP2") if r["buteur"] in u.get(k, ())), "hors unité")
+        buts[k] += 1
+    out += ["", "| Unité spéciale | mesure | n | valeur (IC95) | décision |", "|---|---|---|---|---|",
+            f"| PP d'équipe | buts / supériorités | {n_pp} | {pct(bpp, n_pp)} ({ic(bpp, n_pp)}) | seuil PP {100 * SEUIL_PP:.1f} % : {v_seuil(bpp, n_pp, SEUIL_PP, 'au-dessus')} |",
+            f"| PP1 contre PP2 | buts en supériorité marqués par un joueur de l'unité (composition prouvée) | {buts['PP1'] + buts['PP2']} | PP1 {buts['PP1']}, PP2 {buts['PP2']}, non attribués {buts['hors unité']} ; part PP1 {pct(buts['PP1'], buts['PP1'] + buts['PP2'])} ({ic(buts['PP1'], buts['PP1'] + buts['PP2'])}) | indéterminé : le temps de glace de chaque unité en supériorité n'est pas en base |",
+            f"| PK d'équipe | infériorités tuées | {n_pk} | {pct(n_pk - bpk, n_pk)} ({ic(n_pk - bpk, n_pk)}) | PK1 contre PK2 : non mesurable (joueurs sur la glace par but absents) |"]
+    # pénalités par joueur
+    pim, toi, n = {}, {}, {}
+    for r in joueurs:
+        pim[r["nom"]] = pim.get(r["nom"], 0) + (r["pim"] or 0)
+        toi[r["nom"]] = toi.get(r["nom"], 0) + (r["toi"] or 0)
+        n[r["nom"]] = n.get(r["nom"], 0) + 1
+    tot_p, tot_t = sum(pim.values()), sum(toi.values())
+    moy = tot_p / tot_t * 3600 if tot_t else 0
+    out += ["", f"| Joueur | matchs | minutes de pénalité | par 60 min (IC95) | décision (moyenne de l'équipe {moy:.2f} par 60 min) |".replace(".", ","),
+            "|---|---|---|---|---|"]
+    for k in sorted(pim, key=lambda k: -(pim[k] / toi[k] if toi[k] else 0)):
+        if not toi[k] or n[k] < 5:
+            continue
+        p = poisson_ic(pim[k] / 2, toi[k] / 3600)  # pénalités mineures de 2 min, taux par 60 min
+        r_, lo, hi = (2 * p[0], 2 * p[1], 2 * p[2])
+        dec = ("trop pénalisé : il met l'équipe en infériorité plus souvent que la moyenne ; à surveiller, aucun changement de ligne sans effet mesuré sur le résultat"
+               if lo > moy else "dans la moyenne" if hi >= moy else "discipliné")
+        out.append(f"| {k} | {n[k]} | {pim[k]} | {r_:.2f} ({lo:.2f} à {hi:.2f}) | {dec} |".replace(".", ","))
+    return out
+
+
+def etudes_pro():
+    """Les trois études PRO, tous les matchs PRO en base (toutes saisons, tous types)."""
+    res = {}
+    for k, q in (("g", Q_ETU_GARDIENS), ("j", Q_ETU_JOUEURS), ("pp", Q_ETU_PP), ("l", Q_ETU_LINEUPS)):
+        cols, lignes = sqlmod.executer(q)
+        res[k] = [dict(zip(cols, l)) for l in lignes]
+    releves = [(r["captured_at"], unites_de(r["lignes"])) for r in res["l"]]
+    n = len({r["gid"] for r in res["j"]})
+    return [f"Base : {n} matchs PRO en base (toutes saisons, tous types) ; compositions prouvées par {len(releves)} exports Lineups.", "",
+            "**(a) Gardiens**", "", *etude_gardiens(res["g"]), "", "**(b) Lignes et paires de défense ; (c) unités spéciales et pénalités**", "",
+            *etude_unites(res["j"], releves, res["pp"])]
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
+    if "--etudes" in sys.argv:
+        print("\n".join(etudes_pro()))
+        return 0
     glace, jours = lire_glace()
     tous, gardiens_tous, shift = lire_tous()
     print(rapport(*lire(), retirees=lire_retirees(), glace=glace, jours=jours, tous=tous, gardiens_tous=gardiens_tous, shift=shift))

@@ -37,6 +37,10 @@ EXPORT_LINEUPS = {"PRO": "l'onglet Lineups de l'équipe PRO", "ISL": "l'onglet L
                   "HUA": "l'onglet Lineups de l'équipe de tournoi Huaraz Lamas (page de l'équipe dans Queens League: Nine Lives)"}
 SEUIL_END = {"L1": 7, "L2": 6, "D1": 8, "D2": 6, "G1": 7}
 TOLERANCE = 1
+# 25/11 : unités spéciales (PP, PK, 4 contre 4) : END ≥ 5 d'abord. Chaque présence coûte de la condition selon l'END et une condition de
+# 80 % = compétences à 80 % (skill hockeynation-match-calendrier, 02-lignes-pro) ; une unité spéciale ajoute des présences à celles de la
+# ligne. Seuil repris de la 2e ligne (L2 6+, toléré à −1, Discord talonflame1 2026-04-04) : aucun seuil propre aux unités n'est publié.
+SEUIL_UNITE = SEUIL_END["L2"] - TOLERANCE
 PLAN = {"tempo": ("tempo", ["lent", "normal", "rapide"]), "mentality": ("mentalité", ["défensive", "équilibrée", "offensive"]),
         "aggression": ("agressivité", ["calme", "normale", "agressive"]), "puckPressure": ("pression sur le palet", ["légère", "normale", "forte"]),
         "shiftLength": ("durée des présences", ["courte (35-40 s)", "normale (41-49 s)", "longue (50-55 s)"]),
@@ -97,7 +101,7 @@ def ordre_ligne(j, seuil):
     return (fiable, j["note"] or 0, seuil is None or c(j, "END") >= seuil - TOLERANCE)
 
 
-def composer(joueurs, en_place=None):
+def composer(joueurs, en_place=None, fige=None):
     """{(ligne, poste): joueur} pour G, L1-L4, paires D, unités spéciales. en_place : {(ligne, poste): nom} du jeu ;
     à valeur égale, le joueur déjà en place garde la case (aucun changement sans gain)."""
     en_place = en_place or {}
@@ -121,11 +125,26 @@ def composer(joueurs, en_place=None):
     dans_lignes = [j for j in patineurs if j["id"] in pris]
     avants = [j for j in dans_lignes if set(j["postes"]) & {"C", "LW", "RW"}]
     defs = [j for j in dans_lignes if set(j["postes"]) & {"LD", "RD"}]
+    charge = {}  # nombre d'unités déjà tenues par joueur (sa ligne comptée 1) : sous le seuil d'END, le moins chargé d'abord
+    for (ligne, _), j in out.items():  # poids de la ligne selon son temps de glace (étude PRO du 25/11 : D1 23 min, D2 20, D3 14, L4 10)
+        charge[j["id"]] = {"L1": 3, "L2": 2}.get(ligne, 1)
+    fige = fige or {}
+    nb_unites = {}  # unités spéciales tenues par joueur (PP, PK, 4 contre 4)
+    par_nom = {j["nom"]: j for j in patineurs}
     for type_, unites, crit in (("PP", ("PP1", "PP2"), "PP"), ("PK4", ("PK4-1", "PK4-2"), "PK"), ("PK3", ("PK3-1", "PK3-2"), "PK"),
                                 ("4V4", ("4V4-1", "4V4-2"), "4V4"), ("EXT", ("EXT",), "EXT")):
         utilises = set()
+        for (u, slot), nom in fige.items():  # cases gardées (PRO : joueur du jeu au-dessus du seuil d'END)
+            if u in unites and nom in par_nom:
+                out[(u, slot)] = par_nom[nom]
+                charge[par_nom[nom]["id"]] = charge.get(par_nom[nom]["id"], 0) + 1
+                if type_ != "EXT":
+                    nb_unites[par_nom[nom]["id"]] = nb_unites.get(par_nom[nom]["id"], 0) + 1
+                charge[par_nom[nom]["id"]] = charge.get(par_nom[nom]["id"], 0) + 1
         for u in unites:
             for slot in dict(UNITES)[u]:
+                if (u, slot) in out:
+                    continue
                 if slot in ("LD", "RD"):
                     pool = [j for j in defs if slot in j["postes"]]
                 elif slot == "D":
@@ -138,9 +157,16 @@ def composer(joueurs, en_place=None):
                     pool = avants
                 pool = [j for j in pool if j["id"] not in utilises]
                 if pool:
-                    best = max(pool, key=lambda j: (valeur(j, crit), j["nom"] in {v for (uu, _), v in en_place.items() if uu == u}, j["note"] or 0))
+                    # 25/11 : un joueur sous le seuil d'END des unités (SEUIL_UNITE) tient au plus UNE unité spéciale en plus de sa ligne,
+                    # sauf s'il n'y a personne d'autre ; joueur sans note lue en dernier ; puis la formule de l'unité.
+                    libre = lambda j: crit == "EXT" or c(j, "END") >= SEUIL_UNITE or nb_unites.get(j["id"], 0) == 0  # noqa: E731
+                    best = max(pool, key=lambda j: (j["note"] is not None, libre(j), valeur(j, crit),
+                                                    j["nom"] in {v for (uu, _), v in en_place.items() if uu == u}, j["note"] or 0))
+                    if crit != "EXT":
+                        nb_unites[best["id"]] = nb_unites.get(best["id"], 0) + 1
                     out[(u, slot)] = best
                     utilises.add(best["id"])
+                    charge[best["id"]] = charge.get(best["id"], 0) + 1
     return out
 
 
@@ -202,13 +228,20 @@ def raison_unite(j, u):
     crit = "PP" if u.startswith("PP") else "PK" if u.startswith("PK") else "4V4" if u.startswith("4V4") else "EXT"
     form = {"PP": "SHO+PAS+SKA", "PK": "DEF+CHK+SKA+PWR", "4V4": "SKA+PAS+SHO", "EXT": "SHO+PAS"}[crit]
     sp = [s for s in j["speciales"] if s in ("powerplay-specialist", "penalty-killer")]
-    return f"{form} = {valeur(j, crit)}" + (f" (dont {', '.join(sp)})" if sp else "") + f", END {c(j, 'END')}"
+    end = c(j, "END")
+    return (f"{form} = {valeur(j, crit)}" + (f" (dont {', '.join(sp)})" if sp else "") + f", END {end}"
+            + (f" (sous le seuil des unités {SEUIL_UNITE} : une seule unité spéciale pour lui)" if crit != "EXT" and end < SEUIL_UNITE else ""))
 
 
 def fiche(eq, roster, lineups_corps, lineups_quand, cal, maintenant, jour, classement=None):
     joueurs = joueurs_de(roster)
     jeu = lineup_jeu(lineups_corps, joueurs)
-    ideal = composer(joueurs, {k: v for k, v in (jeu or {}).items() if k != "gameplan"})
+    en_place = {k: v for k, v in (jeu or {}).items() if k != "gameplan"}
+    endu = {j["nom"]: c(j, "END") for j in joueurs}
+    # PRO (25/11) : PP et 4 contre 4 gardent les joueurs du jeu au-dessus du seuil d'END des unités ; seules les cases sous le seuil
+    # changent. L'infériorité suit entièrement la règle (soutenue par le registre).
+    fige = {k: v for k, v in en_place.items() if eq == "PRO" and k[0][:2] in ("PP", "4V") and endu.get(v, 0) >= SEUIL_UNITE}
+    ideal = composer(joueurs, en_place, fige)
     pro = eq == "PRO"
     nx = prochain(cal, ID[eq], maintenant)
     l = [f"# Hockey Nation — fiche tactique {NOM[eq]} du {jour}", ""]
@@ -240,7 +273,12 @@ def fiche(eq, roster, lineups_corps, lineups_quand, cal, maintenant, jour, class
     def rang(ligne, poste, j_ideal, raison, conf, garder_jeu=False):
         actuel = jeu.get((ligne, poste)) if jeu else None
         if garder_jeu and actuel:
-            a_saisir, raison, conf = actuel, "garder : le registre ne soutient aucun changement de cette case", "moyenne"
+            # 25/11 : le joueur gardé est jugé avec les mêmes seuils d'endurance que les autres équipes (signalé s'il est sous le seuil)
+            j_jeu = next((x for x in joueurs if x["nom"] == actuel), None)
+            seuil_txt = raison_ligne(j_jeu, ligne, poste) if j_jeu and ligne in ("L1", "L2", "L3", "L4") else ""
+            a_saisir = actuel
+            raison = "garder : le registre ne soutient aucun changement de cette case" + (f" ; {seuil_txt}" if seuil_txt else "")
+            conf = confiance_ligne(j_jeu, ligne, poste) if j_jeu and ligne in ("L1", "L2", "L3", "L4") else "moyenne"
         else:
             a_saisir = j_ideal["nom"] if j_ideal else "case vide (aucun joueur du poste)"
         change = (actuel or "") != a_saisir
@@ -266,8 +304,8 @@ def fiche(eq, roster, lineups_corps, lineups_quand, cal, maintenant, jour, class
         l.append(f"| **{LIBELLE_UNITE[u].capitalize()}** | | | | |")
         for s in slots:
             j = ideal.get((u, s))
-            garder = pro and not u.startswith("PK")
-            conf = "faible" if j and c(j, "END") <= 3 else "moyenne"
+            garder = pro and u == "EXT"  # 25/11 : PP, PK et 4 contre 4 suivent la règle avec endurance ; gardien retiré : fin de match, END sans importance
+            conf = "faible" if j and c(j, "END") < SEUIL_UNITE else "moyenne"
             rang(u, s, j, raison_unite(j, u) if j else "aucun joueur", conf, garder_jeu=garder)
     # Rôles (automatiques ou cachés) et réglages d'équipe
     l.append("| **Rôles** | | | | |")
@@ -319,6 +357,93 @@ def en_tete_classement(corps, quand, team_id):
     return "Classement : non lu (aucun export de classement de la ligue contenant l'équipe)."
 
 
+RANG_VERDICT = {"idéal": 2, "correct": 1, "contre-emploi": 0}
+Q_FIT = "select name, position, verdict from gold.hn_player_fit where team_level = 'PRO' and is_main"
+
+
+def compo_fit(joueurs, verdicts):
+    """HYPOTHÈSE : lignes et paires d'après le fit des postes (gold.hn_player_fit : talents contre compétences clés du poste,
+    hypothèse gold.hn_position_keys) ; à verdict égal, la note. {(ligne, poste): (nom, verdict)}."""
+    pris, out = set(), {}
+    pat = [j for j in joueurs if not j["goalie"] and j["note"] is not None]
+    for ligne in ("L1", "L2", "L3", "L4"):
+        for poste in ("C", "LW", "RW") + (("LD", "RD") if ligne != "L4" else ()):
+            cand = [j for j in pat if poste in j["postes"] and j["id"] not in pris]
+            if not cand:
+                continue
+            v = lambda j: verdicts.get((j["nom"], poste), "correct")  # noqa: E731 - poste secondaire : verdict non calculé
+            best = max(cand, key=lambda j: (RANG_VERDICT.get(v(j), 1), j["note"]))
+            out[(ligne, poste)] = (best["nom"], v(best))
+            pris.add(best["id"])
+    return out
+
+
+def annexe_pro(joueurs, jeu, verdicts, etudes):
+    l = ["", "## Annexe — études PRO sur tous les matchs en base (registre du Match Engine, 25/11)", "", *etudes, "",
+         "## Annexe — composition idéale d'après le fit des postes (HYPOTHÈSE, non saisie)", "",
+         "Verdicts de `gold.hn_player_fit` (talents contre compétences clés du poste, hypothèse `gold.hn_position_keys` non confirmée) ; "
+         "à verdict égal, la note. Aucune étude ne montre qu'un verdict « idéal » produit plus : à ne saisir qu'après un test.", "",
+         "| ligne | LW | C | RW | LD | RD |", "|---|---|---|---|---|---|"]
+    cf = compo_fit(joueurs, verdicts)
+    for ligne in ("L1", "L2", "L3", "L4"):
+        cases = []
+        for p in ("LW", "C", "RW", "LD", "RD"):
+            x = cf.get((ligne, p))
+            if not x:
+                cases.append("—")
+                continue
+            dans = (jeu or {}).get((ligne, p))
+            cases.append(f"{'🔁 ' if dans and dans != x[0] else ''}{x[0]} ({x[1]})")
+        l.append(f"| {ligne} | " + " | ".join(cases) + " |")
+    l.append("Le fit prime ici sur la note : un joueur noté bas peut monter en première ligne. C'est pourquoi cette composition reste une hypothèse.")
+    return l
+
+
+Q_PLANS = """select captured_at, body->0->'gameplan' as a, body->1->'gameplan' as b from silver.hn_api where route = '/team/:id/lineups'
+ and endpoint like '%/50cf5f9e-4fb2-4469-9f57-e291fe5ce3cd/%' order by captured_at"""
+
+
+def variations_plan(rows):
+    """Réglages d'équipe qui changent d'un export Lineups PRO au suivant (lineups A et B)."""
+    out, prec = [], {}
+    for r in rows:
+        for lu in ("a", "b"):
+            gp = _json(r[lu]) or {}
+            for k, v in gp.items():
+                if k == "instructions":
+                    continue
+                cle = (lu, k)
+                if cle in prec and prec[cle][1] != v:
+                    lib = PLAN.get(k, (k, []))
+                    nom = lambda x: lib[1][x] if isinstance(x, int) and 0 <= x < len(lib[1]) else x  # noqa: E731
+                    out.append(f"lineup {lu.upper()}, {lib[0]} : {nom(prec[cle][1])} → {nom(v)} entre l'export du "
+                               f"{paris(me._dt(prec[cle][0])):%d/%m %H:%M} et celui du {paris(me._dt(r['captured_at'])):%d/%m %H:%M}")
+                prec[cle] = (r["captured_at"], v)
+    return [f"Réglages d'équipe sur {len(rows)} exports Lineups PRO : " + ("; ".join(out) if out else "aucun changement") +
+            " ; tous les autres réglages (A et B) sont restés identiques."]
+
+
+def cases_fiche(texte):
+    """{(ligne, poste): nom à saisir} lu dans le tableau d'une fiche (colonne « à saisir »), lignes, gardiens et unités."""
+    import re
+    res = {}
+    for l in texte.splitlines():
+        m = re.match(r"\|\s*(?:🔁\s*)?(G|L[1-4]|PP[12]|PK[34]-[12]|4V4-[12]|EXT) (titulaire|remplaçant|LW|C|RW|LD|RD|D|ANY|FW|FW1|FW2)\b[^|]*\|[^|]*\|\s*([^|]+?)\s*\|", l)
+        if m:
+            poste = {"titulaire": "SG", "remplaçant": "BG"}.get(m.group(2), m.group(2))
+            res[(m.group(1), poste)] = m.group(3)
+    return res
+
+
+def controle(fiche_txt, jeu, quand):
+    """Écarts entre la saisie du jeu (dernier export Lineups) et la fiche ; [] si tout correspond."""
+    if jeu is None:
+        return ["Lineups jamais exporté (ou vide) : contrôle impossible."]
+    ecarts = [f"{l} {p} : fiche {n}, jeu {jeu.get((l, p)) or 'vide'}" for (l, p), n in cases_fiche(fiche_txt).items()
+              if not n.startswith("case vide") and jeu.get((l, p)) != n]
+    return [f"Export Lineups lu : {paris(me._dt(quand)):%d/%m %H:%M}."] + (ecarts or ["aucun écart"])
+
+
 def lire(eq):
     tid = ID[eq]
     cols, r = sqlmod.executer(Q_ROSTER.format(id=tid))
@@ -334,14 +459,29 @@ def main():
     ap.add_argument("equipe", choices=list(FICHIER))
     ap.add_argument("--jour")
     ap.add_argument("--ecrire", action="store_true")
+    ap.add_argument("--controle", action="store_true", help="compare le dernier export Lineups à la fiche commitée (git HEAD)")
     a = ap.parse_args()
     jour = a.jour or dt.date.today().isoformat()
     roster, lu, quand, cal = lire(a.equipe)
+    if a.controle:  # 25/11 : saisie du jeu contre la fiche commitée (celle que l'utilisateur a recopiée)
+        import subprocess
+        chemin = f"outputs/hockeynation/briefs/{jour}-tactique-{FICHIER[a.equipe]}.md"
+        txt = subprocess.run(["git", "show", f"HEAD:{chemin}"], cwd=RACINE, capture_output=True, text=True).stdout
+        sys.stdout.reconfigure(encoding="utf-8")
+        print(f"Contrôle {NOM[a.equipe]} contre {chemin} (version commitée) :")
+        print("\n".join("- " + x for x in controle(txt, lineup_jeu(lu, joueurs_de(roster)), quand)))
+        return 0
     classement = None
     if a.equipe == "PRO":
         cols, r = sqlmod.executer(Q_CLASSEMENT.format(id=ID["PRO"]))
         classement = en_tete_classement(_json(r[0][1]), r[0][0], ID["PRO"]) if r else en_tete_classement(None, None, ID["PRO"])
-    txt, _, _ = fiche(a.equipe, roster, lu, quand, cal, dt.datetime.now(dt.timezone.utc), jour, classement)
+    txt, _, jeu = fiche(a.equipe, roster, lu, quand, cal, dt.datetime.now(dt.timezone.utc), jour, classement)
+    if a.equipe == "PRO":  # 25/11 : annexe des études PRO et composition d'après le fit (hypothèse)
+        cols, r = sqlmod.executer(Q_FIT)
+        verdicts = {(x[0], x[1]): x[2] for x in r}
+        cols, r2 = sqlmod.executer(Q_PLANS)
+        plans = variations_plan([dict(zip(cols, x)) for x in r2])
+        txt += "\n" + "\n".join(annexe_pro(joueurs_de(roster), jeu, verdicts, me.etudes_pro() + [""] + plans))
     sys.stdout.reconfigure(encoding="utf-8")
     print(txt)
     if a.ecrire:

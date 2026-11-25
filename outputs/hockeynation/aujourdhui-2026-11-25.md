@@ -1,7 +1,7 @@
-<!-- généré le 2026-11-25 15:35 -->
+<!-- généré le 2026-11-25 15:45 -->
 # Hockey Nation — temps 1 : Lire (jour de saison 32, 2026-11-25)
 
-Dernière capture il y a 2 h
+Dernière capture il y a 3 h
 
 Base : 328 Mo sur 500 (plan gratuit), croissance 1,0 Mo/jour sur 7 jours
 

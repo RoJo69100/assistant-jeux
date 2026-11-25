@@ -35,19 +35,19 @@ L'équipe est marquée gérée par l'IA (`bot: true`) dans l'export de l'équipe
 | **Jeu de puissance 1** | | | | |
 | PP1 C | inconnu | Jón Sigvaldason | SHO+PAS+SKA = 18, END 5 | moyenne |
 | PP1 LW | inconnu | Andri Ásgrímsson | SHO+PAS+SKA = 16 (dont penalty-killer), END 5 | moyenne |
-| PP1 RW | inconnu | Sigurður Þorsteinsson | SHO+PAS+SKA = 18, END 4 | moyenne |
+| PP1 RW | inconnu | Sigurður Þorsteinsson | SHO+PAS+SKA = 18, END 4 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | PP1 D | inconnu | Árni Sveinbjörnsson | SHO+PAS+SKA = 13, END 5 | moyenne |
 | PP1 ANY | inconnu | Ragnar Ágústsson | SHO+PAS+SKA = 14, END 5 | moyenne |
 | **Jeu de puissance 2** | | | | |
 | PP2 C | inconnu | Hörður Björgvinsson | SHO+PAS+SKA = 13, END 5 | moyenne |
 | PP2 LW | inconnu | Þorsteinn Svavarsson | SHO+PAS+SKA = 11, END 5 | moyenne |
-| PP2 RW | inconnu | Ólafur Sveinbjörnsson | SHO+PAS+SKA = 11, END 2 | faible |
+| PP2 RW | inconnu | Ólafur Sveinbjörnsson | SHO+PAS+SKA = 11, END 2 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | PP2 D | inconnu | Kristinn Róbertsson | SHO+PAS+SKA = 12, END 6 | moyenne |
 | PP2 ANY | inconnu | Atli Sigurbjörnsson | SHO+PAS+SKA = 13, END 6 | moyenne |
 | **Infériorité 1 (4 joueurs)** | | | | |
 | PK4-1 FW1 | inconnu | Andri Ásgrímsson | DEF+CHK+SKA+PWR = 20 (dont penalty-killer), END 5 | moyenne |
 | PK4-1 FW2 | inconnu | Hörður Björgvinsson | DEF+CHK+SKA+PWR = 18, END 5 | moyenne |
-| PK4-1 LD | inconnu | Haukur Sigurdsson | DEF+CHK+SKA+PWR = 13, END 2 | faible |
+| PK4-1 LD | inconnu | Haukur Sigurdsson | DEF+CHK+SKA+PWR = 13, END 2 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | PK4-1 RD | inconnu | Davíð Eggertsson | DEF+CHK+SKA+PWR = 16, END 6 | moyenne |
 | **Infériorité 2 (4 joueurs)** | | | | |
 | PK4-2 FW1 | inconnu | Jón Sigvaldason | DEF+CHK+SKA+PWR = 17, END 5 | moyenne |
@@ -56,24 +56,24 @@ L'équipe est marquée gérée par l'IA (`bot: true`) dans l'export de l'équipe
 | PK4-2 RD | inconnu | Kristinn Róbertsson | DEF+CHK+SKA+PWR = 15, END 6 | moyenne |
 | **Infériorité à 3, unité 1** | | | | |
 | PK3-1 FW | inconnu | Andri Ásgrímsson | DEF+CHK+SKA+PWR = 20 (dont penalty-killer), END 5 | moyenne |
-| PK3-1 LD | inconnu | Haukur Sigurdsson | DEF+CHK+SKA+PWR = 13, END 2 | faible |
+| PK3-1 LD | inconnu | Árni Sveinbjörnsson | DEF+CHK+SKA+PWR = 12, END 5 | moyenne |
 | PK3-1 RD | inconnu | Davíð Eggertsson | DEF+CHK+SKA+PWR = 16, END 6 | moyenne |
 | **Infériorité à 3, unité 2** | | | | |
 | PK3-2 FW | inconnu | Hörður Björgvinsson | DEF+CHK+SKA+PWR = 18, END 5 | moyenne |
-| PK3-2 LD | inconnu | Árni Sveinbjörnsson | DEF+CHK+SKA+PWR = 12, END 5 | moyenne |
+| PK3-2 LD | inconnu | Haukur Sigurdsson | DEF+CHK+SKA+PWR = 13, END 2 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | PK3-2 RD | inconnu | Kristinn Róbertsson | DEF+CHK+SKA+PWR = 15, END 6 | moyenne |
 | **4 contre 4, unité 1** | | | | |
-| 4V4-1 FW1 | inconnu | Sigurður Þorsteinsson | SKA+PAS+SHO = 18, END 4 | moyenne |
-| 4V4-1 FW2 | inconnu | Jón Sigvaldason | SKA+PAS+SHO = 18, END 5 | moyenne |
+| 4V4-1 FW1 | inconnu | Jón Sigvaldason | SKA+PAS+SHO = 18, END 5 | moyenne |
+| 4V4-1 FW2 | inconnu | Andri Ásgrímsson | SKA+PAS+SHO = 16 (dont penalty-killer), END 5 | moyenne |
 | 4V4-1 LD | inconnu | Árni Sveinbjörnsson | SKA+PAS+SHO = 13, END 5 | moyenne |
 | 4V4-1 RD | inconnu | Kristinn Róbertsson | SKA+PAS+SHO = 12, END 6 | moyenne |
 | **4 contre 4, unité 2** | | | | |
-| 4V4-2 FW1 | inconnu | Andri Ásgrímsson | SKA+PAS+SHO = 16 (dont penalty-killer), END 5 | moyenne |
-| 4V4-2 FW2 | inconnu | Ragnar Ágústsson | SKA+PAS+SHO = 14, END 5 | moyenne |
-| 4V4-2 LD | inconnu | Haukur Sigurdsson | SKA+PAS+SHO = 11, END 2 | faible |
+| 4V4-2 FW1 | inconnu | Ragnar Ágústsson | SKA+PAS+SHO = 14, END 5 | moyenne |
+| 4V4-2 FW2 | inconnu | Hörður Björgvinsson | SKA+PAS+SHO = 13, END 5 | moyenne |
+| 4V4-2 LD | inconnu | Haukur Sigurdsson | SKA+PAS+SHO = 11, END 2 (sous le seuil des unités 5 : une seule unité spéciale pour lui) | faible |
 | 4V4-2 RD | inconnu | Davíð Eggertsson | SKA+PAS+SHO = 10, END 6 | moyenne |
 | **Gardien retiré** | | | | |
-| EXT FW1 | inconnu | Sigurður Þorsteinsson | SHO+PAS = 14, END 4 | moyenne |
+| EXT FW1 | inconnu | Sigurður Þorsteinsson | SHO+PAS = 14, END 4 | faible |
 | EXT FW2 | inconnu | Jón Sigvaldason | SHO+PAS = 13, END 5 | moyenne |
 | **Rôles** | | | | |
 | mises au jeu | automatique | rien à saisir (Ólafur Sveinbjörnsson FOF 6, Sigurjón Tómasson FOF 5) | le jeu prend les 2 attaquants au meilleur FOF sur la glace (02-lignes-pro) | solide |

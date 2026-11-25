@@ -2024,3 +2024,5 @@ HEAD dans origin/main : oui
 | 2026-11-25 13:17 | hockeynation temps 1 (2026-11-25) | 29.4 | 10 |
 | 2026-11-25 13:17 | hockeynation temps 2 (2026-11-25) | 27.4 | 10 |
 | 2026-11-25 15:35 | hockeynation temps 2 (2026-11-25) | 33.3 | 10 |
+| 2026-11-25 15:44 | hockeynation temps 1 (2026-11-25) | 28.8 | 10 |
+| 2026-11-25 15:45 | hockeynation temps 2 (2026-11-25) | 26.9 | 10 |
