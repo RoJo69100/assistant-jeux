@@ -273,8 +273,9 @@ def fiche(eq, roster, lineups_corps, lineups_quand, cal, maintenant, jour, class
     l.append("| **Rôles** | | | | |")
     fof = sorted([j for j in joueurs if not j["goalie"] and j["note"] is not None], key=lambda j: c(j, "FOF"), reverse=True)[:2]
     sho = sorted([j for j in joueurs if not j["goalie"] and j["note"] is not None], key=lambda j: c(j, "SHO"), reverse=True)[:3]
-    l.append(f"| mises au jeu | automatique | rien à saisir ({', '.join(f'{j['nom']} FOF {c(j, 'FOF')}' for j in fof)}) | le jeu prend les 2 attaquants au meilleur FOF sur la glace (02-lignes-pro) | solide |")
-    l.append(f"| tirs au but | automatique | rien à saisir ({', '.join(f'{j['nom']} SHO {c(j, 'SHO')}' for j in sho)}) | le jeu prend les meilleurs tireurs (02-lignes-pro) | solide |")
+    liste = lambda js, k: ", ".join("%s %s %s" % (j["nom"], k, c(j, k)) for j in js)  # noqa: E731 (f-string imbriqué refusé avant 3.12)
+    l.append(f"| mises au jeu | automatique | rien à saisir ({liste(fof, 'FOF')}) | le jeu prend les 2 attaquants au meilleur FOF sur la glace (02-lignes-pro) | solide |")
+    l.append(f"| tirs au but | automatique | rien à saisir ({liste(sho, 'SHO')}) | le jeu prend les meilleurs tireurs (02-lignes-pro) | solide |")
     l.append("| capitaine et assistants | caché | rien à saisir | expérience et leadership caché, non lisibles dans l'export (resume.md) | — |")
     l.append("| **Réglages d'équipe (plan de jeu, lineup A)** | | | | |")
     gp = (jeu or {}).get("gameplan") or {}
