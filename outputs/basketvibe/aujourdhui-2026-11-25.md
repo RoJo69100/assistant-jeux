@@ -1,23 +1,11 @@
-<!-- généré le 2026-11-25 10:41 -->
+<!-- généré le 2026-11-25 13:12 -->
 ## Aujourd'hui — état par événement
 
 | Priorité | Catégorie | Action |
 |---|---|---|
-| 🟥 URGENT | Composition | saisis et sauvegarde l'écran du match de ligue contre Žirmūnai (25/11) selon la fiche, puis exporte la page du match sauvegardé avant le verrou 19:45 (sans export, la saisie n'est pas contrôlée) (outputs/basketvibe/briefs/2026-11-25-tactique-zirmunai-25-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-25-tactique-zirmunai-25-11.md) — échéance 25/11 19:45 — données de 20,5 h |
-| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre Garden City (26/11) selon la fiche (outputs/basketvibe/briefs/2026-11-24-tactique-amical-garden-city-26-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-24-tactique-amical-garden-city-26-11.md) — échéance 26/11 07:45 |
-| 🟧 IMPORTANT | Composition | saisis et sauvegarde l'écran du match amical contre Janusz Team (27/11) selon la fiche (outputs/basketvibe/briefs/2026-11-25-tactique-amical-janusz-team-27-11.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/briefs/2026-11-25-tactique-amical-janusz-team-27-11.md) — échéance 27/11 07:45 |
 | 🟧 IMPORTANT | Académie/Draft | testé (capture du 23/11), rapport du 19/11 : Quentin Besson (PG, decent) : ignorer ; Damien Roussel (PG, high) : ignorer ; Lenny Gauthier (PF, decent) : ignorer — aucun prospect à signer (seuil décidé par Claude le 18/11) |
-| 🟧 IMPORTANT | Export | exporte l'historique global des transferts — export de 42 h |
-| 🟧 IMPORTANT | Export | exporte la page Personnel — export de 180 h |
-| 🟧 IMPORTANT | Export | exporte le Classement de la Tier 2 - League 4 — export de 142 h |
-| 🟧 IMPORTANT | Export | exporte le Classement de l'European Premier League — export de 142 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre General Mines Ironmasters (21/11) — données de 142,8 h |
-| 🟩 SUIVI | Analyse | juge les décisions à mesurer après le match de ligue contre Wrzos Zmigrod (23/11) — données de 37,8 h |
-| 🟩 SUIVI | Export | exporte la page du match amical contre SC Barcelona (25/11) — données de 40,6 h |
-| 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo, Héctor Castro, Kazimierz Lewicki, Camilo Varela, Albert de Groot, Dmytro Fedorenko → ne pas acheter) — outputs/basketvibe/police-2026-11-24.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-24.md |
+| 🟩 SUIVI | Transferts | Achats : aucun recommandé (police : Manuel Arevalo, Héctor Castro, Kazimierz Lewicki, Camilo Varela, Albert de Groot, Dmytro Fedorenko, Dragiša Gavrilović, Anthony Chester, Yuki Fujii → ne pas acheter) — outputs/basketvibe/police-2026-11-25.md — https://github.com/RoJo69100/assistant-jeux/blob/claude/passage-quotidien/outputs/basketvibe/police-2026-11-25.md |
 | 🟩 SUIVI | Transferts | Ventes : aucune à proposer (12 joueurs évalués, en rotation : 9 ; déjà en vente : 1 ; « ne pas vendre » de la police : 1 ; jeune de 16 à 18 ans sans test Low ou Decent : 1) |
-| 🟩 SUIVI | Composition | 🟩 info : Bonnet fatigue relevé 21,58 le 24/11, ≈ 18,9 au coup d'envoi (1 nuit de récupération) : rien à changer (signalée au-dessus de 22) |
-| 🟩 SUIVI | Composition | 🟩 info : Lefebvre fatigue relevé 20,62 le 24/11, ≈ 18,1 au coup d'envoi (1 nuit de récupération) : rien à changer (signalée au-dessus de 22) |
 
 ## Bloc 2 — Composition de l'amical
 
@@ -32,32 +20,74 @@ composition de l'amical en préparation
 | Âge | Note (dès) | Ventes | Prix bas (p25) | Médian | Prix haut (p75) | Dernière vente |
 |---|---|---|---|---|---|---|
 | ≤21 | 25 | 4 | 1 375 | 1 625 | 3 812 | 22/11 |
-| ≤21 | 30 | 8 | 438 | 1 126 | 6 562 | 22/11 |
-| ≤21 | 35 | 64 | 2 250 | 45 500 | 205 250 | 22/11 |
-| ≤21 | 40 | 100 | 97 500 | 302 500 | 803 750 | 22/11 |
-| ≤21 | 45 | 66 | 527 500 | 1 010 000 | 2 165 390 | 22/11 |
-| ≤21 | 50 | 14 | 1 785 000 | 3 733 865 | 5 137 500 | 22/11 |
+| ≤21 | 30 | 9 | 501 | 1 252 | 18 001 | 25/11 |
+| ≤21 | 35 | 69 | 2 250 | 50 000 | 200 000 | 24/11 |
+| ≤21 | 40 | 107 | 100 000 | 340 000 | 792 500 | 25/11 |
+| ≤21 | 45 | 69 | 520 000 | 1 010 000 | 2 100 000 | 25/11 |
+| ≤21 | 50 | 15 | 1 890 000 | 3 792 730 | 5 025 000 | 23/11 |
 | 22-25 | 30 | 1 | 251 | 251 | 251 | 22/11 |
 | 22-25 | 35 | 6 | 63 | 251 | 813 | 14/11 |
-| 22-25 | 40 | 41 | 750 | 5 000 | 50 000 | 22/11 |
-| 22-25 | 45 | 58 | 32 000 | 102 500 | 257 500 | 22/11 |
-| 22-25 | 50 | 31 | 480 000 | 700 000 | 980 000 | 22/11 |
+| 22-25 | 40 | 42 | 750 | 7 500 | 46 250 | 24/11 |
+| 22-25 | 45 | 60 | 30 000 | 100 000 | 252 500 | 24/11 |
+| 22-25 | 50 | 34 | 500 000 | 725 000 | 965 000 | 23/11 |
 | 22-25 | 55 | 35 | 1 010 000 | 1 477 350 | 1 895 000 | 22/11 |
 | 22-25 | 60 | 9 | 2 206 049 | 2 500 000 | 2 659 423 | 22/11 |
 | 26-29 | 35 | 12 | 1 | 175 | 1 375 | 22/11 |
-| 26-29 | 40 | 37 | 1 | 1 000 | 11 001 | 21/11 |
-| 26-29 | 45 | 74 | 1 000 | 10 000 | 65 000 | 22/11 |
-| 26-29 | 50 | 84 | 163 750 | 499 999 | 702 500 | 22/11 |
-| 26-29 | 55 | 95 | 770 000 | 1 009 999 | 1 383 637 | 22/11 |
-| 26-29 | 60 | 32 | 1 110 768 | 1 405 162 | 1 800 000 | 22/11 |
+| 26-29 | 40 | 39 | 1 | 1 000 | 10 500 | 24/11 |
+| 26-29 | 45 | 78 | 1 000 | 10 000 | 62 750 | 25/11 |
+| 26-29 | 50 | 88 | 158 750 | 494 382 | 700 000 | 25/11 |
+| 26-29 | 55 | 99 | 772 500 | 1 010 000 | 1 405 162 | 25/11 |
+| 26-29 | 60 | 37 | 1 155 000 | 1 500 000 | 1 890 000 | 25/11 |
 | 30+ | 35 | 3 | 5 125 | 10 250 | 40 125 | 11/11 |
 | 30+ | 40 | 8 | 438 | 875 | 1 000 | 21/11 |
-| 30+ | 45 | 50 | 316 | 10 125 | 25 750 | 22/11 |
-| 30+ | 50 | 21 | 26 250 | 61 000 | 85 000 | 17/11 |
+| 30+ | 45 | 51 | 378 | 10 000 | 25 500 | 25/11 |
+| 30+ | 50 | 22 | 26 750 | 66 000 | 87 250 | 24/11 |
 
 **Qui acheter (annonces du Marché qui se terminent dans les 24 h)**
 
-aucune annonce du Marché ne se termine dans les 24 h (export du 24/11, 20 annonces)
+| Nom | Poste | Âge | Note | Prix actuel | Médiane de la case | Plafond | Fin | Gain pour mon cinq | Achetable |
+|---|---|---|---|---|---|---|---|---|---|
+| Anderson Correia | PG | 25 | 55,1 | 1 010 000 | 1 477 350 | 955 391 | dans 0,5 h | -1,8 | non (au-dessus de la capacité restante) |
+| Gerard Ruciński | SG | 26 | 56,2 | 2 500 000 | 1 010 000 | 955 391 | dans 1,0 h | -0,3 | non (prix au-dessus de la médiane de la case) |
+| Arcangelo Greco | C | 28 | 40,1 | 1 000 | 1 000 | 1 000 | dans 1,6 h | -13,5 | oui |
+| Ryan Calderon | SG | 17 | 48,8 | 2 100 000 | 1 010 000 | 955 391 | dans 2,6 h | -8,8 | non (prix au-dessus de la médiane de la case) |
+| Zdeněk Černý | SF | 18 | 41,2 | 51 000 | 340 000 | 340 000 | dans 3,1 h | -19,6 | oui |
+| Benedikt Hofer | SG | 24 | 42,4 | 1 000 | 7 500 | 7 500 | dans 3,8 h | -15,3 | oui |
+| Barak Dang | C | 18 | 40,2 | 1 000 | 340 000 | 340 000 | dans 4,3 h | -20,3 | oui |
+| Anselmo Albano | PF | 27 | 48,0 | 26 000 | 10 000 | 10 000 | dans 4,9 h | -5,8 | non (prix au-dessus de la médiane de la case) |
+| Ilija Nikolić | PF | 17 | 44,7 | 500 000 | 340 000 | 340 000 | dans 5,0 h | -10,8 | non (prix au-dessus de la médiane de la case) |
+| Denis Cindrić | C | 25 | 54,4 | 2 200 000 | 725 000 | 725 000 | dans 5,9 h | +0,6 | non (prix au-dessus de la médiane de la case) |
+| Catalin Voicu | SF | 30 | 46,1 | 10 000 | 10 000 | 10 000 | dans 6,0 h | -12,8 | oui |
+| Tomáš Moravec | SG | 17 | 39,0 | 150 000 | 50 000 | 50 000 | dans 6,9 h | -18,1 | non (prix au-dessus de la médiane de la case) |
+| Dorian Rousseau | SG | 31 | 52,0 | 251 | 66 000 | 66 000 | dans 7,8 h | -5,4 | oui |
+| Lucas Ferreira | SG | 23 | 48,3 | 1 000 | 100 000 | 100 000 | dans 7,8 h | -8,6 | oui |
+| Renan Mendes | PF | 29 | 47,8 | 1 001 | 10 000 | 10 000 | dans 7,8 h | -11,5 | oui |
+| Hrvoje Jurčević | PG | 27 | 50,0 | 1 500 | 494 382 | 494 382 | dans 7,8 h | -7,0 | oui |
+| Wei Malik | SG | 27 | 46,6 | 75 000 | 10 000 | 10 000 | dans 8,0 h | -10,3 | non (prix au-dessus de la médiane de la case) |
+| Gaspar Bello | C | 29 | 51,0 | 95 000 | 494 382 | 494 382 | dans 8,5 h | -2,7 | oui |
+| Cipriano Suárez | SG | 17 | 46,8 | 1 500 000 | 1 010 000 | 955 391 | dans 8,8 h | -10,0 | non (prix au-dessus de la médiane de la case) |
+| Davide Messina | SG | 17 | 47,0 | 1 500 000 | 1 010 000 | 955 391 | dans 8,8 h | -10,4 | non (prix au-dessus de la médiane de la case) |
+| Faustino Segura | C | 25 | 55,3 | 1 500 000 | 1 477 350 | 955 391 | dans 9,3 h | +1,6 | non (prix au-dessus de la médiane de la case) |
+| Zeki Mutlu | PG | 29 | 51,3 | 50 000 | 494 382 | 494 382 | dans 9,3 h | -5,7 | oui |
+| Yunus Sevim | PF | 28 | 57,7 | 1 200 000 | 1 010 000 | 955 391 | dans 9,4 h | -1,6 | non (prix au-dessus de la médiane de la case) |
+| Gildo Amato | SG | 25 | 47,8 | 350 000 | 100 000 | 100 000 | dans 10,0 h | -8,9 | non (prix au-dessus de la médiane de la case) |
+| Gabriel Haas | PF | 17 | 46,9 | 2 400 000 | 1 010 000 | 955 391 | dans 10,9 h | -12,3 | non (prix au-dessus de la médiane de la case) |
+| Ángel Rodríguez | PF | 22 | 39,5 | 0 | 251 | 251 | dans 11,7 h | -19,8 | oui |
+| Manuel Cadenas | SG | 28 | 41,1 | 0 | 1 000 | 1 000 | dans 11,7 h | -14,9 | oui |
+| David Boulle | SG | 30 | 51,4 | 10 250 | 66 000 | 66 000 | dans 13,0 h | -4,9 | oui |
+| Matías Taylor | PG | 23 | 43,3 | 200 000 | 7 500 | 7 500 | dans 16,7 h | -13,6 | non (prix au-dessus de la médiane de la case) |
+| Sang-hoon Do | PG | 24 | 59,2 | 1 785 000 | 1 477 350 | 955 391 | dans 17,4 h | +3,3 | non (prix au-dessus de la médiane de la case) |
+| Sang-woo Won | PG | 27 | 52,9 | 800 000 | 494 382 | 494 382 | dans 17,5 h | -5,7 | non (prix au-dessus de la médiane de la case) |
+| Goffredo Bianchini | C | 25 | 56,9 | 1 000 000 | 1 477 350 | 955 391 | dans 18,6 h | -2,5 | non (au-dessus de la capacité restante) |
+| Kornel Sadowski | C | 26 | 53,1 | 650 000 | 494 382 | 494 382 | dans 20,2 h | -0,7 | non (prix au-dessus de la médiane de la case) |
+| Gastone Lombardo | C | 30 | 49,6 | 1 | 10 000 | 10 000 | dans 20,3 h | -4,4 | oui |
+| Claudio Piras | SG | 26 | 41,4 | 100 000 | 1 000 | 1 000 | dans 20,4 h | -15,9 | non (prix au-dessus de la médiane de la case) |
+| Domenico De Angelis | PF | 24 | 50,2 | 500 000 | 725 000 | 725 000 | dans 20,4 h | -9,2 | oui |
+| Libero Neri | SF | 28 | 59,7 | 810 000 | 1 010 000 | 955 391 | dans 20,4 h | +2,7 | oui |
+| Blaž Vučković | SG | 28 | 50,5 | 150 000 | 494 382 | 494 382 | dans 21,0 h | -6,6 | oui |
+| Feliciano Bustamante | PF | 27 | 45,9 | 100 000 | 10 000 | 10 000 | dans 22,9 h | -7,8 | non (prix au-dessus de la médiane de la case) |
+| Yazeed Al-Amri | PG | 29 | 48,5 | 15 000 | 10 000 | 10 000 | dans 23,3 h | -8,6 | non (prix au-dessus de la médiane de la case) |
+| Tomás Carvalho | SF | 31 | 49,2 | 0 | 10 000 | 10 000 | dans 23,3 h | -11,8 | oui |
 
 **Offres et ventes du jour (mêmes lignes que l'état par événement)**
 
@@ -67,22 +97,25 @@ aucune annonce du Marché ne se termine dans les 24 h (export du 24/11, 20 annon
 
 | Nom | Poste | Âge | Note | Salaire hebdomadaire | Rang au poste | Minutes (4 derniers matchs de ligue) | Remplaçant | Écart de force | Prix attendu (médiane de la case) | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Léo Lefebvre | PF | 29 | 63,2 | 32 246 | 1 (C) | 33,0 | Hadrien Gimenez | 4,1 | 1 405 162 | nécessaire (écart de force 4,1 supérieur à la tolérance 1,0) |
-| Hadrien Gimenez | SF | 26 | 60,3 | 29 159 | 1 (SG) | 30,0 | Oscar Richard | 4,4 | 1 405 162 | nécessaire (écart de force 4,4 supérieur à la tolérance 1,0) |
+| Léo Lefebvre | PF | 29 | 63,2 | 32 246 | 1 (C) | 33,0 | Hadrien Gimenez | 4,1 | 1 500 000 | nécessaire (écart de force 4,1 supérieur à la tolérance 1,0) |
+| Hadrien Gimenez | SF | 26 | 60,3 | 29 159 | 1 (SG) | 30,0 | Oscar Richard | 4,4 | 1 500 000 | nécessaire (écart de force 4,4 supérieur à la tolérance 1,0) |
 | Oscar Richard | PG | 25 | 56,8 | 25 605 | 2 (PG) | 30,0 | Thibault Bonnet | 5,0 | 1 477 350 | nécessaire (écart de force 5,0 supérieur à la tolérance 1,0) |
-| Armand Fournier | C | 28 | 52,7 | 22 846 | 3 (C) | 27,0 | Oscar Richard | 2,1 | 499 999 | nécessaire (écart de force 2,1 supérieur à la tolérance 1,0) |
-| Thibault Bonnet | SG | 26 | 52,1 | 21 187 | 4 (SG) | 33,0 | Naël Boyer | 4,2 | 499 999 | nécessaire (écart de force 4,2 supérieur à la tolérance 1,0) |
+| Armand Fournier | C | 28 | 52,7 | 22 846 | 3 (C) | 27,0 | Oscar Richard | 2,1 | 494 382 | nécessaire (écart de force 2,1 supérieur à la tolérance 1,0) |
+| Thibault Bonnet | SG | 26 | 52,1 | 21 187 | 4 (SG) | 33,0 | Naël Boyer | 4,2 | 494 382 | nécessaire (écart de force 4,2 supérieur à la tolérance 1,0) |
 | Naël Boyer | PG | 20 | 48,7 | 19 361 | 5 (PG) | 27,0 | Nolan Baron | 3,5 | 1 010 000 | nécessaire (écart de force 3,5 supérieur à la tolérance 1,0) |
 | Maël Bernard | C | 18 | 48,8 | 19 326 | 6 (C) | 18,0 | Thibault Bonnet | 1,9 | 1 010 000 | nécessaire (écart de force 1,9 supérieur à la tolérance 1,0) |
-| Noé Legrand | PF | 23 | 49,9 | 19 227 | 4 (PF) | 24,0 | Maël Bernard | 1,1 | 102 500 | nécessaire (écart de force 1,1 supérieur à la tolérance 1,0) |
+| Noé Legrand | PF | 23 | 49,9 | 19 227 | 4 (PF) | 24,0 | Maël Bernard | 1,1 | 100 000 | nécessaire (écart de force 1,1 supérieur à la tolérance 1,0) |
 | Anselmo Albano | PF | 27 | 48,0 | 18 103 | 5 (PF) | 3,0 | Thibault Bonnet | 1,1 | 10 000 | déjà en vente |
 | Nolan Baron | PG | 17 | 45,2 | 16 691 | 9 (PG) | 0,0 | Jonathan Durand | 0,8 | 1 010 000 | police d'abord (prix attendu au-dessus de 250 000) |
-| Jonathan Durand | SF | 25 | 43,9 | 15 928 | 9 (SG) | 12,0 | Sacha Leclerc | 2,0 | 5 000 | nécessaire (écart de force 2,0 supérieur à la tolérance 1,0) |
-| Sacha Leclerc | SG | 17 | 43,0 | 13 767 | 11 (SG) | 3,0 | Nolan Baron | 1,4 | 302 500 | nécessaire (écart de force 1,4 supérieur à la tolérance 1,0) |
+| Jonathan Durand | SF | 25 | 43,9 | 15 928 | 9 (SG) | 12,0 | Sacha Leclerc | 2,0 | 7 500 | nécessaire (écart de force 2,0 supérieur à la tolérance 1,0) |
+| Sacha Leclerc | SG | 17 | 43,0 | 13 767 | 11 (SG) | 3,0 | Nolan Baron | 1,4 | 340 000 | nécessaire (écart de force 1,4 supérieur à la tolérance 1,0) |
 
 **Enchères, achats et ventes déjà proposés**
 
-- Acheter un SG de note ≥ 53,1 : aucune annonce au poste SG dans le Marché du 24/11 (annonces encore ouvertes de l'export) — poste SG : profondeur 2, PS moyen 47.6
+- Acheter un SG de note ≥ 53,1 : aucune annonce au poste SG dans le Marché du 25/11 (annonces encore ouvertes de l'export) — poste SG : profondeur 2, PS moyen 47.6
+- Enchère sur Henry Thomas (PF, PS 56.9) : police d'abord : python pipelines/dossier.py basketvibe achat — fin 26/11 ; page du Marché de 0 h : le prix a pu monter
+- Enchère sur Angelo Gupta (C, PS 56.2) : police d'abord : python pipelines/dossier.py basketvibe achat — fin 26/11 ; page du Marché de 0 h : le prix a pu monter
+- Enchère sur Sreten Miletić (SG, PS 59.9) : police d'abord : python pipelines/dossier.py basketvibe achat — fin 26/11 ; page du Marché de 0 h : le prix a pu monter
 
 
 ## Bloc 5 — Les meilleurs et les failles du jeu
@@ -91,7 +124,7 @@ carte de faisabilité du 10/11 : 3a force du club et victoires : faisable mainte
 
 ## Bloc 6 — Match Engine
 
-matchs ajoutés : 0 (ligue 0, amical 0 ; autres clubs 0) · 392 en base · étude à jour au 18/11, 8 de nos matchs pas encore étudiés ; 35 d'autres clubs
+vue matchs_ajoutes illisible
 Pour comprendre le Match Engine, j'ai besoin de : exporte les onglets Details, Stats par quart et Play-by-play du match de ligue du 18/11 dès qu'il est joué, parce que 1a demande 8 matchs de ligue v4 à nous et la base en a 7. (étude du 18/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page match de chaque match de ligue où nous mettons un adversaire en Lock ou Intense, parce que C demande ≥ 8 matchs par niveau (Lock 3, Intense 5). (étude du 18/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés vue côté adversaire (si le jeu l'affiche), parce que 0 des 64 lignes de `silver.bv_match_tactics` n'est adverse. (étude du 18/11)
@@ -103,7 +136,7 @@ Pour comprendre le Match Engine, j'ai besoin de : exporte la page match (Details
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés d'un match entre deux autres clubs, ou d'un de nos matchs vue côté adversaire, si le jeu l'affiche. Parce que la tactique (`player_directives`, `defensive_focus`) des autres clubs est absente : `silver.bv_match_tactics` ne contient qu'1 équipe. *Hypothèse* : cette page existe. Sinon, la partie tactique de 3b reste hors d'atteinte. (étude du 11/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page Classement des trois ligues après chaque journée, parce que le vainqueur de chaque match entre deux autres clubs manque hors score brut. L'écart de victoires d'un relevé à l'autre, croisé avec `silver.bv_fixtures`, donnerait qui a battu qui, sans utiliser de score. Aujourd'hui, le classement n'est relevé jour par jour que pour notre ligue. (étude du 11/11)
 Pour comprendre le Match Engine, j'ai besoin de : exporte la page des réglages utilisés d'un match vue côté adversaire (si le jeu l'affiche), parce que le `defensive_focus` adverse est absent : 0 ligne adverse sur 53 dans `silver.bv_match_tactics`, toutes les captures `match-tactics-used` ont `viewer_is_primary` = true. Hypothèse : cette page existe. Si le jeu ne la montre pas, la question 1c est hors d'atteinte. (étude du 10/11)
-Avancement des expériences : E1 : 3 vérifiés sur 4 ; E5 : 1 vérifié sur 3 ; E2 : 0 vérifié sur 3 ; E3 : 0 vérifié sur 7 ; E4 : 0 vérifié sur 16
+Avancement des expériences : E1 : 0 vérifié sur 4, 3 déclarés non vérifiés (match à exporter) ; E5 : 0 vérifié sur 3, 1 déclaré non vérifié (match à exporter) ; E2 : 0 vérifié sur 3 ; E3 : 0 vérifié sur 7 ; E4 : 0 vérifié sur 16
 prochaine hypothèse : E1 — agressivité défensive, uniforme sur nos cinq
 
 ## Bloc 7 — Analyse détaillée
@@ -115,7 +148,7 @@ défaite du 23/11 : analyse faite
 ## Bloc 8 — Économie
 
 carte de faisabilité du 10/11 : 2 prix : PS et âge : faisable maintenant ; 2 prix : poste : dans 334 jours ; 4a rendement d'un achat-revente (marché) : faisable maintenant ; 4b usage de notre argent et rendement : bloquée par : une seule équipe observée (aucun export connu ne la lève)
-- finances : seuil non atteint (résultat hebdo estimé +152 355, la réduction de charges commence sous 0)
+- vue gold.bv_finance_projection illisible
 
 ## Bloc 9 — Académie, personnel, entraînement
 

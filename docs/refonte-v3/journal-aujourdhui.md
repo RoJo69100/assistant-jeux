@@ -2014,3 +2014,6 @@ HEAD dans origin/main : oui
 | 2026-11-18 17:02 | aujourd'hui | 33.4 | 60 |
 | 2026-11-18 17:03 | aujourd'hui | 33.0 | 60 |
 | 2026-11-19 15:41 | aujourd'hui | 33.6 | 66 |
+| 2026-11-25 12:15 | hockeynation temps 1 (2026-11-25) | 37.0 | 8 |
+| 2026-11-25 12:16 | hockeynation temps 2 (2026-11-25) | 33.7 | 8 |
+| 2026-11-25 12:20 | hockeynation temps 2 (2026-11-25) | 28.9 | 8 |
