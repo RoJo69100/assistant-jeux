@@ -202,8 +202,26 @@ def cas_controles():
     d = ej.controle_minutes([joueur("Alpha", 40), joueur("Beta", 36)], 36)
     yield "minutes : plus de 36 → ❌, 36 accepté", len(d) == 1 and "Alpha" in d[0]["texte"] and "40" in d[0]["texte"] and "36 min" in d[0]["correction"]
     d = ej.controle_fatigue(fj, {"Joueur Beta": 23.5, "Joueur Gamma": 40.0}, 20)
-    yield "fatigue : joueur qui joue au-dessus du seuil → ❌ ; au repos : rien", len(d) == 1 and "Beta" in d[0]["texte"] and "23,5" in d[0]["texte"] \
-        and "20" in d[0]["texte"]
+    yield "fatigue : joueur qui joue au-dessus du signal (22, règle du 25/11) → ❌ ; au repos : rien", len(d) == 1 and "Beta" in d[0]["texte"] \
+        and "23,5" in d[0]["texte"] and "22" in d[0]["texte"]
+    # 25/11 : fatigue estimée au coup d'envoi (relevé − (0,5 + 10 %) par nuit) ; signalée au-dessus de 22 seulement, sinon 🟩 info
+    ce = dt.datetime(2026, 11, 25, 19, 45)
+    fj2 = [joueur("Bonnet", 36), joueur("Lefebvre", 36), joueur("Gamma", 30)]
+    vrai = {"Thibault Bonnet": (21.58, "2026-11-24"), "Léo Lefebvre": (20.62, "2026-11-24"), "Joueur Gamma": (26.0, "2026-11-24")}
+    d = ej.controle_fatigue(fj2, vrai, 20, ce)
+    yield "fatigue 25/11 : Bonnet 21,58 et Lefebvre 20,62 relevés le 24/11 → ≤ 22 au coup d'envoi, aucun défaut", \
+        not any(n in x["texte"] for x in d for n in ("Bonnet", "Lefebvre"))
+    yield "fatigue 25/11 : 26 relevé la veille → 22,9 au coup d'envoi > 22 → défaut", len(d) == 1 and "Gamma" in d[0]["texte"] \
+        and "22,9" in d[0]["texte"]
+    yield "fatigue 25/11 : la correction ne coupe jamais de minutes (pénalité fixée au coup d'envoi)", \
+        all("minutes de" not in x["correction"] and "remplace" in x["correction"] for x in d)
+    inf = ej.infos_fatigue(fj2, vrai, 20, ce)
+    yield "fatigue 25/11 : Bonnet et Lefebvre en 🟩 info avec l'estimation (18,9 et 18,1)", len(inf) == 2 \
+        and all(i.startswith("🟩 info") for i in inf) and "18,9" in inf[0] and "18,1" in inf[1]
+    yield "fatigue 25/11 : récupération d'une nuit = 0,5 + 10 %", abs(ej.fatigue_au_coup_envoi(21.58, 1) - 18.922) < 1e-9 \
+        and abs(ej.fatigue_au_coup_envoi(30, 2) - (30 * 0.9 - 0.5) * 0.9 + 0.5) < 1e-9
+    lig = ej.appliquer_controles(match(coup_envoi=ce, fiche=dict(FICHE, joueurs=fj2)), {"blessures": {}, "fatigue": vrai, "seuil_fatigue": 20}, CFG)
+    yield "fatigue 25/11 : la ligne d'état porte les infos 🟩", len(ej.etat_evenement(lig, CFG, dt.datetime(2026, 11, 25, 10, 0))["infos"]) == 2
     # 24/11 : fatigue contrôlée en ligue et coupe seulement ; en amical, jamais (coût ≈ 1/10) ; 🟥 jamais pour un amical sans erreur réelle
     fat = {"blessures": {}, "fatigue": {"Joueur Beta": 23.5}, "seuil_fatigue": 20}
     amf = match(genre="amical", coup_envoi=dt.datetime(2026, 11, 18, 8, 0), verrou=dt.datetime(2026, 11, 18, 7, 45), fiche=dict(FICHE, joueurs=fj))
@@ -1066,7 +1084,23 @@ def cas_equipe_encheres():
         == ["exporte la page Mes enchères — export de 96 h"]
 
 
-CAS = [cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_achats_refuses_police, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
+def cas_academie_deja_fait_cite_le_fichier():
+    """25/11 : le passage disait « academie déjà fait (briefs/2026-11-25-academie-academie-19-11.md) », fichier inexistant ;
+    la ligne doit citer le brief existant du verdict (2026-11-23-academie-academie-19-11.md)."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        (Path(t) / "briefs").mkdir()
+        (Path(t) / "briefs" / "2026-11-23-academie-academie-19-11.md").write_text("verdict\n", encoding="utf-8")
+        l = {"action": True, "type": "academie", "prochain": "teste", "id": "ac", "evenement": "académie, rapport du 19/11",
+             "cle": "academie-19-11", "arrivee": dt.datetime(2026, 11, 19, 9, 0), "consigne": "c"}
+        res = ej.agents_a_lancer([l], CFG, base=t, jour=dt.date(2026, 11, 25))
+        e = res[0] if res else {}
+        yield "académie : rapport du 19/11 déjà jugé le 23/11 → déjà fait, sans relance", e.get("statut") == "deja_fait"
+        yield "académie : la sortie citée est le fichier existant du 23/11", e.get("sortie") == "briefs/2026-11-23-academie-academie-19-11.md" \
+            and (Path(t) / e.get("sortie", "x")).is_file()
+
+
+CAS = [cas_academie_deja_fait_cite_le_fichier, cas_config, cas_academie_declencheur, cas_equipe_encheres, cas_priorite_export_match, cas_plan_19_11, cas_regle_jeunes, cas_niveau_e1, cas_agents, cas_personnel, cas_lien_fiche, cas_preset_adversaire, cas_rotation_illisible, cas_prix_inconnu, cas_priorite_capacite, cas_achats_refuses_police, cas_offres, cas_ventes, cas_affichage_transferts, cas_enchere_max, cas_etats_ligue, cas_etats_amical, cas_ligne, cas_hors_match, cas_horizon_et_completude, cas_exports, cas_controles,
        cas_construire, cas_deux_amicaux_meme_jour, cas_exports_periodiques, cas_exports_ligue_19, cas_academie_decision, cas_rejeu, cas_branchement]
 
 if __name__ == "__main__":
