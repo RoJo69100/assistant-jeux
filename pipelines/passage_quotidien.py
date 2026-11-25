@@ -449,11 +449,54 @@ def fichier_indisponible(base, jour):
     return Path(base) / f"base-indisponible-{jour.isoformat()}.md"
 
 
-def sortie_base_indisponible(jour, maintenant, raison, base=None, commit=None) -> int:
+# ---- Vues périmées (25/11) --------------------------------------------------------------------------------------------------
+# Les 7 vues matérialisées sont rafraîchies ensemble, dans une seule transaction (core.rafraichir_vues) : elles ont toutes l'âge
+# de core.rafraichi_etat.rafraichi_a. Une vue n'est périmée que si des pages sont arrivées depuis ce rafraîchissement (sinon elle
+# est exacte, même vieille d'une nuit) et qu'il date de plus de PEREMPTION_H heures.
+VUES_MAT = ("core.standing", "core.player_daily", "gold.match_objective", "gold.daily_alerts", "gold.bv_sell_candidates",
+            "gold.bv_sell_replacement", "gold.bv_matchs_autres")
+PEREMPTION_H = 3
+SQL_FRAICHEUR = ("select rafraichi_a, last_page_id, (select max(id) from bronze.raw_pages) as max_page, now() as maintenant "
+                 "from core.rafraichi_etat where id = 1")
+
+
+def _instant(v):
+    if v in (None, ""):
+        return None
+    return v if isinstance(v, dt.datetime) else dt.datetime.fromisoformat(str(v).replace("Z", "+00:00"))
+
+
+def vues_perimees(executer, seuil_h=PEREMPTION_H, vues=VUES_MAT):
+    """Message « vues périmées : vue âge, … » si des pages sont arrivées depuis le dernier rafraîchissement et qu'il a plus de
+    `seuil_h` heures ; None sinon (lecture impossible comprise : la sonde de la base couvre déjà la panne)."""
+    try:
+        cols, lignes = executer(SQL_FRAICHEUR)
+    except (SystemExit, Exception):  # noqa: BLE001
+        return None
+    if not lignes:
+        return None
+    r = dict(zip(cols, lignes[0]))
+    raf, maint = _instant(r.get("rafraichi_a")), _instant(r.get("maintenant"))
+    if r.get("last_page_id") is not None and r.get("max_page") is not None and int(r["last_page_id"]) >= int(r["max_page"]):
+        return None
+    if raf is not None and maint is not None and (maint - raf).total_seconds() <= seuil_h * 3600:
+        return None
+    if raf is None or maint is None:
+        return "vues périmées : " + " · ".join(f"{v} âge inconnu" for v in vues) + " (aucun rafraîchissement réussi connu)"
+    age = (maint - raf).total_seconds() / 3600
+    from zoneinfo import ZoneInfo
+    quand = raf.astimezone(ZoneInfo("Europe/Paris"))
+    return ("vues périmées : " + " · ".join(f"{v} {age:.1f} h" for v in vues)
+            + f" (dernier rafraîchissement le {quand:%d/%m à %H:%M}, pages arrivées depuis ; plafond {seuil_h} h)")
+
+
+def sortie_base_indisponible(jour, maintenant, raison, base=None, commit=None, titre="base indisponible") -> int:
     """Écrit la ligne 🟥 en tête de base-indisponible-AAAA-MM-JJ.md (les lignes plus anciennes du jour restent dessous) ;
-    ne touche à aucun autre fichier. `commit(fichiers)` (optionnel) ne pousse que ce fichier. Code retour 2."""
+    ne touche à aucun autre fichier. `commit(fichiers)` (optionnel) ne pousse que ce fichier. Code retour 2.
+    Une `raison` qui commence par « vues périmées » s'écrit telle quelle."""
     f = fichier_indisponible(BASE if base is None else base, jour)
-    ligne =(f"🟥 base indisponible : {raison} (passage de {maintenant:%H:%M}) — que-faire, briefs et outputs du jour "
+    tete = raison if raison.startswith("vues périmées") else f"{titre} : {raison}"
+    ligne = (f"🟥 {tete} (passage de {maintenant:%H:%M}) — que-faire, briefs et outputs du jour "
              f"inchangés ; aucun agent lancé.")
     ancien = f.read_text(encoding="utf-8") if f.is_file() else ""
     f.parent.mkdir(parents=True, exist_ok=True)
@@ -523,7 +566,8 @@ def main() -> int:
     import aujourdhui as auj0
     commit = None if a.sans_git else (lambda fs: commit_push(fs, auj0.heure_paris_naive().date(), base_sha=base_sha))
     h0 = auj0.heure_paris_naive()
-    panne = sonde_base(auj0.charger_sql().executer)  # avant toute écriture (étiquettes, instantané, que-faire)
+    executer = auj0.charger_sql().executer
+    panne = sonde_base(executer) or vues_perimees(executer)  # avant toute écriture (étiquettes, instantané, que-faire)
     if panne:
         return sortie_base_indisponible(h0.date(), h0, panne, commit=commit)
     depuis = horodatage_passage(BASE, h0.date()) if a.relance else None  # avant que rejouer() réécrive l'instantané

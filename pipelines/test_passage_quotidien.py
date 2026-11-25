@@ -438,7 +438,53 @@ def cas_base_indisponible():
         yield "base : seul ce fichier est commité", len(pousses) == 1 and len(pousses[0]) == 1 and pousses[0][0].endswith(f.name)
 
 
-CAS = [cas_base_indisponible, cas_plafonds_separes, cas_fiches_23_11,cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
+def cas_vues_perimees():
+    """25/11 : une vue matérialisée de plus de 3 h, avec des pages arrivées depuis → 🟥 « vues périmées », rien d'écrasé."""
+    def vues(raf, last, maxp, maint="2026-11-17T17:30:00+00:00"):
+        def run(sql):
+            if sql == pq.SQL_FRAICHEUR:
+                return (["rafraichi_a", "last_page_id", "max_page", "maintenant"], [(raf, last, maxp, maint)])
+            return (["ok"], [(1,)])
+        return run
+    m = pq.vues_perimees(vues("2026-11-17T12:30:00+00:00", 100, 105)) or ""
+    yield "vues : 5 h et des pages arrivées depuis → périmées", m.startswith("vues périmées")
+    yield "vues : l'âge de chaque vue (7 vues, 5.0 h)", all(f"{v} 5.0 h" in m for v in pq.VUES_MAT) and len(pq.VUES_MAT) == 7
+    yield "vues : heure de Paris du dernier rafraîchissement", "17/11 à 13:30" in m
+    yield "vues : 2 h seulement → pas périmées", pq.vues_perimees(vues("2026-11-17T15:30:00+00:00", 100, 105)) is None
+    yield "vues : 11 h mais aucune page depuis → pas périmées", pq.vues_perimees(vues("2026-11-17T06:30:00+00:00", 105, 105)) is None
+    yield "vues : 3 h tout juste → pas périmées", pq.vues_perimees(vues("2026-11-17T14:30:00+00:00", 100, 105)) is None
+    yield "vues : jamais rafraîchies → périmées, âge inconnu", "âge inconnu" in (pq.vues_perimees(vues(None, None, 105)) or "")
+
+    def casse(sql):
+        raise SystemExit("erreur SQL")
+    yield "vues : lecture impossible → pas de blocage ici (la sonde couvre la panne)", pq.vues_perimees(casse) is None
+
+    import aujourdhui as auj
+    with tempfile.TemporaryDirectory() as t:
+        base = Path(t)
+        qf = base / f"que-faire-{JOUR.isoformat()}.md"
+        qf.write_text("plan du matin\n", encoding="utf-8")
+        engages = []
+        anciens = (pq.BASE, auj.charger_sql, auj.heure_paris_naive, sys.argv, pq.etiqueter_experiences, pq.rejouer)
+        pq.BASE = base
+        auj.charger_sql = lambda: types.SimpleNamespace(executer=vues("2026-11-17T12:30:00+00:00", 100, 105))
+        auj.heure_paris_naive = lambda: dt.datetime(2026, 11, 17, 18, 30)
+        sys.argv = ["passage_quotidien.py", "--sans-git"]
+        pq.etiqueter_experiences = lambda *a, **k: engages.append("etiquettes") or ""
+        pq.rejouer = lambda: engages.append("rejouer")
+        try:
+            code = pq.main()
+        finally:
+            pq.BASE, auj.charger_sql, auj.heure_paris_naive, sys.argv, pq.etiqueter_experiences, pq.rejouer = anciens
+        f = pq.fichier_indisponible(base, JOUR)
+        tete = f.read_text(encoding="utf-8").splitlines()[0] if f.is_file() else ""
+        yield "vues : passage → code 2, ligne 🟥 « vues périmées » en tête", code == 2 and tete.startswith("🟥 vues périmées : core.standing 5.0 h")
+        yield "vues : que-faire inchangé, aucun autre fichier", qf.read_text(encoding="utf-8") == "plan du matin\n" \
+            and sorted(p.name for p in base.iterdir()) == sorted([qf.name, f.name])
+        yield "vues : ni étiquettes, ni plan, ni agents", engages == []
+
+
+CAS = [cas_vues_perimees, cas_base_indisponible, cas_plafonds_separes, cas_fiches_23_11,cas_plan_22,cas_garde_fous, cas_lancement, cas_rendu, cas_git, cas_restauration, cas_etiquettes, cas_police, cas_police_plan, cas_relance]
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

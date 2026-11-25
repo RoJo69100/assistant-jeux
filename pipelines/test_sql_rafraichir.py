@@ -22,7 +22,29 @@ def cas():
     yield "vues : les 7 vues matérialisées restent rafraîchies", len(re.findall(r"refresh materialized view concurrently", corps)) == 7
 
 
-JEUX = list(cas())
+MEM = (Path(__file__).resolve().parent.parent / "sql/core/036_rafraichir_memoire.sql").read_text(encoding="utf-8")
+META = (Path(__file__).resolve().parent.parent / "sql/core/035_page_meta.sql").read_text(encoding="utf-8")
+
+
+def cas_memoire():
+    corps = MEM.split("create or replace function core.rafraichir_vues", 1)[1]
+    i_refresh = corps.find("refresh materialized view")
+    yield "mémoire : sans worker parallèle ni hachage doublé, avant le premier rafraîchissement", \
+        -1 < corps.find("set local max_parallel_workers_per_gather = 0") < i_refresh \
+        and -1 < corps.find("set local hash_mem_multiplier = 1") < i_refresh
+    yield "mémoire : page_meta rattrapée avant les vues", -1 < corps.find("core.page_meta_rattraper(") < i_refresh
+    yield "mémoire : garde de 034 conservée (verrou puis créneaux et attente)", \
+        -1 < corps.find("pg_try_advisory_xact_lock(7140001)") < corps.find("core.rafraichir_bloque(now())") < i_refresh
+    yield "mémoire : les 7 vues restent rafraîchies", corps.count("refresh materialized view concurrently") == 7
+    vue = META.split("create or replace view gold.exports_state", 1)[1]
+    yield "exports_state : lit core.page_meta, et bronze seulement au-delà du dernier rattrapage", \
+        "from core.page_meta m" in vue and "r.id > (select coalesce(max(page_id), 0) from core.page_meta)" in vue
+    yield "exports_state : mêmes colonnes (game, ordre, ecran, pour_quoi, dernier_paris, age_h, statut, team_id, club)", \
+        all(c in vue for c in ("as dernier_paris", "as age_h", "as statut", "e.team_id, e.club"))
+    yield "page_meta : aucun déclencheur sur bronze.raw_pages (ingestion intacte)", "trigger" not in META.lower()
+
+
+JEUX = list(cas()) + list(cas_memoire())
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
