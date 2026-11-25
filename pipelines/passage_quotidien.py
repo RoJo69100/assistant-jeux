@@ -50,12 +50,16 @@ def _fr(n: int) -> str:
 # ---- Garde-fous ------------------------------------------------------------------------------------------------------------
 
 def garde_fous(texte: str, police_du_jour: str) -> list:
-    """Lignes 🟥 : une par somme au-dessus du seuil de gros montant quand l'agent police n'a laissé aucune trace aujourd'hui."""
+    """UNE ligne 🟥 (25/11, consigne de l'utilisateur : 25 lignes regroupées) quand des sommes dépassent le seuil de gros montant
+    et que l'agent police n'a laissé aucune trace aujourd'hui : nombre de sommes, plus petite et plus grande."""
     if police_du_jour.strip():
         return []
-    sommes = sorted({int(re.sub(r"\D", "", m)) for m in SOMME.findall(texte)} - {None})
-    return [f"🟥 Transferts : somme de {_fr(s)} au-dessus de {_fr(SEUIL)} sans police du jour — aucune action avant "
-            f"`python -I pipelines/dossier.py {JEU} achat` puis l'agent police" for s in sommes if s > SEUIL]
+    sommes = sorted(s for s in {int(re.sub(r"\D", "", m)) for m in SOMME.findall(texte)} if s > SEUIL)
+    if not sommes:
+        return []
+    quoi = f"somme de {_fr(sommes[0])}" if len(sommes) == 1 else f"{len(sommes)} sommes de {_fr(sommes[0])} à {_fr(sommes[-1])}"
+    return [f"🟥 Transferts : {quoi} au-dessus de {_fr(SEUIL)} sans police du jour — aucune action avant "
+            f"`python -I pipelines/dossier.py {JEU} achat` puis l'agent police"]
 
 
 def consigne_agent(e: dict, jour, vendus=()) -> str:

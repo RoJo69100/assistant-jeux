@@ -41,6 +41,10 @@ def cas_garde_fous():
     yield "garde-fou : 300 000 avec police du jour → rien", pq.garde_fous("enchère max 300 000", "verdict police") == []
     yield "garde-fou : 75 000 → rien", pq.garde_fous("tester 3 prospects (75 000)", "") == []
     yield "garde-fou : une date ou une heure n'est pas une somme", pq.garde_fous("2026-11-17 20:00 m11", "") == []
+    sommes = " ; ".join(f"enchère max {s}" for s in ("257 500", "302 500", "480 000", "803 750", "75 000", "302 500"))
+    g = pq.garde_fous(sommes, "")
+    yield "garde-fou 25/11 : plusieurs sommes → UNE seule ligne 🟥 (nombre, plus petite, plus grande)", len(g) == 1 \
+        and "4 sommes de 257 500 à 803 750" in g[0] and g[0].startswith("🟥 Transferts")
     p = pq.consigne_agent(entree(), JOUR)
     yield "garde-fou : la consigne d'agent interdit achat, vente et enchère et donne l'horizon du jour", \
         "aucun achat" in p and "aucune enchère" in p and "2026-11-17" in p and "250 000" in p and "police" in p
