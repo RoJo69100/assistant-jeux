@@ -22,7 +22,7 @@ Consigne de l'utilisateur, 2026-10-31 : « quand on fait export d'académie, tu 
 2. **Noter pour chaque prospect** : poste, âge, taille, fourchettes de compétences (20 points), TSP min–max, et ce que l'on sait du potentiel (probabilités de la jauge du rapport, test 25 000 si fait). Écrire la jauge **au moment du rapport** et l'investissement de la semaine.
 3. **Chat** : `select posted_at, channel, author, is_dev, left(content, 300) from gold.bv_academy_chat where posted_at >= '<date du dernier rapport>' order by posted_at` — lire **tout** le résultat (salon #academy + mots-clés dans les salons pays) : jauges et choix des autres clubs, juniors vendus et leur prix, tirages, annonces du développeur (`is_dev`). Chaque fait utile : auteur, salon, date, statut dans `connaissance.md` § Académie.
 4. **Autres clubs** (comble la variable 11) : noter chaque jauge ou chaque junior cité par un autre manager, avec sa source, dans `connaissance.md` ; un junior de 16-17 ans vu sur le marché (`gold.bv_market_candidates`, âge 16-17) est un signe indirect.
-5. **Décider** avec la table [M§4.2] ; le chat éclaire, il ne remplace pas la règle.
+5. **Décider** avec la table [M§4.2] ; le chat éclaire, il ne remplace pas la règle. **Signature (utilisateur, 2026-11-26)** : on signe pour le potentiel. Un testé High se signe (le meilleur aux compétences clés, au poste le plus faible) ; Solid/Decent seulement sans High et avec des clés hors norme. Comparer la projection à 2 saisons (P8/P10), jamais le PS du jour ; la jauge ÷ 2 est un coût affiché, pas un motif de refus. Le seuil « High + PS poste ≥ 48 » du 26/11 est annulé.
 Après un nouvel export Discord : `python pipelines/import_discord.py basketvibe`, puis la vue se met à jour.
 
 ## Variables

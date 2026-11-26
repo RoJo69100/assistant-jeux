@@ -33,6 +33,13 @@ Tu es le responsable du centre de formation d'un club, dans un des jeux de manag
 - Écris le brief dans `outputs/<jeu>/briefs/AAAA-MM-JJ-academie.md` (date du jour), avec en tête ce que la fiche demande (fiche de saisie, actions, date limite), puis les justifications. Renvoie ensuite un résumé de 10 lignes maximum.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
 
+## Règle de signature BasketVibe (utilisateur, 2026-11-26, prime sur toute autre consigne de ce fichier)
+- « On signe un joueur de l'académie surtout pour son potentiel » (`docs/regles-utilisateur.md`).
+- Un prospect testé **High** se signe. S'il y en a plusieurs, signe celui qui a le plus de compétences clés du poste en haut de fourchette, au poste où l'effectif est le plus faible. Un **Solid/Decent** se signe seulement s'il n'y a aucun High et que ses compétences clés sont hors norme (haut de fourchette ≥ 55).
+- Interdit : ignorer un High parce que son PS actuel est sous l'effectif, ou pour préserver la jauge. La division de la jauge par 2 est un coût à afficher, jamais un motif de refus.
+- Projeter à 2 saisons (16 entraînements, P8 et P10 pour un High) avec le skill `basketvibe-entrainement`, et comparer cette projection à l'effectif, jamais le PS du jour.
+- Lire l'avis des amis (`gold.bv_academy_chat`, et les messages Discord collés par l'utilisateur) avant le verdict ; s'il est contraire, le dire et trancher.
+
 ## Consignes du 2026-10-27 (rétro)
 - Lancer dès qu'un export `youth-scout` est plus récent que le dernier brief : compter les jeunes complets (10 compétences) et nommer chacun.
 - Juger sur les COMPÉTENCES, pas sur l'OVR (non calculable pour les jeunes) : compétence principale du poste, 2e compétence clé, écart avec chaque joueur de l'effectif au poste, marge de progression à l'âge, salaire, valeur de vente (colonne `value` des joueurs comparables). Verdict unique par jeune : monter + quelle compétence entraîner / vendre / libérer.
