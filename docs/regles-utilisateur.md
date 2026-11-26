@@ -6,6 +6,7 @@ Contrôle : `python -I pipelines/test_regles_utilisateur.py` (chaque clé citée
 
 | Date | Domaine | Règle (mots de l'utilisateur) | Clé de basketvibe.yaml |
 |---|---|---|---|
+| 2026-11-26 | Académie | « On signe un joueur de l'académie surtout pour son potentiel. » Un prospect testé High (ou Solid avec de très bonnes compétences) se signe ; jamais d'ignorer un High parce que son PS actuel est sous l'effectif ou pour préserver la jauge. Le seuil « High + PS poste ≥ 48 » du 26/11 est annulé (Cousin, SG 17 High). | — (à porter par l'agent académie, pas encore de clé) |
 | 2026-11-17 | Exports | Le plan demande toujours le Marché (toutes les pages) et l'historique global des transferts chaque jour (périmés après 24 h), pour trouver de bonnes offres ; le Personnel une fois par semaine. | `etat_jour.exports_periodiques` |
 | 2026-11-17 | Académie | « je signe un prospect quand il a un très gros potentiel, qu'il correspond aux meilleures caractéristiques du poste, qui a la bonne taille, qui a tout ». Résultat du test : à lire plus tard. | `etat_jour.evenements.academie` |
 | 2026-11-17 | Preset | En ligue et en coupe, on fait le preset de l'adversaire pour voir ses joueurs, puis on règle la zone et le focus défensif ; en amical on teste joueurs et tactiques, pas de preset. | `competitions.ligue`, `competitions.coupe`, `competitions.amical` |
