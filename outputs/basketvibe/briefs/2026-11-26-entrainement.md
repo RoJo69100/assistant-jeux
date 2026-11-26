@@ -110,6 +110,49 @@ Lecture : Cousin dépasse Leclerc de ~2 à 4,5 PS à 16 entraînements au milieu
 ## Conseils suivis
 - **C-142** ajouté (Bernard 2PT / Déf), **C-143** ajouté (Cousin Athlé / 3PT). **C-129** : remplacé pour Bernard. **C-056** : déjà confirmé.
 
+## 23:15 : choix académie et revue des 11 (export 81815, 16:15 UTC)
+
+### Saisie ce soir (avant dim. 29/11 04:00)
+| Joueur | Principale | Secondaire | Décision |
+|---|---|---|---|
+| Nolan Baron (PG 17) | Trois points | Défense | CHANGER (Passes 61 → ralenti dès 70) |
+| Étienne Bourdon (SF 16), si signé | Athlétisme | Deux points | À SAISIR |
+| Maël Bernard (C 18) | Deux points | Athlétisme | GARDER (choix de l'utilisateur ; C-142 caduc sur la secondaire) |
+| Les 9 autres | inchangés | | garder |
+
+### Académie : Bourdon contre Cousin (page 81633, `text`)
+Départ PS au poste : Bourdon SF 43,2 / 48,2 / 53,2 (bas / milieu / haut), Cousin SG 40,4 / 45,4 / 50,4. Plan Athlé principale + 3PT/2PT secondaire (compétences travaillées au bas / milieu / haut de leur fourchette). Gain = base (1 / 0,5) × mult. de potentiel [M§8.3] × facteur d'âge (`gold.bv_age_factor`, 1,0 jusqu'à 18, 0,94 à 19, 0,89 à 20, 0,83 à 21 : hypothèse d'interpolation) × ralentissement > 70 [M§8.4] ; calendrier supposé : 4 entraînements avant le +1 an du 20/12, puis 8 par âge. Calcul : récursion SQL.
+
+| Joueur / potentiel | PS départ (bas / milieu / haut) | PS à 16 | PS à 32 |
+|---|---|---|---|
+| Bourdon P5 (×1,15) | 43,2 / 48,2 / 53,2 | 47,3 / **52,3** / 57,3 | 51,1 / **55,9** / 60,7 |
+| Bourdon P7 (×1,50) | idem | 48,6 / **53,6** / 58,5 | 53,1 / **57,8** / 62,3 |
+| Cousin P8 (×1,60) | 40,4 / 45,4 / 50,4 | 46,1 / **51,1** / 56,1 | 51,0 / **55,8** / 60,4 |
+| Cousin P10 (×2,20) | idem | 48,2 / **53,2** / 58,1 | 54,0 / **58,4** / 62,6 |
+
+- Cousin est ralenti par l'âge (19 ans au 13e entraînement, 21 ans au 29e) ; Bourdon a un an de moins : facteur 1,0 jusqu'au 20e. C'est ce qui efface l'avantage de potentiel de Cousin.
+- Attendu (pondération High = P8 51 % / P9 33 % / P10 16 % ; Decent = P4 12 % / P5 23 % / P6 33 % / P7 32 %, table [M§4.2] à 96 % interpolée, P4/P6/P9 interpolés entre mes simulations) : à 16, Bourdon ≈ 52,9 contre Cousin ≈ 51,8 ; à 32, ≈ 56,8 contre ≈ 56,6. **Égalité à 32, Bourdon devant avant, et +2,8 PS dès aujourd'hui.**
+- **Calcul de l'ami (« P10 nécessaire ») : ne tient pas tel quel.** P10 ne bat Bourdon P7 (son meilleur cas) qu'après ~22 entraînements et de 0,6 PS à 32 (dans le bruit : départ inconnu à ±5). Contre Bourdon P5 ou P6, Cousin P8 ou P9 suffit pour égaliser à 32 (55,8 contre 55,9 ; 56,9 contre 57,0), jamais pour devancer. P10 = 16 % de chances au plus.
+- **Tranche : signer Bourdon.** Contre la règle « on signe pour le potentiel » : le potentiel de Cousin est plus haut (High contre Decent) mais le PS au poste à 32 est le même ; les amis « meilleures stats » ont raison ici. Confiance basse (quasi-égalité ; probabilités interpolées ; départs réels inconnus).
+- Ce qui prouverait que j'avais tort : 1re semaine mesurée de Bourdon `implied_mult` ≤ 1,15 (P4–P5) : Cousin P8 serait égal (écart ≤ 0,1 PS) mais pas meilleur ; à 1,50 (P7) j'avais raison. Seul un Cousin P10 (16 %) donne +0,6 PS à 32.
+
+### Revue des 11 (réglage actuel 81815 ; valeurs `gold.bv_roster_now` ; poids PS [M§2.2])
+| Joueur | Actuel (P / S) | Compétence clés / niveau | Verdict |
+|---|---|---|---|
+| Baron PG 17 (P8) | Passes / Défense | Passes 61 (poids 15) gagne 1,60 : 70 au 6e entraînement, ensuite ×0,88 à 75 ; 3PT 41, 2PT 43, Déf 44,6 au même poids | **CHANGER** : 3PT / Défense (≈ +0,8 PS à 16) |
+| Boyer PG 20 | Passes / Dribble | 51,7 / 58,6, loin de 70 | garder |
+| Richard PG 25 (P7) | Passes / Défense | Passes 67,5 : 70 dans 3 entraînements mais ralentissement lent (×0,88 à 75), perte ≈ 0,1 PS à 16 ; Dribble 77,7 non entraîné | garder (revoir à 73) |
+| Bonnet SG 26 | Défense / Dribble | 44,7 / 35,2, 2PT 78 et 3PT 72 non entraînés | garder |
+| Leclerc SG 17 (P8) | 3PT / Défense | 47,2 passe 70 vers le 15e entraînement | garder |
+| Durand SF 25 | 2PT / Défense | 43,7 / 37,6 | garder |
+| Gimenez SF 26 | 2PT / 3PT | 62,3 à +0,68 par semaine : < 70 sur 11 entraînements ; Déf 75,4 et Athlé 72 non entraînés | garder |
+| Lefebvre PF 29 | Défense / Athlé | 64,9 / 63,0, gains ≈ 0,1 (âge 29) ; 2PT 75 et Rebond 73,9 non entraînés | garder |
+| Legrand PF 23 (P8) | Rebond / Défense | Rebond 59,2 : 70 au ~9e entraînement, perte ≈ 0,2 PS à 16 ; Athlé 40 même poids | garder |
+| Bernard C 18 (P10) | 2PT / Athlé | 2PT 34, Athlé 58 : PS à 16 = 56,2 contre 56,3 pour 2PT/Déf | garder (pas de changement pour 0,1 PS) |
+| Fournier C 28 | Rebond / Défense | 63,1 / 57,6, gains ≈ 0,2 | garder |
+
+Contrôle : aucune compétence ≥ 75 n'est entraînée (principale ou secondaire) ; Richard Passes 67,5 est la plus proche.
+
 ## Hypothèses à confirmer par l'utilisateur ou par mesure
 1. Longueur de saison de 8 entraînements et date du +1 an (je suppose 20/12 → 27/12).
 2. Facteur d'âge à 19 et 20 ans (0,94 / 0,89, interpolation).
