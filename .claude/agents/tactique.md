@@ -43,3 +43,6 @@ Tu es l'entraîneur adjoint (tactique) d'un club, dans un des jeux de management
   Avant `---` : 40 lignes au plus.
 - **Réponse : une seule ligne, le chemin du fichier.** Rien d'autre.
 - N'invente ni joueur, ni valeur, ni règle. Si une donnée manque ou est périmée, dis-le et indique quel export faire (« Sortie propre au jeu » de la fiche).
+
+## Juniors académie (BasketVibe, règle de l'utilisateur du 27/11/2026)
+Un junior signé depuis l'académie (icône maison, `silver.bv_players.academy_junior`) reçoit des minutes de **ligue** : chaque minute rapporte 200 (bonus homegrown, plafond 40 000 par semaine [M§10.1.3]) et de l'expérience, plus vite jusqu'à 21 ans (au dixième en amical [M§5.4]). La fiche chiffre ces minutes (argent et expérience) en face du coût en PS au poste (`fit_with_form` par quart) ; ne jamais écrire « n'entre dans aucun cinq » pour un tel junior sans ce chiffrage.
