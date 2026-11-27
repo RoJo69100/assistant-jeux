@@ -647,6 +647,14 @@ def cas_bloc_4():
     t_pl = "\n".join(qfb.bloc_4(donnees_4(), {}, 300000, 1.0, act))
     ligne_aubert = next((l for l in t_pl.splitlines() if l.startswith("| Paul Aubert")), "")
     yield "test_bloc_4_un_seul_plafond", "| 80 000 |" in ligne_aubert and "93 888" not in ligne_aubert.split("|")[7]
+    # 26/11 : TypeError float(None) sur rank_in_slot (_table_vente) ; un joueur sans rang au poste s'affiche « sans rang »
+    sans_rang = T(VENTE[0], [("p9", "Ilan Sansrang", "SF", 19, 40.0, 9000, None, None, None, False)])
+    try:
+        t_sr = "\n".join(qfb.bloc_4(donnees_4(vendre=sans_rang), {}, 300000, 1.0)).splitlines()
+        ok_sr = "sans rang" in ligne_de(t_sr, "Ilan Sansrang")
+    except (TypeError, ValueError):
+        ok_sr = False
+    yield "test_table_vente_rang_none_sans_rang", ok_sr
     yield "test_requetes_bloc_4_existent", all(k in auj.REQUETES for k in ("prix_cases", "annonces_24h", "vendre", "annonces_export"))
 
     # achetable : prix <= médiane de la case, case fiable, dans la capacité restante

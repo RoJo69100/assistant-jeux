@@ -648,9 +648,11 @@ def _table_vente(donnees, tolerance, police="") -> list:
         else:
             prix = auj.montant(case["median"])
         minutes = _virg(r["league_min_last4"]) if r.get("league_min_last4") is not None else "—"
+        # 26/11 : rank_in_slot None (joueur sans rang au poste) faisait planter float(None)
+        rang = f"{int(float(r['rank_in_slot']))} ({r['best_slot']})" if r.get("rank_in_slot") is not None else "sans rang"
         rangees.append((verdict != "vendable", -float(r["salary"]),
                         f"| {r['name']} | {r['position']} | {int(float(r['age']))} | {_virg(r['ps'])} | {auj.montant(r['salary'])} | "
-                        f"{int(float(r['rank_in_slot']))} ({r['best_slot']}) | {minutes} | {r.get('replacement_name') or '—'} | "
+                        f"{rang} | {minutes} | {r.get('replacement_name') or '—'} | "
                         f"{_virg(r['gap']) if r.get('gap') is not None else '—'} | {prix} | {verdict} |"))
     return lignes + [l for _, _, l in sorted(rangees)] + [""]
 
