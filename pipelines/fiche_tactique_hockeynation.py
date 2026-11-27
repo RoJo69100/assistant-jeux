@@ -463,12 +463,14 @@ def main():
     a = ap.parse_args()
     jour = a.jour or dt.date.today().isoformat()
     roster, lu, quand, cal = lire(a.equipe)
-    if a.controle:  # 25/11 : saisie du jeu contre la fiche commitée (celle que l'utilisateur a recopiée)
-        import subprocess
-        chemin = f"outputs/hockeynation/briefs/{jour}-tactique-{FICHIER[a.equipe]}.md"
-        txt = subprocess.run(["git", "show", f"HEAD:{chemin}"], cwd=RACINE, capture_output=True, text=True).stdout
+    if a.controle:  # 27/11 : saisie du jeu contre la fiche du jour lue sur le disque (avant : git HEAD, « aucun écart » à tort)
+        f = BRIEFS / f"{jour}-tactique-{FICHIER[a.equipe]}.md"
         sys.stdout.reconfigure(encoding="utf-8")
-        print(f"Contrôle {NOM[a.equipe]} contre {chemin} (version commitée) :")
+        print(f"Contrôle {NOM[a.equipe]} contre {f.relative_to(RACINE)} (disque) :")
+        txt = f.read_text(encoding="utf-8") if f.exists() else ""
+        if not cases_fiche(txt):
+            print(f"- fiche absente ou sans case lisible : contrôle impossible (lance d'abord `--ecrire`).")
+            return 1
         print("\n".join("- " + x for x in controle(txt, lineup_jeu(lu, joueurs_de(roster)), quand)))
         return 0
     classement = None
